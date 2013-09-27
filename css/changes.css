@@ -236,6 +236,8 @@ div.tooltip.tags-div{
 }
 .bmsgrid .btn-green{
     margin-left: 6px;
+    display: block;
+    margin-top: -6px;
 }
 .addtag .tagbox{
     z-index: 1000;

@@ -113,27 +113,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                         this.setFooterArea();
                       },
                       'keyup #copy-camp-search':function(obj){
-                           var searchterm = $.trim($(obj.target).val());
-                            if(searchterm.length){
-                                    this.$("#remove-search-list").show();
-                                    this.$("#remove-merge-list").show();
-                                    $("#list_grid tr").hide();
-                                    $('#no_of_camps').hide();
-                                    $('#srch').hide();
-                                    searchterm = searchterm.toLowerCase();
-                                    $("#list_grid tr").filter(function() {                                   
-                                             return $(this).text().toLowerCase().indexOf(searchterm) > -1;
-                                     }).show();
-                                     $('#list_grid').removeHighlight().highlight(searchterm);
-                            }
-                            else{
-                                    this.$("#remove-search-list").hide();
-                                    this.$("#remove-merge-list").hide();
-                                    $("#list_grid tr").show();
-                                    $('#no_of_camps').show();
-                                    $('#srch').show();
-                                    $("#list_grid").removeHighlight();
-                            }
+                           
                       }
                      
                       
@@ -1366,7 +1346,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                                 //this.loadTemplateTags();
                                 //this.loadTemplates('search','all',{callback:_.bind(this.loadTemplateAutoComplete,this)});
                                 this.attachEvents();
-                                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 1000, hide:10 }});
+                                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                             break;
                         default:
                             break;
@@ -1481,7 +1461,12 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
                             //this.$("#search-template-input").prop("disabled",true);                        
                             this.states.step2.getTemplateCall.abort();
-                            this.loadTemplates('search','nameTag',{text:val});
+                            if(val!==""){
+                                this.loadTemplates('search','nameTag',{text:val});
+                            }
+                            else{
+                                this.$("#template_search_menu li:first-child").click();
+                            }
                         }
                     
                     
@@ -1625,7 +1610,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                         this.$(".no-templates").hide();     
                         var template_html = $(templates_html);
                         this.$(".step2 .thumbnails").append(template_html);                        
-                       template_html.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 1, hide:1 }}); 
+                       template_html.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false}); 
                        template_html.find(".view").click(_.bind(function(){
                             this.$("#template_search_menu li:nth-child(4)").click();
                         },this));
@@ -1637,14 +1622,10 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                             this.$("#template_layout_menu li").eq(parseInt(target.attr("l_id"))).click();
                         },this));
                         template_html.find(".template-type").click(_.bind(function(obj){
-                            var target = $.getObj(obj,"div");
-                            /*if(target.hasClass("customicon")){
-                                
-                            }
-                            else{
-                                
-                            }
-                            this.loadTemplates();*/
+                            var target = $.getObj(obj,"div");                           
+                        },this));                        
+                        template_html.find(".feat_temp").click(_.bind(function(obj){
+                             this.$("#template_search_menu li:nth-child(3)").click();   
                         },this));
                     }
                     if((this.states.step2.offset + parseInt(this.states.step2.templates.count))<parseInt(this.states.step2.totalcount)){

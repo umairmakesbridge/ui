@@ -5166,5 +5166,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', end
     top: -2px;
     width: 44px;
     z-index: 99;
+    cursor: pointer;
 }
 .feat_temp {}
