@@ -1,0 +1,700 @@
+.big-icon {
+	background:url(../img/icon-map.png) no-repeat 0 0;
+	display:block;
+	width:100px;
+	height:100px;
+}
+.big-icon.getstarted {
+	background-position: right 0;
+}
+.big-icon.marketing {
+	background-position: right -100px;
+}
+.big-icon.studio {
+	background-position: right -200px;
+}
+.big-icon.connect {
+	background-position: right -300px;
+}
+.big-icon.analytics {
+	background-position: right -400px;
+}
+.big-icon.calendar {
+	background-position: right -500px;
+}
+.big-icon.workspace {
+	background-position: right -600px;
+}
+.big-icon.add {
+	background-position: right -700px;
+}
+/* --------------------------------    -------------------------------------- */
+
+
+
+.icon {
+	background:url(../img/icon-map.png) no-repeat 0 0;
+	display:block;
+	width:30px;
+	height:30px;
+}
+/* tile icons */
+.icon.getstarted {
+	background-position: -610px 0;
+}
+.icon.marketing {
+	background-position: -610px -30px;
+}
+.icon.studio {
+	background-position: -610px -60px;
+}
+.icon.connect {
+	background-position: -610px -90px;
+}
+.icon.analytics {
+	background-position: -610px -120px;
+}
+.icon.calendar {
+	background-position: -610px -150px;
+}
+.icon.workspace {
+	background-position: -610px -180px;
+}
+.icon.add {
+	background-position: -610px -210px;
+}
+/* all other icons */
+
+
+
+.icon.graphics {
+	background-position: 0 0;
+}
+.icon.upload-subscribers {
+	background-position: 0 -30px;
+}
+.icon.add-template {
+	background-position: 0 -60px;
+}
+.icon.add-list {
+	background-position: 0 -90px;
+}
+.icon.forms {
+	background-position: 0 -120px;
+}
+.icon.segments {
+	background-position: 0 -150px;
+}
+.icon.bounced-email {
+	background-position: 0 -180px;
+}
+.icon.ftp-uploads {
+	background-position: 0 -210px;
+}
+.icon.reports {
+	background-position: 0 -240px;
+}
+.icon.add {
+	background-position: 0 -270px;
+}
+.icon.search {
+	background-position: 0 -300px;
+}
+
+.icon.account {
+	background-position: 0 -330px;
+}
+.icon.logout {
+	background-position: 0 -360px;
+}
+.icon.studio {
+	background-position: 0 -390px;
+}
+.icon.campaigns {
+	background-position: 0 -420px;
+}
+.icon.analytics {
+	background-position: 0 -450px;
+}
+.icon.list-management {
+	background-position: 0 -480px;
+}
+.icon.automation {
+	background-position: 0 -510px;
+}
+.icon.support {
+	background-position: 0 -540px;
+}
+.icon.updates {
+    background-position: 0px -570px;
+}
+
+
+
+
+/* ------------------------------------------------------------ Side all other icons */
+
+
+ 
+.grayicons .icon  { margin: 9px auto 4px; }
+
+/* tile icons */
+.grayicons .icon.getstarted {
+	background-position: -640px 0;
+}
+.grayicons .icon.marketing {
+	background-position: -640px -30px;
+}
+.grayicons .icon.studio {
+	background-position: -640px -60px;
+}
+.grayicons .icon.connect {
+	background-position: -640px -90px;
+}
+.grayicons .icon.analytics {
+	background-position: -640px -120px;
+}
+.grayicons .icon.calendar {
+	background-position: -640px -150px;
+}
+.grayicons .icon.workspace {
+	background-position: -640px -180px;
+}
+.grayicons .icon.add {
+	background-position: -640px -210px;
+}
+			/* ACTIVE  tile icons */
+			.grayicons :hover.icon.getstarted {
+				background-position: -670px 0;
+			}
+			.grayicons :hover.icon.marketing {
+				background-position: -670px -30px;
+			}
+			.grayicons :hover.icon.studio {
+				background-position: -670px -60px;
+			}
+			.grayicons :hover.icon.connect {
+				background-position: -670px -90px;
+			}
+			.grayicons :hover.icon.analytics {
+				background-position: -670px -120px;
+			}
+			.grayicons :hover.icon.calendar {
+				background-position: -670px -150px;
+			}
+			.grayicons :hover.icon.workspace {
+				background-position: -670px -180px;
+			}
+			.grayicons :hover.icon.add {
+				background-position: -670px -210px;
+			}
+
+/* ------------------------------------------ */
+
+
+.grayicons .icon.graphics {
+	background-position: -30px 0;
+}
+.grayicons .icon.upload-subscribers {
+	background-position: -30px -30px;
+}
+.grayicons .icon.add-template {
+	background-position: -30px -60px;
+}
+.grayicons .icon.add-list {
+	background-position: -30px -90px;
+}
+.grayicons .icon.forms {
+	background-position: -30px -120px;
+}
+.grayicons .icon.segments {
+	background-position: -30px -150px;
+}
+.grayicons .icon.bounced-email {
+	background-position: -30px -180px;
+}
+.grayicons .icon.ftp-uploads {
+	background-position: -30px -210px;
+}
+.grayicons .icon.reports {
+	background-position: -30px -240px;
+}
+.grayicons .icon.add {
+	background-position: -30px -270px;
+}
+.grayicons .icon.search {
+	background-position: -30px -300px;
+}
+
+.grayicons .icon.account {
+	background-position: -30px -330px;
+}
+.grayicons .icon.logout {
+	background-position: -30px -360px;
+}
+.grayicons .icon.studio {
+	background-position: -30px -390px;
+}
+.grayicons .icon.campaigns {
+	background-position: -30px -420px;
+}
+.grayicons .icon.analytics {
+	background-position: -30px -450px;
+}
+.grayicons .icon.list-management {
+	background-position: -30px -480px;
+}
+.grayicons .icon.automation {
+	background-position: -30px -510px;
+}
+.grayicons .icon.support {
+	background-position: -30px -540px;
+}
+.grayicons .icon.time {
+	background-position: -30px -570px;
+}
+.grayicons .icon.pin {
+	background-position: -30px -600px;
+}
+.grayicons .icon.newwin {
+	background-position: -30px -630px;
+}
+.grayicons .icon.delete {
+	background-position: -30px -660px;
+}
+.grayicons .icon.fav {
+	background-position: -30px -690px;
+}
+.grayicons .icon.close {
+	background-position: -30px -720px;
+}
+.grayicons .icon.expand {
+	background-position: -30px -750px;
+}
+.grayicons .icon.more {
+	background-position: -30px -780px;
+}
+.grayicons .icon.refresh {
+	background-position: -240px -360px;
+}
+
+
+/*--------*/
+
+.grayicons .icon.step1 {
+	background-position: -330px -480px;
+}
+.grayicons .icon.step2 {
+	background-position: -330px -510px;
+}
+.grayicons .icon.step3 {
+	background-position: -330px -540px;
+}
+.grayicons .icon.step4 {
+	background-position: -330px -570px;
+}
+
+.grayicons .active   .icon.step1 {
+	background-position: -360px -480px;
+}
+.grayicons .active   .icon.step2 {
+	background-position: -360px -510px;
+}
+.grayicons .active   .icon.step3 {
+	background-position: -360px -540px;
+}
+.grayicons  .active   .icon.step4 {
+	background-position: -360px -570px;
+}
+
+					/* ACTIVE ------------------------------------------ */
+					
+					
+					.grayicons .active >  .icon.graphics {
+						background-position: -60px 0;
+					}
+					.grayicons .active >  .icon.upload-subscribers {
+						background-position: -60px -30px;
+					}
+					.grayicons .active >  .icon.add-template {
+						background-position: -60px -60px;
+					}
+					.grayicons .active >  .icon.add-list {
+						background-position: -60px -90px;
+					}
+					.grayicons .active >  .icon.forms {
+						background-position: -60px -120px;
+					}
+					.grayicons .active >  .icon.segments {
+						background-position: -60px -150px;
+					}
+					.grayicons .active >  .icon.bounced-email {
+						background-position: -60px -180px;
+					}
+					.grayicons .active >  .icon.ftp-uploads {
+						background-position: -60px -210px;
+					}
+					.grayicons .active >  .icon.reports {
+						background-position: -60px -240px;
+					}
+					.grayicons .active >  .icon.add {
+						background-position: -60px -270px;
+					}
+					.grayicons .active >  .icon.search {
+						background-position: -60px -300px;
+					}
+					
+					.grayicons .active >  .icon.account {
+						background-position: -60px -330px;
+					}
+					.grayicons .active >  .icon.logout {
+						background-position: -60px -360px;
+					}
+					.grayicons .active >  .icon.studio {
+						background-position: -60px -390px;
+					}
+					.grayicons .active >  .icon.campaigns {
+						background-position: -60px -420px;
+					}
+					.grayicons .active >  .icon.analytics {
+						background-position: -60px -450px;
+					}
+					.grayicons .active >  .icon.list-management {
+						background-position: -60px -480px;
+					}
+					.grayicons .active >  .icon.automation {
+						background-position: -60px -510px;
+					}
+					.grayicons .active >  .icon.support {
+						background-position: -60px -540px;
+					}
+					.grayicons .active >  .icon.time {
+						background-position: -60px -570px;
+					}
+					.grayicons .active >  .icon.pin {
+						background-position: -60px -600px;
+					}
+					.grayicons .active >  .icon.newwin {
+						background-position: -60px -630px;
+					}
+					.grayicons .active >  .icon.delete {
+						background-position: -60px -660px;
+					}
+					.grayicons .active >  .icon.fav {
+						background-position: -60px -690px;
+					}
+					.grayicons .active >  .icon.close {
+						background-position: -60px -720px;
+					}
+					.grayicons .active >  .icon.expand {
+						background-position: -60px -750px;
+					}
+					.grayicons .active >  .icon.more {
+						background-position: -60px -780px;
+					}
+					.grayicons .active >  .icon.refresh {
+						background-position: -270px -360px;
+					}
+
+
+
+
+/* ----------------------------------------------------------------------- */
+
+
+
+
+
+
+/* ---------------------- Toggle Button ------------------------   */
+
+/*
+.tw-toggle {background:url(../img/togglebtn.png) no-repeat 0 bottom;
+	display:block;
+	float: left;
+	outline:0;
+	width:60px;
+	height:30px;}
+	*/
+.tw-toggle.workspace {margin: 0;}
+.tw-toggle.tiles {	background-position:0 0; }
+
+
+
+
+/* ----------------------------------------------------------------------- */
+
+
+ul.nav > li:hover >  a > .icon.studio {
+    background-position: -60px -390px !important;
+}
+
+ul.nav > li:hover >  a > .icon.campaigns {
+	background-position: -60px -420px;
+}
+ul.nav > li:hover > a .icon.analytics {
+	background-position: -60px -450px;
+}
+ul.nav > li:hover > a .icon.list-management {
+	background-position: -60px -480px;
+}
+ul.nav > li:hover > a .icon.automation {
+	background-position: -60px -510px;
+}
+ul.nav > li:hover > a .icon.account {
+	background-position: -60px -330px;
+}
+
+
+/* ---------------------------------- */
+
+
+ul.nav  ul.tab-icons li a .icon.graphics {
+	background-position: -60px 0;
+}
+ul.nav  ul.tab-icons li a .icon.upload-subscribers {
+	background-position: -60px -30px;
+}
+ul.nav  ul.tab-icons li a .icon.add-template {
+	background-position: -60px -60px;
+}
+ul.nav  ul.tab-icons li a .icon.add-list {
+	background-position: -60px -90px;
+}
+ul.nav  ul.tab-icons li a .icon.forms {
+	background-position: -60px -120px;
+}
+ul.nav  ul.tab-icons li a .icon.segments {
+	background-position: -60px -150px;
+}
+ul.nav  ul.tab-icons li a .icon.bounced-email {
+	background-position: -60px -180px;
+}
+ul.nav  ul.tab-icons li a .icon.ftp-uploads {
+	background-position: -60px -210px;
+}
+ul.nav  ul.tab-icons li a .icon.reports {
+	background-position: -60px -240px;
+}
+ul.nav  ul.tab-icons li a .icon.add {
+	background-position: -60px -270px;
+}
+
+
+			ul.nav  ul.tab-icons li a:hover .icon.graphics {
+				background-position: 0 0;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.upload-subscribers {
+				background-position: 0 -30px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.add-template {
+				background-position: 0 -60px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.add-list {
+				background-position: 0 -90px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.forms {
+				background-position: 0 -120px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.segments {
+				background-position: 0 -150px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.bounced-email {
+				background-position: 0 -180px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.ftp-uploads {
+				background-position: 0 -210px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.reports {
+				background-position: 0 -240px;
+			}
+			ul.nav  ul.tab-icons li a:hover .icon.add {
+				background-position: 0 -270px;
+			}
+
+/*----------------------------------------------------------------------------
+------------------------------------------- icons-bar ---------------------------------*/
+
+
+
+.icons-bar .icon.getstarted {
+	background-position: -610px 0;
+}
+.icons-bar .icon.marketing {
+	background-position: -610px -30px;
+}
+.icons-bar .icon.studio {
+	background-position: -610px -60px;
+}
+.icons-bar .icon.connect {
+	background-position: -610px -90px;
+}
+.icons-bar .icon.analytics {
+	background-position: -610px -120px;
+}
+.icons-bar .icon.calendar {
+	background-position: -610px -150px;
+}
+.icons-bar .icon.workspace {
+	background-position: -610px -180px;
+}
+
+.icons-bar .icon.pin {
+	background-position: 0px -600px;
+}
+
+
+
+
+
+
+/* -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+
+#tiles .green ul.tab-icons li a:hover .icon.graphics {background-position: -90px 0;}
+#tiles .green ul.tab-icons li a:hover .icon.upload-subscribers {
+    background-position: -90px -30px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.segments {
+    background-position: -90px -150px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.forms {
+    background-position: -90px -120px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.bounced-email {
+    background-position: -90px -180px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.ftp-uploads {
+    background-position: -90px -210px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.reports {
+    background-position: -90px -240px;
+}
+#tiles .green ul.tab-icons li a:hover .icon.add {
+    background-position: -90px -270px;
+}
+
+/* ------------------------------------------------------------------------------------------- */
+.temp1 { background-position: -610px -510px; }
+.temp2 { background-position: -610px -540px; }
+.temp3 { background-position: -610px -570px; }
+.temp4 { background-position: -610px -600px; }
+.temp5 { background-position: -610px -630px; }
+.temp6 { background-position: -610px -660px; }
+.temp7 { background-position: -610px -690px; }
+.temp8 { background-position: -610px -720px; }
+.temp9 { background-position: -610px -750px; }
+
+:hover.temp1,.temp-style .active .temp1 { background-position: -640px -510px; }
+:hover.temp2,.temp-style .active .temp2 { background-position: -640px -540px; }
+:hover.temp3,.temp-style .active .temp3 { background-position: -640px -570px; }
+:hover.temp4,.temp-style .active .temp4 { background-position: -640px -600px; }
+:hover.temp5,.temp-style .active .temp5 { background-position: -640px -630px; }
+:hover.temp6,.temp-style .active .temp6 { background-position: -640px -660px; }
+:hover.temp7,.temp-style .active .temp7 { background-position: -640px -690px; }
+:hover.temp8,.temp-style .active .temp8 { background-position: -640px -720px; }
+:hover.temp9,.temp-style .active .temp9 { background-position: -640px -750px; }
+
+/* ------------------------------------------------------------------------------------------- */
+.target {    background-position: -300px 0;}
+.tstyle {background-position: -330px -240px ;}
+.scheduled { background-position: -330px -210px ;}
+.editor {background-position: -300px -270px;}
+.view {  background-position: -330px -300px;}
+:hover.view {  background-position: -360px -300px;}
+
+.edit {background-position: -330px -330px;}
+
+.icon.h-info  {    background-position: -300px -30px; }
+.icon.social  {    background-position: -300px -60px; }
+.icon.settings { background-position: -300px -90px; } 
+.icon.preview {   background-position: -300px -120px;}
+
+
+.tagicon { display:block; width:15px; height:15px; background:url(../img/icon-map.png) no-repeat 0 0;}
+.tagicon.red { background-position:-150px -886px;}
+.tagicon.green { background-position:-150px -870px;}
+.tagicon.blue { background-position:-165px -870px;}
+.tagicon.yellow { background-position:-165px -885px;}
+.tagicon.gray { background-position:-180px -885px;}
+
+
+
+.social-icon { width:25px; height:24px; display:block; background:url(../img/icon-map.png) no-repeat 0 0;}
+.fb {background-position:  -610px -810px;}
+.tw {background-position:  -635px -810px;}
+.in {background-position:  -610px -834px;}
+.pi {background-position:  -635px -834px;}
+.gp {background-position:  -610px -858px;}
+.dn {background-position:  -635px -858px;}
+
+
+
+
+
+
+
+
+.btn { background:#fff; border:1px solid #d7d9dc;
+padding:2px 5px;
+box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+-webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+-moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+
+	
+	
+	
+.btn-group {}
+.btn-group .btn  {background: none repeat scroll 0 0 #FFFFFF ; border: 1px solid #D7D9DC ;
+}
+.btn-group .btn:hover  {background: none repeat scroll 0 0 #f3f5f8 ; border: 1px solid #afb1b3 ;}
+.btn-group .btn:focus, .btn-group .btn.active   {background: none repeat scroll 0 0 #F3F5F8 ; border: 1px solid #D7D9DC;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+outline:0;
+
+}
+
+.btn-group > .btn:first-child {
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+}
+.btn-group > .btn:last-child, .btn-group > .dropdown-toggle {
+    border-bottom-right-radius:3px;
+    border-top-right-radius: 3px;
+}
+
+
+
+
+.btn-group   .tiles { background-position: 0 -810px;}
+.btn-group   .workspace { background-position: 0 -840px; margin: 0;}
+
+
+.btn-group .active .tiles { background-position: -30px -810px; }
+.btn-group .active .workspace { background-position: -30px -840px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

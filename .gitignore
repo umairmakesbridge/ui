@@ -1,0 +1,14 @@
+node_modules/
+nbproject/
+json/
+
+Gruntfile.js
+package.json
+
+DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

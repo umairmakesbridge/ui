@@ -1,0 +1,20 @@
+h2.header-list {
+    padding: 5px 1px 3px 10px;
+	margin-top:20px;
+}
+
+.notfound
+{
+	font-size:17px;
+	font-weight:normal;
+	margin:10px 0 0 20px;
+}
+
+.search .close-icon {    
+    right: 38px;
+    top: 6px;
+}
+.highlight { background-color: #0088CC;
+    color: #FFFFFF;
+    font-weight: bold; }
+.c-name h2 { margin-top:9px; }
