@@ -18,3 +18,4 @@ h2.header-list {
     color: #FFFFFF;
     font-weight: bold; }
 .c-name h2 { margin-top:9px; }
+.step-contents { overflow-y:inherit; overflow-x:inherit; }

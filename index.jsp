@@ -43,6 +43,7 @@ if(userInfo == null) {
     <link href="css/style.css" rel="stylesheet" type="text/css" >    
     <link href="css/isotope.css" rel="stylesheet" type="text/css" >
     <link href="css/bmsgrid.css" rel="stylesheet" type="text/css" >
+    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" >
     <link href="css/calendar.css" rel="stylesheet" type="text/css" >
     <link href="css/custom_2.css" rel="stylesheet" type="text/css" >
     <link href="css/chosen.css" rel="stylesheet" type="text/css" >
