@@ -15,6 +15,7 @@
            'jquery.calendario': '../shared/libs/jquery.calendario',
            'jquery.chosen': '../shared/libs/chosen.jquery',
            'jquery.highlight': '../shared/libs/jquery.highlight',
+		   'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
 		   'jquery-ui': '../shared/libs/jquery-ui',
            bootstrap: '../shared/libs/bootstrap.min'
        },
@@ -51,6 +52,9 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
+               },
+			   'jquery.searchcontrol':{
+                   deps: ['jquery']
                },
                bootstrap: ['jquery']
          }

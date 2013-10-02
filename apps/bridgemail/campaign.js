@@ -152,6 +152,15 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template) {
                         }
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
+						this.$el.find('div#copycampsearch').searchcontrol({
+						  id:'copy-camp-search',
+						  width:'200px',
+						  height:'22px',
+						  placeholder: 'Search Campaign',
+						  gridcontainer: 'camp_list_grid',
+						  showicon: 'no',
+						  iconsource: ''
+					   });
                 },
                 stepsCall:function(step){
                     var proceed = -1;
