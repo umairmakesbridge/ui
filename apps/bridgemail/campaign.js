@@ -1,19 +1,8 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','text!html/campaign.html'],
-function (bmsgrid,calendraio,chosen,jqhighlight,template) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','text!html/campaign.html','views/common/editor'],
+function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
         'use strict';
         return Backbone.View.extend({
-                id: 'step_container',
-                tags : '',
-                tag_limit : 5,
-                camp_id : 0,
-                tags_common : ["test","test1","test3"],
-                hasConversionFilter:false,
-                hasResultToSalesCampaign:false,
-                mergeTags : {},
-                allMergeTags : [],
-                states:{"step1":{},
-                        "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:''}
-                       },
+                id: 'step_container',               
                 events: {
                        "click  .step3 #choose_soruce li":function(obj){
                            var target_li = obj.target.tagName=="LI" ? $(obj.target) : $(obj.target).parents("li");                           
@@ -27,8 +16,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                       'click .step2 #choose_soruce li':function(obj){
                           var camp_obj = this;
                            var target_li =$.getObj(obj,"li"); 
-                          if($(".step2 #choose_soruce li.selected").length==0){
-                                $(".step2 .selection-boxes").animate({width:"425px",margin:'0px auto'}, "medium",function(){
+                          if(this.$(".step2 #choose_soruce li.selected").length==0){
+                                this.$(".step2 .selection-boxes").animate({width:"425px",margin:'0px auto'}, "medium",function(){
                                     $(this).removeClass("create-temp");                                                                                        
                                     camp_obj.step2SlectSource(target_li);
                                 });
@@ -120,16 +109,30 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                  },
 
                 initialize: function () {
-                        this.template = _.template(template);				
+                        this.template = _.template(template);				                        
+                        this.tags =  '';
+                        this.tag_limit = 5;
+                        this.camp_id = 0;
+                        this.tags_common =[];
+                        this.hasConversionFilter=false;
+                        this.hasResultToSalesCampaign=false;
+                        this.mergeTags = {};
+                        this.allMergeTags = [];
+                        this.wp_id = this.options.params.wp_id;
+                        this.states = {"step1":{},
+                                        "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:''}
+                                       };
+                        this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
                         this.render();
                 },
 
                 render: function () {
                         this.$el.html(this.template({}));				                        
-                        this.app = this.options.app;    
+                        this.app = this.options.app;                            
+                        this.wizard = this.options.wizard;    
                         if(this.options.params && this.options.params.camp_id){
                             this.camp_id = this.options.params.camp_id;
-                        }
+                        }                                     
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
                 },
@@ -158,10 +161,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     }
                     return proceed;
                 },
-                init:function(){
-                    
-                                                            
-                    
+                init:function(){                                                                                                    
                     //Load mergeFields
                     this.mergeFieldsSetup();
                     //Load Calender
@@ -172,6 +172,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     if(this.camp_id!=="0"){
                         this.loadCampaign(this.camp_id);
                     }
+                    this.$el.parents(".ws-content").append(this.bmseditor.$el);
+                    this.bmseditor.initEditor({id:this.wp_id});
                    
                 },
                 initTemplateListing:function(){
@@ -228,6 +230,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                
                         camp_obj.$("#campaign_preview_defaultReplyTo").html(camp_json.defaultReplyTo);
                         camp_obj.$("#campaign_footer_text").val(camp_json.footerText);
+                        camp_obj.states.step2.htmlText = camp_json.htmlText;
 
                         if(camp_json.defaultSenderName){
                              camp_obj.$("#campaign_from_name_default").show();
@@ -339,10 +342,11 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     $("#tag_box_close").click(function(){
                         $(".tagbox").hide();
                     });
-                    active_ws.find(".tagscont .ellipsis").click(function(){
-                       $("#camp_tags").toggleClass("overflow");
-                       $(".tagscont .tags-buttons").toggleClass("overflow");
-                    });
+                    active_ws.find(".tagscont .ellipsis").click(_.bind(function(){
+                       var active_ws = this.$el.parents(".ws-content");  
+                       active_ws.find("#camp_tags").toggleClass("overflow");
+                       active_ws.find(".tagscont .tags-buttons").toggleClass("overflow");
+                    },this));
                     active_ws.find("#camp_tags").click(function(obj){
                         $(".custom_popup").hide();
                         obj.stopPropagation();
@@ -551,7 +555,24 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     
                     return proceed;
                 },
-                saveStep2:function(){
+                saveStep2:function(){                 
+                 var camp_obj = this; 
+                 var html = this.$(".step2 #choose_soruce li.selected").attr("id")!=="html_code" ?tinyMCE.get('bmseditor_'+this.wp_id).getContent():this.$("textarea#myhtml").val();
+                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                   $.post(URL, { type: "saveStep2",campNum:this.camp_id,
+                                 htmlCode: html      
+                         })
+                        .done(function(data) {                                 
+                            var step1_json = jQuery.parseJSON(data);
+                            camp_obj.bmseditor.$el.find(".saving").removeClass("saving");
+                            if(step1_json[0]!=="err"){
+                                camp_obj.app.showMessge("Step 2 saved successfully!");
+                                camp_obj.states.step2.htmlText = html;
+                            }
+                            else{
+                               camp_obj.app.showMessge(step1_json[0]); 
+                            }
+                   });
                   return 1;  
                 },
                 saveStep3:function(){
@@ -1193,6 +1214,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     }
                     else{
                         $(".mergefields .browsefields").show();
+                        $(".mergefields .browsefields").removeClass("mergefields_editor");
                         $(".mergefields .searchfields,#remove-merge-list").hide();
                         $("#merge_list_search").val("");
                         
@@ -1348,6 +1370,10 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                                 this.attachEvents();
                                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                             break;
+                         case 'html_editor':
+                                 this.setEditor();
+                                 tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
+                         break;
                         default:
                             break;
                     }
@@ -1591,7 +1617,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                                 if(val[0].isAdmin==='Y'){
                                     templates_html +='<div class="template-type builticon showtooltip"  title="Stock Template"></div>';
                                 }
-                                templates_html +='<div class="img"><div><a class="btn-green"><span class="plus">+</span>Select Template</a><a href="" class="btn-blue"><span class="icon view"></span>Preview Template</a></div><img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
+                                templates_html +='<div class="img"><div><a class="btn-green select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span class="plus">+</span>Select Template</a><a href="" class="btn-blue"><span class="icon view"></span>Preview Template</a></div><img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
                                 templates_html +='<p>'+camp_obj.app.showTags(val[0].tags)+'</p>';
@@ -1627,6 +1653,16 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                         template_html.find(".feat_temp").click(_.bind(function(obj){
                              this.$("#template_search_menu li:nth-child(3)").click();   
                         },this));
+                        
+                        template_html.find(".select-template").click(_.bind(function(obj){
+                              this.setEditor();
+                              var target = $.getObj(obj,"a");
+                              var bms_token =this.app.get('bms_token');
+                              this.app.showLoading('Loading HTML...',$(".fullwindow.campaign-content"));
+                              var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
+                              jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
+                              
+                        },this));
                     }
                     if((this.states.step2.offset + parseInt(this.states.step2.templates.count))<parseInt(this.states.step2.totalcount)){
                         this.$(".step2 .thumbnails li:last-child").attr("data-load","true");
@@ -1635,13 +1671,26 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template) {
                     
                 },
                 copyCampaign:function(obj){
-                    this.$("#html_editor").click(); 
+                    this.setEditor();
                     var target = $.getObj(obj,"div");
                     var bms_token =this.app.get('bms_token');
-                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+target.attr("id")+"&type=basic";
-                    jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        
-                    });
+                    this.app.showLoading('Loading HTML...',$(".fullwindow.campaign-content"));
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+target.attr("id")+"&type=basic";                    
+                    jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
+                },
+                setEditor:function(){
+                  this.bmseditor.showEditor();   
+                  var active_ws = this.$el.parents(".ws-content");
+                  active_ws.find(".camp_header").addClass("workspace-fixed-editor");                                                
+                  tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                },
+                setEditorHTML:function(tsv, state, xhr){
+                    this.app.showLoading(false,$(".fullwindow.campaign-content"));
+                    var html_json = jQuery.parseJSON(xhr.responseText);
+                    if(html_json.htmlText){
+                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                    }
+                    
                 }
                 
         });

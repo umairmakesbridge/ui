@@ -16,6 +16,8 @@ function ($,Backbone, _,app,Wizard, template) {
                         else{
                            $("#wstabs li:first").click();
                         }
+                        $("body").css("overflow","auto");                                                    
+                        $("#activities,#search,.icons-bar").show();                        
                     },
                     'click .toolbar .more':function(){
                         //this.$el.find("#more-tool-actions").fadeToggle("fast", "linear");
@@ -76,7 +78,7 @@ function ($,Backbone, _,app,Wizard, template) {
                     require(
                             [_url],function(pageView){
                                 app.showLoading(false,wsp);
-                                var page_view = new pageView({'app':app,params:params});
+                                var page_view = new pageView({'app':app,params:params,wizard:container});
                                 if(container){
                                     //giving access to wizard 
                                     container.page = page_view; 

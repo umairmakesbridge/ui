@@ -4390,7 +4390,7 @@ border-radius: 3px;
 
 
 
-.loading , .overlay { position:absolute; left:0; top:0; width:100%; height:100%; display:block;  z-index: 9999;
+.loading , .overlay { position:absolute; left:0; top:0; width:100%; height:100%; display:block;  z-index: 100003;
 background: url("../img/trans_white.png") repeat scroll center 0 transparent;}
 
 

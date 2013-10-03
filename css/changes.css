@@ -107,10 +107,10 @@ ol.progtrckr li.no-text{
     fon-weight:700px;
 }
 .loading{
-    z-index: 1000;
+    z-index: 10002;
 }
 .loading p{
-    z-index: 1001;
+    z-index: 10003;
 }
 
 .template-container{
@@ -674,4 +674,80 @@ input[type="text"].search-template{
 }
 .c-name h2{
     font-size:20px;
+}
+
+.fullwindow {
+    margin:0x;
+    position: fixed !important;
+    z-index: 10000;
+    top:111px;
+    left:0px;
+    display: none;
+    padding: 15px 15px 0;
+}
+
+.fullwindow{
+	min-height:380px;
+	background:#fff;
+	min-width: 850px;
+	padding: 15px;
+	position:relative;
+	-webkit-border-radius: 3px 3px 3px;
+	-moz-border-radius:3px 3px 3px;
+	border-radius: 3px 3px 3px;
+	border: 1px solid #DDDDDD;
+}
+
+.fullwindow:before {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 0 0 3px 3px;
+    bottom: -5px;
+    content: "";
+    height: 3px;
+    left: -1px;
+    position: absolute;
+    width: 100%;
+
+	-webkit-border-radius: 0 0 3px 3px;
+	-moz-border-radius:0 0 3px 3px;
+	border-radius: 0 0 3px 3px;}
+	
+.fullwindow:after { background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DDDDDD;
+    border-radius: 0 0 3px 3px;
+    bottom: -9px;
+    content: "";
+    height: 3px;
+    left: -1px;
+    position: absolute;
+    width: 100%;
+
+	-webkit-border-radius: 0 0 3px 3px;
+	-moz-border-radius:0 0 3px 3px;
+	border-radius: 0 0 3px 3px; 
+}
+
+.workspace-fixed-editor {
+    left: 16px;
+    margin-top: 0;
+    position: fixed !important;
+    top: 41px;
+    width:100% !important;
+    z-index: 10001;
+}
+
+.mergefields_editor{
+    z-index: 10004;
+}
+.mergefields_editor:after{
+    right:146px;
+}
+.saving {
+    background: url("../img/greenloader.gif") no-repeat scroll center center #94CF1E;
+    font-size: 0;
+    line-height: 0;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 30px;
 }

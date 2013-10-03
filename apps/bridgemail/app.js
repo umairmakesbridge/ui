@@ -107,7 +107,7 @@ define([
                            }
                        }
                    });
-                   
+                 //this.mainContainer.bmseditor.initEditor();
                    
              },
              checkError:function(result){
@@ -202,7 +202,8 @@ define([
                 str = str.replace(/&#41;/g,")");
                 str = str.replace(/&lt;/g,"<");
                 str = str.replace(/&gt;/g,">");
-                str = str.replace(/&gt;/g,">");                
+                str = str.replace(/&gt;/g,">"); 
+                str = str.replace(/&nbsp;/g," "); 
                 str = str.replace(/&quot;/g,"\"");
                 if(lineFeed){
                     str = str.replace(/&line;/g,"\n");

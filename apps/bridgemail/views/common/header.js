@@ -56,10 +56,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                                 });
                             },
                             'click .automation-li':function(obj){
-                                 app.mainContainer.addWorkSpace({type:'wizard',
+                                 app.mainContainer.bmseditor.showEditor();
+                                 /*app.mainContainer.addWorkSpace({type:'wizard',
                                                   title:this.getTitle(obj),
                                                   wizard :{steps:4,active_step:1}
-                                                });
+                                                });*/
                             }
                             ,
                             'click .account-li':function(obj){

@@ -1,10 +1,11 @@
-define(['jquery','backbone','app' ,'views/common/header', 'text!templates/main_container.html','views/common/footer','views/common/news','views/workspace'],
-        function($,Backbone, app, HeaderView ,LandingPage,FooterView,NewsView,WorkSpace){
+define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templates/main_container.html','views/common/footer','views/common/news','views/workspace'],
+        function($,Backbone, app,_tinymce, HeaderView ,LandingPage,FooterView,NewsView,WorkSpace){
   "use strict";
   
    return Backbone.View.extend({       
       id: 'main-container', 
       tagName :'div',
+      wp_counter:0,
       events: {
           'click .tw-toggle button':function(obj){
               if(!$(obj.target).find("span").hasClass("workspace")){
@@ -60,7 +61,7 @@ define(['jquery','backbone','app' ,'views/common/header', 'text!templates/main_c
       initialize:function(){
          this.header = new HeaderView();
          this.footer = new FooterView();
-         this.news = new NewsView();
+         this.news = new NewsView();         
          this.render();
       }
       ,      
@@ -71,6 +72,7 @@ define(['jquery','backbone','app' ,'views/common/header', 'text!templates/main_c
       addWorkSpace:function(options){
            var workspace_li = $("#wstabs li[workspace_id='"+options.workspace_id+"']");
            if(workspace_li.length===0){
+                this.wp_counter = this.wp_counter +1;
                 var obj = $(".tw-toggle button").eq(1);
                  if(!$(obj).hasClass("active")){                
                      $(".tw-toggle button").removeClass("active");
@@ -79,13 +81,18 @@ define(['jquery','backbone','app' ,'views/common/header', 'text!templates/main_c
                      $('#workspace').show();
                      $('#workspace').css({left:'0%'});  
                  }
+                 
+                var wp_count = this.wp_counter ; 
+                if(options && options["params"]){
+                    options["params"]["wp_id"] = wp_count;
+                }
                 var wp_view = new WorkSpace(options);              
 
-                wp_view.$el.addClass("active");
-                var wp_count = $(".ws-tabs li").length ;
+                wp_view.$el.addClass("active");                
 
                 $(".ws-tabs li").removeClass('active');
-                $('#wp_li_0').before('<li class="active" id="wp_li_'+wp_count+'" workspace_id="'+options.workspace_id+'"><a><span class="icon step1"></span></a></li>');
+                var workspaceid = options.workspace_id?('workspace_id="'+options.workspace_id+'"'):"";
+                $('#wp_li_0').before('<li class="active" id="wp_li_'+wp_count+'" '+workspaceid+'><a><span class="icon step1"></span></a></li>');
 
                 wp_view.$el.attr("id","workspace_"+wp_count);
                 $("#workspace .ws-content.active").removeClass('active').css("display","none");

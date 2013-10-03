@@ -15,6 +15,7 @@
            'jquery.calendario': '../shared/libs/jquery.calendario',
            'jquery.chosen': '../shared/libs/chosen.jquery',
            'jquery.highlight': '../shared/libs/jquery.highlight',
+           'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
            bootstrap: '../shared/libs/bootstrap.min'
        },
         shim: {
@@ -47,7 +48,12 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
-               },
+               },                                                           
+                'tinymce':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.tinymce'
+               }
+               ,
                bootstrap: ['jquery']
          }
     });
