@@ -194,6 +194,10 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                             usepager : false,
                             colWidth : ['100%','90px','66px','132px']
                     });
+                    this.$("#camp_list_grid tr td:nth-child(1)").attr("width","100%");
+                    this.$("#camp_list_grid tr td:nth-child(2)").attr("width","90px");
+                    this.$("#camp_list_grid tr td:nth-child(3)").attr("width","66px");
+                    this.$("#camp_list_grid tr td:nth-child(4)").attr("width","132px");
                 },
                 initListListing:function(){
                     this.$el.find("#list_grid").bmsgrid({
