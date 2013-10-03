@@ -8,46 +8,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				"click #addnew_campaign":function(){					
                                     this.app.mainContainer.openCampaign();
 				},
-                                "click #list_grid .btn-green":function(obj){
-                                    var target = $.getObj(obj,"a");
-                                    if(target.attr("id")){
-                                        this.app.mainContainer.openCampaign(target.attr("id"));
-                                    }
-                                },
-				 'keyup #list-search':function(obj){
-					 var searchterm = $(obj.target).val();
-					 if(searchterm.length){
-						 this.$("#remove-search-list").show();
-						 this.$("#remove-merge-list").show();
-						 this.$("#list_grid tr").hide();
-						 this.$('#no_of_camps').hide();
-						 this.$('#srch').hide();
-						 searchterm = searchterm.toLowerCase();
-						 this.$("#list_grid tr").filter(function() {                                   
-							  return $(this).text().toLowerCase().indexOf(searchterm) > -1;
-						  }).show();
-						  this.$('#list_grid').removeHighlight().highlight(searchterm);
-					 }
-					 else{
-						 this.$("#remove-search-list").hide();
-						 this.$("#remove-merge-list").hide();
-						 this.$("#list_grid tr").show();
-						 this.$('#no_of_camps').show();
-						 this.$('#srch').show();
-						 this.$("#list_grid").removeHighlight();
-					 }
-												
-					 
-				 },
-				 'click #remove-merge-list':function(){
-				   this.$("#list-search").val('');  
-				   this.$("#remove-search-list").hide();
-				   this.$("#remove-merge-list").hide();
-				   this.$("#list_grid tr").show();
-				   this.$('#no_of_camps').show();
-				   this.$('#srch').show();
-				   this.$("#list_grid").removeHighlight();
-				 }				
+				"click #camps_grid .btn-green":function(obj){
+					var target = $.getObj(obj,"a");
+					if(target.attr("id")){
+						this.app.mainContainer.openCampaign(target.attr("id"));
+					}
+				}
 			},
 			initialize:function(){
 			   this.template = _.template(template);
@@ -63,9 +29,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					width:'300px',
 					height:'22px',
 					placeholder: 'Search Campaign',
-					gridcontainer: 'list_grid',
+					gridcontainer: 'camps_grid',
 					showicon: 'no',
-					iconsource: ''
+					iconsource: '',
+					closeiconid: 'clearcampssearch'
 				 });
 			}
 			,
@@ -87,7 +54,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			createListTable: function (xhr) {
 				var camp_obj = this;				
 				var camp_list_json = jQuery.parseJSON(xhr.responseText);
-				var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="list_grid"><tbody>';				
+				var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid"><tbody>';				
 				$.each(camp_list_json.lists[0], function(index, val) {
 					list_html += camp_obj.makecamprows(val);					
 				});	
@@ -95,7 +62,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				list_html += '</tbody></table>';
 				this.app.showLoading(false,camp_obj.$el.find("#target-camps"));
 				this.$el.find("#target-camps").html(list_html);
-				this.$el.find("#list_grid").bmsgrid({
+				this.$el.find("#camps_grid").bmsgrid({
 						useRp : false,
 						resizable:false,
 						colresize:false,
@@ -103,10 +70,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 						usepager : false,
 						colWidth : ['100%','90px','66px','132px']
 				});                                                                
-                                this.$("#list_grid tr td:nth-child(1)").attr("width","100%");
-                                this.$("#list_grid tr td:nth-child(2)").attr("width","90px");
-                                this.$("#list_grid tr td:nth-child(3)").attr("width","66px");
-                                this.$("#list_grid tr td:nth-child(4)").attr("width","132px");
+                                this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
+                                this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
+                                this.$("#camps_grid tr td:nth-child(3)").attr("width","66px");
+                                this.$("#camps_grid tr td:nth-child(4)").attr("width","132px");
 				var camp_count_lable = '';
 				if(camp_list_json.count > 1)
 					camp_count_lable = 'Campaigns';

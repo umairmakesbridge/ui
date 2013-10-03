@@ -9,10 +9,11 @@
 			  placeholder: "Search list",
 			  gridcontainer : "list_grid",
 			  showicon: 'no',
-			  iconsource: ''
+			  iconsource: '',
+			  closeiconid: 'clearsearch'
 			  }, options );
 			  return this.each(function() {				  
-				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' style='width:"+ options.width +";height:"+ options.height +";' />");
+				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' style='width:"+ options.width +";' />");
 				  txt.bind( "keyup", dosearch );
 				  $(this).append(txt);
 				  if(options.showicon == 'yes')
@@ -20,12 +21,12 @@
 					  var icon = $('<img src="'+ options.iconsource +'" />');
 					  $(this).append(icon);
 				  }
-				  var closeicon = $('<a class="close-icon" id="remove-merge-list" style="display:none"></a>');
+				  var closeicon = $('<a class="close-icon" id="'+ options.closeiconid +'" style="display:none"></a>');
 				  $(this).append(closeicon);
 				  closeicon.click(function() { 
 				  	//alert(txt.val());
 				  	txt.val('');
-					$("#remove-merge-list").hide();
+					$("#"+ options.closeiconid).hide();
 					 $("#"+ options.gridcontainer +" tr").show();
 					 $("#"+ options.gridcontainer).removeHighlight();
 				  });
@@ -35,9 +36,12 @@
 				  
 				  function dosearch(obj) {
 					  var searchterm = $(obj.target).val();
-					  if(searchterm.length)
+					  //alert(searchterm.length);
+					  if(searchterm.length > 0)
 					  {
-					  	$('#remove-merge-list').show();
+						  //alert($('#remove-merge-list'));
+					  	$("#"+ options.closeiconid).show();
+						//$('#remove-merge-list').css('display','block');
 						$("#"+ options.gridcontainer +" tr").hide();
 						 searchterm = searchterm.toLowerCase();
 						 $("#"+ options.gridcontainer +" tr").filter(function() {                                   
@@ -47,11 +51,11 @@
 					  }
 					  else
 					  {
-					  	$('#remove-merge-list').hide();
+					  	$("#"+ options.closeiconid).hide();
 						$("#"+ options.gridcontainer +" tr").show();
 						$("#"+ options.gridcontainer).removeHighlight();
 					  }
-				  }				  
+				  }
 			  });
 		};
 	}( jQuery ));

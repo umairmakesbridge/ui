@@ -20,3 +20,5 @@ h2.header-list {
 .c-name h2 { margin-top:9px; }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
 .search input[type=text] { padding:3px 6px; }
+ #listssearch { margin-right:5px; }
+

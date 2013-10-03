@@ -37,7 +37,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
                        },
-                       'keyup #list-search':function(obj){
+                       /*'keyup #list-search':function(obj){
                            var searchterm = $(obj.target).val();
                            if(searchterm.length){
                                this.$("#remove-search-list").show();                               
@@ -58,7 +58,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                          this.$("#list-search").val('');  
                          this.$("#remove-search-list").hide();
                          $("#list_grid tr").show();
-                       },
+                       },*/
                        'click #save_results_sf':function(){
                            this.saveResultToSF();
                        },
@@ -100,13 +100,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                       },
                       'click #campaign_isFooterText':function(){
                         this.setFooterArea();
-                      },
-                      'keyup #copy-camp-search':function(obj){
-                           
                       }
-                     
-                      
-                 },
+                    },
 
                 initialize: function () {
                         this.template = _.template(template);				                        
@@ -135,14 +130,35 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                         }                                     
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
-						this.$el.find('div#copycampsearch').searchcontrol({
+                                           this.$el.find('div#copycampsearch').searchcontrol({
 						  id:'copy-camp-search',
-						  width:'200px',
+						  width:'300px',
 						  height:'22px',
 						  placeholder: 'Search Campaign',
 						  gridcontainer: 'camp_list_grid',
 						  showicon: 'no',
-						  iconsource: ''
+						  iconsource: '',
+							closeiconid: 'clearcopysearch'
+					   });
+					   this.$el.find('div#listssearch').searchcontrol({
+						  id:'list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'clearlistssearch'
+					   });
+					   this.$el.find('div#targetssearch').searchcontrol({
+						  id:'target-list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'target_list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'cleartlistssearch'
 					   });
                 },
                 stepsCall:function(step){

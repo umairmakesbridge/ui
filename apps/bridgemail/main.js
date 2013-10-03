@@ -62,7 +62,13 @@
                 'jquery.searchcontrol':{
                    deps: ['jquery']
                },
+<<<<<<< HEAD
 
+=======
+			   'jquery.searchcontrol':{
+                   deps: ['jquery']
+               },
+>>>>>>> tanveer_changes
                bootstrap: ['jquery']
          }
     });
