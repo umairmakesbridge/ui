@@ -48,7 +48,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template) {
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
                        },
-                       'keyup #list-search':function(obj){
+                       /*'keyup #list-search':function(obj){
                            var searchterm = $(obj.target).val();
                            if(searchterm.length){
                                this.$("#remove-search-list").show();                               
@@ -69,7 +69,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template) {
                          this.$("#list-search").val('');  
                          this.$("#remove-search-list").hide();
                          $("#list_grid tr").show();
-                       },
+                       },*/
                        'click #save_results_sf':function(){
                            this.saveResultToSF();
                        },
@@ -111,32 +111,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template) {
                       },
                       'click #campaign_isFooterText':function(){
                         this.setFooterArea();
-                      },
-                      'keyup #copy-camp-search':function(obj){
-                           var searchterm = $.trim($(obj.target).val());
-                            if(searchterm.length){
-                                    this.$("#remove-search-list").show();
-                                    this.$("#remove-merge-list").show();
-                                    $("#list_grid tr").hide();
-                                    $('#no_of_camps').hide();
-                                    $('#srch').hide();
-                                    searchterm = searchterm.toLowerCase();
-                                    $("#list_grid tr").filter(function() {                                   
-                                             return $(this).text().toLowerCase().indexOf(searchterm) > -1;
-                                     }).show();
-                                     $('#list_grid').removeHighlight().highlight(searchterm);
-                            }
-                            else{
-                                    this.$("#remove-search-list").hide();
-                                    this.$("#remove-merge-list").hide();
-                                    $("#list_grid tr").show();
-                                    $('#no_of_camps').show();
-                                    $('#srch').show();
-                                    $("#list_grid").removeHighlight();
-                            }
-                      }
-                     
-                      
+                      }                      
                  },
 
                 initialize: function () {
@@ -154,12 +129,33 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template) {
                         this.loadDataAjax(); // Load intial Calls
 						this.$el.find('div#copycampsearch').searchcontrol({
 						  id:'copy-camp-search',
-						  width:'200px',
+						  width:'300px',
 						  height:'22px',
 						  placeholder: 'Search Campaign',
 						  gridcontainer: 'camp_list_grid',
 						  showicon: 'no',
-						  iconsource: ''
+						  iconsource: '',
+							closeiconid: 'clearcopysearch'
+					   });
+					   this.$el.find('div#listssearch').searchcontrol({
+						  id:'list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'clearlistssearch'
+					   });
+					   this.$el.find('div#targetssearch').searchcontrol({
+						  id:'target-list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'target_list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'cleartlistssearch'
 					   });
                 },
                 stepsCall:function(step){
