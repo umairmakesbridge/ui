@@ -13,7 +13,7 @@
 			  closeiconid: 'clearsearch'
 			  }, options );
 			  return this.each(function() {				  
-				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' style='width:"+ options.width +";' />");
+				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' class='search-control' style='width:"+ options.width +";' />");
 				  txt.bind( "keyup", dosearch );
 				  $(this).append(txt);
 				  if(options.showicon == 'yes')

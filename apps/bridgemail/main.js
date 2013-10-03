@@ -59,10 +59,7 @@
                    exports: 'jQuery.fn.tinymce'
                }
                ,
-                'jquery.searchcontrol':{
-                   deps: ['jquery']
-               },
-			   'jquery.searchcontrol':{
+               'jquery.searchcontrol':{
                    deps: ['jquery']
                },
                bootstrap: ['jquery']

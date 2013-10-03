@@ -19,6 +19,6 @@ h2.header-list {
     font-weight: bold; }
 .c-name h2 { margin-top:9px; }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
-.search input[type=text] { padding:3px 6px; }
+ input[type=text].search-control { padding:3px 6px; }
  #listssearch { margin-right:5px; }
 
