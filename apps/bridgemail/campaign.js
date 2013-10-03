@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','text!html/campaign.html','views/common/editor'],
-function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor'],
+function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -135,6 +135,15 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                         }                                     
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
+						this.$el.find('div#copycampsearch').searchcontrol({
+						  id:'copy-camp-search',
+						  width:'200px',
+						  height:'22px',
+						  placeholder: 'Search Campaign',
+						  gridcontainer: 'camp_list_grid',
+						  showicon: 'no',
+						  iconsource: ''
+					   });
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -204,7 +213,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                    var bms_token =this.app.get('bms_token');
                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=basic";
                    var camp_obj = this;
-
+					
+					$( "#accordion" ).accordion();
                     //remove previous data 
                     camp_obj.$(".step1 input").val("");
                     camp_obj.$(".step1 input[type='checkbox']").prop("checked",false);
@@ -748,7 +758,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                    
                     
                     var wp_length = $(".ws-tabs li").length-1;
-                    this.$("#accordion_setting").attr("id","accordion_setting"+wp_length);
+                    /*this.$("#accordion_setting").attr("id","accordion_setting"+wp_length);
                     this.$("#accordion_setting"+wp_length+" .accordion-toggle").attr("data-parent","#accordion_setting"+wp_length);
                     
                     var acc_group = this.$("#accordion_setting"+wp_length+" .accordion-group");
@@ -757,7 +767,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                        $(this).find(".accordion-toggle").attr("href","#"+id+wp_length);
                        $(this).find(".accordion-body").attr("id",id+wp_length);
                        $(this).find(".accordion-heading input[type='checkbox']").attr("accrodion-body",id+wp_length);
-                    });
+                    });*/
                     
                     /*var xhr = {};
                     xhr.responseText = '{"count": "85","lists":[{"list1":[{"creationDate": "2012-07-27","tags": "","campaignSentCount": "0","name": "Abandoned Shopping Carts","listNum": "qcWQe30Wh33Jb26Hi17Mk20qcW","md5": "4b7dc121caf2baf0963a047346fc8df6","subscriberCount": "705","isSupressList": "false"}],"list2":[{"creationDate": "2008-02-05","tags": "","campaignSentCount": "0","name": "All Synch Leads","listNum": "kzaqwKb26Bb17Gd20Mi21Uh30kzaqw","md5": "7d24c36ac85da6029d610602b6994085","subscriberCount": "712","isSupressList": "false"}]}]}';
@@ -1071,8 +1081,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                     var URL = "/pms/io/salesforce/getSalesforceData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
-                            var camps_html = '<select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" disabled="disabled" >';
-                            camps_html += '<option value="">Select Salesforce Campaign</option>';
+                            var camps_html = '<select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >';
+                            camps_html += '<option value=""></option>';
                              var s_camps_json = jQuery.parseJSON(xhr.responseText);
                              if(camp_obj.app.checkError(s_camps_json)){
                                 return false;
@@ -1083,7 +1093,15 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                             camps_html +="</select>";
                             camp_obj.$("#salesforce_campaigns").html(camps_html);
                             
-                            //camp_obj.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!'});
+                            camp_obj.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!'});
+							
+							var type_html = '<select id="con_filter_combo" data-placeholder="Select Filter" style="width:150px;" class="chosen-select"><option value=""></option><option value="ct">Contains</option><option value="=">Equal to</option></select>';
+							camp_obj.$("#match_type").html(type_html);
+							camp_obj.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});
+							
+							var unsubsc_html = '<select id="campaign_unSubscribeType" data-placeholder="Simple Unsubscribe" class="chosen-select"><option value="S">Simple Unsubscribe </option><option value="U">Universal Subscriber Management</option></select>';
+							camp_obj.$("#unsubscribe").html(unsubsc_html);
+							camp_obj.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                         }
                     }).fail(function() { console.log( "error fetch sales force campaign" ); });  
                 },
@@ -1143,7 +1161,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,template,editorView) {
                         this.$("#con_filter_combo,#con_filter_field").prop("disabled",false);
                     }
                     else{
-                       this.$("#con_filter_combo,#con_filter_field").prop("disabled",true); 
+                       /*this.$("#con_filter_combo,#con_filter_field").prop("disabled",true); */
                        this.$("#con_filter_field").val("");
                        this.$("#con_filter_combo").val("#");
                     }

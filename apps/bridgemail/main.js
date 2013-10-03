@@ -16,7 +16,9 @@
            'jquery.chosen': '../shared/libs/chosen.jquery',
            'jquery.highlight': '../shared/libs/jquery.highlight',
            'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
-           bootstrap: '../shared/libs/bootstrap.min'
+           'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
+           'jquery-ui': '../shared/libs/jquery-ui',
+            bootstrap: '../shared/libs/bootstrap.min'
        },
         shim: {
                 backbone: {
@@ -32,6 +34,9 @@
                'jquery.isotope':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.isotope'
+               },
+			   'jquery-ui':{
+                   deps: ['jquery']
                },
                'jquery.bmsgrid':{
                    deps: ['jquery'],
@@ -54,6 +59,10 @@
                    exports: 'jQuery.fn.tinymce'
                }
                ,
+                'jquery.searchcontrol':{
+                   deps: ['jquery']
+               },
+
                bootstrap: ['jquery']
          }
     });

@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.highlight','text!html/campaigns.html'],
-function (bmsgrid,jqhighlight,template) {
+define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html'],
+function (bmsgrid,jqhighlight,jsearchcontrol,template) {
         'use strict';
         return Backbone.View.extend({
 			id: 'campaigns_list',
@@ -51,18 +51,27 @@ function (bmsgrid,jqhighlight,template) {
 			},
 			initialize:function(){
 			   this.template = _.template(template);
-			   $('.tagscont').hide();
+			   $('.tagscont').hide();			   
 			   this.render();
 			},
 			render: function () {
 				this.$el.html(this.template({}));
                                 this.app = this.options.app;    
 				this.getallcampaigns();
+				this.$el.find('div#campslistsearch').searchcontrol({
+					id:'list-search',
+					width:'300px',
+					height:'22px',
+					placeholder: 'Search Campaign',
+					gridcontainer: 'list_grid',
+					showicon: 'no',
+					iconsource: ''
+				 });
 			}
-                        ,
-                        init:function(){
-                            this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
-                        }
+			,
+			init:function(){
+				this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
+			}
 			,
 			getallcampaigns: function () {
 				var camp_obj = this;                                
