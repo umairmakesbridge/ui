@@ -11,9 +11,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                 this.back(obj);
                             },
                             'click a.nextbtn':function(obj){
-                                this.next(obj); 
+                                //this.next(obj); 
+                                this.validateStep();
                             },
                             'click ol.progtrckr li':function(obj){
+                                return false;
                                 if(obj.target.className.indexOf("step")==-1){
                                     if(!$(obj.target).hasClass("active")){
                                         var validate = this.page.stepsCall("step_"+parseInt(this.active_step));
@@ -112,7 +114,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             }
                            
                         },
-                        next:function(obj){                            
+                        validateStep:function(){
                             var validate = this.page.stepsCall("step_"+parseInt(this.active_step));
                             if(validate>-1){
                                 if(validate===0){
@@ -121,26 +123,31 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                     else{
                                         this.$el.find(".progtrckr li").eq(this.active_step).removeClass("incomplete");
                                  }
+                            }  
+                            else{
+                                this.next();
                             }
-                            if(validate >0){
-                                
-                                this.$el.find(".step-contents .step"+this.active_step).hide();
-                                this.active_step = parseInt(this.active_step)+1
-                                this.$el.find(".step-contents .step"+this.active_step).fadeIn();
-                                
-                                //Moving Steps prgoress bar
-                                this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
-                                this.$el.find(".progtrckr .active").removeClass("active");
-                                this.$el.find(".progtrckr li").eq(this.active_step).addClass("active");
+                                  
+                        },
+                        next:function(obj){                            
+                            
+                            this.$el.find(".step-contents .step"+this.active_step).hide();
+                            this.active_step = parseInt(this.active_step)+1
+                            this.$el.find(".step-contents .step"+this.active_step).fadeIn();
 
-                                //Making Button enable disable
-                                if(this.active_step>1){
-                                    this.$el.find("a.backbtn").show();
-                                }
-                                if(this.active_step==this.total_steps){
-                                    this.$el.find("a.nextbtn").hide();
-                                }
+                            //Moving Steps prgoress bar
+                            this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
+                            this.$el.find(".progtrckr .active").removeClass("active");
+                            this.$el.find(".progtrckr li").eq(this.active_step).addClass("active");
+
+                            //Making Button enable disable
+                            if(this.active_step>1){
+                                this.$el.find("a.backbtn").show();
                             }
+                            if(this.active_step==this.total_steps){
+                                this.$el.find("a.nextbtn").hide();
+                            }
+                            
                             
                         }
 		});

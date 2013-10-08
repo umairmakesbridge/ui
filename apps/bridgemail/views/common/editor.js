@@ -14,14 +14,14 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                             'click .save_editor':function(obj){
                                 var button = $.getObj(obj,"a");
                                 if(!button.hasClass("saving")){
-                                    this.page.saveStep2();
+                                    this.page.saveStep2(false);
                                     button.addClass("saving");
                                 }                                                                
                             }
                             ,
                             'click .save_continue_editor':function(){
                                 this.hideEditor();
-                                this.page.wizard.next();
+                                this.page.wizard.validateStep();
                             }
                         },
 			initialize: function () {                            
@@ -65,6 +65,7 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                             obj.stopPropagation();
                         },
                         initEditor:function(options){
+                            var editor = this;
                             tinyMCE.init({
                                 // General options
                                 mode : "exact",
@@ -139,7 +140,14 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                                 template_replace_values : {
                                         username : "Some User",
                                         staffid : "991234"
+                                },
+                                setup : function(ed) {
+                                        ed.onChange.add(function(ed, l) {
+                                                editor.page.states.editor_change = true;
+                                               // console.log('Editor contents was modified. Contents: ');
+                                        });
                                 }
+
                         });
                         },
                         showEditor:function(){

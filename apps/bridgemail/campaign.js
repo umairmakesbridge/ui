@@ -36,29 +36,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                            if(input_obj.val().indexOf("{{") ==-1  && input_obj.val().indexOf("}}")==-1){
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
-                       },
-                       /*'keyup #list-search':function(obj){
-                           var searchterm = $(obj.target).val();
-                           if(searchterm.length){
-                               this.$("#remove-search-list").show();                               
-                               $("#list_grid tr").hide();
-                               searchterm = searchterm.toLowerCase();
-                               $("#list_grid tr").filter(function() {                                   
-                                    return $(this).text().toLowerCase().indexOf(searchterm) > -1;
-                                }).show();
-                           }
-                           else{
-                               this.$("#remove-search-list").hide();
-                               $("#list_grid tr").show();
-                           }
-                                                      
-                           
-                       },
-                       'click #remove-search-list':function(){
-                         this.$("#list-search").val('');  
-                         this.$("#remove-search-list").hide();
-                         $("#list_grid tr").show();
-                       },*/
+                       },                       
                        'click #save_results_sf':function(){
                            this.saveResultToSF();
                        },
@@ -100,6 +78,12 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                       },
                       'click #campaign_isFooterText':function(){
                         this.setFooterArea();
+                      },
+                      'change .step1 input,change .step1 select':function(){
+                          this.states.step1.change = true;
+                      },
+                      'change .step2 #myhtml':function(){
+                          this.states.editor_change = true;
                       }
                     },
 
@@ -114,8 +98,11 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                         this.mergeTags = {};
                         this.allMergeTags = [];
                         this.wp_id = this.options.params.wp_id;
-                        this.states = {"step1":{},
-                                        "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:''}
+                        this.states = { "step1":{change:false},
+                                        "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
+                                        "step3":{},
+                                        "step4":{},
+                                        "editor_change":false
                                        };
                         this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
                         this.render();
@@ -130,36 +117,36 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                         }                                     
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
-                                           this.$el.find('div#copycampsearch').searchcontrol({
-						  id:'copy-camp-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Campaign',
-						  gridcontainer: 'camp_list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-							closeiconid: 'clearcopysearch'
-					   });
-					   this.$el.find('div#listssearch').searchcontrol({
-						  id:'list-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Lists',
-						  gridcontainer: 'list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-						  closeiconid: 'clearlistssearch'
-					   });
-					   this.$el.find('div#targetssearch').searchcontrol({
-						  id:'target-list-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Lists',
-						  gridcontainer: 'target_list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-						  closeiconid: 'cleartlistssearch'
-					   });
+                        this.$el.find('div#copycampsearch').searchcontrol({
+                               id:'copy-camp-search',
+                               width:'300px',
+                               height:'22px',
+                               placeholder: 'Search Campaign',
+                               gridcontainer: 'camp_list_grid',
+                               showicon: 'no',
+                               iconsource: '',
+                               closeiconid: 'clearcopysearch'
+                        });
+                        this.$el.find('div#listssearch').searchcontrol({
+                               id:'list-search',
+                               width:'300px',
+                               height:'22px',
+                               placeholder: 'Search Lists',
+                               gridcontainer: 'list_grid',
+                               showicon: 'no',
+                               iconsource: '',
+                               closeiconid: 'clearlistssearch'
+                        });
+                        this.$el.find('div#targetssearch').searchcontrol({
+                               id:'target-list-search',
+                               width:'300px',
+                               height:'22px',
+                               placeholder: 'Search Lists',
+                               gridcontainer: 'target_list_grid',
+                               showicon: 'no',
+                               iconsource: '',
+                               closeiconid: 'cleartlistssearch'
+                        });
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -410,6 +397,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                   active_ws.find(".camp_header").addClass("heighted-header");
                   active_ws.find("#header_wp_field").attr("placeholder","Type in Campaign Name");
                   active_ws.find("#save_campaign_btn").click(_.bind(this.saveCampaign,this));               
+                  active_ws.find("#cancel_campaign_btn").click(_.bind(this.setupCampaign,this));               
                   
                  active_ws.find("#header_wp_field").keyup(function(e){
                      if(e.keyCode==13){
@@ -425,7 +413,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                       e.stopPropagation();
                   });
                   active_ws.find("#workspace-header").click(function(e){
-                       active_ws.find(".camp_header .c-name h2").hide();
+                      active_ws.find(".camp_header .c-name h2").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
@@ -548,7 +536,8 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                          messageObj["detail"] = errorHTML;
                          this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
                     }
-                    if(proceed!==0){
+                    if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
+                        this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
                         var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                         $.post(URL, { type: "saveStep1",campNum:this.camp_id,
                                      subject : this.$("#campaign_subject").val(),
@@ -573,8 +562,11 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                               })
                              .done(function(data) {                                 
                                  var step1_json = jQuery.parseJSON(data);
+                                 camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                                  if(step1_json[0]!=="err"){
-                                     camp_obj.app.showMessge("Step 1 saved successfully!");
+                                     camp_obj.app.showMessge("Step 1 saved successfully!");                                     
+                                     camp_obj.states.step1.change=false;
+                                     camp_obj.wizard.next();
                                  }
                                  else{
                                     camp_obj.app.showMessge(step1_json[0]); 
@@ -585,28 +577,44 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                     
                     return proceed;
                 },
-                saveStep2:function(){                 
+                saveStep2:function(gotoNext){                 
                  var camp_obj = this; 
+                 var proceed = -1;
                  var html = this.$(".step2 #choose_soruce li.selected").attr("id")!=="html_code" ?tinyMCE.get('bmseditor_'+this.wp_id).getContent():this.$("textarea#myhtml").val();
-                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                 if(html=="" && this.states.step2.htmlText!==""){
+                     html = this.states.step2.htmlText;
+                 }
+                        
+                 if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
+                    if(typeof(gotoNext)==="undefined"){
+                       this.app.showLoading("Saving Step 2...",this.$el.parents(".ws-content"));
+                    }
+                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                    $.post(URL, { type: "saveStep2",campNum:this.camp_id,
                                  htmlCode: html      
                          })
                         .done(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
+                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                             camp_obj.bmseditor.$el.find(".saving").removeClass("saving");
                             if(step1_json[0]!=="err"){
                                 camp_obj.app.showMessge("Step 2 saved successfully!");
                                 camp_obj.states.step2.htmlText = html;
+                                camp_obj.states.editor_change = false;
+                                if(typeof(gotoNext)=="undefined"){
+                                    camp_obj.wizard.next();
+                                }
                             }
                             else{
                                camp_obj.app.showMessge(step1_json[0]); 
                             }
                    });
-                  return 1;  
+                   proceed = 1
+                 }  
+                return proceed;  
                 },
                 saveStep3:function(){
-                  return 1;  
+                  return -1;  
                 },
                 saveStep4:function(){
                   return -1;  
@@ -1385,11 +1393,13 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                         $(".mergefields .searchfields .searchlist li").filter(function() {                                                               
                              return $(this).find("div").text().toLowerCase().indexOf(searchterm) > -1;
                          }).show();
+                         $(".mergefields .searchfields .searchlist li").removeHighlight().highlight(searchterm);
                     }
                     else{
+                        $(".mergefields .searchfields .searchlist li").removeHighlight();
                         $(".mergefields .searchfields,#remove-merge-list").hide();
                         $(".mergefields .browsefields").show();
-                        $(".mergefields  .searchfields .searchlist li").show();
+                        $(".mergefields  .searchfields .searchlist li").show();                        
                     }
                 },
                 setFooterArea:function(){
@@ -1697,6 +1707,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                               var target = $.getObj(obj,"a");
                               var bms_token =this.app.get('bms_token');
                               this.app.showLoading('Loading HTML...',$(".fullwindow.campaign-content"));
+                              this.states.editor_change = true;
                               var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                               jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
                               
@@ -1712,6 +1723,7 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                     this.setEditor();
                     var target = $.getObj(obj,"div");
                     var bms_token =this.app.get('bms_token');
+                    this.states.editor_change = true;
                     this.app.showLoading('Loading HTML...',$(".fullwindow.campaign-content"));
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+target.attr("id")+"&type=basic";                    
                     jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));

@@ -14,9 +14,15 @@ h2.header-list {
     right: 38px;
     top: 6px;
 }
-.highlight { background-color: #0088CC;
-    color: #FFFFFF;
-    font-weight: bold; }
+.highlight { 
+    background-color: #0088CC !important;
+    color: #FFFFFF !important;
+    float: none !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin:0px !important;
+}
 .c-name h2 { margin-top:9px; }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
  input[type=text].search-control { padding:3px 6px; }

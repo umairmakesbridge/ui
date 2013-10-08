@@ -663,10 +663,10 @@ input[type="text"].search-template{
     position: relative;
 }
 
-.camp_header h2 a.icon,.camp_header .addtag,.camp_header #more-tool-actions,.camp_header a.icon.more{
+.camp_header h2 a.icon,.camp_header #more-tool-actions,.camp_header a.icon.more{
     display: none !important;
 }
-.camp_header:hover h2 a.icon,.camp_header:hover .addtag,.camp_header:hover #more-tool-actions,.camp_header:hover a.icon.more{
+.camp_header:hover h2 a.icon,.camp_header:hover #more-tool-actions,.camp_header:hover a.icon.more{
     display: inline-block  !important;
 }
 .heighted-header .c-name h2{
@@ -750,4 +750,18 @@ input[type="text"].search-template{
     min-height: 20px;
     text-indent: -999em;
     min-width: 30px;
+}
+.c-name .edited .btn-green,.c-name .edited .btn-gray {
+    padding: 5px 10px;
+    position: absolute;    
+}
+.c-name .edited .btn-green{
+    right:20px;
+    min-width: 43px;
+}
+.c-name .edited .btn-gray {
+    right: -50px;
+}
+.c-name input{
+    width:420px;
 }
