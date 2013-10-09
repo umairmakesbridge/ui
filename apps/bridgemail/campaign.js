@@ -36,49 +36,44 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                            if(input_obj.val().indexOf("{{") ==-1  && input_obj.val().indexOf("}}")==-1){
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
-                       },                       
-                       'click #save_results_sf':function(){
-                           this.saveResultToSF();
                        },
-                       'click #clear_results_sf':function(){
-                          this.removeResultFromSF();
-                      },
-                      'click #campaign_add_to_salesforce':function(obj){
-                          this.setSalesForceCombo();
-                          //var body_id = $(obj.target).attr("accrodion-body");
-						  //alert('aaa');
-                          if(obj.target.checked){
-                              //$("#"+body_id).collapse("show");
-							  this.$( "#accordion" ).accordion({ active: 0 });
-							  //alert('aaa');
+                      'click #campaign_add_to_salesforce':function(obj){                          
+                          if(obj.target.checked){ 
+                            this.states.step1.sf_checkbox = true;
+                            this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
+                            this.$( "#accordion" ).accordion({ active: 0 });				
                           }
                           else{
-                              this.removeResultFromSF();
-							  this.$( "#accordion" ).accordion({ active: 1 });
-                              //$("#"+body_id).collapse("hide");
+                              this.removeResultFromSF();	
+                              this.states.step1.sf_checkbox = false;
+                              this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
+                              this.$( "#accordion" ).accordion({ active: false });                              
                           }
-                          //obj.stopPropagation();
+                          this.setSalesForceCombo();                          
+                          obj.stopPropagation();
                       },
-                      'click #conversion_filter':function(obj){
-                          this.setConversionPage();
-                          //var body_id = $(obj.target).attr("accrodion-body");
-                          if(obj.target.checked){
-                              //$("#"+body_id).collapse("show");
-							  this.$( "#accordion1" ).accordion({ active: 0 });
+                      'click #conversion_filter':function(obj){                          
+                          if(obj.target.checked){                              
+                            this.states.step1.pageconversation_checkbox = true;  
+                            this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
+                            this.$( "#accordion1" ).accordion({ active: 0 });
                           }
                           else{
-                              this.removeConversionPage();
-                              //$("#"+body_id).collapse("hide");
-							  this.$( "#accordion1" ).accordion({ active: 1 });
+                              this.removeConversionPage();       
+                              this.states.step1.pageconversation_checkbox = false;
+                              this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
+			      this.$( "#accordion1" ).accordion({ active: 1 });
                           }
-                          //obj.stopPropagation();
+                          this.setConversionPage();                          
+                          obj.stopPropagation();
                       },
                       'click #save_conversion_filter':function(){
                           this.saveConversionPage();
                       },
-                      'click #clear_conversion_filter':function(){
-                          this.removeConversionPage();
-                      },
+                      
+                      'click #save_results_sf':function(){
+                           this.saveResultToSF();
+                       },
                       'click .mergefields-box' :function(obj){
                           this.showMergeFieldDialog(obj);
                       },
@@ -98,13 +93,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.tags =  '';
                         this.tag_limit = 5;
                         this.camp_id = 0;
-                        this.tags_common =[];
-                        this.hasConversionFilter=false;
-                        this.hasResultToSalesCampaign=false;
+                        this.tags_common =[];                        
                         this.mergeTags = {};
                         this.allMergeTags = [];
                         this.wp_id = this.options.params.wp_id;
-                        this.states = { "step1":{change:false},
+                        this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
                                         "step3":{},
                                         "step4":{},
@@ -124,36 +117,35 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
                         this.$el.find('div#copycampsearch').searchcontrol({
-
-						  id:'copy-camp-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Campaign',
-						  gridcontainer: 'camp_list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-							closeiconid: 'clearcopysearch'
-					   });
-					   this.$el.find('div#listssearch').searchcontrol({
-						  id:'list-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Lists',
-						  gridcontainer: 'list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-						  closeiconid: 'clearlistssearch'
-					   });
-					   this.$el.find('div#targetssearch').searchcontrol({
-						  id:'target-list-search',
-						  width:'300px',
-						  height:'22px',
-						  placeholder: 'Search Lists',
-						  gridcontainer: 'target_list_grid',
-						  showicon: 'no',
-						  iconsource: '',
-						  closeiconid: 'cleartlistssearch'
-					   });					   
+                                id:'copy-camp-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search Campaign',
+                                gridcontainer: 'camp_list_grid',
+                                showicon: 'no',
+                                iconsource: '',
+                                      closeiconid: 'clearcopysearch'
+                         });
+                         this.$el.find('div#listssearch').searchcontrol({
+                                id:'list-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search Lists',
+                                gridcontainer: 'list_grid',
+                                showicon: 'no',
+                                iconsource: '',
+                                closeiconid: 'clearlistssearch'
+                         });
+                         this.$el.find('div#targetssearch').searchcontrol({
+                                id:'target-list-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search Lists',
+                                gridcontainer: 'target_list_grid',
+                                showicon: 'no',
+                                iconsource: '',
+                                closeiconid: 'cleartlistssearch'
+                         });					   
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -191,10 +183,21 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.camp_id!=="0"){
                         this.loadCampaign(this.camp_id);
                     }
-					this.$( "#accordion" ).accordion({ active: 1, collapsible: true });
-					this.$( "#accordion1" ).accordion({ active: 1, collapsible: true });
+                    this.$( "#accordion" ).accordion({ active: 1, collapsible: true,activate: _.bind(function(){
+                            this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox)
+                            
+                    },this) });
+                    this.$( "#accordion1" ).accordion({ active: 1, collapsible: true,activate:_.bind(function(){
+                            this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
+                    },this) });
                     this.$el.parents(".ws-content").append(this.bmseditor.$el);
                     this.bmseditor.initEditor({id:this.wp_id});
+                                        
+                    this.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});                                       
+                    this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
+                    this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
+                        this.states.step1.change = true;
+                    },this));
                    
                 },
                 initTemplateListing:function(){
@@ -229,9 +232,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                    var bms_token =this.app.get('bms_token');
                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=basic";
                    var camp_obj = this;
-					
-					this.$( "#accordion" ).accordion({ active: 1, collapsible: true });
-					this.$( "#accordion1" ).accordion({ active: 1, collapsible: true });
+				
                     //remove previous data 
                     camp_obj.$(".step1 input").val("");
                     camp_obj.$(".step1 input[type='checkbox']").prop("checked",false);
@@ -295,23 +296,25 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         camp_obj.tags = camp_obj.app.encodeHTML(camp_json.tags);
                         camp_obj.showTags();     
 						//alert(camp_json.addToSFStatus);
-                        if(camp_json.addToSFStatus=='Y'){
-                             camp_obj.hasResultToSalesCampaign = true;
-                             camp_obj.$("#campaign_add_to_salesforce").prop("checked",true);
-                             camp_obj.setSalesForceCombo();
-							 //alert(camp_json.sfCampaignID);
-                             camp_obj.$("select#sf_campaigns_combo").val(camp_json.sfCampaignID).trigger("chosen:updated");							 
-							 camp_obj.$( "#accordion" ).accordion({ active: 0 });
+                        if(camp_json.addToSFStatus=='Y'){                             
+                             camp_obj.states.step1.hasResultToSalesCampaign = true;                             
+                             camp_obj.$("#campaign_add_to_salesforce").prop("checked",true);                             
+                             camp_obj.states.step1.sf_checkbox = true;
+                             camp_obj.states.step1.sfCampaignID = camp_json.sfCampaignID;                             
+                             camp_obj.$("#sf_campaigns_combo").prop("disabled",false).val(camp_json.sfCampaignID).trigger("chosen:updated");
+                             camp_obj.$( "#accordion" ).accordion({ active: 0 });
                         }
                         else{
-                             camp_obj.hasResultToSalesCampaign = false;
-                             camp_obj.setSalesForceCombo();
+                             camp_obj.states.step1.hasResultToSalesCampaign = false;                             
                              camp_obj.$("#campaign_add_to_salesforce").prop("checked",false);   
-                        }
+                             camp_obj.states.step1.sf_checkbox = false;
+                             camp_obj.$( "#accordion" ).accordion({ active: false });
+                        }                       
 
                         if(camp_json.conversionFilterStatus=='Y'){
                             camp_obj.$("#conversion_filter").prop("checked",true);                                   
-                            camp_obj.hasConversionFilter = true;
+                            camp_obj.states.step1.hasConversionFilter = true;
+                            camp_obj.states.step1.pageconversation_checkbox = true;
                             URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=source";
 
                             jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -321,22 +324,23 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                  }
                                  camp_obj.setConversionPage();           
                                  if(conversation_filter.ruleCount > 0){                                            
-                                     var r = conversation_filter.rules[0].rule1[0];
-									 //alert(camp_obj.app.decodeHTML(r.rule));
-                                     camp_obj.$("select#con_filter_combo").val(camp_obj.app.decodeHTML(r.rule)).trigger("chosen:updated");
+                                     var r = conversation_filter.rules[0].rule1[0];									 
+                                     camp_obj.$("select#con_filter_combo").val(camp_obj.app.decodeHTML(r.rule));
                                      camp_obj.$("#con_filter_field").val(camp_obj.app.decodeHTML(r.matchValue));
+                                     camp_obj.setConversionPage();
                                  }
 
                              });
-							camp_obj.$( "#accordion1" ).accordion({ active: 0 });
+                            camp_obj.$( "#accordion1" ).accordion({ active: 0 });
                         }
                         else{
-                            camp_obj.hasConversionFilter = false;
-                            camp_obj.$("#conversion_filter").prop("checked",false);
+                            camp_obj.states.step1.hasConversionFilter = false;
+                            camp_obj.states.step1.pageconversation_checkbox =false;
+                            camp_obj.$("#conversion_filter").prop("checked",false);                                                        
+                            camp_obj.$( "#accordion1" ).accordion({ active: false });
                             camp_obj.setConversionPage();
-                            camp_obj.$("#con_filter_combo").val("=").trigger("chosen:updated");
-                            camp_obj.$("#con_filter_field").val("");
                         }
+                        
 
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=source";
                         camp_obj.$el.find("#list_grid input[type='checkbox']").prop("checked",false);
@@ -1115,21 +1119,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 return false;
                              }
                              $.each(s_camps_json.campList[0], function(index, val) {     
-                                camps_html += '<option value="'+val[0].sfCampaignID+'">'+val[0].name+'</option>';
+                                var _selected = (camp_obj.states.step1.sfCampaignID==val[0].sfCampaignID)?"selected=selected":"";
+                                camps_html += '<option value="'+val[0].sfCampaignID+'" '+_selected+'>'+val[0].name+'</option>';
                             });
                             camps_html +="</select>";
                             camp_obj.$("#salesforce_campaigns").html(camps_html);
                             
                             camp_obj.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!'});
-							
-							var type_html = '<select id="con_filter_combo" data-placeholder="Select Filter" style="width:150px;" class="chosen-select"><option value=""></option><option value="ct">Contains</option><option value="=">Equal to</option></select>';
-							camp_obj.$("#match_type").html(type_html);
-							//alert(type_html);
-							camp_obj.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});
-							
-							var unsubsc_html = '<select id="campaign_unSubscribeType" data-placeholder="Simple Unsubscribe" class="chosen-select"><option value="S">Simple Unsubscribe </option><option value="U">Universal Subscriber Management</option></select>';
-							camp_obj.$("#unsubscribe").html(unsubsc_html);
-							camp_obj.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
+                            camp_obj.setSalesForceCombo(); 
+							                            
                         }
                     }).fail(function() { console.log( "error fetch sales force campaign" ); });  
                 },
@@ -1142,7 +1140,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         $.post(URL, { campNum: camp_id,sfCampaignID: $("#sf_campaigns_combo").val() , add:'Y',type:"addToSaleforce"})
                         .done(function(data) {                            
                             camp_obj.$("#save_results_sf").removeClass("saving");
-                            camp_obj.hasResultToSalesCampaign = true;
+                            camp_obj.states.step1.hasResultToSalesCampaign = true;
                         });    
                     }                    
                 },
@@ -1150,12 +1148,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var camp_obj =this;
                     var camp_id= this.camp_id;
                     var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                    if(this.hasResultToSalesCampaign){                        
+                    if(this.states.step1.hasResultToSalesCampaign){                        
                         $.post(URL, { campNum: camp_id,add:'N',type:"addToSaleforce"})
                         .done(function(data) {                          
-                            camp_obj.$("#campaign_add_to_salesforce").prop("checked",false);
+                            camp_obj.$("#campaign_add_to_salesforce").prop("checked",false);                            
+                            camp_obj.states.step1.hasResultToSalesCampaign = false;
                             camp_obj.setSalesForceCombo();
-                            camp_obj.hasResultToSalesCampaign = false;
                         });    
                     }
                 },
@@ -1177,21 +1175,21 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     return isValid;
                 },
                 setSalesForceCombo:function(){
-                    if(this.$("#campaign_add_to_salesforce")[0].checked){
-                        this.$("#sf_campaigns_combo").prop("disabled",false);
+                    if(this.states.step1.sf_checkbox){
+                        this.$("#sf_campaigns_combo").prop("disabled",false).trigger("chosen:updated");
                     }
                     else{
-                         this.$("#sf_campaigns_combo").prop("disabled",true).val("").trigger("chosen:updated");
+                         this.$("#sf_campaigns_combo").val("").prop("disabled",true).trigger("chosen:updated");
                     }
                 },
                 setConversionPage:function(){
-                    if(this.$("#conversion_filter")[0].checked){
-                        this.$("#con_filter_combo,#con_filter_field").prop("disabled",false);
+                    if(this.states.step1.pageconversation_checkbox){
+                        this.$("#con_filter_field").prop("disabled",false);
+                        this.$("#con_filter_combo").prop("disabled",false).trigger("chosen:updated");
                     }
                     else{
-                       /*this.$("#con_filter_combo,#con_filter_field").prop("disabled",true); */
-                       this.$("#con_filter_field").val("");
-                       this.$("#con_filter_combo").val("#").trigger("chosen:updated");
+                       this.$("#con_filter_field").prop("disabled",true); 
+                       this.$("#con_filter_combo").prop("disabled",true).val("#").trigger("chosen:updated");
                     }
                 },
                 validateConverionPage:function(){
@@ -1217,8 +1215,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 					
                     if(this.validateConverionPage()){
                         var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK="+this.app.get('bms_token');                        
-                        this.$("#save_conversion_filter").addClass("saving");
-						alert($("select#con_filter_combo").val());
+                        this.$("#save_conversion_filter").addClass("saving");						
                         $.post(URL, { campNum: camp_id , 
                                rule:this.$("select#con_filter_combo").val(),
                                matchValue:this.$("#con_filter_field").val(),
@@ -1234,13 +1231,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var camp_id= this.camp_id;
                     
                     var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK="+this.app.get('bms_token');
-                    if(this.hasConversionFilter){                        
+                    if(this.states.step1.hasConversionFilter){                        
                         $.post(URL, { campNum: camp_id ,
                                type:"delete"})
                         .done(function(data) {                          
                             camp_obj.$("#conversion_filter").prop("checked",false);
-                            camp_obj.setConversionPage();
-                            camp_obj.hasConversionFilter = false;
+                            camp_obj.states.step1.hasConversionFilter = false;
+                            camp_obj.setConversionPage();                            
                             
                         });    
                     }

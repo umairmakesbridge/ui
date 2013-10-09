@@ -766,8 +766,12 @@ input[type="text"].search-template{
     min-width: 43px;
 }
 .c-name .edited .btn-gray {
-    right: -50px;
+    right: -45px;
 }
 .c-name input{
     width:420px;
+}
+.accrodion-checkbox{
+    margin-top:-2px !important;
+    margin-left: 5px !important;
 }

@@ -107,10 +107,10 @@
         <div class="row-fluid">
             <div class="span6">            
               <div id="unsubscribe" class="btn-group subs-dd">
-                    <!--<select id="campaign_unSubscribeType" >
-                        <option value="S">Simple Unsubscribe </option>
-                        <option value="U">Universal Subscriber Management</option>
-                    </select>-->
+                        <select id="campaign_unSubscribeType" data-placeholder="Simple Unsubscribe" class="chosen-select">
+                            <option value="S">Simple Unsubscribe </option>
+                            <option value="U">Universal Subscriber Management</option>
+                        </select>
               </div>
 
               <div class="fluidlabel" style="margin-top:10px;"><input type="checkbox" id="campaign_profileUpdate" value=""> <label>Subscriber Information Update <a>Choose  fields</a> </label></div>		
@@ -152,10 +152,10 @@
        </div>
    </div> <!--settings  -->
 </div>
-	<div style="position:relative">
-    	<input type="checkbox" id="campaign_add_to_salesforce" value="" style="position:absolute; left:335px; top:14px; z-index:1000;">
+    <div style="position:relative">    	
 	<div id="accordion">
-    <h3> <img alt="" src="img/SF_plus.png"  width="36" style="margin: 0 7px 0 -3px;" /> Add Results to Salesforce Campaign            
+    <h3> <img alt="" src="img/SF_plus.png"  width="36" style="margin: 0 7px 0 -3px;" /> Add Results to Salesforce Campaign      
+      <input type="checkbox" id="campaign_add_to_salesforce" value="" class="accrodion-checkbox" />  
       <b class="caret"></b> </h3>
     <div class="accordion-inner">
       <div class="cont">
@@ -189,9 +189,10 @@
     </div>
     </div>
     <div style="position:relative">
-    	<input type="checkbox" id="conversion_filter" value="" style="position:absolute; left:195px; top:14px; z-index:1000;">
+    	
         <div id="accordion1">
         <h3> <img alt="" src="img/conversion_large.png" width="36" style="margin: 0 7px 0 -3px;" /> Conversion Page          
+            <input type="checkbox" id="conversion_filter" value="" class="accrodion-checkbox">
           <b class="caret"></b> </h3>
         <div class="accordion-inner">
           <div class="cont">
@@ -205,10 +206,11 @@
                   <div class="row">
                     <label>Match Type</label>                
                    <div class="btn-group subs-dd" id="match_type">                
-                      <!--<select id="con_filter_combo" class="chosen-select">
+                      <select id="con_filter_combo" data-placeholder="Select Filter" style="width:150px;" class="chosen-select">
+                        <option value=""></option>
                         <option value="ct">Contains</option>
                         <option value="=">Equal to</option>
-                      </select>-->
+                      </select>
                     </div>               
                   </div>
                   <div class="row texturl">
