@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor'],
-function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor'],
+function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -1643,15 +1643,26 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                 ,
                 drawTemplates:function(){
                     var templates =  this.states.step2.templates.templates;
+                    var vars = [], hash;
                     var camp_obj = this;
                     var templates_html = "";
                      if(this.$("#template_search_menu li.active").length){
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
                         this.$("#total_templates").html(this.states.step2.totalcount+" <b>"+text+"</b> templates found");                         
                     }
-                    else if($.trim(this.$("#search-template-input").val())!==""){
+                    else if(this.states.step2.searchString.indexOf("=nameTag")>-1){
                         this.$("#total_templates").html(this.states.step2.totalcount+" templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
                     }    
+                    else if(this.states.step2.searchString.indexOf("=tag")>-1){                        
+                        var hashes = this.states.step2.searchString.split('&');                               
+                        for(var i = 0; i < hashes.length; i++)
+                        {
+                            hash = hashes[i].split('=');
+                            vars.push(hash[0]);
+                            vars[hash[0]] = hash[1];
+                        }
+                        this.$("#total_templates").html(this.states.step2.totalcount+" templates found <b>for tag '"+vars["searchText"]+"'</b>");                         
+                    }
                     else{
                         this.$("#total_templates").html(this.states.step2.totalcount +" templates");
                     }
@@ -1702,6 +1713,12 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                              this.$("#template_search_menu li:nth-child(3)").click();   
                         },this));
                         
+                        template_html.find(".caption p a").click(_.bind(function(obj){
+                             var tag = $.getObj(obj,"a");
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.loadTemplates('search','tag',{text:tag.text()});  
+                        },this));
+                        
                         template_html.find(".select-template").click(_.bind(function(obj){
                               this.setEditor();
                               var target = $.getObj(obj,"a");
@@ -1715,6 +1732,13 @@ function (bmsgrid,calendraio,chosen,jqhighlight,jqueryui,template,editorView) {
                     }
                     if((this.states.step2.offset + parseInt(this.states.step2.templates.count))<parseInt(this.states.step2.totalcount)){
                         this.$(".step2 .thumbnails li:last-child").attr("data-load","true");
+                    }
+                    
+                    if(this.states.step2.searchString.indexOf("=nameTag")>-1){
+                        this.$(".step2 .thumbnails .caption").highlight($.trim(this.$("#search-template-input").val()));
+                    }    
+                    else if(this.states.step2.searchString.indexOf("=tag")>-1){
+                        this.$(".step2 .thumbnails .caption p").highlight(vars["searchText"]);
                     }
                     this.$(".footer-loading").hide();
                     

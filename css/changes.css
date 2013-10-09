@@ -6,6 +6,12 @@ a,div,span,h1,h2,h3,h4,h5,h5{
   user-select: none;          
 
 }
+.grayicons .icon.pin{
+    background-position: 0px -600px;
+}
+.tw-toggle{
+    z-index: 10;
+}
 .workspace-fixed{
     position: fixed !important;
     top:0px;    
@@ -455,7 +461,7 @@ ol.progtrckr li.incomplete:after{
 .c-name h2 a.preview { 
     float:left; 
     margin:3px 0px 0 5px !important;
-    background-position: -28px -300px !important;
+    background-position: 0px -300px !important;
 }
 .c-name h2 a.preview:hover {      
        background-position: -58px -300px !important;
@@ -464,7 +470,7 @@ ol.progtrckr li.incomplete:after{
     padding-bottom: 5px;
 }
 .tagscont ul li > a{
-    color:#8A8A8A;
+    
 }
 .mergefields .searchfields .searchlist li div{
     display:inline-block;
@@ -729,7 +735,7 @@ input[type="text"].search-template{
 }
 
 .workspace-fixed-editor {
-    left: 16px;
+    left: 0px;
     margin-top: 0;
     position: fixed !important;
     top: 41px;

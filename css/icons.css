@@ -257,25 +257,25 @@
 	background-position: -30px -600px;
 }
 .grayicons .icon.newwin {
-	background-position: -30px -630px;
+	background-position: -0px -630px;
 }
 .grayicons .icon.delete {
-	background-position: -30px -660px;
+	background-position: -0px -660px;
 }
 .grayicons .icon.fav {
 	background-position: -30px -690px;
 }
 .grayicons .icon.close {
-	background-position: -30px -720px;
+	background-position: -0px -720px;
 }
 .grayicons .icon.expand {
-	background-position: -30px -750px;
+	background-position: -0px -750px;
 }
 .grayicons .icon.more {
-	background-position: -30px -780px;
+	background-position: -0px -780px;
 }
 .grayicons .icon.refresh {
-	background-position: -240px -360px;
+	background-position: -210px -360px;
 }
 
 
@@ -584,16 +584,20 @@ ul.nav  ul.tab-icons li a .icon.add {
 .temp7 { background-position: -610px -690px; }
 .temp8 { background-position: -610px -720px; }
 .temp9 { background-position: -610px -750px; }
+.cust-temp {  background: url("../img/custom-temp.png") no-repeat scroll 0 bottom transparent; }
 
-:hover.temp1,.temp-style .active .temp1 { background-position: -640px -510px; }
-:hover.temp2,.temp-style .active .temp2 { background-position: -640px -540px; }
-:hover.temp3,.temp-style .active .temp3 { background-position: -640px -570px; }
-:hover.temp4,.temp-style .active .temp4 { background-position: -640px -600px; }
-:hover.temp5,.temp-style .active .temp5 { background-position: -640px -630px; }
-:hover.temp6,.temp-style .active .temp6 { background-position: -640px -660px; }
-:hover.temp7,.temp-style .active .temp7 { background-position: -640px -690px; }
-:hover.temp8,.temp-style .active .temp8 { background-position: -640px -720px; }
-:hover.temp9,.temp-style .active .temp9 { background-position: -640px -750px; }
+:hover.temp1 { background-position: -640px -510px; }
+:hover.temp2 { background-position: -640px -540px; }
+:hover.temp3 { background-position: -640px -570px; }
+:hover.temp4 { background-position: -640px -600px; }
+:hover.temp5 { background-position: -640px -630px; }
+:hover.temp6 { background-position: -640px -660px; }
+:hover.temp7 { background-position: -640px -690px; }
+:hover.temp8 { background-position: -640px -720px; }
+:hover.temp9 { background-position: -640px -750px; }
+:hover.cust-temp {  background: url("../img/custom-temp.png") no-repeat scroll 0 0 transparent; }
+
+
 
 /* ------------------------------------------------------------------------------------------- */
 .target {    background-position: -300px 0;}
@@ -603,7 +607,8 @@ ul.nav  ul.tab-icons li a .icon.add {
 .view {  background-position: -330px -300px;}
 :hover.view {  background-position: -360px -300px;}
 
-.edit {background-position: -330px -330px;}
+.edit {background-position: -300px -330px;}
+.edit:hover {background-position: -360px -330px;}
 
 .icon.h-info  {    background-position: -300px -30px; }
 .icon.social  {    background-position: -300px -60px; }
@@ -616,7 +621,7 @@ ul.nav  ul.tab-icons li a .icon.add {
 .tagicon.green { background-position:-150px -870px;}
 .tagicon.blue { background-position:-165px -870px;}
 .tagicon.yellow { background-position:-165px -885px;}
-.tagicon.gray { background-position:-180px -885px;}
+.tagicon.gray { background-position:-180px -868px;}
 
 
 

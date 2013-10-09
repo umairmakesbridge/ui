@@ -32,7 +32,16 @@ function ($,Backbone, _,app,Wizard, template) {
                     },
                     'mouseout .fav':function(){                			
 			$(".fav").parent().removeClass('active');
+                    },
+                    'mouseover .toolbar .icon':function(obj){                			
+                        var obj = $.getObj(obj,"a");
+			obj.parent().addClass('active');
+                    },
+                    'mouseout .toolbar .icon':function(obj){                			
+                        var obj = $.getObj(obj,"a");
+			obj.parent().removeClass('active');
                     }
+                    
                 },
                 initialize: function () {
                         this.template = _.template(template);				                                
@@ -112,7 +121,7 @@ function ($,Backbone, _,app,Wizard, template) {
                   if (scrollTop >= this.navTop && !this.isFixed) {
                     this.isFixed = 1
                     this.$nav.addClass('workspace-fixed');
-                    this.$nav.css("width",this.$(".campaign-content").width()+30);
+                    this.$nav.css("width",this.$(".campaign-content").width());
                     this.$tabs.addClass('tab-fixed');
                     this.$tray.addClass('tray-fixed');
                   } else if (scrollTop <= this.navTop && this.isFixed) {
