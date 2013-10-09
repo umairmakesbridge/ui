@@ -45,27 +45,33 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       },
                       'click #campaign_add_to_salesforce':function(obj){
                           this.setSalesForceCombo();
-                          var body_id = $(obj.target).attr("accrodion-body");
+                          //var body_id = $(obj.target).attr("accrodion-body");
+						  //alert('aaa');
                           if(obj.target.checked){
-                              $("#"+body_id).collapse("show");
+                              //$("#"+body_id).collapse("show");
+							  this.$( "#accordion" ).accordion({ active: 0 });
+							  //alert('aaa');
                           }
                           else{
                               this.removeResultFromSF();
-                              $("#"+body_id).collapse("hide");
+							  this.$( "#accordion" ).accordion({ active: 1 });
+                              //$("#"+body_id).collapse("hide");
                           }
-                          obj.stopPropagation();
+                          //obj.stopPropagation();
                       },
                       'click #conversion_filter':function(obj){
                           this.setConversionPage();
-                          var body_id = $(obj.target).attr("accrodion-body");
+                          //var body_id = $(obj.target).attr("accrodion-body");
                           if(obj.target.checked){
-                              $("#"+body_id).collapse("show");
+                              //$("#"+body_id).collapse("show");
+							  this.$( "#accordion1" ).accordion({ active: 0 });
                           }
                           else{
                               this.removeConversionPage();
-                              $("#"+body_id).collapse("hide");
+                              //$("#"+body_id).collapse("hide");
+							  this.$( "#accordion1" ).accordion({ active: 1 });
                           }
-                          obj.stopPropagation();
+                          //obj.stopPropagation();
                       },
                       'click #save_conversion_filter':function(){
                           this.saveConversionPage();
@@ -104,7 +110,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                         "step4":{},
                                         "editor_change":false
                                        };
-                        this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
+                        this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});						
                         this.render();
                 },
 
@@ -114,39 +120,40 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wizard = this.options.wizard;    
                         if(this.options.params && this.options.params.camp_id){
                             this.camp_id = this.options.params.camp_id;
-                        }                                     
+                        }
                         this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
                         this.$el.find('div#copycampsearch').searchcontrol({
-                               id:'copy-camp-search',
-                               width:'300px',
-                               height:'22px',
-                               placeholder: 'Search Campaign',
-                               gridcontainer: 'camp_list_grid',
-                               showicon: 'no',
-                               iconsource: '',
-                               closeiconid: 'clearcopysearch'
-                        });
-                        this.$el.find('div#listssearch').searchcontrol({
-                               id:'list-search',
-                               width:'300px',
-                               height:'22px',
-                               placeholder: 'Search Lists',
-                               gridcontainer: 'list_grid',
-                               showicon: 'no',
-                               iconsource: '',
-                               closeiconid: 'clearlistssearch'
-                        });
-                        this.$el.find('div#targetssearch').searchcontrol({
-                               id:'target-list-search',
-                               width:'300px',
-                               height:'22px',
-                               placeholder: 'Search Lists',
-                               gridcontainer: 'target_list_grid',
-                               showicon: 'no',
-                               iconsource: '',
-                               closeiconid: 'cleartlistssearch'
-                        });
+
+						  id:'copy-camp-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Campaign',
+						  gridcontainer: 'camp_list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+							closeiconid: 'clearcopysearch'
+					   });
+					   this.$el.find('div#listssearch').searchcontrol({
+						  id:'list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'clearlistssearch'
+					   });
+					   this.$el.find('div#targetssearch').searchcontrol({
+						  id:'target-list-search',
+						  width:'300px',
+						  height:'22px',
+						  placeholder: 'Search Lists',
+						  gridcontainer: 'target_list_grid',
+						  showicon: 'no',
+						  iconsource: '',
+						  closeiconid: 'cleartlistssearch'
+					   });					   
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -184,6 +191,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.camp_id!=="0"){
                         this.loadCampaign(this.camp_id);
                     }
+					this.$( "#accordion" ).accordion({ active: 1, collapsible: true });
+					this.$( "#accordion1" ).accordion({ active: 1, collapsible: true });
                     this.$el.parents(".ws-content").append(this.bmseditor.$el);
                     this.bmseditor.initEditor({id:this.wp_id});
                    
@@ -221,7 +230,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=basic";
                    var camp_obj = this;
 					
-					$( "#accordion" ).accordion();
+					this.$( "#accordion" ).accordion({ active: 1, collapsible: true });
+					this.$( "#accordion1" ).accordion({ active: 1, collapsible: true });
                     //remove previous data 
                     camp_obj.$(".step1 input").val("");
                     camp_obj.$(".step1 input[type='checkbox']").prop("checked",false);
@@ -273,7 +283,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         camp_obj.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);
                         //camp_obj.$("#campaign_dunkb").prop("checked",camp_json.googleplus=="N"?false:true);
 
-                        camp_obj.$("#campaign_unSubscribeType").val(camp_json.unSubscribeType);
+                        camp_obj.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
                         camp_obj.$("#campaign_profileUpdate").prop("checked",camp_json.profileUpdate=="N"?false:true);
                         camp_obj.$("#campaign_useCustomFooter").prop("checked",camp_json.useCustomFooter=="N"?false:true);
                         camp_obj.$("#campaign_isFooterText").prop("checked",camp_json.isFooterText=="N"?false:true);
@@ -284,11 +294,14 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         //Load tags
                         camp_obj.tags = camp_obj.app.encodeHTML(camp_json.tags);
                         camp_obj.showTags();     
+						//alert(camp_json.addToSFStatus);
                         if(camp_json.addToSFStatus=='Y'){
                              camp_obj.hasResultToSalesCampaign = true;
                              camp_obj.$("#campaign_add_to_salesforce").prop("checked",true);
                              camp_obj.setSalesForceCombo();
-                             camp_obj.$("#sf_campaigns_combo").val(camp_json.sfCampaignID);
+							 //alert(camp_json.sfCampaignID);
+                             camp_obj.$("select#sf_campaigns_combo").val(camp_json.sfCampaignID).trigger("chosen:updated");							 
+							 camp_obj.$( "#accordion" ).accordion({ active: 0 });
                         }
                         else{
                              camp_obj.hasResultToSalesCampaign = false;
@@ -307,21 +320,21 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                      return false;
                                  }
                                  camp_obj.setConversionPage();           
-                                 if(conversation_filter.ruleCount){                                            
+                                 if(conversation_filter.ruleCount > 0){                                            
                                      var r = conversation_filter.rules[0].rule1[0];
-                                     camp_obj.$("#con_filter_combo").val(camp_obj.app.decodeHTML(r.rule));
+									 //alert(camp_obj.app.decodeHTML(r.rule));
+                                     camp_obj.$("select#con_filter_combo").val(camp_obj.app.decodeHTML(r.rule)).trigger("chosen:updated");
                                      camp_obj.$("#con_filter_field").val(camp_obj.app.decodeHTML(r.matchValue));
                                  }
 
                              });
-
-
+							camp_obj.$( "#accordion1" ).accordion({ active: 0 });
                         }
                         else{
                             camp_obj.hasConversionFilter = false;
                             camp_obj.$("#conversion_filter").prop("checked",false);
                             camp_obj.setConversionPage();
-                            camp_obj.$("#con_filter_combo").val("=");
+                            camp_obj.$("#con_filter_combo").val("=").trigger("chosen:updated");
                             camp_obj.$("#con_filter_field").val("");
                         }
 
@@ -448,7 +461,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       active_ws.find("#camp_tags").children().remove();
                       active_ws.find(".tags-contents,.ellipsis").hide();                      
                       active_ws.find("#header_wp_field").focus().val('');
-                      active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",true);
+                      //active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",true);
                       active_ws.find("#campMenu").prop("disabled",false);
                   }
                   else{
@@ -770,7 +783,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         }
                     }).fail(function() { console.log( "error merge fields json" ); });
                                         
-                    
                     // Load common tags
                     camp_obj.initTpyeAhead();
                     
@@ -782,20 +794,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     $(".mergefields").click(function(e){
                         e.stopPropagation();
                     });
-                    
-                   
-                    
-                    var wp_length = $(".ws-tabs li").length-1;
-                    /*this.$("#accordion_setting").attr("id","accordion_setting"+wp_length);
-                    this.$("#accordion_setting"+wp_length+" .accordion-toggle").attr("data-parent","#accordion_setting"+wp_length);
-                    
-                    var acc_group = this.$("#accordion_setting"+wp_length+" .accordion-group");
-                    acc_group.each(function(){
-                       var id =   $(this).find(".accordion-body").attr("id");
-                       $(this).find(".accordion-toggle").attr("href","#"+id+wp_length);
-                       $(this).find(".accordion-body").attr("id",id+wp_length);
-                       $(this).find(".accordion-heading input[type='checkbox']").attr("accrodion-body",id+wp_length);
-                    });*/
+                    var wp_length = $(".ws-tabs li").length-1;                    
                     
                     /*var xhr = {};
                     xhr.responseText = '{"count": "85","lists":[{"list1":[{"creationDate": "2012-07-27","tags": "","campaignSentCount": "0","name": "Abandoned Shopping Carts","listNum": "qcWQe30Wh33Jb26Hi17Mk20qcW","md5": "4b7dc121caf2baf0963a047346fc8df6","subscriberCount": "705","isSupressList": "false"}],"list2":[{"creationDate": "2008-02-05","tags": "","campaignSentCount": "0","name": "All Synch Leads","listNum": "kzaqwKb26Bb17Gd20Mi21Uh30kzaqw","md5": "7d24c36ac85da6029d610602b6994085","subscriberCount": "712","isSupressList": "false"}]}]}';
@@ -1125,6 +1124,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 							
 							var type_html = '<select id="con_filter_combo" data-placeholder="Select Filter" style="width:150px;" class="chosen-select"><option value=""></option><option value="ct">Contains</option><option value="=">Equal to</option></select>';
 							camp_obj.$("#match_type").html(type_html);
+							//alert(type_html);
 							camp_obj.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});
 							
 							var unsubsc_html = '<select id="campaign_unSubscribeType" data-placeholder="Simple Unsubscribe" class="chosen-select"><option value="S">Simple Unsubscribe </option><option value="U">Universal Subscriber Management</option></select>';
@@ -1181,7 +1181,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.$("#sf_campaigns_combo").prop("disabled",false);
                     }
                     else{
-                         this.$("#sf_campaigns_combo").prop("disabled",true).val("");
+                         this.$("#sf_campaigns_combo").prop("disabled",true).val("").trigger("chosen:updated");
                     }
                 },
                 setConversionPage:function(){
@@ -1191,7 +1191,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     else{
                        /*this.$("#con_filter_combo,#con_filter_field").prop("disabled",true); */
                        this.$("#con_filter_field").val("");
-                       this.$("#con_filter_combo").val("#");
+                       this.$("#con_filter_combo").val("#").trigger("chosen:updated");
                     }
                 },
                 validateConverionPage:function(){
@@ -1214,11 +1214,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 saveConversionPage:function(){
                     var camp_obj =this;
                     var camp_id= this.camp_id;
+					
                     if(this.validateConverionPage()){
                         var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK="+this.app.get('bms_token');                        
                         this.$("#save_conversion_filter").addClass("saving");
+						alert($("select#con_filter_combo").val());
                         $.post(URL, { campNum: camp_id , 
-                               rule:this.$("#con_filter_combo").val(),
+                               rule:this.$("select#con_filter_combo").val(),
                                matchValue:this.$("#con_filter_field").val(),
                                type:"conversion"})
                         .done(function(data) {                          

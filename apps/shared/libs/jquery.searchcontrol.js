@@ -45,9 +45,9 @@
 						$("#"+ options.gridcontainer +" tr").hide();
 						 searchterm = searchterm.toLowerCase();
 						 $("#"+ options.gridcontainer +" tr").filter(function() {                                   
-							  return $(this).text().toLowerCase().indexOf(searchterm) > -1;
+							  return $(this).children('td:first').text().toLowerCase().indexOf(searchterm) > -1;
 						  }).show();
-						  $("#"+ options.gridcontainer).removeHighlight().highlight(searchterm);
+						  $("#"+ options.gridcontainer + ' tr td:first').removeHighlight().highlight(searchterm);
 					  }
 					  else
 					  {

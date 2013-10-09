@@ -152,10 +152,10 @@
        </div>
    </div> <!--settings  -->
 </div>
-	
+	<div style="position:relative">
+    	<input type="checkbox" id="campaign_add_to_salesforce" value="" style="position:absolute; left:335px; top:14px; z-index:1000;">
 	<div id="accordion">
-    <h3> <img alt="" src="img/SF_plus.png"  width="36" style="margin: 0 7px 0 -3px;" /> Add Results to Salesforce Campaign
-      <input type="checkbox" id="campaign_add_to_salesforce" value="" style="margin:0 0 0 8px; position:relative;">
+    <h3> <img alt="" src="img/SF_plus.png"  width="36" style="margin: 0 7px 0 -3px;" /> Add Results to Salesforce Campaign            
       <b class="caret"></b> </h3>
     <div class="accordion-inner">
       <div class="cont">
@@ -186,46 +186,50 @@
         </div>
       </div>
     </div>
-    <h3> <img alt="" src="img/conversion_large.png" width="36" style="margin: 0 7px 0 -3px;" /> Conversion Page
-      <input type="checkbox" id="conversion_filter" value="" style="margin:0 0 0 8px; position:relative;">
-      <b class="caret"></b> </h3>
-    <div class="accordion-inner">
-      <div class="cont">
-        <div class="row-fluid">
-          <div class="span12"> 
-            
-            <!--btn-group  -->
-            
-            <div class="fluidlabel">&nbsp;</div>
-            <div class="span6 " style="margin:0;">
-              <div class="row">
-                <label>Match Type</label>                
-               <div class="btn-group subs-dd" id="match_type">                
-                  <!--<select id="con_filter_combo" class="chosen-select">
-                    <option value="ct">Contains</option>
-                    <option value="=">Equal to</option>
-                  </select>-->
-                </div>               
-              </div>
-              <div class="row texturl">
-                <label>Text in URL</label>
-                <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
-                <!--<span>Text in your Conversion URL, Example: <strong>/products</strong></span>--></div>
-              <div class="row">
-                <div class="btns left accordion-action-btn"> <a class="btn-green savebtn left" id="save_conversion_filter">Save</a> 
-                  <!--<a class="btn-gray left" id="clear_conversion_filter">Clear</a>--> 
+    </div>
+    </div>
+    <div style="position:relative">
+    	<input type="checkbox" id="conversion_filter" value="" style="position:absolute; left:195px; top:14px; z-index:1000;">
+        <div id="accordion1">
+        <h3> <img alt="" src="img/conversion_large.png" width="36" style="margin: 0 7px 0 -3px;" /> Conversion Page          
+          <b class="caret"></b> </h3>
+        <div class="accordion-inner">
+          <div class="cont">
+            <div class="row-fluid">
+              <div class="span12"> 
+                
+                <!--btn-group  -->
+                
+                <div class="fluidlabel">&nbsp;</div>
+                <div class="span6 " style="margin:0;">
+                  <div class="row">
+                    <label>Match Type</label>                
+                   <div class="btn-group subs-dd" id="match_type">                
+                      <!--<select id="con_filter_combo" class="chosen-select">
+                        <option value="ct">Contains</option>
+                        <option value="=">Equal to</option>
+                      </select>-->
+                    </div>               
+                  </div>
+                  <div class="row texturl">
+                    <label>Text in URL</label>
+                    <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
+                    <!--<span>Text in your Conversion URL, Example: <strong>/products</strong></span>--></div>
+                  <div class="row">
+                    <div class="btns left accordion-action-btn"> <a class="btn-green savebtn left" id="save_conversion_filter">Save</a> 
+                      <!--<a class="btn-gray left" id="clear_conversion_filter">Clear</a>--> 
+                    </div>
+                  </div>
                 </div>
               </div>
+              <!--span6  --> 
+              <!-- span6  --> 
+              
             </div>
           </div>
-          <!--span6  --> 
-          <!-- span6  --> 
-          
         </div>
       </div>
     </div>
-  </div>
-  
 </div>
 
 <div class="wizard-steps step2">

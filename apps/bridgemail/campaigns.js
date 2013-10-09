@@ -85,7 +85,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			makecamprows: function (val){
 				var camp_obj = this;
 				var row_html = '<tr id="row_'+val[0].campNum+'">';
-				row_html += '<td><div class="name-type"><h3>'+ val[0].name +'</h3>   <div class="  tags"><h5>Tags:</h5>'+ this.app.showTags(val[0].tags) +'</div></div></td>';
+				row_html += '<td class="firstcol"><div class="name-type"><h3>'+ val[0].name +'</h3>   <div class="  tags"><h5>Tags:</h5>'+ this.app.showTags(val[0].tags) +'</div></div></td>';
 				var datetime = val[0].scheduledDate;
 				if(datetime)
 				{
