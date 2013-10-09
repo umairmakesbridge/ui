@@ -122,9 +122,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 height:'22px',
                                 placeholder: 'Search Campaign',
                                 gridcontainer: 'camp_list_grid',
-                                showicon: 'no',
-                                iconsource: '',
-                                      closeiconid: 'clearcopysearch'
+                                showicon: 'yes',
+                                iconsource: 'campaigns',
+                                closeiconid: 'clearcopysearch'
                          });
                          this.$el.find('div#listssearch').searchcontrol({
                                 id:'list-search',
@@ -132,8 +132,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 height:'22px',
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'list_grid',
-                                showicon: 'no',
-                                iconsource: '',
+                                showicon: 'yes',
+                                iconsource: 'add-list',
                                 closeiconid: 'clearlistssearch'
                          });
                          this.$el.find('div#targetssearch').searchcontrol({

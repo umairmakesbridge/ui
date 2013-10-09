@@ -151,11 +151,11 @@ h2.header-list .search{
 
 h2.header-list .search #list-search{
     width:300px;
-    padding:3px 6px;
+    padding:5px 6px;
 }
 h2.header-list .search .searchbtn{
-    height:30px;
-    width: 30px;
+    height:34px;
+    width: 34px;
     margin: 0 0 0 -30px !important; 
 }
 .remove-search{
@@ -537,7 +537,7 @@ input[type="text"].search-template{
     width:30px;
     height:30px;
     position: absolute;
-    top:4px;
+    top:3px;
     left:1px;
     z-index: 5;
 }
@@ -774,4 +774,7 @@ input[type="text"].search-template{
 .accrodion-checkbox{
     margin-top:-2px !important;
     margin-left: 5px !important;
+}
+.show-image{
+    padding-left:35px !important;
 }

@@ -106,10 +106,10 @@
   margin: 1px 0;
   padding: 4px 20px 4px 5px;
   width: 100%;
-  height: auto;
+  height: 27px;
   outline: 0;
   border: 1px solid #aaa;
-  background: white url('images/chosen-sprite.png') no-repeat 100% -20px;
+  background: white url('images/chosen-sprite.png') no-repeat 100% -18px;
   background: url('images/chosen-sprite.png') no-repeat 100% -20px, -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
   background: url('images/chosen-sprite.png') no-repeat 100% -20px, -webkit-linear-gradient(#eeeeee 1%, #ffffff 15%);
   background: url('images/chosen-sprite.png') no-repeat 100% -20px, -moz-linear-gradient(#eeeeee 1%, #ffffff 15%);
@@ -117,8 +117,7 @@
   background: url('images/chosen-sprite.png') no-repeat 100% -20px, linear-gradient(#eeeeee 1%, #ffffff 15%);
   font-size: 1em;
   font-family: sans-serif;
-  line-height: normal;
-  border-radius: 0;
+  line-height: 27px;  
 }
 .chosen-container-single .chosen-drop {
   margin-top: -1px;
@@ -305,11 +304,7 @@
   border-bottom-right-radius: 0;
   -moz-border-radius-bottomleft: 0;
   border-bottom-left-radius: 0;
-  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(20%, #eeeeee), color-stop(80%, #ffffff));
-  background-image: -webkit-linear-gradient(#eeeeee 20%, #ffffff 80%);
-  background-image: -moz-linear-gradient(#eeeeee 20%, #ffffff 80%);
-  background-image: -o-linear-gradient(#eeeeee 20%, #ffffff 80%);
-  background-image: linear-gradient(#eeeeee 20%, #ffffff 80%);
+  
   box-shadow: 0 1px 0 #fff inset;
 }
 .chosen-container-active.chosen-with-drop .chosen-single div {

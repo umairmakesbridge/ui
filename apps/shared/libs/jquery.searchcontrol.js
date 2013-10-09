@@ -13,14 +13,17 @@
 			  closeiconid: 'clearsearch'
 			  }, options );
 			  return this.each(function() {				  
-				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' class='search-control' style='width:"+ options.width +";' />");
-				  txt.bind( "keyup", dosearch );
-				  $(this).append(txt);
-				  if(options.showicon == 'yes')
+                                  var imageClass= "";
+                                  if(options.showicon == 'yes')
 				  {
-					  var icon = $('<img src="'+ options.iconsource +'" />');
+					  var icon = $('<span class="icon '+options.iconsource+'"></span>');
+                                          imageClass ="show-image";
 					  $(this).append(icon);
 				  }
+				  var txt=$("<input type='text' id='"+ options.id +"' placeholder='"+ options.placeholder +"' class='search-control "+imageClass+"' style='width:"+ options.width +";' />");
+				  txt.bind( "keyup", dosearch );
+				  $(this).append(txt);
+				  
 				  var closeicon = $('<a class="close-icon" id="'+ options.closeiconid +'" style="display:none"></a>');
 				  $(this).append(closeicon);
 				  closeicon.click(function() { 

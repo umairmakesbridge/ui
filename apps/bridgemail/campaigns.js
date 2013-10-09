@@ -30,8 +30,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					height:'22px',
 					placeholder: 'Search Campaign',
 					gridcontainer: 'camps_grid',
-					showicon: 'no',
-					iconsource: '',
+					showicon: 'yes',
+                                        iconsource: 'campaigns',
 					closeiconid: 'clearcampssearch'
 				 });
 			}

@@ -25,7 +25,7 @@ h2.header-list {
 }
 .c-name h2 { margin-top:9px; }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
- input[type=text].search-control { padding:3px 6px; }
+ input[type=text].search-control { padding:5px 6px; }
  #listssearch { margin-right:5px; }
 #salesforce_campaigns .chosen-container-single .chosen-single { width:250px; }
 #salesforce_campaigns .chosen-container .chosen-drop { width:268px; }
