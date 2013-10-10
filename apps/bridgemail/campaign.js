@@ -169,6 +169,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }
                     else{
                         this.app.showAlert('Please save campaign first to proceed!',this.$el.parents(".ws-content.active"));
+                        proceed = 0 ;
                     }
                     return proceed;
                 },
@@ -192,7 +193,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     },this) });
                     this.$el.parents(".ws-content").append(this.bmseditor.$el);
                     this.bmseditor.initEditor({id:this.wp_id});
-                                        
+                    
+                    //Init Chosen combo                    
                     this.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});                                       
                     this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
@@ -1137,7 +1139,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.validateRSF()){
                         var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');                        
                         this.$("#save_results_sf").addClass("saving");
-                        $.post(URL, { campNum: camp_id,sfCampaignID: $("#sf_campaigns_combo").val() , add:'Y',type:"addToSaleforce"})
+                        $.post(URL, { campNum: camp_id,sfCampaignID: this.$("#sf_campaigns_combo").val() , add:'Y',type:"addToSaleforce"})
                         .done(function(data) {                            
                             camp_obj.$("#save_results_sf").removeClass("saving");
                             camp_obj.states.step1.hasResultToSalesCampaign = true;
