@@ -141,8 +141,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Campaign',
                                 gridcontainer: 'camp_list_grid',
                                 showicon: 'yes',
-                                iconsource: 'campaigns',
-                                closeiconid: 'clearcopysearch'
+                                iconsource: 'campaigns'
                          });
                          this.$el.find('div#listssearch').searchcontrol({
                                 id:'list-search',
@@ -151,8 +150,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'list_grid',
                                 showicon: 'yes',
-                                iconsource: 'add-list',
-                                closeiconid: 'clearlistssearch'
+                                iconsource: 'add-list'
                          });
                          this.$el.find('div#targetssearch').searchcontrol({
                                 id:'target-list-search',
@@ -161,9 +159,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'target_list_grid',
                                 showicon: 'no',
-                                iconsource: '',
-                                closeiconid: 'cleartlistssearch'
-                         });					   
+                                iconsource: ''
+                         });
+						 this.$el.find('div#targetsearch').searchcontrol({
+                                id:'target-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search target',
+                                gridcontainer: 'targets_grid',
+                                showicon: 'yes',
+                                iconsource: 'add-list'
+                         });
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -228,7 +234,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             useRp : false,
                             resizable:false,
                             colresize:false,
-                            height:this.app.get('wp_height')-375,
+                            height:this.app.get('wp_height')-122,
                             usepager : false,
                             colWidth : ['100%','90px','66px','132px']
                     });
@@ -242,13 +248,31 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             useRp : false,
                             resizable:false,
                             colresize:false,
-                            height:this.app.get('wp_height')-359,
+							height:this.app.get('wp_height')-122,                            
                             usepager : false,
-                            colWidth : ['90%','10%']
+                            colWidth : ['100%','330px']
                     });
-                    this.$("#recipients-list,.list-action-btn").css("height",this.app.get('wp_height')-359);
-                    this.$("#list_grid tr td:first-child").attr("width","90%");
-                    this.$("#list_grid tr td:last-child").attr("width","10%");  
+					this.$el.find("#targets").bmsgrid({
+                            useRp : false,
+                            resizable:false,
+                            colresize:false,
+                            height:this.app.get('wp_height')-122,
+                            usepager : false,
+                            colWidth : ['auto','330']
+                    });
+                   	//this.$("#recipients-list,.list-action-btn").css("height",this.app.get('wp_height')-122);
+                    
+					this.$("#list_grid tr td:first-child").attr("width","auto");
+                    this.$("#list_grid tr td:last-child").attr("width","100px");
+					//this.$("#list_grid_recipients tr td:first-child").attr("width","100%");
+                   	//this.$("#list_grid_recipients tr td:last-child").attr("width","320px");
+					this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
+					
+					this.$("#targets tr td:first-child").attr("width","auto");
+                    this.$("#targets tr td:last-child").attr("width","150px");					
+					this.$("#target_grid_recipients tr td:first-child").attr("width","100%");
+                    this.$("#target_grid_recipients tr td:last-child").attr("width","180px");
+					this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
                 },
                 loadCampaign:function(camp_id){
                    if(camp_id==="0" || camp_id===0) return false;
@@ -724,6 +748,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             camp_obj.app.setAppData("lists",jQuery.parseJSON(xhr.responseText));  
                         }
                     }).fail(function() { console.log( "error lists listing" ); });
+					
+					URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C";
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        if(xhr && xhr.responseText){
+                            camp_obj.createTargetsTable(xhr);
+                        }
+                    }).fail(function() { console.log( "error lists listing" ); });
                     
                     URL = "/pms/io/salesforce/getSalesforceData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -823,11 +854,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     });
                     var wp_length = $(".ws-tabs li").length-1;                    
                     
-                    /*var xhr = {};
+                    /*var xhr = {};1GKvqmqc1Iyz6VZqETa5DaK5Nb0zLw
                     xhr.responseText = '{"count": "85","lists":[{"list1":[{"creationDate": "2012-07-27","tags": "","campaignSentCount": "0","name": "Abandoned Shopping Carts","listNum": "qcWQe30Wh33Jb26Hi17Mk20qcW","md5": "4b7dc121caf2baf0963a047346fc8df6","subscriberCount": "705","isSupressList": "false"}],"list2":[{"creationDate": "2008-02-05","tags": "","campaignSentCount": "0","name": "All Synch Leads","listNum": "kzaqwKb26Bb17Gd20Mi21Uh30kzaqw","md5": "7d24c36ac85da6029d610602b6994085","subscriberCount": "712","isSupressList": "false"}]}]}';
                     this.createListTable(xhr);*/
                 },
-                createListTable:function(xhr){                    
+                createListTable:function(xhr){
+					var camp_obj=this;                    
                     this.$el.find("#target-lists").children().remove();
                     var camp_list_json = jQuery.parseJSON(xhr.responseText);
                     if(this.app.checkError(camp_list_json)){
@@ -837,7 +869,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0].listNum+'">';                        
-                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5><a class=""> Business </a>,<a class=""> marketing </a>,<a class=""> online shopping </a>, <a class=""> amazon </a></div></div></td>';                        
+                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
                         list_html += '</tr>';
                     });
@@ -847,6 +879,29 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.initListListing();
                     
                     this.$el.find(".target-listing .action").click(_.bind(this.addToRecipients,this));
+                },
+				createTargetsTable:function(xhr){ 
+					var camp_obj=this;                   
+                    this.$el.find("#targets").children().remove();
+                    var targets_list_json = jQuery.parseJSON(xhr.responseText);
+                    if(this.app.checkError(targets_list_json)){
+                        return false;
+                     }
+                    var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
+                    this.$el.find(".target-count").html("Displaying <b>"+targets_list_json.count+"</b> targets");
+					//alert(targets_list_json);
+                    $.each(targets_list_json.lists[0], function(index, val) {     
+                        target_html += '<tr id="row_'+val[0].listNum+'">';                        
+                        target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
+                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
+                        target_html += '</tr>';
+                    });
+                    target_html += '</tbody></table>';
+
+                    this.$el.find("#targets").html(target_html);                                                            
+                    this.initListListing();
+                    
+                    this.$el.find("#targets_grid .add").click(_.bind(this.addToTargetRecipients,this));
                 },
                 createCampaignListTable:function(xhr){                    
                     var camp_obj=this;
@@ -907,7 +962,39 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       tr_copy.fadeIn("fast");
                       
                   })
-                  
+				  var recpoldcount = this.$el.find("#recpcount span").text();
+				  var recpnewval = tr_obj.find("td:nth-child(2) div.subscribers").text();
+				  var recptotalcount = parseInt(recpoldcount) + parseInt(recpnewval);				   
+				  this.$el.find("#recpcount span").text(recptotalcount);
+				  //alert('1');
+                },
+				addToTargetRecipients:function(obj){
+                  var tr_obj = $(obj.target).parents("tr");  
+                  var me = this;
+                  tr_obj.fadeOut("fast", function(){
+                      var tr_copy = tr_obj.clone();
+                      if(tr_obj.next().length){
+                        var tr_next =  tr_obj.next();                        
+                        tr_copy.attr("before_id", tr_next.attr("id"));
+                      
+                      }
+                      $(this).remove();
+					  tr_copy.find(".action .use").hide();
+                      tr_copy.find(".action .btn-green").removeClass("btn-green").addClass("btn-red").html("Remove");                      
+                      tr_copy.find(".action").click(_.bind(me.removeFromTargetRecipients,me))
+                      tr_copy.appendTo(me.$("#target_grid_recipients tbody"));
+                      tr_copy.fadeIn("fast");
+                      
+                  });
+				  var oldcount1 = this.$el.find("#trecpcount span").text();
+				  //alert(oldcount);
+				  var newval1 = tr_obj.find("td:nth-child(2) div.subscribers").text();
+				  //alert(newval);
+				  //alert(parseInt(oldcount) + parseInt(newval));
+				  var totalcount1 = parseInt(oldcount1) + parseInt(newval1);
+				  this.$el.find("#trecpcount span").text(parseInt(totalcount1));
+				  this.$el.find("#recpcount span").text('0');
+				  //alert('2');
                 },
                 removeFromRecipients:function(obj){
                     var tr_obj = $(obj.target).parents("tr"); 
@@ -926,8 +1013,35 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             tr_copy.appendTo(me.$("#list_grid tbody"));
                         }
                         tr_copy.fadeIn("fast");
-
                     });
+					var oldcount = this.$el.find("#recpcount span").text();
+					var newval = tr_obj.find("td:nth-child(2) div.subscribers").text();
+					var totalcount = oldcount - newval;				   
+					this.$el.find("#recpcount span").text(totalcount);
+                },
+				removeFromTargetRecipients:function(obj){
+                    var tr_obj = $(obj.target).parents("tr"); 
+                    var me = this;
+                    tr_obj.fadeOut("fast", function(){
+                        var tr_copy = tr_obj.clone();
+                        var before_id = tr_obj.attr("before_id");
+                        tr_copy.removeAttr("before_id");
+                        $(this).remove();
+						tr_copy.find(".action .use").show();
+                        tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add");                      
+                        tr_copy.find(".add").click(_.bind(me.addToTargetRecipients,me));
+                        if(before_id){
+                            tr_copy.insertBefore(me.$("#targets_grid #"+before_id));
+                        }
+                        else{
+                            tr_copy.appendTo(me.$("#targets_grid tbody"));
+                        }
+                        tr_copy.fadeIn("fast");
+                    });
+					var oldcount = this.$el.find("#trecpcount span").text();
+					var newval = tr_obj.find("td:nth-child(2) div.subscribers").text();
+					var totalcount = oldcount - newval;				   
+					this.$el.find("#trecpcount span").text(totalcount);
                 },
                 addTagEnter:function(obj){
                     if(obj && obj.keyCode==13 && $(".typeahead").css("display")==="none"){

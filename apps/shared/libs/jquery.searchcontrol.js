@@ -24,12 +24,12 @@
 				  txt.bind( "keyup", dosearch );
 				  $(this).append(txt);
 				  
-				  var closeicon = $('<a class="close-icon" id="'+ options.closeiconid +'" style="display:none"></a>');
+				  var closeicon = $('<a class="close-icon" id="clearsearch" style="display:none"></a>');
 				  $(this).append(closeicon);
 				  closeicon.click(function() { 
 				  	//alert(txt.val());
 				  	txt.val('');
-					$("#"+ options.closeiconid).hide();
+					$(this).parent().find("#clearsearch").hide();
 					 $("#"+ options.gridcontainer +" tr").show();
 					 $("#"+ options.gridcontainer).removeHighlight();
 				  });
@@ -42,19 +42,23 @@
 					  //alert(searchterm.length);
 					  if(searchterm.length > 0)
 					  {
-						  //alert($('#remove-merge-list'));
-					  	$("#"+ options.closeiconid).show();
+						//alert($(this).parent().attr('id'));
+					  	$(this).parent().find("#clearsearch").show();
 						//$('#remove-merge-list').css('display','block');
 						$("#"+ options.gridcontainer +" tr").hide();
 						 searchterm = searchterm.toLowerCase();
 						 $("#"+ options.gridcontainer +" tr").filter(function() {                                   
-							  return $(this).children('td:first').text().toLowerCase().indexOf(searchterm) > -1;
+							  return $(this).children('td').text().toLowerCase().indexOf(searchterm) > -1;
 						  }).show();
-						  $("#"+ options.gridcontainer + ' tr td:first').removeHighlight().highlight(searchterm);
+						  //$("#"+ options.gridcontainer + ' tr td').removeHighlight().highlight(searchterm);
+						  $("#"+ options.gridcontainer + " tr").each(function(i) {
+							  // find the first td in the row
+							  $(this).find("td:first-child").removeHighlight().highlight(searchterm);							  
+						  });
 					  }
 					  else
 					  {
-					  	$("#"+ options.closeiconid).hide();
+					  	$(this).parent().find("#clearsearch").hide();
 						$("#"+ options.gridcontainer +" tr").show();
 						$("#"+ options.gridcontainer).removeHighlight();
 					  }
