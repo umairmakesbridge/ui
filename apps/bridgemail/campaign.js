@@ -250,7 +250,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             colresize:false,
 							height:this.app.get('wp_height')-122,                            
                             usepager : false,
-                            colWidth : ['100%','330px']
+                            colWidth : ['100%','100px']
                     });
 					this.$el.find("#targets").bmsgrid({
                             useRp : false,
@@ -262,17 +262,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     });
                    	//this.$("#recipients-list,.list-action-btn").css("height",this.app.get('wp_height')-122);
                     
-					this.$("#list_grid tr td:first-child").attr("width","auto");
-                    this.$("#list_grid tr td:last-child").attr("width","100px");
-					//this.$("#list_grid_recipients tr td:first-child").attr("width","100%");
-                   	//this.$("#list_grid_recipients tr td:last-child").attr("width","320px");
-					this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
+                    this.$("#list_grid tr td:first-child").attr("width","100%");
+                    this.$("#list_grid tr td:last-child").attr("width","100px");	
+                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
 					
-					this.$("#targets tr td:first-child").attr("width","auto");
-                    this.$("#targets tr td:last-child").attr("width","150px");					
-					this.$("#target_grid_recipients tr td:first-child").attr("width","100%");
-                    this.$("#target_grid_recipients tr td:last-child").attr("width","180px");
-					this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
+                    this.$("#targets tr td:first-child").attr("width","100%");
+                    this.$("#targets tr td:last-child").attr("width","150px");										
+                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
                 },
                 loadCampaign:function(camp_id){
                    if(camp_id==="0" || camp_id===0) return false;
@@ -870,7 +866,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0].listNum+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
+                        list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
