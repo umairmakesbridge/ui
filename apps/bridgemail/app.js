@@ -9,7 +9,8 @@ define([
 				env: 'developement',
 				bms_token: $.getUrlVar(false,'BMS_REQ_TK'),
 				host: window.location.hostname,
-				session: null                                
+				session: null,
+                                app_data : {}
 			}, window.sz_config || {}));
 					
 			//Convenience for accessing the app object in the console
@@ -108,6 +109,7 @@ define([
                        }
                    });
                  //this.mainContainer.bmseditor.initEditor();
+                 this.loadAppData();
                    
              },
              checkError:function(result){
@@ -220,6 +222,60 @@ define([
                     }
                 });
                 return tag_html;
+            },
+            setAppData:function(appVar,data){
+                var _data = this.get("app_data");
+                _data[appVar]= data;
+            },
+            getAppData:function(appVar){
+               return this.get("app_data")[appVar];   
+            },
+            loadAppData:function(){
+                var app = this;
+                var URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=fields_all";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                    if(xhr && xhr.responseText){                        
+                         var fields_json = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(fields_json)){
+                             return false;
+                         }
+                        app.setAppData("fields",fields_json);
+                        var basic_fields = [];var custom_fields = [];                        
+                        $.each(fields_json,function(key,val){
+                            if(val[2]=="true"){
+                                basic_fields.push(val);
+                            }
+                            else{
+                               custom_fields.push(val); 
+                            }
+                        });
+                        app.setAppData("basicFields",basic_fields);
+                        app.setAppData("customFields",custom_fields);
+                    }
+              }).fail(function() { console.log( "error in loading fields" ); });
+              
+              URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=rules";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                    if(xhr && xhr.responseText){                        
+                         var rules_json = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(rules_json)){
+                             return false;
+                         }
+                        app.setAppData("rules",rules_json);  
+                    }
+              }).fail(function() { console.log( "error in loading rules" ); });
+              
+              URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=formats";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                    if(xhr && xhr.responseText){                        
+                         var formats_json = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(formats_json)){
+                             return false;
+                         }
+                        app.setAppData("formats",formats_json);  
+                    }
+              }).fail(function() { console.log( "error in loading formats" ); });
+              
             }
              
 	});

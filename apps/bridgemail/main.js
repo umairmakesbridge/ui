@@ -18,6 +18,8 @@
            'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
            'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
+           'bms-filters': '../shared/filters',
+           'bms-tags': '../shared/tags',
             bootstrap: '../shared/libs/bootstrap.min'
        },
         shim: {
@@ -63,6 +65,13 @@
                    deps: ['jquery']
                },
                bootstrap: ['jquery']
+               ,
+               'bms-filters':{
+                   deps: ['jquery','bootstrap']
+               },
+               'bms-tags':{
+                   deps: ['jquery']
+               }
          }
     });
  

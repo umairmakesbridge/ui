@@ -196,6 +196,9 @@ h2.header-list .search .searchbtn{
 .bmsgrid td .action{
     margin:auto 5px;
 }
+.icon.add-list{
+  background-position: -30px -90px;
+}
 .grayicons .icon.add-list-green{
     background-position: -60px -90px;    
 }
@@ -321,13 +324,14 @@ div.tags-div:before {
     float:left;
 }
 
-.camp_header .tagscont ul{
+.tagscont ul,.targt .tagscont ul{
     float: left;
     position: relative;
     left:0px;
+    border:1px solid transparent;
     width: 200px;    
 }
-.camp_header .tagscont ul.overflow {
+.tagscont ul.overflow {
     height:auto;
     overflow:visible;    
     background: none repeat scroll 0 0 #f9f9f9;
@@ -336,44 +340,46 @@ div.tags-div:before {
    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);  
 }
-.camp_header .tagscont .ellipsis{
+.tagscont .ellipsis{
     display: none;
 }
-.camp_header .tagscont .addtag{
+.tagscont .addtag,.targt .tagscont .addtag{
     float:none;
-    margin-left: 0px;    
+    margin-left: 4px;    
     display:inline-block;   
     padding-bottom: 2px;
 }
-.camp_header .tagscont .tags-contents{
+.tagscont .tags-contents{
     display:none;    
 }
-.camp_header .tagscont .ellipsis {    
-    background: none repeat scroll 0 0 #F9F9F9;
-    border: 1px solid #CCCCCC;
-    border-radius: 3px 3px 3px 3px;
-    font-weight: bold;    
-    letter-spacing: 2px;
-    line-height: 4px;
-    padding: 0 3px 7px 4px;
+.tagscont .ellipsis {    
+    line-height: 5px;
     position: relative;
     top:-10px;
-    left:0px;
+    left:2px;
+    padding: 0 3px 6px 4px;
     cursor:pointer;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius:3px;
+    
+}
+.tagscont ul li a{
+    padding:0px 1px;    
+}
+.tagscont ul li a:hover,.tagscont ul li a.active{
+    text-decoration: underline;
 }
 .tags-buttons{
     display:inline-block;
-    top:-3px;
+    top:-4px;
     position:relative;
 }
 .tags-buttons.overflow{
     position:absolute;
-    top:0px;
-    margin-left: 2px;
+    top:2px;
+    margin-left: 0px;
     width:100px;
+}
+.tags-buttons.overflow a{
+    color:#888;
 }
 .tag_msg1{
    top:10%;
@@ -777,4 +783,118 @@ input[type="text"].search-template{
 }
 .show-image{
     padding-left:35px !important;
+}
+.c-name.targt.create_target{
+    padding:0px !important;
+    margin:0px !important;
+}
+.create_target input{
+  border: 1px solid #BABCBE;
+  width: 448px;
+}
+.create_target .edited .btn-green,.create_target .edited .btn-gray{
+    min-width: 43px;
+    padding: 5px 10px;
+    text-align: center;
+}
+.create_target .edited .btn-gray{
+    right:-52px;
+}
+.filter-div > div.filter:after{
+    background-position: -209px -867px;
+}
+.filter-cont .edit{
+    background-position: -330px -330px
+}
+.grayicons .filter-cont .icon.delete{
+    background-position: -30px -660px;
+}
+.grayicons .filter-cont .icon.delete:hover{
+    background-position: -60px -660px;
+}
+.filter-row .filter-cont .right-btns{
+    display: none;
+}
+
+.filter-row .chosen-container-single .chosen-single{
+    height:26px;
+    line-height: 26px;
+}
+.filter-row .row.match{
+    margin-left:112px;
+}
+.chosen-container .chosen-results li em{
+ font-weight: bold;
+ color:#fff;
+ float:none;
+ margin: 0px;
+ background-color:#0096FF;   
+}
+.sub-date-container .list{
+    background-position: -270px -811px;
+}
+.sub-date-container .list:hover{
+    background-position: -270px -871px;
+}
+.sub-date-container .add-list,.sub-date-container .list{
+    margin-top:0px;
+    margin-right: 5px;
+}
+
+.sub-date-container .add-list:hover{
+    background-position: -60px -90px;
+}
+.modal-body h2.header-list{
+    margin-top:0px;
+}
+
+.modal-header{
+    background: #32AFDE;    
+    
+}
+.modal-header h3{
+    color:#fff;
+    font-size: 20px;
+    font-weight: bold;
+}
+.modal-header .close{
+    color: #fff;
+}
+.filter-row .row.nolabel{
+    margin-left: 112px;
+}
+.filter-row label{
+    width:112px;
+}
+.filter-row .filter-cont h4{
+ min-width: 112px;
+ margin: 0px;
+}
+.filter-div > div.filter_start:after{
+     background-position: -419px -870px;
+}
+.targt .tagicon.gray {
+    background-position:-180px -885px
+}
+
+.targt .tagscont .addtag > a,.targt .tagscont ul li > a{
+    color:#888;
+}
+.targt.c-name{
+    height:75px;
+}
+.c-name.targt .tagscont{
+    margin:5px 0px;
+}
+.targt.c-name.targt h2 span{
+    color:#0096FF;
+}
+.targt.c-name h2 a.edit{
+    background-position: -330px -330px;
+}
+.targt.c-name h2 a.edit:hover{
+    background-position: -360px -330px;
+}
+.targt.c-name h2 a.delete{
+    background-position: -30px -660px;
 }
