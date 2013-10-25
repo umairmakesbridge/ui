@@ -31,7 +31,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					placeholder: 'Search Campaign',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                                        iconsource: 'campaigns',
+                    iconsource: 'campaigns',
 					closeiconid: 'clearcampssearch'
 				 });
 			}
@@ -66,7 +66,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 						useRp : false,
 						resizable:false,
 						colresize:false,
-						height:this.app.get('wp_height')-178,
+						height:this.app.get('wp_height')-122,
 						usepager : false,
 						colWidth : ['100%','90px','66px','132px']
 				});                                                                
