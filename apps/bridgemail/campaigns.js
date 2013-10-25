@@ -31,8 +31,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					placeholder: 'Search Campaign',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                    iconsource: 'campaigns',
-					closeiconid: 'clearcampssearch'
+                    iconsource: 'campaigns'
 				 });
 			}
 			,
@@ -43,7 +42,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			getallcampaigns: function () {
 				var camp_obj = this;                                
 				this.app.showLoading(true,camp_obj.$el.find("#target-camps"));
-				URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormal";
+				URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns";
 				jQuery.getJSON(URL,  function(tsv, state, xhr){					
 					if(xhr && xhr.responseText){
 						camp_obj.createListTable(xhr);

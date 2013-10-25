@@ -123,8 +123,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Campaign',
                                 gridcontainer: 'camp_list_grid',
                                 showicon: 'yes',
-                                iconsource: 'campaigns',
-                                closeiconid: 'clearcopysearch'
+                                iconsource: 'campaigns'
                          });
                          this.$el.find('div#listssearch').searchcontrol({
                                 id:'list-search',
@@ -133,8 +132,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'list_grid',
                                 showicon: 'yes',
-                                iconsource: 'add-list',
-                                closeiconid: 'clearlistssearch'
+                                iconsource: 'add-list'
                          });
                          this.$el.find('div#targetssearch').searchcontrol({
                                 id:'target-list-search',
@@ -143,8 +141,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'target_list_grid',
                                 showicon: 'no',
-                                iconsource: '',
-                                closeiconid: 'cleartlistssearch'
+                                iconsource: ''
                          });
 						 this.$el.find('div#targetsearch').searchcontrol({
                                 id:'target-search',
@@ -153,8 +150,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search target',
                                 gridcontainer: 'targets_grid',
                                 showicon: 'yes',
-                                iconsource: 'add-list',
-                                closeiconid: 'cleartargetsearch'
+                                iconsource: 'add-list'
                          });
                 },
                 stepsCall:function(step){
@@ -691,7 +687,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     //Loading Campaigns list
                     this.app.showLoading(true,camp_obj.$el.find("#target-lists"));
                     
-                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormal";                                                            
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns";                                                            
                     
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
