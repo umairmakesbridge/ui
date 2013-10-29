@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters'],
-function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor'],
+function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -9,10 +9,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                            
                            this.$(".step3 #choose_soruce li").removeClass("selected");
                            this.$(".step3 .soruces").hide();                           
-                           this.$(".step3 #area_"+target_li.attr("id")).fadeIn("fast");                                                      
+                           this.$(".step3 #area_"+target_li.attr("id")).fadeIn("fast");
+                                                      
                            target_li.addClass("selected");
-                           
-                           this.step3SlectSource(target_li);
                        } ,
                       'click .step2 #choose_soruce li':function(obj){
                           var camp_obj = this;
@@ -81,28 +80,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       'click #campaign_isFooterText':function(){
                         this.setFooterArea();
                       },
-                      'change .step1 input,change .step1 select,change .step1 textarea':function(){
+                      'change .step1 input,change .step1 select':function(){
                           this.states.step1.change = true;
                       },
                       'change .step2 #myhtml':function(){
                           this.states.editor_change = true;
-                      },
-                      'click .step3 .savetarget': function(obj){
-                          this.saveTarget(obj)
-                      },
-                       'click .step3 .canceltarget': function(obj){
-                          if(this.states.step3.target_id){
-                            this.showHideTargetTitle();
-                          }
-                      },
-                      'click .step3 .targt .edit': function(){
-                          this.showHideTargetTitle(true);
-                      },
-                      'click .step3 .targt .delete':function(){
-                        this.deleteTarget();  
-                      },
-                      'click .step3 .targt #target_name_text span': function(){
-                          this.showHideTargetTitle(true);
                       }
                     },
 
@@ -117,7 +99,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0},
+                                        "step3":{},
                                         "step4":{},
                                         "editor_change":false
                                        };
@@ -132,7 +114,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         if(this.options.params && this.options.params.camp_id){
                             this.camp_id = this.options.params.camp_id;
                         }
-                        //this.createPopups();                        
+                        this.createPopups();                        
                         this.loadDataAjax(); // Load intial Calls
                         this.$el.find('div#copycampsearch').searchcontrol({
                                 id:'copy-camp-search',
@@ -205,11 +187,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.initHeader();
                     //
                     this.setupCampaign();                    
-                    if(this.camp_id!="0"){
+                    if(this.camp_id!=="0"){
                         this.loadCampaign(this.camp_id);
-                    }
-                    else{
-                        this.initCampaignTag('')   
                     }
                     this.$( "#accordion" ).accordion({ active: 1, collapsible: true,activate: _.bind(function(){
                             this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox)
@@ -250,7 +229,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             colresize:false,
 							height:this.app.get('wp_height')-122,                            
                             usepager : false,
-                            colWidth : ['100%','100px']
+                            colWidth : ['100%','330px']
                     });
 					this.$el.find("#targets").bmsgrid({
                             useRp : false,
@@ -262,13 +241,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     });
                    	//this.$("#recipients-list,.list-action-btn").css("height",this.app.get('wp_height')-122);
                     
-                    this.$("#list_grid tr td:first-child").attr("width","100%");
-                    this.$("#list_grid tr td:last-child").attr("width","100px");	
-                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
+					this.$("#list_grid tr td:first-child").attr("width","auto");
+                    this.$("#list_grid tr td:last-child").attr("width","100px");
+					//this.$("#list_grid_recipients tr td:first-child").attr("width","100%");
+                   	//this.$("#list_grid_recipients tr td:last-child").attr("width","320px");
+					this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
 					
-                    this.$("#targets tr td:first-child").attr("width","100%");
-                    this.$("#targets tr td:last-child").attr("width","150px");										
-                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
+					this.$("#targets tr td:first-child").attr("width","auto");
+                    this.$("#targets tr td:last-child").attr("width","150px");					
+					this.$("#target_grid_recipients tr td:first-child").attr("width","100%");
+                    this.$("#target_grid_recipients tr td:last-child").attr("width","180px");
+					this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
                 },
                 loadCampaign:function(camp_id){
                    if(camp_id==="0" || camp_id===0) return false;
@@ -337,7 +320,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         camp_obj.setFooterArea();
                         //Load tags
                         camp_obj.tags = camp_obj.app.encodeHTML(camp_json.tags);
-                        camp_obj.initCampaignTag(camp_obj.tags);     
+                        camp_obj.showTags();     
 						//alert(camp_json.addToSFStatus);
                         if(camp_json.addToSFStatus=='Y'){                             
                              camp_obj.states.step1.hasResultToSalesCampaign = true;                             
@@ -419,7 +402,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     $("#tag_box_close").click(function(){
                         $(".tagbox").hide();
                     });
-                    active_ws.find(".camp_header .tagscont .ellipsis").click(_.bind(function(){
+                    active_ws.find(".tagscont .ellipsis").click(_.bind(function(){
                        var active_ws = this.$el.parents(".ws-content");  
                        active_ws.find("#camp_tags").toggleClass("overflow");
                        active_ws.find(".tagscont .tags-buttons").toggleClass("overflow");
@@ -450,7 +433,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   var editIconCampaign = $('<a class="icon edit"></a>');
                   var deleteIconCampaign = $('<a class="icon delete"></a>');
                   var active_ws = this.$el.parents(".ws-content");
-                  var header_title = active_ws.find(".camp_header .edited  h2");
+                  var header_title = active_ws.find(".edited  h2");
                   header_title.append(previewIconCampaign);
                   header_title.append(editIconCampaign);
                   header_title.append(deleteIconCampaign);
@@ -506,7 +489,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       active_ws.find(".camp_header .c-name h2").hide();                      
                       active_ws.find(".camp_header .c-name .edited ").show();                      
                       active_ws.find("#camp_tags").children().remove();
-                      active_ws.find(".camp_header .tags-contents,.camp_header .ellipsis").hide();                      
+                      active_ws.find(".tags-contents,.ellipsis").hide();                      
                       active_ws.find("#header_wp_field").focus().val('');
                       //active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",true);
                       active_ws.find("#campMenu").prop("disabled",false);
@@ -552,12 +535,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){
                                  camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_name_input.val());
-                                 camp_obj.camp_id = camp_json[1];             
-                                 var active_ws = camp_obj.$el.parents(".ws-content");
-                                 var camp_tag_ele = active_ws.find(".camp_header #campaign_tags");
-                                 if(camp_tag_ele.data("tags")){
-                                    camp_tag_ele.data("tags").setObjectId("campNum",camp_json[1]);
-                                 }
+                                 camp_obj.camp_id = camp_json[1];                                 
                                  camp_obj.setupCampaign();
                                  camp_obj.app.showMessge("Campaign Created");
                                  
@@ -684,16 +662,23 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 saveStep4:function(){
                   return -1;  
                 },
-                initCampaignTag:function(tags){                  
-                  var active_ws = this.$el.parents(".ws-content");
-                  var camp_tag_ele = active_ws.find(".camp_header #campaign_tags");
-                  camp_tag_ele.tags({app:this.app,
-                        url:"/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token'),
-                        tags:tags,
-                        showAddButton:(this.camp_id=="0")?false:true,
-                        params:{type:'tags',campNum:this.camp_id,tags:''},
-                        typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allCampaignTags"
-                    });                  
+                initTpyeAhead:function(){
+                  var camp_obj = this;  
+                  //Create Type ahead
+                  URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allCampaignTags";                    
+                        jQuery.getJSON(URL,  function(tsv, state, xhr){
+                           if(xhr && xhr.responseText){                        
+                                var tags_json = jQuery.parseJSON(xhr.responseText);                                
+                                if(camp_obj.app.checkError(tags_json)){
+                                    return false;
+                                }
+                                camp_obj.tags_common = tags_json.tags.split(",");
+
+                                var typeahead = $('#camp_tag_text').data('typeahead');
+                                if(typeahead) typeahead.source = camp_obj.tags_common;
+                                else $('#camp_tag_text').typeahead({source: camp_obj.tags_common,items:10});
+                           }
+                     }).fail(function() { console.log( "error in common tags" ); });
                   
                 },
                 loadDataAjax:function(){
@@ -711,7 +696,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 return false;
                             }
                             camp_obj.createCampaignListTable(xhr);
-                            camp_obj.app.setAppData("campaigns",jQuery.parseJSON(xhr.responseText));  
                             
                         }
                     }).fail(function() { console.log( "error campaign listing" ); });
@@ -741,7 +725,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
                             camp_obj.createListTable(xhr);
-                            camp_obj.app.setAppData("lists",jQuery.parseJSON(xhr.responseText));  
                         }
                     }).fail(function() { console.log( "error lists listing" ); });
 					
@@ -838,7 +821,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }).fail(function() { console.log( "error merge fields json" ); });
                                         
                     // Load common tags
-                    //camp_obj.initTpyeAhead();
+                    camp_obj.initTpyeAhead();
                     
                     $("#add_tag_btn").click(_.bind(this.addTag,this));
                     $("#camp_tag_text").keyup(_.bind(this.addTagEnter,this));
@@ -866,15 +849,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0].listNum+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
+                        list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
 
-                    this.$el.find("#target-lists").html(list_html);                                                            
+                    this.$el.find("#target-lists").html(list_html);
                     this.initListListing();
                     
-                    this.$el.find(".target-listing .action").click(_.bind(this.addToRecipients,this));
+                    this.$el.find("#target-lists .action").click(_.bind(this.addToRecipients,this));
                 },
 				createTargetsTable:function(xhr){ 
 					var camp_obj=this;                   
@@ -886,10 +869,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
                     this.$el.find(".target-count").html("Displaying <b>"+targets_list_json.count+"</b> targets");
 					//alert(targets_list_json);
-                    $.each(targets_list_json.lists[0], function(index, val) {     
-                        target_html += '<tr id="row_'+val[0].listNum+'">';                        
+                    $.each(targets_list_json.lists[0], function(index, val) {
+						//alert(val[0]["filterNumber.encode"]);
+                        target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'">';                        
                         target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
+                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a id="'+val[0]["filterNumber.encode"]+'" class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
                         target_html += '</tr>';
                     });
                     target_html += '</tbody></table>';
@@ -898,7 +882,14 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.initListListing();
                     
                     this.$el.find("#targets_grid .add").click(_.bind(this.addToTargetRecipients,this));
+					this.$el.find("#targets_grid .use").click(_.bind(this.loadTarget,this));
                 },
+				loadTarget:function(obj)
+				{
+					var target = $.getObj(obj,"a");
+					var tid = target.attr("id");
+					//alert(tid);
+				},
                 createCampaignListTable:function(xhr){                    
                     var camp_obj=this;
                     this.$el.find("#copy-camp-listing").children().remove();
@@ -964,7 +955,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 				  this.$el.find("#recpcount span").text(recptotalcount);
 				  //alert('1');
                 },
-				addToTargetRecipients:function(obj){
+				addToTargetRecipients:function(obj){					
                   var tr_obj = $(obj.target).parents("tr");  
                   var me = this;
                   tr_obj.fadeOut("fast", function(){
@@ -1002,12 +993,24 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         $(this).remove();
                         tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add");                      
                         tr_copy.find(".action").click(_.bind(me.addToRecipients,me));
-                        if(before_id){
+                        /*if(before_id){
                             tr_copy.insertBefore(me.$("#list_grid #"+before_id));
                         }
                         else{
-                            tr_copy.appendTo(me.$("#list_grid tbody"));
-                        }
+                            tr_copy.appendTo(me.$("#list_grid tbody"));							
+                        }*/
+						var match = null;
+						$("#list_grid tbody").find("tr").each(function(){
+							if($(this).attr("id") == before_id){
+								match = $(this);
+								return false;
+							}
+						});
+						if(match)
+							tr_copy.insertBefore(match);
+						else
+						   $("#list_grid tbody").append(tr_copy);
+						   
                         tr_copy.fadeIn("fast");
                     });
 					var oldcount = this.$el.find("#recpcount span").text();
@@ -1024,14 +1027,29 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         tr_copy.removeAttr("before_id");
                         $(this).remove();
 						tr_copy.find(".action .use").show();
-                        tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add");                      
-                        tr_copy.find(".add").click(_.bind(me.addToTargetRecipients,me));
-                        if(before_id){
+						tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add"); 
+						tr_copy.find(".action .use").html("Use");
+                        //tr_copy.find(".action .btn-green").html("Add");
+                        tr_copy.find(".action .add").click(_.bind(me.addToTargetRecipients,me));
+						tr_copy.find(".action .use").click(_.bind(me.loadTarget,me));
+						var match = null;
+						$("#targets_grid tbody").find("tr").each(function(){
+							if($(this).attr("id") == before_id){
+								match = $(this);
+								return false;
+							}
+						});
+						if(match)
+							tr_copy.insertBefore(match);
+						else
+						   $("#targets_grid tbody").append(tr_copy);
+                        /*if(before_id){
                             tr_copy.insertBefore(me.$("#targets_grid #"+before_id));
                         }
                         else{
                             tr_copy.appendTo(me.$("#targets_grid tbody"));
-                        }
+							alert(me.$("#list_grid tbody"));
+                        }*/
                         tr_copy.fadeIn("fast");
                     });
 					var oldcount = this.$el.find("#trecpcount span").text();
@@ -1192,7 +1210,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         var tags_array = tags.split(",");
                         $.each(tags_array,function(i,t){
                             var char_comma = (i<tags_array.length-1)?",":"";
-                            var li_html ='<li id="camp_tag_'+i+'"><a class="tag" > '+t+'</a>'+char_comma+'</li>';
+                            var li_html ='<li id="camp_tag_'+i+'"><a class="tag" > '+t+'</a>'+char_comma+'<div class="tooltip"><a class="left"><span class="icon edit"></span></a>';
+                                li_html +='<a class="right"><span class="icon delete"></span></a></div></li>';
                             tags_ul.append($(li_html));        
                         });                            
                         this.showTagAction();
@@ -1207,12 +1226,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                        tags_ul.css("width","auto");
                        if(tags_ul.width()>260){
                            tags_ul.css("width","250px");
-                           $(".ws-content.active .camp_header .tags-buttons .ellipsis").css("display","inline-block");
+                           $(".ws-content.active .tags-buttons .ellipsis").css("display","inline-block");
                        }
                        else{
                            tags_ul.removeClass("overflow");
-                           $(".ws-content.active .camp_header .tagscont .tags-buttons").removeClass("overflow");
-                           $(".ws-content.active .camp_header .tags-buttons .ellipsis").hide();
+                           $(".ws-content.active  .tagscont .tags-buttons").removeClass("overflow");
+                           $(".ws-content.active  .tags-buttons .ellipsis").hide();
                        }
                     }
                     
@@ -1481,7 +1500,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 showMergeFields:function(obj){
                     var li = $.getObj(obj,"li");
-                    var camp_obj = this;                   
+                                       
                     
                     if(!li.hasClass("active")){
                         var type = li.attr("id").split("_")[1];
@@ -1509,7 +1528,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                active_ws.find("#"+input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos) ); 
                            }
                            active_ws.find("#"+input_field+"_default").fadeIn("fast");
-                           camp_obj.states.step1.change = true;
                            $(".mergefields").hide();
                         });
                     }
@@ -1897,105 +1915,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
                     }
                     
-                },
-                step3SlectSource:function(target_li){
-                    switch(target_li.attr("id")){
-                        case 'create_target':
-                            this.$("#c_c_target").filters({app:this.app});
-                            this.$("#targets_tags").tags({app:this.app,
-                                    url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token'),
-                                    params:{type:'tags',filterNumber:'',tags:''}
-                                });
-                        break;
-                        default:
-                            break;
-                    }
-               },
-               saveTarget:function(obj){                   
-                   var camp_obj = this;
-                   var target_name_input =  $(obj.target).parent().find("input");                       
-                   var target_head = $(obj.target).parents("div.targt");
-                   var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&filterFor=C";
-                   if(target_name_input.val()!==""){
-
-                     if(this.states.step3.target_id){
-                        $(obj.target).addClass("saving");                         
-                        $.post(URL, { type: "newName",filterName:target_name_input.val(),filterNumber:this.states.step3.target_id })
-                          .done(function(data) {                              
-                              var target_json = jQuery.parseJSON(data);                              
-                              if(target_json[0]!=="err"){
-                                 target_head.find("#target_name_text").show(); 
-                                 target_head.find("#target_name_text span").html(target_name_input.val());                                                                                                 
-                                 target_head.find("#target_name_edit").hide();
-                                 camp_obj.app.showMessge("Target Renamed");
-                              }
-                              else{                                  
-                                  camp_obj.app.showAlert(target_json[1],camp_obj.$el.parents(".ws-content.active"));
-                                  
-                              }
-                              $(obj.target).removeClass("saving");                              
-                         }); 
-                     }
-                     else{                         
-                         $(obj.target).addClass("saving");
-                         $.post(URL, { type: "create",filterName:target_name_input.val() })
-                          .done(function(data) {                              
-                              var camp_json = jQuery.parseJSON(data);                              
-                              if(camp_json[0]!=="err"){
-                                 target_head.find("#target_name_text").show(); 
-                                 target_head.find("#target_name_text span").html(target_name_input.val());
-                                 camp_obj.states.step3.target_id = camp_json[1];
-                                 if(camp_obj.$("#targets_tags").data("tags")){
-                                    camp_obj.$("#targets_tags").data("tags").setObjectId("filterNumber",camp_json[1]);
-                                 }
-                                 target_head.find("#target_name_edit").hide();
-                                 camp_obj.app.showMessge("Target Created");
-                                                                  
-                              }
-                              else{
-                                  camp_obj.app.showAlert(camp_json[1],camp_obj.$el.parents(".ws-content.active"));
-                              }
-                              $(obj.target).removeClass("saving");                              
-                         });
-                     }
-                   }                      
-                    obj.stopPropagation();
-               },
-               showHideTargetTitle:function(show,isNew){
-                   if(show){
-                       this.$(".step3 .targt #target_name_text").hide();
-                       this.$(".step3 .targt #target_name_edit").show();
-                       if(isNew){
-                           this.$(".step3 .targt #target_name_text span").html('');
-                           this.states.step3.target_id = 0;
-                       }
-                       this.$(".step3 .targt #target_name_edit input").val(this.$(".step3 .targt #target_name_text span").html());
-                   }
-                   else{
-                       this.$(".step3 .targt #target_name_text").show();
-                       this.$(".step3 .targt #target_name_edit").hide();                       
-                   }
-               },
-               deleteTarget:function(){
-                   var camp_obj = this;
-                   if(confirm('Are you sure you want to delete this target?')){
-                        var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-                        camp_obj.app.showLoading("Deleting...",camp_obj.$el.parents(".ws-content.active"));
-                        $.post(URL, {type:'delete',filterNumber:this.states.step3.target_id})
-                        .done(function(data) {                                 
-                               var del_target_json = jQuery.parseJSON(data);  
-                               if(camp_obj.app.checkError(del_target_json)){
-                                      return false;
-                               }
-                               if(del_target_json[0]!=="err"){
-                                   camp_obj.app.showMessge("Target Deleted");                                   
-                                   camp_obj.showHideTargetTitle(true,true);
-                               }                               
-                               camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
-                       });
-                    }
-               }
-               
+                }
                 
         });
 });
