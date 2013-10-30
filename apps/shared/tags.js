@@ -25,7 +25,7 @@
       this.tag_li = null
       this.tag_action = 'add'
       this.tags_common = ''
-      
+      this.$element.children().remove()
       this.$element.append(this.ele)
       
       this.showTags()      
@@ -291,6 +291,7 @@
 
   $.fn.tags = function ( option ) {
     return this.each(function () {
+      $(this).removeData('tags')    
       var $this = $(this)
         , data = $this.data('tags')
         , options = typeof option == 'object' && option

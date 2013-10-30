@@ -347,7 +347,7 @@ div.tags-div:before {
     float:none;
     margin-left: 4px;    
     display:inline-block;   
-    padding-bottom: 2px;
+    padding-bottom: 4px;
 }
 .tagscont .tags-contents{
     display:none;    
@@ -813,7 +813,7 @@ input[type="text"].search-template{
     background-position: -60px -660px;
 }
 .filter-row .filter-cont .right-btns{
-    display: none;
+    display: block;
 }
 
 .filter-row .chosen-container-single .chosen-single{
@@ -829,6 +829,9 @@ input[type="text"].search-template{
  float:none;
  margin: 0px;
  background-color:#0096FF;   
+}
+.chosen-container .chosen-results{
+    margin-right: 0px;
 }
 .sub-date-container .list{
     background-position: -270px -811px;

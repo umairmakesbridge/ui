@@ -60,11 +60,11 @@ h2.header-list span.recpscount {
 #targets_grid .action .btn-green { float:left; margin-left:10px; }
 #targets_grid .action .use { margin-left:0; }
 #salesforce_campaigns .chosen-container .chosen-drop {  }
-.chosen-container-single .chosen-drop { margin-top:10px; border-top:solid 1px #aaa; }
+.chosen-container-single .chosen-drop { margin-top:6px; border-top:solid 1px #aaa; }
 .chosen-drop:after {  
 	left: auto;
     right: 7px;
-	border-bottom: 6px solid #0096FF;
+	border-bottom: 6px solid #aaaaaa;
     border-left: 6px solid rgba(0, 0, 0, 0);
     border-right: 6px solid rgba(0, 0, 0, 0);
     content: "";

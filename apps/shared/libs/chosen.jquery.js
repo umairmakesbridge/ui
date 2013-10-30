@@ -156,8 +156,8 @@
     };
 
     AbstractChosen.prototype.set_default_text = function() {
-      if (this.form_field.getAttribute("data-placeholder") || this.options.placeholder_text) {
-        this.default_text = this.form_field.getAttribute("data-placeholder") || this.options.placeholder_text;
+      if (this.form_field.getAttribute("data-placeholder")) {
+        this.default_text = this.form_field.getAttribute("data-placeholder");
       } else if (this.is_multiple) {
         this.default_text = this.options.placeholder_text_multiple || this.options.placeholder_text || AbstractChosen.default_multiple_text;
       } else {

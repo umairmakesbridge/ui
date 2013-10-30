@@ -103,6 +103,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       },
                       'click .step3 .targt #target_name_text span': function(){
                           this.showHideTargetTitle(true);
+                      },
+                      'click .step3 #save_target_detail':function(){
+                          this.saveTargetFilter();
                       }
                     },
 
@@ -131,8 +134,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wizard = this.options.wizard;    
                         if(this.options.params && this.options.params.camp_id){
                             this.camp_id = this.options.params.camp_id;
-                        }
-                        //this.createPopups();                        
+                        }                        
                         this.loadDataAjax(); // Load intial Calls
                         this.$el.find('div#copycampsearch').searchcontrol({
                                 id:'copy-camp-search',
@@ -404,45 +406,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                         });
                     });  
-                },
-                createPopups:function(){
-                    //Tags Actions handling
-                    if($(".tagbox").length===0){
-                        $("body").append('<div class="tagbox custom_popup"><input type="text" placeholder="Add Tag" id="camp_tag_text" maxlength="30"><a class="btn-green savebtn left" id="add_tag_btn">Add</a><a class="btn-gray left" id="tag_box_close">Close</a></div>');
-                        $("body").append('<div class="tooltip tags-div custom_popup" style="display:none"><a class="left"><span class="icon edit"></span></a><a class="right"><span class="icon delete"></span></a></div>');                    
-                    }
-                    var active_ws = $(".ws-content.active ");
-                    active_ws.find("#add_tag_li").click(_.bind(this.showAddTagBox,this));
-                    $(".tagbox").click(function(event){
-                        event.stopPropagation();
-                    });
-                    $("#tag_box_close").click(function(){
-                        $(".tagbox").hide();
-                    });
-                    active_ws.find(".camp_header .tagscont .ellipsis").click(_.bind(function(){
-                       var active_ws = this.$el.parents(".ws-content");  
-                       active_ws.find("#camp_tags").toggleClass("overflow");
-                       active_ws.find(".tagscont .tags-buttons").toggleClass("overflow");
-                    },this));
-                    active_ws.find("#camp_tags").click(function(obj){
-                        $(".custom_popup").hide();
-                        obj.stopPropagation();
-                    });
-                                                            
-                    
-                    $(".tags-div .edit").click(_.bind(function(obj){
-                        var span = $.getObj(obj,"span");
-                        var span_id = span.attr("id").split("_")[2];
-                        this.showAddTagBox(false,span_id);
-                        $(".tags-div").hide();   
-                        obj.stopPropagation();
-                    },this));
-                    
-                    $(".tags-div .delete").click(_.bind(function(obj){
-                        var span = $.getObj(obj,"span");
-                        var span_id = span.attr("id").split("_")[2];
-                        this.deleteTag(span_id);                        
-                    },this));
                 }
                 ,
                 initHeader:function(){
@@ -839,12 +802,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                         
                     // Load common tags
                     //camp_obj.initTpyeAhead();
-                    
-                    $("#add_tag_btn").click(_.bind(this.addTag,this));
-                    $("#camp_tag_text").keyup(_.bind(this.addTagEnter,this));
-                                        
-                    this.showTagAction();
-                    
+                                                                                                                        
                     $(".mergefields").click(function(e){
                         e.stopPropagation();
                     });
@@ -874,7 +832,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$el.find("#target-lists").html(list_html);                                                            
                     this.initListListing();
                     
-                    this.$el.find(".target-listing .action").click(_.bind(this.addToRecipients,this));
+                    this.$el.find("#list_grid .action").click(_.bind(this.addToRecipients,this));
                 },
 				createTargetsTable:function(xhr){ 
 					var camp_obj=this;                   
@@ -887,9 +845,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$el.find(".target-count").html("Displaying <b>"+targets_list_json.count+"</b> targets");
 					//alert(targets_list_json);
                     $.each(targets_list_json.lists[0], function(index, val) {     
-                        target_html += '<tr id="row_'+val[0].listNum+'">';                        
+                        target_html += '<tr id="row_'+val[0]['filterNumber.encode']+'">';                        
                         target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
+                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]['filterNumber.encode']+'" class="action"><a class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
                         target_html += '</tr>';
                     });
                     target_html += '</tbody></table>';
@@ -898,6 +856,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.initListListing();
                     
                     this.$el.find("#targets_grid .add").click(_.bind(this.addToTargetRecipients,this));
+                    this.$el.find("#targets_grid .use").click(_.bind(this.useTarget,this));
                 },
                 createCampaignListTable:function(xhr){                    
                     var camp_obj=this;
@@ -964,7 +923,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 				  this.$el.find("#recpcount span").text(recptotalcount);
 				  //alert('1');
                 },
-				addToTargetRecipients:function(obj){
+		addToTargetRecipients:function(obj){
                   var tr_obj = $(obj.target).parents("tr");  
                   var me = this;
                   tr_obj.fadeOut("fast", function(){
@@ -975,9 +934,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       
                       }
                       $(this).remove();
-					  tr_copy.find(".action .use").hide();
-                      tr_copy.find(".action .btn-green").removeClass("btn-green").addClass("btn-red").html("Remove");                      
-                      tr_copy.find(".action").click(_.bind(me.removeFromTargetRecipients,me))
+                      tr_copy.find(".action .use").hide();
+                      tr_copy.find(".action .add").removeClass("btn-green").addClass("btn-red").html("Remove");                      
+                      tr_copy.find(".action .add").click(_.bind(me.removeFromTargetRecipients,me))
                       tr_copy.appendTo(me.$("#target_grid_recipients tbody"));
                       tr_copy.fadeIn("fast");
                       
@@ -1023,9 +982,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         var before_id = tr_obj.attr("before_id");
                         tr_copy.removeAttr("before_id");
                         $(this).remove();
-						tr_copy.find(".action .use").show();
-                        tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add");                      
-                        tr_copy.find(".add").click(_.bind(me.addToTargetRecipients,me));
+			tr_copy.find(".action .use").show().click(_.bind(me.useTarget,me));
+                        tr_copy.find(".action .add").removeClass("btn-red").addClass("btn-green").html("Add");                      
+                        tr_copy.find(".action .add").click(_.bind(me.addToTargetRecipients,me));
                         if(before_id){
                             tr_copy.insertBefore(me.$("#targets_grid #"+before_id));
                         }
@@ -1038,207 +997,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 					var newval = tr_obj.find("td:nth-child(2) div.subscribers").text();
 					var totalcount = oldcount - newval;				   
 					this.$el.find("#trecpcount span").text(totalcount);
-                },
-                addTagEnter:function(obj){
-                    if(obj && obj.keyCode==13 && $(".typeahead").css("display")==="none"){
-                        $("#add_tag_btn").click();                        
-                    }
-                },
-                addTag:function(obj){
-                    var tag = $("#camp_tag_text").val();
-                    
-                    if(this.tagValidation(tag)){                        
-                        tag = this.app.encodeHTML(tag);
-                        var camp_id= this.camp_id;
-                        var add_btn = $.getObj(obj,"a");                        
-                        var camp_obj = this;
-                        var temp_tags = "";
-                        if(add_btn.attr("edit_id")){
-                            temp_tags = this.editTags(add_btn.attr("edit_id"),tag);
-                        }
-                        else{
-                            temp_tags = (this.tags)?(this.tags+","+tag):tag;
-                        }
-                        $("#camp_tag_text").prop("disabled",true);
-                        $("#add_tag_btn").prop("disabled",true).addClass("saving");
-                        var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                        $.post(URL, { campNum: camp_id, type: "tags",tags:this.app.decodeHTML(temp_tags) })
-                            .done(function(data) {
-                                var tag_json = jQuery.parseJSON(data);
-                                if(camp_obj.app.checkError(tag_json)){
-                                    return false;
-                                 }
-                                if(tag_json[0]=="success"){
-                                    camp_obj.tags = temp_tags;
-                                    camp_obj.showTags();                                                                
-                                }
-                                $("#camp_tag_text").prop("disabled",false).val('');
-                                $("#add_tag_btn").prop("disabled",false).removeClass("saving");
-                                if(add_btn.attr("edit_id")){
-                                   $(".tagbox").hide(); 
-                                }
-                                else{
-                                    $(".tagbox").hide(); 
-                                    if(camp_obj.tags.split(",").length<5){
-                                        $("#add_tag_li").click();
-                                    }
-                                }
-                                camp_obj.initTpyeAhead();
-                         });
-                        
-                    }
-                },
-                tagValidation:function(tag){
-                    var isValid = true;
-                    var tags_arr = this.tags.split(",");
-                    var edit_id = $("#add_tag_btn").attr("edit_id");
-                    if($.trim(tag)==""){
-                        isValid = false;
-                    }
-                    else if(tag.length>30){                        
-                        this.app.showAlert('Tag lenght shouldn\'t be greater than 30 characters.',this.$el.parents(".ws-content"));
-                        isValid = false;
-                    }
-                    else if(tag.indexOf(",")>-1){                        
-                        this.app.showAlert('Tag shouldn\'t contain ",".',this.$el.parents(".ws-content"));
-                        isValid = false;
-                    }
-                    else if($.inArray(this.app.encodeHTML(tag),tags_arr)>-1){                        
-                        if(!edit_id){                            
-                            this.app.showAlert('Tag already exists with same name.',this.$el.parents(".ws-content"));
-                            isValid = false;
-                        }
-                        else if($.inArray(this.app.encodeHTML(tag),tags_arr)!=parseInt(edit_id)){                            
-                            this.app.showAlert('Tag already exists with same name.',this.$el.parents(".ws-content"));
-                            isValid = false;
-                        }
-                    }                    
-                    else if(!edit_id && tags_arr.length>=this.tag_limit){                        
-                        this.app.showAlert('You can enter '+this.tag_limit+' tags for campaign.',this.$el.parents(".ws-content"));
-                        isValid = false;
-                    }
-                    if(isValid===false){
-                        $(".custom_popup").hide(); 
-                    }
-                    return isValid;
-                },
-                editTags:function(index,newVal){
-                    var tags_array = this.tags.split(",");
-                    tags_array[index] = newVal;
-                    return tags_array.join();                    
-                },
-                showAddTagBox:function(obj,fromObj){
-                    if(this.tags.split(",").length<5 || obj===false){
-                        var li = null;   
-                        var left_minus = 0;
-                        if(typeof(fromObj)!="undefined"){
-                            li = $("#camp_tag_"+fromObj);
-                            $("#add_tag_btn").html("Save").attr("edit_id",fromObj);
-                            var tags_array = this.tags.split(",");
-                            $(".tagbox input#camp_tag_text").val(this.app.decodeHTML(tags_array[fromObj]));
-                            left_minus = 10;
-                        }
-                        else{
-                            li = $.getObj(obj,"div");
-                            $("#add_tag_btn").html("Add").removeAttr("edit_id");
-                            $(".tagbox input#camp_tag_text").val("");
-                        }
-                        var ele_offset = li.offset();                    
-                        var ele_height =  li.height();
-                        var top = ele_offset.top + ele_height;
-                        var left = ele_offset.left-left_minus;            
-                        $(".custom_popup").hide();
-
-                        $(".tagbox").css({"left":left+"px","top":top+"px"}).show();
-                        $(".tagbox input#camp_tag_text").focus();
-                    }
-                    else{
-                        this.app.showAlert('You cann\'t create more than 5 tags.',this.$el.parents(".ws-content.active"));
-                    }
-                    if(obj){
-                        obj.stopPropagation();
-                    }
-                },
-                deleteTag:function(id){
-                   var camp_id= this.camp_id; 
-                    var camp_obj = this;
-                    
-                    var temp_tags = "";
-                    var tags_array = this.tags.split(",");
-                    tags_array.splice(id,1);
-                    temp_tags = tags_array.join();
-                    
-                    this.tags = temp_tags;
-                    this.showTags();
-                    
-                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                    $.post(URL, { campNum: camp_id, type: "tags",tags:this.app.decodeHTML(temp_tags) })
-                    .done(function(data) {
-                        var tag_json = jQuery.parseJSON(data);   
-                        if(camp_obj.app.checkError(tag_json)){
-                            return false;
-                         }
-                        if(tag_json[0]=="success"){
-                            camp_obj.tags = temp_tags;
-                            camp_obj.initTpyeAhead();
-                        }
-                    });    
-                },
-                showTags:function(){
-                    var tags = this.tags;
-                    var tags_ul = this.$el.parents(".ws-content.active").find(".camp_header ul#camp_tags");
-                    tags_ul.children().remove();  
-                    if(tags!==""){
-                        var tags_array = tags.split(",");
-                        $.each(tags_array,function(i,t){
-                            var char_comma = (i<tags_array.length-1)?",":"";
-                            var li_html ='<li id="camp_tag_'+i+'"><a class="tag" > '+t+'</a>'+char_comma+'</li>';
-                            tags_ul.append($(li_html));        
-                        });                            
-                        this.showTagAction();
-                    }
-                    
-                    if(tags_ul.children().length==0){
-                       $(".ws-content.active .tags-contents").hide();
-                     }
-                    else{
-                       $(".ws-content.active .tags-contents").css("display","inline-block"); 
-                       var tags_ul = $(".ws-content.active .tags-contents #camp_tags");
-                       tags_ul.css("width","auto");
-                       if(tags_ul.width()>260){
-                           tags_ul.css("width","250px");
-                           $(".ws-content.active .camp_header .tags-buttons .ellipsis").css("display","inline-block");
-                       }
-                       else{
-                           tags_ul.removeClass("overflow");
-                           $(".ws-content.active .camp_header .tagscont .tags-buttons").removeClass("overflow");
-                           $(".ws-content.active .camp_header .tags-buttons .ellipsis").hide();
-                       }
-                    }
-                    
-                    
-                },
-                showTagAction:function(){
-                    var tags_li = $("#camp_tags li");                    
-                    
-                    tags_li.click(_.bind(function(obj){
-                        var li = $.getObj(obj,"li");
-                        var ele_offset = $(obj.target).offset();
-                        var ele_width =  $(obj.target).width();
-                        var ele_height =  $(obj.target).height();
-                        var top = ele_offset.top + ele_height;
-                        var left = ele_offset.left + (ele_width/2 - 10);
-                        
-                        
-                        if(li.attr("id")){
-                            $(".tags-div .edit").attr("id","edit_tag_"+li.attr("id").split("_")[2]);                     
-                            $(".tags-div .delete").attr("id","delete_tag_"+li.attr("id").split("_")[2]);
-                        }
-                        $(".custom_popup").hide();
-                        $(".tags-div").css({"left":left+"px","top":top+"px"}).show();
-                        obj.stopPropagation();
-                    },this));
-                },
+                },                
                 showSalesForceCampaigns:function(){
                     var camp_obj =this;
                     var URL = "/pms/io/salesforce/getSalesforceData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
@@ -1994,6 +1753,68 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
                        });
                     }
+               },
+               saveTargetFilter:function(){
+                   var target_id = this.states.step3.target_id;
+                   if(target_id){
+                       var camp_obj = this;
+                       var post_data = "";
+                        if(camp_obj.$("#targets_tags").data("tags")){
+                           post_data = camp_obj.$("#c_c_target").data("filters").saveFilters();
+                        }
+                        camp_obj.app.showLoading("Saving Target...",camp_obj.$el.parents(".ws-content.active"));                        
+                        var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token')+post_data;
+                        $.post(URL, {type:'update',filterNumber:target_id})
+                        .done(function(data) {                                 
+                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));                        
+                            var target_json = jQuery.parseJSON(data);  
+                            if(camp_obj.app.checkError(target_json)){
+                                   return false;
+                            }   
+                            
+                            if(target_json[0]!=="err"){
+                                camp_obj.app.showMessge("Target has been updated");
+                            }
+                            else{
+                                camp_obj.app.showAlert(false,camp_obj.$el.parents(".ws-content.active"));
+                            }
+                            
+                       });
+                   }
+                   else{
+                       this.app.showAlert("Please create a target first!",this.$el.parents(".ws-content.active"));
+                   }
+               },
+               useTarget:function(obj){
+                   var target_obj = $.getObj(obj,"div");
+                   var target_id = target_obj.attr("id");
+                   var camp_obj = this;
+                   this.$("#create_target").click();
+                   var URL = '/pms/io/filters/getTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=get&filterNumber='+target_id;
+                   camp_obj.app.showLoading("Loading Target...",camp_obj.$el.parents(".ws-content"));
+                   jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
+                        var selected_target = jQuery.parseJSON(xhr.responseText);
+                         if(camp_obj.app.checkError(selected_target)){
+                             return false;
+                         }
+                         if(selected_target){
+                             camp_obj.states.step3.target_id = selected_target["filterNumber.encode"];
+                             camp_obj.$(".step3 .targt #target_name_text span").html(selected_target.name);
+                             camp_obj.showHideTargetTitle(false);
+                             camp_obj.$("#targets_tags").tags({app:camp_obj.app,
+                                url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+camp_obj.app.get('bms_token'),
+                                params:{type:'tags',filterNumber:selected_target["filterNumber.encode"],tags:''}
+                                ,showAddButton:true,
+                                tags:selected_target.tags
+                             });
+                             var filters = camp_obj.$("#c_c_target").data("filters")
+                             if(filters){
+                                 filters.loadFilters(selected_target);
+                             }
+                         }
+                                                     
+                    });
                }
                
                 

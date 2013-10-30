@@ -109,7 +109,7 @@ define([
                        }
                    });
                  //this.mainContainer.bmseditor.initEditor();
-                 this.loadAppData();
+                 //this.loadAppData();
                    
              },
              checkError:function(result){
