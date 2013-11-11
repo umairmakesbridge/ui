@@ -19,6 +19,7 @@
            'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
            'bms-filters': '../shared/filters',
+           'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
             bootstrap: '../shared/libs/bootstrap.min'
        },
@@ -67,6 +68,9 @@
                bootstrap: ['jquery']
                ,
                'bms-filters':{
+                   deps: ['jquery','bootstrap']
+               },
+               'bms-crm_filters':{
                    deps: ['jquery','bootstrap']
                },
                'bms-tags':{

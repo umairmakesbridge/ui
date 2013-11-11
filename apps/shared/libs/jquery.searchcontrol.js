@@ -9,11 +9,12 @@
 			  placeholder: "Search list",
 			  gridcontainer : "list_grid",
 			  showicon: 'no',
+                          tdNo:1,
 			  iconsource: '',
 			  closeiconid: 'clearsearch'
 			  }, options );
 			  return this.each(function() {				  
-                                  var imageClass= "";
+                                  var imageClass= "";                                  
                                   if(options.showicon == 'yes')
 				  {
 					  var icon = $('<span class="icon '+options.iconsource+'"></span>');
@@ -26,12 +27,12 @@
 				  
 				  var closeicon = $('<a class="close-icon" id="clearsearch" style="display:none"></a>');
 				  $(this).append(closeicon);
-				  closeicon.click(function() { 
-				  	//alert(txt.val());
+				  closeicon.click(function() { 				  	
+                                        var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
 				  	txt.val('');
 					$(this).parent().find("#clearsearch").hide();
-					 $("#"+ options.gridcontainer +" tr").show();
-					 $("#"+ options.gridcontainer).removeHighlight();
+					 grid.find("tr").show();
+					 grid.removeHighlight();
 				  });
 				  var buttons = $('<div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> \
 				  </span></button></div>');
@@ -39,28 +40,30 @@
 				  
 				  function dosearch(obj) {
 					  var searchterm = $(obj.target).val();
+                                          var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
 					  //alert(searchterm.length);
 					  if(searchterm.length > 0)
 					  {
 						//alert($(this).parent().attr('id'));
 					  	$(this).parent().find("#clearsearch").show();
 						//$('#remove-merge-list').css('display','block');
-						$("#"+ options.gridcontainer +" tr").hide();
+                                                var nthchild = options.tdNo? options.tdNo : 1;
+						grid.find("tr").hide();
 						 searchterm = searchterm.toLowerCase();
-						 $("#"+ options.gridcontainer +" tr").filter(function() {                                   
-							  return $(this).children('td').text().toLowerCase().indexOf(searchterm) > -1;
+						 grid.find("tr").filter(function() {                                   
+							  return $(this).find("td:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1;
 						  }).show();
 						  //$("#"+ options.gridcontainer + ' tr td').removeHighlight().highlight(searchterm);
-						  $("#"+ options.gridcontainer + " tr").each(function(i) {
-							  // find the first td in the row
-							  $(this).find("td:first-child").removeHighlight().highlight(searchterm);							  
+						  grid.find("tr").each(function(i) {
+							  // find the first td in the row                                                           
+                                                         $(this).find("td:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							  
 						  });
 					  }
 					  else
 					  {
 					  	$(this).parent().find("#clearsearch").hide();
-						$("#"+ options.gridcontainer +" tr").show();
-						$("#"+ options.gridcontainer).removeHighlight();
+						grid.find("tr").show();
+						grid.removeHighlight();
 					  }
 				  }
 			  });

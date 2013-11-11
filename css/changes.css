@@ -114,6 +114,14 @@ ol.progtrckr li.no-text{
 }
 .loading{
     z-index: 10002;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.loading.fixed{
+    position: fixed;
 }
 .loading p{
     z-index: 10003;
@@ -152,6 +160,7 @@ h2.header-list .search{
 h2.header-list .search #list-search{
     width:300px;
     padding:5px 6px;
+    margin-left: 0px;
 }
 h2.header-list .search .searchbtn{
     height:34px;
@@ -339,6 +348,7 @@ div.tags-div:before {
    -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
    -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);  
+    z-index: 100;
 }
 .tagscont .ellipsis{
     display: none;
@@ -355,7 +365,7 @@ div.tags-div:before {
 .tagscont .ellipsis {    
     line-height: 5px;
     position: relative;
-    top:-10px;
+    top:-13px;
     left:2px;
     padding: 0 3px 6px 4px;
     cursor:pointer;
@@ -367,6 +377,9 @@ div.tags-div:before {
 .tagscont ul li a:hover,.tagscont ul li a.active{
     text-decoration: underline;
 }
+.tagscont ul.overflow li > a{
+    color:#888;
+}
 .tags-buttons{
     display:inline-block;
     top:-4px;
@@ -377,9 +390,6 @@ div.tags-div:before {
     top:2px;
     margin-left: 0px;
     width:100px;
-}
-.tags-buttons.overflow a{
-    color:#888;
 }
 .tag_msg1{
    top:10%;
@@ -900,4 +910,58 @@ input[type="text"].search-template{
 }
 .targt.c-name h2 a.delete{
     background-position: -30px -660px;
+}
+.loading-wheel{
+    background: url("../img/recurring.gif") no-repeat scroll center center transparent;
+    width:16px;
+    height:16px;
+    position: absolute;
+    top:50%;
+    lefT:50%;
+    margin-left: -8px;
+    margin-top:-8px;
+}
+.loading-wheel-inline{
+    background: url("../img/recurring.gif") no-repeat scroll center center transparent;
+    width:16px;
+    height:16px;
+}
+.loading-wheel.combo{
+    left:auto;
+    right:18px;
+    margin-left: 0px;
+}
+.input-append .btn-group{
+    float: none !important;
+}
+.gray-panel{
+    background-color: #FCFCFC;
+}
+.cont-box{
+    margin-top:-131px;
+}
+.salesforce_after_filter,.netsuite_after_filter{
+    min-height:300px;
+    position: relative;
+}
+.sf_settings,.ns_settings{
+    display: inline-block;
+    width:24px;
+    height:24px;
+    position: absolute;
+    top:4px;
+    left:5px;
+    background: url("../img/sf-icon-s.png") no-repeat scroll center center transparent;    
+}
+.ns_settings{
+    background: url("../img/ns-icon.png") no-repeat scroll center center transparent;    
+}
+.btn.setting .caret{
+    margin-top: 13px;
+    margin-left:4px;
+}
+.btn.setting{
+    padding-left: 33px;
+    min-width: 115px;
+    
 }

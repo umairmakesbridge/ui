@@ -3705,21 +3705,21 @@ background: url("../img/scheduledicon.png") no-repeat scroll 0 0 ;}
 .crm-content #area_choose_lists {}
 .crm-content h2.header-list { background:none;}
 
-.crm-content .cont-box {    left: 50%;    margin: -118px 0 0 -325px;}
-.crm-content .cont-box h5 {
+.cont-box {    left: 50%;    margin: -118px 0 0 -325px;}
+.cont-box h5 {
     clear: both;
     color: #666666;
     margin: 20px 0 0;
     padding: 10px 0 0 25%;
     text-align: center;
 }
-.crm-content .cont-box .btnrow {
+.cont-box .btnrow {
     float: right;
     padding: 10px 0 ;
     text-align: center;
     width: 380px;
 }
-.crm-content .cont-box .btnrow a { margin:0 3px;}
+.cont-box .btnrow a { margin:0 3px;}
 
 .target-listing .tags , .tags {
     float: left;

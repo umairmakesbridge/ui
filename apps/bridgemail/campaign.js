@@ -6,7 +6,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 events: {
                        "click  .step3 #choose_soruce li":function(obj){
                            var target_li = obj.target.tagName=="LI" ? $(obj.target) : $(obj.target).parents("li");                           
-                           
+                           if(target_li.hasClass("selected")) return false;
                            this.$(".step3 #choose_soruce li").removeClass("selected");
                            this.$(".step3 .soruces").hide();                           
                            this.$(".step3 #area_"+target_li.attr("id")).fadeIn("fast");                                                      
@@ -107,6 +107,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       'click .step3 #save_target_detail':function(){
                           this.saveTargetFilter();
                       }
+                      ,'click .step3 #save_salesforce_detail':function(){
+                          this.saveSalesForceDetails();
+                      }
+                      ,'click .step3 #save_netsuite_detail':function(){
+                          this.saveNetSuiteDetails()
+                      }
                     },
 
                 initialize: function () {
@@ -120,7 +126,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false},
                                         "step4":{},
                                         "editor_change":false
                                        };
@@ -172,6 +178,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 showicon: 'yes',
                                 iconsource: 'add-list'
                          });
+                         this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -463,6 +470,23 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   });
                                     
                 },
+                initStepCall:function(stepNo){
+                    if(this.camp_id!==0){
+                        switch (stepNo){                                                            
+                            case 'step_2':
+                                this.initStep2();
+                                break;                                
+                            default:
+                                break;
+                        }
+                    }
+                },
+                initStep2:function(){
+                    if(this.states.step2.htmlText){
+                        this.setEditor();
+                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
+                    }
+                },
                 setupCampaign:function(){
                   var active_ws = this.$el.parents(".ws-content");
                   if(this.camp_id===0){                      
@@ -715,22 +739,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         }
                     }).fail(function() { console.log( "error lists listing" ); });
                     
-                    URL = "/pms/io/salesforce/getSalesforceData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status";
-                    jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        if(xhr && xhr.responseText){
-                             var setting_json = jQuery.parseJSON(xhr.responseText);
-                             if(camp_obj.app.checkError(setting_json)){
-                                return false;
-                             }
-                             if(setting_json.isSalesforceUser=="Y"){
-                                 camp_obj.$("#add_result_salesforce").show();
-                                 camp_obj.showSalesForceCampaigns();
-                             }
-                             else{
-                                 camp_obj.$("#add_result_salesforce").hide();
-                             }
-                        }
-                    }).fail(function() { console.log( "error sales force status call" ); });
+                    var salesforce_setting = this.app.getAppData("salesfocre");
+                    if(salesforce_setting.isSalesforceUser=="Y"){
+                        this.$("#add_result_salesforce").show();
+                        this.showSalesForceCampaigns();
+                    }
+                    else{
+                        this.$("#add_result_salesforce").hide();
+                    }                   
+                                        
                     
                     URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -1028,7 +1045,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   },                
                 showSalesForceCampaigns:function(){
                     var camp_obj =this;
-                    var URL = "/pms/io/salesforce/getSalesforceData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
+                    var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
                             var camps_html = '<select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >';
@@ -1037,16 +1054,43 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                              if(camp_obj.app.checkError(s_camps_json)){
                                 return false;
                              }
+                             var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="sfcamp_list_grid"><tbody>';
                              $.each(s_camps_json.campList[0], function(index, val) {     
                                 var _selected = (camp_obj.states.step1.sfCampaignID==val[0].sfCampaignID)?"selected=selected":"";
                                 camps_html += '<option value="'+val[0].sfCampaignID+'" '+_selected+'>'+val[0].name+'</option>';
+                                list_html += '<tr id="row_'+val[0].sfCampaignID+'">';                        
+                                list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3> </td>';                  
+                                var total_count = parseFloat(val[0].contactCount)+parseFloat(val[0].leadCount);
+                                list_html += '<td><div class="subscribers show" style="width:60px"><span class=""></span>'+total_count+'</div><div id="'+val[0].sfCampaignID+'" class="action"><a class="btn-green use">Use</a></div></td>';                        
+                                list_html += '</tr>';
                             });
+                            list_html += '</tbody></table>';
                             camps_html +="</select>";
+                            
+                            //Setting salesforce campaigns in select box
                             camp_obj.$("#salesforce_campaigns").html(camps_html);
+                            //Setting salesforce campaigns listing grid
+                            camp_obj.$("#salesforce-camp-listing").html(list_html);   
+                            
+                            camp_obj.$el.find("#sfcamp_list_grid").bmsgrid({
+                                    useRp : false,
+                                    resizable:false,
+                                    colresize:false,
+                                    height:camp_obj.app.get('wp_height')-150,
+                                    usepager : false,
+                                    colWidth : ['100%','90px']
+                            });
+                            camp_obj.$("#sfcamp_list_grid tr td:nth-child(1)").attr("width","100%");
+                            camp_obj.$("#sfcamp_list_grid tr td:nth-child(2)").attr("width","90px");
+                            
+                            camp_obj.$("#sfcamp_list_grid .action .use").click(function(){
+                                camp_obj.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
+                                $(this).parents("tr").addClass("selected");
+                            });
                             
                             camp_obj.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!'});
                             camp_obj.setSalesForceCombo(); 
-							                            
+                					                            
                         }
                     }).fail(function() { console.log( "error fetch sales force campaign" ); });  
                 },
@@ -1685,14 +1729,27 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }
                     
                 },
-                step3SlectSource:function(target_li){
+                step3SlectSource:function(target_li){                    
                     switch(target_li.attr("id")){
                         case 'create_target':
-                            this.$("#c_c_target").filters({app:this.app});
+                            if(!this.$("#c_c_target").data("filters")){
+                                this.$("#c_c_target").filters({app:this.app});
+                            }
+                            else{
+                                this.$("#c_c_target").data("filters").initFilters();
+                                this.states.step3.target_id = 0;
+                                this.showHideTargetTitle(true,true);
+                            }
                             this.$("#targets_tags").tags({app:this.app,
                                     url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token'),
                                     params:{type:'tags',filterNumber:'',tags:''}
                                 });
+                        break;
+                        case 'salesforce_import':
+                            this.setSalesForceWiz()
+                        break;
+                        case 'netsuite_import':
+                            this.setNetSuiteeWiz()
                         break;
                         default:
                             break;
@@ -1843,6 +1900,395 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                          }
                                                      
                     });
+               },
+               setSalesForceWiz:function(){
+                    var salesforce_setting = this.app.getAppData("salesfocre");
+                    var self = this;
+                    if(salesforce_setting.isSalesforceUser=="Y"){
+                        this.$("#salesforce_welcome").hide();
+                        this.$("#salesforce_login").hide();
+                        this.$("#salesforce_mapping").hide();
+                        this.$("#salesforce_setup").show();
+                    }
+                    else{
+                        this.$("#salesforce_welcome").show();
+                        this.$("#salesforce_mapping").hide();
+                        this.$("#salesforce_login").hide();
+                        this.$("#salesforce_setup").hide();
+                    }
+                    if(!this.states.step3.salesforce){
+                        this.$("#campaign_salesforce").chosen({width: "290px",disable_search: "true"}).change(function(){
+                            $(this).val($(this).val())
+                            $(this).trigger("chosen:updated")
+                            var camp_saleforce = $(this).val();
+                            if(camp_saleforce=="campaign"){
+                                self.$("#salesforce_setup .salesforce_campaigns").slideDown("fast");
+                                self.$("#salesforce_setup .salesforce_after_filter").hide();
+                                self.$("#salesforce_setup .salesforce_all_leads_contants").hide();
+                                self.$("#salesforce_setup  .sf_lcdd").hide();
+                                self.$("#salesforce_setup #salesforce-camp-search").show();
+                            }
+                            else if(camp_saleforce=="filter"){
+                                self.$("#salesforce_setup .salesforce_campaigns").hide();
+                                self.$("#salesforce_setup .salesforce_after_filter").slideDown("fast");
+                                self.$("#salesforce_setup .salesforce_all_leads_contants").hide();                                
+                                self.$("#salesforce_setup #salesforce-camp-search").hide();
+                                if(self.$("#salesforce_setup .salesforce_after_filter").children().length==0){
+                                    //Loading after filter view
+                                    self.app.showLoading("Loading Filters...",self.$(".salesforce_after_filter"));  
+                                    require(["crm/salesforce/after_filter"],function(afterFilter){
+                                        self.app.showLoading(false,self.$(".salesforce_after_filter"));  
+                                        var afilter = new afterFilter({app:self.app});
+                                        afilter.$el.css("margin","10px 0px");
+                                        self.$(".salesforce_after_filter").append(afilter.$el);
+                                        self.$("#salesforce_setup  .sf_lcdd").show();
+                                    }); 
+                                }
+                                else{
+                                    self.$("#salesforce_setup  .sf_lcdd").show();
+                                }
+                            }
+                            else if(camp_saleforce=="all"){
+                                self.$("#salesforce_setup .salesforce_campaigns").hide();
+                                self.$("#salesforce_setup .salesforce_after_filter").hide();
+                                self.$("#salesforce_setup .salesforce_all_leads_contants").slideDown("fast");
+                                self.$("#salesforce_setup  .sf_lcdd").hide();
+                                self.$("#salesforce_setup #salesforce-camp-search").hide();
+                                
+                                //Get total count
+                                self.$("#salesforce_setup .salesforce_all_leads_contants .sf_ccount,#salesforce_setup .salesforce_all_leads_contants .sf_lcount").html('<div class="loading-wheel-inline"></div>')
+                                var URL = '/pms/io/salesforce/getData/?BMS_REQ_TK='+self.app.get('bms_token')+'&type=allCount';
+                                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                                    var total_count = jQuery.parseJSON(xhr.responseText);
+                                    self.$("#salesforce_setup .salesforce_all_leads_contants .sf_ccount").html(total_count.contactCount);
+                                    self.$("#salesforce_setup .salesforce_all_leads_contants .sf_lcount").html(total_count.leadCount);
+                                })
+                            }
+                        })
+                        this.$("#salesforce_import_type").chosen({width: "190px",disable_search: "true"}).change(function(){
+                            var filter_type = $(this).val();
+                            if(filter_type=="lead"){
+                                self.$(".salesforce_after_filter .lead-accordion").show();
+                                self.$(".salesforce_after_filter .contact-accordion").hide();
+                            }
+                            else if(filter_type=="contact"){
+                                self.$(".salesforce_after_filter .lead-accordion").hide();
+                                self.$(".salesforce_after_filter .contact-accordion").show();
+                            }
+                            else if(filter_type=="both"){
+                                self.$(".salesforce_after_filter .lead-accordion").show();
+                                self.$(".salesforce_after_filter .contact-accordion").show();
+                            }
+                            $(this).val($(this).val());
+                            $(this).trigger("chosen:updated");
+                        })
+                        this.$("#salesforce-camp-search").searchcontrol({
+                            id:'salesforce-camp-search',
+                            width:'300px',
+                            height:'22px',
+                            placeholder: 'Search Salesforce Campaign',
+                            gridcontainer: 'sfcamp_list_grid',
+                            showicon: 'no',
+                            iconsource: 'campaigns'
+                        });
+                        this.states.step3.salesforce=true;
+                        this.$("#sf_setting_menu li").click(_.bind(function(obj){
+                            var target_obj = $.getObj(obj,"li");
+                            if(target_obj.attr("id")=="sf_mapping"){
+                                this.$("#salesforce_welcome").hide();
+                                this.$("#salesforce_login").hide();
+                                this.$("#salesforce_mapping").show();
+                                this.$("#salesforce_setup").hide();
+                                if(this.$("#salesforce_mapping").children().length==0){
+                                    this.app.showLoading("Loading Mapping...",this.$("#salesforce_mapping"));                                  
+                                    require(["crm/salesforce/mapping"],function(mappingPage){
+                                         self.app.showLoading(false,self.$("#salesforce_mapping"));                                  
+                                         var mPage = new mappingPage({camp:self});
+                                         self.$("#salesforce_mapping").append(mPage.$el);
+                                    });
+                                }
+                            }
+                            else if(target_obj.attr("id")=="sf_user_setting"){
+                                this.$("#salesforce_welcome").hide();
+                                this.$("#salesforce_login").show();
+                                this.$("#salesforce_mapping").hide();
+                                this.$("#salesforce_setup").hide();
+                                if(this.$("#salesforce_login").children().length==0){
+                                    this.app.showLoading("Loading Login...",this.$("#salesforce_login"));                                  
+                                    require(["crm/salesforce/login"],function(loginPage){
+                                        self.app.showLoading(false,self.$("#salesforce_login"));                                  
+                                        var lPage = new loginPage({camp:self});
+                                        self.$("#salesforce_login").append(lPage.$el);
+                                    })
+                                }
+                            }
+                        },this))
+                     }
+                     else{
+                        this.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
+                        if(this.$("#salesforce_setup .salesforce_after_filter .lead-filter").length){
+                            this.$("#salesforce_setup .salesforce_after_filter .lead-filter").data("crmfilters").initFilters();
+                            this.$("#salesforce_setup .salesforce_after_filter .contact-filter").data("crmfilters").initFilters();
+                        }
+                        this.$("#campaign_salesforce").val("campaign").trigger("chosen:updated").change(); 
+                        this.$("#salesforce_import_type").val("lead").trigger("chosen:updated").change(); 
+                     }
+               },
+               saveSalesForceDetails:function(){
+                   var camp_obj = this;
+                   var salesforce_val = this.$("#campaign_salesforce").val();    
+                   var post_data = {type:'import',synchType:'recipients',campNum:this.camp_id};
+                   var URL = "/pms/io/salesforce/setData/?BMS_REQ_TK="+this.app.get('bms_token');
+                   if(salesforce_val=="campaign"){
+                       var select_sCamp = this.$("#salesforce_setup .salesforce_campaigns #sfcamp_list_grid tr.selected")
+                       if(select_sCamp.length===1){
+                            post_data['filterType']= "campaign";
+                            post_data['sfCampaignId']= select_sCamp.attr("id").split("_")[1];                            
+                       }
+                       else{
+                           this.app.showAlert('Please select a salesforce campaign to proceed.',$("body"),{fixed:true});
+                           return false;
+                       }
+                   }
+                   else if(salesforce_val=="filter"){
+                       var importType = this.$("#salesforce_import_type").val();
+                       post_data['filterType']= "filter";
+                       post_data['sfObject'] = importType;                       
+                       var leadPost = $("#salesforce_setup .salesforce_after_filter .lead-filter").data("crmfilters").saveFilters('lead');
+                       var contactPost= $("#salesforce_setup .salesforce_after_filter .contact-filter").data("crmfilters").saveFilters('contact');
+                       if(importType=="lead"){
+                        $.extend(post_data,leadPost)
+                       }
+                       else if(importType=="contact"){
+                        $.extend(post_data,contactPost)
+                       }
+                       else if(importType=="both"){
+                         $.extend(post_data,leadPost)
+                         $.extend(post_data,contactPost)
+                         
+                       }
+                       
+                   }
+                   else if(salesforce_val=="all"){
+                       post_data['filterType']= "all";                       
+                   }                   
+                   $.post(URL,post_data)
+                    .done(function(data) {                              
+                        var camp_json = jQuery.parseJSON(data);                              
+                        if(camp_json[0]!=="err"){                           
+                           camp_obj.app.showMessge("Saved Successfully!");
+                        }
+                        else{                                  
+                            camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
+                        }                        
+                   }); 
+               },
+               setNetSuiteeWiz:function(){
+                   var netsuite_setting = this.app.getAppData("netsuite");
+                    if(netsuite_setting.isNetsuiteUser=="Y"){
+                        this.$("#netsuite_login").hide();
+                        this.$("#netsuite_mapping").hide();
+                        this.$("#netsuite_welcome").hide();
+                        this.$("#netsuite_setup").show();                        
+                    }
+                    else{
+                       this.$("#netsuite_login").hide();
+                        this.$("#netsuite_welcome").show(); 
+                        this.$("#netsuite_setup").hide();
+                        this.$("#netsuite_mapping").hide();
+                   }
+                   var self = this;
+                   if(!this.states.step3.netsuite){     
+                       this.loadNetSuiteGroup();
+                       this.$("#groups_netsuite").chosen({width: "290px",disable_search: "true"}).change(function(){
+                         $(this).val($(this).val())
+                         $(this).trigger("chosen:updated")  
+                         if($(this).val()=="group"){
+                            self.$("#netsuite_setup .netsuite_groups").slideDown("fast"); 
+                            self.$("#netsuite_setup .netsuite_after_filter").hide(); 
+                            self.$("#netsuite_setup  .sf_lcdd,#netsuite_setup  .customer-type").hide();
+                            self.$("#netsuite_setup #netsuite-group-search").show();
+                                                                                    
+                         }
+                         else if($(this).val()=="filter"){
+                             self.$("#netsuite_setup .netsuite_after_filter").slideDown("fast"); 
+                             self.$("#netsuite_setup .netsuite_groups").hide(); 
+                             
+                             self.$("#netsuite_setup #netsuite-group-search").hide();
+                             if(self.$("#netsuite_setup .netsuite_after_filter").children().length==0){
+                                self.app.showLoading("Loading Filters...",self.$(".netsuite_after_filter"));  
+                                require(["crm/netsuite/after_filter"],function(afterFilter){
+                                   self.app.showLoading(false,self.$(".netsuite_after_filter"));  
+                                   var afilter = new afterFilter({app:self.app});
+                                   afilter.$el.css("margin","10px 0px");
+                                   self.$(".netsuite_after_filter").append(afilter.$el);
+                                   self.$("#netsuite_setup  .sf_lcdd").show();
+                                   if(self.$("#netsuite_import_type").val()=="customer"){
+                                        self.$("#netsuite_setup  .customer-type").show();
+                                    }
+                               }); 
+                            }
+                            else{
+                                self.$("#netsuite_setup  .sf_lcdd").show();
+                                if(self.$("#netsuite_import_type").val()=="customer"){
+                                    self.$("#netsuite_setup  .customer-type").show();
+                                }
+                            }
+                         }
+                       })
+                       this.$("#netsuite_import_type").chosen({width: "190px",disable_search: "true"}).change(function(){                           
+                            $(this).val($(this).val());
+                            $(this).trigger("chosen:updated");
+                            if($(this).val()=="customer"){
+                                self.$("#netsuite_setup  .customer-type").show();
+                                self.$(".netsuite_after_filter .customer-accordion").show();
+                                self.$(".netsuite_after_filter .contact-accordion").hide();
+                                self.$(".netsuite_after_filter .partner-accordion").hide();
+                            }
+                            else if($(this).val()=="contact"){
+                                self.$("#netsuite_setup  .customer-type").hide();
+                                self.$(".netsuite_after_filter .customer-accordion").hide();
+                                self.$(".netsuite_after_filter .contact-accordion").show();
+                                self.$(".netsuite_after_filter .partner-accordion").hide();
+                            }
+                            else if($(this).val()=="partner"){                                
+                                 self.$("#netsuite_setup  .customer-type").hide();
+                                 self.$(".netsuite_after_filter .customer-accordion").hide();
+                                self.$(".netsuite_after_filter .contact-accordion").hide();
+                                self.$(".netsuite_after_filter .partner-accordion").show();
+                            }
+                                
+                       })
+                       this.$("#netsuite_setup .customer-type button").click(function(){
+                           $(this).find("input").prop("checked",!$(this).find("input").prop("checked"));
+                       })
+                       this.$("#netsuite-group-search").searchcontrol({
+                            id:'netsuite-group-search',
+                            width:'300px',
+                            height:'22px',
+                            placeholder: 'Search NetSuite Groups',
+                            gridcontainer: 'nsgroup_list_grid',
+                            showicon: 'no',
+                            iconsource: 'campaigns'
+                        });
+                        
+                        this.states.step3.netsuite=true;
+                   }
+                   else{
+                        this.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
+                        if(this.$("#netsuite_setup .netsuite_after_filter .customer-filter").length){
+                            this.$("#netsuite_setup .netsuite_after_filter .customer-filter").data("crmfilters").initFilters();
+                            this.$("#netsuite_setup .netsuite_after_filter .contact-filter").data("crmfilters").initFilters();
+                            this.$("#netsuite_setup .netsuite_after_filter .partner-filter").data("crmfilters").initFilters();
+                        }
+                        this.$("#netsuite_import_type").val("customer").trigger("chosen:updated").change(); 
+                        this.$("#groups_netsuite").val("group").trigger("chosen:updated").change();                         
+                   }
+               },
+               loadNetSuiteGroup:function(){
+                   var self = this;
+                    this.app.showLoading("Loading Groups...",self.$("#netsuite_setup .netsuite_groups .template-container"));
+                    URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=nsGroupList";
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        self.app.showLoading(false,self.$("#netsuite_setup .netsuite_groups .template-container"));
+                        var netsuite_groups = jQuery.parseJSON(xhr.responseText);
+                        if(self.app.checkError(netsuite_groups)){
+                            return false;
+                        }
+                        if(netsuite_groups[0]!=="err"){
+                            if(netsuite_groups.count!="0"){
+                                 var group_html = '<table cellpadding="0" cellspacing="0" width="100%" id="nsgroup_list_grid"><tbody>';
+                                $.each(netsuite_groups.groupList[0], function(index, val) {                                              
+                                   group_html += '<tr id="row_'+val[0].id+'">';                        
+                                   group_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3> </td>';                  
+                                   var total_count = 0;
+                                   group_html += '<td><div class="subscribers show" style="width:60px"><span class=""></span>'+total_count+'</div><div id="'+val[0].id+'" class="action"><a class="btn-green use">Use</a></div></td>';                        
+                                   group_html += '</tr>';
+                               });
+                               group_html += '</tbody></table>';                                       
+
+                               //Setting netsuite group listing grid
+                               self.$("#netsuite-group-listing").html(group_html);   
+
+                               self.$el.find("#nsgroup_list_grid").bmsgrid({
+                                       useRp : false,
+                                       resizable:false,
+                                       colresize:false,
+                                       height:self.app.get('wp_height')-150,
+                                       usepager : false,
+                                       colWidth : ['100%','90px']
+                               });
+                               self.$("#nsgroup_list_grid tr td:nth-child(1)").attr("width","100%");
+                               self.$("#nsgroup_list_grid tr td:nth-child(2)").attr("width","90px");
+
+                               self.$("#nsgroup_list_grid .action .use").click(function(){
+                                   self.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
+                                   $(this).parents("tr").addClass("selected");
+                               });   
+                            }
+                        }
+                        else{
+                          self.app.showAlert(netsuite_groups[1],$("body"),{fixed:true});  
+                        }
+                    }).fail(function() { console.log( "error net suite group listing" ); });
+               },
+               saveNetSuiteDetails:function(){
+                   var camp_obj = this;
+                   var netsuite_val = this.$("#groups_netsuite").val();    
+                   var post_data = {type:'import',synchType:'recipients',campNum:this.camp_id};
+                   var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');
+                   if(netsuite_val=="group"){
+                       var select_sCamp = this.$("#netsuite_setup .netsuite_groups #nsgroup_list_grid tr.selected")
+                       if(select_sCamp.length===1){
+                            post_data['filterType']= "group";
+                            post_data['nsGroupId']= select_sCamp.attr("id").split("_")[1];                            
+                       }
+                       else{
+                           this.app.showAlert('Please select a netsuite group to proceed.',$("body"),{fixed:true});
+                           return false;
+                       }
+                   }
+                   else if(netsuite_val=="filter"){
+                       var importType = this.$("#netsuite_import_type").val();
+                       post_data['filterType']= "filter";
+                       post_data['nsObject'] = importType;          
+                       if(importType=="customer"){
+                           var cust_val = $(".customer-type input:checked").map(function(){
+                                            return $(this).val()
+                                        }).toArray().join()
+                           if(cust_val){
+                               post_data['nsObject'] = cust_val;
+                           }          
+                           else{
+                             this.app.showAlert('Please at least on option from Customer, Lead, Or Prospect',$("body"),{fixed:true});  
+                             return false;
+                           }
+                       }
+                       var customerPost = $("#netsuite_setup .netsuite_after_filter .customer-filter").data("crmfilters").saveFilters('customer');
+                       var contactPost= $("#netsuite_setup .netsuite_after_filter .contact-filter").data("crmfilters").saveFilters('contact');
+                       var partnerPost= $("#netsuite_setup .netsuite_after_filter .partner-filter").data("crmfilters").saveFilters('partner');
+                       if(importType=="customer"){
+                          $.extend(post_data,customerPost)
+                       }
+                       else if(importType=="contact"){
+                          $.extend(post_data,contactPost)
+                       }
+                       else if(importType=="partner"){
+                          $.extend(post_data,partnerPost)                                                  
+                       }
+                       
+                   }
+                  
+                   $.post(URL,post_data)
+                    .done(function(data) {                              
+                        var camp_json = jQuery.parseJSON(data);                              
+                        if(camp_json[0]!=="err"){                           
+                           camp_obj.app.showMessge("Saved Successfully!");
+                        }
+                        else{                                  
+                            camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
+                        }                        
+                   }); 
                }
                
                 

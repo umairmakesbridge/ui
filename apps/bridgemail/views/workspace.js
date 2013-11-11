@@ -112,13 +112,14 @@ function ($,Backbone, _,app,Wizard, template) {
                 ,this.$nav = this.$('.camp_header')
                 ,this.$tabs = $('.ws-tabs')
                 ,this.$tray = $('.icons-bar')
+                ,this.container = $("#container")
                 , this.navTop = el.find('.camp_header').length && el.find('.camp_header').offset().top                
                 , this.isFixed = 0;
                 
                 this.processScroll=_.bind(function(){
                  // fix sub nav on scroll                
                   var i, scrollTop = this.$win.scrollTop();
-                  if (scrollTop >= this.navTop && !this.isFixed) {
+                  if (scrollTop >= this.navTop && !this.isFixed && this.container.height()>803) {
                     this.isFixed = 1
                     this.$nav.addClass('workspace-fixed');
                     this.$nav.css("width",this.$(".campaign-content").width());

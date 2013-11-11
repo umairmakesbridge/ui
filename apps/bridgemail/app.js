@@ -109,7 +109,7 @@ define([
                        }
                    });
                  //this.mainContainer.bmseditor.initEditor();
-                 //this.loadAppData();
+                 this.loadAppData();
                    
              },
              checkError:function(result){
@@ -120,7 +120,7 @@ define([
                  return isError; 
              },
              autoLoadImages:function(){
-                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif']
+                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });
@@ -151,7 +151,8 @@ define([
              showAlert:function(message, container,option){       
                  if(message){                    
                     var inlineStyle = (option && option.top) ? ('top:'+option.top) : '';
-                    $(container).append('<div class="loading"> <div class="tag_msg1" style='+inlineStyle+'><span class="caution"></span>'+message+'<a class="close-btn">X</a></div> </div>');
+                    var fixed_position = (option && option.fixed)?"fixed":"";
+                    $(container).append('<div class="loading '+fixed_position+'"> <div class="tag_msg1" style='+inlineStyle+'><span class="caution"></span>'+message+'<a class="close-btn">X</a></div> </div>');
                     $(".loading .close-btn").click(function(){
                        $(".loading").fadeOut("fast",function(){
                            $(this).remove();
@@ -232,50 +233,28 @@ define([
             },
             loadAppData:function(){
                 var app = this;
-                var URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=fields_all";
+                var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                     if(xhr && xhr.responseText){                        
-                         var fields_json = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(fields_json)){
+                         var salesforce = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(salesforce)){
                              return false;
-                         }
-                        app.setAppData("fields",fields_json);
-                        var basic_fields = [];var custom_fields = [];                        
-                        $.each(fields_json,function(key,val){
-                            if(val[2]=="true"){
-                                basic_fields.push(val);
-                            }
-                            else{
-                               custom_fields.push(val); 
-                            }
-                        });
-                        app.setAppData("basicFields",basic_fields);
-                        app.setAppData("customFields",custom_fields);
+                         }                        
+                        app.setAppData("salesfocre",salesforce);                        
                     }
-              }).fail(function() { console.log( "error in loading fields" ); });
+              }).fail(function() { console.log( "error in salesforce fields" ); });
               
-              URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=rules";
+              URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                     if(xhr && xhr.responseText){                        
-                         var rules_json = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(rules_json)){
+                         var netstuite = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(netstuite)){
                              return false;
-                         }
-                        app.setAppData("rules",rules_json);  
+                         }                        
+                        app.setAppData("netsuite",netstuite);                        
                     }
-              }).fail(function() { console.log( "error in loading rules" ); });
-              
-              URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.get('bms_token')+"&type=formats";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                    if(xhr && xhr.responseText){                        
-                         var formats_json = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(formats_json)){
-                             return false;
-                         }
-                        app.setAppData("formats",formats_json);  
-                    }
-              }).fail(function() { console.log( "error in loading formats" ); });
-              
+              }).fail(function() { console.log( "error in salesforce fields" ); });
+                                          
             }
              
 	});

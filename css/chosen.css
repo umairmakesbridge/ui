@@ -58,6 +58,7 @@
   margin-right: 26px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: normal;
 }
 .chosen-container-single .chosen-single-with-deselect span {
   margin-right: 38px;
@@ -152,6 +153,7 @@
 .chosen-container .chosen-results li.active-result {
   display: list-item;
   cursor: pointer;
+  font-weight: normal;
 }
 .chosen-container .chosen-results li.disabled-result {
   display: list-item;

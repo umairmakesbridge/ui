@@ -72,7 +72,7 @@
         matchValue = (params.matchValue)?params.matchValue:""
         gapValue = (params.spanInDays)?params.spanInDays:"0"
         if( params.fieldName=="{{SUBSCRIPTION_DATE}}"){
-            list_html = '<div class="btn-group sub-date-container" style="display:block" list_id="'+params['listNumber.encode']+'"><a class="icon list"></a></div>'          
+            list_html = '<div class="btn-group sub-date-container" style="display:block" list_id="'+params['listNumber.encode']+'" list_checksum="'+params['listNumber.checksum']+'"><a class="icon list"></a></div>'          
         }
         if(params.rule=="dr" || params.rule=="prior" || params.rule=="after" || params.rule=="dayof" || params.rule=="birthday" || params.rule=="pbday"){               
              format_display = "block"
@@ -102,8 +102,14 @@
               filter.find(".sub-date-container").hide();
           }
       })
+      var self = this
       //Chosen with rules
       filter.find(".selectbox.rules").chosen({disable_search: "true",width:'170px'}).change(function(){             
+             if((filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}") && ($(this).val()=="ct" || $(this).val()=="!ct" || $(this).val()=="nr") ){
+                 self.options.app.showAlert("'Subscribe Date' OR 'Birth Date' field can not have rules like: contains, not contains & within numeric range.",$("body"),{fixed:true});
+                 $(this).val('=').trigger("chosen:updated").change()
+                 return false
+             }
              if($(this).val()=="dr" || $(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="dayof" || $(this).val()=="birthday" || $(this).val()=="pbday"){
                 filter.find(".formats-container").show();
                 if($(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="pbday"){
@@ -119,6 +125,8 @@
                 filter.find(".formats-container").hide()
                 filter.find(".value-container").show()
              }
+             
+             
       });
             
       //Chosen with formats      
@@ -239,14 +247,15 @@
     }
   , addEmailFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
-      filter.addClass("email");
+      filter.addClass("email")
+      var selected_camp = "",selected_article = ""
       var self = this
       var filter_html = '<div class="row"><label>Filter by</label>'
           filter_html += ' <div class="btn-group "><select data-placeholder="Select Filter by" class="filter-by"><option value="OP">Email Opened</option><option value="CK">Email Clicked</option><option value="NC">Non Clickers</option></select></div>'
           filter_html += '</div>'
           filter_html += '<div class="row">'
             filter_html += '<label>Campaign</label>'            
-            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="C" selected>Campaigns</option><option value="AT">Auto Trigger</option><option value="NT">Nurture Track</option><option value="W">Workflow</option></select></div>'  
+            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option></select></div>'  
             filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
@@ -259,14 +268,17 @@
             filter_html += '<div class="row nolabel campaign-url-container" style="display:none"><div class="btn-group "><select data-placeholder="Select URL" class="campaign-url"></select></div>'              
           filter_html += '<a  class="icon view showtooltip" title="Preview Link"></a></div>'
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan()+'</select></div> days'  
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan()+'</select></div> or more times'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
           
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-by").chosen({disable_search: "true",width:"152px"}).change(function(){
           if($(this).val()=="CK" &&  filter.find(".campaign-list").val()!=="-1"){
               filter.find(".campaign-url-container").show()
+              if( filter.find(".campaign-source").val()!=="-1"){
+                  filter.find(".campaign-source").change()
+              }
           }
           else{
               filter.find(".campaign-url-container").hide()
@@ -274,11 +286,12 @@
       })
       //Campaign Soruces i.e campaigns, workflows, Nuture Track and Auto Triggers
       filter.find(".campaign-source").chosen({disable_search: "true",width:"170px"}).change(function(){
-          $(this).val($(this).val())
+          $(this).val($(this).val()).prop("disabled",true)
           $(this).trigger("chosen:updated")
+          $(this).parent().find(".chosen-container").append('<div class="loading-wheel combo"></div>')
           
           filter.find(".campaign-list").html("<option value='-1'>Loading...</option>").prop("disabled",true).trigger("chosen:updated")
-          var map ={C:"listNormalCampaigns",AT:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",NT:"listNurtureTracksCampaigns"}
+          var map ={N:"listNormalCampaigns",A:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",T:"listNurtureTracksCampaigns"}
           var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type="+map[$(this).val()];                                                                                
             jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){
@@ -286,16 +299,23 @@
                     if(self.options.app.checkError(_json)){
                           return false;
                      } 
+                     filter.find(".campaign-source").parent().find(".chosen-container .loading-wheel").remove()
+                     filter.find(".campaign-source").prop("disabled",false).trigger("chosen:updated")
                      var select_html = '<option value="-1">Any Campaign</option>'
                      if(_json.count!=="0"){
                         var camp_list = _json.lists || _json.campaigns
                         $.each(camp_list[0], function(index, val) {    
+                            var _checksum = val[0].md5 || val[0]["campNum.checksum"]
+                            selected_camp = (params && params["campaignNumber.checksum"]==_checksum)?"selected":""
                             var _value = val[0]["campNum.encode"] || val[0]["campNum"]
-                            select_html += '<option value="'+_value+'">'+val[0].name+'</option>'
+                            select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
                         })
                      }
                      
                      filter.find(".campaign-list").html(select_html).prop("disabled",false).trigger("chosen:updated")
+                     if(params && params["campaignNumber.checksum"]){
+                         filter.find(".campaign-list").change()
+                     }
                      
                 }
             }).fail(function() { console.log( "error campaigns listing" ); });
@@ -318,7 +338,8 @@
                      if(_json.count!=="0"){
                         $.each(_json.articles[0], function(index, val) {    
                             var _value = val[0]["articleNumber.encode"] 
-                            select_html += '<option value="'+_value+'">'+val[0].title+'</option>'
+                            selected_article = (params && params["articleNumber.checksum"]==val[0]["articleNumber.checksum"])?"selected":""
+                            select_html += '<option value="'+_value+'" '+selected_article+'>'+val[0].title+'</option>'
                         })
                      }
                      filter.find(".campaign-url").html(select_html).prop("disabled",false).trigger("chosen:updated")
@@ -344,7 +365,14 @@
       this.showTooltips(filter)
       if(params){
           filter.find(".filter-by").val(params.filterBy).trigger("chosen:updated")
-          //filter.find(".campaign-source").val(params.filterBy).trigger("chosen:updated")
+          filter.find(".filter-by").change()
+          if(params.campaignType){
+            filter.find(".campaign-source").val(params.campaignType).trigger("chosen:updated")
+            filter.find(".campaign-source").change()
+          }
+          else if(params.campaignNumber!==""){
+            filter.find(".campaign-source").change()
+          }          
           if(params.isTimeSpan=="true"){
               filter.find(".emailTimeSpan").val(params.timeSpanInDays).trigger("chosen:updated")
           }
@@ -361,16 +389,16 @@
           filter_html += ' <div class="btn-group "><select class="member-box"><option value="Y">Member</option><option value="N">Non Member</option></select></div>'
           filter_html += '</div>'          
             
-          filter_html += '<div class="match row"> Match '
+          filter_html += '<div class="match row" style="margin-bottom:0px"> Match '
                 filter_html += '<div class="btn-group"><select class="match-box"><option value="Y">All</option><option value="N">Any</option></select></div> of the selected list(s).'                  
           filter_html += '</div>'
-          filter_html += '<div class="target-listing">'
+          filter_html += '<h2 class="header-list" style="margin-top:0px">&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
             filter_html += '<table cellpadding="0" cellspacing="0" width="100%" id="__list_grid"><tbody>'
             var list_array =this.options.app.getAppData("lists")
             var filter_ref = this;
             $.each(list_array.lists[0], function(index, val) {     
                         filter_html += '<tr id="row_'+val[0].listNum+'">';      
-                        filter_html +='<td><input class="check-list" type="checkbox" value="'+val[0].listNum+'" /></td>'
+                        filter_html +='<td><input class="check-list" type="checkbox" value="'+val[0].listNum+'" list_checksum="'+val[0].md5+'" /></td>'
                         filter_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags"><h5>Tags:</h5>'+filter_ref.options.app.showTags(val[0].tags)+'</div></div></td>';                        
                         filter_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Use</a></div></td>';                        
                         filter_html += '</tr>';
@@ -387,6 +415,17 @@
           $(this).trigger("chosen:updated")
       })
       
+      filter.find(".search").searchcontrol({
+                id:'list-search',
+                width:'300px',
+                height:'22px',
+                tdNo:2,
+                placeholder: 'Search Lists',
+                gridcontainer: filter.find(".target-listing"),
+                showicon: 'yes',
+                iconsource: 'add-list'
+         });
+      
       this.addActionBar(filter)      
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
@@ -398,6 +437,9 @@
                 usepager : false,
                 colWidth : ['40px','100%','100px']
         });
+        filter.find("#__list_grid").find("tr td:nth-child(1)").attr("width","40px")
+        filter.find("#__list_grid").find("tr td:nth-child(2)").attr("width","100%")
+        filter.find("#__list_grid").find("tr td:nth-child(3)").attr("width","100px")
       filter.find("#__list_grid .action").click(function(){
           $(this).parents("tr").addClass("selected")
           $(this).parents("tr").find(".check-list").prop("checked",true)
@@ -416,10 +458,9 @@
            filter.find(".member-box").val(isMemberOfList).trigger("chosen:updated")
            var matchAll = params.matchAll=="false"?"N":"Y"
            filter.find(".match-box").val(matchAll).trigger("chosen:updated")
-           var list_arr = params.listNumbers.split(",")
+           var list_arr = params["listNumbers.checksums"].split(",")
            $.each(list_arr,function(k,v){
-               filter.find("#__list_grid input[value='"+v+"']").prop("checked",true)
-               filter.find("#__list_grid tr[id='row_"+v+"']").addClass("selected")
+               filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
            })
       }
     }    
@@ -433,7 +474,7 @@
           filter_html += '</div>'          
             
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan()+'</select></div> days'                  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'                  
           filter_html += '</div>'
       filter.find(".filter-cont").append(filter_html)
       filter.find(".forms-box").chosen({width:"300px"})      
@@ -457,9 +498,9 @@
                    if(_json.count!=="0"){
                       $.each(_json.forms[0], function(index, val) {    
                           var _value = val[0]["formId.encode"] 
-                          select_form = (params && params.formNumber==_value) ? "selected" : ""
-                          select_html += '<option value="'+_value+'" '+select_form+'>'+val[0].name+'</option>'
-                          self.webforms.push({"id":_value,"name":val[0].name})
+                          select_form = (params && params['formNumber.checksum']==val[0]["formId.checksum"]) ? "selected" : ""
+                          select_html += '<option value="'+_value+'" '+select_form+' webform_checksum="'+val[0]["formId.checksum"] +'">'+val[0].name+'</option>'
+                          self.webforms.push({"id":_value,"name":val[0].name,checksum:val[0]["formId.checksum"]})
                       })
                    }                   
                    filter.find(".forms-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
@@ -470,8 +511,8 @@
        else{
            var select_html = '<option value=""></option>'                     
            $.each(this.webforms, function(index, val) {
-               select_form = (params && params.formNumber==+val.id) ? "selected" : ""
-               select_html +='<option value="'+val.id+'" '+select_form+'>'+val.name+'</option>'
+               select_form = (params && params['formNumber.checksum']==val.checksum) ? "selected" : ""
+               select_html +='<option value="'+val.id+'" '+select_form+' webform_checksum="'+val.checksum +'">'+val.name+'</option>'
            }) 
            filter.find(".forms-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
        }
@@ -492,7 +533,7 @@
       filter_html += '</select></div>'  
       filter_html += '<input type="text" value="" name="" style="width:50px;" class="scoreValue" />'
       filter_html += '<div class="match row days-container" style="display:none"> in last '
-            filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan()+'</select></div> days'                  
+            filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
       filter_html += '</div>'
       filter.find(".filter-cont").append(filter_html)
       filter.find(".condtion-box").chosen({disable_search: "true",width:"200px"}).change(function(){
@@ -514,6 +555,7 @@
           filter.find(".condtion-box").val(params.rule).trigger("chosen:updated")
           filter.find(".scoreValue").val(params.score)
           if(params.rangeInDays!=="0"){
+            filter.find(".days-container").show()
             filter.find(".scoreRange").val(params.rangeInDays).trigger("chosen:updated")
           }
       }
@@ -521,6 +563,7 @@
    , addWebsiteFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
       filter.addClass("web")
+      var selected_link="",selected_ptype="",selected_linkfilter=""
       // Loading Page url, page types and link filters data
       var URL = ""
       var self = this
@@ -546,8 +589,8 @@
             filter_html += '</select></div>'                        
           filter_html += '</div>'
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan()+'</select></div> days'  
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webFreq">'+this.getTimeSpan()+'</select></div> or more times'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-box").chosen({disable_search: "true",width:"152px"}).change(function(){
@@ -565,8 +608,9 @@
                                  return false;
                              }
                              var select_html = ''
-                             $.each(_json.links[0], function(index, val) {                            
-                                  select_html += '<option value="'+val[0]["url"]+'">'+val[0].title+'</option>'
+                             $.each(_json.links[0], function(index, val) {            
+                                  selected_link = (params && params['pageURL']==val[0]["url"]) ? "selected" : ""
+                                  select_html += '<option value="'+val[0]["url"]+'" '+selected_link+'>'+val[0].title+'</option>'
                                   self.pageUrls.push({"id":val[0]["url"],"title":val[0].title})
                               })
 
@@ -577,7 +621,8 @@
                 else{
                     var select_html = ''
                     $.each(self.pageUrls, function(index, val) {                            
-                          select_html += '<option value="'+val.id+'">'+val.title+'</option>'                
+                          selected_link = (params && params['pageURL']==val.id) ? "selected" : ""
+                          select_html += '<option value="'+val.id+'" '+selected_link+'>'+val.title+'</option>'                
                       })
                      filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
                 }
@@ -602,8 +647,9 @@
                              }
                              var select_html = ''
                              $.each(_json.groups[0], function(index, val) {                            
-                                  select_html += '<option value="'+val[0]["groupId.encode"]+'">'+val[0].name+'</option>'
-                                  self.pageTypes.push({"id":val[0]["groupId.encode"],"name":val[0].name})
+                                  selected_ptype = (params && params['linkFilterGroupId.checksum']==val[0]["groupId.checksum"]) ? "selected" : ""
+                                  select_html += '<option value="'+val[0]["groupId.encode"]+'" '+selected_ptype+'>'+val[0].name+'</option>'
+                                  self.pageTypes.push({"id":val[0]["groupId.encode"],"name":val[0].name,checksum:val[0]["groupId.checksum"]})
                               })
 
                              filter.find(".pagetype-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
@@ -612,8 +658,9 @@
                 }
                 else{
                     var select_html = '<option value=""></option>'
-                    $.each(self.pageTypes, function(index, val) {                            
-                          select_html += '<option value="'+val.id+'">'+val.name+'</option>'                
+                    $.each(self.pageTypes, function(index, val) {       
+                          selected_ptype = (params && params['linkFilterGroupId.checksum']==val.checksum) ? "selected" : ""
+                          select_html += '<option value="'+val.id+'" '+selected_ptype+'>'+val.name+'</option>'                
                       })
                      filter.find(".pagetype-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
                 }
@@ -634,8 +681,9 @@
                              }
                              var select_html = ''
                              $.each(_json.filters[0], function(index, val) {                            
-                                  select_html += '<option value="'+val[0]["filterNumber.encode"]+'">'+val[0].name+'</option>'
-                                  self.linkFilters.push({"id":val[0]["filterNumber.encode"],"name":val[0].name})
+                                  selected_linkfilter = (params && params['linkIDFilterNum.checksum']==val[0]["filterNumber.checksum"]) ? "selected" : ""
+                                  select_html += '<option value="'+val[0]["filterNumber.encode"]+'" '+selected_linkfilter+'>'+val[0].name+'</option>'
+                                  self.linkFilters.push({"id":val[0]["filterNumber.encode"],"name":val[0].name,checksum:val[0]["ilterNumber.checksum"]})
                               })
 
                              filter.find(".linkfilter-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
@@ -645,7 +693,8 @@
                 else{
                     var select_html = ''
                     $.each(self.linkFilters, function(index, val) {                            
-                          select_html += '<option value="'+val.id+'">'+val.name+'</option>'                
+                          selected_linkfilter = (params && params['linkIDFilterNum.checksum']==val.checksum) ? "selected" : ""
+                          select_html += '<option value="'+val.id+'" '+selected_linkfilter+'>'+val.name+'</option>'                
                       })
                      filter.find(".linkfilter-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
                 }
@@ -654,9 +703,18 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      filter.find(".pagelink-box").chosen({width:"400px"})
-      filter.find(".pagetype-box").chosen({width:"300px"})
-      filter.find(".linkfilter-box").chosen({width:"300px"})
+      filter.find(".pagelink-box").chosen({width:"400px"}).change(function(){
+          $(this).val($(this).val())
+          $(this).trigger("chosen:updated")
+      })
+      filter.find(".pagetype-box").chosen({width:"300px"}).change(function(){
+          $(this).val($(this).val())
+          $(this).trigger("chosen:updated")
+      })
+      filter.find(".linkfilter-box").chosen({width:"300px"}).change(function(){
+          $(this).val($(this).val())
+          $(this).trigger("chosen:updated")
+      })
       filter.find(".timespan").chosen({disable_search: "true",width:"60px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
@@ -666,7 +724,8 @@
       this.showTooltips(filter)
 
       if(params){
-          filter.find(".filter-box").val(params.filterBy).trigger("chosen:updated")          
+          filter.find(".filter-box").val(params.filterBy).trigger("chosen:updated")
+          filter.find(".filter-box").change()
           if(params.isTimeSpan=="true"){
               filter.find(".webTimeSpan").val(params.timeSpanInDays).trigger("chosen:updated")
           }
@@ -697,14 +756,14 @@
   }
   ,showDialog:function(obj){
       var list_icon = $.getObj(obj,"div")
-      var selected_list = list_icon.attr("list_id")
+      var selected_list = list_icon.attr("list_checksum")
       var d = null;
       if($("#filtersModal").length==0){
         var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="filter_list_grid"><tbody>'
             var list_array =this.options.app.getAppData("lists")
             var filter = this;
             $.each(list_array.lists[0], function(index, val) {     
-                        list_html += '<tr id="row_'+val[0].listNum+'">';                            
+                        list_html += '<tr id="row_'+val[0].listNum+'" list_checksum="'+val[0].md5+'">';                            
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags"><h5>Tags:</h5>'+filter.options.app.showTags(val[0].tags)+'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Use</a></div></td>';                        
                         list_html += '</tr>';
@@ -747,6 +806,7 @@
         d.find("#filter_list_grid tr td:nth-child(2)").attr("width","100px");
         d.find("#filter_list_grid .action").click(function(){            
              list_icon.attr("list_id",$(this).attr("id"))
+             list_icon.attr("list_checksum",$(this).parents("tr").attr("list_checksum"))
              list_icon.find("a").removeClass("add-list").addClass("list");
              d.modal("hide")
          })
@@ -757,7 +817,7 @@
           
       }      
       if(selected_list){
-            var tr = d.find("#filter_list_grid tr[id='row_"+selected_list+"']")
+            var tr = d.find("#filter_list_grid tr[list_checksum='"+selected_list+"']")
             if(tr.length){
                 tr.addClass("selected");
             }
@@ -792,6 +852,11 @@
       })
       
   },
+  initFilters:function(){
+      var _target = this.$element
+      _target.find(".filter-div ._row").remove()
+      _target.find(".all-any button[rule='A']").click()
+  },
   saveFilters:function(){
       var filters_post = ""
       var _target = this.$element
@@ -817,6 +882,7 @@
           }
           else if($(total_rows[i]).hasClass("email")){
               filters_post +="&"+N+".filterType=E"
+              filters_post +="&"+N+".emailCampType="+filter.find(".campaign-source").val()
               filters_post +="&"+N+".emailFilterBy="+filter.find(".filter-by").val()
               filters_post +="&"+N+".campaignNumber="+filter.find(".campaign-list").val()
               if(filter.find(".campaign-list").val()!=="-1" && filter.find(".filter-by").val()=="CK"){
@@ -887,12 +953,13 @@
       }
       return filters_post
   }
-  , getTimeSpan:function(){
+  , getTimeSpan:function(val){
       var spanHTML = ""
-      spanHTML +='<option value="-1" selected>-</option>'
-      for(var i=1;i<=30;i++){
-         var selected = ""
-         spanHTML +='<option value="'+i+'" '+selected+'>'+i+'</option>'
+      var selected_val = ""
+      spanHTML +=''
+      for(var i=1;i<=30;i++){         
+         selected_val = (i==val) ?"selected":""
+         spanHTML +='<option value="'+i+'" '+selected_val+'>'+i+'</option>'
       }
       return spanHTML
   }

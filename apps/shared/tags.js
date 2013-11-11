@@ -45,6 +45,8 @@
      this.dialog.find("#tag_box_close").on("click",$.proxy(this.hideTagDialog,this))
      //save dialog button
      this.dialog.find("#add_tag_btn").on("click",$.proxy(this.saveTag,this))
+     //save dialog button
+     this.dialog.find(".tag-input").on("keydown",$.proxy(this.saveTagOnEnter,this))
      //Edit tag from toolbar
      this.toolbar.find(".edit").on("click",$.proxy(this.editTag,this))
      //Delete tag from toolbar
@@ -94,12 +96,12 @@
           tags_ul.css("width","auto");
           if(tags_ul.width()>260){
               tags_ul.css("width","250px");
-              this.ele.find(".ellipsis").css("display","inline-block");
+              this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");
           }
           else{
               tags_ul.removeClass("overflow");
-              this.ele.find(".tags-buttons").removeClass("overflow");
-              this.ele.find(".tags-buttons .ellipsis").hide();
+              this.$element.find(".tags-buttons").removeClass("overflow");
+              this.$element.find(".tags-buttons .ellipsis").hide();
           }
        }
        this.initTypeAhead()
@@ -115,25 +117,25 @@
             isValid = false;
         }
         else if(tag.length>30){                        
-            this.options.app.showAlert('Tag length shouldn\'t be greater than 30 characters.',$("body"));
+            this.options.app.showAlert('Tag length shouldn\'t be greater than 30 characters.',$("body"),{fixed:true});
             isValid = false;
         }
         else if(tag.indexOf(",")>-1){                        
-            this.options.app.showAlert('Tag shouldn\'t contain ",".',$("body"));
+            this.options.app.showAlert('Tag shouldn\'t contain ",".',$("body"),{fixed:true});
             isValid = false;
         }
         else if($.inArray(this.options.app.encodeHTML(tag),tags_arr)>-1){                        
-            if(!edit_id){                            
-                this.options.app.showAlert('Tag already exists with same name.',$("body"));
+            if(edit_id===null){                            
+                this.options.app.showAlert('Tag already exists with same name.',$("body"),{fixed:true});
                 isValid = false;
             }
             else if($.inArray(this.options.app.encodeHTML(tag),tags_arr)!=parseInt(edit_id)){                            
-                this.options.app.showAlert('Tag already exists with same name.',$("body"));
+                this.options.app.showAlert('Tag already exists with same name.',$("body"),{fixed:true});
                 isValid = false;
             }
         }                    
-        else if(!edit_id && tags_arr.length>=this.options.tag_limit){                        
-            this.options.app.showAlert('You can enter '+this.options.tag_limit+' tags for campaign.',$("body"));
+        else if(edit_id===null && tags_arr.length>=this.options.tag_limit){                        
+            this.options.app.showAlert('You can enter '+this.options.tag_limit+' tags for campaign.',$("body"),{fixed:true});
             isValid = false;
         }
         if(isValid===false){
@@ -141,6 +143,14 @@
         }
         return isValid;
     }
+  ,saveTagOnEnter:function(e){
+      if(e.keyCode==13){
+          this.saveTag()
+      }
+      else if(e.keyCode==27){
+          this.hideTagDialog()
+      }
+  }  
   ,saveTag:function(){      
       var _input = this.dialog.find("input.tag-input")
       var tag = _input.val()      
@@ -149,6 +159,7 @@
             var self = this
             var temp_tags = '';
             if(this.tag_action!=="delete"){
+                this.dialog.find("#add_tag_btn").addClass("saving")
                 self.dialog.find(".tag-input").prop("disabled",true);
                 self.dialog.find(".addtag").prop("disabled",true).addClass("saving");
                 if(this.tag_action=="edit"){
@@ -160,21 +171,24 @@
                     temp_tags = (this.options.tags)?(this.options.tags+","+tag):tag
                 }
             }
-            else{
-                var tags_array = this.options.tags.split(",");
-                tags_array.splice(this.tag_id,1);
-                temp_tags = tags_array.join();
+            else{                
+                var tags_array = this.options.tags.split(",")
+                tags_array.splice(this.tag_id,1)
+                temp_tags = tags_array.join()
             }
             
             var URL = this.options.url;
             this.options.params['tags'] = this.options.app.decodeHTML(temp_tags)
             var params = this.options.params
+            this.showLoading()
             $.post(URL, params)
                 .done(function(data) {
+                    self.hideLoading()
                     var tag_json = jQuery.parseJSON(data);
                     if(self.options.app.checkError(tag_json)){
                         return false;
                      }
+                    self.dialog.find("#add_tag_btn").removeClass("saving") 
                     if(tag_json[0]=="success"){
                         self.options.tags = temp_tags;
                         self.showTags();                                                                
@@ -248,6 +262,14 @@
   showOverFlow:function(){
       this.ele.find("ul").toggleClass("overflow")
       this.$element.find(".tags-buttons").toggleClass("overflow")
+  },
+  showLoading:function(){
+     var ele = this.$element.find(".tags-contents ul") 
+     ele.append("<div class='loading tags-load-mask' style='opacity: 0.6;'><div class='loading-wheel'></div></div>")
+  },
+  hideLoading:function(){
+      var ele = this.$element.find(".tags-contents ul .tags-load-mask")       
+          ele.remove()
   }
   ,
   initTypeAhead:function(){
