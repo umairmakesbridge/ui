@@ -205,11 +205,11 @@ function (app,template,fileuploader,chosen) {
 							$.each(list_array.lists[0], function(index, val) { 
 								list_html +="<option value='"+val[0].listNum+"'>"+val[0].name+"</option>";
 							})
-							campview.mapdataview.$el.find("#existing_lists").html(list_html);
-							campview.csvupload.$el.hide();
-							campview.mapdataview.$el.show();
+							campview.mapdataview.$el.find("#existing_lists").html(list_html);							
 							campview.mapdataview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px",disable_search: "true"});
 							campview.mapdataview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px",disable_search: "true"});
+							campview.csvupload.$el.hide();
+							campview.mapdataview.$el.show();
 						}
 					}
 				}).fail(function() { console.log( "error lists listing" ); });				

@@ -1757,12 +1757,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 				   var camp_obj = this;
 				   if(this.csvupload.fileuploaded == true)
 				   {
-					   /*var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token')+'&stepType=cancel';
-					   $.post(cancelURL, { type: "cancel" })
+					   var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+					   $.post(cancelURL, { stepType: "cancel" })
 					   .done(function(data) {
 						   var list_json = jQuery.parseJSON(data);						   
 						   if(list_json[0] == 'success')
-						   {*/
+						   {
 							  alert('Your csv upload has cancelled.');
 							  camp_obj.csvupload.$el.find("#dropped-files").children().remove();
 							  camp_obj.csvupload.$el.find("#drop-files .middle").css("display","block");
@@ -1770,8 +1770,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 							  camp_obj.csvupload.fileuploaded=false;
 							  camp_obj.csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
 							  $('.loading').hide();
-						   /*}
-					   });*/
+						   }
+					   });
 				   }
 			   },
                saveTarget:function(obj){                   
