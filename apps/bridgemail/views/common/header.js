@@ -56,7 +56,16 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                                 });
                             },
                             'click .automation-li':function(obj){
-                                 app.mainContainer.bmseditor.showEditor();
+                                var dialog = app.showDialog({title:'Test Dialog',
+                                                                  css:{"width":"850px","margin-left":"-425px"},
+                                                                  bodyCss:{"min-height":"360px"},
+                                                                  buttons: {saveBtn:{text:'Save Target'} }   
+                                    });
+                                 app.showLoading("Loading Page...",dialog.getBody());                                                                         
+                                 require(['text!html/dialog_test.html'],function(page){                                                                            
+                                    dialog.getBody().html(page);
+                                })
+                                 //app.mainContainer.bmseditor.showEditor();
                                  /*app.mainContainer.addWorkSpace({type:'wizard',
                                                   title:this.getTitle(obj),
                                                   wizard :{steps:4,active_step:1}

@@ -455,9 +455,7 @@
           <div class="clearfix"></div>
            <a href="" class="btn-green">Setup Salesforce Account</a>
       </div>
-     </div>
-      <div id="salesforce_login" style="display:none"></div>
-      <div id="salesforce_mapping" style="display:none"></div>
+     </div>      
       <div id="salesforce_setup" style="display:none">
            <h2 class="header-list" style="padding-left:0px">
                   <div id="" class="btn-group subs-dd sf_dd" >
@@ -520,9 +518,7 @@
                <div class="clearfix"></div>
                 <a href="" class="btn-green">Setup Netsuite Account</a>
             </div>
-      </div>
-      <div id="netsuite_login" style="display:none"></div>
-      <div id="netsuite_mapping" style="display:none"></div>
+      </div>    
       <div id="netsuite_setup" style="display:none">
            <h2 class="header-list" style="padding-left:0px">
                   <div id="" class="btn-group subs-dd sf_dd" >
@@ -549,10 +545,10 @@
                    <div  class="btn dropdown-toggle setting" data-toggle="dropdown"> 
                       <span class="ns_settings"></span> NetSuite settings <b class="caret"></b>
                    </div>
-                   <ul class="dropdown-menu">
-                    <li><a>Change Mapping</a></li>
-                    <li><a>Edit Login Settings</a></li>
-                  </ul>
+                    <ul class="dropdown-menu" id="ns_setting_menu">
+                        <li id="ns_mapping"><a>Change Mapping</a></li>
+                        <li id="ns_user_setting"><a>Edit Login Settings</a></li>
+                      </ul>
                </div>
            </h2>
           <div class="clearfix"></div>

@@ -1,6 +1,6 @@
 define([
-	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap'
-], function ($, _, Backbone, isotope, bootstrap) {
+	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap','views/common/dialog'
+], function ($, _, Backbone, isotope, bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({                
 		initialize: function () {
@@ -253,8 +253,15 @@ define([
                          }                        
                         app.setAppData("netsuite",netstuite);                        
                     }
-              }).fail(function() { console.log( "error in salesforce fields" ); });
-                                          
+              }).fail(function() { console.log( "error in salesforce fields" ); });                                          
+            }
+            ,showDialog:function(options){
+                var dialog = new bmsDialog(options);                
+                
+                $("body").append(dialog.$el);
+                dialog.show();
+                
+                return dialog;
             }
              
 	});

@@ -1995,32 +1995,30 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.$("#sf_setting_menu li").click(_.bind(function(obj){
                             var target_obj = $.getObj(obj,"li");
                             if(target_obj.attr("id")=="sf_mapping"){
-                                this.$("#salesforce_welcome").hide();
-                                this.$("#salesforce_login").hide();
-                                this.$("#salesforce_mapping").show();
-                                this.$("#salesforce_setup").hide();
-                                if(this.$("#salesforce_mapping").children().length==0){
-                                    this.app.showLoading("Loading Mapping...",this.$("#salesforce_mapping"));                                  
-                                    require(["crm/salesforce/mapping"],function(mappingPage){
-                                         self.app.showLoading(false,self.$("#salesforce_mapping"));                                  
-                                         var mPage = new mappingPage({camp:self});
-                                         self.$("#salesforce_mapping").append(mPage.$el);
-                                    });
-                                }
+                                var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
+                                                                css:{"width":"1200px","margin-left":"-600px"},
+                                                                bodyCss:{"min-height":"430px"}
+                                  });
+                                
+                                this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
+                                require(["crm/salesforce/mapping"],function(mappingPage){                                     
+                                     var mPage = new mappingPage({camp:self});
+                                     dialog.getBody().html(mPage.$el);
+                                });
+                                
                             }
-                            else if(target_obj.attr("id")=="sf_user_setting"){
-                                this.$("#salesforce_welcome").hide();
-                                this.$("#salesforce_login").show();
-                                this.$("#salesforce_mapping").hide();
-                                this.$("#salesforce_setup").hide();
-                                if(this.$("#salesforce_login").children().length==0){
-                                    this.app.showLoading("Loading Login...",this.$("#salesforce_login"));                                  
-                                    require(["crm/salesforce/login"],function(loginPage){
-                                        self.app.showLoading(false,self.$("#salesforce_login"));                                  
-                                        var lPage = new loginPage({camp:self});
-                                        self.$("#salesforce_login").append(lPage.$el);
-                                    })
-                                }
+                            else if(target_obj.attr("id")=="sf_user_setting"){                                
+                                
+                                var dialog = this.app.showDialog({title:'Salesforce Login Setup',
+                                                                  css:{"width":"650px","margin-left":"-325px"},
+                                                                  bodyCss:{"min-height":"360px"}
+                                    });
+                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                                require(["crm/salesforce/login"],function(loginPage){                                        
+                                    var lPage = new loginPage({camp:self});
+                                    dialog.getBody().html(lPage.$el);
+                                })
+                                
                             }
                         },this))
                      }
@@ -2173,6 +2171,36 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         });
                         
                         this.states.step3.netsuite=true;
+                        
+                        this.$("#ns_setting_menu li").click(_.bind(function(obj){
+                            var target_obj = $.getObj(obj,"li");
+                            if(target_obj.attr("id")=="ns_mapping"){
+                                var dialog = this.app.showDialog({title:' Specify Customer or/and Contacts to Import',
+                                                                css:{"width":"1200px","margin-left":"-600px"},
+                                                                bodyCss:{"min-height":"430px"}
+                                  });
+                                
+                                this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
+                                require(["crm/netsuite/mapping"],function(mappingPage){                                     
+                                     var mPage = new mappingPage({camp:self});
+                                     dialog.getBody().html(mPage.$el);
+                                });
+                                
+                            }
+                            else if(target_obj.attr("id")=="ns_user_setting"){                                
+                                
+                                var dialog = this.app.showDialog({title:'NetSuite Login Setup',
+                                                                  css:{"width":"650px","margin-left":"-325px"},
+                                                                  bodyCss:{"min-height":"360px"}
+                                    });
+                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                                require(["crm/netsuite/login"],function(loginPage){                                        
+                                    var lPage = new loginPage({camp:self});
+                                    dialog.getBody().html(lPage.$el);
+                                })
+                                
+                            }
+                        },this))
                    }
                    else{
                         this.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
