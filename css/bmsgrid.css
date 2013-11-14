@@ -664,11 +664,17 @@ div.pGroup {
 .bmsgrid div.bDiv td div{
     position: relative;
 }
+.fields .bmsgrid div.bDiv td div{
+    margin-top:5px;
+}
 .bmsgrid div.bDiv td {
     border-bottom:1px solid #f0f0f0; 
     border-top:1px solid transparent; 
     height: 44px;
     padding: 6px 0;    
+}
+.fields .bmsgrid div.bDiv td{
+    height: 38px;
 }
 .bmsgrid div.bDiv td:first-child input{
     float: left;
@@ -745,5 +751,9 @@ background: url("../img/timeicon.png") no-repeat scroll center  0 ;}
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 
+.bmsgrid .type { 
+    color :#787983;
+    padding-top:5px;
+}
 
 

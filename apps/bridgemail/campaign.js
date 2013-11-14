@@ -1997,13 +1997,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             if(target_obj.attr("id")=="sf_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
                                                                 css:{"width":"1200px","margin-left":"-600px"},
-                                                                bodyCss:{"min-height":"430px"}
+                                                                bodyCss:{"min-height":"430px"},
+                                                                buttons: {saveBtn:{text:'Save Mapping'} }  
                                   });
                                 
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/salesforce/mapping"],function(mappingPage){                                     
                                      var mPage = new mappingPage({camp:self});
                                      dialog.getBody().html(mPage.$el);
+                                     dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
                                 });
                                 
                             }
@@ -2175,15 +2177,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.$("#ns_setting_menu li").click(_.bind(function(obj){
                             var target_obj = $.getObj(obj,"li");
                             if(target_obj.attr("id")=="ns_mapping"){
-                                var dialog = this.app.showDialog({title:' Specify Customer or/and Contacts to Import',
+                                var dialog = this.app.showDialog({title:' Specify Customers, Contacts or/and Partners to Import',
                                                                 css:{"width":"1200px","margin-left":"-600px"},
-                                                                bodyCss:{"min-height":"430px"}
+                                                                bodyCss:{"min-height":"430px"},
+                                                                buttons: {saveBtn:{text:'Save Mapping'} }
                                   });
                                 
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/netsuite/mapping"],function(mappingPage){                                     
                                      var mPage = new mappingPage({camp:self});
                                      dialog.getBody().html(mPage.$el);
+                                     dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
                                 });
                                 
                             }

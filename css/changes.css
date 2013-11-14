@@ -965,3 +965,22 @@ input[type="text"].search-template{
     min-width: 115px;
     
 }
+ul.tabs-btns li{
+    background-color:#fff;
+    padding:0px;
+}
+ul.tabs-btns li a{
+    padding:8px 25px;
+}
+ul.tabs-btns li.active{
+    margin-bottom: -1px;
+    background-color:#FCFCFC;
+}
+ul.tabs-btns li.active a{
+    margin-bottom: 1px;
+}
+.tab-content{
+    border:1px solid #E5E5E5;
+    padding: 15px;    
+    background-color:#FCFCFC;
+}

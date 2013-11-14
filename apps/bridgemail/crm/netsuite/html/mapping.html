@@ -1,97 +1,59 @@
-<ul class="tabs-btns clearfix">
-    <li class="active"><a href="">Leads</a></li>
-    <li><a href="">Contacts</a></li>
+<ul  class="mapTab tabs-btns clearfix">
+    <li class="active"><a data-toggle="tab" href="#customers">Customers</a></li>
+    <li><a  data-toggle="tab" href="#contacts">Contacts</a></li>
+    <li><a  data-toggle="tab" href="#partners">Partners</a></li>
 </ul>
-<div style=" padding:10px;" class="soruces clearfix template-container ">
-
-          <div class="col1">    
-              <h2 class="header-list clearfix"> 
-                  <div style="margin-left:-10px; " class="input-append search left">
-                    <input type="text" placeholder="Search list" id="list-search">
-                    <div class="btn-group">
-                      <button class="searchbtn" tabindex="-1"><span class="icon-search icon-white"></span></button>
-                    </div>
-                  </div>
-                  <a style="padding: 3px 15px;" class="btn-blue right useallf">Use All Fields</a>
-              </h2>
-          <div class="template-container fields" style="height:300px;">
-              <div class="target-listing ">
-                  <!--<div class="loading"><p>Loading...</p></div>-->
-                  <ul>
-                      <li class="odd">
-                      <label>
-                          <div class="name-type">
-                          <h3>Master Recoed ID</h3>
-                          </div>
-                          <a class=" btn-green">Add</a>
-                          <div class="type">Last Name</div>
-                      </label>
-                      </li>
-                      <li class="even"><label><div class="name-type">
-                          <h3>Salutation</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type"></div>
-                      </label></li>
-                      <li class="odd"><label><div class="name-type">
-                          <h3>State / Province</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type">State Code</div>
-                      </label></li>
-                      <li class="even"><label><div class="name-type">
-                          <h3>Zip Code</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type">Zip</div>
-                      </label></li>
-                      <li class="odd "><label>
-                          <div class="name-type">
-                          <h3>Record Type</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type"></div>
-                      </label></li>
-                      <li class="even"><label><div class="name-type">
-                          <h3>Mobile Phone</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type"></div>
-                      </label></li>
-                      <li class="odd"><label><div class="name-type">
-                          <h3>Record Type</h3>
-                          </div>
-                           <a class=" btn-green">Add</a>
-                           <div class="type">Last Name</div>
-                      </label></li>
-                  </ul>
-              </div>
-          </div>  <!-- template-container  -->
-          </div> <!-- col1  -->
-
-          <div class="col2 right">    
-              <h2 class="header-list">Salesforce Field Mapping </h2>
-          <div class="template-container fields" style="height:300px;">
-              <div class="target-listing ">
-                  <!--<div class="loading"><p>Loading...</p></div>-->
-                  <ul>
-
-                      <li class="odd"><label><div class="name-type">
-                          <h3>Record Type</h3>
-                          </div>
-                           <a class=" btn-red">Remove</a>
-                           <div class="type">Last Name</div>
-                      </label></li>
-                      <li class="even"><label><div class="name-type">
-                          <h3>Mobile Phone</h3>
-                          </div>
-                           <a class=" btn-red">Remove</a>
-                           <div class="type">Last Name</div>
-                      </label></li>
-                  </ul>
-              </div>
-          </div>  <!-- template-container  -->
-          </div> <!-- col2 -->
-
-
-      </div>
+<div class="tab-content" style="height:350px">
+    <div id="customers" class="tab-pane active">
+        <div class="col1">
+          <h2 class="header-list">&nbsp;
+                <div id="customer-mapping-search" class="input-append search" style="float:left;margin-left:-9px;"> </div>
+                <a style="padding: 3px 15px;margin-right:5px;" class="btn-blue right useallf">Use All Fields</a>
+          </h2>
+          <div class="template-container fields customer-fields-grid leftcol"  style="margin-right:5px;height:300px">
+            
+          </div>
+        </div>
+        <div class="col2">
+          <h2 class="header-list">Netsuite Customers Field Mapping</h2>
+          <div class="template-container fields map-customer-fields-grid rightcol" style="margin-left:5px;height:300px">                
+              
+          </div>
+        </div>            
+    </div>    
+    <div id="contacts" class="tab-pane">        
+         <div class="col1">
+          <h2 class="header-list">&nbsp;
+                <div id="contact-mapping-search" class="input-append search" style="float:left;margin-left:-9px;"> </div>
+                <a style="padding: 3px 15px;margin-right:5px;" class="btn-blue right useallf">Use All Fields</a>
+          </h2>
+          <div class="template-container fields contact-fields-grid leftcol"  style="margin-right:5px;height:300px">
+            
+          </div>
+        </div>
+        <div class="col2">
+          <h2 class="header-list">Netsuite Contacts Field Mapping</h2>
+          <div class="template-container fields map-contact-fields-grid rightcol" style="margin-left:5px;height:300px">                
+              
+          </div>
+        </div> 
+    </div>
+    <div id="partners" class="tab-pane">        
+         <div class="col1">
+          <h2 class="header-list">&nbsp;
+                <div id="partner-mapping-search" class="input-append search" style="float:left;margin-left:-9px;"> </div>
+                <a style="padding: 3px 15px;margin-right:5px;" class="btn-blue right useallf">Use All Fields</a>
+          </h2>
+          <div class="template-container fields partner-fields-grid leftcol"  style="margin-right:5px;height:300px">
+            
+          </div>
+        </div>
+        <div class="col2">
+          <h2 class="header-list">Netsuite Partners Field Mapping</h2>
+          <div class="template-container fields map-partner-fields-grid rightcol" style="margin-left:5px;height:300px">                
+              
+          </div>
+        </div> 
+    </div>
+    
+</div>   

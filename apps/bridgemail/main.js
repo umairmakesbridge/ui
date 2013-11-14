@@ -2,6 +2,7 @@
    'use strict';
     require.config({  
        deps: ['main'], 
+       waitSeconds:120,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
@@ -21,6 +22,7 @@
            'bms-filters': '../shared/filters',
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
+           'bms-mapping': '../shared/mapping',
             bootstrap: '../shared/libs/bootstrap.min'
        },
         shim: {
@@ -74,6 +76,10 @@
                    deps: ['jquery','bootstrap']
                },
                'bms-tags':{
+                   deps: ['jquery']
+               }
+               ,
+               'bms-mapping':{
                    deps: ['jquery']
                }
          }

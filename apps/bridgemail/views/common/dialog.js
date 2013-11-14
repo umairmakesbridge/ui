@@ -4,7 +4,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
 		return Backbone.View.extend({			
                         className:'modal',
                         events: {
-                            
+                            'click .btn-save':function(){
+                                this.saveCall()
+                            }
                          },
 			initialize: function () {
 				this.template = _.template(template);				
@@ -42,6 +44,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         },
                         getBody:function(){
                             return this.$(".modal-body");
+                        },
+                        saveCallBack:function(save){
+                            this.saveCall = save;
                         }
 		});
 	});
