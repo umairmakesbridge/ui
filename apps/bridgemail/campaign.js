@@ -125,8 +125,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                         "editor_change":false
                                        };
                         this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
-						this.csvupload = new CSVUploadView({camp:this,app:this.app});
-						this.mapdataview = new MapDataView({camp:this,app:this.app});
+						this.csvupload = new CSVUploadView({camp:this});
+						this.mapdataview = new MapDataView({camp:this});
                         this.render();
                 },
 
@@ -136,7 +136,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wizard = this.options.wizard;    
                         if(this.options.params && this.options.params.camp_id){
                             this.camp_id = this.options.params.camp_id;
-                        }                        
+                        }
                         this.loadDataAjax(); // Load intial Calls
                         this.$el.find('div#copycampsearch').searchcontrol({
                                 id:'copy-camp-search',
@@ -201,6 +201,19 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }
                     return proceed;
                 },
+				removeCSVUpload: function(){
+					var camp_obj = this;
+					if(camp_obj.csvupload.fileuploaded == true)					
+						camp_obj.csvupload.removeFile();
+						
+					camp_obj.csvupload.$el.hide();
+					camp_obj.$el.find('#upload_csv').removeClass('selected');
+					camp_obj.mapdataview.$el.hide();
+					camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
+					camp_obj.mapdataview.$el.find('#newlist').val('');
+					camp_obj.mapdataview.$el.find('#alertemail').val('');
+					$('.loading').hide();
+				},
                 init:function(){                                                                                                    
                     //Load mergeFields
                     this.mergeFieldsSetup();
@@ -658,7 +671,16 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 return proceed;  
                 },
                 saveStep3:function(){
-                  return -1;  
+					var camp_obj = this;
+					if(camp_obj.csvupload.fileuploaded == true)
+					{
+						return camp_obj.mapdataview.mapAndImport(); 
+					}
+					camp_obj.csvupload.$el.hide();
+					camp_obj.$el.find('#upload_csv').removeClass('selected');
+					camp_obj.mapdataview.$el.hide();
+					$('.loading').hide();
+                  //return -1;  
                 },
                 saveStep4:function(){
                   return -1;  
@@ -1721,7 +1743,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 });
 							camp_obj.checkCSVUploaded();
                         	break;
-						case 'choose_targets':						   							   
+						case 'choose_targets':
+							//this.$el.find('#target-recipients-list').children().remove();
+							this.$el.find('#target-recipients-list table tr').remove();
+							this.$el.find("#trecpcount span").text('0');
 							URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C";
 							jQuery.getJSON(URL,  function(tsv, state, xhr){
 								if(xhr && xhr.responseText){
@@ -1732,6 +1757,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 							break;						   
 						case 'choose_lists':						   
 							//Loading lists list
+							this.app.showLoading("",this.$el.find('#target-lists'));
+							this.$el.find('#recipients-list table tr').remove();
+							this.$el.find("#recpcount span").text('0');
 							URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all";
 							jQuery.getJSON(URL,  function(tsv, state, xhr){
 								if(xhr && xhr.responseText){
@@ -1746,7 +1774,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 						   this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);
 						   //this.csvupload.$el.children().remove();
 						   camp_obj.csvupload.$el.show();
-						   camp_obj.mapdataview.$el.hide();						   
+						   camp_obj.mapdataview.$el.hide();
 						   break;
                         default:
                             break;
@@ -1769,6 +1797,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 							  camp_obj.csvupload.dataArray = [];
 							  camp_obj.csvupload.fileuploaded=false;
 							  camp_obj.csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
+							  camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
+							  camp_obj.mapdataview.$el.find('#newlist').val('');
+							  camp_obj.mapdataview.$el.find('#alertemail').val('');
 							  $('.loading').hide();
 						   }
 					   });

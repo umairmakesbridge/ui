@@ -76,7 +76,8 @@ h2.header-list span.recpscount {
     top: -6px;	
 }
 .bmsgrid td .action { margin:auto 0px; }
-.bmsgrid div.bDiv table { margin-bottom:0; }
+.bmsgrid div.bDiv { min-height:290px; }
+.bmsgrid div.bDiv table { margin-bottom:0; min-height:290px; }
 h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
 #targets_grid .action, #target_grid_recipients .action { margin-top:-33px; top:auto; }
 #area_choose_lists, #area_choose_targets { position:relative; min-height:200px; }
@@ -140,6 +141,8 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 {
 	position:relative;
 	padding-bottom:50px;
+	/*text-align:center;*/
+	margin:0 auto 15px;
 }
 #dropped-files .filename {
     color: #DDDDDD;
@@ -150,9 +153,10 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 }
 #dropped-files .image {
     height: 128px;
-    margin-bottom: 30px;
+    margin: 0 auto 30px;
     width: 128px;
 }
+#remove-file-upload { margin:auto; }
 .csvupload { position:absolute; right:10px; bottom:10px; }
 .tabel-div { overflow:inherit; }
 .imgLoading {
@@ -187,6 +191,7 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 .template-container
 {
 	clear:both;
+	min-height:290px;
 }
 #campaigns_list .template-container { margin-top:0; }
 .tabel-div .table tbody tr td { padding:5px; }

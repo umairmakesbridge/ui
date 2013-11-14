@@ -99,7 +99,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             this.$el.find(".step-contents .step"+this.active_step).hide();
                             this.active_step = parseInt(this.active_step)-1
                             this.$el.find(".step-contents .step"+this.active_step).fadeIn(); 
-
+							if(this.active_step == 3)
+							{
+								this.page.removeCSVUpload();
+							}
                             //Moving Steps prgoress bar
                             this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
                             this.$el.find(".progtrckr .active").removeClass("active");
@@ -112,7 +115,6 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             if(this.active_step < this.total_steps){
                                 this.$el.find("a.nextbtn").show();
                             }
-                           
                         },
                         validateStep:function(){
                             var validate = this.page.stepsCall("step_"+parseInt(this.active_step));
@@ -144,6 +146,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             if(this.active_step>1){
                                 this.$el.find("a.backbtn").show();
                             }
+							if(this.active_step == 3)
+							{
+								this.page.removeCSVUpload();
+							}
                             if(this.active_step==this.total_steps){
                                 this.$el.find("a.nextbtn").hide();
                             }
