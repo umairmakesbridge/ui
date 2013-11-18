@@ -19,6 +19,7 @@
            'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
            'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
+		   'fileuploader': '../shared/libs/jquery.form',
            'bms-filters': '../shared/filters',
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
@@ -65,6 +66,9 @@
                }
                ,
                'jquery.searchcontrol':{
+                   deps: ['jquery']
+               },
+			   'fileuploader':{
                    deps: ['jquery']
                },
                bootstrap: ['jquery']

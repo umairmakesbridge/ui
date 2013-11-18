@@ -17,12 +17,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			},
 			initialize:function(){
 			   this.template = _.template(template);
-			   $('.tagscont').hide();			   
+			   $('.tagscont').hide();
 			   this.render();
 			},
 			render: function () {
 				this.$el.html(this.template({}));
-                                this.app = this.options.app;    
+                this.app = this.options.app;
 				this.getallcampaigns();
 				this.$el.find('div#campslistsearch').searchcontrol({
 					id:'list-search',
@@ -57,10 +57,11 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				$.each(camp_list_json.lists[0], function(index, val) {
 					list_html += camp_obj.makecamprows(val);					
 				});	
-                                
+				                
 				list_html += '</tbody></table>';
 				this.app.showLoading(false,camp_obj.$el.find("#target-camps"));
 				this.$el.find("#target-camps").html(list_html);
+											
 				this.$el.find("#camps_grid").bmsgrid({
 						useRp : false,
 						resizable:false,
@@ -71,13 +72,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				});                                                                
                                 this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
                                 this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
-                                this.$("#camps_grid tr td:nth-child(3)").attr("width","66px");
                                 this.$("#camps_grid tr td:nth-child(4)").attr("width","132px");
 				var camp_count_lable = '';
 				if(camp_list_json.count > 1)
-					camp_count_lable = 'Campaigns';
+					camp_count_lable = 'Campaigns found';
 				else
-					camp_count_lable = 'Campaign';				
+					camp_count_lable = 'Campaign found';				
 				this.$el.find("span#no_of_camps").html(camp_list_json.count+' '+camp_count_lable);				
 			}
 			,
@@ -103,7 +103,6 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					dateFormat = '';					
                                      }   
 				row_html += '<td><div class="subscribers show" style="width:60px"><span class=""></span>0</div></td>';
-				row_html += '<td><div class="mail show" style="width:40px"><span class=""></span>'+ val[0].sentCount +'</div></td>';
 				row_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div><div id="'+ val[0].campNum +'" class="action"><a id="'+ val[0].campNum +'" class="btn-green">Select</a></div></td>';					
 				row_html += '</tr>';
 				return row_html;
