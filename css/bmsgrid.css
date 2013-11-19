@@ -755,5 +755,7 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
     color :#787983;
     padding-top:5px;
 }
-
+.bmsgrid .btn-red.system{
+    display:none !important;
+}
 

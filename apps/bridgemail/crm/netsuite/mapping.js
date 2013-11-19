@@ -35,30 +35,32 @@ function (template,Mapping) {
                                 var fields_html = '<table cellpadding="0" cellspacing="0" width="100%" id="customer_mapping_list_grid"><tbody>';
                                 var c_fields_html = '<table cellpadding="0" cellspacing="0" width="100%" id="contact_mapping_list_grid"><tbody>';
                                 var p_fields_html = '<table cellpadding="0" cellspacing="0" width="100%" id="partner_mapping_list_grid"><tbody>';
+                                var system_flag = "";
                                 $.each(import_fields.fldList[0], function(index, val) {                                              
-                                   if(!self.skipFields(val[0].name)){ 
+                                   system_flag = val[0].defaultSetup=="Y"?"system":""; 
+                                   
                                     if(val[0].nsObject=="Customer"){
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                           
                                      fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                     
-                                     var mapping_field = val[0].bmsMappingField!=='[Custom Field]'?val[0].bmsMappingField:'';
-                                     fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use">Add</a></div></td>';                        
+                                     var mapping_field = val[0].bmsMappingField;
+                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use '+system_flag+'">Add</a></div></td>';                        
                                      fields_html += '</tr>';
                                     }
                                     else if(val[0].nsObject=="Contact"){
                                      c_fields_html+= '<tr id="row_'+val[0].name+'">';                        
                                      c_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                  
-                                     var mapping_field = val[0].bmsMappingField!=='[Custom Field]'?val[0].bmsMappingField:'';
-                                     c_fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use">Add</a></div></td>';                        
+                                     var mapping_field = val[0].bmsMappingField;
+                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use '+system_flag+'">Add</a></div></td>';                        
                                      c_fields_html += '</tr>';
                                     }
                                     else if(val[0].nsObject=="Partner"){
                                         p_fields_html+= '<tr id="row_'+val[0].name+'">';                        
                                         p_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                  
-                                        var mapping_field = val[0].bmsMappingField!=='[Custom Field]'?val[0].bmsMappingField:'';
-                                        p_fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use">Add</a></div></td>';                        
+                                        var mapping_field = val[0].bmsMappingField;
+                                        p_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use '+system_flag+'">Add</a></div></td>';                        
                                         p_fields_html += '</tr>';
                                     }
-                                  }
+                                  
                                });
                                fields_html += '</tbody></table>';   
                                c_fields_html += '</tbody></table>';   
@@ -75,13 +77,18 @@ function (template,Mapping) {
                                        colWidth : ['100%','90px']
                                });
                                self.$("#customer_mapping_list_grid tr td:nth-child(1),#contact_mapping_list_grid tr td:nth-child(1),#partner_mapping_list_grid tr td:nth-child(1)").attr("width","100%");
-                               self.$("#customer_mapping_list_grid tr td:nth-child(2),#contact_mapping_list_grid tr td:nth-child(2),#partner_mapping_list_grid tr td:nth-child(2)").attr("width","90px");                                                              
+                               self.$("#customer_mapping_list_grid tr td:nth-child(2),#contact_mapping_list_grid tr td:nth-child(2),#partner_mapping_list_grid tr td:nth-child(2)").attr("width","110px");                                                              
                                
                                self.$("#customers").mapping({});
                                self.$("#contacts").mapping({});
                                self.$("#partners").mapping({});
                             }
-                            URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+self.app.get('bms_token')+"&type=getFields";
+                            
+                            self.$("#customer_mapping_list_grid tr .system").click()
+                            self.$("#contact_mapping_list_grid tr .system").click()
+                            self.$("#partner_mapping_list_grid tr .system").click()
+                            
+                            URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+self.app.get('bms_token')+"&type=getMappingFields";
                             self.app.showLoading("Loading Mapped Fields...",self.$(".map-customer-fields-grid"));
                             self.app.showLoading("Loading Mapped Fields...",self.$(".map-contact-fields-grid"));
                             self.app.showLoading("Loading Mapped Fields...",self.$(".map-partner-fields-grid"));
@@ -95,36 +102,17 @@ function (template,Mapping) {
                                 }
                                 if(mapped_fields[0]!=="err"){
                                     if(mapped_fields.count!="0"){                                                                                
-                                        $.each(mapped_fields.fldList[0], function(index, val) {     
-                                            if(self.skipFields(val[0].name)){
-                                                var fields_html = '';                                                
-                                                fields_html += '<tr id="row_'+val[0].name+'">';                                                           
-                                                fields_html += '<td width="100%"><div><div class="name-type"><h3>'+val[0].name+'</h3> </div></div></td>';                                                                                                     
-                                                fields_html += '<td width="90px"><div><div style="width:90px" class="type"><span class=""></span></div></div></td>';                        
-                                                fields_html += '</tr>';
-                                                
-                                                if(val[0].nsObject=="Customer"){
-                                                    self.$(".map-customer-fields-grid tbody").append(fields_html)
-                                                }
-                                                else if(val[0].nsObject=="Contact"){
-                                                    self.$(".map-contact-fields-grid tbody").append(fields_html) 
-                                                }
-                                                else if(val[0].nsObject=="Partner"){
-                                                    self.$(".map-partner-fields-grid tbody").append(fields_html) 
-                                                }
-                                                       
+                                        $.each(mapped_fields.fldList[0], function(index, val) {                                                
+                                            if(val[0].nsObject=="Customer"){
+                                                self.$("#customer_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
                                             }
-                                            else{
-                                                if(val[0].nsObject=="Customer"){
-                                                    self.$("#customer_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
-                                                }
-                                                else if(val[0].nsObject=="Contact"){
-                                                    self.$("#contact_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
-                                                }
-                                                 else if(val[0].nsObject=="Partner"){
-                                                     self.$("#partner_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
-                                                 }
+                                            else if(val[0].nsObject=="Contact"){
+                                                self.$("#contact_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
                                             }
+                                             else if(val[0].nsObject=="Partner"){
+                                                 self.$("#partner_mapping_list_grid tr[id='row_"+val[0].name+"'] .use").click()
+                                             }
+                                            
                                         });
                                     }
                                 }
@@ -174,8 +162,8 @@ function (template,Mapping) {
                 saveCall:function(){
                     var self = this;
                     this.app.showLoading("Saving Mapping...",this.$el);
-                    var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=setFields";
-                    $.post(URL,{type:"setFields",customerFields:this.getMappedFields("customer"),contactFields:this.getMappedFields("contact"),partnerFields:this.getMappedFields("partner")})
+                    var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $.post(URL,{type:"setMappingFields",customerFields:this.getMappedFields("customer"),contactFields:this.getMappedFields("contact"),partnerFields:this.getMappedFields("partner")})
                     .done(function(data) {                      
                         self.app.showLoading(false,self.$el);
                         var mapping_json = jQuery.parseJSON(data);                              

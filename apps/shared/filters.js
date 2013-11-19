@@ -24,6 +24,7 @@
       this.linkFilters = []
       this.basicFields = []
       this.customFields = []
+      this.lists = null;
       this.formats = []
       this.rules = []
       var self = this;
@@ -380,7 +381,20 @@
               filter.find(".emailFreq").val(params.frequency).trigger("chosen:updated")
           }
       }
-    }  
+    },
+    loadLists:function(){
+        var self = this;
+        var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=all";
+       $.ajax({
+            url: URL,
+            dataType: 'json',
+            async: false,
+            type:'GET',
+            success: function(data) {
+                    self.lists = data;                         
+              }
+        })
+    }
   , addListFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)      
       filter.addClass("list");
@@ -394,7 +408,10 @@
           filter_html += '</div>'
           filter_html += '<h2 class="header-list" style="margin-top:0px">&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
             filter_html += '<table cellpadding="0" cellspacing="0" width="100%" id="__list_grid"><tbody>'
-            var list_array =this.options.app.getAppData("lists")
+            if(!this.lists){
+                this.loadLists();
+            }
+            var list_array =this.lists
             var filter_ref = this;
             $.each(list_array.lists[0], function(index, val) {     
                         filter_html += '<tr id="row_'+val[0].listNum+'">';      
@@ -755,12 +772,35 @@
       })*/
   }
   ,showDialog:function(obj){
+    
+      var dialog = this.options.app.showDialog({title:'Choose List',
+            css:{"width":"700px","margin-left":"-350px"},
+            bodyCss:{"min-height":"290px"}
+      });
+      this.options.app.showLoading("Loading Lists...",dialog.getBody()); 
+      if(this.lists){
+          this.populateDialog(obj,dialog)
+      }
+      else{
+       var self = this;   
+       var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=all";
+       jQuery.getJSON(URL,  function(tsv, state, xhr){
+                if(xhr && xhr.responseText){
+                      self.lists = jQuery.parseJSON(xhr.responseText);   
+                      self.populateDialog(obj,dialog);
+                }
+        }).fail(function() { console.log( "error lists listing" ); });
+      }
+       
+      
+  },
+  populateDialog:function(obj,dialog){
       var list_icon = $.getObj(obj,"div")
       var selected_list = list_icon.attr("list_checksum")
-      var d = null;
-      if($("#filtersModal").length==0){
-        var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="filter_list_grid"><tbody>'
-            var list_array =this.options.app.getAppData("lists")
+      var d = "";
+      
+       var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="filter_list_grid"><tbody>'
+            var list_array =this.lists
             var filter = this;
             $.each(list_array.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0].listNum+'" list_checksum="'+val[0].md5+'">';                            
@@ -769,18 +809,11 @@
                         list_html += '</tr>';
                     });
             list_html += '</tbody></table>'
-        d = '<div class="modal" id="filtersModal" style="width:700px;margin-left:-350px">'
-        d += '<div class="modal-header">'
-        d += '<a class="close" data-dismiss="modal">×</a>'
-        d += '<h3>Choose List</h3>'
-        d += '</div>'
-        d += '<div class="modal-body">'
-        d +='<h2 class="header-list">&nbsp; <div id="listssearch" class="input-append search"></div></h2>'
+        
+        d +='<div><h2 class="header-list">&nbsp; <div id="listssearch" class="input-append search"></div></h2>'
         d += '<div class="template-container" style="margin-right:5px;min-height:290px"><div class="target-listing" id="filter-lists">'+list_html+'</div></div>'
         d += '</div>'
-        d += '<div class="modal-footer">'        
-        d += '<a class="btn btn-gray" data-dismiss="modal">Close</a>'
-        d += ' </div> </div>'
+        
         d = $(d)
         d.find(".search").searchcontrol({
                 id:'list-search',
@@ -791,9 +824,8 @@
                 showicon: 'yes',
                 iconsource: 'add-list',
                 closeiconid: 'dialoglistssearch'
-         });
-        d.modal({keyboard: true})
-        $("body").append(d)
+         });        
+        dialog.getBody().html(d)
         d.find("#filter_list_grid").bmsgrid({
                 useRp : false,
                 resizable:false,
@@ -808,22 +840,17 @@
              list_icon.attr("list_id",$(this).attr("id"))
              list_icon.attr("list_checksum",$(this).parents("tr").attr("list_checksum"))
              list_icon.find("a").removeClass("add-list").addClass("list");
-             d.modal("hide")
+             dialog.hide();
          })
-      }
-      else{
-          d = $("#filtersModal");          
-          d.find("#filter_list_grid tr.selected").removeClass("selected");
-          
-      }      
+         
       if(selected_list){
             var tr = d.find("#filter_list_grid tr[list_checksum='"+selected_list+"']")
             if(tr.length){
                 tr.addClass("selected");
             }
         }
-      d.modal("show")
   },
+ 
   loadFilters:function(data){
       var _target = this.$element
       var self = this

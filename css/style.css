@@ -276,7 +276,7 @@ body {
 	/*height: 105px;*/
 	position: relative;
 	width: 100%;
-	z-index: 9999;
+	z-index: 999;
 }
 #header > div:first-child { display:none;}
 a.logo {
@@ -3446,7 +3446,7 @@ height: 367px;
     margin: 0 auto 10px;
     padding: 10px 0 0;
     position: relative;
-    width: 742px;
+    width: 660px;
 }
 .selection-boxes a.prev, .selection-boxes a.next {
     border: 1px solid #FFFFFF;
@@ -4106,7 +4106,7 @@ div.shortcuts ul.dropdown-menu li a .icon { margin:-5px 10px -5px -5px; float:le
 .filter-row .addbtn { font-size: 28px;font-weight:bold; line-height:30px; float:left; color:#94CF1E; margin:0 5px; }
 .filter-row .icon.view { line-height:30px; float:left; color:#94CF1E; margin:0 5px; }
 
-.filter-row .row { padding:5px  0;line-height:30px;}
+.filter-row .row { padding:5px  0;line-height:30px;margin-left: 0px;}
 
 .filter-row  label {
     color: #343434;

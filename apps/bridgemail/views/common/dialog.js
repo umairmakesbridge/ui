@@ -33,11 +33,12 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                              }
 			},                        
                         show:function(){                          
-                          this.$el.modal({keyboard: true});
+                          this.$el.modal({backdrop: 'static',keyboard: false});
                           this.$el.modal("show");
                           this.$el.on('hidden', _.bind(function(){
-                            this.$el.remove();
+                            this.$el.remove();                          
                           },this))
+                          
                         },
                         hide:function(){
                             this.$el.modal("hide");

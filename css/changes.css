@@ -93,7 +93,7 @@ ol.progtrckr li.no-text{
 }
 .step3 .selection-boxes ul{
     margin:0px auto 10px auto;
-    width:744px;
+    width:637px;
     float: none;
 }
 .step3  .selection-boxes li{
@@ -322,7 +322,7 @@ div.tags-div:before {
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
           box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-   z-index: 1000;
+   z-index: 1002;
 }
 .tagbox input {
     color: #000000;
@@ -816,10 +816,10 @@ input[type="text"].search-template{
 .filter-cont .edit{
     background-position: -330px -330px
 }
-.grayicons .filter-cont .icon.delete{
+.filter-cont .icon.delete{
     background-position: -30px -660px;
 }
-.grayicons .filter-cont .icon.delete:hover{
+.filter-cont .icon.delete:hover{
     background-position: -60px -660px;
 }
 .filter-row .filter-cont .right-btns{
@@ -983,4 +983,10 @@ ul.tabs-btns li.active a{
     border:1px solid #E5E5E5;
     padding: 15px;    
     background-color:#FCFCFC;
+}
+.modal-backdrop{
+    z-index:1000; 
+}
+.modal{
+    z-index:1001; 
 }
