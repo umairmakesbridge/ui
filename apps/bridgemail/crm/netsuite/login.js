@@ -56,34 +56,24 @@ function (template) {
 					var logindialog = this.dialog;
 					var app = this.options.app;
 					var el = this.$el;
-					el.find('#ns_userid').attr('readonly','readonly');
-					el.find('#ns_pwd').attr('readonly','readonly');
-					el.find('#ns_email').attr('readonly','readonly');
-					el.find('#ns_accid').attr('readonly','readonly');
+					el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').attr('readonly','readonly');
 					el.find('#btnSaveLogin').addClass('saving');
 					var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";				
 					$.post(URL, { nsUserID: curview.$el.find('#ns_userid').val(),nsPass: curview.$el.find('#ns_pwd').val(),nsAccountID: curview.$el.find('#ns_accid').val(),nsEmail:curview.$el.find('#ns_email').val()})
 					.done(function(data) { 
-						var creds = jQuery.parseJSON(data);                            
+						var creds = jQuery.parseJSON(data);     
+                                                el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').removeAttr('readonly');                                                
+                                                el.find('#btnSaveLogin').removeClass('saving');
 						if(creds.err)
 						{							
-							app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
-							el.find('#ns_userid').removeAttr('readonly');
-							el.find('#ns_pwd').removeAttr('readonly');
-							el.find('#ns_accid').removeAttr('readonly');
-							el.find('#ns_email').removeAttr('readonly');
-							el.find('#btnSaveLogin').removeClass('saving');
+							app.showAlert(creds.err.replace('&#58;',':'),curview.$el);							
 						}
 						else
 						{
-							logindialog.hide();
-							el.find('#ns_userid').removeAttr('readonly');
-							el.find('#ns_pwd').removeAttr('readonly');
-							el.find('#ns_accid').removeAttr('readonly');
-							el.find('#ns_email').removeAttr('readonly');
-							el.find('#btnSaveLogin').removeClass('saving');
+							logindialog.hide();						
 							curview.options.camp.checkNetSuiteStatus();
 						}
+                                                
 					});
 				},
 				validateLoginFields: function() {
@@ -125,31 +115,25 @@ function (template) {
 						el.find('#ns_email').attr('style','');
 					return isValid;
 				},
-                initialize: function () {
+                                initialize: function () {
 					this.template = _.template(template);				
 					this.render();
 					var el = this.$el;
-					var app = this.options.app;
-					el.find('#ns_userid').attr('readonly','readonly');
-					el.find('#ns_pwd').attr('readonly','readonly');
-					el.find('#ns_email').attr('readonly','readonly');
-					el.find('#ns_accid').attr('readonly','readonly');
+					var app = this.options.app;					
 					var netsuite_setting = this.app.getAppData("netsuite");
 					app.showLoading('Loading Credentials',el);
 					if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y")
 					{
+                                                el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').attr('readonly','readonly');
 						var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
 						jQuery.getJSON(URL,  function(tsv, state, xhr){							
 							var creds = jQuery.parseJSON(xhr.responseText);
 							if(creds)
-							{
-								el.find('#ns_userid').removeAttr('readonly');
-								el.find('#ns_pwd').removeAttr('readonly');
-								el.find('#ns_accid').removeAttr('readonly');
-								el.find('#ns_email').removeAttr('readonly');
-								el.find('#ns_userid').val(creds["nsUserID"]);
-								el.find('#ns_accid').val(creds["nsAccountID"]);
-								el.find('#ns_email').val(creds["nsEmail"]);								
+							{				
+                                                                el.find('#ns_pwd').removeAttr('readonly');
+								el.find('#ns_userid').removeAttr('readonly').val(creds["nsUserID"]);
+								el.find('#ns_accid').removeAttr('readonly').val(creds["nsAccountID"]);
+								el.find('#ns_email').removeAttr('readonly').val(creds["nsEmail"]);								
 							}
 						});
 					}
