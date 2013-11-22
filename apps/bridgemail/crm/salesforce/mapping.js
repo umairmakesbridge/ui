@@ -39,13 +39,15 @@ function (template,Mapping) {
                                     if(val[0].sfObject=="Lead"){
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                           
                                      fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                                                           
-                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use '+system_flag+'">Add</a></div></td>';                        
+                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row'+system_flag+'">Add</a></div></td>';                        
+
                                      fields_html += '</tr>';
                                     }
                                     else{
                                      c_fields_html+= '<tr id="row_'+val[0].name+'">';                        
                                      c_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                       
-                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use '+system_flag+'">Add</a></div></td>';                        
+                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row'+system_flag+'">Add</a></div></td>';                        
+
                                      c_fields_html += '</tr>';
                                     }
                                    

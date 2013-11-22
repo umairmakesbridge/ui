@@ -17,16 +17,20 @@
 
   , init: function (element, options) {           
       this.$element = $(element)
-      this.options = this.getOptions(options)            
+      this.options = this.getOptions(options)
+	  //alert(this.options.sumColumn);
       var template = $(this.options.template)
       template.find(".bDiv").css("height",this.options.gridHeight)
       this.$element.find(".col2 .rightcol").append(template)
       
       this.mappingInit()
       
-      this.$element.find(".col1 .use").click(_.bind(this.addToCol2,this))
-      this.$element.find(".useallf").click(_.bind(this.moveAll,this))
-                       
+      this.$element.find(".col1 .move-row").click(_.bind(this.addToCol2,this))
+      this.$element.find(".useallf").click(_.bind(this.moveAll,this))	 
+	  if(this.options.loadTarget != '')	  		  
+	 	 this.$element.find(".col1 .use").click(_.bind(this.options.loadTarget,this));
+	  if(this.options.copyTarget != '')	  		  
+	 	 this.$element.find(".col1 .copy").click(_.bind(this.options.copyTarget,this));
     }
   ,mappingInit:function(){
       this.$element.find(".col1 .leftcol tr").each(function(i,v){
@@ -39,10 +43,23 @@
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
           $(this).remove();
-          tr_copy.find(".action .use").removeClass("btn-green").addClass("btn-red").html("Remove");   
-          tr_copy.find(".action .use").click(_.bind(self.removeFromCol2,self))
-          tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"))
-          tr_copy.fadeIn("fast")          
+		  //if(tr_copy.find(".action .use"))
+		  tr_copy.find(".action").children().hide();
+          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html("Remove");
+		  tr_copy.find(".action .move-row").show();
+          tr_copy.find(".action .move-row").click(_.bind(self.removeFromCol2,self));
+          tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
+          tr_copy.fadeIn("fast");
+		  
+		  //++ Recipients count
+		  if(self.options.sumColumn != '')
+		  {
+		  	var recpoldcount = self.$element.find("#"+self.options.sumTarget).text();
+		  	var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+			//alert(recpnewval);
+		  	var recptotalcount = parseInt(recpoldcount) + parseInt(recpnewval);				   
+		  	self.$element.find("#"+self.options.sumTarget).text(recptotalcount);
+		  }
       })
   }  
   ,removeFromCol2:function(obj){
@@ -51,8 +68,10 @@
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
           $(this).remove();
-          tr_copy.find(".action .use").removeClass("btn-red").addClass("btn-green").html("Add")
-          tr_copy.find(".action .use").click(_.bind(self.addToCol2,self))
+		  //if(tr_copy.find(".action .use"))
+		  tr_copy.find(".action").children().show();		  
+          tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html("Use")
+          tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
           var _index = tr_copy.attr("item_index")
           var next_element = null
           var col1_rows = self.$element.find(".col1 .leftcol tr")
@@ -66,13 +85,22 @@
             tr_copy.insertBefore(next_element)
           }
           else{
-            tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"))  
+            tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"))
           }
-          tr_copy.fadeIn("fast")
+          tr_copy.fadeIn("fast");
+		  
+		  //-- Recipients count
+		  if(self.options.sumColumn != '')
+		  {
+		  	var recpoldcount = self.$element.find("#"+self.options.sumTarget).text();
+		  	var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+		  	var recptotalcount = recpoldcount - recpnewval;
+		  	self.$element.find("#"+self.options.sumTarget).text(recptotalcount);
+		  }
       })
   },
   moveAll:function(){
-      this.$element.find(".col1 .bmsgrid tr .use").click()
+      this.$element.find(".col1 .bmsgrid tr .move-row").click()
   }
   , getOptions: function (options) {
       options = $.extend({}, $.fn.mapping.defaults, options)    
@@ -101,7 +129,11 @@
   $.fn.mapping.defaults = { 
    template:'<div class="bmsgrid"><div class="bDiv"><table cellspacing="0" cellpadding="0" border="0" style="display: table;"><tbody></tbody></table></div></div>',   
    app:null,
-   gridHeight:300
+   gridHeight:290,
+   sumColumn: '',
+   sumTarget: '',
+   loadTarget: '',
+   copyTarget: '',
   }
 
 }(window.jQuery);

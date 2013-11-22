@@ -108,7 +108,6 @@ function (app,template,fileuploader,chosen) {
 									xhr.send(formData);
 									xhr.onreadystatechange = function() {
 										if (xhr.readyState == 4 && xhr.status == 200) {
-											//alert(xhr.responseText);
 											var jsonResult = eval(xhr.responseText);						  
 											if(jsonResult[0] != 'err'){
 											  var rows = jsonResult;							
@@ -120,13 +119,12 @@ function (app,template,fileuploader,chosen) {
 											  curview.csvupload.createmaplists(trs);					
 											}
 											else
-											{
-												alert(jsonResult[1]);
+											{												
+												app.showAlert(jsonResult[1],campview.csvupload.$el);
 												curview.csvupload.removeFile();
 											}
 										}
 									}
-									//curview.csvupload.uploadfile();
 							}; 
 							})(files[index]);
 							fileReader.readAsDataURL(file);
@@ -161,7 +159,7 @@ function (app,template,fileuploader,chosen) {
 				  }
 				  else
 				  {
-					  alert(jsonResult[1]);
+					  app.showAlert(jsonResult[1],campview.csvupload.$el);
 					  curview.csvupload.removeFile();
 				  }
 			  }

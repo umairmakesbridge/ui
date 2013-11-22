@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','listupload/csvupload','listupload/mapdata'],
-function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,CSVUploadView,MapDataView) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','listupload/csvupload','listupload/mapdata','bms-mapping'],
+function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,CSVUploadView,MapDataView,Mapping) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -63,7 +63,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                               this.removeConversionPage();       
                               this.states.step1.pageconversation_checkbox = false;
                               this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
-			      this.$( "#accordion1" ).accordion({ active: 1 });
+			      				this.$( "#accordion1" ).accordion({ active: 1 });
                           }
                           this.setConversionPage();                          
                           obj.stopPropagation();
@@ -97,6 +97,41 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       'change .step3 select,change .step3 input':function(){
                           this.states.step3.netsuite=true;
                       }
+                      ,
+                        'click #btnSFLogin':function(){
+                            var camp_obj = this;
+                            var dialog = this.app.showDialog({title:'Salesforce Login Setup',
+                                            css:{"width":"650px","margin-left":"-325px"},
+                                            bodyCss:{"min-height":"360px"}
+                            });
+                            this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                            require(["crm/salesforce/login"],function(loginPage){                                        
+                                    var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
+                                    dialog.getBody().html(lPage.$el);
+                            })
+                            this.$("#salesforce_welcome").hide();
+                            this.$("#salesforce_mapping").hide();
+                            this.$("#salesforce_login").show();
+                            this.$("#salesforce_setup").hide();
+                            return false;
+                      },
+                        'click #btnNSLogin':function(){
+                                var camp_obj = this;
+                                var dialog = this.app.showDialog({title:'NetSuite Login Setup',
+                                                css:{"width":"650px","margin-left":"-325px"},
+                                                bodyCss:{"min-height":"360px"}
+                                        });
+                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                                require(["crm/netsuite/login"],function(loginPage){                                        
+                                        var lPage = new loginPage({camp:camp_obj,app:camp_obj.app,dialog:dialog});
+                                        dialog.getBody().html(lPage.$el);
+                                })
+                                this.$("#netsuite_welcome").hide();
+                                this.$("#netsuite_mapping").hide();
+                                this.$("#netsuite_login").show();
+                                this.$("#netsuite_setup").hide();
+                                return false;
+                      }					  
                     },
 
                 initialize: function () {
@@ -112,7 +147,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
                                         "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",change:false},
                                         "step4":{"init":false},
-                                        "editor_change":false
+                                        "editor_change":false,
+                                        "saleforce_campaigns":null
                                        };
                         this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
                         this.csvupload = new CSVUploadView({camp:this});
@@ -203,7 +239,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 					camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
 					camp_obj.mapdataview.$el.find('#newlist').val('');
 					camp_obj.mapdataview.$el.find('#alertemail').val('');
-					$('.loading').hide();
+					camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
 				},
                 init:function(){                                                                                                    
                     //Load mergeFields
@@ -250,9 +286,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 initListListing:function(){					
 					//var winheight = parseInt($(document).prop('scrollHeight'));
-					alert(this.get('winheight'));
-					var target_camps_top = this.$el.find('#area_choose_lists').offset().top;
-					alert(target_camps_top);
+					var target_camps_top = this.$el.find('#area_choose_lists').offset().top;					
 					var grid_height = winheight-(parseInt(target_camps_top)+60)-130;
 					
                     this.$el.find("#list_grid").bmsgrid({
@@ -764,6 +798,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                           camp_obj.app.showMessge(step3_json[0]); 
                        }
                   })  
+
                 },
                 saveStep4:function(){
                   return -1;  
@@ -821,14 +856,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         }
                     }).fail(function() { console.log( "error in detauls" ); });                    										
                     
-                    var salesforce_setting = this.app.getAppData("salesfocre");
+
+                    var salesforce_setting = camp_obj.app.getAppData("salesfocre");					
                     if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
                         this.$("#add_result_salesforce").show();
                         this.showSalesForceCampaigns();
                     }
                     else{
                         this.$("#add_result_salesforce").hide();
-                    }                   
+                    }
                                         
                     
                     URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
@@ -918,12 +954,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.app.checkError(camp_list_json)){
                         return false;
                      }
+					
+					camp_obj.$el.find('#area_choose_lists #target-lists .bmsgrid').remove();
+					camp_obj.$el.find("#area_choose_lists .col2 .bmsgrid").remove();
+					camp_obj.$el.find("#area_choose_lists").removeData("mapping");
+					
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0].listNum+'" checksum="'+val[0]["md5"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
+                        list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green add move-row">Use</a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
@@ -937,12 +978,19 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 							height:this.app.get('wp_height')-122,							
                             usepager : false,
                             colWidth : ['100%','100px']
-                    });					
-                    
+                    });					                    
                     this.$("#list_grid tr td:first-child").attr("width","100%");
                     this.$("#list_grid tr td:last-child").attr("width","100px");	
-                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);
-		    		this.$el.find("#target-lists .action").click(_.bind(this.addToRecipients,this));
+                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);										
+								
+					this.$el.find("#area_choose_lists").mapping({
+						gridHeight:this.app.get('wp_height')-122,
+						sumColumn: 'subscribers',
+						sumTarget: 'recpcount span',
+						loadTarget: ''
+						});
+					camp_obj.app.showLoading(false,camp_obj.$el.find('#area_choose_lists .leftcol'));
+		    		//this.$el.find("#target-lists .action").click(_.bind(this.addToRecipients,this));
                 },
 				createTargetsTable:function(xhr){ 
 					var camp_obj=this;
@@ -951,6 +999,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.app.checkError(targets_list_json)){
                         return false;
                      }
+					
+					camp_obj.$el.find('#area_choose_targets #targets .bmsgrid').remove();
+					camp_obj.$el.find("#area_choose_targets .col2 .bmsgrid").remove();
+					camp_obj.$el.find("#area_choose_targets").removeData("mapping");
+					
                     var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
                     this.$el.find(".target-count").html("Displaying <b>"+targets_list_json.count+"</b> targets");
 					//alert(targets_list_json);
@@ -958,7 +1011,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 						//alert(val[0]["filterNumber.encode"]);
                         target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
                         target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a id="'+val[0]["filterNumber.encode"]+'" class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
+                        target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a id="'+val[0]["filterNumber.encode"]+'" class="btn-green use">Edit</a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-green copy">Copy</a><a class="btn-green add move-row">Use</a></div></div></td>';                        
                         target_html += '</tr>';
                     });
                     target_html += '</tbody></table>';
@@ -972,15 +1025,27 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             colresize:false,
                             height:this.app.get('wp_height')-122,							
                             usepager : false,
-                            colWidth : ['auto','330']
-                    });                   	
+                            colWidth : ['auto','400']
+                    });
 					
-                    this.$("#targets tr td:first-child").attr("width","100%");
-                    this.$("#targets tr td:last-child").attr("width","150px");										
-                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);
-					
-					camp_obj.$el.find("#targets_grid .add").click(_.bind(this.addToTargetRecipients,this));
-                    camp_obj.$el.find("#targets_grid .use").click(_.bind(this.loadTarget,this));
+                    this.$("#targets tr td:first-child").attr("width","auto");
+                    this.$("#targets tr td:last-child").attr("width","230px");										
+                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);										
+								
+					this.$el.find("#area_choose_targets").mapping({
+						gridHeight:this.app.get('wp_height')-122,
+						sumColumn: 'subscribers',
+						sumTarget: 'trecpcount span',
+						loadTarget: function(obj) { 
+							camp_obj.loadTarget(obj);
+						},
+						copyTarget: function(obj) { 
+							camp_obj.copyTarget(obj);
+						},
+					});
+					camp_obj.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
+					/*camp_obj.$el.find("#targets_grid .add").click(_.bind(this.addToTargetRecipients,this));
+                    camp_obj.$el.find("#targets_grid .use").click(_.bind(this.loadTarget,this));*/
                 },
                 createCampaignListTable:function(xhr){                    
                     var camp_obj=this;
@@ -1084,13 +1149,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                           tr_copy.removeAttr("before_id");
                           $(this).remove();
                           tr_copy.find(".action .btn-red").removeClass("btn-red").addClass("btn-green").html("Add");                      
-                          tr_copy.find(".action").click(_.bind(me.addToRecipients,me));
-                          /*if(before_id){
-                              tr_copy.insertBefore(me.$("#list_grid #"+before_id));
-                          }
-                          else{
-                              tr_copy.appendTo(me.$("#list_grid tbody"));							
-                          }*/
+                          //tr_copy.find(".action").click(_.bind(me.addToRecipients,me));                          
                                                   var match = null;
                                                   $("#list_grid tbody").find("tr").each(function(){
                                                           if($(this).attr("id") == before_id){
@@ -1150,16 +1209,19 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                           this.$el.find("#trecpcount span").text(totalcount);
                   },                
                 showSalesForceCampaigns:function(){
-                    var camp_obj =this;
+                    var camp_obj =this;					
+					camp_obj.app.showLoading("Loading Salesforce Campaigns...",camp_obj.$el.find('#salesforce_setup .salesforce_campaigns .template-container'));
                     var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
+							camp_obj.app.showLoading(false,camp_obj.$el.find('#salesforce_setup .salesforce_campaigns .template-container'));
                             var camps_html = '<select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >';
                             camps_html += '<option value=""></option>';
                              var s_camps_json = jQuery.parseJSON(xhr.responseText);
                              if(camp_obj.app.checkError(s_camps_json)){
                                 return false;
                              }
+							 camp_obj.states.saleforce_campaigns = s_camps_json;
                              var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="sfcamp_list_grid"><tbody>';
                              $.each(s_camps_json.campList[0], function(index, val) {     
                                 var _selected = (camp_obj.states.step1.sfCampaignID==val[0].sfCampaignID)?"selected=selected":"";
@@ -1846,50 +1908,58 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 });
                             camp_obj.checkCSVUploaded();    
                         break;
-                        case 'choose_targets':
-                                //this.$el.find('#target-recipients-list').children().remove();
-                                this.$el.find('#target-recipients-list table tr').remove();
+                        case 'choose_targets':                                
+                                //this.$el.find('#area_choose_targets .rightcol table tr').remove();
                                 this.$el.find("#trecpcount span").text('0');
+								camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
                                 URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C";
                                 jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                        if(xhr && xhr.responseText){
-                                                camp_obj.createTargetsTable(xhr);
-                                                if(camp_obj.states.step3.recipientType.toLowerCase()=="target"){
-                                                    camp_obj.setRecipients();
-                                                }
-                                                camp_obj.checkCSVUploaded();
+
+
+                                if(xhr && xhr.responseText){										
+                                        camp_obj.createTargetsTable(xhr);
+                                        if(camp_obj.states.step3.recipientType.toLowerCase()=="target"){
+                                            camp_obj.setRecipients();
                                         }
+                                        camp_obj.checkCSVUploaded();
+                                }
+
                                 }).fail(function() { console.log( "error lists listing" ); });
-                                break;						   
+                                break;
                         case 'choose_lists':						   
-                                //Loading lists list
-                                this.app.showLoading("",this.$el.find('#target-lists'));
-                                this.$el.find('#recipients-list table tr').remove();
+                                //Loading lists list								
+                                //this.$el.find('#area_choose_lists .rightcol table tr').remove();
                                 this.$el.find("#recpcount span").text('0');
+								camp_obj.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));
                                 URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all";
                                 jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                        if(xhr && xhr.responseText){
-                                                camp_obj.createListTable(xhr);
-                                                camp_obj.app.setAppData("lists",jQuery.parseJSON(xhr.responseText));  
-                                                if(camp_obj.states.step3.recipientType.toLowerCase()=="list"){
-                                                    camp_obj.setRecipients();
-                                                }
-                                                camp_obj.checkCSVUploaded();
+
+                                if(xhr && xhr.responseText){										
+                                        camp_obj.createListTable(xhr);
+                                        camp_obj.app.setAppData("lists",jQuery.parseJSON(xhr.responseText));
+                                        if(camp_obj.states.step3.recipientType.toLowerCase()=="list"){
+                                            camp_obj.setRecipients();
                                         }
+
+                                        camp_obj.checkCSVUploaded();
+                                }
+
                                 }).fail(function() { console.log( "error lists listing" ); });
                                 break;
                         case 'upload_csv':						   
                            camp_obj.checkCSVUploaded();
-                           this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);
-                           //this.csvupload.$el.children().remove();
+                           this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);                           
                            camp_obj.csvupload.$el.show();
                            camp_obj.mapdataview.$el.hide();
                            break;
-                        case 'salesforce_import':
-                            this.setSalesForceWiz()
+                        case 'salesforce_import':                            
+                            camp_obj.checkCSVUploaded();
+                            this.checkSalesForceStatus();							
                         break;
-                        case 'netsuite_import':
-                            this.setNetSuiteWiz()
+                        case 'netsuite_import':                          
+                            camp_obj.checkCSVUploaded();							
+                            this.checkNetSuiteStatus();							
+
                         break;
                         default:
                             break;
@@ -1906,8 +1976,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 .done(function(data) {
                                         var list_json = jQuery.parseJSON(data);						   
                                         if(list_json[0] == 'success')
-                                        {
-                                               alert('Your csv upload has cancelled.');
+                                        {                                               
+											   camp_obj.app.showAlert('Your csv upload has cancelled.',camp_obj.$el);
                                                camp_obj.csvupload.$el.find("#dropped-files").children().remove();
                                                camp_obj.csvupload.$el.find("#drop-files .middle").css("display","block");
                                                camp_obj.csvupload.dataArray = [];
@@ -1916,7 +1986,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                                camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
                                                camp_obj.mapdataview.$el.find('#newlist').val('');
                                                camp_obj.mapdataview.$el.find('#alertemail').val('');
-                                               $('.loading').hide();
+                                               camp_obj.app.showLoading(false,camp_obj.csvupload.$el);
                                         }
                                 });
                         }
@@ -1930,7 +2000,6 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                               bodyCss:{"min-height":"430px"},
                               buttons: {saveBtn:{text:'Save Target'} }                                                                           
                         });
-
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id});
@@ -1938,15 +2007,31 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                       });      
                 },
+
                loadTarget:function(obj){
                    var target_obj = $.getObj(obj,"div");
                    var target_id = target_obj.attr("id");                 
                    this.initCreateEditTarget(target_id);
                },
-               setSalesForceWiz:function(){
+                checkSalesForceStatus: function(){
+                        var camp_obj = this;				   
+                        var salesforce_setting = this.app.getAppData("salesfocre");
+                        if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
+                        {
+                                camp_obj.app.showLoading("Getting Salesforce Status...",camp_obj.$el.find('#area_salesforce_import')); 
+                                this.app.getSalesForceStatus(_.bind(this.setSalesForceWiz,this));
+                        }
+                },
+               setSalesForceWiz:function(){				   	
+                    var camp_obj = this;
+                    camp_obj.app.showLoading(false,camp_obj.$el.find('#area_salesforce_import'));
                     var salesforce_setting = this.app.getAppData("salesfocre");
                     var self = this;
                     if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
+
+                        if(this.states.saleforce_campaigns ===null)
+                                this.showSalesForceCampaigns();
+
                         this.$("#salesforce_welcome").hide();
                         this.$("#salesforce_login").hide();
                         this.$("#salesforce_mapping").hide();
@@ -2037,21 +2122,20 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         });
                         this.states.step3.salesforce=true;
                         this.$("#sf_setting_menu li").click(_.bind(function(obj){
-                            var target_obj = $.getObj(obj,"li");
+                            var target_obj = $.getObj(obj,"li");							
                             if(target_obj.attr("id")=="sf_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
                                     css:{"width":"1200px","margin-left":"-600px"},
                                     bodyCss:{"min-height":"430px"},
                                     buttons: {saveBtn:{text:'Save Mapping'} }  
                                   });
-                                
+         
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/salesforce/mapping"],function(mappingPage){                                     
-                                     var mPage = new mappingPage({camp:self});
+                                     var mPage = new mappingPage({camp:self,app:camp_obj.app,dialog:dialog});
                                      dialog.getBody().html(mPage.$el);
                                      dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
                                 });
-                                
                             }
                             else if(target_obj.attr("id")=="sf_user_setting"){                                
                                 
@@ -2061,7 +2145,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/salesforce/login"],function(loginPage){                                        
-                                    var lPage = new loginPage({camp:self});
+                                    var lPage = new loginPage({camp:self,app:self.app,dialog:dialog});
                                     dialog.getBody().html(lPage.$el);
                                 })
                                 
@@ -2130,9 +2214,21 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         }                        
                    }); 
                },
-               setNetSuiteWiz:function(){
+                checkNetSuiteStatus: function(){
+                        var camp_obj = this;				   
+                        var netsuite_setting = this.app.getAppData("netsuite");
+                        if(!netsuite_setting || netsuite_setting[0] == "err" || netsuite_setting.isNetsuiteUser=="N")
+                        {
+                                camp_obj.app.showLoading("Getting Netsuite Status...",camp_obj.$el.find('#area_netsuite_import'));
+                                this.app.getNetSuiteStatus(_.bind(this.setNetSuiteeWiz,this));
+                        }
+                },
+               setNetSuiteeWiz:function(){
+                    var camp_obj = this;
+                    camp_obj.app.showLoading(false,camp_obj.$el.find('#area_netsuite_import'));
                    var netsuite_setting = this.app.getAppData("netsuite");
                     if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){
+                        this.loadNetSuiteGroup();
                         this.$("#netsuite_login").hide();
                         this.$("#netsuite_mapping").hide();
                         this.$("#netsuite_welcome").hide();
@@ -2145,8 +2241,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.$("#netsuite_mapping").hide();
                    }
                    var self = this;
-                   if(!this.states.step3.netsuite){     
-                       this.loadNetSuiteGroup();
+                   if(!this.states.step3.netsuite){                            
                        this.$("#groups_netsuite").chosen({width: "290px",disable_search: "true"}).change(function(){
                          $(this).val($(this).val())
                          $(this).trigger("chosen:updated")  
@@ -2219,8 +2314,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             gridcontainer: 'nsgroup_list_grid',
                             showicon: 'no',
                             iconsource: 'campaigns'
-                        });
-                        
+                        });                        
                         this.states.step3.netsuite=true;
                         
                         this.$("#ns_setting_menu li").click(_.bind(function(obj){
@@ -2234,7 +2328,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/netsuite/mapping"],function(mappingPage){                                     
-                                     var mPage = new mappingPage({camp:self});
+                                     var mPage = new mappingPage({camp:self,app:camp_obj.app,dialog:dialog});
                                      dialog.getBody().html(mPage.$el);
                                      dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
                                 });
@@ -2248,7 +2342,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/netsuite/login"],function(loginPage){                                        
-                                    var lPage = new loginPage({camp:self});
+                                    var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
                                     dialog.getBody().html(lPage.$el);
                                 })
                                 
@@ -2382,7 +2476,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     camp_obj.csvupload.$el.hide();
                     camp_obj.$el.find('#upload_csv').removeClass('selected');
                     camp_obj.mapdataview.$el.hide();
-                    $('.loading').hide();
+                    camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
                },
                saveLists:function(){
                    var selected_list = this.$("#area_choose_lists .col2 tr").map(function(){
