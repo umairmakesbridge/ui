@@ -44,7 +44,7 @@ function (template,Mapping) {
                                      fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                     
 
                                      var mapping_field = val[0].bmsMappingField;
-                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row'+system_flag+'">Add</a></div></td>';                        
+                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'">Add</a></div></td>';                        
 
                                      fields_html += '</tr>';
                                     }
@@ -53,14 +53,14 @@ function (template,Mapping) {
                                      c_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                  
                                      
                                      var mapping_field = val[0].bmsMappingField;
-                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row'+system_flag+'">Add</a></div></td>';                        
+                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'">Add</a></div></td>';                        
                                     }
                                     else if(val[0].nsObject=="Partner"){
                                         p_fields_html+= '<tr id="row_'+val[0].name+'">';                        
                                         p_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                  
 
                                         var mapping_field = val[0].bmsMappingField;
-                                        p_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row'+system_flag+'">Add</a></div></td>';                        
+                                        p_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'">Add</a></div></td>';                        
 
                                         p_fields_html += '</tr>';
                                     }
