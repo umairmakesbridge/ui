@@ -88,7 +88,7 @@
 }
 .ui-accordion .ui-accordion-header {
 	background: none repeat scroll 0 0 #F9F9F9;
-    border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 0px 0px;
     color: #62646D;
     cursor: pointer;
     display: block;
@@ -822,8 +822,7 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-	font-size: 1.1em;
+       font-family: 'PT Sans',sans-serif;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;

@@ -419,28 +419,6 @@
   </div>
   <div class="content-inner soruces" id="area_upload_csv" style="display:none">  	
   </div>
-  <div class="content-inner soruces" style="display:none" id="area_create_target">        
-        <div class="row c-name edited targt create_target" style="margin: 0 0 25px;" >
-            <h2  style="display:none;" id="target_name_text"><span></span> <a class="icon edit showtooltip" title="Edit Target Name"></a><a class="icon delete showtooltip" title="Delete Target"></a></h2>
-             <div class="edited" id="target_name_edit">
-                <input type="text" id="target_name" placeholder="Create New Target" />
-                <a class="btn-green save_btn savetarget">Save </a>
-                <a class="btn-gray cancel_btn canceltarget">Cancel </a>
-             </div>
-            <div class=" tagscont" id="targets_tags">
-                
-            </div> <!--     -->
-        </div>  
-        <div class="clearfix"></div>
-        
-        <div id="c_c_target">
-            
-        </div>
-        <div class="clearfix"></div>                                 
-        <div class="btns left">
-            <a  class="btn-blue left" id="save_target_detail">Save Target</a>
-       </div>
-  </div>
   <!-- Saelsforce import section starts -->
   <div id="area_salesforce_import" class="content-inner soruces clearfix" style="display: none">      
       <div id="salesforce_welcome" style="display:none">
@@ -497,10 +475,7 @@
                     </div>
                 </div>
           </div>
-          
-          <div class="btns left">
-            <a  class="btn-blue left" id="save_salesforce_detail">Save</a>
-          </div>
+                    
       </div>
   </div>
   <!-- Saelsforce import section Ends -->
@@ -553,9 +528,7 @@
               </div>
           </div>
           <div class="netsuite_after_filter" style="display: none;"></div>
-          <div class="btns left">
-            <a  class="btn-blue left" id="save_netsuite_detail">Save</a>
-          </div>
+          
       </div>
   </div>
   <!-- Netsuite import section End -->
@@ -564,8 +537,48 @@
 <div class="wizard-steps step4">
   <div class="row-fluid show-grid schedule-container">
     <div class="span8">
-      <div class="accordion" id="accordion_info">
-        <div class="accordion-group">
+        
+      <div id="accordion_info">
+      <h3  class="clearfix"><span class="icon h-info "></span>Header Information <b class="caret"></b> </h3>
+        <div class="accordion-inner">
+            <div class="row">
+                <label>Subject</label>
+                <span class="text" id="campaign_preview_subject">Subject of the campaign</span></div>
+              <div class="row">
+                <label>From Email</label>
+                <span class="text" id="campaign_preview_fromEmail">demo@bridgemailsystem.com</span></div>
+              <div class="row">
+                <label>From Name</label>
+                <span class="text" id="campaign_preview_defaultSenderName">MakesBridge Technology</span></div>
+              <div class="row">
+                <label>Reply To</label>
+                <span class="text" id="campaign_preview_defaultReplyTo">babar@makesbridge.com</span></div>
+        </div>
+       <h3  class="clearfix"><span class="icon settings"></span>Settings  <b class="caret"></b> </h3>
+        <div class="accordion-inner">
+            <div  class="row fluidlabel">
+                <label class="checked">Subscriber Information Update </label>
+              </div>
+              <div class="row fluidlabel">
+                <label class="checked">Send Text version only </label>
+              </div>
+              <div class="row fluidlabel">
+                <label class="checked">Show web version on my email </label>
+              </div>
+              <div class="row fluidlabel" style="margin:15px 0 0;">
+                <label class=""><strong>Company and Physical Address in email footer:</strong></label>
+                <p style="clear:both;">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. </p>
+              </div>
+        </div>
+        <h3  class="clearfix"><span class="icon target"></span>Target  <b class="caret"></b> </h3>
+        <div class="accordion-inner">
+            <div class="list_target-listing"> </div>
+        </div>
+       
+     </div>
+        
+       <!--<div class="accordion" id="accordion_info">
+      <div class="accordion-group">
           <div class="accordion-heading"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_info" href="#collapseHeaderInfo">
             <h2 class="clearfix"><span class="icon h-info "></span>Header Information </h2>
             <b class="caret"></b> </a> <a href="" class="icon edit"></a> </div>
@@ -607,18 +620,18 @@
               </div>
             </div>
           </div>
-        </div>
         <div class="accordion-group">
           <div class="accordion-heading"> <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_info" href="#collapseTarget">
             <h2 class="clearfix"><span class="icon target"></span>Target </h2>
             <b class="caret"></b> </a> <a href="" class="icon edit"></a> </div>
           <div id="collapseTarget" class="accordion-body collapse">
             <div class="accordion-inner">
-              <div class="list_target-listing"> </div>
+              
             </div>
           </div>
         </div>
-      </div>
+      </div>        </div>-->
+
       <!-- Accordian --> 
       
     </div>
@@ -663,7 +676,9 @@
         <b class="caret"></b> </a> <a href="" class="icon edit"></a> <a class="icon newwin" href=""></a> </div>
       <div class="accordion-body collapse in" id="collapseOne">
         <div class="accordion-inner">
-          <div class="newsletter-preview"> <img src="img/newsletter-full.jpg" style="display: block; margin: 0 auto; width: 500px;" alt="" /> </div>
+          <div class="email-preview">
+              
+          </div>
         </div>
       </div>
     </div>

@@ -990,3 +990,10 @@ ul.tabs-btns li.active a{
 .modal{
     z-index:1001; 
 }
+.schedule-container h3 .icon {
+    float: left;
+    margin: 0 7px 0 -3px;
+}
+.ui-accordion h3:first-child{
+    margin-top:0px;
+}

@@ -98,11 +98,13 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                            
                             this.$el.find(".step-contents .step"+this.active_step).hide();
                             this.active_step = parseInt(this.active_step)-1
-                            this.$el.find(".step-contents .step"+this.active_step).fadeIn(); 
-							if(this.active_step == 3)
-							{
-								this.page.removeCSVUpload();
-							}
+                            this.$el.find(".step-contents .step"+this.active_step).fadeIn(_.bind(function(){
+                               if(this.page.initStepCall){
+                                this.page.initStepCall("step_"+parseInt(this.active_step));
+                               }
+                               
+                            },this)); 
+							
                             //Moving Steps prgoress bar
                             this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
                             this.$el.find(".progtrckr .active").removeClass("active");

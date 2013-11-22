@@ -87,14 +87,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                       'change .step2 #myhtml':function(){
                           this.states.editor_change = true;
                       }                      
-                      ,'click .step3 #save_salesforce_detail':function(){
-                          this.saveSalesForceDetails();
-                      }
-                      ,'click .step3 #save_netsuite_detail':function(){
-                          this.saveNetSuiteDetails()
-                      },
+                      ,
                       'click .step3 #addnew_target':function(){
                           this.initCreateEditTarget();
+                      },
+                      'keydown .step3 input':function(){
+                          this.states.step3.netsuite=true;
+                      },
+                      'change .step3 select,change .step3 input':function(){
+                          this.states.step3.netsuite=true;
                       }
                     },
 
@@ -109,13 +110,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0,salesforce:false,netsuite:false},
-                                        "step4":{},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",change:false},
+                                        "step4":{"init":false},
                                         "editor_change":false
                                        };
                         this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
-						this.csvupload = new CSVUploadView({camp:this});
-						this.mapdataview = new MapDataView({camp:this});
+                        this.csvupload = new CSVUploadView({camp:this});
+                        this.mapdataview = new MapDataView({camp:this});
                         this.render();
                 },
 
@@ -206,9 +207,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 				},
                 init:function(){                                                                                                    
                     //Load mergeFields
-                    this.mergeFieldsSetup();
-                    //Load Calender
-                    this.createCalender();
+                    this.mergeFieldsSetup();                    
                     this.initHeader();
                     //
                     this.setupCampaign();
@@ -313,16 +312,14 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
 
-                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject)); 
-                        camp_obj.$("#campaign_preview_subject").html(camp_json.subject);
-                        camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
-                        camp_obj.$("#campaign_preview_fromEmail").html(camp_json.fromEmail);
-                        camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));
-                        camp_obj.$("#campaign_preview_defaultSenderName").html(camp_json.defaultSenderName);
-                        camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                
-                        camp_obj.$("#campaign_preview_defaultReplyTo").html(camp_json.defaultReplyTo);
+                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));                        
+                        camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail));                        
+                        camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
+                        camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                                        
                         camp_obj.$("#campaign_footer_text").val(camp_json.footerText);
                         camp_obj.states.step2.htmlText = camp_json.htmlText;
+                        
+                        camp_obj.states.step3.recipientType = camp_json.recipientType;
 
                         if(camp_json.defaultSenderName){
                              camp_obj.$("#campaign_from_name_default").show();
@@ -405,11 +402,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             camp_obj.setConversionPage();
                         }
                         
-
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=source";
                         camp_obj.$el.find("#list_grid input[type='checkbox']").prop("checked",false);
                         camp_obj.$el.find("#list_grid tr").removeClass("trSelected");
-
                         jQuery.getJSON(URL,  function(tsv, state, xhr){
                             var selected_lists = jQuery.parseJSON(xhr.responseText);
                              if(camp_obj.app.checkError(selected_lists)){
@@ -488,6 +483,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             case 'step_2':
                                 this.initStep2();
                                 break;                                
+                            case 'step_3':
+                                this.initStep3();
+                                break;
+                            case 'step_4':
+                                this.initStep4();
+                                break;    
                             default:
                                 break;
                         }
@@ -497,6 +498,32 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.states.step2.htmlText){
                         this.setEditor();
                         tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
+                    }
+                },
+                initStep3:function(){
+                    if(this.states.step3.recipientType){
+                        var source_li = "choose_lists";
+                        if(this.states.step3.recipientType.toLowerCase()=="list"){
+                            source_li = "choose_lists";
+                        }
+                        else if(this.states.step3.recipientType.toLowerCase()=="target"){
+                            source_li = "choose_targets";
+                        }
+                        else if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
+                            source_li = "salesforce_import";
+                        }
+                        else if(this.states.step3.recipientType.toLowerCase()=="netsuite"){
+                            source_li = "netsuite_import";
+                        }
+                        this.$(".step3 #"+source_li).click();
+                    }
+                },
+                initStep4:function(){
+                    if(this.states.step4.init===false){
+                        //Load Calender
+                        this.createCalender();
+                        this.$("#accordion_info").accordion({ collapsible: true});
+                        this.states.step4.init = true;
                     }
                 },
                 setupCampaign:function(){
@@ -653,7 +680,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(typeof(gotoNext)==="undefined"){
                        this.app.showLoading("Saving Step 2...",this.$el.parents(".ws-content"));
                     }
-                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                   var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                    $.post(URL, { type: "saveStep2",campNum:this.camp_id,
                                  htmlCode: html      
                          })
@@ -677,17 +704,66 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                  }  
                 return proceed;  
                 },
-                saveStep3:function(){
-					var camp_obj = this;
-					if(camp_obj.csvupload.fileuploaded == true)
-					{
-						return camp_obj.mapdataview.mapAndImport(); 
-					}
-					camp_obj.csvupload.$el.hide();
-					camp_obj.$el.find('#upload_csv').removeClass('selected');
-					camp_obj.mapdataview.$el.hide();
-					$('.loading').hide();
-                  //return -1;  
+                saveStep3:function(){ 
+                  if(this.states.step3.change===false){
+                      return -1;
+                  }  
+                  var source = this.$(".step3 #choose_soruce li.selected").attr("id");                    
+                  if(source=="upload_csv"){
+                       this.saveCSVUpload();                            
+                       this.step3SaveCall({'recipientType':'List'});
+                  }
+                  else if(source=="choose_lists"){
+                      var lists = this.saveLists();
+                       if(!lists){
+                           return false;
+                       }   
+                       this.step3SaveCall({'recipientType':'List',listNum:lists});
+                  }
+                  else if(source=="choose_targets"){
+                       var targets = this.saveTargets();    
+                       if(!targets){
+                           return false;
+                       }
+                       this.step3SaveCall({'recipientType':'Target',filterNumber:targets});
+                  }
+                  else if(source=="salesforce_import"){
+                       this.saveSalesForceDetails();                           
+                  }
+                  else if(source=="netsuite_import"){
+                       this.saveNetSuiteDetails();                           
+                  }     
+                  else{
+                      this.app.showAlert('We are not currently supporting Tags',$("body"));                      
+                  }     
+                  //Save call step 3
+                  return 1;
+                },
+                step3SaveCall:function(options){
+                  var camp_obj = this; 
+                  var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                  var no_list = "";
+                  var post_data = {type:"recipientType",campNum:this.camp_id};                  
+                  if(options){
+                    $.each(options,function(key,val){
+                        post_data[key] = val;
+                    })
+                  }
+                  this.app.showLoading("Saving Step 3",this.$el.parents(".ws-content"));  
+                  $.post(URL,post_data)
+                   .done(function(data) {                                 
+                       var step3_json = jQuery.parseJSON(data);
+                       camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                       
+                       if(step3_json[0]!=="err"){
+                           camp_obj.app.showMessge("Step 3 saved successfully!");                                                          
+                           camp_obj.states.step3.recipientType = post_data['recipientType'];
+                           camp_obj.states.step3.change= false;
+                           camp_obj.wizard.next();
+                       }
+                       else{
+                          camp_obj.app.showMessge(step3_json[0]); 
+                       }
+                  })  
                 },
                 saveStep4:function(){
                   return -1;  
@@ -845,7 +921,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
-                        list_html += '<tr id="row_'+val[0].listNum+'">';                        
+                        list_html += '<tr id="row_'+val[0].listNum+'" checksum="'+val[0]["md5"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Add</a></div></td>';                        
                         list_html += '</tr>';
@@ -880,7 +956,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 					//alert(targets_list_json);
                     $.each(targets_list_json.filters[0], function(index, val) {
 						//alert(val[0]["filterNumber.encode"]);
-                        target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'">';                        
+                        target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
                         target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
                         target_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a id="'+val[0]["filterNumber.encode"]+'" class="btn-green use">Use</a><a class="btn-green add">Add</a></div></div></td>';                        
                         target_html += '</tr>';
@@ -1269,35 +1345,28 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 createCalender:function(){
                      var transEndEventNames = {
-                                    'WebkitTransition' : 'webkitTransitionEnd',
-                                    'MozTransition' : 'transitionend',
-                                    'OTransition' : 'oTransitionEnd',
-                                    'msTransition' : 'MSTransitionEnd',
-                                    'transition' : 'transitionend'
-                            },
-                            transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
-                            $wrapper = $( '#custom-inner' ),
-                            $calendar = $( '#calendar' ),
-                            cal = $calendar.calendario( {
-                                    onDayClick : function( $el, $contentEl, dateProperties ) {
+                            'WebkitTransition' : 'webkitTransitionEnd',
+                            'MozTransition' : 'transitionend',
+                            'OTransition' : 'oTransitionEnd',
+                            'msTransition' : 'MSTransitionEnd',
+                            'transition' : 'transitionend'
+                    },
+                    transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
+                    $wrapper = this.$( '#custom-inner' ),
+                    $calendar = this.$( '#calendar' ),
+                    cal = $calendar.calendario( {
+                        onDayClick : function( $el, $contentEl, dateProperties ) {
 
-                                            if( $contentEl.length > 0 ) {
-                                                    showEvents( $contentEl, dateProperties );
-                                            }
+                                if( $contentEl.length > 0 ) {
+                                        showEvents( $contentEl, dateProperties );
+                                }
 
-                                    },                                    
-                                    displayWeekAbbr : true
-                            } ),
-                            $month = $( '#custom-month' ).html( cal.getMonthName() ),
-                            $year = $( '#custom-year' ).html( cal.getYear() );
-
-                    $( '#custom-next' ).on( 'click', function() {
-                            cal.gotoNextMonth( updateMonthYear );
-                    } );
-                    $( '#custom-prev' ).on( 'click', function() {
-                            cal.gotoPreviousMonth( updateMonthYear );
-                    } );
-
+                        },                                    
+                        displayWeekAbbr : true
+                    } ),
+                    $month = this.$( '#custom-month' ).html( cal.getMonthName() ),
+                    $year = this.$( '#custom-year' ).html( cal.getYear() );
+                    
                     function updateMonthYear() {				
                             $month.html( cal.getMonthName() );
                             $year.html( cal.getYear() );
@@ -1305,30 +1374,30 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 
                     // just an example..
                     function showEvents( $contentEl, dateProperties ) {
-
-                            hideEvents();
-
-                            var $events = $( '<div id="custom-content-reveal" class="custom-content-reveal"><h4>Campaigns for ' + dateProperties.monthname + ' ' + dateProperties.day + ', ' + dateProperties.year + '</h4></div>' ),
-                                    $close = $( '<span class="icon close custom-content-close "></span>' ).on( 'click', hideEvents );
-
-                            $events.append( $contentEl.html() , $close ).insertAfter( $wrapper );
-
-                            setTimeout( function() {
-                                    $events.css( 'top', '0%' );
-                            }, 25 );
+                        hideEvents();
+                        var $events = $( '<div id="custom-content-reveal" class="custom-content-reveal"><h4>Campaigns for ' + dateProperties.monthname + ' ' + dateProperties.day + ', ' + dateProperties.year + '</h4></div>' ),
+                                $close = $( '<span class="icon close custom-content-close "></span>' ).on( 'click', hideEvents );
+                        $events.append( $contentEl.html() , $close ).insertAfter( $wrapper );
+                        setTimeout( function() {
+                                $events.css( 'top', '0%' );
+                        }, 25 );
 
                     }
                     function hideEvents() {
+                        var $events = $( '#custom-content-reveal' );
+                        if( $events.length > 0 ) {
 
-                            var $events = $( '#custom-content-reveal' );
-                            if( $events.length > 0 ) {
+                                $events.css( 'top', '100%' );
+                                Modernizr.csstransitions ? $events.on( transEndEventName, function() { $( this ).remove(); } ) : $events.remove();
 
-                                    $events.css( 'top', '100%' );
-                                    Modernizr.csstransitions ? $events.on( transEndEventName, function() { $( this ).remove(); } ) : $events.remove();
-
-                            }
-
+                        }
                     }
+                    this.$( '#custom-next' ).on( 'click', function() {
+                            cal.gotoNextMonth( updateMonthYear );
+                    } );
+                    this.$( '#custom-prev' ).on( 'click', function() {
+                            cal.gotoPreviousMonth( updateMonthYear );
+                    } );
                 },
                 mergeFieldsSetup:function(){
                     $(".mergefields .merge-feilds-type li").click(_.bind(this.showMergeFields,this));
@@ -1785,6 +1854,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){
                                                 camp_obj.createTargetsTable(xhr);
+                                                if(camp_obj.states.step3.recipientType.toLowerCase()=="target"){
+                                                    camp_obj.setRecipients();
+                                                }
                                                 camp_obj.checkCSVUploaded();
                                         }
                                 }).fail(function() { console.log( "error lists listing" ); });
@@ -1799,6 +1871,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                         if(xhr && xhr.responseText){
                                                 camp_obj.createListTable(xhr);
                                                 camp_obj.app.setAppData("lists",jQuery.parseJSON(xhr.responseText));  
+                                                if(camp_obj.states.step3.recipientType.toLowerCase()=="list"){
+                                                    camp_obj.setRecipients();
+                                                }
                                                 camp_obj.checkCSVUploaded();
                                         }
                                 }).fail(function() { console.log( "error lists listing" ); });
@@ -1818,7 +1893,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         break;
                         default:
                             break;
-                    }			
+                    }
+                    this.states.step3.change = true;
                },
                 checkCSVUploaded:function()
                 {
@@ -1870,7 +1946,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                setSalesForceWiz:function(){
                     var salesforce_setting = this.app.getAppData("salesfocre");
                     var self = this;
-                    if(salesforce_setting.isSalesforceUser=="Y"){
+                    if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
                         this.$("#salesforce_welcome").hide();
                         this.$("#salesforce_login").hide();
                         this.$("#salesforce_mapping").hide();
@@ -1930,6 +2006,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                     self.$("#salesforce_setup .salesforce_all_leads_contants .sf_lcount").html(total_count.leadCount);
                                 })
                             }
+                            self.states.step3.change = true;                                
                         })
                         this.$("#salesforce_import_type").chosen({width: "190px",disable_search: "true"}).change(function(){
                             var filter_type = $(this).val();
@@ -1947,6 +2024,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             }
                             $(this).val($(this).val());
                             $(this).trigger("chosen:updated");
+                            self.states.step3.change = true;                                
                         })
                         this.$("#salesforce-camp-search").searchcontrol({
                             id:'salesforce-camp-search',
@@ -1962,9 +2040,9 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             var target_obj = $.getObj(obj,"li");
                             if(target_obj.attr("id")=="sf_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
-                                                                css:{"width":"1200px","margin-left":"-600px"},
-                                                                bodyCss:{"min-height":"430px"},
-                                                                buttons: {saveBtn:{text:'Save Mapping'} }  
+                                    css:{"width":"1200px","margin-left":"-600px"},
+                                    bodyCss:{"min-height":"430px"},
+                                    buttons: {saveBtn:{text:'Save Mapping'} }  
                                   });
                                 
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
@@ -2038,11 +2116,14 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                    else if(salesforce_val=="all"){
                        post_data['filterType']= "all";                       
                    }                   
+                   this.app.showLoading("Saving Salesforce Settings...",this.$el.parents(".ws-content"));  
                    $.post(URL,post_data)
                     .done(function(data) {                              
                         var camp_json = jQuery.parseJSON(data);                              
+                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));  
                         if(camp_json[0]!=="err"){                           
-                           camp_obj.app.showMessge("Saved Successfully!");
+                           //camp_obj.app.showMessge("Saved Successfully!");
+                           camp_obj.step3SaveCall({'recipientType':'Salesforce'});
                         }
                         else{                                  
                             camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
@@ -2051,7 +2132,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                },
                setNetSuiteWiz:function(){
                    var netsuite_setting = this.app.getAppData("netsuite");
-                    if(netsuite_setting.isNetsuiteUser=="Y"){
+                    if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){
                         this.$("#netsuite_login").hide();
                         this.$("#netsuite_mapping").hide();
                         this.$("#netsuite_welcome").hide();
@@ -2101,6 +2182,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 }
                             }
                          }
+                         self.states.step3.change = true;
                        })
                        this.$("#netsuite_import_type").chosen({width: "190px",disable_search: "true"}).change(function(){                           
                             $(this).val($(this).val());
@@ -2123,10 +2205,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 self.$(".netsuite_after_filter .contact-accordion").hide();
                                 self.$(".netsuite_after_filter .partner-accordion").show();
                             }
-                                
+                            self.states.step3.change = true;                                
                        })
                        this.$("#netsuite_setup .customer-type button").click(function(){
                            $(this).find("input").prop("checked",!$(this).find("input").prop("checked"));
+                           self.states.step3.change = true;                                
                        })
                        this.$("#netsuite-group-search").searchcontrol({
                             id:'netsuite-group-search',
@@ -2276,17 +2359,73 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                        }
                        
                    }
-                  
+                   this.app.showLoading("Saving Netsuite settings...",this.$el.parents(".ws-content"));  
                    $.post(URL,post_data)
                     .done(function(data) {                              
-                        var camp_json = jQuery.parseJSON(data);                              
+                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));  
+                        var camp_json = jQuery.parseJSON(data);                                                      
                         if(camp_json[0]!=="err"){                           
-                           camp_obj.app.showMessge("Saved Successfully!");
+                           //camp_obj.app.showMessge("Saved Successfully!");
+                           camp_obj.step3SaveCall({'recipientType':'Netsuite'});
                         }
                         else{                                  
                             camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
                    }); 
+               },
+               saveCSVUpload:function(){
+                   var camp_obj = this;
+                    if(camp_obj.csvupload.fileuploaded == true)
+                    {
+                            return camp_obj.mapdataview.mapAndImport(); 
+                    }
+                    camp_obj.csvupload.$el.hide();
+                    camp_obj.$el.find('#upload_csv').removeClass('selected');
+                    camp_obj.mapdataview.$el.hide();
+                    $('.loading').hide();
+               },
+               saveLists:function(){
+                   var selected_list = this.$("#area_choose_lists .col2 tr").map(function(){
+                                            return $(this).attr("id").split("_")[1]
+                                        }).toArray().join();
+                   if(!selected_list){
+                       this.app.showAlert("Please select list(s) to set recipients",$("body"),{fixed:true});
+                   }
+                   return selected_list;
+               },
+               saveTargets:function(){
+                   var selected_targets = this.$("#area_choose_targets .col2 tr").map(function(){
+                                return $(this).attr("id").split("_")[1]
+                            }).toArray().join();
+                   if(!selected_targets){
+                       this.app.showAlert("Please select target(s) to set recipients",$("body"),{fixed:true});
+                   }
+                   return selected_targets;
+               },
+               setRecipients:function(){
+                   var camp_obj = this;
+                   this.app.showLoading("Loading Recipients...",this.$el.parents(".ws-content"));  
+                   var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=recipientType";
+                   jQuery.getJSON(URL,  function(tsv, state, xhr){
+                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                              
+                            if(xhr && xhr.responseText){                               
+                               var rec_josn = jQuery.parseJSON(xhr.responseText);                                   
+                               if(camp_obj.app.checkError(rec_josn)){
+                                    return false;
+                               } 
+                               if(rec_josn.type.toLowerCase()=="list"){
+                                   $.each(rec_josn.listNumbers[0], function(index, val) { 
+                                        camp_obj.$(".step3 #area_choose_lists .col1 tr[checksum='"+val[0].checksum+"'] .btn-green").click();
+                                   })   
+                               }
+                               else if(rec_josn.type.toLowerCase()=="target"){
+                                   $.each(rec_josn.filterNumbers[0], function(index, val) { 
+                                        camp_obj.$(".step3 #area_choose_targets .col1 tr[checksum='"+val[0].checksum+"'] .add").click();
+                                   })   
+                               }
+                               camp_obj.states.step3.change = false;
+                            }
+                    }).fail(function() { console.log( "Receipts data load failed" ); });
                }
                
                 
