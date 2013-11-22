@@ -20,15 +20,12 @@ function ($,Backbone,_,app,template,chosen) {
 				  }
 				  el.find('.lt-toggle .btn').removeClass('active');
 				  $(obj.target).addClass('active');
-			 },
-			 'click a.nextbtn':function(obj){
-				  alert('clicked');
-			  },
+			 },			
 			 'click .fubackbtn':function(){
 				 var curview = this.camp_obj;
 				 curview.csvupload.$el.show();
 				 curview.mapdataview.$el.hide();
-				 $('.loading').hide();
+				 app.showLoading(false,curview.mapdataview.$el);
 			 },			 
 		},	
 		mapAndImport: function(){
@@ -42,8 +39,8 @@ function ($,Backbone,_,app,template,chosen) {
 		   if(actid == 'new')
 		   {
 			   if(el.find('#newlist').val() == '')
-			   {
-				  alert('Please supply list');
+			   {				  
+				  app.showAlert('Please supply list',curview.mapdataview.$el);
 				  isValid = false;
 			   }
 			   else
@@ -56,7 +53,7 @@ function ($,Backbone,_,app,template,chosen) {
 		   {
 			  if(el.find('#existing_lists').val() == '')
 			  {	 
-				  alert('Please supply list');
+				  app.showAlert('Please supply list',curview.mapdataview.$el);
 				  isValid = false;
 			  }
 			  else
@@ -79,16 +76,16 @@ function ($,Backbone,_,app,template,chosen) {
 			});
 			if(layout_map == "")
 			{
-			  isValid = false;
-			  alert('Please supply mapping fields');
+			  isValid = false;			 
+			  app.showAlert('Please supply mapping fields',curview.mapdataview.$el);
 			}
 			else
 			{
 				var $maps = layout_map.split(',');
 				if( $maps[0] ==  $maps[1] ||
 				   $maps[0] ==  $maps[2] ||
-				   $maps[2] ==  $maps[3]) {
-					  alert('Please supply correct mapping fields');
+				   $maps[2] ==  $maps[3]) {					  
+					  app.showAlert('Please supply correct mapping fields',curview.mapdataview.$el);
 					  isValid = false;
 				}
 				else
@@ -110,11 +107,11 @@ function ($,Backbone,_,app,template,chosen) {
 					   curview.mapdataview.savecampaign(list_json[2],list_json[1]);
 				   }
 				   else
-				   {
-					  alert(list_json[1]);
+				   {					  
+					  app.showAlert(list_json[1],curview.mapdataview.$el);
 					  return false;
 				   }
-				   $('.loading').hide();
+				   app.showLoading(false,curview.mapdataview.$el);
 			   });
 		   }
 		   else
@@ -128,15 +125,12 @@ function ($,Backbone,_,app,template,chosen) {
 				var camp_json = jQuery.parseJSON(data);
 				if(camp_json[0] == "success"){
 					campview.csvupload.removeFile();
-					app.showMessge(alertMsg);
-					/*alert(alertMsg);
-					campview.csvupload.$el.show();
-					campview.mapdataview.$el.hide();*/
+					app.showMessge(alertMsg);					
 					return 1;
 				}
 				else
 				{
-					alert(list_json[1]);
+					app.showAlert(list_json[1],campview.mapdataview.$el);
 					return false;
 				}
 			});

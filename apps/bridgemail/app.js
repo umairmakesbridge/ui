@@ -109,8 +109,7 @@ define([
                        }
                    });
                  //this.mainContainer.bmseditor.initEditor();
-                 this.loadAppData();
-                   
+                 //this.loadAppData();                   
              },
              checkError:function(result){
                  var isError = false;
@@ -231,7 +230,43 @@ define([
             getAppData:function(appVar){
                return this.get("app_data")[appVar];   
             },
-            loadAppData:function(){
+			getSalesForceStatus: function(callback)
+			{
+				var app = this;
+				var retStatus = 0;
+                var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                    if(xhr && xhr.responseText){
+                         var salesforce = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(salesforce)){
+                             //return false;
+                         }                        
+                        app.setAppData("salesfocre",salesforce);
+						callback();
+						retStatus = 1;
+                    }
+              	}).fail(function() { console.log( "error in salesforce fields" ); });
+				return retStatus;
+			},
+			getNetSuiteStatus: function(callback)
+			{
+				var app = this;
+				var retStatus = 0;
+				URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
+                jQuery.getJSON(URL,  function(tsv, state, xhr){
+                    if(xhr && xhr.responseText){                        
+                         var netstuite = jQuery.parseJSON(xhr.responseText);                                
+                         if(app.checkError(netstuite)){
+                             //return false;
+                         }                        
+                        app.setAppData("netsuite",netstuite);
+						callback();
+						retStatus = 1;
+                    }
+              	}).fail(function() { console.log( "error in salesforce fields" ); });
+				return retStatus;
+			},
+            /*loadAppData:function(){
                 var app = this;
                 var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -254,8 +289,8 @@ define([
                         app.setAppData("netsuite",netstuite);                        
                     }
               }).fail(function() { console.log( "error in salesforce fields" ); });                                          
-            }
-            ,showDialog:function(options){
+            }*/
+            showDialog:function(options){
                 var dialog = new bmsDialog(options);                
                 
                 $("body").append(dialog.$el);

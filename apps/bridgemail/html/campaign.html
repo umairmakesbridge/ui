@@ -372,23 +372,14 @@
       <h2 class="header-list">Lists
         <div id="listssearch" class="input-append search"> </div>
       </h2>
-      <div class="template-container" style="margin-right:5px">
+      <div class="template-container leftcol" style="margin-right:5px">
         <div class="target-listing" id="target-lists"> </div>
       </div>
     </div>
     <div class="col2">
       <h2 class="header-list">Recipients<span id="recpcount" class="recpscount"><span>0</span> Records Found</span></h2>
-      <div class="template-container" style="margin-left:5px">
-        <div class="bmsgrid">
-          <div id="recipients-list" class="bDiv" style="height:290px;">
-            <table id="list_grid_recipients" cellspacing="0" cellpadding="0" border="0" style="display: table;">
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!--<div class="unique_rec"><strong>&nbsp;</strong><span>&nbsp;</span></div>-->
-      </div>
+      <div class="template-container rightcol" style="margin-left:5px">
+      </div>  
     </div>
   </div>
   <!-- template-container  -->  
@@ -397,22 +388,14 @@
       <h2 class="header-list">Targets
         <div id="targetsearch" class="input-append search"> </div>
       </h2>
-      <div class="template-container" style="margin-right:5px">
+      <div class="template-container leftcol" style="margin-right:5px">
         <div class="target-listing" id="targets"> </div>
       </div>
     </div>
     <div class="col2">
       <h2 class="header-list">Recipients<span id="trecpcount" class="recpscount"><span>0</span> Records Found</span></h2>
-      <div class="template-container" style="margin-left:5px">
-        <div class="bmsgrid">
-          <div id="target-recipients-list" class="bDiv">
-            <table id="target_grid_recipients" cellspacing="0" cellpadding="0" border="0" style="display: table;">
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!--<div class="unique_rec"><strong>&nbsp;</strong><span>&nbsp;</span></div>-->
+      <div class="template-container rightcol" style="margin-left:5px">
+        
       </div>
     </div>
   </div>
@@ -447,7 +430,7 @@
        <div class="recept">
           <img src="img/salesforce-logo.jpg" alt="" />
           <div class="clearfix"></div>
-           <a href="" class="btn-green">Setup Salesforce Account</a>
+           <a id="btnSFLogin" class="btn-green">Setup Salesforce Account</a>
       </div>
      </div>      
       <div id="salesforce_setup" style="display:none">
@@ -510,7 +493,7 @@
             <div class="recept">
                <img src="img/netsuite-logo.jpg" alt="" />
                <div class="clearfix"></div>
-                <a href="" class="btn-green">Setup Netsuite Account</a>
+                <a id="btnNSLogin" class="btn-green">Setup Netsuite Account</a>
             </div>
       </div>    
       <div id="netsuite_setup" style="display:none">

@@ -39,14 +39,14 @@ function (template,Mapping) {
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                           
                                      fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                     
                                       var mapping_field = val[0].bmsMappingField;
-                                     fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use">Add</a></div></td>';                        
+                                     fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row">Add</a></div></td>';                        
                                      fields_html += '</tr>';
                                     }
                                     else{
                                      c_fields_html+= '<tr id="row_'+val[0].name+'">';                        
                                      c_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                  
                                      var mapping_field = val[0].bmsMappingField;
-                                     c_fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use">Add</a></div></td>';                        
+                                     c_fields_html += '<td><div class="type show" style="width:90px"><span class=""></span>'+mapping_field+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row">Add</a></div></td>';                        
                                      c_fields_html += '</tr>';
                                     }
                                    }

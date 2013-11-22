@@ -57,11 +57,13 @@ h2.header-list span.recpscount {
 }
 #list_grid_recipients .btn-red, #target_grid_recipients .btn-red, #target-lists .btn-green { padding:6px 15px; }
 #list_grid_recipients .subscribers, #target-lists .subscribers { margin:13px 0px 13px 25px; }
-#targets_grid .subscribers, #target_grid_recipients .subscribers { margin:13px 0px 13px 85px; }
+#targets_grid .subscribers, #target_grid_recipients .subscribers { margin:13px 0px 13px 150px; }
+#area_choose_targets .col2 .subscribers { margin-left:150px; }
+#area_choose_targets .col2 table { width:100%; }
 #list_grid_recipients .action, #target-lists .action { right:10px; top:-1px; }
 #targets_grid .action, #target_grid_recipients .action { right:10px; }
 #targets_grid .action .btn-green { float:left; margin-left:10px; }
-#targets_grid .action .use { margin-left:0; }
+#targets_grid .action .use { /*margin-left:0;*/ }
 #salesforce_campaigns .chosen-container .chosen-drop {  }
 .chosen-container-single .chosen-drop { margin-top:6px; border-top:solid 1px #aaa; }
 .chosen-drop:after {  
@@ -196,3 +198,21 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 #campaigns_list .template-container { margin-top:0; }
 .tabel-div .table tbody tr td { padding:5px; }
 .tabel-div .table thead { border-collapse: separate; }
+.cont-box input[type="password"] {
+    float: right;
+    font-size: 12px;
+    margin: 0;
+    width: 70%;
+}
+.cont-box .saving
+{
+	display:block;
+	float:right;
+	position:relative;
+	right:125px;
+	top:-6px;
+	width:25px;
+	height:17px;
+	min-width:inherit;
+	min-height:inherit;
+}
