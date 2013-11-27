@@ -116,7 +116,7 @@ function (template) {
 					var salesforce_setting = this.app.getAppData("salesfocre");
 					if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y")
 					{
-                                                el.find('#sf_userid,#sf_pwd,#sf_email').attr('readonly','readonly');
+                        el.find('#sf_userid,#sf_pwd,#sf_email').attr('readonly','readonly');
 						var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
 						jQuery.getJSON(URL,  function(tsv, state, xhr){
 							var creds = jQuery.parseJSON(xhr.responseText);
