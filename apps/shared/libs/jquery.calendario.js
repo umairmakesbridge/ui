@@ -141,7 +141,7 @@
 			var html = '<div class="fc-body"><div class="fc-row">',
 				// fill in the days
 				day = 1;
-
+                        var disable_date = "";
 			// this loop is for weeks (rows)
 			for ( var i = 0; i < 7; i++ ) {
 
@@ -155,7 +155,16 @@
 						content = '';
 					
 					if ( day <= monthLength && ( i > 0 || j >= p ) ) {
-
+                                                if(this.year==this.today.getFullYear()){
+                                                    disable_date =((this.month < this.today.getMonth()) || (this.month==this.today.getMonth() && day < this.today.getDate()))?"fc-disabled":"";
+                                                }
+                                                else if(this.year<this.today.getFullYear()){
+                                                    disable_date = "fc-disabled";
+                                                }
+                                                else {
+                                                    disable_date = "";
+                                                }
+                                                
 						inner += '<span class="fc-date">' + day + '</span><span class="fc-weekday">' + this.options.weekabbrs[ j + this.options.startIn > 6 ? j + this.options.startIn - 6 - 1 : j + this.options.startIn ] + '</span>';
 
 						// this day is:
@@ -177,12 +186,12 @@
 						today = false;
 					}
 
-					var cellClasses = today ? 'fc-today ' : '';
+					var cellClasses = today ? 'fc-today selected' : '';
 					if( content !== '' ) {
 						cellClasses += 'fc-content';
 					}
 
-					html += cellClasses !== '' ? '<div class="' + cellClasses + '">' : '<div>';
+					html += (cellClasses !== '' || disable_date!=='') ? '<div class="' + cellClasses + ' '+disable_date+'">' : '<div>';
 					html += inner;
 					html += '</div>';
 

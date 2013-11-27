@@ -235,6 +235,18 @@
 	background: #0096ff;
 
 }
+.fc-calendar .fc-row > div.selected > span.fc-date{
+    color:#fff !important;
+    text-shadow: none;
+}
+.fc-calendar .fc-row > div.fc-disabled {
+	background: #eee;
+}
+.fc-calendar .fc-row > div.selected{
+    background: #94CF1E;
+    color:#fff;
+    font-weight: bold;
+}
 
 .fc-calendar .fc-row > div.fc-today > span.fc-date {
 	color: #fff;

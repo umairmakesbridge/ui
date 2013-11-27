@@ -994,6 +994,19 @@ ul.tabs-btns li.active a{
     float: left;
     margin: 0 7px 0 -3px;
 }
-.ui-accordion h3:first-child{
+.step4 .ui-accordion h3:first-child{
     margin-top:0px;
+}
+.email-preview{
+    margin: 0 auto; 
+}
+.email-iframe{
+    width:800px;
+    height:660px;
+    border:0px;
+    margin: 0 auto;
+    display:block;
+}
+.ui-accordion .ui-accordion-content{
+    overflow-y: auto;
 }

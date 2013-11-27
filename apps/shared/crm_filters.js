@@ -17,8 +17,10 @@
   , init: function (element, options) {           
       this.$element = $(element)
       this.options = this.getOptions(options)            
+      this.objType = this.options.object
       this.$element.append($(this.options.template))
       if(this.options.showAdvanceOption){
+        this.adv_options = $(this.options.adv_option)
         this.$element.append($(this.options.adv_option))
       }
       this.fields = []
@@ -50,7 +52,8 @@
           this.options.app.showAlert("You can't add more than 8 filter rows.",$("body"),{fixed:true});
       }
       var filter = $(this.options.filterRow)
-      var value_display='block',matchValue='',selected_field=''
+      var value_display='block',matchValue=''
+      matchValue = (params && params.fieldValue)?params.fieldValue :""
       filter.addClass("filter")           
       var filter_html = '<div class="btn-group"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
           filter_html +='</select></div>'          
@@ -60,21 +63,22 @@
       
       filter.find(".filter-cont").append(filter_html)
       this.addActionBar(filter)
-      
+      var self = this 
       if(this.$element.find(".filter-div ._row").length>=1){
           var condition_row = $(this.options.condition_row);
           this.$element.find(".addfilter").before(condition_row)
           if(this.options.filterFor==="S"){
             condition_row.find("select").chosen({disable_search: "true",width:'80px'}).change(function(){ 
                   $(this).val($(this).val())
-                  $(this).trigger("chosen:updated")  
+                  $(this).trigger("chosen:updated")
+                  self.updateAdvanceFilter()
             })
           }
           else if(this.options.filterFor==="N"){
               condition_row.find(".btn-group").html('<button data-toggle="dropdown" class="btn dropdown-toggle" style="padding:1px 12px">And</button>')
           }
       }
-      var self = this 
+      
       filter.find(".fields").chosen({width:'200px'}).change(function(){
            var rule_html = ""
            if(self.options.filterFor==="S"){        
@@ -85,15 +89,19 @@
                      }           
                 })
                 filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
+                self.updateAdvanceFilter()
            }
       })
       filter.find(".rules").chosen({disable_search: "true",width:'170px'}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")  
+           self.updateAdvanceFilter()
       })
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
-            
+      filter.find(".matchValue").keyup(function(){
+          self.updateAdvanceFilter()
+      })      
       
       //Load Elements 
       if(this.options.filterFor==="S"){
@@ -120,9 +128,11 @@
                      }       
                     var field_html ='<option value=""></option>'                                            
                     $.each(fields_json.fldList[0],function(key,val){
-                        selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                        
-                        self.fields.push(val[0])                            
-                        field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                        selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
+                        if(self.objType && self.objType===val[0].sfObject.toLowerCase()){
+                            self.fields.push(val[0])                                  
+                            field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                        }
                         
                     });
                     
@@ -133,7 +143,7 @@
       else{
           var field_html ='<option value=""></option>'                                            
           $.each(this.fields,function(key,val){
-                selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                
+                selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
                 field_html +='<option value="'+val.name+'" '+selected_field+' field_type="'+val.type+'">'+val.label+'</option>'                           
 
             })
@@ -154,7 +164,7 @@
                      }       
                     var rule_html =''                                            
                     $.each(fields_json.fldList[0],function(key,val){
-                        selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                        
+                        selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                        
                         self.rules.push(val[0])                            
                         if(val[0].type=="string"){
                             rule_html +='<option value="'+val[0].name+'" '+selected_field+' rule_type="'+val[0].type+'">'+val[0].label+'</option>'                           
@@ -168,7 +178,7 @@
       else{
           var rule_html =''                                            
           $.each(this.rules,function(key,val){
-                selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                                                              
+                selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                                                              
                 if(val.type=="string"){
                     rule_html +='<option value="'+val.name+'" '+selected_field+' rule_type="'+val.type+'">'+val.label+'</option>'                           
                 }
@@ -190,7 +200,7 @@
                      }       
                     var field_html ='<option value=""></option>'                                            
                     $.each(fields_json.fldList[0],function(key,val){
-                        selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                        
+                        selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
                         self.fields.push(val[0])                            
                         field_html +='<option value="'+val[0].name+'" '+selected_field+' >'+val[0].label+'</option>'                           
                         
@@ -203,7 +213,7 @@
       else{
           var field_html ='<option value=""></option>'                                            
           $.each(this.fields,function(key,val){
-                selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                
+                selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
                 field_html +='<option value="'+val.name+'" '+selected_field+' >'+val.label+'</option>'                           
 
             })
@@ -224,7 +234,7 @@
                      }       
                     var rule_html =''                                            
                     $.each(fields_json.oprList[0],function(key,val){
-                        selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                        
+                        selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                        
                         self.rules.push(val[0])                                                    
                         rule_html +='<option value="'+val[0].name+'" '+selected_field+' >'+val[0].label+'</option>'                           
                         
@@ -237,7 +247,7 @@
       else{
           var rule_html =''                                            
           $.each(this.rules,function(key,val){
-                selected_field = (params && params.fieldName==val[0]) ? "selected" : ""                                                                              
+                selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                                                                              
                 rule_html +='<option value="'+val.name+'" '+selected_field+' >'+val.label+'</option>'                           
                 
             })
@@ -257,20 +267,50 @@
       });
       filterRow.find(".filter-cont").append(action)    
             
-  }
+  },
+   updateAdvanceFilter:function(){
+       if(this.options.filterFor==="S"){ 
+         var _target = this.$element
+         var total_rows = _target.find(".filter-div ._row");  
+         var query = "";
+         var condition = "";
+         for (var i=0;i<total_rows.length;i++){
+             if($(total_rows[i]).find(".fields").val()!="" && $(total_rows[i]).find(".rules").val()!='none' && $(total_rows[i]).find(".matchValue").val()!==""){
+                 if(i!=0){
+                     query += " "+condition+" "
+                 }
+                 query += (i+1);
+                 condition = $(total_rows[i]).next("span.andor").find("select").val()
+             }
+         }        
+         this.$element.find(".advance-option").val(query);
+       }
+    }
   ,
   loadFilters:function(data){
       var _target = this.$element
       var self = this
-      _target.find(".filter-div ._row").remove()
-      _target.find(".all-any button[rule='"+data.applyRuleCount+"']").click()
-      $.each(data.triggers[0],function(i,v){
-          var filter =  v[0] 
-          if(filter.type=="P"){
-             self.addBasicFilter(false,false,filter) 
-          }          
-      })
-      
+      _target.find(".filter-div ._row").remove()      
+      if(data.filterFields){
+      var filters_data = data.filterFields[0]
+        $.each(filters_data,function(i,v){
+            var filter =  v[0]
+            if(self.options.filterFor=='N'){
+              if(v[0].nsObject.indexOf(self.objType)>-1){
+                self.addBasicFilter(false,false,filter)                    
+              }  
+            }
+            else{
+              if(v[0].sfObject==self.objType){
+                self.addBasicFilter(false,false,filter)                    
+              }
+            }
+        })
+        if(self.options.filterFor=="S"){            
+            var adv_option = self.objType=="lead"?"advancedOptionsL":"advancedOptionsC"
+            this.$element.find(".advance-option").val(data[adv_option])
+        }
+      }
   },
   initFilters:function(){
       var _target = this.$element

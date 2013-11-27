@@ -26,10 +26,10 @@ function ($,Backbone,_,app,template,chosen) {
 				 curview.csvupload.$el.show();
 				 curview.mapdataview.$el.hide();
 				 app.showLoading(false,curview.mapdataview.$el);
-			 },			 
+			 }			 
 		},	
 		mapAndImport: function(){
-			var curview = this.camp_obj;
+                   var curview = this.camp_obj;
 		   var el = this.camp_obj.mapdataview.$el;
 		   var actid = el.find('.lt-toggle .active').attr('id');
 		   var newlist = '';
@@ -98,13 +98,14 @@ function ($,Backbone,_,app,template,chosen) {
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
 			   app.showLoading("Uploading file",curview.mapdataview.$el);
-			   var importURL = 'https://test.bridgemailsystem.com/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';
+			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';
 			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:this.camp_obj.csvupload.fileName,layout:layout_map })
 			   .done(function(data) {
 				   var list_json = jQuery.parseJSON(data);						 
 				   if(list_json[0] == 'success')
 				   {
-					   curview.mapdataview.savecampaign(list_json[2],list_json[1]);
+					   //curview.mapdataview.savecampaign(list_json[2],list_json[1]);
+                                           curview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
 				   }
 				   else
 				   {					  
@@ -117,31 +118,13 @@ function ($,Backbone,_,app,template,chosen) {
 		   else
 		   	return false;
 		},
-		savecampaign: function(listNumber,alertMsg){
-			var campview = this.camp_obj;
-			var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+app.get('bms_token')+"&campNum="+campview.camp_id+"&type=recipientType";
-            $.post(URL, { recipientType: "List",listNum:listNumber })
-			.done(function(data) {
-				var camp_json = jQuery.parseJSON(data);
-				if(camp_json[0] == "success"){
-					campview.csvupload.removeFile();
-					app.showMessge(alertMsg);					
-					return 1;
-				}
-				else
-				{
-					app.showAlert(list_json[1],campview.mapdataview.$el);
-					return false;
-				}
-			});
-		},
-		initialize:function(){
+		initialize:function(){                    
 		   this.template = _.template(template);
 		   this.render();		   
 		},
 		render: function () {
 			this.$el.html(this.template({}));
-			this.app = this.options.app;
+			this.app = this.options.app;                        
 			this.camp_obj = this.options.camp;			
 		}
 		,
