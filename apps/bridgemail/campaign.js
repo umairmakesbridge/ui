@@ -784,10 +784,15 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 saveStep3:function(){ 
                   if(this.states.step3.change===false){
                       return -1;
-                  }  
+                  }
                   var source = this.$(".step3 #choose_soruce li.selected").attr("id");                    
-                  if(source=="upload_csv")
+                  if(source == "upload_csv")
 				  {
+					  if(this.csvupload.fileuploaded == false)
+					  {
+						  this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));
+						  return 1;
+					  }
 					  var isValid = this.saveCSVUpload();
 					  /*if(isValid)
                       	this.step3SaveCall({'recipientType':'List'});*/
