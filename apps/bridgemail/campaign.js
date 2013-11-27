@@ -176,10 +176,11 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 id:'copy-camp-search',
                                 width:'300px',
                                 height:'22px',
-                                placeholder: 'Search Campaign',
+                                placeholder: 'Search Campaigns',
                                 gridcontainer: 'camp_list_grid',
                                 showicon: 'yes',
-                                iconsource: 'campaigns'
+                                iconsource: 'campaigns',
+								countcontainer: 'copy_no_of_camps'
                          });
                          this.$el.find('div#listssearch').searchcontrol({
                                 id:'list-search',
@@ -203,7 +204,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 id:'target-search',
                                 width:'300px',
                                 height:'22px',
-                                placeholder: 'Search target',
+                                placeholder: 'Search Targets',
                                 gridcontainer: 'targets_grid',
                                 showicon: 'yes',
                                 iconsource: 'add-list'
@@ -693,67 +694,109 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var proceed = -1;
                     //Validating Step 1
                     var errorHTML = "";
-                    this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
-                    if(this.$("#campaign_subject").val()==""){
-                        proceed = 0;
-                        this.$("#campaign_subject").addClass("form-error");
-                        errorHTML +="- Subject can't be blank. <br/>";
+                    var email_patt = camp_obj.$el.find('#campaign_reply_to').val();
+                    var email_addr = camp_obj.$el.find('#campaign_default_reply_to').val();
+                    var isValid = true;
+                    if(email_patt == '' || email_patt != '{{EMAIL_ADDR}}')	
+                    {						
+                            camp_obj.$el.find('#replyto_erroricon').css('display','block');
+                            camp_obj.$el.find('#campaign_reply_to').attr('style','width:90.5%; float:left;border:solid 1px #ff0000;');
+                            camp_obj.$el.find('.input-append .replyto-group').attr('style','right:25px;');
+                            camp_obj.$el.find("#replyto_erroricon").tooltip({'placement':'right',delay: { show: 0, hide:0 },animation:false});
+                            isValid = false;
                     }
-                    if(this.$("#campaign_subject").val().length>100){
-                        this.$("#campaign_subject").addClass("form-error");
-                        errorHTML +="- Subject length cann't be greater than 100 characters. <br/>";
-                        proceed = 0;
+                    else
+                    {
+                            camp_obj.$el.find('#replyto_erroricon').css('display','none');
+                            camp_obj.$el.find('#campaign_reply_to').removeAttr('style');
+                            camp_obj.$el.find('.input-append .replyto-group').removeAttr('style');						
+                            //isValid = true;
                     }
-                    if(this.$("#campaign_from_name").val()==""){
-                        this.$("#campaign_from_name").addClass("form-error");
-                        errorHTML +="- From name can't be empty. <br/>";
-                        proceed = 0;
+
+                    if(email_addr == '' || email_addr.indexOf('.') == -1 || email_addr.indexOf('@') == -1)
+                    {
+                            camp_obj.$el.find('#campaign_default_reply_to').attr('style','border:solid 1px #ff0000;margin-right:1px;');
+                            camp_obj.$el.find('#email_erroricon').css('display','block');
+                            camp_obj.$el.find("#email_erroricon").tooltip({'placement':'right',delay: { show: 0, hide:0 },animation:false});
+                            isValid = false;					
                     }
-                    if(errorHTML){
-                         var messageObj = {};
-                         messageObj["heading"] = "Step 1: Following error(s) occured:" 
-                         messageObj["detail"] = errorHTML;
-                         this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
+                    else
+                    {
+                            camp_obj.$el.find('#campaign_default_reply_to').removeAttr('style');
+                            camp_obj.$el.find('#email_erroricon').css('display','none');
+                            //isValid = true;
                     }
-                    if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
-                        this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
-                        var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                        $.post(URL, { type: "saveStep1",campNum:this.camp_id,
-                                     subject : this.$("#campaign_subject").val(),
-                                     senderName :this.$("#campaign_from_name").val(),
-                                     defaultSenderName :this.$("#campaign_default_from_name").val(),
-                                     replyTo :this.$("#campaign_reply_to").val(),
-                                     defaultReplyToEmail :this.$("#campaign_default_reply_to").val(),
-                                     tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
-                                     subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
-                                     unsubscribe :this.$("#campaign_unSubscribeType").val(),
-                                     provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
-                                     isCampaignText :this.$("#campaign_isTextOnly")[0].checked?'Y':'N',
-                                     isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
-                                     footerText :this.$("#campaign_footer_text").val(),
-                                     useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
-                                     isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N',
-                                     facebookShareIcon :this.$("#campaign_fb")[0].checked?'Y':'N',
-                                     twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
-                                     linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
-                                     googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
-                                     pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
-                              })
-                             .done(function(data) {                                 
-                                 var step1_json = jQuery.parseJSON(data);
-                                 camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
-                                 if(step1_json[0]!=="err"){
-                                     camp_obj.app.showMessge("Step 1 saved successfully!");                                     
-                                     camp_obj.states.step1.change=false;
-                                     camp_obj.wizard.next();
-                                 }
-                                 else{
-                                    camp_obj.app.showMessge(step1_json[0]); 
-                                 }
-                        });
-                        proceed = 1;
+
+                    if(!isValid)
+                    {
+                            //camp_obj.app.showAlert('Please correct validation errors.',camp_obj.$el.parents("#step_container"));												
+                            proceed = 0;
                     }
-                    
+                    else
+                    {
+                            camp_obj.$el.find('#campaign_reply_to').attr('style','');
+                            camp_obj.$el.find('#campaign_default_reply_to').attr('style','');
+                            this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
+                            if(this.$("#campaign_subject").val()==""){
+                                    proceed = 0;
+                                    this.$("#campaign_subject").addClass("form-error");
+                                    errorHTML +="- Subject can't be blank. <br/>";
+                            }
+                            if(this.$("#campaign_subject").val().length>100){
+                                    this.$("#campaign_subject").addClass("form-error");
+                                    errorHTML +="- Subject length cann't be greater than 100 characters. <br/>";
+                                    proceed = 0;
+                            }
+                            if(this.$("#campaign_from_name").val()==""){
+                                    this.$("#campaign_from_name").addClass("form-error");
+                                    errorHTML +="- From name can't be empty. <br/>";
+                                    proceed = 0;
+                            }
+                            if(errorHTML){
+                                     var messageObj = {};
+                                     messageObj["heading"] = "Step 1: Following error(s) occured:" 
+                                     messageObj["detail"] = errorHTML;
+                                     this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
+                            }
+                            if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
+                                    this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
+                                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                                    $.post(URL, { type: "saveStep1",campNum:this.camp_id,
+                                                             subject : this.$("#campaign_subject").val(),
+                                                             senderName :this.$("#campaign_from_name").val(),
+                                                             defaultSenderName :this.$("#campaign_default_from_name").val(),
+                                                             replyTo :this.$("#campaign_reply_to").val(),
+                                                             defaultReplyToEmail :this.$("#campaign_default_reply_to").val(),
+                                                             tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
+                                                             subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
+                                                             unsubscribe :this.$("#campaign_unSubscribeType").val(),
+                                                             provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
+                                                             isCampaignText :this.$("#campaign_isTextOnly")[0].checked?'Y':'N',
+                                                             isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
+                                                             footerText :this.$("#campaign_footer_text").val(),
+                                                             useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
+                                                             isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N',
+                                                             facebookShareIcon :this.$("#campaign_fb")[0].checked?'Y':'N',
+                                                             twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
+                                                             linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
+                                                             googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
+                                                             pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
+                                              })
+                                             .done(function(data) {                                 
+                                                     var step1_json = jQuery.parseJSON(data);
+                                                     camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
+                                                     if(step1_json[0]!=="err"){
+                                                             camp_obj.app.showMessge("Step 1 saved successfully!");                                     
+                                                             camp_obj.states.step1.change=false;
+                                                             camp_obj.wizard.next();
+                                                     }
+                                                     else{
+                                                            camp_obj.app.showMessge(step1_json[0]); 
+                                                     }
+                                    });
+                                    proceed = 1;
+                            }
+                    }
                     return proceed;
                 },
                 saveStep2:function(gotoNext){                 
@@ -795,10 +838,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 saveStep3:function(){ 
                   if(this.states.step3.change===false){
                       return -1;
-                  }  
+                  }
                   var source = this.$(".step3 #choose_soruce li.selected").attr("id");                    
-                  if(source=="upload_csv"){
-                       this.saveCSVUpload();                                                   
+
+                  if(source == "upload_csv")
+                  {                        
+                      this.saveCSVUpload();                    
                   }
                   else if(source=="choose_lists"){
                       var lists = this.saveLists();
@@ -838,20 +883,20 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   }
                   this.app.showLoading("Saving Step 3",this.$el.parents(".ws-content"));  
                   $.post(URL,post_data)
-                   .done(function(data) {                                 
+                   .done(function(data) {
                        var step3_json = jQuery.parseJSON(data);
                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                       
                        if(step3_json[0]!=="err"){
                            camp_obj.app.showMessge("Step 3 saved successfully!");                                                          
                            camp_obj.states.step3.recipientType = post_data['recipientType'];
                            camp_obj.states.step3.change= false;
+						   camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                            camp_obj.wizard.next();
                        }
                        else{
                            camp_obj.app.showMessge(step3_json[0]); 
                        }
-                  })  
-
+                  })
                 },
                 saveStep4:function(){
                   return -1;  
@@ -913,69 +958,62 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     
                     URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        if(xhr && xhr.responseText){
+                        if(xhr && xhr.responseText)
+						{
                             var mergeFields_json = jQuery.parseJSON(xhr.responseText);                            
                             if(camp_obj.app.checkError(mergeFields_json)){
                                 return false;
-                             }
+                            }
                             camp_obj.mergeTags['basic'] = [];
                             camp_obj.mergeTags['custom'] = [];
+							camp_obj.mergeTags['salesRep'] = [];
                             $.each(mergeFields_json,function(key,val){
-                                if(val[2]=="true"){
+                                if(val[2]=="B"){
                                     camp_obj.mergeTags['basic'].push(val);
                                 }
-                                else{
+                                else if(val[2]=="C"){
                                     camp_obj.mergeTags['custom'].push(val);
                                 }
+								else if(val[2]=="S"){
+                                    camp_obj.mergeTags['salesRep'].push(val);
+                                }
                             });
-                            
-                            URL = "/pms/io/user/getData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=salesRepMergeTags";
-                            jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                if(xhr && xhr.responseText){
-                                    var salesRepFields_json = jQuery.parseJSON(xhr.responseText);
-                                    if(camp_obj.app.checkError(salesRepFields_json)){
-                                        return false;
-                                     }
-                                    camp_obj.mergeTags['salesRep'] =  salesRepFields_json;
-                                    
-                                    $.each(camp_obj.mergeTags['salesRep'],function(key,val){
-                                        camp_obj.allMergeTags.push({"type":"Sales Rep","name":val[1],"code":val[0]});
-                                    });
-                                    $.each(camp_obj.mergeTags['basic'],function(key,val){
-                                        camp_obj.allMergeTags.push({"type":"Basic Field","name":val[1],"code":val[0]});
-                                    });
-                                    $.each(camp_obj.mergeTags['custom'],function(key,val){
-                                        camp_obj.allMergeTags.push({"type":"Custom Field","name":val[1],"code":val[0]});
-                                    });
-                                    camp_obj.allMergeTags.sort(function(a, b){
-                                        var a1= a.name, b1= b.name;
-                                        if(a1== b1) return 0;
-                                        return a1> b1? 1: -1;
-                                    });
-                                    
-                                    var fields_html = "<ul>";
-                                    $.each(camp_obj.allMergeTags,function(key,val){
-                                        fields_html +="<li mergeval='"+val.code+"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
-                                    });
-                                    fields_html += "</ul>";
-                                    $(".searchfields .searchlist").html(fields_html);
-                                    $(".search-merge-insert").click(function(){
-                                        var active_ws = $(".ws-content.active");
-                                        var merge_field = $(this).parents("li").attr("mergeval");
-                                        var input_field = $(this).parents(".mergefields").attr("input-source");
-                                        if(input_field!=="campaign_subject"){
-                                         active_ws.find("#"+input_field).val(merge_field);
-                                        }
-                                        else{
+                            $.each(camp_obj.mergeTags['salesRep'],function(key,val){
+                                    camp_obj.allMergeTags.push({"type":"Sales Rep","name":val[1],"code":val[0]});
+                            });
+                            $.each(camp_obj.mergeTags['basic'],function(key,val){
+                                    camp_obj.allMergeTags.push({"type":"Basic Field","name":val[1],"code":val[0]});
+                            });
+                            $.each(camp_obj.mergeTags['custom'],function(key,val){
+                                    camp_obj.allMergeTags.push({"type":"Custom Field","name":val[1],"code":val[0]});
+                            });
+                            camp_obj.allMergeTags.sort(function(a, b){
+                                    var a1= a.name, b1= b.name;
+                                    if(a1== b1) return 0;
+                                    return a1> b1? 1: -1;
+                            });
+
+                            var fields_html = "<ul>";
+                            $.each(camp_obj.allMergeTags,function(key,val){
+                                    fields_html +="<li mergeval='"+val.code+"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
+                            });
+                            fields_html += "</ul>";
+                            $(".searchfields .searchlist").html(fields_html);
+                            $(".search-merge-insert").click(function(){
+                                    var active_ws = $(".ws-content.active");
+                                    var merge_field = $(this).parents("li").attr("mergeval");
+                                    var input_field = $(this).parents(".mergefields").attr("input-source");
+                                    if(input_field!=="campaign_subject"){
+                                     active_ws.find("#"+input_field).val(merge_field);
+                                    }
+                                    else{
                                             var caretPos = active_ws.find("#"+input_field)[0].selectionStart;
                                             var textAreaTxt = active_ws.find("#"+input_field).val();
                                             active_ws.find("#"+input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos) ); 
-                                        }
-                                        active_ws.find("#"+input_field+"_default").fadeIn("fast");
-                                        $(".mergefields").hide();
-                                    });
-                                }
-                            }).fail(function() { console.log( "error sales rep fields json" ); });
+                                    }
+                                    active_ws.find("#"+input_field+"_default").fadeIn("fast");
+                                    $(".mergefields").hide();
+                            });                            
                         }
                     }).fail(function() { console.log( "error merge fields json" ); });
                                         
@@ -1101,7 +1139,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var camp_obj=this;
                     this.$el.find("#copy-camp-listing").children().remove();
                     var camp_list_json = jQuery.parseJSON(xhr.responseText);
-                    this.$("#copy-camp-count").html(camp_list_json.count+" Campaigns")
+					if(camp_list_json.count > 1)
+                    	this.$("#copy_no_of_camps").html(camp_list_json.count+" Campaigns found");
+					else
+						this.$("#copy_no_of_camps").html(camp_list_json.count+" Campaign found");
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camp_list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
@@ -1450,16 +1491,26 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 searchMergeFields:function(obj){
                     var searchterm = $(obj.target).val();
+					$(".mergefields .searchfields .searchlist").find('.notfound').hide();
                     if(searchterm.length){
                         var camp_obj = this;
                         $(".mergefields .searchfields,#remove-merge-list").show();                                                       
                         $(".mergefields .browsefields").hide();
                         $(".mergefields .searchfields .searchlist li").hide();
                         searchterm = searchterm.toLowerCase();
-                        $(".mergefields .searchfields .searchlist li").filter(function() {                                                               
-                             return $(this).find("div").text().toLowerCase().indexOf(searchterm) > -1;
+						var count = 0;
+                        $(".mergefields .searchfields .searchlist li").filter(function() {
+							if($(this).find("div").text().toLowerCase().indexOf(searchterm) > -1 && $(this).find("div").text().substring(0,9) != '<!DOCTYPE')
+							{
+								count++;
+                             	return $(this);
+							}
                          }).show();
                          $(".mergefields .searchfields .searchlist li").removeHighlight().highlight(searchterm);
+						 if(count == 0)
+						  {
+							  $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
+						  }
                     }
                     else{
                         $(".mergefields .searchfields .searchlist li").removeHighlight();
@@ -2484,15 +2535,25 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                    }); 
                },
                saveCSVUpload:function(){
-                   var camp_obj = this;
+                    var camp_obj = this;
+                    var isValid = false;                    
                     if(camp_obj.csvupload.fileuploaded == true)
                     {
-                            return camp_obj.mapdataview.mapAndImport(); 
+                        camp_obj.csvupload.$el.hide();                    
+                        camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
+                        isValid = camp_obj.mapdataview.mapAndImport(); 
+                        if(isValid)
+                        {
+                                camp_obj.mapdataview.$el.hide();
+                                camp_obj.$el.find('#upload_csv').removeClass('selected');
+                        }
+                        return isValid;
                     }
-                    camp_obj.csvupload.$el.hide();
-                    camp_obj.$el.find('#upload_csv').removeClass('selected');
-                    camp_obj.mapdataview.$el.hide();
-                    camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
+                    else{
+                        
+                        this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));
+                        
+                    }
                },
                saveLists:function(){
                    var selected_list = this.$("#area_choose_lists .col2 tr").map(function(){

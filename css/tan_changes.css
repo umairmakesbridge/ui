@@ -3,7 +3,7 @@ h2.header-list {
 	margin-top:20px;
 }
 
-#campaigns_list h2.header-list { padding-left:0; text-align:right; }
+#campaigns_list h2.header-list, #area_copy_campaign h2.header-list { padding-left:0; text-align:right; }
 #campaigns_list h2.header-list .search { float:none; }
 
 .notfound
@@ -216,3 +216,41 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 	min-width:inherit;
 	min-height:inherit;
 }
+.notfound
+{
+	text-align:center; margin-top:50px; font-style:italic;
+}
+.settings .cont { position:relative; }
+.erroricon { float:right; display:none; margin-top:6px; 
+background:url(../img/error-icon.png) no-repeat 0 0;
+	width:20px;
+	height:20px;	
+}
+.addrow label { width:25%; }
+#campaign_default_reply_to { float:none; width:85%; margin-right:-3px; }
+#replyto_erroricon { position:absolute; right:0px; top:0; }
+div.tooltip.right { right:auto; width:auto; top:inherit; margin-left: 5px;
+    margin-top: 19px;
+    padding: 0 5px; }
+#mapdata div.tooltip.right { margin-top:10px; }
+.tooltip.right .tooltip-arrow {
+    border-right-color: #FF0000;
+    border-width: 6px 6px 6px 0;
+    left: -7px;
+    margin-top: -6px;
+    top: 50%;
+}
+.tooltip.right  { background-color:#ff0000; border-color:#ff0000; }
+.tooltip.right:before { display:none; }
+div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
+.popover-title { display: none; }
+.popover-content {
+    color: #FFFFFF;
+    margin-top: 5px;
+    padding: 5px 14px 0px;
+}
+.popover-content p { color:#fff; }
+.popover { background-color:#ff0000; box-shadow:none; margin-top:0px; border-radius:3px; }
+.popover.right .arrow:after { border-right-color: #ff0000; left:-8px; border-width:8px; margin-top:-8px; }
+.popover.right .arrow { border-right: 0; left:-8px; margin-top:-13px; }
+#mapdata #email_erroricon { float:left; }

@@ -7,14 +7,8 @@ function (template) {
 						var el = this.$el;
 						var app = this.options.app;
 						var isValid = this.validateLoginFields();
-						if(!isValid)
-						{							
-							app.showAlert("Please correct validation errors.",el);
-						}
-						else
-						{							
-							this.testCredentials();							
-						}
+						if(isValid)						
+							this.testCredentials();						
                     },
 					"click #btnSaveLogin":function(obj){
 						if($(obj.target).hasClass('saving'))
@@ -24,14 +18,8 @@ function (template) {
 							var el = this.$el;
 							var app = this.options.app;
 							var isValid = this.validateLoginFields();
-							if(!isValid)
-							{
-								app.showAlert("Please correct validation errors.",el);
-							}
-							else
-							{							
-								this.saveCredentials();
-							}
+							if(isValid)							
+								this.saveCredentials();							
 						}
                     },
                  },
@@ -80,32 +68,59 @@ function (template) {
 					var isValid = true;
 					if((el.find('#sf_userid').val() == ''))
 					{						
-						el.find('#sf_userid').css('border','solid 1px #ff0000');
+						//el.find('#sf_userid').css('border','solid 1px #ff0000');
+						this.enableValidation('sf_userid','sfuid_erroricon','Please supply user id');
 						isValid = false;
 					}					
 					else if(el.find('#sf_userid').val().indexOf('.') == -1 || el.find('#sf_userid').val().indexOf('@') == -1)
 					{						
-						el.find('#sf_userid').css('border','solid 1px #ff0000');
+						//el.find('#sf_userid').css('border','solid 1px #ff0000');
+						this.enableValidation('sf_userid','sfuid_erroricon','Please supply correct user id');
 						isValid = false;
 					}
 					else
-						el.find('#sf_userid').attr('style','');
+					{
+						this.disableValidation('sf_userid','sfuid_erroricon');
+						//el.find('#sf_userid').attr('style','');						
+					}
 					if(el.find('#sf_pwd').val() == '')
 					{
-						el.find('#sf_pwd').css('border','solid 1px #ff0000');
+						//el.find('#sf_pwd').css('border','solid 1px #ff0000');
+						this.enableValidation('sf_pwd','sfpwd_erroricon','Please supply password');
 						isValid = false;
 					}
 					else
-						el.find('#sf_pwd').attr('style','');
+					{
+						//el.find('#sf_pwd').attr('style','');
+						this.disableValidation('sf_pwd','sfpwd_erroricon');
+					}
 					if(el.find('#sf_email').val() != '' && 
 							(el.find('#sf_email').val().indexOf('.') == -1 || el.find('#sf_email').val().indexOf('@') == -1))
 					{						
-						el.find('#sf_email').css('border','solid 1px #ff0000');
+						//el.find('#sf_email').css('border','solid 1px #ff0000');
+						this.enableValidation('sf_email','sfemail_erroricon','Please supply correct email');
 						isValid = false;
 					}
 					else
-						el.find('#sf_email').attr('style','');
+					{
+						//el.find('#sf_email').attr('style','');
+						this.disableValidation('sf_email','sfemail_erroricon');
+					}
 					return isValid;
+				},
+				enableValidation:function(control,valid_icon,message)
+				{
+					var el = this.$el;
+					el.find('#'+control).attr('style','border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;');				  
+					el.find('#'+valid_icon).css('display','block');
+					el.find('#'+valid_icon).attr('data-content',message);
+					el.find('#'+valid_icon).popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
+				},
+				disableValidation:function(control,valid_icon)
+				{
+					var el = this.$el;
+					el.find('#'+valid_icon).css('display','none');
+				  	el.find('#'+control).removeAttr('style');
 				},
                 initialize: function () {
 					this.template = _.template(template);				
@@ -116,7 +131,7 @@ function (template) {
 					var salesforce_setting = this.app.getAppData("salesfocre");
 					if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y")
 					{
-                                                el.find('#sf_userid,#sf_pwd,#sf_email').attr('readonly','readonly');
+                        el.find('#sf_userid,#sf_pwd,#sf_email').attr('readonly','readonly');
 						var URL = "/pms/io/salesforce/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
 						jQuery.getJSON(URL,  function(tsv, state, xhr){
 							var creds = jQuery.parseJSON(xhr.responseText);

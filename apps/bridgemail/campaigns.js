@@ -28,10 +28,11 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					id:'list-search',
 					width:'300px',
 					height:'22px',
-					placeholder: 'Search Campaign',
+					placeholder: 'Search Campaigns',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                    iconsource: 'campaigns'
+                    iconsource: 'campaigns',
+					countcontainer: 'no_of_camps'
 				 });
 			}
 			,

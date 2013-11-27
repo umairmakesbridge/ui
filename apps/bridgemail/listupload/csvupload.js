@@ -15,7 +15,7 @@ function (app,template,fileuploader,chosen) {
 			'change #file_control':function(obj){
 				var input_obj = obj.target;
 			   	var files = input_obj.files; 
-			   	this.fileuploaded=false;
+			   	this.fileuploaded=false;				
 			   	this.showSelectedfile(files);
 			},
 			'mouseover #file_control':function(obj){
@@ -49,9 +49,10 @@ function (app,template,fileuploader,chosen) {
 		showSelectedfile:function(files){
 			var z = -40;
 			var maxFiles = 1;
-			var errMessage = 0;			
+			var errMessage = 0;
 		    var curview = this.camp_obj;
 				this.$el.find('#uploaded-holder').show();
+				curview.states.step3.change=true;
 				app.showLoading("Uploading file",curview.csvupload.$el);
 				$.each(files, function(index, file) {
 						if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) {
@@ -182,7 +183,7 @@ function (app,template,fileuploader,chosen) {
 			jQuery.getJSON(mapURL,function(tsv, state, xhr){
 				if(xhr && xhr.responseText){
 					curview.csvupload.map_feilds = jQuery.parseJSON(xhr.responseText);
-					var chtml="<select class='mapfields'>";
+					var chtml="<select class='mapfields' id='mapfields'>";
 					chtml +="<option value='0'>---Select Field---</option>";
 					var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
 					if(curview.csvupload.map_feilds)
@@ -203,7 +204,7 @@ function (app,template,fileuploader,chosen) {
 					chtml +="</select>";
 					if(chtml)
 					{
-						trs += '<tr><td></td><td>'+ chtml +'</td>><td>'+ chtml +'</td><td>'+ chtml +'</td><td></td></tr></tbody>';
+						trs += '<tr><td></td><td>'+ chtml.replace("id='mapfields'","id='mapfields1'") +'<span id="mf1_erroricon" class="erroricon" data-content="Please supply map field"></span></td>><td>'+ chtml.replace("id='mapfields'","id='mapfields2'") +'<span id="mf2_erroricon" class="erroricon" data-content="Please supply map field"></span></td><td>'+ chtml.replace("id='mapfields'","id='mapfields3'") +'<span id="mf3_erroricon" class="erroricon" data-content="Please supply map field"></span></td><td></td></tr></tbody>';
 						curview.mapdataview.$el.find('#uploadslist').children().remove();							
 						curview.mapdataview.$el.find('#uploadslist').append(trs);
 						curview.csvupload.fileuploaded=true;
@@ -226,11 +227,8 @@ function (app,template,fileuploader,chosen) {
 				{
 					list_html = "<option value=''>Select Existing List</option>";
 					$.each(list_array.lists[0], function(index, val) { 
-						list_html +="<option value='"+val[0].listNum+"'>"+val[0].name+"</option>";
-					})
-					campview.mapdataview.$el.find("#existing_lists").html(list_html);
-					campview.csvupload.$el.hide();
-					campview.mapdataview.$el.show();
+						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+					})					
 				}
 			}
 			else
@@ -243,17 +241,17 @@ function (app,template,fileuploader,chosen) {
 						{
 							list_html = "<option value=''>Select Existing List</option>";
 							$.each(list_array.lists[0], function(index, val) { 
-								list_html +="<option value='"+val[0].listNum+"'>"+val[0].name+"</option>";
-							})
-							campview.mapdataview.$el.find("#existing_lists").html(list_html);							
-							campview.mapdataview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
-							campview.mapdataview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-							campview.csvupload.$el.hide();
-							campview.mapdataview.$el.show();
+								list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+							})							
 						}
 					}
 				}).fail(function() { console.log( "error lists listing" ); });				
-			}			
+			}
+			campview.mapdataview.$el.find("#existing_lists").html(list_html);
+			campview.mapdataview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
+			campview.mapdataview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
+			campview.csvupload.$el.hide();
+			campview.mapdataview.$el.show();
 		},
 	});
 });

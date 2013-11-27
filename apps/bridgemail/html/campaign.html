@@ -21,17 +21,17 @@
         <div class="row">
           <label>From Email</label>
           <div class="input-append adv_dd sort-options">
-            <input type="text" placeholder="demo@bridgemailsystem.com" id="campaign_from_email" readonly="readonly" class="header-info textfield">
+            <input type="text" placeholder="demo@bridgemailsystem.com" id="campaign_from_email" readonly="readonly" class="header-info textfield" />
           </div>
         </div>
         <div class="row addrow" id="campaign_from_email_default" style="display:none">
           <label>&nbsp;</label>
-          <input type="text" placeholder="Set Default Value">
+          <input type="text" placeholder="Set Default Value" />
         </div>
         <div class="row">
           <label>From Name</label>
           <div class="input-append adv_dd sort-options">
-            <input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info">
+            <input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" />
             <div class="btn-group">
               <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
             </div>
@@ -39,20 +39,24 @@
         </div>
         <div class="row addrow" id="campaign_from_name_default" style="display:none">
           <label>&nbsp;</label>
-          <input id="campaign_default_from_name" type="text" placeholder="Set Default Value">
+          <input id="campaign_default_from_name" type="text" placeholder="Set Default Value" />
         </div>
         <div class="row">
           <label>Reply To</label>
           <div class="input-append adv_dd sort-options">
-            <input type="text" placeholder="babar@makesbridge.com"  id="campaign_reply_to" class="header-info">
-            <div class="btn-group">
+            <input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" />
+            <div class="btn-group replyto-group">
               <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
             </div>
+            <span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>
           </div>
         </div>
-        <div class="row addrow" id="campaign_reply_to_default" style="display:none">
+        <div class="row addrow" id="campaign_reply_to_default">
           <label>&nbsp;</label>
-          <input id="campaign_default_reply_to" type="text" placeholder="Set Default Value">
+          <div style="float: right; width: 72%; text-align: right;">
+              <input id="campaign_default_reply_to" type="text" placeholder="Set Default Value" />&nbsp;
+              <span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to email"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -263,7 +267,7 @@
     <div class="clearfix"></div>
   </div>
   <div class="content-inner soruces"  id="area_copy_campaign" style="margin: 20px 0 0;display: none" >
-    <h2 class="header-list">Select a Campaign <span id="copy-camp-count">698 Campaigns</span>
+    <h2 class="header-list"><span id="copy_no_of_camps"></span>
       <div id="copycampsearch" class="input-append search">         
       </div>
     </h2>
