@@ -32,7 +32,7 @@ function (template,crm_filters) {
                             this.$(".lead-accordion").hide();
                             this.$(".contact-filter").data("crmfilters").loadFilters(this.savedObject);
                         }
-                        else if(this.savedObject.sfObject=="both"){
+                        else if(this.savedObject.sfObject=="both" && this.savedObject.filterFields){
                             this.$(".lead-accordion").show();
                             this.$(".contact-accordion").show();
                             this.$(".contact-filter").data("crmfilters").loadFilters(this.savedObject);

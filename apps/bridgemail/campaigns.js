@@ -22,7 +22,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			},
 			render: function () {
 				this.$el.html(this.template({}));
-                this.app = this.options.app;
+                                this.app = this.options.app;
 				this.getallcampaigns();
 				this.$el.find('div#campslistsearch').searchcontrol({
 					id:'list-search',
@@ -40,20 +40,20 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
 			}
 			,
-			getallcampaigns: function () {
-				var camp_obj = this;                                
-				this.app.showLoading(true,camp_obj.$el.find("#target-camps"));
-				URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns";
-				jQuery.getJSON(URL,  function(tsv, state, xhr){					
-					if(xhr && xhr.responseText){
-						camp_obj.createListTable(xhr);
-					}
-				}).fail(function() { console.log( "error lists listing" ); });
+			getallcampaigns: function () {				                               				
+                                if(!this.app.getAppData("campaigns")){
+                                    this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));
+                                    this.app.getCampaigns(_.bind( this.createListTable,this));
+                                 }
+                                 else{
+                                     this.createListTable()
+                                 }
+				
 			}
 			,
-			createListTable: function (xhr) {
+			createListTable: function () {
 				var camp_obj = this;				
-				var camp_list_json = jQuery.parseJSON(xhr.responseText);
+				var camp_list_json = this.app.getAppData("campaigns");
 				var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid"><tbody>';				
 				$.each(camp_list_json.lists[0], function(index, val) {
 					list_html += camp_obj.makecamprows(val);					

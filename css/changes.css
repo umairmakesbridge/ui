@@ -1007,6 +1007,6 @@ ul.tabs-btns li.active a{
     margin: 0 auto;
     display:block;
 }
-.ui-accordion .ui-accordion-content{
+.step4 .ui-accordion .ui-accordion-content{
     overflow-y: auto;
 }

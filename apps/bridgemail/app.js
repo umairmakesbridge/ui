@@ -89,8 +89,7 @@ define([
                     
                    var self = this;                                                                         
                    var content_height = ($('body').height()-90);                   
-                   //$('#container .content').css("min-height",content_height);
-                   //$(".workspace .ws-content").css("height",(content_height-100));
+                   
                    this.set("wp_height",(content_height-100));
                    $(window).resize(function(){
                        self.resizeWorkSpace();
@@ -109,8 +108,13 @@ define([
                            }
                        }
                    });
-                 //this.mainContainer.bmseditor.initEditor();
-                 //this.loadAppData();                   
+                   
+                   //Cache Clear time set
+                   this.clearCache();
+                 
+             },
+             clearCache:function(){
+                window.setTimeout(_.bind(this.removeAllCache,this),1000*60*30);
              },
              checkError:function(result){
                  var isError = false;
@@ -126,11 +130,7 @@ define([
                  });
              },
              resizeWorkSpace:function(){
-                var body_size =  $('body').height()-90;
-                /*if(body_size>=500){
-                    $('#container .content').css("min-height",body_size);
-                    $(".workspace .ws-content").css("height",(body_size-100));
-                }*/
+                var body_size =  $('body').height()-90;                
                 $(".workspace .ws-content").css("min-height",(body_size-100)); 
                 $(".bDiv").css("height",body_size-397);                
                 this.set("wp_height",(body_size-100));
@@ -231,72 +231,85 @@ define([
             getAppData:function(appVar){
                return this.get("app_data")[appVar];   
             },
-			getSalesForceStatus: function(callback)
-			{
-				var app = this;
-				var retStatus = 0;
+            removeAllCache:function(){
+                var cache = this.get("app_data");
+                $.each(cache,function(k,v){
+                    cache[k] = null;
+                    delete cache[k];
+                })                
+                this.clearCache();
+                console.log("Cache is cleared now time=" + (new Date()));
+            },
+            removeCache:function(key){
+                var cache = this.get("app_data");
+                cache[key] = null;
+                delete cache[key];
+            },
+            getSalesForceStatus: function(callback)
+            {
+                var app = this;                
                 var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                     if(xhr && xhr.responseText){
                          var salesforce = jQuery.parseJSON(xhr.responseText);                                
                          if(app.checkError(salesforce)){
-                             //return false;
+                             return false;
                          }                        
                         app.setAppData("salesfocre",salesforce);
-						callback();
-						retStatus = 1;
+                        callback();
+                                                
                     }
-              	}).fail(function() { console.log( "error in salesforce fields" ); });
-				return retStatus;
-			},
-			getNetSuiteStatus: function(callback)
-			{
-				var app = this;
-				var retStatus = 0;
-				URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
+                }).fail(function() { console.log( "error in salesforce fields" ); });                
+            },
+            getNetSuiteStatus: function(callback)
+            {
+                var app = this;                
+                URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                     if(xhr && xhr.responseText){                        
                          var netstuite = jQuery.parseJSON(xhr.responseText);                                
                          if(app.checkError(netstuite)){
-                             //return false;
+                             return false;
                          }                        
                         app.setAppData("netsuite",netstuite);
-						callback();
-						retStatus = 1;
+                        callback();                        
                     }
-              	}).fail(function() { console.log( "error in salesforce fields" ); });
-				return retStatus;
-			},
-            /*loadAppData:function(){
-                var app = this;
-                var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
+                }).fail(function() { console.log( "error in salesforce fields" ); });                
+            },
+            getCampaigns:function(callback){
+                var app = this;                
+                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.get('bms_token')+"&type=listNormalCampaigns";                                                            
+                  jQuery.getJSON(URL,  function(tsv, state, xhr){
+                      if(xhr && xhr.responseText){
+                          var camps_json = jQuery.parseJSON(xhr.responseText);
+                          if(app.checkError(camps_json)){
+                              return false;
+                          }                          
+                          app.setAppData("campaigns",camps_json);  
+                          callback();
+                      }
+                  }).fail(function() { console.log( "error campaign listing" ); });
+            },
+            getLists:function(callback){
+                var app = this;                
+                var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.get('bms_token')+"&type=all";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
-                    if(xhr && xhr.responseText){                        
-                         var salesforce = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(salesforce)){
+                    if(xhr && xhr.responseText){										
+                        var list_json = jQuery.parseJSON(xhr.responseText);                                
+                        if(app.checkError(list_json)){
                              return false;
-                         }                        
-                        app.setAppData("salesfocre",salesforce);                        
+                         }  
+                         app.setAppData("lists",list_json);
+                         callback();
                     }
-              }).fail(function() { console.log( "error in salesforce fields" ); });
-              
-              URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                    if(xhr && xhr.responseText){                        
-                         var netstuite = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(netstuite)){
-                             return false;
-                         }                        
-                        app.setAppData("netsuite",netstuite);                        
-                    }
-              }).fail(function() { console.log( "error in salesforce fields" ); });                                          
-            }*/
-            showDialog:function(options){
-                var dialog = new bmsDialog(options);                
+                }).fail(function() { console.log( "error lists listing" ); });
                 
+            },
+            showDialog:function(options){
+                var dialog = new bmsDialog(options);                                
                 $("body").append(dialog.$el);
                 dialog.show();
-                
+               
                 return dialog;
             }
              
