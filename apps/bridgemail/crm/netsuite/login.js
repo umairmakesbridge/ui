@@ -65,80 +65,83 @@ function (template) {
 					});
 				},
 				validateLoginFields: function() {
+					var campview = this;
 					var el = this.$el;
 					var isValid = true;
+					var app = this.options.app;
+					var appMsgs = campview.app.messages[0];
 					if((el.find('#ns_userid').val() == ''))
 					{						
-						//el.find('#ns_userid').css('border','solid 1px #ff0000');
-						this.enableValidation('ns_userid','nsuid_erroricon','Please supply user id');
+						var options = {'control':el.find('#ns_userid'),
+										'valid_icon':el.find('#nsuid_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.NS_userid_empty_error};
+						app.enableValidation(options);
 						isValid = false;
 					}					
-					else if(el.find('#ns_userid').val().indexOf('.') == -1 || el.find('#ns_userid').val().indexOf('@') == -1)
+					else if(!app.validateEmail(el.find('#ns_userid').val()))
 					{						
-						//el.find('#ns_userid').css('border','solid 1px #ff0000');
-						this.enableValidation('ns_userid','nsuid_erroricon','Please supply correct user id');
+						var options = {'control':el.find('#ns_userid'),
+										'valid_icon':el.find('#nsuid_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.NS_userid_format_error};
+						app.enableValidation(options);						
 						isValid = false;
 					}
 					else
 					{
-						this.disableValidation('ns_userid','nsuid_erroricon');
-						//el.find('#ns_userid').attr('style','');
+						var options = {'control':el.find('#ns_userid'),'valid_icon':el.find('#nsuid_erroricon')};
+						app.disableValidation(options);
 					}
 					if(el.find('#ns_pwd').val() == '')
-					{
-						//el.find('#ns_pwd').css('border','solid 1px #ff0000');
-						this.enableValidation('ns_pwd','nspwd_erroricon','Please supply password');
+					{						
+						var options = {'control':el.find('#ns_pwd'),
+										'valid_icon':el.find('#nspwd_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.NS_pwd_empty_error};
+						app.enableValidation(options);
 						isValid = false;
 					}
 					else
 					{
-						//el.find('#ns_pwd').attr('style','');
-						this.disableValidation('ns_pwd','nspwd_erroricon');
+						var options = {'control':el.find('#ns_pwd'),'valid_icon':el.find('#nspwd_erroricon')};
+						app.disableValidation(options);						
 					}
 					if(el.find('#ns_accid').val() == '')
 					{
-						//el.find('#ns_accid').css('border','solid 1px #ff0000');
-						this.enableValidation('ns_accid','nsaccid_erroricon','Please supply account id');
+						var options = {'control':el.find('#ns_accid'),
+										'valid_icon':el.find('#nsaccid_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.NS_accid_empty_error};
+						app.enableValidation(options);						
 						isValid = false;
 					}
 					else
 					{
-						//el.find('#ns_accid').attr('style','');
-						this.disableValidation('ns_accid','nsaccid_erroricon');
+						var options = {'control':el.find('#ns_accid'),'valid_icon':el.find('#nsaccid_erroricon')};
+						app.disableValidation(options);
 					}
-					if(el.find('#ns_email').val() != '' && 
-							(el.find('#ns_email').val().indexOf('.') == -1 || el.find('#ns_email').val().indexOf('@') == -1))
+					if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
 					{						
-						//el.find('#ns_email').css('border','solid 1px #ff0000');
-						this.enableValidation('ns_email','nsemail_erroricon','Please supply correct email');
+						var options = {'control':el.find('#ns_email'),
+										'valid_icon':el.find('#nsemail_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.NS_email_format_error};
+						app.enableValidation(options);						
 						isValid = false;
 					}
 					else
-					{
-						this.disableValidation('ns_email','nsemail_erroricon');
-						//el.find('#ns_email').attr('style','');
+					{						
+						var options = {'control':el.find('#ns_email'),'valid_icon':el.find('#nsemail_erroricon')};
+						app.disableValidation(options);
 					}
 					return isValid;
-				},
-				enableValidation:function(control,valid_icon,message)
-				{
-					var el = this.$el;
-					el.find('#'+control).attr('style','border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;');				  
-					el.find('#'+valid_icon).css('display','block');
-					el.find('#'+valid_icon).attr('data-content',message);
-					el.find('#'+valid_icon).popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
-				},
-				disableValidation:function(control,valid_icon)
-				{
-					var el = this.$el;
-					el.find('#'+valid_icon).css('display','none');
-				  	el.find('#'+control).removeAttr('style');
-				},
+				},				
                 initialize: function () {
 					this.template = _.template(template);				
 					this.render();
 					var el = this.$el;
-					var app = this.options.app;					
+					var app = this.options.app;
 					var netsuite_setting = this.app.getAppData("netsuite");
 					app.showLoading('Loading Credentials',el);
 					if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y")

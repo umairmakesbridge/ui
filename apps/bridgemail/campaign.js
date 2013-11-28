@@ -635,46 +635,111 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 saveStep1:function(){
                     var camp_obj = this;
-                    var proceed = -1;
-                    //Validating Step 1
-                    var errorHTML = "";
-                    var email_patt = camp_obj.$el.find('#campaign_reply_to').val();
-                    var email_addr = camp_obj.$el.find('#campaign_default_reply_to').val();
+					var app = camp_obj.app;
+                    var proceed = -1;                   
+                    var errorHTML = "";                    					
                     var isValid = true;
-                    if(email_patt == '' || email_patt != '{{EMAIL_ADDR}}')	
-                    {						
-                            camp_obj.$el.find('#replyto_erroricon').css('display','block');
-                            camp_obj.$el.find('#campaign_reply_to').attr('style','width:90.5%; float:left;border:solid 1px #ff0000;');
-                            camp_obj.$el.find('.input-append .replyto-group').attr('style','right:25px;');
-                            camp_obj.$el.find("#replyto_erroricon").tooltip({'placement':'right',delay: { show: 0, hide:0 },animation:false});
-                            isValid = false;
+					var el = camp_obj.$el;
+					var replyto = el.find('#campaign_reply_to').val();
+                    var email_addr = el.find('#campaign_default_reply_to').val();
+					var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+					
+					if(el.find('#campaign_subject').val() == '')
+					{
+						var options = {'control':el.find('#campaign_subject'),
+										'valid_icon':el.find('#subject_erroricon'),
+										'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
+										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+										'customfield':el.find('.input-append .subject-group'),
+										'customfieldcss':'right:25px;'};
+						app.enableValidation(options);						
+                        isValid = false;
+					}
+					else if(el.find('#campaign_subject').val().length > 100)
+					{
+						var options = {'control':el.find('#campaign_subject'),
+										'valid_icon':el.find('#subject_erroricon'),
+										'message':camp_obj.app.messages[0].CAMP_subject_length_error,
+										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+										'customfield':el.find('.input-append .subject-group'),
+										'customfieldcss':'right:25px;'};
+						app.enableValidation(options);						
+                        isValid = false;
+					}
+					else
+                    {
+						var options = {'control':el.find('#campaign_subject'),
+										'valid_icon':el.find('#subject_erroricon'),
+										'customfield':el.find('.input-append .subject-group')};
+						app.disableValidation(options);						
                     }
+					if(el.find('#campaign_from_name').val() == '')
+					{
+						var options = {'control':el.find('#campaign_from_name'),
+										'valid_icon':el.find('#fromname_erroricon'),
+										'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
+										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+										'customfield':el.find('.input-append .fromname-group'),
+										'customfieldcss':'right:25px;'};
+						app.enableValidation(options);						
+                        isValid = false;
+					}
+					else
+                    {
+						var options = {'control':el.find('#campaign_from_name'),
+										'valid_icon':el.find('#fromname_erroricon'),
+										'customfield':el.find('.input-append .fromname-group')};
+						app.disableValidation(options);						
+                    }
+                    if(replyto == '')
+                    {                            
+						var options = {'control':el.find('#campaign_reply_to'),
+									'valid_icon':el.find('#replyto_erroricon'),
+									'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
+									'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+									'customfield':el.find('.input-append .replyto-group'),
+									'customfieldcss':'right:25px;'};
+						app.enableValidation(options);
+						isValid = false;
+                    }
+					else if(!field_patt.test(replyto) && !app.validateEmail(replyto))
+                    {                            
+						var options = {'control':el.find('#campaign_reply_to'),
+									'valid_icon':el.find('#replyto_erroricon'),
+									'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
+									'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+									'customfield':el.find('.input-append .replyto-group'),
+									'customfieldcss':'right:25px;'};
+						app.enableValidation(options);
+						isValid = false;
+                    }					
                     else
                     {
-                            camp_obj.$el.find('#replyto_erroricon').css('display','none');
-                            camp_obj.$el.find('#campaign_reply_to').removeAttr('style');
-                            camp_obj.$el.find('.input-append .replyto-group').removeAttr('style');						
-                            //isValid = true;
+						var options = {'control':el.find('#campaign_reply_to'),
+										'valid_icon':el.find('#replyto_erroricon'),
+										'customfield':el.find('.input-append .replyto-group')};
+						app.disableValidation(options);                            
                     }
 
-                    if(email_addr == '' || email_addr.indexOf('.') == -1 || email_addr.indexOf('@') == -1)
-                    {
-                            camp_obj.$el.find('#campaign_default_reply_to').attr('style','border:solid 1px #ff0000;margin-right:1px;');
-                            camp_obj.$el.find('#email_erroricon').css('display','block');
-                            camp_obj.$el.find("#email_erroricon").tooltip({'placement':'right',delay: { show: 0, hide:0 },animation:false});
-                            isValid = false;					
+                    if(email_addr != '' && !app.validateEmail(email_addr))
+                    {                           
+						var options = {'control':el.find('#campaign_default_reply_to'),
+									'valid_icon':el.find('#email_erroricon'),
+									'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
+									'controlcss':'width:80%; float:left; border:solid 1px #ff0000; margin-left:10%;'};
+						app.enableValidation(options);
+						isValid = false;
                     }
                     else
                     {
-                            camp_obj.$el.find('#campaign_default_reply_to').removeAttr('style');
-                            camp_obj.$el.find('#email_erroricon').css('display','none');
-                            //isValid = true;
+						var options = {'control':el.find('#campaign_default_reply_to'),
+										'valid_icon':el.find('#email_erroricon')};
+						app.disableValidation(options);                            
                     }
 
                     if(!isValid)
-                    {
-                            //camp_obj.app.showAlert('Please correct validation errors.',camp_obj.$el.parents("#step_container"));												
-                            proceed = 0;
+                    {                            											
+                    	proceed = 0;
                     }
                     else
                     {

@@ -66,62 +66,61 @@ function (template) {
 				validateLoginFields: function() {
 					var el = this.$el;
 					var isValid = true;
+					var app = this.options.app;
+					var appMsgs = this.app.messages[0];
 					if((el.find('#sf_userid').val() == ''))
 					{						
-						//el.find('#sf_userid').css('border','solid 1px #ff0000');
-						this.enableValidation('sf_userid','sfuid_erroricon','Please supply user id');
+						var options = {'control':el.find('#sf_userid'),
+										'valid_icon':el.find('#sfuid_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.SF_userid_empty_error};
+						app.enableValidation(options);
 						isValid = false;
 					}					
-					else if(el.find('#sf_userid').val().indexOf('.') == -1 || el.find('#sf_userid').val().indexOf('@') == -1)
+					else if(!app.validateEmail(el.find('#sf_userid').val()))
 					{						
-						//el.find('#sf_userid').css('border','solid 1px #ff0000');
-						this.enableValidation('sf_userid','sfuid_erroricon','Please supply correct user id');
+						var options = {'control':el.find('#sf_userid'),
+										'valid_icon':el.find('#sfuid_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.SF_userid_format_error};
+						app.enableValidation(options);
 						isValid = false;
 					}
 					else
 					{
-						this.disableValidation('sf_userid','sfuid_erroricon');
-						//el.find('#sf_userid').attr('style','');						
+						var options = {'control':el.find('#sf_userid'),'valid_icon':el.find('#sfuid_erroricon')};
+						app.disableValidation(options);						
 					}
 					if(el.find('#sf_pwd').val() == '')
 					{
-						//el.find('#sf_pwd').css('border','solid 1px #ff0000');
-						this.enableValidation('sf_pwd','sfpwd_erroricon','Please supply password');
+						var options = {'control':el.find('#sf_pwd'),
+										'valid_icon':el.find('#sfpwd_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.SF_pwd_empty_error};
+						app.enableValidation(options);
 						isValid = false;
 					}
 					else
 					{
-						//el.find('#sf_pwd').attr('style','');
-						this.disableValidation('sf_pwd','sfpwd_erroricon');
+						var options = {'control':el.find('#sf_pwd'),'valid_icon':el.find('#sfpwd_erroricon')};
+						app.disableValidation(options);
 					}
-					if(el.find('#sf_email').val() != '' && 
-							(el.find('#sf_email').val().indexOf('.') == -1 || el.find('#sf_email').val().indexOf('@') == -1))
+					if(el.find('#sf_email').val() != '' && !app.validateEmail(el.find('#sf_email').val()))
 					{						
-						//el.find('#sf_email').css('border','solid 1px #ff0000');
-						this.enableValidation('sf_email','sfemail_erroricon','Please supply correct email');
+						var options = {'control':el.find('#sf_email'),
+										'valid_icon':el.find('#sfemail_erroricon'),
+										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'message':appMsgs.SF_email_format_error};
+						app.enableValidation(options);
 						isValid = false;
 					}
 					else
 					{
-						//el.find('#sf_email').attr('style','');
-						this.disableValidation('sf_email','sfemail_erroricon');
+						var options = {'control':el.find('#sf_email'),'valid_icon':el.find('#sfemail_erroricon')};
+						app.disableValidation(options);
 					}
 					return isValid;
-				},
-				enableValidation:function(control,valid_icon,message)
-				{
-					var el = this.$el;
-					el.find('#'+control).attr('style','border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;');				  
-					el.find('#'+valid_icon).css('display','block');
-					el.find('#'+valid_icon).attr('data-content',message);
-					el.find('#'+valid_icon).popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
-				},
-				disableValidation:function(control,valid_icon)
-				{
-					var el = this.$el;
-					el.find('#'+valid_icon).css('display','none');
-				  	el.find('#'+control).removeAttr('style');
-				},
+				},				
                 initialize: function () {
 					this.template = _.template(template);				
 					this.render();
