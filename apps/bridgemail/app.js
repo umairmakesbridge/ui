@@ -2,7 +2,23 @@ define([
 	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap','views/common/dialog'
 ], function ($, _, Backbone, isotope, bootstrap,bmsDialog) {
 	'use strict';
-	var App = Backbone.Model.extend({                
+	var App = Backbone.Model.extend({
+		messages:[{'CAMP_subject_empty_error':'Subject can not be empty',
+				   'CAMP_subject_length_error':'Subject can be 100 characters long',
+				   'CAMP_fromname_empty_error':'From name can not be empty',
+				   'CAMP_replyto_empty_error':'Reply to field can not be empty',
+				   'CAMP_replyto_format_error':'Please supply correct format',
+				   'CAMP_defaultreplyto_format_error':'Please supply correct email',
+				   'SF_userid_empty_error':'User id can not be empty',
+				   'SF_userid_format_error':'Please supply correct user id',
+				   'SF_pwd_empty_error':'Password can not be empty',				   
+				   'SF_email_format_error':'Please supply correct email',
+				   'NS_userid_empty_error':'User id can not be empty',
+				   'NS_userid_format_error':'Please supply correct user id',
+				   'NS_pwd_empty_error':'Password can not be empty',
+				   'NS_accid_empty_error':'Account id can not be empty',
+				   'NS_email_format_error':'Please supply correct email',
+		}],
 		initialize: function () {
 			//Load config or use defaults
 			this.set(_.extend({
@@ -292,14 +308,36 @@ define([
               }).fail(function() { console.log( "error in salesforce fields" ); });                                          
             }*/
             showDialog:function(options){
-                var dialog = new bmsDialog(options);                
+                var dialog = new bmsDialog(options);
                 
                 $("body").append(dialog.$el);
                 dialog.show();
                 
                 return dialog;
-            }
-             
+            },
+            enableValidation:function(options)
+			{
+				if(options.controlcss)
+					options.control.attr('style',options.controlcss);				
+				if(options.customfield)
+					options.customfield.attr('style',options.customfieldcss);				
+					
+				options.valid_icon.show();
+				options.valid_icon.attr('data-content',options.message);
+				options.valid_icon.popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});								
+			},
+			disableValidation:function(options)
+			{				
+				options.valid_icon.hide();
+				options.control.removeAttr('style');
+				if(options.customfield)
+					options.customfield.removeAttr('style');
+			},
+			validateEmail:function(emailVal)
+			{
+				var email_patt = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+				return email_patt.test(emailVal);
+			}
 	});
 
 	return new App();
