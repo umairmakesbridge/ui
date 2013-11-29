@@ -261,65 +261,18 @@ define([
                 cache[key] = null;
                 delete cache[key];
             },
-            getSalesForceStatus: function(callback)
-            {
-                var app = this;                
-                var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
+            getData:function(data){
+              var app = this;                                
+              jQuery.getJSON(data.URL,  function(tsv, state, xhr){
                     if(xhr && xhr.responseText){
                          var salesforce = jQuery.parseJSON(xhr.responseText);                                
                          if(app.checkError(salesforce)){
                              return false;
                          }                        
-                        app.setAppData("salesfocre",salesforce);
-                        callback();
-                                                
+                        app.setAppData(data.key,salesforce);
+                        data.callback();                                                
                     }
-                }).fail(function() { console.log( "error in salesforce fields" ); });                
-            },
-            getNetSuiteStatus: function(callback)
-            {
-                var app = this;                
-                URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                    if(xhr && xhr.responseText){                        
-                         var netstuite = jQuery.parseJSON(xhr.responseText);                                
-                         if(app.checkError(netstuite)){
-                             return false;
-                         }                        
-                        app.setAppData("netsuite",netstuite);
-                        callback();                        
-                    }
-                }).fail(function() { console.log( "error in salesforce fields" ); });                
-            },
-            getCampaigns:function(callback){
-                var app = this;                
-                var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.get('bms_token')+"&type=listNormalCampaigns";                                                            
-                  jQuery.getJSON(URL,  function(tsv, state, xhr){
-                      if(xhr && xhr.responseText){
-                          var camps_json = jQuery.parseJSON(xhr.responseText);
-                          if(app.checkError(camps_json)){
-                              return false;
-                          }                          
-                          app.setAppData("campaigns",camps_json);  
-                          callback();
-                      }
-                  }).fail(function() { console.log( "error campaign listing" ); });
-            },
-            getLists:function(callback){
-                var app = this;                
-                var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.get('bms_token')+"&type=all";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                    if(xhr && xhr.responseText){										
-                        var list_json = jQuery.parseJSON(xhr.responseText);                                
-                        if(app.checkError(list_json)){
-                             return false;
-                         }  
-                         app.setAppData("lists",list_json);
-                         callback();
-                    }
-                }).fail(function() { console.log( "error lists listing" ); });
-
+                }).fail(function() { console.log( "error in "+data.key+" fields" ); });                  
             },
             showDialog:function(options){
                 var dialog = new bmsDialog(options);                                
@@ -334,7 +287,6 @@ define([
                    options.control.attr('style',options.controlcss);				
                 if(options.customfield)
                    options.customfield.attr('style',options.customfieldcss);				
-
                 options.valid_icon.show();
                 options.valid_icon.attr('data-content',options.message);
                 options.valid_icon.popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});								

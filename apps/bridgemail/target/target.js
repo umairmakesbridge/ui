@@ -58,6 +58,7 @@ function (template,bmsfilters) {
                                  target_head.find("#target_name_text span").html(target_name_input.val());                                                                                                 
                                  target_head.find("#target_name_edit").hide();
                                  camp_obj.app.showMessge("Target Renamed");
+                                 camp_obj.app.removeCache("targets");
                               }
                               else{                                  
                                   camp_obj.app.showAlert(target_json[1],camp_obj.$el);
@@ -80,7 +81,7 @@ function (template,bmsfilters) {
                                  }
                                  target_head.find("#target_name_edit").hide();
                                  camp_obj.app.showMessge("Target Created");
-                                                                  
+                                 camp_obj.app.removeCache("targets");
                               }
                               else{
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el);

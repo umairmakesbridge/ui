@@ -348,8 +348,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         camp_obj.$("#campaign_twitter").prop("checked",camp_json.twitter=="N"?false:true);
                         camp_obj.$("#campaign_linkedin").prop("checked",camp_json.linkedin=="N"?false:true);
                         camp_obj.$("#campaign_pintrest").prop("checked",camp_json.pinterest=="N"?false:true);
-                        camp_obj.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);
-                        //camp_obj.$("#campaign_dunkb").prop("checked",camp_json.googleplus=="N"?false:true);
+                        camp_obj.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
 
                         camp_obj.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
                         camp_obj.$("#campaign_profileUpdate").prop("checked",camp_json.profileUpdate=="N"?false:true);
@@ -386,7 +385,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             camp_obj.$("#conversion_filter").prop("checked",true);                                   
                             camp_obj.states.step1.hasConversionFilter = true;
                             camp_obj.states.step1.pageconversation_checkbox = true;
-                            URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=source";
+                            URL = "/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+bms_token+"&type=get&campNum="+camp_id;
 
                             jQuery.getJSON(URL,  function(tsv, state, xhr){
                                  var conversation_filter = jQuery.parseJSON(xhr.responseText);
@@ -580,8 +579,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                        this.setConversionPage();
                   }  
                 },
-                saveCampaign:function(obj){                   
-                   
+                saveCampaign:function(obj){                                      
                     var camp_obj = this;
                     var camp_name_input =  $(obj.target).parent().find("input");                       
                     var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
@@ -596,6 +594,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                  camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_name_input.val());                                                                
                                  camp_obj.setupCampaign();
                                  camp_obj.app.showMessge("Campaign Renamed");
+                                 camp_obj.app.removeCache("campaigns");
                               }
                               else{                                  
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el.parents(".ws-content.active"));
@@ -623,6 +622,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                  //update workspace tab id 
                                  var li_id =  camp_obj.$el.parents(".ws-content").attr("id").split("_")[1];
                                  $("#wp_li_"+li_id).attr("workspace_id","campaign_"+camp_json[1]);
+                                 camp_obj.app.removeCache("campaigns");
                               }
                               else{
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el.parents(".ws-content.active"));
@@ -635,107 +635,116 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                 },
                 saveStep1:function(){
                     var camp_obj = this;
-					var app = camp_obj.app;
+                    var app = camp_obj.app;
                     var proceed = -1;                   
                     var errorHTML = "";                    					
                     var isValid = true;
-					var el = camp_obj.$el;
-					var replyto = el.find('#campaign_reply_to').val();
+                    var el = camp_obj.$el;
+                    var replyto = el.find('#campaign_reply_to').val();
                     var email_addr = el.find('#campaign_default_reply_to').val();
-					var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                    var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
 					
-					if(el.find('#campaign_subject').val() == '')
-					{
-						var options = {'control':el.find('#campaign_subject'),
-										'valid_icon':el.find('#subject_erroricon'),
-										'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
-										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
-										'customfield':el.find('.input-append .subject-group'),
-										'customfieldcss':'right:25px;'};
-						app.enableValidation(options);						
-                        isValid = false;
-					}
-					else if(el.find('#campaign_subject').val().length > 100)
-					{
-						var options = {'control':el.find('#campaign_subject'),
-										'valid_icon':el.find('#subject_erroricon'),
-										'message':camp_obj.app.messages[0].CAMP_subject_length_error,
-										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
-										'customfield':el.find('.input-append .subject-group'),
-										'customfieldcss':'right:25px;'};
-						app.enableValidation(options);						
-                        isValid = false;
-					}
-					else
-                    {
-						var options = {'control':el.find('#campaign_subject'),
-										'valid_icon':el.find('#subject_erroricon'),
-										'customfield':el.find('.input-append .subject-group')};
-						app.disableValidation(options);						
-                    }
-					if(el.find('#campaign_from_name').val() == '')
-					{
-						var options = {'control':el.find('#campaign_from_name'),
-										'valid_icon':el.find('#fromname_erroricon'),
-										'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
-										'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
-										'customfield':el.find('.input-append .fromname-group'),
-										'customfieldcss':'right:25px;'};
-						app.enableValidation(options);						
-                        isValid = false;
-					}
-					else
-                    {
-						var options = {'control':el.find('#campaign_from_name'),
-										'valid_icon':el.find('#fromname_erroricon'),
-										'customfield':el.find('.input-append .fromname-group')};
-						app.disableValidation(options);						
-                    }
-                    if(replyto == '')
-                    {                            
-						var options = {'control':el.find('#campaign_reply_to'),
-									'valid_icon':el.find('#replyto_erroricon'),
-									'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
-									'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
-									'customfield':el.find('.input-append .replyto-group'),
-									'customfieldcss':'right:25px;'};
-						app.enableValidation(options);
-						isValid = false;
-                    }
-					else if(!field_patt.test(replyto) && !app.validateEmail(replyto))
-                    {                            
-						var options = {'control':el.find('#campaign_reply_to'),
-									'valid_icon':el.find('#replyto_erroricon'),
-									'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
-									'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
-									'customfield':el.find('.input-append .replyto-group'),
-									'customfieldcss':'right:25px;'};
-						app.enableValidation(options);
-						isValid = false;
-                    }					
-                    else
-                    {
-						var options = {'control':el.find('#campaign_reply_to'),
-										'valid_icon':el.find('#replyto_erroricon'),
-										'customfield':el.find('.input-append .replyto-group')};
-						app.disableValidation(options);                            
-                    }
+                    if(el.find('#campaign_subject').val() == ''){
+                           var options = {
+                                'control':el.find('#campaign_subject'),
+                                'valid_icon':el.find('#subject_erroricon'),
+                                'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
+                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'customfield':el.find('.input-append .subject-group'),
+                                'customfieldcss':'right:25px;'
+                            };
+                            app.enableValidation(options);						
+                            isValid = false;
+                        }
+			else if(el.find('#campaign_subject').val().length > 100){
+                            var options = { 
+                                'control':el.find('#campaign_subject'),
+                                'valid_icon':el.find('#subject_erroricon'),
+                                'message':camp_obj.app.messages[0].CAMP_subject_length_error,
+                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'customfield':el.find('.input-append .subject-group'),
+                                'customfieldcss':'right:25px;'
+                            };
+                            app.enableValidation(options);						
+                            isValid = false;
+                       }
+                       else
+                       {
+                            var options = {
+                             'control':el.find('#campaign_subject'),
+                             'valid_icon':el.find('#subject_erroricon'),
+                             'customfield':el.find('.input-append .subject-group')};
+                             app.disableValidation(options);						
+                        }
+			if(el.find('#campaign_from_name').val() == '')
+                        {
+                            var options = {'control':el.find('#campaign_from_name'),
+                                'valid_icon':el.find('#fromname_erroricon'),
+                                'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
+                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'customfield':el.find('.input-append .fromname-group'),
+                                'customfieldcss':'right:25px;'
+                              };
+                            app.enableValidation(options);						
+                            isValid = false;
+			}
+                        else
+                        {
+                            var options = {'control':el.find('#campaign_from_name'),
+                            'valid_icon':el.find('#fromname_erroricon'),
+                            'customfield':el.find('.input-append .fromname-group')
+                            };
+                            app.disableValidation(options);						
+                        }
+                        if(replyto == '')
+                        {                            
+                            var options = {
+                                'control':el.find('#campaign_reply_to'),
+                                'valid_icon':el.find('#replyto_erroricon'),
+                                'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
+                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'customfield':el.find('.input-append .replyto-group'),
+                                'customfieldcss':'right:25px;'
+                               };
+                            app.enableValidation(options);
+                            isValid = false;
+                        }
+                        else if(!field_patt.test(replyto) && !app.validateEmail(replyto))
+                        {                            
+                            var options = {'control':el.find('#campaign_reply_to'),
+                            'valid_icon':el.find('#replyto_erroricon'),
+                            'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
+                            'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                            'customfield':el.find('.input-append .replyto-group'),
+                            'customfieldcss':'right:25px;'};
+                            app.enableValidation(options);
+                            isValid = false;
+                        }					
+                        else
+                        {
+                            var options = {'control':el.find('#campaign_reply_to'),
+                                'valid_icon':el.find('#replyto_erroricon'),
+                                'customfield':el.find('.input-append .replyto-group')
+                               };
+                            app.disableValidation(options);                            
+                        }
 
-                    if(email_addr != '' && !app.validateEmail(email_addr))
-                    {                           
-						var options = {'control':el.find('#campaign_default_reply_to'),
-									'valid_icon':el.find('#email_erroricon'),
-									'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
-									'controlcss':'width:80%; float:left; border:solid 1px #ff0000; margin-left:10%;'};
-						app.enableValidation(options);
-						isValid = false;
-                    }
-                    else
-                    {
-						var options = {'control':el.find('#campaign_default_reply_to'),
-										'valid_icon':el.find('#email_erroricon')};
-						app.disableValidation(options);                            
-                    }
+                        if(email_addr != '' && !app.validateEmail(email_addr))
+                        {                           
+                            var options = {'control':el.find('#campaign_default_reply_to'),
+                            'valid_icon':el.find('#email_erroricon'),
+                            'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
+                            'controlcss':'width:80%; float:left; border:solid 1px #ff0000; margin-left:10%;'};
+                            app.enableValidation(options);
+                            isValid = false;
+                        }
+                        else
+                        {
+                            var options = {'control':el.find('#campaign_default_reply_to'),
+                                           'valid_icon':el.find('#email_erroricon')
+                                          };
+                            app.disableValidation(options);                            
+                        }
 
                     if(!isValid)
                     {                            											
@@ -743,68 +752,68 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }
                     else
                     {
-                            camp_obj.$el.find('#campaign_reply_to').attr('style','');
-                            camp_obj.$el.find('#campaign_default_reply_to').attr('style','');
-                            this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
-                            if(this.$("#campaign_subject").val()==""){
-                                    proceed = 0;
-                                    this.$("#campaign_subject").addClass("form-error");
-                                    errorHTML +="- Subject can't be blank. <br/>";
-                            }
-                            if(this.$("#campaign_subject").val().length>100){
-                                    this.$("#campaign_subject").addClass("form-error");
-                                    errorHTML +="- Subject length cann't be greater than 100 characters. <br/>";
-                                    proceed = 0;
-                            }
-                            if(this.$("#campaign_from_name").val()==""){
-                                    this.$("#campaign_from_name").addClass("form-error");
-                                    errorHTML +="- From name can't be empty. <br/>";
-                                    proceed = 0;
-                            }
-                            if(errorHTML){
-                                     var messageObj = {};
-                                     messageObj["heading"] = "Step 1: Following error(s) occured:" 
-                                     messageObj["detail"] = errorHTML;
-                                     this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
-                            }
-                            if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
-                                    this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
-                                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                                    $.post(URL, { type: "saveStep1",campNum:this.camp_id,
-                                                             subject : this.$("#campaign_subject").val(),
-                                                             senderName :this.$("#campaign_from_name").val(),
-                                                             defaultSenderName :this.$("#campaign_default_from_name").val(),
-                                                             replyTo :this.$("#campaign_reply_to").val(),
-                                                             defaultReplyToEmail :this.$("#campaign_default_reply_to").val(),
-                                                             tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
-                                                             subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
-                                                             unsubscribe :this.$("#campaign_unSubscribeType").val(),
-                                                             provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
-                                                             isCampaignText :this.$("#campaign_isTextOnly")[0].checked?'Y':'N',
-                                                             isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
-                                                             footerText :this.$("#campaign_footer_text").val(),
-                                                             useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
-                                                             isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N',
-                                                             facebookShareIcon :this.$("#campaign_fb")[0].checked?'Y':'N',
-                                                             twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
-                                                             linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
-                                                             googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
-                                                             pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
-                                              })
-                                             .done(function(data) {                                 
-                                                     var step1_json = jQuery.parseJSON(data);
-                                                     camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
-                                                     if(step1_json[0]!=="err"){
-                                                             camp_obj.app.showMessge("Step 1 saved successfully!");                                     
-                                                             camp_obj.states.step1.change=false;
-                                                             camp_obj.wizard.next();
-                                                     }
-                                                     else{
-                                                            camp_obj.app.showMessge(step1_json[0]); 
-                                                     }
-                                    });
-                                    proceed = 1;
-                            }
+                        camp_obj.$el.find('#campaign_reply_to').attr('style','');
+                        camp_obj.$el.find('#campaign_default_reply_to').attr('style','');
+                        this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
+                        if(this.$("#campaign_subject").val()==""){
+                                proceed = 0;
+                                this.$("#campaign_subject").addClass("form-error");
+                                errorHTML +="- Subject can't be blank. <br/>";
+                        }
+                        if(this.$("#campaign_subject").val().length>100){
+                                this.$("#campaign_subject").addClass("form-error");
+                                errorHTML +="- Subject length cann't be greater than 100 characters. <br/>";
+                                proceed = 0;
+                        }
+                        if(this.$("#campaign_from_name").val()==""){
+                                this.$("#campaign_from_name").addClass("form-error");
+                                errorHTML +="- From name can't be empty. <br/>";
+                                proceed = 0;
+                        }
+                        if(errorHTML){
+                                 var messageObj = {};
+                                 messageObj["heading"] = "Step 1: Following error(s) occured:" 
+                                 messageObj["detail"] = errorHTML;
+                                 this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
+                        }
+                        if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
+                                this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
+                                var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                                $.post(URL, { type: "saveStep1",campNum:this.camp_id,
+                                        subject : this.$("#campaign_subject").val(),
+                                        senderName :this.$("#campaign_from_name").val(),
+                                        defaultSenderName :this.$("#campaign_default_from_name").val(),
+                                        replyTo :this.$("#campaign_reply_to").val(),
+                                        defaultReplyToEmail :this.$("#campaign_default_reply_to").val(),
+                                        tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
+                                        subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
+                                        unsubscribe :this.$("#campaign_unSubscribeType").val(),
+                                        provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
+                                        isCampaignText :this.$("#campaign_isTextOnly")[0].checked?'Y':'N',
+                                        isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
+                                        footerText :this.$("#campaign_footer_text").val(),
+                                        useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
+                                        isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N',
+                                        facebookShareIcon :this.$("#campaign_fb")[0].checked?'Y':'N',
+                                        twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
+                                        linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
+                                        googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
+                                        pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
+                                  })
+                                 .done(function(data) {                                 
+                                    var step1_json = jQuery.parseJSON(data);
+                                    camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
+                                    if(step1_json[0]!=="err"){
+                                            camp_obj.app.showMessge("Step 1 saved successfully!");                                     
+                                            camp_obj.states.step1.change=false;
+                                            camp_obj.wizard.next();
+                                    }
+                                    else{
+                                           camp_obj.app.showMessge(step1_json[0]); 
+                                    }
+                                });
+                                proceed = 1;
+                        }
                     }
                     return proceed;
                 },
@@ -923,8 +932,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   
                 },
                 loadDataAjax:function(){
-                    var camp_obj = this;       
-                                        
+                    var camp_obj = this;                                               
                     //Load Defaults 
                     var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -945,8 +953,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             }
                         }
                     }).fail(function() { console.log( "error in detauls" ); });                    										
-                    
-                    this.app.getSalesForceStatus(_.bind(this.showSalesForceArea,this));                                        
+                                        
+                    this.app.getData({
+                        "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"salesfocre",
+                        "callback":_.bind(this.showSalesForceArea,this)
+                    });
                     
                     URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -1071,14 +1083,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.setRecipients();
                     }
                 },
-		createTargetsTable:function(xhr){ 
+		createTargetsTable:function(){ 
                     var camp_obj=this;
+                    this.$el.find("#trecpcount span").text('0');
                     this.$el.find("#targets").children().remove();
-                    var targets_list_json = jQuery.parseJSON(xhr.responseText);
-                    if(this.app.checkError(targets_list_json)){
-                        return false;
-                     }
-					
+                    var targets_list_json = this.app.getAppData("targets");
+                   		
                     camp_obj.$el.find('#area_choose_targets #targets .bmsgrid').remove();
                     camp_obj.$el.find("#area_choose_targets .col2 .bmsgrid").remove();
                     camp_obj.$el.find("#area_choose_targets").removeData("mapping");
@@ -1120,7 +1130,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                     camp_obj.copyTarget(obj);
                             }
                     });
-                    camp_obj.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
+                    this.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
+                    if(this.states.step3.recipientType.toLowerCase()=="target"){
+                        this.setRecipients();
+                    }
 					
                 },
                 createCampaignListTable:function(){                    
@@ -1527,8 +1540,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                          break;
                             case 'copy_campaign':
                                  if(!this.app.getAppData("campaigns")){
-                                    this.app.showLoading("Loading Campaigns...",this.$("#copy-camp-listing")); 
-                                    this.app.getCampaigns(_.bind( this.createCampaignListTable,this));
+                                    this.app.showLoading("Loading Campaigns...",this.$("#copy-camp-listing"));                                     
+                                    this.app.getData({
+                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns",
+                                        "key":"campaigns",
+                                        "callback":_.bind(this.createCampaignListTable,this)
+                                    });
                                  }
                                  else{
                                     this.createCampaignListTable(); 
@@ -1901,26 +1918,30 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 if(this.checkRecipientsSaved("target")){
                                     return false;
                                 }
-                                this.$el.find("#trecpcount span").text('0');
-				camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
-                                URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C";
-                                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                if(xhr && xhr.responseText){										
-                                        camp_obj.createTargetsTable(xhr);
-                                        if(camp_obj.states.step3.recipientType.toLowerCase()=="target"){
-                                            camp_obj.setRecipients();
-                                        }                                        
+                                if(!this.app.getAppData("targets")){                                    
+                                    camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
+                                     this.app.getData({
+                                        "URL":"/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C",
+                                        "key":"targets",
+                                        "callback":_.bind(this.createTargetsTable,this)
+                                    });
                                 }
-
-                                }).fail(function() { console.log( "error lists listing" ); });
+                                else{
+                                    this.createTargetsTable();
+                                }
+                                
                                 break;
                         case 'choose_lists':						   
                                  if(this.checkRecipientsSaved("list")){
                                     return false;
                                 }                                
                                 if(!this.app.getAppData("lists")){
-                                    this.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));
-                                    this.app.getLists(_.bind(this.createListTable,this));
+                                    this.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));                                    
+                                    this.app.getData({
+                                        "URL":"/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all",
+                                        "key":"lists",
+                                        "callback":_.bind(this.createListTable,this)
+                                    });
                                 }
                                 else{
                                     this.createListTable();
@@ -2006,8 +2027,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         var salesforce_setting = this.app.getAppData("salesfocre");
                         if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
                         {
-                                camp_obj.app.showLoading("Getting Salesforce Status...",camp_obj.$el.find('#area_salesforce_import')); 
-                                this.app.getSalesForceStatus(_.bind(this.setSalesForceWiz,this));
+                            camp_obj.app.showLoading("Getting Salesforce Status...",camp_obj.$el.find('#area_salesforce_import'));                                 
+                            this.app.getData({
+                                "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                                "key":"salesfocre",
+                                "callback":_.bind(this.setSalesForceWiz,this)
+                            });
                         }
                         else{
                             this.setSalesForceWiz();
@@ -2233,8 +2258,12 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         var netsuite_setting = this.app.getAppData("netsuite");
                         if(!netsuite_setting || netsuite_setting[0] == "err" || netsuite_setting.isNetsuiteUser=="N")
                         {
-                                camp_obj.app.showLoading("Getting Netsuite Status...",camp_obj.$el.find('#area_netsuite_import'));
-                                this.app.getNetSuiteStatus(_.bind(this.setNetSuiteeWiz,this));
+                                camp_obj.app.showLoading("Getting Netsuite Status...",camp_obj.$el.find('#area_netsuite_import'));                                
+                                this.app.getData({
+                                    "URL":"/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                                    "key":"netsuite",
+                                    "callback":_.bind(this.setNetSuiteeWiz,this)
+                                });
                         }
                         else{
                             this.setNetSuiteeWiz();

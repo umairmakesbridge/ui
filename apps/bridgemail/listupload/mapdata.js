@@ -162,6 +162,7 @@ function ($,Backbone,_,app,template,chosen) {
 
 					   //return curview.mapdataview.savecampaign(list_json[2],list_json[1]);
 					   curview.csvupload.removeFile();
+                                           app.removeCache("lists");
 					   curview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
 					   //return true;
 				   }

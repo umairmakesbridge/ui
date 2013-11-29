@@ -42,8 +42,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			,
 			getallcampaigns: function () {				                               				
                                 if(!this.app.getAppData("campaigns")){
-                                    this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));
-                                    this.app.getCampaigns(_.bind( this.createListTable,this));
+                                    this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
+                                    this.app.getData({
+                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns",
+                                        "key":"campaigns",
+                                        "callback":_.bind(this.createListTable,this)
+                                    });
                                  }
                                  else{
                                      this.createListTable()
