@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping'],
-function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping'],
+function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping) {
 
         'use strict';
         return Backbone.View.extend({
