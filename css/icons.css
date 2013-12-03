@@ -193,7 +193,7 @@
 
 
 .grayicons .icon.graphics {
-	background-position: -30px 0;
+	background-position: -28px 2px;
 }
 .grayicons .icon.upload-subscribers {
 	background-position: -30px -30px;
@@ -259,11 +259,11 @@
 .grayicons .icon.newwin {
 	background-position: -0px -630px;
 }
-.grayicons .icon.delete {
+.icon.delete {
 	background-position: -0px -660px;
 }
 .grayicons .icon.fav {
-	background-position: -30px -690px;
+	background-position: 0px -690px;
 }
 .grayicons .icon.close {
 	background-position: -0px -720px;
@@ -424,7 +424,7 @@
 
 /* ----------------------------------------------------------------------- */
 
-
+/*
 ul.nav > li:hover >  a > .icon.studio {
     background-position: -60px -390px !important;
 }
@@ -444,7 +444,7 @@ ul.nav > li:hover > a .icon.automation {
 ul.nav > li:hover > a .icon.account {
 	background-position: -60px -330px;
 }
-
+*/
 
 /* ---------------------------------- */
 
@@ -608,7 +608,7 @@ ul.nav  ul.tab-icons li a .icon.add {
 :hover.view {  background-position: -360px -300px;}
 
 .edit {background-position: -300px -330px;}
-.edit:hover {background-position: -360px -330px;}
+.edit:hover {background-position: ;}
 
 .icon.h-info  {    background-position: -300px -30px; }
 .icon.social  {    background-position: -300px -60px; }
@@ -625,13 +625,18 @@ ul.nav  ul.tab-icons li a .icon.add {
 
 
 
-.social-icon { width:25px; height:24px; display:block; background:url(../img/icon-map.png) no-repeat 0 0;}
-.fb {background-position:  -610px -810px;}
-.tw {background-position:  -635px -810px;}
-.in {background-position:  -610px -834px;}
-.pi {background-position:  -635px -834px;}
-.gp {background-position:  -610px -858px;}
-.dn {background-position:  -635px -858px;}
+.social-icon { width:30px; height:30px; display:block; background:url(../img/social-icons.png) no-repeat 0 0;}
+.fb {background-position:  -0px 0px;}
+.tw {background-position:  -30px 0px;}
+.in {background-position:  -60px 0px;}
+.pi {background-position:  -90px 0px;}
+.gp {background-position:  -120px 0px;}
+
+.btnchecked .fb {background-position:  -0px -30px;}
+.btnchecked .tw {background-position:  -30px -30px;}
+.btnchecked .in {background-position:  -60px -30px;}
+.btnchecked .pi {background-position:  -90px -30px;}
+.btnchecked .gp {background-position:  -120px -30px;}
 
 
 
@@ -640,42 +645,52 @@ ul.nav  ul.tab-icons li a .icon.add {
 
 
 
-.btn { background:#fff; border:1px solid #d7d9dc;
-padding:2px 5px;
+.btn { background:#fff; border:0px solid #d7d9dc;
+padding:0px 5px;
+text-shadow: none;
 color: #5A5A5A;
-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
--webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
--moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-line-height: 28px;
-padding: 2px 15px;
+box-shadow: none;
+-webkit-box-shadow:  none;
+-moz-box-shadow: none;
+line-height: 22px;
 }
 
 
 	
 	
 	
-.btn-group {}
-.btn-group .btn  {background: none repeat scroll 0 0 #FFFFFF ; border: 1px solid #D7D9DC ;
+.btn-group {
+	background: none repeat scroll 0 0 #EAF5FC ;
+	padding: 0 0;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;}
+.btn-group .btn  {background: none repeat scroll 0 0 #EAF5FC ; border: 0px solid #D7D9DC ;
+
 }
-.btn-group .btn:hover  {background: none repeat scroll 0 0 #f3f5f8 ; border: 1px solid #afb1b3 ;}
-.btn-group .btn:focus, .btn-group .btn.active   {background: none repeat scroll 0 0 #F3F5F8 ; border: 1px solid #D7D9DC;
-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
--webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
--moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+.btn-group .btn:hover  {background: none repeat scroll 0 0 #EAF4F9 ; }
+.btn-group .btn:focus, .btn-group .btn.active   {background: none repeat scroll 0 0 #fff ; border:0;
+-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none; 
 outline:0;
-
+    line-height: 22px;
+    padding: 0 5px;
 }
+
 .btn-group .btn input {
     margin: -2px 8px 0 -3px;
     vertical-align: middle;
 }
 .btn-group > .btn:first-child {
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
+    border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
 }
 .btn-group > .btn:last-child, .btn-group > .dropdown-toggle {
     border-bottom-right-radius:3px;
     border-top-right-radius: 3px;
+    border: 0 none;
 }
 
 
@@ -692,12 +707,77 @@ outline:0;
 
 
 
+i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
+
+.icon.back {	background: url("../img/back.png") no-repeat center center;}
+.icon.next {	background: url("../img/next.png") no-repeat center center;}
+.icon.save {   background: url("../img/save.png") no-repeat center center;}
+.icon.delete {   background: url("../img/delete.png") no-repeat 4px 3px ;}
+.icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
+.icon.list {   background: url("../img/list.png") no-repeat center center ;}
+.icon.copy {   background: url("../img/copy.png") no-repeat center center ;}
+.icon.check {   background: url("../img/check.png") no-repeat center center ;}
+.icon.activate {background: url("../img/play.png") no-repeat center center ;}
+.icon.deactivate {background: url("../img/pause.png") no-repeat center center ;}
+.icon.update {background: url("../img/update.png") no-repeat center center ;}
+.icon.chat {background: url("../img/chat.png") no-repeat center center ;}
+.icon.score {background: url("../img/score.png") no-repeat center center ;}
+
+
+/*
+.icon.campaigns {   background: url("../img/campaigns.png") no-repeat center center ;}
+*/
+#copycampsearch .icon.campaigns {   background: url("../img/campaigns.png") no-repeat center center ;}
+
+.icon.mobile {   background: url("../img/mobile.png") no-repeat center center ;}
+.icon.mobile:hover {   background: url("../img/mobile-hover.png") no-repeat center center ;}
+
+.icon.builtin {   background: url("../img/builtin.png") no-repeat center center ;}
+.icon.schedule {   background: url("../img/schedule.png") no-repeat center center ;}
+.icon.cross {   background: url("../img/cross.png") no-repeat center center ;}
+.icon.edit2 {   background: url("../img/edit2.png") no-repeat center center ;}
+.icon.newwin2 {   background: url("../img/newwin.png") no-repeat center center ;}
+.icon.plus {   background: url("../img/plus.png") no-repeat center center ;}
+.icon.setting {   background: url("../img/setting.png") no-repeat center center ;}
+.icon.filter {   background: url("../img/icon-map.png") no-repeat scroll -210px -838px rgba(0, 0, 0, 0);}
+.icon.time {   background: url("../img/time.png") no-repeat scroll center center !important;}
+.icon.sendmail {   background: url("../img/sendmail.png") no-repeat scroll center center ;}
+.icon.hide {   background: url("../img/hide.png") no-repeat scroll center center ;}
+.icon.preview2 {   background: url("../img/preview2.png") no-repeat scroll center center ;}
+.icon.mbaction {   background: url("../img/mbaction.png") no-repeat scroll center center ;}
+
+.icon.alerticon {   background: url("../img/alert.png") no-repeat scroll center center ;}
+.icon.mail {   background: url("../img/mail.png") no-repeat scroll center center ;}
+.icon.chat {   background: url("../img/chat2.png") no-repeat scroll center center ;}
+.icon.coursecorrect {   background: url("../img/coursecorrect.png") no-repeat scroll center center ;}
 
 
 
+.icon.h-info {
+   background: url("../img/headinfo.png") no-repeat center center;
+}
+.icon.settings {
+   background: url("../img/settings.png") no-repeat center center;
+}
+.icon.social {
+   background: url("../img/social.png") no-repeat center center;
+}
+.icon.preview {
+   background: url("../img/preview.png") no-repeat center center;
+}
+.icon.subscribers {
+   background: url("../img/subscribers.png") no-repeat center center;
+}
 
-
-
+.icon.h-info2 {
+   background: url("../img/headinfo2.png") no-repeat center center;
+}
+.icon.settings2 {
+   background: url("../img/settings2.png") no-repeat center center;
+}
+.icon.social2 {
+   background: url("../img/social2.png") no-repeat center center;
+}
 
 
 

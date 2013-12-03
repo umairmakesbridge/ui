@@ -59,37 +59,40 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				var camp_obj = this;				
 				var camp_list_json = this.app.getAppData("campaigns");
 				var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid"><tbody>';				
-				$.each(camp_list_json.lists[0], function(index, val) {
-					list_html += camp_obj.makecamprows(val);					
-				});	
-				                
-				list_html += '</tbody></table>';
-				this.app.showLoading(false,camp_obj.$el.find("#target-camps"));
-				this.$el.find("#target-camps").html(list_html);
-											
-				this.$el.find("#camps_grid").bmsgrid({
-						useRp : false,
-						resizable:false,
-						colresize:false,
-						height:this.app.get('wp_height')-122,
-						usepager : false,
-						colWidth : ['100%','90px','66px','132px']
-				});                                                                
-                                this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
-                                this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
-                                this.$("#camps_grid tr td:nth-child(4)").attr("width","132px");
-				var camp_count_lable = '';
+                                if(camp_list_json.count!=="0"){
+                                    $.each(camp_list_json.lists[0], function(index, val) {
+                                            list_html += camp_obj.makecamprows(val);					
+                                    });	
+
+                                    list_html += '</tbody></table>';
+                                    this.app.showLoading(false,camp_obj.$el.find("#target-camps"));
+                                    this.$el.find("#target-camps").html(list_html);
+
+                                    this.$el.find("#camps_grid").bmsgrid({
+                                                    useRp : false,
+                                                    resizable:false,
+                                                    colresize:false,
+                                                    height:this.app.get('wp_height')-122,
+                                                    usepager : false,
+                                                    colWidth : ['100%','90px','66px','132px']
+                                    });                                                                
+                                    this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
+                                    this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
+                                    this.$("#camps_grid tr td:nth-child(4)").attr("width","132px");
+                                }
+				var camp_count_lable = '';                                
 				if(camp_list_json.count > 1)
-					camp_count_lable = 'Campaigns found';
+                                    camp_count_lable = 'Campaigns found';
 				else
-					camp_count_lable = 'Campaign found';				
+                                    camp_count_lable = 'Campaign found';				
 				this.$el.find("span#no_of_camps").html(camp_list_json.count+' '+camp_count_lable);				
+                                this.app.showLoading(false,this.$("#target-camps"));
 			}
 			,
 			makecamprows: function (val){
 				var camp_obj = this;
 				var row_html = '<tr id="row_'+val[0].campNum+'">';
-				row_html += '<td class="firstcol"><div class="name-type"><h3>'+ val[0].name +'</h3>   <div class="  tags"><h5>Tags:</h5>'+ this.app.showTags(val[0].tags) +'</div></div></td>';
+				row_html += '<td class="firstcol"><div class="name-type"><h3>'+ val[0].name +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div></td>';
 				var datetime = val[0].scheduledDate;
 				if(datetime)
 				{
@@ -108,7 +111,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					dateFormat = '';					
                                      }   
 				row_html += '<td><div class="subscribers show" style="width:60px"><span class=""></span>0</div></td>';
-				row_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div><div id="'+ val[0].campNum +'" class="action"><a id="'+ val[0].campNum +'" class="btn-green">Select</a></div></td>';					
+				row_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div><div id="'+ val[0].campNum +'" class="action"><a id="'+ val[0].campNum +'" class="btn-green"><span>Select</span></a></div></td>';					
 				row_html += '</tr>';
 				return row_html;
 			}

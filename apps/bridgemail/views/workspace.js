@@ -35,11 +35,11 @@ function ($,Backbone, _,app,Wizard, template) {
                     },
                     'mouseover .toolbar .icon':function(obj){                			
                         var obj = $.getObj(obj,"a");
-			obj.parent().addClass('active');
+			//obj.parent().addClass('active');
                     },
                     'mouseout .toolbar .icon':function(obj){                			
                         var obj = $.getObj(obj,"a");
-			obj.parent().removeClass('active');
+			//obj.parent().removeClass('active');
                     }
                     
                 },

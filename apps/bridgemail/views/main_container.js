@@ -99,7 +99,7 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
                 $("#workspace .workspace").append(wp_view.$el.fadeIn('fast',function(){
                      wp_view.initScroll(wp_view.$el);
                 }));
-                wp_view.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 500, hide:10 }});
+                wp_view.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 
                 var self = this;
                 $("#wp_li_"+wp_count).click(function(){                  

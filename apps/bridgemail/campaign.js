@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','listupload/csvupload','listupload/mapdata','bms-mapping'],
-function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,CSVUploadView,MapDataView,Mapping) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','listupload/csvupload','listupload/mapdata','bms-mapping'],
+function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,CSVUploadView,MapDataView,Mapping) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -18,7 +18,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                           var camp_obj = this;
                            var target_li =$.getObj(obj,"li"); 
                           if(this.$(".step2 #choose_soruce li.selected").length==0){
-                                this.$(".step2 .selection-boxes").animate({width:"425px",margin:'0px auto'}, "medium",function(){
+                                this.$(".step2 .selection-boxes").animate({width:"560px",margin:'0px auto'}, "medium",function(){
                                     $(this).removeClass("create-temp");                                                                                        
                                     camp_obj.step2SlectSource(target_li);
                                 });
@@ -37,50 +37,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                            if(input_obj.val().indexOf("{{") ==-1  && input_obj.val().indexOf("}}")==-1){
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
-                       },
-                      'click #campaign_add_to_salesforce':function(obj){                          
-                          if(obj.target.checked){ 
-                            this.states.step1.sf_checkbox = true;
-                            this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
-                            if(this.states.saleforce_campaigns ===null)
-                                this.showSalesForceCampaigns();
-                            this.$( "#accordion" ).accordion({ active: 0 });				
-                          }
-                          else{
-                              this.removeResultFromSF();	
-                              this.states.step1.sf_checkbox = false;
-                              this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
-                              this.$( "#accordion" ).accordion({ active: false });                              
-                          }
-                          this.setSalesForceCombo();                          
-                          obj.stopPropagation();
-                      },
-                      'click #conversion_filter':function(obj){                          
-                          if(obj.target.checked){                              
-                            this.states.step1.pageconversation_checkbox = true;  
-                            this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
-                            this.$( "#accordion1" ).accordion({ active: 0 });
-                          }
-                          else{
-                              this.removeConversionPage();       
-                              this.states.step1.pageconversation_checkbox = false;
-                              this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
-			      				this.$( "#accordion1" ).accordion({ active: 1 });
-                          }
-                          this.setConversionPage();                          
-                          obj.stopPropagation();
-                      },
+                       },                                            
                       'click #save_conversion_filter':function(){
                           this.saveConversionPage();
-                      },
-                      
+                      },                      
                       'click #save_results_sf':function(){
                            this.saveResultToSF();
                        },
                       'click .mergefields-box' :function(obj){
                           this.showMergeFieldDialog(obj);
                       },
-                      'click #campaign_isFooterText':function(){
+                      'change #campaign_isFooterText':function(){
                         this.setFooterArea();
                       },
                       'change .step1 input,change .step1 select,change .step1 textarea':function(){
@@ -189,7 +156,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 placeholder: 'Search Lists',
                                 gridcontainer: 'list_grid',
                                 showicon: 'yes',
-                                iconsource: 'add-list'
+                                iconsource: 'list'
                          });
                          this.$el.find('div#targetssearch').searchcontrol({
                                 id:'target-list-search',
@@ -260,8 +227,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                         this.loadCampaign(this.camp_id);
                     }
                     else{
-                        this.initCampaignTag('')   
+                        this.initCampaignTag('');
+                        this.initCheckbox();
                     }
+                    //Init Accoridions on first step
                     this.$( "#accordion" ).accordion({ active: 1, collapsible: true,activate: _.bind(function(){
                             this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox)
                             
@@ -269,11 +238,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$( "#accordion1" ).accordion({ active: 1, collapsible: true,activate:_.bind(function(){
                             this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
                     },this) });
+                
+                    //Init Edtior
                     this.$el.parents(".ws-content").append(this.bmseditor.$el);
                     this.bmseditor.initEditor({id:this.wp_id});
                     
                     //Init Chosen combo                    
-                    this.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "270px",disable_search: "true"});                                       
+                    this.$("#con_filter_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                       
                     this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
                         this.states.step1.change = true;
@@ -281,7 +252,45 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$("#campaign_schedule_time").chosen({ width: "76px",disable_search: "true"});       
                     this.$("#campaign_schedule_timeam").chosen({ width: "62px",disable_search: "true"});       
                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!',disable_search: "true"});
+                    
+                    //Init icheck boxes 
+                     
                    
+                },
+                initCheckbox:function(){
+                    this.$('input').iCheck({
+                        checkboxClass: 'checkinput',
+                        radioClass: 'radioinput'
+                     });
+                     this.$('input.checkpanel').iCheck({
+                         checkboxClass: 'checkpanelinput',
+                         insert: '<div class="icheck_line-icon"></div>'
+                     });
+                     this.$( "ul.socialbtns li label " ).click(function() {
+                        $(this).toggleClass( "btnchecked" );
+                     });
+                     var camp = this;
+                     this.$(".iCheck-helper").click(function(){
+                         var icheck = $(this).parent().find("input");
+                         var icheck_id = icheck.attr("id");
+                         if(icheck_id=="campaign_isFooterText"){
+                            camp.setFooterArea();
+                         }
+                         else if(icheck_id=="campaign_add_to_salesforce"){
+                            camp.setSalesForceStep1(icheck); 
+                         }
+                         else if(icheck_id=="conversion_filter"){
+                            camp.setCoversionPageStep1(icheck); 
+                         }
+                         else if(icheck_id=="campaign_fb" || icheck_id=="campaign_twitter" || icheck_id=="campaign_linkedin" || icheck_id=="campaign_pintrest" || icheck_id=="campaign_gplus"){
+                             if( $(this).parent().next().hasClass("btnchecked")){
+                                 $(this).parent().next().removeClass("btnchecked");
+                             }
+                             else{
+                                $(this).parent().next().addClass("btnchecked");
+                             }
+                         }
+                     })
                 },
                 initTemplateListing:function(){
                     this.$el.find("#camp_list_grid").bmsgrid({
@@ -345,10 +354,25 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
 
                         camp_obj.$("#campaign_socail_networks").prop("checked",camp_json.isShareIcons=="N"?false:true);
                         camp_obj.$("#campaign_fb").prop("checked",camp_json.facebook=="N"?false:true);
+                        if(camp_json.facebook=="Y"){
+                            camp_obj.$("label[for='campaign_fb']").addClass("btnchecked");
+                        }
                         camp_obj.$("#campaign_twitter").prop("checked",camp_json.twitter=="N"?false:true);
+                        if(camp_json.twitter=="Y"){
+                            camp_obj.$("label[for='campaign_twitter']").addClass("btnchecked");
+                        }
                         camp_obj.$("#campaign_linkedin").prop("checked",camp_json.linkedin=="N"?false:true);
+                        if(camp_json.linkedin=="Y"){
+                            camp_obj.$("label[for='campaign_linkedin']").addClass("btnchecked");
+                        }
                         camp_obj.$("#campaign_pintrest").prop("checked",camp_json.pinterest=="N"?false:true);
+                        if(camp_json.pinterest=="Y"){
+                            camp_obj.$("label[for='campaign_pintrest']").addClass("btnchecked");
+                        }
                         camp_obj.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
+                        if(camp_json.googleplus=="Y"){
+                            camp_obj.$("label[for='campaign_gplus']").addClass("btnchecked");
+                        }
 
                         camp_obj.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
                         camp_obj.$("#campaign_profileUpdate").prop("checked",camp_json.profileUpdate=="N"?false:true);
@@ -410,7 +434,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             camp_obj.$( "#accordion1" ).accordion({ active: false });
                             camp_obj.setConversionPage();
                         }
-                        
+                        camp_obj.initCheckbox();
                         camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                     });  
                 }
@@ -420,10 +444,13 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   var editIconCampaign = $('<a class="icon edit"></a>');
                   var deleteIconCampaign = $('<a class="icon delete"></a>');
                   var active_ws = this.$el.parents(".ws-content");
+                  
                   var header_title = active_ws.find(".camp_header .edited  h2");
-                  header_title.append(previewIconCampaign);
-                  header_title.append(editIconCampaign);
-                  header_title.append(deleteIconCampaign);
+                  var action_icon = $('<div class="pointy"></div>")');                                                     
+                  action_icon.append(editIconCampaign);
+                  action_icon.append(deleteIconCampaign);
+                  header_title.append(action_icon); 
+                  
                   active_ws.find(".camp_header").addClass("heighted-header");
                   active_ws.find("#header_wp_field").attr("placeholder","Type in Campaign Name");
                   active_ws.find("#save_campaign_btn").click(_.bind(this.saveCampaign,this));               
@@ -436,14 +463,14 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                  });
                   
                   editIconCampaign.click(function(e){                      
-                      active_ws.find(".camp_header .c-name h2").hide();
+                      active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
                       e.stopPropagation();
                   });
                   active_ws.find("#workspace-header").click(function(e){
-                      active_ws.find(".camp_header .c-name h2").hide();
+                      active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
@@ -571,7 +598,7 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                   }
                   else{
                        active_ws.find(".camp_header .c-name .edited").hide();                        
-                       active_ws.find(".camp_header .c-name h2").show();                        
+                       active_ws.find(".camp_header .c-name h2,#campaign_tags").show();                        
                        active_ws.find("#header_wp_field").focus().attr("process-id",this.camp_id);  
                        active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",false);
                        this.setFooterArea();
@@ -1052,8 +1079,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';                        
-                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show" style="width:75px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green add move-row">Use</a></div></td>';                        
+                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
+                        list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add move-row"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
@@ -1066,10 +1093,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             colresize:false,
                             height:this.app.get('wp_height')-122,							
                             usepager : false,
-                            colWidth : ['100%','100px']
+                            colWidth : ['100%','90px']
                     });					                    
                     this.$("#list_grid tr td:first-child").attr("width","100%");
-                    this.$("#list_grid tr td:last-child").attr("width","100px");	
+                    this.$("#list_grid tr td:last-child").attr("width","90px");	
                     this.$("#recipients-list").css("height",this.app.get('wp_height')-122);										
 								
                     this.$el.find("#area_choose_lists").mapping({
@@ -1082,6 +1109,37 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     if(this.states.step3.recipientType.toLowerCase()=="list"){
                         this.setRecipients();
                     }
+                },
+                setSalesForceStep1:function(obj){
+                   if(obj.prop("checked")){ 
+                    this.states.step1.sf_checkbox = true;
+                    this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
+                    if(this.states.saleforce_campaigns ===null)
+                        this.showSalesForceCampaigns();
+                    this.$( "#accordion" ).accordion({ active: 0 });				
+                  }
+                  else{
+                      this.removeResultFromSF();	
+                      this.states.step1.sf_checkbox = false;
+                      this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
+                      this.$( "#accordion" ).accordion({ active: false });                              
+                  }
+                  this.setSalesForceCombo();                                            
+                },
+                setCoversionPageStep1:function(obj){
+                      if(obj.prop("checked")){                             
+                        this.states.step1.pageconversation_checkbox = true;  
+                        this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
+                        this.$( "#accordion1" ).accordion({ active: 0 });
+                      }
+                      else{
+                          this.removeConversionPage();       
+                          this.states.step1.pageconversation_checkbox = false;
+                          this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
+                                                    this.$( "#accordion1" ).accordion({ active: 1 });
+                      }
+                      this.setConversionPage();                          
+                          
                 },
 		createTargetsTable:function(){ 
                     var camp_obj=this;
@@ -1168,9 +1226,8 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             dateFormat = '';					
                          }  
                         list_html += '<tr id="row_'+val[0].campNum+'">';                        
-                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3>   <div class="  tags"><h5>Tags:</h5>'+camp_obj.app.showTags(val[0].tags)+'</td>'; 
-                        list_html += '<td><div class="subscribers show" style="width:60px"><span  class=""></span>0</div></td>'; 
-                        list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0].campNum+'" class="action"><a class="btn-green">Copy</a></div></td>';                        
+                        list_html += '<td><div class="name-type"><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';                         
+                        list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0].campNum+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
@@ -1777,10 +1834,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     var templates_html = "";
                      if(this.$("#template_search_menu li.active").length){
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
-                        this.$("#total_templates").html(this.states.step2.totalcount+" <b>"+text+"</b> templates found");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> <b>"+text+"</b> templates found");                         
                     }
                     else if(this.states.step2.searchString.indexOf("=nameTag")>-1){
-                        this.$("#total_templates").html(this.states.step2.totalcount+" templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
                     }    
                     else if(this.states.step2.searchString.indexOf("=tag")>-1){                        
                         var hashes = this.states.step2.searchString.split('&');                               
@@ -1790,10 +1847,10 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                             vars.push(hash[0]);
                             vars[hash[0]] = hash[1];
                         }
-                        this.$("#total_templates").html(this.states.step2.totalcount+" templates found <b>for tag '"+vars["searchText"]+"'</b>");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> templates found <b>for tag '"+vars["searchText"]+"'</b>");                         
                     }
                     else{
-                        this.$("#total_templates").html(this.states.step2.totalcount +" templates");
+                        this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount +"</strong> templates");
                     }
                     if(templates){                        
                         $.each(templates[0], function(index, val) { 
@@ -1802,17 +1859,20 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                                 if(val[0].isFeatured==='Y'){
                                     templates_html +='<div class="feat_temp showtooltip" title="Featured Template"></div>';
                                 }                                
-                                if(val[0].isAdmin==='Y'){
-                                    templates_html +='<div class="template-type builticon showtooltip"  title="Stock Template"></div>';
-                                }
-                                templates_html +='<div class="img"><div><a class="btn-green select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span class="plus">+</span>Select Template</a><a href="" class="btn-blue"><span class="icon view"></span>Preview Template</a></div><img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
+                                
+                                templates_html +='<div class="img"><div><a class="previewbtn" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Preview Template</a> <a class="selectbtn"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
-                                templates_html +='<p>'+camp_obj.app.showTags(val[0].tags)+'</p>';
+                                templates_html +='<a class="cat">Category</a>';
+                                templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                                 templates_html +='<div class="btm-bar">';
                                 templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
                                 templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon mail showtooltip"  title="Used Count"></span></span>';
-                                templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
+                                //templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
+                                if(val[0].isAdmin==='Y'){
+                                    templates_html +='<a class="icon builtin right showtooltip"></a>';                                                                                                        
+                                }       
+                                templates_html +='<a class="icon mobile right"></a>';                                                                    
                                 templates_html +='</div></div> </div></li>';                      
                         });
                     }
@@ -1871,6 +1931,17 @@ function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,edit
                     }
                     this.$(".footer-loading").hide();
                     
+                },
+                showTagsTemplate:function(tags){
+                   var tag_array = tags.split(",");
+                   var tag_html ="";
+                    $.each(tag_array,function(key,val){
+                        tag_html +="<a>"+val+"</a>";
+                        if(key<tag_array.length-1){
+                            tag_html +=", ";
+                        }
+                    });
+                    return tag_html; 
                 },
                 copyCampaign:function(obj){
                     this.setEditor();

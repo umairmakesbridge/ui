@@ -64,9 +64,8 @@
       if(tags!==""){
         var tags_array = tags.split(",")
         var self= this
-        $.each(tags_array,function(i,t){
-            var char_comma = (i<tags_array.length-1)?",":"";
-            var li_html =$('<li id="_tag_'+i+'"><a class="tag" > '+t+'</a>'+char_comma+'</li>')
+        $.each(tags_array,function(i,t){            
+            var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross"></i></a></li>')
             li_html.click(function(event){
                 var li = $(this)
                 var ele_offset = li.offset()
@@ -220,6 +219,7 @@
       if(_ele.hasClass("addtag")){          
         this.tag_id = -1
         this.tag_li = null
+        left_minus = 17
         _input.val("")
         this.tag_action = 'add'
         this.dialog.find("#add_tag_btn").html("Add")
@@ -231,7 +231,7 @@
       }
       var ele_offset = _ele.offset()                    
       var ele_height =  _ele.height()
-      var top = ele_offset.top + ele_height
+      var top = ele_offset.top + ele_height +4
       var left = ele_offset.left-left_minus            
       
       $(".custom_popup").hide();      
@@ -325,7 +325,7 @@
   $.fn.tags.Constructor = Tags
 
   $.fn.tags.defaults = {
-    template: '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="ellipsis" style="display:none">...</span><div class="addtag"><a><strong>+</strong>Add Tag </a></div></div>',
+    template: '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="ellipsis" style="display:none">...</span><div class="addtag"><a><strong>+</strong></a></div></div>',
     dialog:'<div class="tagbox custom_popup"><input type="text" placeholder="Add Tag" class="tag-input" maxlength="30"><a class="btn-green savebtn left" id="add_tag_btn">Add</a><a class="btn-gray left" id="tag_box_close">Close</a></div>;',
     toolbar:'<div class="tooltip tags-div custom_popup" style="display:none"><a class="right"><span class="icon delete"></span></a><a class="left"><span class="icon edit"></span></a></div>',
     tags:'',

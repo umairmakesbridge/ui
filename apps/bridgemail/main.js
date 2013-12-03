@@ -14,12 +14,13 @@
            'jquery.isotope': '../shared/libs/jquery.isotope.min',
            'jquery.bmsgrid': '../shared/libs/bmsgrid',
            'jquery.calendario': '../shared/libs/jquery.calendario',
+           'jquery.icheck': '../shared/libs/jquery.icheck',
            'jquery.chosen': '../shared/libs/chosen.jquery',
            'jquery.highlight': '../shared/libs/jquery.highlight',
            'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
            'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
-		   'fileuploader': '../shared/libs/jquery.form',
+           'fileuploader': '../shared/libs/jquery.form',
            'bms-filters': '../shared/filters',
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
@@ -51,6 +52,10 @@
                'jquery.calendario':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.calendario'
+               },
+               'jquery.icheck':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.icheck'
                },
                'jquery.chosen':{
                    deps: ['jquery'],

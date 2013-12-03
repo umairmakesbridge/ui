@@ -26,7 +26,6 @@
 	outline: 0;
 	line-height: 1.3;
 	text-decoration: none;
-	font-size: 12px;
 	list-style: none;
 }
 .ui-helper-clearfix:before,
@@ -86,49 +85,64 @@
 	width: 100%;
 	height: 100%;
 }
+.ui-accordion { margin-top:10px;}
 .ui-accordion .ui-accordion-header {
-	background: none repeat scroll 0 0 #F9F9F9;
-    border-radius: 3px 3px 0px 0px;
-    color: #62646D;
+    background: none repeat scroll 0 0 #EAF4F9;
+    border: 0 none;
+    border-radius: 2px 2px 0 0;
+    color: #6494AF;
     cursor: pointer;
     display: block;
-    height: 30px;
-    line-height: 30px;
-    margin-top: 10px;
+    
+    font-size: 16px;
+    font-weight: bold;
+    height: 45px;
+    line-height: 45px;
+    margin-top: 0px;
     min-height: 0;
-    padding: 8px 15px;
+    padding: 2px 15px 2px 2px;
     position: relative;
-	font-size:16px;
-	font-weight:bold;
-	font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
-	/*border-bottom:0 none;*/
 }
-.ui-accordion .ui-accordion-header .caret
-{
-	background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #CCCCCC;
-    border-radius: 15px 15px 15px 15px;
-    padding: 10px;
+.ui-accordion .ui-accordion-header > span { margin-left:15px;}
+.ui-accordion .ui-accordion-header > span i { font-weight:normal; font-size:14px;}
+
+.ui-accordion .ui-accordion-header  .checkpanelinput,
+.ui-accordion .ui-accordion-header  .radiopanelinput { margin-right:-2px;}
+.ui-accordion .ui-accordion-header  .checkpanelinput.checked,
+.ui-accordion .ui-accordion-header  .radiopanelinput.checked {
+    background-color: #94CF1E;
+    height: 49px;
+    margin: -2px 0px -2px -2px;
+}
+.ui-accordion .ui-accordion-header  .checkpanelinput.checked .icheck_line-icon, 
+.ui-accordion .ui-accordion-header  .radiopanelinput.checked .icheck_radio-icon{
+	margin: -10px 0 0 -8px;
+}
+.ui-accordion .ui-accordion-header .caret {
+    background: none repeat scroll 0 0 #6C8B9F;
+    border: 0 none;
+    border-radius: 15px;
+    padding: 12px;
     position: absolute;
     right: 10px;
-    top: 13px;
+    top: 12px;
 }
-.ui-accordion .ui-accordion-header .caret:after
-{
-	border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid #999999;
+
+.ui-accordion .ui-accordion-header .caret:after {
+    border-left: 5px solid rgba(0, 0, 0, 0);
+    border-right: 5px solid rgba(0, 0, 0, 0);
+    border-top: 5px solid #EAF4F9;
     content: "";
     display: inline-block;
     height: 0;
-    left: 6px;
+    left: 7px;
     position: absolute;
-    top: 9px;
+    top: 11px;
     vertical-align: top;
-    width: 0;	
+    width: 0;
 }
-.ui-accordion .ui-accordion-header:hover { background-color:#fff; /*border:1px solid #D3D3D3;*/ }
-#accordion h3.ui-accordion-header-active, h3.ui-state-active{ border-bottom:1px solid #E5E5E5; border-radius:3px 3px 0 0; }
+.ui-accordion .ui-accordion-header:hover { background-color:#EAF4F9; /*border:1px solid #D3D3D3;*/ }
+#accordion h3.ui-accordion-header-active, h3.ui-state-active{  border-radius:3px 3px 0 0; }
 .ui-accordion .ui-accordion-icons {
 	/*padding-left: 2.2em;*/
 }
@@ -145,10 +159,10 @@
 	margin-top: -8px;*/
 }
 .ui-accordion .ui-accordion-content {
-	border:solid 1px #c2c4c6;
+	border:solid 2px #EAF4F9;
 	border-top: none;
     /*overflow: auto;*/
-    padding: 9px 15px 15px;
+    padding: 10px;
 }
 .ui-autocomplete {
 	position: absolute;
@@ -822,7 +836,8 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-       font-family: 'PT Sans',sans-serif;
+	
+	font-size: 1.1em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -831,7 +846,7 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	
 	font-size: 1em;
 }
 .ui-widget-content {
@@ -890,7 +905,7 @@ body .ui-tooltip {
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #C2C4C6;
+	border: 2px solid #EAF4F9;
 	border-bottom:0;
 	border-radius:3px 3px 0 0;
 	/*background: #ffffff url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x;

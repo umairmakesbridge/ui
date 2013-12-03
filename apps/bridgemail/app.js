@@ -99,7 +99,7 @@ define([
                        var getCmpField = $(".ws-content.active #header_wp_field");
                        if(getCmpField.attr("process-id")){
                             $(".ws-content.active").find(".camp_header .c-name .edited").hide();                        
-                            $(".ws-content.active").find(".camp_header .c-name h2").show();                        
+                            $(".ws-content.active").find(".camp_header .c-name h2,#campaign_tags").show();                                                    
                         }
                     });
                     
@@ -230,14 +230,12 @@ define([
                 return str;
             },
             showTags: function(tags){
-                var tag_array = tags.split(",");
-                var tag_html ="";
+                var tag_array = tags.split(",");                
+                var tag_html ="<ul>";
                 $.each(tag_array,function(key,val){
-                    tag_html +="<a>"+val+"</a>";
-                    if(key<tag_array.length-1){
-                        tag_html +=", ";
-                    }
+                    tag_html +="<li><a>"+val+"</a></li>";                    
                 });
+                tag_html +="</ul>";
                 return tag_html;
             },
             setAppData:function(appVar,data){
