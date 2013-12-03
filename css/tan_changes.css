@@ -160,7 +160,11 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 }
 #remove-file-upload { margin:auto; }
 .csvupload { position:absolute; right:10px; bottom:10px; }
-.tabel-div { overflow:inherit; }
+.tabel-div { overflow-y: auto; height:300px; border:0; border-radius:0; z-index:0; }
+.tabel-div table { margin-top:5px; border: 1px solid #C2C4C6; z-index:0;
+    border-radius: 3px;
+    margin-bottom: 10px; }
+.tabel-div .table th { border-bottom:0; }
 .imgLoading {
     background-color: #AEADAD;
     color: #FFFFFF;
@@ -254,3 +258,4 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .popover.right .arrow:after { border-right-color: #ff0000; left:-8px; border-width:8px; margin-top:-8px; }
 .popover.right .arrow { border-right: 0; left:-8px; margin-top:-13px; }
 #mapdata #email_erroricon { float:left; }
+.icon.copy {   background: url("../img/copy.png") no-repeat center center; float:left; margin:3px 3px 0 5px !important; }
