@@ -45,7 +45,7 @@
           $(this).remove();
 		  //if(tr_copy.find(".action .use"))
 		  tr_copy.find(".action").children().hide();
-          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html("Remove");
+          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
 		  tr_copy.find(".action .move-row").show();
           tr_copy.find(".action .move-row").click(_.bind(self.removeFromCol2,self));
           tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
@@ -70,7 +70,7 @@
           $(this).remove();
 		  //if(tr_copy.find(".action .use"))
 		  tr_copy.find(".action").children().show();
-          tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html("Use")
+          tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>')
           tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
 		  if(self.options.loadTarget != '')
 			 tr_copy.find(".action .use").click(_.bind(self.options.loadTarget,self));
