@@ -14,6 +14,23 @@ function (template,bmsfilters) {
                       'click .targt .edit': function(){
                           this.showHideTargetTitle(true);
                       },
+					  'click .targt .copy': function(){                          
+						  var target_id = this.target_id;
+						  var curview = this;
+						  var camp_obj = this.options.camp;
+						  var dialog_title = "Copy Target";
+						  var dialog = this.app.showDialog({title:dialog_title,
+									css:{"width":"650px","margin-left":"-325px"},
+									bodyCss:{"min-height":"200px"},							   
+									buttons: {saveBtn:{text:'Copy Target'} }                                                                           
+						  });
+						  this.app.showLoading("Loading...",dialog.getBody());                                  
+						  require(["target/copytarget"],function(copytargetPage){                                     
+							   var mPage = new copytargetPage({camp:camp_obj,app:camp_obj.app,target_id:target_id,copydialog:dialog,editview:curview,source:'edit'});
+							   dialog.getBody().html(mPage.$el);
+							   dialog.saveCallBack(_.bind(mPage.copyTarget,mPage));
+						  });
+                      },
                       'click .targt .delete':function(){
                         this.deleteTarget();  
                       },
@@ -43,13 +60,15 @@ function (template,bmsfilters) {
                 },
                 saveTarget:function(obj){                   
                    var camp_obj = this;
+				   var campview = this.options.camp;
                    var target_name_input =  $(obj.target).parent().find("input");                       
                    var target_head = $(obj.target).parents("div.targt");
                    var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&filterFor=C";
                    if(target_name_input.val()!==""){
 
-                     if(this.target_id){
-                        $(obj.target).addClass("saving");                         
+                     if(this.target_id)
+					 {
+                        $(obj.target).addClass("saving");
                         $.post(URL, { type: "newName",filterName:target_name_input.val(),filterNumber:this.target_id })
                           .done(function(data) {                              
                               var target_json = jQuery.parseJSON(data);                              
@@ -63,9 +82,9 @@ function (template,bmsfilters) {
                               else{                                  
                                   camp_obj.app.showAlert(target_json[1],camp_obj.$el);
                                   
-                              }
+                              }							  
                               $(obj.target).removeClass("saving");                              
-                         }); 
+                         });
                      }
                      else{                         
                          $(obj.target).addClass("saving");
@@ -89,6 +108,7 @@ function (template,bmsfilters) {
                               $(obj.target).removeClass("saving");                              
                          });
                      }
+					 campview.loadTargets();
                    }                      
                     obj.stopPropagation();
                },
@@ -127,6 +147,8 @@ function (template,bmsfilters) {
                     }
                },
                saveTargetFilter:function(){
+				    var camp_obj = this;
+					var campview = this.options.camp;
                    var target_id = this.target_id;
                    if(target_id){
                        var camp_obj = this;
@@ -150,7 +172,7 @@ function (template,bmsfilters) {
                             else{
                                 camp_obj.app.showAlert(false,camp_obj.$el);
                             }
-                            
+                            campview.loadTargets();
                        });
                    }
                    else{

@@ -1,5 +1,6 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','listupload/csvupload','listupload/mapdata','bms-mapping'],
-function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,CSVUploadView,MapDataView,Mapping) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping'],
+function (bmsgrid,calendraio,chosen,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping) {
+
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',               
@@ -93,7 +94,7 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                                                 css:{"width":"650px","margin-left":"-325px"},
                                                 bodyCss:{"min-height":"360px"}
                                         });
-                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                                this.app.showLoading("Loading Login...",dialog.getBody());
                                 require(["crm/netsuite/login"],function(loginPage){                                        
                                         var lPage = new loginPage({camp:camp_obj,app:camp_obj.app,dialog:dialog});
                                         dialog.getBody().html(lPage.$el);
@@ -120,14 +121,14 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null},
                                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
                                        };
                         this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});
-                        this.csvupload = new CSVUploadView({camp:this});
-                        this.mapdataview = new MapDataView({camp:this});
+                        /*this.csvupload = new CSVUploadView({camp:this});
+                        this.mapdataview = new MapDataView({camp:this});*/
                         this.render();
                 },
 
@@ -206,16 +207,18 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 removeCSVUpload: function(){
                         var camp_obj = this;
-                        if(camp_obj.csvupload.fileuploaded == true)					
-                                camp_obj.csvupload.removeFile();
-
-                        camp_obj.csvupload.$el.hide();
-                        camp_obj.$el.find('#upload_csv').removeClass('selected');
-                        camp_obj.mapdataview.$el.hide();
-                        camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
-                        camp_obj.mapdataview.$el.find('#newlist').val('');
-                        camp_obj.mapdataview.$el.find('#alertemail').val('');
-                        camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
+						var csvupload = camp_obj.states.step3.csvupload
+                        if(csvupload && csvupload.fileuploaded == true)
+						{					
+                            csvupload.removeFile();
+							csvupload.$el.hide();
+							camp_obj.$el.find('#upload_csv').removeClass('selected');
+							camp_obj.states.step3.mapdataview.$el.hide();
+							camp_obj.states.step3.mapdataview.$el.find('#uploadslist').children().remove();
+							camp_obj.states.step3.mapdataview.$el.find('#newlist').val('');
+							camp_obj.states.step3.mapdataview.$el.find('#alertemail').val('');
+							camp_obj.app.showLoading(false,camp_obj.states.step3.mapdataview.$el);
+						}
                 },
                 init:function(){                                                                                                    
                     //Load mergeFields
@@ -1162,7 +1165,7 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                     });
                     target_html += '</tbody></table>';
 										
-                    this.$el.find("#targets").html(target_html);                    
+                    this.$el.find("#targets").html(target_html);
 					                    
                     this.$el.find("#targets").bmsgrid({
                             useRp : false,
@@ -1969,7 +1972,7 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                 step3SlectSource:function(target_li){
                     var camp_obj = this;
                     //Check if cvs upload exits to delete
-                    camp_obj.checkCSVUploaded();    
+                    camp_obj.checkCSVUploaded();
                     switch(target_li.attr("id")){
                         case 'create_target':
                             if(!this.$("#c_c_target").data("filters")){
@@ -2000,10 +2003,10 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                                 else{
                                     this.createTargetsTable();
                                 }
-                                
+
                                 break;
                         case 'choose_lists':						   
-                                 if(this.checkRecipientsSaved("list")){
+                                if(this.checkRecipientsSaved("list")){
                                     return false;
                                 }                                
                                 if(!this.app.getAppData("lists")){
@@ -2018,10 +2021,18 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                                     this.createListTable();
                                 }
                                 break;
-                        case 'upload_csv':						                              
-                           this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);                           
+                        case 'upload_csv':
+							var camp_obj = this;
+							var app = this.app;
+							require(["listupload/csvupload"],function(csvuploadPage){                                        
+								var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});
+								//app.showLoading("Loading CSV upload...",$el.find('.step3 #area_upload_csv'));
+								camp_obj.$el.find('.step3 #area_upload_csv').html(lPage.$el);
+								camp_obj.states.step3.csvupload = lPage;
+							})
+                           /*this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);                           
                            camp_obj.csvupload.$el.show();
-                           camp_obj.mapdataview.$el.hide();
+                           camp_obj.mapdataview.$el.hide();*/
                            break;
                         case 'salesforce_import':                                                        
                             this.checkSalesForceStatus();							
@@ -2044,7 +2055,9 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                checkCSVUploaded:function()
                 {
                     var camp_obj = this;
-                    if(this.csvupload.fileuploaded == true)
+					var csvupload = camp_obj.states.step3.csvupload;
+					var mapdataview = camp_obj.states.step3.mapdataview;
+                    if(csvupload && csvupload.fileuploaded == true)
                     {
                             var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
                             $.post(cancelURL, { stepType: "cancel" })
@@ -2053,15 +2066,15 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                                     if(list_json[0] == 'success')
                                     {                                               
                                            camp_obj.app.showAlert('Your csv upload has cancelled.',camp_obj.$el);
-                                           camp_obj.csvupload.$el.find("#dropped-files").children().remove();
-                                           camp_obj.csvupload.$el.find("#drop-files .middle").css("display","block");
-                                           camp_obj.csvupload.dataArray = [];
-                                           camp_obj.csvupload.fileuploaded=false;
-                                           camp_obj.csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
-                                           camp_obj.mapdataview.$el.find('#uploadslist').children().remove();
-                                           camp_obj.mapdataview.$el.find('#newlist').val('');
-                                           camp_obj.mapdataview.$el.find('#alertemail').val('');
-                                           camp_obj.app.showLoading(false,camp_obj.csvupload.$el);
+                                           csvupload.$el.find("#dropped-files").children().remove();
+                                           csvupload.$el.find("#drop-files .middle").css("display","block");
+                                           csvupload.dataArray = [];
+                                           csvupload.fileuploaded=false;
+                                           csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
+                                           mapdataview.$el.find('#uploadslist').children().remove();
+                                           mapdataview.$el.find('#newlist').val('');
+                                           mapdataview.$el.find('#alertemail').val('');
+                                           camp_obj.app.showLoading(false,csvupload.$el);
                                     }
                             });
                     }
@@ -2069,7 +2082,7 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                 initCreateEditTarget:function(target_id){
                   var self = this;
                   var t_id = target_id?target_id:"";
-                  var dialog_title = target_id ? "Edit Target" : "Create New Target";
+                  	var dialog_title = target_id ? "Edit Target" : "Create New Target";
                     var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":"1200px","margin-left":"-600px"},
                               bodyCss:{"min-height":"430px"},
@@ -2078,23 +2091,50 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id});
+						   self.states.step3.targetDialog =  mPage;
                            dialog.getBody().html(mPage.$el);
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
-                      });      
+                      });
                 },
                 copyTarget:function(obj){
-                var target_obj = $.getObj(obj,"div");
-                var target_id = 'copy_'+target_obj.attr("id");
-                var camp_obj = this;
-                this.app.showAlert("In Progress target id="+target_id,$("body"));
+					var target_obj = $.getObj(obj,"div");
+					var target_id = target_obj.attr("id");
+					var camp_obj = this;
+					var dialog_title = "Copy Target";
+                    var dialog = this.app.showDialog({title:dialog_title,
+                              css:{"width":"650px","margin-left":"-325px"},
+                              bodyCss:{"min-height":"200px"},							   
+                              buttons: {saveBtn:{text:'Copy Target'} }                                                                           
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());
+					require(["target/copytarget"],function(copytargetPage){                                     
+						 var mPage = new copytargetPage({camp:camp_obj,app:camp_obj.app,target_id:target_id,copydialog:dialog});
+						 dialog.getBody().html(mPage.$el);
+						 dialog.saveCallBack(_.bind(mPage.copyTarget,mPage));
+					});
+					//this.app.showAlert("In Progress target id="+target_id,$("body"));
                },
                loadTarget:function(obj){
                    var target_obj = $.getObj(obj,"div");
                    var target_id = target_obj.attr("id");                 
                    this.initCreateEditTarget(target_id);
                },
-                checkSalesForceStatus: function(){
-                        var camp_obj = this;				   
+			   loadTargets:function(){
+					var camp_obj = this;
+					camp_obj.$el.find("#trecpcount span").text('0');
+					camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
+					URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=list&filterFor=C";
+					jQuery.getJSON(URL,  function(tsv, state, xhr){
+					if(xhr && xhr.responseText){										
+						camp_obj.createTargetsTable(xhr);
+						if(camp_obj.states.step3.recipientType.toLowerCase()=="target"){
+							camp_obj.setRecipients();
+						}
+					}
+					}).fail(function() { console.log( "error lists listing" ); });
+			   },
+               checkSalesForceStatus: function(){
+                        var camp_obj = this;
                         var salesforce_setting = this.app.getAppData("salesfocre");
                         if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
                         {
@@ -2614,15 +2654,17 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                },
                saveCSVUpload:function(){
                     var camp_obj = this;
-                    var isValid = false;                    
-                    if(camp_obj.csvupload.fileuploaded == true)
+                    var isValid = false;    
+					var csvupload = camp_obj.states.step3.csvupload; 
+					var mapdataview = camp_obj.states.step3.mapdataview;                
+                    if(csvupload && csvupload.fileuploaded == true)
                     {
-                        camp_obj.csvupload.$el.hide();                    
-                        camp_obj.app.showLoading(false,camp_obj.mapdataview.$el);
-                        isValid = camp_obj.mapdataview.mapAndImport(); 
+                        csvupload.$el.hide();                    
+                        camp_obj.app.showLoading(false,mapdataview.$el);
+                        isValid = mapdataview.mapAndImport(); 
                         if(isValid)
                         {
-                                camp_obj.mapdataview.$el.hide();
+                                mapdataview.$el.hide();
                                 camp_obj.$el.find('#upload_csv').removeClass('selected');
                         }
                         return isValid;
@@ -2654,7 +2696,7 @@ function (bmsgrid,calendraio,icheck,chosen,bmsSearch,jqhighlight,jqueryui,templa
                setRecipients:function(){
                    var camp_obj = this;
                    if(this.states.step3.recipientDetial) return false;
-                   this.app.showLoading("Loading Recipients...",this.$el.parents(".ws-content"));  
+                   this.app.showLoading("Loading Recipients...",this.$el.parents(".ws-content"));
                    var URL = "";
                    var source_type = camp_obj.states.step3.recipientType.toLowerCase();
                    if(source_type=="salesforce"){

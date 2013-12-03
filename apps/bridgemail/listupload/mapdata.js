@@ -1,12 +1,12 @@
-define(['jquery','backbone', 'underscore','app','text!listupload/html/mapdata.html','jquery.chosen'],
-function ($,Backbone,_,app,template,chosen) {
+define(['text!listupload/html/mapdata.html','jquery.chosen'],
+function (template,chosen) {
 	'use strict';
 	return Backbone.View.extend({
 		id: 'mapdata',
 		tags : 'div',
 		events: {				
 			'click .lt-toggle .btn':function(obj){		
-				  var el = this.camp_obj.mapdataview.$el;
+				  var el = this.$el;
 				  var actid = $(obj.target).attr('id');
 				  if(actid == 'old')
 				  {					  					  
@@ -26,15 +26,19 @@ function ($,Backbone,_,app,template,chosen) {
 				  $(obj.target).addClass('active');
 			 },			
 			 'click .fubackbtn':function(){
-				 var curview = this.camp_obj;
-				 curview.csvupload.$el.show();
-				 curview.mapdataview.$el.hide();
-				 app.showLoading(false,curview.mapdataview.$el);
+				 var curview = this;
+				 var app = this.app;
+				 this.campview.csvupload.$el.show();
+				 curview.$el.hide();
+				 app.showLoading(false,curview.$el);
 			 }			 
 		},	
 		mapAndImport: function(){
-                   var curview = this.camp_obj;
-		   var el = this.camp_obj.mapdataview.$el;
+		   var campview = this.camp_obj;
+		   var curview = this;
+		   var app = this.app;
+		   var appMsgs = app.messages[0];
+		   var el = this.$el;
 		   var actid = el.find('.lt-toggle .active').attr('id');
 		   var newlist = '';
 		   var listid = '';
@@ -44,76 +48,76 @@ function ($,Backbone,_,app,template,chosen) {
 		   {
 			   if(el.find('#newlist').val() == '')
 			   {				  
-				  //app.showAlert('Please supply list',curview.mapdataview.$el);
-				  el.find('#list_erroricon').css('display','block');
-				  el.find('#newlist').attr('style','border:solid 1px #ff0000; float:left;margin-right:5px; width:300px;');				  
-				  el.find("#list_erroricon").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
+				  var options = {'control':el.find('#newlist'),
+								  'valid_icon':el.find('#list_erroricon'),
+								  'controlcss':'border:solid 1px #ff0000; float:left; margin-right:5px; width:300px;',
+								  'message':appMsgs.MAPDATA_newlist_empty_error};
+				  app.enableValidation(options);
 				  isValid = false;				  
 			   }
 			   else
 			   {
-				  newlist = el.find('#newlist').val();
-				  el.find('#list_erroricon').css('display','none');
-				  el.find('#newlist').removeAttr('style');
-				  //isValid = true;
+				  newlist = el.find('#newlist').val();				  
+				  var options = {'control':el.find('#newlist'),'valid_icon':el.find('#list_erroricon')};
+					app.disableValidation(options);				  
 			   }
 		   }
 		   else if(actid == 'old')
 		   {
 			  if(el.find('#existing_lists').val() == '')
-			  {	 
-				  //app.showAlert('Please supply list',curview.mapdataview.$el);
-				  el.find('#list_erroricon').css('display','block');
-				  el.find('#existing_lists_chosen').attr('style','float:left;margin-right:5px; width:288px;');
-				  el.find('#existing_lists_chosen a').attr('style','border:solid 1px #ff0000;');				  
-				  el.find("#list_erroricon").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
+			  {				  
+				  var options = {'control':el.find('#existing_lists_chosen'),
+								  'valid_icon':el.find('#list_erroricon'),
+								  'controlcss':'float:left;margin-right:5px; width:288px;',
+								  'customfield':el.find('#existing_lists_chosen a'),
+								  'customfieldcss':'border:solid 1px #ff0000;',
+								  'message':appMsgs.MAPDATA_extlist_empty_error};
+				  app.enableValidation(options);				 
 				  isValid = false;
 			  }
 			  else
-			  {
+			  {				  
 				  listid = el.find('#existing_lists').val();
-				  el.find('#list_erroricon').css('display','none');
-				  el.find('#existing_lists_chosen').removeAttr('style');
-				  el.find('#existing_lists_chosen a').removeAttr('style');
-				  el.find('#existing_lists_chosen').attr('style','width:288px;');
-				  //isValid = true;
+				  var options = {'control':el.find('#existing_lists_chosen'),
+								  'valid_icon':el.find('#list_erroricon'),
+								  'customfield':el.find('#existing_lists_chosen a'),
+								  'customfieldcss':'border:inherit;'};					
+				  app.disableValidation(options);
+				  el.find('#existing_lists_chosen').attr('style','width: 288px;');
 			  }
 		   }
 		   var email_addr = el.find('#alertemail').val();
-		   if(email_addr != '' && (email_addr.indexOf('.') == -1 || email_addr.indexOf('@') == -1))
-			{
-				el.find('#alertemail').attr('style','border:solid 1px #ff0000; float:left; margin-right:5px;');
-				el.find('#email_erroricon').css('display','block');
-				el.find("#email_erroricon").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});
+		   if(email_addr != '' && !app.validateEmail(email_addr))
+			{				
+				var options = {'control':el.find('#alertemail'),
+								'valid_icon':el.find('#email_erroricon'),
+								'controlcss':'border:solid 1px #ff0000; float:left; margin-right:5px;',
+								'message':appMsgs.MAPDATA_email_format_error};
+				app.enableValidation(options);
 				isValid = false;
 			}
 			else
-			{
-				el.find('#alertemail').removeAttr('style');
-				el.find('#email_erroricon').css('display','none');
-				//isValid = true;
+			{				
+				var options = {'control':el.find('#alertemail'),'valid_icon':el.find('#email_erroricon')};
+				app.disableValidation(options);
 			}		   
 		   	var sel_lenght = el.find(".mapfields").length;
 			el.find(".mapfields").each(function(i,e){
 				var id = $(e).parent().find('.erroricon').attr('id');
 				if($(e).val()==0){
-					layout_map="";
-					//$(e).attr('style','border:solid 1px #ff0000;');					
-					$(e).parent().find('.erroricon').attr('style','display:block; float:left; margin-left:5px;');
-					//el.find("#" + id).tooltip({'placement':'right','container': el,'trigger':'click',delay: { show: 0, hide:0 },animation:false});
+					layout_map="";					
+					/*$(e).parent().find('.erroricon').attr('style','display:block; float:left; margin-left:5px;');					
 					el.find("#" + id).popover({'placement':'right','container': el,'trigger':'hover',delay: { show: 0, hide:0 },animation:false});
 					el.find("#" + $(e).attr('id')+"_chosen").attr('style','width:200px; float:left;');
-					el.find("#" + $(e).attr('id')+"_chosen a").attr('style','border:solid 1px #ff0000;');
+					el.find("#" + $(e).attr('id')+"_chosen a").attr('style','border:solid 1px #ff0000;');*/
 				}
 				else
-				{
-					//$(e).removeAttr('style');
-					el.find("#" + id).removeAttr('style');
+				{					
+					/*el.find("#" + id).removeAttr('style');
 					el.find("#" + $(e).attr('id')+"_chosen").removeAttr('style');
 					el.find("#" + $(e).attr('id')+"_chosen a").removeAttr('style');
 					$(e).hide();
-					el.find("#" + $(e).attr('id')+"_chosen").attr('style','width:200px;');
-					//$(e).removeAttr('style');
+					el.find("#" + $(e).attr('id')+"_chosen").attr('style','width:200px;');*/					
 					 layout_map+= $(e).val();
 					 if(i<sel_lenght-1){
 						 layout_map+=",";
@@ -122,39 +126,26 @@ function ($,Backbone,_,app,template,chosen) {
 			});
 			if(layout_map == "")
 			{
-			  isValid = false;
-			  /*el.find('#mf1_erroricon').css('display','block');
-			  el.find('#mf2_erroricon').css('display','block');
-			  el.find('#mf3_erroricon').css('display','block');*/
-			  //app.showAlert('Please supply mapping fields',curview.mapdataview.$el);
+				app.showAlert('Please provide BMS fields against each column to fetch data in correct format',el);
+				isValid = false;
 			}
-			else
+			/*else
 			{
 				var $maps = layout_map.split(',');
 				if( $maps[0] ==  $maps[1] ||
 				   $maps[0] ==  $maps[2] ||
-				   $maps[2] ==  $maps[3]) {					  
-					  //app.showAlert('Please supply correct mapping fields',curview.mapdataview.$el);
-					  isValid = false;
-					  /*el.find('#mf1_erroricon').css('display','block');
-					  el.find('#mf2_erroricon').css('display','block');
-					  el.find('#mf3_erroricon').css('display','block');*/
+				   $maps[2] ==  $maps[3]) 
+				{					  
+					  isValid = false;					  
 				}
-				else
-				{
-				  //isValid = true;
-				  		/*el.find('#mf1_erroricon').css('display','none');
-					  el.find('#mf2_erroricon').css('display','none');
-					  el.find('#mf3_erroricon').css('display','none');*/
-				}
-			}
+			}*/
 			  
 		   if(isValid)
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
-			   app.showLoading("Uploading file",curview.mapdataview.$el);
+			   app.showLoading("Uploading file",curview.$el);
 			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';
-			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:this.camp_obj.csvupload.fileName,layout:layout_map })
+			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:campview.states.step3.csvupload.fileName,layout:layout_map })
 			   .done(function(data) {
 				   var list_json = jQuery.parseJSON(data);						 
 				   if(list_json[0] == 'success')
@@ -164,22 +155,58 @@ function ($,Backbone,_,app,template,chosen) {
 					   curview.csvupload.removeFile();
                                            app.removeCache("lists");
 					   curview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
+
 					   //return true;
 				   }
 				   else
 				   {					  
-					  app.showAlert(list_json[1],curview.mapdataview.$el);
+					  app.showAlert(list_json[1],curview.$el);
 					  return false;
 				   }
-				   app.showLoading(false,curview.mapdataview.$el);
+				   app.showLoading(false,curview.$el);
 			   });
 		   }
 		   else
 		   	return false;
 		},
+		filllistsdropdown:function(){
+			var list_array = '';
+			var list_html = "<option value=''>Select Existing List</option>";
+			var campview = this.camp_obj;
+			var app = this.app;
+			var curview = this;
+			if(app.getAppData("lists"))
+			{
+				list_array = app.getAppData("lists");
+				if(list_array != '')
+				{					
+					$.each(list_array.lists[0], function(index, val) { 
+						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+					})					
+				}
+			}
+			else
+			{				
+				URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
+				jQuery.getJSON(URL,  function(tsv, state, xhr){				
+					if(xhr && xhr.responseText){
+						list_array = jQuery.parseJSON(xhr.responseText);
+						if(list_array != '')
+						{							
+							$.each(list_array.lists[0], function(index, val) { 
+								list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+							})							
+						}
+					}
+				}).fail(function() { console.log( "error lists listing" ); });				
+			}
+			curview.$el.find("#existing_lists").html(list_html);			
+			curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});			
+		},
 		initialize:function(){                    
 		   this.template = _.template(template);
 		   this.render();		   
+		   this.filllistsdropdown();		   
 		},
 		render: function () {
 			this.$el.html(this.template({}));

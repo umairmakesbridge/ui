@@ -17,7 +17,11 @@ define([
                             'NS_userid_format_error':'Please supply correct user id',
                             'NS_pwd_empty_error':'Password can not be empty',
                             'NS_accid_empty_error':'Account id can not be empty',
-                            'NS_email_format_error':'Please supply correct email'
+                            'NS_email_format_error':'Please supply correct email',
+							'CT_copyname_empty_error':'Copy name can not be empty',
+							'MAPDATA_newlist_empty_error':'List can not be empty',
+							'MAPDATA_extlist_empty_error':'Please select some list',
+							'MAPDATA_email_format_error':'Please select correct email',
 		}],
 		initialize: function () {
 			//Load config or use defaults

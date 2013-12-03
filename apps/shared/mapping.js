@@ -27,7 +27,7 @@
       
       this.$element.find(".col1 .move-row").click(_.bind(this.addToCol2,this))
       this.$element.find(".useallf").click(_.bind(this.moveAll,this))	 
-	  if(this.options.loadTarget != '')	  		  
+	  if(this.options.loadTarget != '')
 	 	 this.$element.find(".col1 .use").click(_.bind(this.options.loadTarget,this));
 	  if(this.options.copyTarget != '')	  		  
 	 	 this.$element.find(".col1 .copy").click(_.bind(this.options.copyTarget,this));
@@ -69,9 +69,13 @@
           var tr_copy = tr_obj.clone();
           $(this).remove();
 		  //if(tr_copy.find(".action .use"))
-		  tr_copy.find(".action").children().show();		  
+		  tr_copy.find(".action").children().show();
           tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html("Use")
           tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
+		  if(self.options.loadTarget != '')
+			 tr_copy.find(".action .use").click(_.bind(self.options.loadTarget,self));
+		  if(self.options.copyTarget != '')	  		  
+			 tr_copy.find(".action .copy").click(_.bind(self.options.copyTarget,self));
           var _index = tr_copy.attr("item_index")
           var next_element = null
           var col1_rows = self.$element.find(".col1 .leftcol tr")

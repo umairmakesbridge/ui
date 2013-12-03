@@ -41,7 +41,7 @@ function (app,template,fileuploader,chosen) {
 			this.$("#drop-files .middle").css("display","block");
 			this.dataArray = [];
 			this.$("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
-			this.camp_obj.mapdataview.$el.hide(); 
+			this.camp_obj.states.step3.mapdataview.$el.hide(); 
 			$('.loading').hide();
 			this.fileuploaded=false;
 			this.camp_obj.$el.find('#upload_csv').removeClass('selected');
@@ -50,122 +50,185 @@ function (app,template,fileuploader,chosen) {
 			var z = -40;
 			var maxFiles = 1;
 			var errMessage = 0;
-		    var curview = this.camp_obj;
-				this.$el.find('#uploaded-holder').show();
-				curview.states.step3.change=true;
-				app.showLoading("Uploading file",curview.csvupload.$el);
-				$.each(files, function(index, file) {
-						if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) {
-	
-								if(errMessage == 0) {
-										$('#dropped-files').html('Please select CSV file only');
-										++errMessage
-								}
-								else if(errMessage == 1) {
-										$('#dropped-files').html('Stop it! CSV only!');
-										++errMessage
-								}
-								else if(errMessage == 2) {
-										$('#dropped-files').html("Can't you read?! CSV only!");
-										++errMessage
-								}
-								else if(errMessage == 3) {
-										$('#dropped-files').html("Fine! Keep selecting non-CSV.");
-										errMessage = 0;
-								}
-								$('.loading').hide();
-								return false;
+		    var campview = this.camp_obj;
+			var curview = this;
+			var app = this.app;
+			var el = this.$el;
+			el.find('#uploaded-holder').show();
+			campview.states.step3.change=true;
+			app.showLoading("Uploading file",el);
+			$.each(files, function(index, file) {
+				if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) 
+				{
+					if(errMessage == 0) {
+							el.find('#dropped-files').html('Please select CSV file only');
+							++errMessage
+					}
+					else if(errMessage == 1) {
+							el.find('#dropped-files').html('Stop it! CSV only!');
+							++errMessage
+					}
+					else if(errMessage == 2) {
+							el.find('#dropped-files').html("Can't you read?! CSV only!");
+							++errMessage
+					}
+					else if(errMessage == 3) {
+							el.find('#dropped-files').html("Fine! Keep selecting non-CSV.");
+							errMessage = 0;
+					}
+					app.showLoading(false,el);
+					return false;
+				}
+				else
+				{
+					var fileReader = new FileReader();
+					fileReader.onload = (function(file) {
+
+					return function(e) { 
+						curview.dataArray.push({name : file.name, value : this.result});
+						curview.fileName=file.name;
+						z = z+40;
+						var image = "/pms/img/newui/csv.png";
+						if(curview.dataArray.length == 1) {
+							el.find("#drop-files .middle").css("display","none");
+							curview.fileuploaded=true;
+						} 
+						else {
+							el.find("#drop-files .middle").css("display","block");									
 						}
-						else
-						{
-							var fileReader = new FileReader();
-							fileReader.onload = (function(file) {
-	
-							return function(e) { 
-									curview.csvupload.dataArray.push({name : file.name, value : this.result});
-									curview.csvupload.fileName=file.name;
-									z = z+40;
-									var image = "/pms/img/newui/csv.png";
-									if(curview.csvupload.dataArray.length == 1) {
-										curview.csvupload.$el.find("#drop-files .middle").css("display","none");
-										curview.csvupload.fileuploaded=true;
-									} 
-									else {
-										curview.csvupload.$el.find("#drop-files .middle").css("display","block");									
+						if(el.find('#dropped-files > .image').length < maxFiles) { 
+								el.find('#dropped-files').html('<div class="filename">'+file.name+'</div><div class="image" style="background: url('+image+'); background-size: cover;"> </div><div  id="remove-file-upload" class="btn btn-small"><i class="icon-trash"></i> Remove</div>'); 
+								el.find("#remove-file-upload").click(function(){
+									curview.removeFile();
+									errMessage =0;
+								});
+						}
+						el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
+						var formData = curview.formdata ? new FormData() : null;																
+						if (curview.formdata) formData.append("file", files[index]);
+						var xhr = new XMLHttpRequest();
+						URL = "/pms/io/subscriber/uploadCSV/?BMS_REQ_TK="+app.get('bms_token')+"&stepType=one";
+						xhr.open('POST', URL);
+						xhr.send(formData);
+						xhr.onreadystatechange = function() {
+							if (xhr.readyState == 4 && xhr.status == 200) {
+								var jsonResult = eval(xhr.responseText);						  
+								if(jsonResult[0] != 'err'){									
+									var rows = jsonResult;
+									/*var trs = '<thead><tr><th width="4%">. </th>';
+									for(var j=0;j<rows[0].length;j++)
+									{
+										
 									}
-									if($('#dropped-files > .image').length < maxFiles) { 
-											$('#dropped-files').html('<div class="filename">'+file.name+'</div><div class="image" style="background: url('+image+'); background-size: cover;"> </div><div  id="remove-file-upload" class="btn btn-small"><i class="icon-trash"></i> Remove</div>'); 
-											curview.csvupload.$el.find("#remove-file-upload").click(function(){
-												curview.csvupload.removeFile();
-												errMessage =0;
-											});
-									}
-									curview.csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
-									var formData = curview.csvupload.formdata ? new FormData() : null;																
-									if (curview.csvupload.formdata) formData.append("file", files[index]);
-									var xhr = new XMLHttpRequest();
-									URL = "/pms/io/subscriber/uploadCSV/?BMS_REQ_TK="+app.get('bms_token')+"&stepType=one";
-									xhr.open('POST', URL);
-									xhr.send(formData);
-									xhr.onreadystatechange = function() {
-										if (xhr.readyState == 4 && xhr.status == 200) {
-											var jsonResult = eval(xhr.responseText);						  
-											if(jsonResult[0] != 'err'){
-											  var rows = jsonResult;							
-											  var trs = '<thead><tr><th width="4%">. </th><th class="leftalign">Col 1</th><th>Col 2</th><th>Col 3</th><th></th></tr></thead><tbody>';
-											  for(var i=0;i<rows.length;i++)
-											  {
-												  trs += '<tr><td>'+ i +'</td><td>'+ rows[i][0] +'</td><td>'+ rows[i][1] +'</td><td>'+ rows[i][2] +'</td><td></td></tr>';								
-											  }
-											  curview.csvupload.createmaplists(trs);					
-											}
-											else
-											{												
-												app.showAlert(jsonResult[1],campview.csvupload.$el);
-												curview.csvupload.removeFile();
+									trs += '</tr></thead><tbody>';
+									for(var i=0; i < rows.length; i++)
+									{
+										var c=1;																								
+										trs += '<tr><td>'+ (parseInt(i)+1) +'</td>';
+										for(var j=0;j<rows[0].length;j++)
+										{
+											if(j==0)
+												trs += '<th class="leftalign">Col '+ (parseInt(j)+1) +'</th>';
+											trs += '<td>'+ rows[i][j] +'</td>';
+											if(c==4)
+											{
+												c=1;
 											}
 										}
-									}
-							}; 
-							})(files[index]);
-							fileReader.readAsDataURL(file);
+										trs += '</tr>';										
+									}*/
+									var mapURL = curview.url_getMapping+"?BMS_REQ_TK="+app.get('bms_token')+"&type=upload_map_fields";			
+									jQuery.getJSON(mapURL,function(tsv, state, xhr){
+										if(xhr && xhr.responseText){
+											curview.map_feilds = jQuery.parseJSON(xhr.responseText);
+											curview.createMappingTable(rows);
+										}
+									});
+									//curview.createmaplists(trs,rows[0].length);									
+								}
+								else
+								{												
+									app.showAlert(jsonResult[1],el);
+									curview.removeFile();
+								}
+							}
 						}
-				});
+					}; 
+					})(files[index]);
+					fileReader.readAsDataURL(file);
+				}
+			});
 		},
-		uploadfile:function()
-		{
-			var curview = this.camp_obj;			
-			URL = "/pms/io/subscriber/uploadCSV/?BMS_REQ_TK="+app.get('bms_token')+"&stepType=one";
-			curview.csvupload.$el.find("#listupload_form").attr('action',URL);					
-			curview.csvupload.$el.find("#listupload_form").ajaxSubmit({
-			  beforeSerialize: function($form, options) { 
-				  // return false to cancel submit                  
-			  },
-			  beforeSubmit: function(a,f,o) {
-				 app.showLoading("Uploading file",curview.csvupload.$el);
-				 o.dataType = 'json';
-				 //a.value = curview.csvupload.$el.find("#dropped-files").data('file');
-				 //console.log(a.value);
-			  },
-			  complete: function(XMLHttpRequest, textStatus) {
-				  var jsonResult = eval(XMLHttpRequest.responseText);						  
-				  if(jsonResult[0] != 'err'){
-					var rows = jsonResult;							
-					var trs = '<thead><tr><th width="4%">. </th><th class="leftalign">Col 1</th><th>Col 2</th><th>Col 3</th><th></th></tr></thead><tbody>';
-					for(var i=0;i<rows.length;i++)
-					{
-						trs += '<tr><td>'+ i +'</td><td>'+ rows[i][0] +'</td><td>'+ rows[i][1] +'</td><td>'+ rows[i][2] +'</td><td></td></tr>';								
+		createMappingTable:function(rows){
+			var campview = this.camp_obj;
+			var curview = this;
+			var app = this.app;
+			
+			var tcols = 4;
+			var cols = rows[0].length;
+			var tables_count = Math.ceil(cols/tcols);
+			var mappingHTML = "";
+			for(var t=0;t<tables_count;t++){
+				var oc = t*tcols;
+				mappingHTML +="<table id='uploadslist' class='table'>";
+					for(var r=0;r<5;r++){
+					   if(r==0){
+						   mappingHTML +="<tr>";
+							for(var h=oc;h<(oc+tcols+1);h++){
+								if(h==oc){
+									mappingHTML +="<th width='30px' class='leftalign'>&nbsp;</th>";
+								}
+								else{
+									var hcol = (h<=cols)?"col"+h:"&nbsp;";
+									mappingHTML +="<th width='25%'>"+hcol+"</th>";
+								}
+							}
+						   mappingHTML +="</tr>";
+					   }
+					   else if(r==4){
+						   mappingHTML +="<tr>";
+							for(var f=oc;f<(oc+tcols+1);f++){
+								if(f==oc){
+									mappingHTML +="<td width='30px' class='td_footer lastrow'>&nbsp;</td>";
+								}
+								else{
+									var cbox = (f<=cols)?curview.mapCombo():"&nbsp;";
+									mappingHTML +="<td width='25%' class='td_footer lastrow'>"+cbox+"</td>";
+								}
+							}
+						   mappingHTML +="</tr>"; 
+					   }
+					   else{
+						var oddRow = (r%2==0)?"class='colorTd'":"";   
+						mappingHTML +="<tr>";
+							for(var c=oc;c<(oc+tcols+1);c++){
+								if(c==oc){
+									mappingHTML +="<td>"+r+"</td>";
+								}
+								else{
+									var tdText = rows[r-1][c-1] ? rows[r-1][c-1] : "&nbsp;";
+									
+									mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
+								}
+							}
+						mappingHTML +="</tr>";
+					   }
 					}
-					curview.csvupload.createmaplists(trs);					
-				  }
-				  else
-				  {
-					  app.showAlert(jsonResult[1],campview.csvupload.$el);
-					  curview.csvupload.removeFile();
-				  }
-			  }
-			});			
-		},
+				mappingHTML +="</table>";				
+			}						
+			curview.$el.find('.tabel-div').children().remove();
+			var mapPage;
+			require(["listupload/mapdata"],function(mapdataPage){                                        
+				mapPage = new mapdataPage({camp:campview,app:app});
+				mapPage.$el.find('.tabel-div').append(mappingHTML);
+				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
+				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
+				campview.states.step3.mapdataview=mapPage;
+			});						
+			curview.fileuploaded=true;
+			curview.$el.hide();
+					
+		},		
 		initialize:function(){
 		   this.template = _.template(template);			   	   
 		   this.render();
@@ -176,82 +239,34 @@ function (app,template,fileuploader,chosen) {
 			this.camp_obj = this.options.camp;
 			jQuery.event.props.push('dataTransfer');
 		},
-		createmaplists: function(trs) {
-			var curview = this.camp_obj;
-			var mapURL = this.url_getMapping+"?BMS_REQ_TK="+app.get('bms_token')+"&type=upload_map_fields";
+		mapCombo: function() {
+			var campview = this.camp_obj;
+			var curview = this;
+			var app = this.app;
 			
-			jQuery.getJSON(mapURL,function(tsv, state, xhr){
-				if(xhr && xhr.responseText){
-					curview.csvupload.map_feilds = jQuery.parseJSON(xhr.responseText);
-					var chtml="<select class='mapfields' id='mapfields'>";
-					chtml +="<option value='0'>---Select Field---</option>";
-					var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
-					if(curview.csvupload.map_feilds)
-					{
-						for(var x=0;x<curview.csvupload.map_feilds.length;x++){
-							var sel ="";
-							if(curview.csvupload.map_feilds[x][2]=='true'){
-								optgroupbasic += "<option class='select_option' value='"+curview.csvupload.map_feilds[x][0]+"' "+sel+">"+curview.csvupload.map_feilds[x][1]+"</option>";
-							}
-							else{
-							   optgroupcustom += "<option class='select_option' value='"+curview.csvupload.map_feilds[x][0]+"' "+sel+">"+curview.csvupload.map_feilds[x][1]+"</option>";
-							}
-						}
+			var chtml="<select  class='mapfields'>";
+			chtml +="<option value='0'>---Select Field---</option>";
+			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
+			if(curview.map_feilds)
+			{
+				for(var x=0;x<curview.map_feilds.length;x++){
+					var sel ="";
+					if(curview.map_feilds[x][2]=='true'){
+						optgroupbasic += "<option class='select_option' value='"+curview.map_feilds[x][0]+"' "+sel+">"+curview.map_feilds[x][1]+"</option>";
 					}
-					optgroupbasic +="</optgroup>";
-					optgroupcustom +="</optgroup>";
-					chtml += optgroupbasic + optgroupcustom;
-					chtml +="</select>";
-					if(chtml)
-					{
-						trs += '<tr><td></td><td>'+ chtml.replace("id='mapfields'","id='mapfields1'") +'<span id="mf1_erroricon" class="erroricon" data-content="Please supply map field"></span></td>><td>'+ chtml.replace("id='mapfields'","id='mapfields2'") +'<span id="mf2_erroricon" class="erroricon" data-content="Please supply map field"></span></td><td>'+ chtml.replace("id='mapfields'","id='mapfields3'") +'<span id="mf3_erroricon" class="erroricon" data-content="Please supply map field"></span></td><td></td></tr></tbody>';
-						curview.mapdataview.$el.find('#uploadslist').children().remove();							
-						curview.mapdataview.$el.find('#uploadslist').append(trs);
-						curview.csvupload.fileuploaded=true;
-						curview.csvupload.filllistsdropdown();
-					}					
+					else{
+					   optgroupcustom += "<option class='select_option' value='"+curview.map_feilds[x][0]+"' "+sel+">"+curview.map_feilds[x][1]+"</option>";
+					}
 				}
-			}).fail(function() { console.log( "error fetching map fields" ); });                   		
+			}
+			optgroupbasic +="</optgroup>";
+			optgroupcustom +="</optgroup>";
+			chtml += optgroupbasic + optgroupcustom;
+			chtml +="</select>";
+			return chtml;
 		},
 		init:function(){
 			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
-		},
-		filllistsdropdown:function(){
-			var list_array = '';
-			var list_html = '';
-			var campview = this.camp_obj;
-			if(app.getAppData("lists"))
-			{
-				var list_array = app.getAppData("lists");
-				if(list_array != '')
-				{
-					list_html = "<option value=''>Select Existing List</option>";
-					$.each(list_array.lists[0], function(index, val) { 
-						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-					})					
-				}
-			}
-			else
-			{				
-				URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
-				jQuery.getJSON(URL,  function(tsv, state, xhr){				
-					if(xhr && xhr.responseText){
-						list_array = jQuery.parseJSON(xhr.responseText);
-						if(list_array != '')
-						{
-							list_html = "<option value=''>Select Existing List</option>";
-							$.each(list_array.lists[0], function(index, val) { 
-								list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-							})							
-						}
-					}
-				}).fail(function() { console.log( "error lists listing" ); });				
-			}
-			campview.mapdataview.$el.find("#existing_lists").html(list_html);
-			campview.mapdataview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
-			campview.mapdataview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-			campview.csvupload.$el.hide();
-			campview.mapdataview.$el.show();
-		},
+		},		
 	});
 });
