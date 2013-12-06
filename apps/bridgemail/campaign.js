@@ -121,7 +121,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null},
                                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
@@ -679,9 +679,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_subject'),
                                 'valid_icon':el.find('#subject_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
-                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
                                 'customfield':el.find('.input-append .subject-group'),
-                                'customfieldcss':'right:25px;'
+                                'customfieldcss':'right:28px; top:1px;'
                             };
                             app.enableValidation(options);						
                             isValid = false;
@@ -691,9 +691,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_subject'),
                                 'valid_icon':el.find('#subject_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_subject_length_error,
-                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
                                 'customfield':el.find('.input-append .subject-group'),
-                                'customfieldcss':'right:25px;'
+                                'customfieldcss':'right:28px; top:1px;'
                             };
                             app.enableValidation(options);						
                             isValid = false;
@@ -711,9 +711,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var options = {'control':el.find('#campaign_from_name'),
                                 'valid_icon':el.find('#fromname_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
-                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
                                 'customfield':el.find('.input-append .fromname-group'),
-                                'customfieldcss':'right:25px;'
+                                'customfieldcss':'right:28px; top:1px;'
                               };
                             app.enableValidation(options);						
                             isValid = false;
@@ -732,9 +732,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_reply_to'),
                                 'valid_icon':el.find('#replyto_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
-                                'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
                                 'customfield':el.find('.input-append .replyto-group'),
-                                'customfieldcss':'right:25px;'
+                                'customfieldcss':'right:28px; top:1px;'
                                };
                             app.enableValidation(options);
                             isValid = false;
@@ -744,9 +744,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var options = {'control':el.find('#campaign_reply_to'),
                             'valid_icon':el.find('#replyto_erroricon'),
                             'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
-                            'controlcss':'width:90.5%; float:left; border:solid 1px #ff0000;',
+                            'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
                             'customfield':el.find('.input-append .replyto-group'),
-                            'customfieldcss':'right:25px;'};
+                            'customfieldcss':'right:28px; top:1px;'};
                             app.enableValidation(options);
                             isValid = false;
                         }					
@@ -764,7 +764,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var options = {'control':el.find('#campaign_default_reply_to'),
                             'valid_icon':el.find('#email_erroricon'),
                             'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
-                            'controlcss':'width:80%; float:left; border:solid 1px #ff0000; margin-left:10%;'};
+                            'controlcss':'border:solid 1px #ff0000; float:left; margin-left:40px; width:57%;'};
                             app.enableValidation(options);
                             isValid = false;
                         }
@@ -907,6 +907,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        }
                        this.step3SaveCall({'recipientType':'Target',filterNumber:targets});
                   }
+				  else if(source=="choose_tags"){
+                       var tagsView = this.states.step3.tags;
+					   var tags = tagsView.saveTags();
+                       if(!tags){
+                           return false;
+                       }
+                       this.step3SaveCall({'recipientType':'Tags',tags:tags});
+                  }
                   else if(source=="salesforce_import"){
                        this.saveSalesForceDetails();                           
                   }
@@ -958,7 +966,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         showAddButton:(this.camp_id=="0")?false:true,
                         params:{type:'tags',campNum:this.camp_id,tags:''},
                         typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allCampaignTags"
-                    });                  
+                    });
                   
                 },
                 loadDataAjax:function(){
@@ -2022,24 +2030,27 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                 break;
                         case 'upload_csv':
-							var camp_obj = this;
-							var app = this.app;
+							camp_obj.app.showLoading("Loading CSV upload...",camp_obj.$el.find('#area_upload_csv'));
 							require(["listupload/csvupload"],function(csvuploadPage){                                        
-								var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});
-								//app.showLoading("Loading CSV upload...",$el.find('.step3 #area_upload_csv'));
+								var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});								
 								camp_obj.$el.find('.step3 #area_upload_csv').html(lPage.$el);
 								camp_obj.states.step3.csvupload = lPage;
 							})
-                           /*this.$el.find('.step3 #area_upload_csv').append(this.csvupload.$el,this.mapdataview.$el);                           
-                           camp_obj.csvupload.$el.show();
-                           camp_obj.mapdataview.$el.hide();*/
                            break;
                         case 'salesforce_import':                                                        
                             this.checkSalesForceStatus();							
-                        break;
+                        	break;
                         case 'netsuite_import':                                                      							
                             this.checkNetSuiteStatus();							
-                        break;
+                        	break;
+						case 'choose_tags':
+							camp_obj.app.showLoading("Loading Tags...",camp_obj.$el.find('#area_choose_tags'));  
+							require(["tags"],function(tagsPage){  								                                    
+								var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});								
+								camp_obj.$el.find('.step3 #area_choose_tags').html(lPage.$el);
+								camp_obj.states.step3.tags = lPage;
+							})
+							break;
                         default:
                             break;
                     }
@@ -2655,13 +2666,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                saveCSVUpload:function(){
                     var camp_obj = this;
                     var isValid = false;    
-					var csvupload = camp_obj.states.step3.csvupload; 
+					var csvupload = camp_obj.states.step3.csvupload;
 					var mapdataview = camp_obj.states.step3.mapdataview;                
                     if(csvupload && csvupload.fileuploaded == true)
                     {
-                        csvupload.$el.hide();                    
+                        csvupload.$el.hide();
                         camp_obj.app.showLoading(false,mapdataview.$el);
-                        isValid = mapdataview.mapAndImport(); 
+                        isValid = mapdataview.mapAndImport();
                         if(isValid)
                         {
                                 mapdataview.$el.hide();
@@ -2669,10 +2680,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         return isValid;
                     }
-                    else{
-                        
-                        this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));
-                        
+                    else{                        
+                        this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));                        
                     }
                },
                saveLists:function(){

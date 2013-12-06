@@ -5,7 +5,7 @@ function (template,chosen) {
 		id: 'mapdata',
 		tags : 'div',
 		events: {				
-			'click .lt-toggle .btn':function(obj){		
+			'click .map-toggle .btn':function(obj){		
 				  var el = this.$el;
 				  var actid = $(obj.target).attr('id');
 				  if(actid == 'old')
@@ -22,7 +22,7 @@ function (template,chosen) {
 						el.find('#existing_lists_chosen').hide();
 						el.find('#newlist').show();
 				  }
-				  el.find('.lt-toggle .btn').removeClass('active');
+				  el.find('.map-toggle .btn').removeClass('active');
 				  $(obj.target).addClass('active');
 			 },			
 			 'click .fubackbtn':function(){
@@ -35,11 +35,11 @@ function (template,chosen) {
 		},	
 		mapAndImport: function(){
 		   var campview = this.camp_obj;
-		   var curview = this;
+		   var curview = campview.states.step3.csvupload;
 		   var app = this.app;
 		   var appMsgs = app.messages[0];
 		   var el = this.$el;
-		   var actid = el.find('.lt-toggle .active').attr('id');
+		   var actid = el.find('.map-toggle .active').attr('id');
 		   var newlist = '';
 		   var listid = '';
 		   var isValid = true;
@@ -152,9 +152,9 @@ function (template,chosen) {
 				   {
 
 					   //return curview.mapdataview.savecampaign(list_json[2],list_json[1]);
-					   curview.csvupload.removeFile();
+					   curview.removeFile();
                                            app.removeCache("lists");
-					   curview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
+					   campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
 
 					   //return true;
 				   }
@@ -201,12 +201,13 @@ function (template,chosen) {
 				}).fail(function() { console.log( "error lists listing" ); });				
 			}
 			curview.$el.find("#existing_lists").html(list_html);			
-			curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});			
+			curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
+			app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
 		},
 		initialize:function(){                    
 		   this.template = _.template(template);
-		   this.render();		   
-		   this.filllistsdropdown();		   
+		   this.render();
+		   this.filllistsdropdown();
 		},
 		render: function () {
 			this.$el.html(this.template({}));
