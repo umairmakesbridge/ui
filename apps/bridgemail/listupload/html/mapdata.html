@@ -1,34 +1,29 @@
-
-<div class="drop-files">
-  <div class="exist-new">
-    <div class="temp-filters clearfix">
-      <div class="btn-group lt-toggle left">
-        <button id="old" class="btn active">Existing</button>
-        <button id="new" class="btn ">New</button>
-      </div>
-      <div class="btn-group subs-dd left"> 
-        <select id="existing_lists" class="lists" data-placeholder="Select Existing List" class="chosen-select">
-          
-        </select>        
-        <input type="text" id="newlist" class="emailinput" placeholder="Enter new list" style="display:none;" />
-        <span id="list_erroricon" class="erroricon" data-content="Please supply list"></span>
-      </div>
-      <span class="icon noti"></span>
-      <input type="text" id="alertemail" class="emailinput" placeholder="Enter email to receive confirmation">
-      <span id="email_erroricon" class="erroricon" data-content="Please supply correct email"></span>
+<div class="exist-new">
+  <div class="temp-filters clearfix">
+  	<h3>Choose list </h3>
+    <div class="btn-group togglebtns map-toggle left">
+      <button id="old" class="btn active">Existing</button>
+      <button id="new" class="btn ">New</button>
+    </div>
+    <div class="subs-dd left">
+      <select id="existing_lists" class="lists" data-placeholder="Select Existing List" class="chosen-select">
+      </select>
+      <input type="text" id="newlist" class="emailinput" placeholder="Enter new list" style="display:none;" />
+      <span id="list_erroricon" class="erroricon" data-content="Please supply list"></span> </div>
+    <span class="icon noti"></span>
+    <input type="text" id="alertemail" class="emailinput" placeholder="Enter email to receive confirmation">
+    <span id="email_erroricon" class="erroricon" data-content="Please supply correct email"></span> </div>
+</div>
+<h4>Map Data </h4>
+<div class="content-inner">
+  <p>Map your .csv data to bridgeMail System data fields and your current Custom fields. if you need to add a new custom field, simply choose "Enter a Custom Field" in the drop down menu. 
+    Unmapped fields will not be loaded. Email address is a required field. </p>
+  <div class="bmsgrid">
+  	<div class="bDiv">
+  		<div class="tabel-div"> 
+        	
+  		</div>
     </div>
   </div>
-  <div class="tabel-div-head">
-    <h2>Map Data </h2>
-  </div>
-  <div class="content-inner">
-    <p>Map your .csv data to bridgeMail System data fields and your current Custom fields. if you need to add a new custom field, simply choose "Enter a Custom Field" in the drop down menu. 
-      Unmapped fields will not be loaded. Email address is a required field. </p>
-    <div class="tabel-div">
-      
-    </div>
-    <!-- tabel-div  --> 
-    
-  </div>
-  <!--<div class="btns1"> <a class="btn-gray left fubackbtn">Back</a> <a id="import" class="btn-green left">Save &amp; Proceed</a> </div>-->
+  <!-- tabel-div  -->
 </div>

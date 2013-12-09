@@ -10,12 +10,14 @@
 			  gridcontainer : "list_grid",
 			  showicon: 'no',
               tdNo:1,
-			  iconsource: '',
+			  iconsource: 'list',
 			  closeiconid: 'clearsearch',
+			  movingElement: 'tr',
 			  countcontainer: 'no_of_camps'
 			  }, options );
 			  return this.each(function() {				  
-				  var imageClass= "";                                  
+				  var imageClass= ""; 
+				  var movElement = options.movingElement? options.movingElement : 'tr';                                 
 				  if(options.showicon == 'yes')
 				  {
 					  var icon = $('<span class="icon '+options.iconsource+'"></span>');
@@ -31,17 +33,21 @@
                   	var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
 				  	txt.val('');
 					$(this).parent().find("#clearsearch").hide();
-					 grid.find("tr").show();
-					 grid.removeHighlight();
-					 if($("#"+options.countcontainer))
-							$("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
-						grid.parent().find('.notfound').hide();
+					if(movElement == 'tr')
+						grid.find("tr").show();
+					else
+						grid.find("li").show();
+					grid.removeHighlight();
+					if($("#"+options.countcontainer))
+						$("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
+					grid.parent().find('.notfound').hide();
 				  });
 				  var buttons = $('<div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> \
 				  </span></button></div>');
 				  $(this).append(buttons);
 				  
 				  function dosearch(obj) {
+					  var movElement = options.movingElement? options.movingElement : 'tr';
 					  var searchterm = $(obj.target).val();					  
                       var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
 					  grid.parent().find('.notfound').hide();
@@ -49,23 +55,40 @@
 					  {
 					  	$(this).parent().find("#clearsearch").show();
                         var nthchild = options.tdNo? options.tdNo : 1;
-						grid.find("tr").hide();						
+						if(movElement == 'tr')
+							grid.find("tr").hide();
+						else
+							grid.find("li").hide();
 						 searchterm = searchterm.toLowerCase();
 						 var count = 0;
-						 grid.find("tr").filter(function() {
-							 if($(this).find("td:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1)
-							 {								 
-								 count++;								 
-							  	return $(this);
-							 }
-						  }).show();
-						  //$("#"+ options.gridcontainer + ' tr td').removeHighlight().highlight(searchterm);
-						  
-						  grid.find("tr").each(function(i) {
-							  // find the first td in the row                                                           
-                          	$(this).find("td:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							
-						  });
-						  
+						 if(movElement == 'tr')
+						 {
+							 grid.find("tr").filter(function() {
+								 if($(this).find("td:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1)
+								 {								 
+									count++;								 
+									return $(this);
+								 }
+							  }).show();						  
+							  grid.find("tr").each(function(i) {
+								  // find the first td in the row                                                           
+								$(this).find("td:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							
+							  });
+					  	  }
+						  else
+						  {
+							 grid.find("li").filter(function() {
+								 if($(this).find("a:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1)
+								 {								 
+									count++;								 
+									return $(this);
+								 }
+							  }).show();						  
+							  grid.find("li").each(function(i) {
+								  // find the first td in the row                                                           
+								$(this).find("a:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							
+							  }); 
+						  }
 						  if($("#"+options.countcontainer))
 							$("#"+options.countcontainer).html(count + ' ' + options.placeholder.replace('Search ','') +' found <b>for &lsquo;' + searchterm + '&rsquo;</b>');
 									
@@ -77,7 +100,10 @@
 					  else
 					  {
 					  	$(this).parent().find("#clearsearch").hide();
-						grid.find("tr").show();						
+						if(movElement == 'tr')
+							grid.find("tr").show();
+						else
+							grid.find("li").show();
 						if($("#"+options.countcontainer))
 							$("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
 						grid.removeHighlight();

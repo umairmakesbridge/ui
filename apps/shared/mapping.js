@@ -19,12 +19,14 @@
       this.$element = $(element)
       this.options = this.getOptions(options)
 	  //alert(this.options.sumColumn);
-      var template = $(this.options.template)
-      template.find(".bDiv").css("height",this.options.gridHeight)
-      this.$element.find(".col2 .rightcol").append(template)
-      
+      var template = $(this.options.template);
+	  if(template != '')
+	  {
+      	template.find(".bDiv").css("height",this.options.gridHeight)
+      	this.$element.find(".col2 .rightcol").append(template)
+	  }
       this.mappingInit()
-      
+      //alert('aaa');
       this.$element.find(".col1 .move-row").click(_.bind(this.addToCol2,this))
       this.$element.find(".useallf").click(_.bind(this.moveAll,this))	 
 	  if(this.options.loadTarget != '')
@@ -33,63 +35,94 @@
 	 	 this.$element.find(".col1 .copy-action").click(_.bind(this.options.copyTarget,this));
     }
   ,mappingInit:function(){
-      this.$element.find(".col1 .leftcol tr").each(function(i,v){
-          $(this).attr("item_index",i)          
-      })
+	  if(this.options.movingElement == 'tr')
+	  {
+		  this.$element.find(".col1 .leftcol tr").each(function(i,v){
+			  $(this).attr("item_index",i)          
+		  });
+	  }
+	  else
+	  {
+		  this.$element.find(".col1 .leftcol li").each(function(i,v){
+			  $(this).attr("item_index",i)          
+		  });
+	  }
   }  
   ,addToCol2:function(obj){
-      var tr_obj = $(obj.target).parents("tr")
-      var self = this
+	  var self = this
+	  if(self.options.movingElement == 'tr')
+      	var tr_obj = $(obj.target).parents("tr");
+	  else
+		var tr_obj = $(obj.target).parents("li");
+	//alert(tr_obj);      
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
-          $(this).remove();
-		  //if(tr_copy.find(".action .use"))
-		  tr_copy.find(".action").children().hide();
-          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
-		  tr_copy.find(".action .move-row").show();
-          tr_copy.find(".action .move-row").click(_.bind(self.removeFromCol2,self));
-          tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
-          tr_copy.fadeIn("fast");
+          $(this).remove();		  
+
+              if(self.options.movingElement == 'tr')
+                  tr_copy.find(".action").children().hide();
+                  tr_copy.find(".move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
+                  tr_copy.find(".move-row").show();
+                  tr_copy.find(".move-row").click(_.bind(self.removeFromCol2,self));
+                  if(self.options.movingElement == 'tr')
+                      tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
+                  else
+                      tr_copy.appendTo(self.$element.find(".col2 .rightcol ul"));
+
+                  tr_copy.fadeIn("fast");
 		  
 		  //++ Recipients count
 		  if(self.options.sumColumn != '')
 		  {
 		  	var recpoldcount = self.$element.find("#"+self.options.sumTarget).text();
-		  	var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+			if(self.options.movingElement == 'tr')
+		  		var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+			else
+				var recpnewval = tr_obj.find("a.tag .badge").text();
 			//alert(recpnewval);
 		  	var recptotalcount = parseInt(recpoldcount) + parseInt(recpnewval);				   
 		  	self.$element.find("#"+self.options.sumTarget).text(recptotalcount);
 		  }
       })
   }  
-  ,removeFromCol2:function(obj){
-      var tr_obj = $(obj.target).parents("tr");  
+  ,removeFromCol2:function(obj){      
       var self = this;
+	  if(self.options.movingElement == 'tr')
+      	var tr_obj = $(obj.target).parents("tr");
+	  else
+		var tr_obj = $(obj.target).parents("li");
+		
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
           $(this).remove();
-		  //if(tr_copy.find(".action .use"))
-              tr_copy.find(".action").children().show();
-              tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>')
-              tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
-              if(self.options.loadTarget != '')
-                  tr_copy.find(".action .edit-action").click(_.bind(self.options.loadTarget,self));
-              if(self.options.copyTarget != '')	  		  
-                  tr_copy.find(".action .copy-action").click(_.bind(self.options.copyTarget,self));
+
+		  tr_copy.find(".action").children().show();
+          tr_copy.find(".move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>')
+          tr_copy.find(".move-row").click(_.bind(self.addToCol2,self))
+		  if(self.options.loadTarget != '')
+			 tr_copy.find(".action .edit-action").click(_.bind(self.options.loadTarget,self));
+		  if(self.options.copyTarget != '')	  		  
+			 tr_copy.find(".action .copy-action").click(_.bind(self.options.copyTarget,self));
           var _index = tr_copy.attr("item_index")
           var next_element = null
-          var col1_rows = self.$element.find(".col1 .leftcol tr")
-          for(var i=0;i<col1_rows.length;i++){
+		  if(self.options.movingElement == 'tr')
+         	 var col1_rows = self.$element.find(".col1 .leftcol tr")
+		  else
+		  	var col1_rows = self.$element.find(".col1 .leftcol li")
+          	for(var i=0;i<col1_rows.length;i++){
               if(parseInt($(col1_rows[i]).attr("item_index"))>_index){
                   next_element = $(col1_rows[i])
                   break
               }          
-          }  
+          	}
           if(next_element){
             tr_copy.insertBefore(next_element)
           }
-          else{
-            tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"))
+          else{            
+			if(self.options.movingElement == 'tr')
+			  tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"));
+			else
+			  tr_copy.appendTo(self.$element.find(".col1 .leftcol ul"));
           }
           tr_copy.fadeIn("fast");
 		  
@@ -97,7 +130,10 @@
 		  if(self.options.sumColumn != '')
 		  {
 		  	var recpoldcount = self.$element.find("#"+self.options.sumTarget).text();
-		  	var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+			if(self.options.movingElement == 'tr')
+		  		var recpnewval = tr_obj.find("td:nth-child(2) div."+self.options.sumColumn).text();
+			else
+				var recpnewval = tr_obj.find("a.tag .badge").text();		  	
 		  	var recptotalcount = recpoldcount - recpnewval;
 		  	self.$element.find("#"+self.options.sumTarget).text(recptotalcount);
 		  }
@@ -138,6 +174,7 @@
    sumTarget: '',
    loadTarget: '',
    copyTarget: '',
+   movingElement: 'tr'
   }
 
 }(window.jQuery);

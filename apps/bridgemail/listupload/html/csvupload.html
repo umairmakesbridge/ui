@@ -1,6 +1,3 @@
-<div class="heading">
-  <h2>CSV Upload</h2>
-</div>
 <div class="drop-files" id="drop-files" ondragover="return false">
   <div id="uploaded-holder">
     <div id="dropped-files"> </div>
@@ -8,13 +5,13 @@
   <div class="middle">
   	<form name="listupload_form" id="listupload_form" method="post" action="" enctype="multipart/form-data">
     <h4>Drag .CSV file or browse from computer</h4>
-    <div class="csvimg"><img alt="" src="img/csv.jpg"></div>
+    <div class="csvimg"><img alt="" src="img/csv.png"></div>
     <div style="text-align:center">
       <div class="SI-FILES-STYLIZED" style="display:inline-block;position:relative;">
         <label style="width:195px;" class="cabinet">
           <input type="file" id="file_control" name="file" class="file">
         </label>
-        <button id="list_file_upload" class="btn-gray">Select a file from computer</button>
+        <a id="list_file_upload" class="btn-gray"><span>Select a file from computer</span></a>
       </div>
     </div>
     </form>

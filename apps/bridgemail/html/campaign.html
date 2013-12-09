@@ -59,6 +59,7 @@
             <label>&nbsp;</label>
             <span class="directarrow"></span>
             <div class="inputcont"><input id="campaign_default_reply_to" type="text" placeholder="Set Default Value"></div>
+            <span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>
           </div>
       </div>
     </div>
@@ -359,8 +360,8 @@
    <div class="selection-boxes" style="width: 840px;"> <a class="prev"><span></span></a>
     <ul id="choose_soruce">
       <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
-      <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>
-      <li><a><img alt="" src="img/tags.png"><span>Tags</span></a></li>
+      <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>      
+      <li id="choose_tags"><a><img alt="" src="img/tags.png"><span>Tags</span></a></li>
       <li id="upload_csv"><a><img alt="" src="img/csv.png"><span>Upload CSV</span></a></li>
       <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span >Salesforce</span></a></li>
       <li id="netsuite_import"><a><img alt="" src="img/netsuite.png"><span>Netsuite</span></a></li>
@@ -402,7 +403,12 @@
       </div>
     </div>
   </div>
-  <div class="content-inner soruces" id="area_upload_csv" style="display:none">  	
+  <div id="area_choose_tags" class="soruces clearfix">
+              
+              
+  </div>
+  <div class="content-inner soruces" id="area_upload_csv" style="display:none">  
+  	
   </div>
   <!-- Saelsforce import section starts -->
   <div id="area_salesforce_import" class="content-inner soruces clearfix" style="display: none">      

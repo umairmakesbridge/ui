@@ -19,10 +19,10 @@ function (app,template,fileuploader,chosen) {
 			   	this.showSelectedfile(files);
 			},
 			'mouseover #file_control':function(obj){
-				this.$("#list_file_upload").css({'background' : '#e9ebee', 'color' : '#7a7a7a'});
+				this.$("#list_file_upload").css({'background' : '#7996a8', 'color' : '#ffffff'});
 			},
 			'mouseout #file_control':function(obj){
-				this.$("#list_file_upload").css({'background' : '#DCDEE1', 'color' : '#7A7A7A'});
+				this.$("#list_file_upload").css({'background' : '#91ABBC', 'color' : '#ffffff'});
 			},
 			'drop #drop-files': function(e) {
 				if(this.$("#dropped-files .image").length!==0) return false;
@@ -114,37 +114,14 @@ function (app,template,fileuploader,chosen) {
 							if (xhr.readyState == 4 && xhr.status == 200) {
 								var jsonResult = eval(xhr.responseText);						  
 								if(jsonResult[0] != 'err'){									
-									var rows = jsonResult;
-									/*var trs = '<thead><tr><th width="4%">. </th>';
-									for(var j=0;j<rows[0].length;j++)
-									{
-										
-									}
-									trs += '</tr></thead><tbody>';
-									for(var i=0; i < rows.length; i++)
-									{
-										var c=1;																								
-										trs += '<tr><td>'+ (parseInt(i)+1) +'</td>';
-										for(var j=0;j<rows[0].length;j++)
-										{
-											if(j==0)
-												trs += '<th class="leftalign">Col '+ (parseInt(j)+1) +'</th>';
-											trs += '<td>'+ rows[i][j] +'</td>';
-											if(c==4)
-											{
-												c=1;
-											}
-										}
-										trs += '</tr>';										
-									}*/
+									var rows = jsonResult;									
 									var mapURL = curview.url_getMapping+"?BMS_REQ_TK="+app.get('bms_token')+"&type=upload_map_fields";			
 									jQuery.getJSON(mapURL,function(tsv, state, xhr){
 										if(xhr && xhr.responseText){
 											curview.map_feilds = jQuery.parseJSON(xhr.responseText);
 											curview.createMappingTable(rows);
 										}
-									});
-									//curview.createmaplists(trs,rows[0].length);									
+									});									
 								}
 								else
 								{												
@@ -185,7 +162,7 @@ function (app,template,fileuploader,chosen) {
 							}
 						   mappingHTML +="</tr>";
 					   }
-					   else if(r==4){
+					   else if(r==1){
 						   mappingHTML +="<tr>";
 							for(var f=oc;f<(oc+tcols+1);f++){
 								if(f==oc){
@@ -203,10 +180,10 @@ function (app,template,fileuploader,chosen) {
 						mappingHTML +="<tr>";
 							for(var c=oc;c<(oc+tcols+1);c++){
 								if(c==oc){
-									mappingHTML +="<td>"+r+"</td>";
+									mappingHTML +="<td>"+(r-1)+"</td>";
 								}
 								else{
-									var tdText = rows[r-1][c-1] ? rows[r-1][c-1] : "&nbsp;";
+									var tdText = rows[r-2][c-1] ? rows[r-2][c-1] : "&nbsp;";
 									
 									mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
 								}
@@ -217,21 +194,23 @@ function (app,template,fileuploader,chosen) {
 				mappingHTML +="</table>";				
 			}						
 			curview.$el.find('.tabel-div').children().remove();
+			curview.fileuploaded=true;
+			curview.$el.hide();
 			var mapPage;
-			require(["listupload/mapdata"],function(mapdataPage){                                        
+			require(["listupload/mapdata"],function(mapdataPage){				
+				app.showLoading("Getting mapping fields...",campview.$el.find('.step3 #area_upload_csv'));
 				mapPage = new mapdataPage({camp:campview,app:app});
 				mapPage.$el.find('.tabel-div').append(mappingHTML);
 				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
 				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
 				campview.states.step3.mapdataview=mapPage;
-			});						
-			curview.fileuploaded=true;
-			curview.$el.hide();
-					
+			});					
 		},		
 		initialize:function(){
 		   this.template = _.template(template);			   	   
 		   this.render();
+		   var campview = this.camp_obj;
+		   this.app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
 		},
 		render: function () {
 			this.$el.html(this.template({}));
