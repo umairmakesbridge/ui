@@ -48,12 +48,12 @@
      //save dialog button
      this.dialog.find(".tag-input").on("keydown",$.proxy(this.saveTagOnEnter,this))
      //Edit tag from toolbar
-     this.toolbar.find(".edit").on("click",$.proxy(this.editTag,this))
+     //this.toolbar.find(".edit").on("click",$.proxy(this.editTag,this))
      //Delete tag from toolbar
-     this.toolbar.find(".delete").on("click",$.proxy(this.deleteTag,this))
+     //this.toolbar.find(".delete").on("click",$.proxy(this.deleteTag,this))
      
      $("body").append(this.dialog)
-     $("body").append(this.toolbar)
+     //$("body").append(this.toolbar)
      //Show hide add button
      this.showAddTagButton()
     }
@@ -66,7 +66,7 @@
         var self= this
         $.each(tags_array,function(i,t){            
             var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross"></i></a></li>')
-            li_html.click(function(event){
+            /*li_html.click(function(event){
                 var li = $(this)
                 var ele_offset = li.offset()
                 var ele_width =  li.width()
@@ -83,7 +83,7 @@
                 $(".custom_popup").hide();
                 self.toolbar.css({"left":left+"px","top":top+"px"}).show();
                 event.stopPropagation();
-            })
+            })*/
             tags_ul.append(li_html);        
         });                                    
       }

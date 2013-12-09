@@ -34,12 +34,12 @@
         addFilterRow()
       } 
       function addFilterRow(){
-        var  basicFilter = $('<li><a class="btn-green"><span class="filter"></span>Basic Filter </a></li>')
-        var  emailFilter = $('<li><a class="btn-green"><span class="email"></span>Email Activity </a></li>')
-        var  listFilter = $('<li><a  class="btn-green"><span class="list"></span>Lists </a></li>')
-        var  formFilter = $('<li><a  class="btn-green"><span class="form"></span>Form Submissions </a></li>')
-        var  websiteFilter = $('<li><a  class="btn-green"><span class="web"></span>Website Actions</a></li>')
-        var  leadScoreFilter = $('<li><a  class="btn-green"><span class="score"></span>Lead Score</a></li>')
+        var  basicFilter = $('<li><a class="btn-green"><span>Basic Filter</span> <i class="filter"></i> </a></li>')
+        var  emailFilter = $('<li><a class="btn-green"><span>Email Activity</span> <i class="email"></i></a></li>')
+        var  listFilter = $('<li><a  class="btn-green"><span>Lists</span> <i class="list"></i> </a></li>')
+        var  formFilter = $('<li><a  class="btn-green"><span>Form Submissions</span> <i class="form"></i></a></li>')
+        var  websiteFilter = $('<li><a  class="btn-green"><span>Website Actions</span> <i class="web"></i></a></li>')
+        var  leadScoreFilter = $('<li><a  class="btn-green"><span>Lead Score</span> <i class="score"></i></a></li>')
         var add_filter_row = $(self.options.bottomrow_c);
         
         //adding different filter to add row
@@ -93,6 +93,7 @@
           filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><select data-placeholder="Choose a format" class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
           filter_html +='</select></div>'
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:120px;" /></div>'
+      filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');    
       filter.find(".filter-cont").append(filter_html)
       //Chosen with fields
       filter.find(".fields").chosen({width:'200px'}).change(function(){
@@ -272,7 +273,7 @@
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
-          
+      filter.find(".filter-cont").append('<span class="timelinelabel">Email Activity</span>');        
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-by").chosen({disable_search: "true",width:"152px"}).change(function(){
           if($(this).val()=="CK" &&  filter.find(".campaign-list").val()!=="-1"){
@@ -357,7 +358,7 @@
       filter.find(".campaign-url").chosen({width:"350px"})
       
       //Time Span Select boxes
-      filter.find(".timespan").chosen({disable_search: "true",width:"60px"}).change(function(){
+      filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
@@ -406,7 +407,7 @@
           filter_html += '<div class="match row" style="margin-bottom:0px"> Match '
                 filter_html += '<div class="btn-group"><select class="match-box"><option value="Y">All</option><option value="N">Any</option></select></div> of the selected list(s).'                  
           filter_html += '</div>'
-          filter_html += '<h2 class="header-list" style="margin-top:0px">&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
+          filter_html += '<h2 class="header-list" style="margin-top:0px;background-color:transparent">&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
             filter_html += '<table cellpadding="0" cellspacing="0" width="100%" id="__list_grid"><tbody>'
             if(!this.lists){
                 this.loadLists();
@@ -414,14 +415,15 @@
             var list_array =this.lists
             var filter_ref = this;
             $.each(list_array.lists[0], function(index, val) {     
-                        filter_html += '<tr id="row_'+val[0].listNum+'">';      
-                        filter_html +='<td><input class="check-list" type="checkbox" value="'+val[0].listNum+'" list_checksum="'+val[0].md5+'" /></td>'
-                        filter_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags"><h5>Tags:</h5>'+filter_ref.options.app.showTags(val[0].tags)+'</div></div></td>';                        
-                        filter_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Use</a></div></td>';                        
+                        filter_html += '<tr id="row_'+val[0]["listNumber.encode"]+'">';      
+                        filter_html +='<td><input class="check-list" type="checkbox" value="'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'" /></td>'
+                        filter_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+filter_ref.options.app.showTags(val[0].tags)+'</div></div></td>';                        
+                        filter_html += '<td><div class="subscribers show" style="min-width:80px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         filter_html += '</tr>';
                     });
             filter_html += '</tbody></table>'
           filter_html += '</div>'
+      filter.find(".filter-cont").append('<span class="timelinelabel">Lists</span>');            
       filter.find(".filter-cont").append(filter_html)
       filter.find(".member-box").chosen({disable_search: "true",width:"200px"}).change(function(){
           $(this).val($(this).val())
@@ -440,7 +442,7 @@
                 placeholder: 'Search Lists',
                 gridcontainer: filter.find(".target-listing"),
                 showicon: 'yes',
-                iconsource: 'add-list'
+                iconsource: 'list'
          });
       
       this.addActionBar(filter)      
@@ -493,9 +495,10 @@
           filter_html += '<div class="match row"> Happened in last '
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'                  
           filter_html += '</div>'
+      filter.find(".filter-cont").append('<span class="timelinelabel">Form Submission</span>');                
       filter.find(".filter-cont").append(filter_html)
       filter.find(".forms-box").chosen({width:"300px"})      
-      filter.find(".timespan").chosen({disable_search: "true",width:"60px"}).change(function(){
+      filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
@@ -544,7 +547,7 @@
   , addLeadScoreFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
       filter.addClass("score");
-      var filter_html = '<h4>Score</h4>'
+      var filter_html = '<label>Score</label>'
       filter_html += '<div class="btn-group "><select class="condtion-box">'
       filter_html += '<option value="eq">equals</option><option value="less">less than</option><option value="gr8">greater than</option><option value="btw">between</option><option value="incmore">increase more than</option>'
       filter_html += '</select></div>'  
@@ -552,6 +555,7 @@
       filter_html += '<div class="match row days-container" style="display:none"> in last '
             filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
       filter_html += '</div>'
+      filter.find(".filter-cont").append('<span class="timelinelabel">Lead Score</span>');            
       filter.find(".filter-cont").append(filter_html)
       filter.find(".condtion-box").chosen({disable_search: "true",width:"200px"}).change(function(){
           if($(this).val()=="incmore"){
@@ -561,7 +565,7 @@
               filter.find(".days-container").hide()
           }
       })
-      filter.find(".timespan").chosen({disable_search: "true",width:"60px"}).change(function(){
+      filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
@@ -609,6 +613,7 @@
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
+      filter.find(".filter-cont").append('<span class="timelinelabel">Website Action</span>')    
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-box").chosen({disable_search: "true",width:"152px"}).change(function(){
           if($(this).val()=="PU"){
@@ -732,7 +737,7 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      filter.find(".timespan").chosen({disable_search: "true",width:"60px"}).change(function(){
+      filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
@@ -756,7 +761,7 @@
     }
   , addActionBar:function(filterRow){
       var action =  $('<div class="right-btns"></div>')            
-      var del_btn = $('<a class="icon delete showtooltip" title="Delete Filter"></a>')      
+      var del_btn = $('<a title="Delete Filter" class="btn-red showtooltip"><i class="icon delete "></i></a>')      
       action.append(del_btn)            
       del_btn.click(function(){
          $(this).parents(".filter-row").remove()
@@ -803,9 +808,9 @@
             var list_array =this.lists
             var filter = this;
             $.each(list_array.lists[0], function(index, val) {     
-                        list_html += '<tr id="row_'+val[0].listNum+'" list_checksum="'+val[0].md5+'">';                            
+                        list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'">';                            
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags"><h5>Tags:</h5>'+filter.options.app.showTags(val[0].tags)+'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0].listNum+'" class="action"><a class="btn-green">Use</a></div></td>';                        
+                        list_html += '<td><div class="subscribers show" style="min-width:70px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
             list_html += '</tbody></table>'
@@ -822,7 +827,7 @@
                 placeholder: 'Search Lists',
                 gridcontainer: 'filter-lists',
                 showicon: 'yes',
-                iconsource: 'add-list',
+                iconsource: 'list',
                 closeiconid: 'dialoglistssearch'
          });        
         dialog.getBody().html(d)

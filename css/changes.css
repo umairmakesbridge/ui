@@ -295,7 +295,7 @@ div.tags-div:before {
     position: absolute;
     left: 0px;
     top: 95px;
-    width:296px;
+    width:299px;
     padding:5px;
     -webkit-border-radius: 3px;
      -moz-border-radius: 3px;
@@ -303,7 +303,7 @@ div.tags-div:before {
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
           box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-   z-index: 1000;
+   z-index: 1001;
 }
 .tagbox input {
     color: #000000;
@@ -439,12 +439,9 @@ ol.progtrckr li.incomplete:after{
  }
 .c-name h2 a.preview { 
     float:left; 
-    margin:3px 0px 0 5px !important;
-    background-position: 0px -300px !important;
+    margin:0px !important;
+    background:  url("../img/preview3.png") no-repeat center center ;
 }
-.c-name h2 a.preview:hover {      
-       background-position: -58px -300px !important;
-}    
 .c-name .edited{
     padding-bottom: 5px;
 	z-index: 99;
@@ -749,7 +746,7 @@ input[type="text"].search-template{
 .saving {
     background: url("../img/greenloader.gif") no-repeat scroll center center #94CF1E;
     font-size: 0;
-    line-height: 0;
+    line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
     min-width: 30px;
@@ -1018,10 +1015,14 @@ ul.tabs-btns li.active a{
 }
 .modal{
     z-index:1001; 
+    border: 0 none;
+    border-radius: 2px;
+    overflow: hidden;
+    padding: 10px;
+    top:8%;
 }
 .schedule-container h3 .icon {
-    float: left;
-    margin: 0 7px 0 -3px;
+    float: left;   
 }
 .step4 .ui-accordion h3:first-child{
     margin-top:0px;
@@ -1042,3 +1043,22 @@ ul.tabs-btns li.active a{
 .step1 .texturl{
     margin-top:5px;
 }
+.single-row .bmsgrid tr.selected td:last-child div:after{    
+    top:-10px;
+    right:-10px;
+    height: 44px;
+}
+.ws-notags .pointy{
+    display: none !important;
+}
+.ws-notags .tagscont{
+    display: none !important;
+}
+
+.ui-accordion { margin-top:10px;}
+.step4 .ui-accordion { margin-top:0px;}
+.ui-accordion .ui-accordion-header .sub-count {
+    float: right;
+    margin: 12px -4px 0 0;
+}
+.ui-accordion .ui-accordion-header .sub-count .badge { float:right;}

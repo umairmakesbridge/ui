@@ -2,41 +2,8 @@ define(['text!target/html/target.html','bms-filters'],
 function (template,bmsfilters) {
         'use strict';
         return Backbone.View.extend({                
-                events: {
-                    'click .savetarget': function(obj){
-                          this.saveTarget(obj)
-                      },
-                       'click .canceltarget': function(obj){
-                          if(this.target_id){
-                            this.showHideTargetTitle();
-                          }
-                      },
-                      'click .targt .edit': function(){
-                          this.showHideTargetTitle(true);
-                      },
-					  'click .targt .copy': function(){                          
-						  var target_id = this.target_id;
-						  var curview = this;
-						  var camp_obj = this.options.camp;
-						  var dialog_title = "Copy Target";
-						  var dialog = this.app.showDialog({title:dialog_title,
-									css:{"width":"650px","margin-left":"-325px"},
-									bodyCss:{"min-height":"200px"},							   
-									buttons: {saveBtn:{text:'Copy Target'} }                                                                           
-						  });
-						  this.app.showLoading("Loading...",dialog.getBody());                                  
-						  require(["target/copytarget"],function(copytargetPage){                                     
-							   var mPage = new copytargetPage({camp:camp_obj,app:camp_obj.app,target_id:target_id,copydialog:dialog,editview:curview,source:'edit'});
-							   dialog.getBody().html(mPage.$el);
-							   dialog.saveCallBack(_.bind(mPage.copyTarget,mPage));
-						  });
-                      },
-                      'click .targt .delete':function(){
-                        this.deleteTarget();  
-                      },
-                      'click .targt #target_name_text span': function(){
-                          this.showHideTargetTitle(true);
-                      }
+                events: {                   
+                      
                  },
                 initialize: function () {
                         this.template = _.template(template);				
@@ -46,38 +13,66 @@ function (template,bmsfilters) {
                 render: function () {
                         this.app = this.options.camp.app; 
                         this.target_id = this.options.target_id;
+                        this.dialog = this.options.dialog;
                         this.$el.html(this.template({}));                                                
                         this.$("#c_c_target").filters({app:this.app});                        
                         if(!this.target_id){
-                            this.$("#targets_tags").tags({app:this.app,
+                            this.dialog.$(".tagscont").tags({app:this.app,
                                 url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token'),
                                 params:{type:'tags',filterNumber:'',tags:''}
                             });
+                            this.showHideTargetTitle(true);
                         }
                         else{
                             this.loadTarget(this.target_id);
                         }
+                        this.showTitle();
+                },
+                showTitle:function(){
+                    this.dialog.$(".pointy .edit").click(_.bind(function(){
+                         this.showHideTargetTitle(true);
+                    },this));
+                    this.dialog.$(".pointy .copy").click(_.bind(function(){
+                         this.copyTarget();
+                    },this));
+                    this.dialog.$(".pointy .delete").click(_.bind(function(obj){
+                        this.deleteTarget();  
+                    },this));
+                    
+                    this.dialog.$("#dialog-title span").click(_.bind(function(obj){
+                         this.showHideTargetTitle(true);
+                    },this));
+                    
+                    this.dialog.$(".savebtn").click(_.bind(function(obj){
+                         this.saveTarget(obj)
+                    },this));
+                    this.dialog.$(".cancelbtn").click(_.bind(function(obj){
+                        if(this.target_id){
+                            this.showHideTargetTitle();
+                        }
+                    },this));
+                   
                 },
                 saveTarget:function(obj){                   
                    var camp_obj = this;
-				   var campview = this.options.camp;
-                   var target_name_input =  $(obj.target).parent().find("input");                       
-                   var target_head = $(obj.target).parents("div.targt");
+                   var campview = this.options.camp;
+                   var target_name_input =  $(obj.target).parents(".edited").find("input");                       
+                   var target_head = this.dialog;
                    var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&filterFor=C";
                    if(target_name_input.val()!==""){
 
                      if(this.target_id)
-					 {
+                      {
                         $(obj.target).addClass("saving");
                         $.post(URL, { type: "newName",filterName:target_name_input.val(),filterNumber:this.target_id })
                           .done(function(data) {                              
                               var target_json = jQuery.parseJSON(data);                              
-                              if(target_json[0]!=="err"){
-                                 target_head.find("#target_name_text").show(); 
-                                 target_head.find("#target_name_text span").html(target_name_input.val());                                                                                                 
-                                 target_head.find("#target_name_edit").hide();
+                              if(target_json[0]!=="err"){                                  
+                                 target_head.$("#dialog-title span").html(target_name_input.val());                                                                                                 
+                                 camp_obj.showHideTargetTitle();
                                  camp_obj.app.showMessge("Target Renamed");
                                  camp_obj.app.removeCache("targets");
+                                 campview.loadTargets();
                               }
                               else{                                  
                                   camp_obj.app.showAlert(target_json[1],camp_obj.$el);
@@ -91,16 +86,16 @@ function (template,bmsfilters) {
                          $.post(URL, { type: "create",filterName:target_name_input.val() })
                           .done(function(data) {                              
                               var camp_json = jQuery.parseJSON(data);                              
-                              if(camp_json[0]!=="err"){
-                                 target_head.find("#target_name_text").show(); 
-                                 target_head.find("#target_name_text span").html(target_name_input.val());
+                              if(camp_json[0]!=="err"){                                 
+                                 target_head.$("#dialog-title span").html(target_name_input.val());
                                  camp_obj.target_id = camp_json[1];
-                                 if(camp_obj.$("#targets_tags").data("tags")){
-                                    camp_obj.$("#targets_tags").data("tags").setObjectId("filterNumber",camp_json[1]);
-                                 }
-                                 target_head.find("#target_name_edit").hide();
+                                 if(camp_obj.dialog.$(".tagscont").data("tags")){
+                                    camp_obj.dialog.$(".tagscont").data("tags").setObjectId("filterNumber",camp_json[1]);
+                                 }                        
+                                 camp_obj.showHideTargetTitle();
                                  camp_obj.app.showMessge("Target Created");
                                  camp_obj.app.removeCache("targets");
+                                 campview.loadTargets();
                               }
                               else{
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el);
@@ -108,25 +103,28 @@ function (template,bmsfilters) {
                               $(obj.target).removeClass("saving");                              
                          });
                      }
-					 campview.loadTargets();
+                      
                    }                      
                     obj.stopPropagation();
                },
                showHideTargetTitle:function(show,isNew){
-                   if(show){
-                       this.$(".targt #target_name_text").hide();
-                       this.$(".targt #target_name_edit").show();
-                       if(isNew){
-                           this.$(".targt #target_name_text span").html('');
-                           this.target_id = 0;
-                       }
-                       this.$(".targt #target_name_edit input").val(this.$(".targt #target_name_text span").html());
-                   }
-                   else{
-                       this.$(".targt #target_name_text").show();
-                       this.$(".targt #target_name_edit").hide();                       
-                   }
-               },
+                    if(show){
+                        this.dialog.$("#dialog-title").hide();
+                        this.dialog.$("#dialog-title-input").show();
+                        this.dialog.$(".tagscont").hide();
+                        if(isNew){
+                            this.dialog.$("#dialog-title span").html('');
+                            this.target_id = 0;
+                        }
+                        this.dialog.$("#dialog-title-input input").val(this.dialog.$("#dialog-title span").html());
+                    }
+                    else{
+                        this.dialog.$("#dialog-title").show();
+                        this.dialog.$("#dialog-title-input").hide();   
+                        this.dialog.$(".tagscont").show();
+                    }
+                }
+               ,
                deleteTarget:function(){
                    var camp_obj = this;
                    if(confirm('Are you sure you want to delete this target?')){
@@ -147,8 +145,8 @@ function (template,bmsfilters) {
                     }
                },
                saveTargetFilter:function(){
-				    var camp_obj = this;
-					var campview = this.options.camp;
+                   var camp_obj = this;
+                   var campview = this.options.camp;
                    var target_id = this.target_id;
                    if(target_id){
                        var camp_obj = this;
@@ -179,6 +177,23 @@ function (template,bmsfilters) {
                        this.app.showAlert("Please create a target first!",this.$el);
                    }
                },
+               copyTarget:function(){
+                    var target_id = this.target_id;
+                    var curview = this;
+                    var camp_obj = this.options.camp;
+                    var dialog_title = "Copy Target";
+                    var dialog = this.app.showDialog({title:dialog_title,
+                                          css:{"width":"650px","margin-left":"-325px"},
+                                          bodyCss:{"min-height":"200px"},							   
+                                          buttons: {saveBtn:{text:'Copy Target'} }                                                                           
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());                                  
+                    require(["target/copytarget"],function(copytargetPage){                                     
+                             var mPage = new copytargetPage({camp:camp_obj,app:camp_obj.app,target_id:target_id,copydialog:dialog,editview:curview,source:'edit'});
+                             dialog.getBody().html(mPage.$el);
+                             dialog.saveCallBack(_.bind(mPage.copyTarget,mPage));
+                    });  
+               },
                loadTarget:function(target_id){                  
                    var camp_obj = this;
                    var URL = '/pms/io/filters/getTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=get&filterNumber='+target_id;
@@ -191,9 +206,9 @@ function (template,bmsfilters) {
                          }
                          if(selected_target){
                              camp_obj.target_id = selected_target["filterNumber.encode"];
-                             camp_obj.$(".targt #target_name_text span").html(selected_target.name);
+                             camp_obj.dialog.$("#dialog-title span").html(selected_target.name);
                              camp_obj.showHideTargetTitle(false);
-                             camp_obj.$("#targets_tags").tags({app:camp_obj.app,
+                             camp_obj.dialog.$(".tagscont").tags({app:camp_obj.app,
                                 url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+camp_obj.app.get('bms_token'),
                                 params:{type:'tags',filterNumber:selected_target["filterNumber.encode"],tags:''}
                                 ,showAddButton:true,

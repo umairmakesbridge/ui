@@ -28,9 +28,9 @@
       this.$element.find(".col1 .move-row").click(_.bind(this.addToCol2,this))
       this.$element.find(".useallf").click(_.bind(this.moveAll,this))	 
 	  if(this.options.loadTarget != '')
-	 	 this.$element.find(".col1 .use").click(_.bind(this.options.loadTarget,this));
+	 	 this.$element.find(".col1 .edit-action").click(_.bind(this.options.loadTarget,this));
 	  if(this.options.copyTarget != '')	  		  
-	 	 this.$element.find(".col1 .copy").click(_.bind(this.options.copyTarget,this));
+	 	 this.$element.find(".col1 .copy-action").click(_.bind(this.options.copyTarget,this));
     }
   ,mappingInit:function(){
       this.$element.find(".col1 .leftcol tr").each(function(i,v){
@@ -45,7 +45,7 @@
           $(this).remove();
 		  //if(tr_copy.find(".action .use"))
 		  tr_copy.find(".action").children().hide();
-          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html("Remove");
+          tr_copy.find(".action .move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
 		  tr_copy.find(".action .move-row").show();
           tr_copy.find(".action .move-row").click(_.bind(self.removeFromCol2,self));
           tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
@@ -69,13 +69,13 @@
           var tr_copy = tr_obj.clone();
           $(this).remove();
 		  //if(tr_copy.find(".action .use"))
-		  tr_copy.find(".action").children().show();
-          tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html("Use")
-          tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
-		  if(self.options.loadTarget != '')
-			 tr_copy.find(".action .use").click(_.bind(self.options.loadTarget,self));
-		  if(self.options.copyTarget != '')	  		  
-			 tr_copy.find(".action .copy").click(_.bind(self.options.copyTarget,self));
+              tr_copy.find(".action").children().show();
+              tr_copy.find(".action .move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>')
+              tr_copy.find(".action .move-row").click(_.bind(self.addToCol2,self))
+              if(self.options.loadTarget != '')
+                  tr_copy.find(".action .edit-action").click(_.bind(self.options.loadTarget,self));
+              if(self.options.copyTarget != '')	  		  
+                  tr_copy.find(".action .copy-action").click(_.bind(self.options.copyTarget,self));
           var _index = tr_copy.attr("item_index")
           var next_element = null
           var col1_rows = self.$element.find(".col1 .leftcol tr")

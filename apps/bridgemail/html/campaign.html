@@ -76,7 +76,7 @@
               </div>
 
               <!--span6  -->
-              <div class="">
+              <div class="step1-settings">
                 <div class="inputlabel" style="margin-top:10px;">
                   <input type="checkbox" id="campaign_profileUpdate" value="" >
                   <label for="campaign_profileUpdate">Subscriber Information Update <a>Choose  fields</a> </label>
@@ -142,7 +142,7 @@
               <h2 class="clearfix"><span class="icon social2"></span>Social </h2>
         <div class="row-fluid" id="campaign_socail_share" >
           <ul class="socialbtns">
-            <li class="facebook btnunchecked">
+            <li class="facebook">
               <input type="checkbox" id="campaign_fb" class="checkpanel" value=""/>
               <label for="campaign_fb"><span class="social-icon fb"></span><strong>Facebook</strong></label>
             </li>
@@ -359,7 +359,7 @@
    <div class="selection-boxes" style="width: 840px;"> <a class="prev"><span></span></a>
     <ul id="choose_soruce">
       <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
-      <li id="choose_targets"  class="selected"><a><img alt="" src="img/targets.png"><span>Create Target</span></a></li>
+      <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>
       <li><a><img alt="" src="img/tags.png"><span>Tags</span></a></li>
       <li id="upload_csv"><a><img alt="" src="img/csv.png"><span>Upload CSV</span></a></li>
       <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span >Salesforce</span></a></li>
@@ -385,7 +385,7 @@
   </div>
   <!-- template-container  -->  
   <div class="content-inner soruces" style="display:none" id="area_choose_targets">
-    <a class="btn-green" id="addnew_target">Add New</a>   
+    <a class="btn-green" id="addnew_target"><span>Add New</span></a>   
     <div class="clearfix"></div>
     <div class="col1">
       <h2 class="header-list">Targets
@@ -414,25 +414,11 @@
            <a id="btnSFLogin" class="btn-green">Setup Salesforce Account</a>
       </div>
      </div>      
-      <div id="salesforce_setup" style="display:none">
-           <h2 class="header-list" style="padding-left:0px">
-                  <div id="" class="btn-group subs-dd sf_dd" >
-                    <select id="campaign_salesforce"  class="chosen-select">
-                      <option value="campaign">Import Salesforce Campaign</option>
-                      <option value="filter">Apply filter</option>
-                      <option value="all">Import All Leads & Contacts</option>
-                    </select>
-                  </div>
-                  <div class="btn-group sf_lcdd" style="display: none">
-                      <select id="salesforce_import_type"  class="chosen-select">
-                          <option value="lead">Leads</option>
-                          <option value="contact">Contacts</option>
-                          <option value="both">Lead & Contacts</option>
-                      </select>
-                  </div>
+      <div id="salesforce_setup" style="display:none">          
+           <h2 class="header-list" style="padding-left:0px">                                    
                 <div id="salesforce-camp-search" class="input-append search">         
                 </div>
-               <div class="btn-group right">
+               <div class="btn-group left">
                    <div  class="btn dropdown-toggle setting" data-toggle="dropdown"> 
                       <span class="sf_settings"></span> Salesforce settings <b class="caret"></b>
                    </div>
@@ -444,12 +430,40 @@
            </h2>
           <div class="clearfix"></div>
           <div class="salesforce_campaigns" style="display: block">                           
-              <div class="template-container fields" style="min-height:300px; margin:4px  0;">
-               <div class="target-listing salesforce_camp" id="salesforce-camp-listing"> </div>
+              <div class="ui-accordion">
+                <h3 class="ui-accordion-header" role="tab">
+                  <input type="radio" class="radiopanel " value="both" name="options_sf" checked>
+                  <span class="left">Leads & Contacts </span> <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge sf_all_count"></strong></div>
+                  </h3>
+              </div>      
+              <div class="ui-accordion" >
+                <h3 class="ui-accordion-header">
+                  <input type="radio" class="radiopanel " value="lead" name="options_sf">
+                  <span class="left">Leads</span>  <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge sf_lead_count"></strong></div>
+                  </h3>
+              </div>       
+              <div class="ui-accordion" > 
+                <h3 class="ui-accordion-header">
+                  <input type="radio" class="radiopanel " value="contact" name="options_sf">
+                  <span class="left">Contacts</span> <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>                 
+                  <div class="sub-count show" style="width:"><strong class="badge sf_contact_count"></strong></div>                  
+                  </h3>
               </div>
+               <div id="sf_accordion">
+                    <h3> 
+                      <input type="radio" class="radiopanel " value="campaign" name="options_sf" id="">
+                      <span class="left">Salesforce Campaigns</span> <b class="caret"></b></b> 
+                     </h3>
+                    <div class="accordion-inner">
+                        <div class="template-container fields single-row" style="min-height:300px; margin:4px  0;">
+                           <div class="target-listing salesforce_camp" id="salesforce-camp-listing"> </div>
+                       </div>
+                    </div>
+               </div>                   
           </div>
-          <div class="salesforce_after_filter" style="display: none;"></div>
-          
+          <div class="salesforce_after_filter" style="display: none;"></div>          
           <div class="salesforce_all_leads_contants" style="display: none">
                <div style="height: ; margin:10px  0;" class="template-container fields gray-panel">                                
                     <div class="ialc">
@@ -476,7 +490,7 @@
       </div>    
       <div id="netsuite_setup" style="display:none">
            <h2 class="header-list" style="padding-left:0px">
-                  <div id="" class="btn-group subs-dd sf_dd" >
+                  <div class="btn-group subs-dd sf_dd" style="background-color:transparent">
                     <select id="groups_netsuite"  class="chosen-select">
                       <option value="group">NetSuite Static Group</option>
                       <option value="filter">Apply filter</option>                      
@@ -521,97 +535,124 @@
 <!-- Step3 End -->
 <div class="wizard-steps step4">
   <div class="row-fluid show-grid schedule-container">
-    <div class="span8">
+    <div class="span6">
         
-      <div id="accordion_info">
-      <h3  class="clearfix"><span class="icon h-info "></span>Header Information <b class="caret"></b> </h3>
+     <div id="accordion_info">
+      <h3  class="clearfix"><span class="icon settings "></span>Settings<b class="caret"></b> </h3>
         <div class="accordion-inner">
-            <div class="row">
-                <label>Subject</label>
-                <span class="text" id="campaign_preview_subject"></span></div>
-              <div class="row">
-                <label>From Email</label>
-                <span class="text" id="campaign_preview_fromEmail"></span></div>
-              <div class="row">
-                <label>From Name</label>
-                <span class="text" id="campaign_preview_defaultSenderName"></span></div>
-              <div class="row">
-                <label>Reply To</label>
-                <span class="text" id="campaign_preview_defaultReplyTo"></span></div>
-        </div>
-       <h3  class="clearfix"><span class="icon settings"></span>Settings  <b class="caret"></b> </h3>
-        <div class="accordion-inner settings-inner">
+            <div class="collapsedivs">    
+                <a ><h4>Header Information <b class="caret"></b></h4></a>
+                <div>
+                    <div class="row">
+                    <label>Subject</label>
+                    <span class="text" id="campaign_preview_subject"></span></div>
+                  <div class="row">
+                    <label>From Email</label>
+                    <span class="text" id="campaign_preview_fromEmail"></span></div>
+                  <div class="row">
+                    <label>From Name</label>
+                    <span class="text" id="campaign_preview_defaultSenderName"></span></div>
+                  <div class="row">
+                    <label>Reply To</label>
+                    <span class="text" id="campaign_preview_defaultReplyTo"></span></div>
+                </div>
+            </div>   
+            <div class="collapsedivs">    
+                <a ><h4>Campaign Setting<b class="caret"></b></h4></a>
+              <div class="settings-inner">
+                  
+              </div>
+            </div>
+            <div class="collapsedivs">    
+                <a ><h4>Social <b class="caret"></b></h4></a>
+                <div>
+                    <ul class="socialbtns clearfix">
+                      <li class="facebook btnunchecked">
+                        <span class="social-icon fb"></span>
+                      </li>
+                      <li class="twitter">
+                        <span class="social-icon tw"></span>
+                      </li>
+                      <li class="linkedin">
+                        <span class="social-icon in"></span>
+                      </li>
+                      <li class="pinterest">
+                        <span class="social-icon pi"></span>
+                      </li>
+                      <li class="googleplus">
+                        <span class="social-icon gp"></span>
+                      </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="collapsedivs">    
+                <a ><h4>Other <b class="caret"></b></h4></a>
+                <div>
+                    <div class="row sf-camp-info"><label>Add Results to Salesforce Campaign</label><span class="text"></span></div>
+                    <div class="row conversion-page-info"><label>Conversion Page</label><span class="text"></span></div>
+                </div>
+            </div>
             
-        </div>
-        <h3  class="clearfix"><span class="icon target"></span>Recipients  <b class="caret"></b> </h3>
-        <div class="accordion-inner recipients-inner">
-            
-        </div>
-       
+        </div>                      
      </div>
     
       
     </div>
-    <!-- span8 -->
+    <!-- span6 -->
     
-    <div class="span4 schedule-box">
+    <div class="span6 schedule-box">
       <div>
-        <div class="calendar">
-          <div class="custom-calendar-wrap">
-            <div id="custom-inner" class="custom-inner">
-              <div class="custom-header clearfix">
-                <nav> <span id="custom-prev" class="custom-prev"></span> <span id="custom-next" class="custom-next"></span> </nav>
-                <h2 id="custom-month" class="custom-month"></h2>
-                <h3 id="custom-year" class="custom-year"></h3>
+        <div class="schtoggle">Toggle</div>
+        <div class="schedule-camp">
+            <div class="calendar">
+              <div class="custom-calendar-wrap">
+                <div id="custom-inner" class="custom-inner">
+                  <div class="custom-header clearfix">
+                    <nav> <span id="custom-prev" class="custom-prev"></span> <span id="custom-next" class="custom-next"></span> </nav>
+                    <h2 id="custom-month" class="custom-month"></h2>
+                    <h3 id="custom-year" class="custom-year"></h3>
+                  </div>
+                  <div id="calendar" class="fc-calendar-container"></div>
+                </div>
               </div>
-              <div id="calendar" class="fc-calendar-container"></div>
+            </div>            
+            <!-- calendar  -->
+            <div class="sch-right">                                                                	
+                <div class="set-time">
+                    <div class="timebox hour">
+                        <input type="text" value="14" name="" />
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="timebox min">
+                        <input type="text" value="35" name="" />
+                    </div>
+                    <div data-toggle="buttons-radio" class="btn-group all-any">
+                      <button rule="A" class="btn active">AM</button>
+                      <button rule="1" class="btn">PM</button>
+                    </div>
+                </div>
+                <a class="btn-green sch-btn left scheduled-campaign"><span>Schedule </span><i  class="icon schedule"></i></a>
+                <a class="btn-blue sch-btn left"><span>Draft </span><i  class="icon edit"></i></a>
             </div>
-          </div>
+          </div>                
         </div>
-        <!-- calendar  -->
-        
-        <div class="s-time">
-          <div class="dropdown"> 
-               <select id="campaign_schedule_time" class="chosen-select">
-                <option value="12:00:00" selected="selected">12:00</option>
-                <option value="12:30:00">12:30</option>
-                <option value="01:00:00">01:00</option>
-                <option value="01:30:00">01:30</option>
-                <option value="02:00:00">02:00</option>
-                <option value="02:30:00">02:30</option>
-                <option value="03:00:00">03:00</option>
-                <option value="03:30:00">03:30</option>
-                <option value="04:00:00">04:00</option>
-                <option value="04:30:00">04:30</option>
-                <option value="05:00:00">05:00</option>
-                <option value="05:30:00">05:30</option>
-                <option value="06:00:00">06:00</option>
-                <option value="06:30:00">06:30</option>
-                <option value="07:00:00">07:00</option>
-                <option value="07:30:00">07:30</option>
-                <option value="08:00:00">08:00</option>
-                <option value="08:30:00">08:30</option>
-                <option value="09:00:00">09:00</option>
-                <option value="09:30:00">09:30</option>
-                <option value="10:00:00">10:00</option>
-                <option value="10:30:00">10:30</option>
-                <option value="11:00:00">11:00</option>
-                <option value="11:30:00">11:30</option>
-               </select> 
-          </div>
-          <div class="dropdown ">
-              <select id="campaign_schedule_timeam" class="chosen-select">
-                <option value="am">AM</option>
-                <option value="pm">PM</option>
-               </select> 
-          </div>
+    </div>
+    <div class="span12 preview" style="margin:10px 0 15px;">
+        <div id="accordion_recipients">
+            <h3  class="clearfix"><span class="icon subscribers"></span>Recipients  <b class="caret"></b> </h3>
+            <div class="accordion-inner">
+                <div class="recipients-inner" style="min-height:120px">
+                </div>    
+            </div>
         </div>
-        <a class="btn-blue left scheduled-campaign"><span class="icon scheduled"></span>Schedule</a> </div>
     </div>
     <div class="span12 preview" style="margin:0 0 15px;">
       <div class="accordion-heading" > <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle">
         <h2 class="clearfix"><span class="icon preview "></span>Preview </h2>
-        <b class="caret"></b> </a> <a class="icon edit"></a> <a class="icon newwin"></a> </div>
+        <b class="caret"></b> </a> 
+        <a class="icon edit2"></a>
+        <a class="icon newwin2"></a>
+      </div>
       <div class="accordion-body collapse in" id="collapseOne">
         <div class="accordion-inner">
           <div class="email-preview">

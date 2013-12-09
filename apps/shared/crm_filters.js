@@ -22,6 +22,8 @@
       if(this.options.showAdvanceOption){
         this.adv_options = $(this.options.adv_option)
         this.$element.append($(this.options.adv_option))
+        
+       
       }
       this.fields = []
       this.rules = []
@@ -37,14 +39,23 @@
         self.$element.find(".filter-div").append(add_filter_row)
         //adding different filter to add row
         add_filter_row.find("ul").append(basicFilter)
-       
-        
+               
         //Attaching events to filter buttons
         basicFilter.on("click",$.proxy(self.addBasicFilter,self))
-       
+        
       }
-      
-      
+      if(this.options.showAdvanceOption){
+            this.$element.find('input').iCheck({
+                  checkboxClass: 'checkinput'
+            })
+
+            this.$element.find('input').on('ifChecked', function(event){
+                  self.$element.find(".advncfilter .filter-cont").show();
+            })
+            this.$element.find('input').on('ifUnchecked', function(event){
+                  self.$element.find(".advncfilter .filter-cont").hide();
+            })
+      }
       
     }
   , addBasicFilter:function(obj,e,params){
@@ -68,7 +79,7 @@
           var condition_row = $(this.options.condition_row);
           this.$element.find(".addfilter").before(condition_row)
           if(this.options.filterFor==="S"){
-            condition_row.find("select").chosen({disable_search: "true",width:'80px'}).change(function(){ 
+            condition_row.find("select").chosen({disable_search: "true",width:'100px'}).change(function(){ 
                   $(this).val($(this).val())
                   $(this).trigger("chosen:updated")
                   self.updateAdvanceFilter()
@@ -256,7 +267,7 @@
   }
   , addActionBar:function(filterRow){
       var action =  $('<div class="right-btns"></div>')            
-      var del_btn = $('<a class="icon delete showtooltip" title="Delete Filter"></a>')      
+      var del_btn = $('<a title="Delete Filter" class="btn-red showtooltip"><i class="icon delete "></i></a>')      
       action.append(del_btn)            
       del_btn.click(function(){
          if($(this).parents(".filter-row").index()==0){
@@ -399,7 +410,7 @@
   , bottomrow_c : '<div class="filter-row filter-menu addfilter"><ul></ul></div>'
   , condition_row : '<span class="andor"><div class="btn-group"><select><option value="AND">And</option><option value="OR">Or</option></select></div></span>'
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
-  , adv_option : '<div class="adv_bar"><h4>Advanced Filtering Options</h4><input type="text" value="" class="advance-option" /></div>'
+  , adv_option : '<div class="advncfilter"><div class="inputlabel" style=""><input type="checkbox" id="campaign_isFooterText" class="checkinput"><label for="campaign_isFooterText">Advanced Filter</label></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
   , filterFor : 'S'
   , title: ''
   , app:null

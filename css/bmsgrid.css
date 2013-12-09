@@ -798,14 +798,4 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 	width: 18px;
 }
 
-
-
-
-
-
-
-.ui-accordion .ui-accordion-header .subscribers {
-    float: right;
-    margin: 12px -4px 0 0;
-}
 .ui-accordion .ui-accordion-header .subscribers .badge { float:right;}

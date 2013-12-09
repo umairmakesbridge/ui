@@ -14,11 +14,27 @@ function (template,crm_filters) {
 
                 render: function () {
                         this.app = this.options.camp.app;                         
+                        this.camp = this.options.camp;
                         this.$el.html(this.template({}));
                         this.savedObject = this.options.savedObject;
+                        this.filter_type = this.options.type;
                         this.$(".lead-filter").crmfilters({app:this.app,object:'lead'});
                         this.$(".contact-filter").crmfilters({app:this.app,object:'contact'});
                         this.loadSavedData();
+                        
+                        if(this.filter_type=="lead"){
+                           this.$(".lead-accordion").show();
+                           this.$(".contact-accordion").hide();
+                        }
+                        else if(this.filter_type=="contact"){
+                            this.$(".contact-accordion").show();
+                            this.$(".lead-accordion").hide();
+                        }
+                        else{
+                           this.$(".lead-accordion").show();
+                           this.$(".contact-accordion").show();
+                        }
+                        
                 },
                 loadSavedData:function(){
                     if(this.savedObject){
@@ -39,6 +55,11 @@ function (template,crm_filters) {
                             this.$(".lead-filter").data("crmfilters").loadFilters(this.savedObject);
                         }
                     }
+                },
+                saveFilter:function(dialog){
+                    this.camp.states.step3.sf_filters.contact = this.$(".contact-filter").data("crmfilters").saveFilters('contact');
+                    this.camp.states.step3.sf_filters.lead =  this.$(".lead-filter").data("crmfilters").saveFilters('lead');
+                    dialog.hide();
                 }
         });
 });

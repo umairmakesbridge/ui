@@ -26,7 +26,6 @@ h2.header-list {
     width: auto !important;
     margin:0px !important;
 }
-.c-name h2 { margin-top:9px; }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
  input[type=text].search-control { padding:5px 6px; }
  #listssearch,#targetsearch { margin-right:5px; }
@@ -53,20 +52,12 @@ h2.header-list span.recpscount {
     padding: 0 14px;
 	color: #888888;
 }
-#targets_grid .subscribers, #target_grid_recipients .subscribers { margin:13px 0px 13px 150px; }
-#area_choose_targets .col2 .subscribers { margin-left:150px; }
-#area_choose_targets .col2 table { width:100%; }
-#list_grid_recipients .action, #target-lists .action { right:10px; top:-1px; }
-#targets_grid .action, #target_grid_recipients .action { right:10px; }
-#targets_grid .action .btn-green { float:left; margin-left:10px; }
-#targets_grid .action .use { /*margin-left:0;*/ }
+
 #salesforce_campaigns .chosen-container .chosen-drop {  }
 
 .bmsgrid td .action { margin:auto 0px; }
 .bmsgrid div.bDiv { min-height:290px; }
-.bmsgrid div.bDiv table { margin-bottom:0; min-height:290px; }
 h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
-#targets_grid .action, #target_grid_recipients .action { margin-top:-33px; top:auto; }
 #area_choose_lists, #area_choose_targets { position:relative; min-height:200px; }
 .SI-FILES-STYLIZED label.cabinet {
     cursor: pointer;
@@ -242,4 +233,3 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .popover.right .arrow:after { border-right-color: #ff0000; left:-8px; border-width:8px; margin-top:-8px; }
 .popover.right .arrow { border-right: 0; left:-8px; margin-top:-13px; }
 #mapdata #email_erroricon { float:left; }
-.icon.copy {   background: url("../img/copy.png") no-repeat center center; float:left; margin:3px 3px 0 5px !important; }
