@@ -40,12 +40,16 @@
 		  this.$element.find(".col1 .leftcol tr").each(function(i,v){
 			  $(this).attr("item_index",i)          
 		  });
+		  if(this.$element.find('#recipients tr').length == 0)
+			this.$element.find(".col2 .search input").attr('disabled','disabled');
 	  }
 	  else
 	  {
 		  this.$element.find(".col1 .leftcol li").each(function(i,v){
 			  $(this).attr("item_index",i)          
 		  });
+		  if(this.$element.find('#recipients li').length == 0)
+			this.$element.find(".col2 .search input").attr('disabled','disabled');
 	  }
   }  
   ,addToCol2:function(obj){
@@ -65,9 +69,17 @@
                   tr_copy.find(".move-row").show();
                   tr_copy.find(".move-row").click(_.bind(self.removeFromCol2,self));
                   if(self.options.movingElement == 'tr')
+				  {
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
+					  if(self.$element.find(".col2 .rightcol tbody tr").length > 0)
+					  	self.$element.find(".col2 .search input").removeAttr('disabled');
+				  }
                   else
+				  {
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol ul"));
+					  if(self.$element.find(".col2 .rightcol ul li").length > 0)
+					  	self.$element.find(".col2 .search input").removeAttr('disabled');
+				  }
 
                   tr_copy.fadeIn("fast");
 		  
@@ -106,9 +118,17 @@
           var _index = tr_copy.attr("item_index")
           var next_element = null
 		  if(self.options.movingElement == 'tr')
-         	 var col1_rows = self.$element.find(".col1 .leftcol tr")
+		  {
+         	 var col1_rows = self.$element.find(".col1 .leftcol tr");
+			 if(self.$element.find(".col2 .rightcol tbody tr").length == 0)
+				self.$element.find(".col2 .search input").attr('disabled','disabled');
+		  }
 		  else
-		  	var col1_rows = self.$element.find(".col1 .leftcol li")
+		  {
+		  	var col1_rows = self.$element.find(".col1 .leftcol li");
+			if(self.$element.find(".col2 .rightcol ul li").length == 0)
+				self.$element.find(".col2 .search input").attr('disabled','disabled');
+		  }
           	for(var i=0;i<col1_rows.length;i++){
               if(parseInt($(col1_rows[i]).attr("item_index"))>_index){
                   next_element = $(col1_rows[i])
@@ -120,9 +140,13 @@
           }
           else{            
 			if(self.options.movingElement == 'tr')
-			  tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"));
+			{
+			  tr_copy.appendTo(self.$element.find(".col1 .leftcol tbody"));			  
+			}
 			else
-			  tr_copy.appendTo(self.$element.find(".col1 .leftcol ul"));
+			{
+			  tr_copy.appendTo(self.$element.find(".col1 .leftcol ul"));			  
+			}
           }
           tr_copy.fadeIn("fast");
 		  
@@ -167,7 +191,7 @@
   $.fn.mapping.Constructor = Mapping
 
   $.fn.mapping.defaults = { 
-   template:'<div class="bmsgrid"><div class="bDiv"><table cellspacing="0" cellpadding="0" border="0" style="display: table;"><tbody></tbody></table></div></div>',   
+   template:'<div class="bmsgrid"><div class="bDiv"><table id="recipients" cellspacing="0" cellpadding="0" border="0" style="display: table;"><tbody></tbody></table></div></div>',   
    app:null,
    gridHeight:290,
    sumColumn: '',

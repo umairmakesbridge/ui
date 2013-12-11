@@ -14,7 +14,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            target_li.addClass("selected");						   
 						   
                            this.step3SlectSource(target_li);
-                       } ,
+                       },
                       'click .step2 #choose_soruce li':function(obj){
                           var camp_obj = this;
                            var target_li =$.getObj(obj,"li"); 
@@ -162,6 +162,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 showicon: 'yes',
                                 iconsource: 'list'
                          });
+						 this.$el.find('div#listrecpssearch').searchcontrol({
+                                id:'list-recps-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search Recipients',
+                                gridcontainer: 'recipients',
+                                showicon: 'yes',
+                                iconsource: 'list'
+                         });
                          this.$el.find('div#targetssearch').searchcontrol({
                                 id:'target-list-search',
                                 width:'300px',
@@ -170,6 +179,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 gridcontainer: 'target_list_grid',
                                 showicon: 'no',
                                 iconsource: ''
+                         });
+						 this.$el.find('div#targetrecpssearch').searchcontrol({
+                                id:'target-recps-search',
+                                width:'300px',
+                                height:'22px',
+                                placeholder: 'Search Recipients',
+                                gridcontainer: 'recipients',
+                                showicon: 'yes',
+                                iconsource: 'list'
                          });
                         this.$el.find('div#targetsearch').searchcontrol({
                                 id:'target-search',
@@ -254,12 +272,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
                         this.states.step1.change = true;
-                    },this));                    
-                    this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});
-                    
-                    //Init icheck boxes 
-                     
-                   
+                    },this));
+                    this.$("#campaign_schedule_time").chosen({ width: "76px",disable_search: "true"});       
+                    this.$("#campaign_schedule_timeam").chosen({ width: "62px",disable_search: "true"});       
+                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                 
+                    //Init icheck boxes                   
+
                 },
                 initCheckbox:function(){
                     this.$('input').iCheck({
@@ -337,7 +355,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
 
-                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));                        
+                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
                         camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail));                        
                         camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                                        
@@ -714,9 +732,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_subject'),
                                 'valid_icon':el.find('#subject_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
-                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
-                                'customfield':el.find('.input-append .subject-group'),
-                                'customfieldcss':'right:28px; top:1px;'
+                                'controlcss':'border:solid 2px #FB8080;'
                             };
                             app.enableValidation(options);						
                             isValid = false;
@@ -726,9 +742,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_subject'),
                                 'valid_icon':el.find('#subject_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_subject_length_error,
-                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
-                                'customfield':el.find('.input-append .subject-group'),
-                                'customfieldcss':'right:28px; top:1px;'
+                                'controlcss':'border:solid 2px #FB8080;'
                             };
                             app.enableValidation(options);						
                             isValid = false;
@@ -741,18 +755,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              'customfield':el.find('.input-append .subject-group')};
                              app.disableValidation(options);						
                         }
-			if(el.find('#campaign_from_name').val() == '')
+						if(el.find('#campaign_from_name').val() == '')
                         {
                             var options = {'control':el.find('#campaign_from_name'),
                                 'valid_icon':el.find('#fromname_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
-                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
-                                'customfield':el.find('.input-append .fromname-group'),
-                                'customfieldcss':'right:28px; top:1px;'
+                                'controlcss':'border:solid 2px #FB8080;'
                               };
                             app.enableValidation(options);						
                             isValid = false;
-			}
+						}
                         else
                         {
                             var options = {'control':el.find('#campaign_from_name'),
@@ -767,24 +779,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 'control':el.find('#campaign_reply_to'),
                                 'valid_icon':el.find('#replyto_erroricon'),
                                 'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
-                                'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
-                                'customfield':el.find('.input-append .replyto-group'),
-                                'customfieldcss':'right:28px; top:1px;'
+                                'controlcss':'border:solid 2px #FB8080;'
                                };
                             app.enableValidation(options);
                             isValid = false;
                         }
                         else if(!field_patt.test(replyto) && !app.validateEmail(replyto))
-                        {                            
+                        {
                             var options = {'control':el.find('#campaign_reply_to'),
                             'valid_icon':el.find('#replyto_erroricon'),
                             'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
-                            'controlcss':'width:87.5%; float:left; border:solid 1px #ff0000;',
-                            'customfield':el.find('.input-append .replyto-group'),
-                            'customfieldcss':'right:28px; top:1px;'};
+                            'controlcss':'border:solid 2px #FB8080;'
+							};
                             app.enableValidation(options);
                             isValid = false;
-                        }					
+                        }
                         else
                         {
                             var options = {'control':el.find('#campaign_reply_to'),
@@ -793,13 +802,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                };
                             app.disableValidation(options);                            
                         }
-
-                        if(email_addr != '' && !app.validateEmail(email_addr))
+						if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
+						{
+							var options = {'control':el.find('#campaign_default_reply_to'),
+                            'valid_icon':el.find('#email_erroricon'),
+                            'message':camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error,
+                            'controlcss':'border:solid 2px #FB8080;'};
+                            app.enableValidation(options);
+                            isValid = false;
+						}
+                        else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
                         {                           
                             var options = {'control':el.find('#campaign_default_reply_to'),
                             'valid_icon':el.find('#email_erroricon'),
                             'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
-                            'controlcss':'border:solid 1px #ff0000; float:left; margin-left:40px; width:57%;'};
+                            'controlcss':'border:solid 2px #FB8080;'};
                             app.enableValidation(options);
                             isValid = false;
                         }
@@ -946,6 +963,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var tagsView = this.states.step3.tags;
 					   var tags = tagsView.saveTags();
                        if(!tags){
+						   this.app.showAlert("Please select tag(s) to set recipients",$("body"),{fixed:true});
                            return false;
                        }
                        this.step3SaveCall({'recipientType':'Tags',tags:tags});
@@ -1072,7 +1090,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 
                             var fields_html = "<ul>";
                             $.each(camp_obj.allMergeTags,function(key,val){
-                                    fields_html +="<li mergeval='"+val.code+"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
+                                    fields_html +="<li mergeval='"+val.code+"' rel='"+ val.type +"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
                             });
                             fields_html += "</ul>";
                             $(".searchfields .searchlist").html(fields_html);
@@ -1567,9 +1585,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(!li.hasClass("active")){
                         var type = li.attr("id").split("_")[1];
                         var fields = this.mergeTags[type];
-                        var fields_html = "<ul>";
+                        var fields_html = "<ul id='"+ type +"'>";
                         $.each(fields,function(key,val){
-                            fields_html +="<li mergeval='"+val[0]+"'>"+val[1]+"<a class='append-merge-field'>Insert</a></li>";
+                            fields_html +="<li rel='"+ type +"' mergeval='"+val[0]+"'>"+val[1]+"<a class='append-merge-field'>Insert</a></li>";
                         });
                         fields_html += "</ul>";
                         
@@ -1612,7 +1630,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     return $(this);
                             }
                          }).show();
-                         $(".mergefields .searchfields .searchlist li").removeHighlight().highlight(searchterm);
+						 var ids = ['Basic Field', 'Custom Field', 'Sales Rep'];
+						 var items = $(".mergefields .searchfields .searchlist li");
+						 $.each(ids, function(index, id) {
+							$(items).filter("li[rel='" + ids[index] + "']")
+								.appendTo($(".mergefields .searchfields .searchlist ul"));
+						});
+                         $(".mergefields .searchfields .searchlist li div").removeHighlight().highlight(searchterm);
                         if(count == 0)
                          {
                               $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
@@ -2081,6 +2105,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.checkNetSuiteStatus();							
                         	break;
 						case 'choose_tags':
+							if(this.checkRecipientsSaved("tags")){
+								return false;
+							}
 							camp_obj.app.showLoading("Loading Tags...",camp_obj.$el.find('#area_choose_tags'));  
 							require(["tags"],function(tagsPage){  								                                    
 								var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});								

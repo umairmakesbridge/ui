@@ -44,7 +44,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
                                 if(!this.app.getAppData("campaigns")){
                                     this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
                                     this.app.getData({
-                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=300&status=D",
+                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=searchNormalCampaigns&searchText=umair&bucket=200",
                                         "key":"campaigns",
                                         "callback":_.bind(this.createListTable,this)
                                     });
