@@ -50,7 +50,7 @@ function (template,chosen) {
 			   {				  
 				  var options = {'control':el.find('#newlist'),
 								  'valid_icon':el.find('#list_erroricon'),
-								  'controlcss':'border:solid 1px #ff0000; float:left; margin-right:5px; width:300px;',
+								  'controlcss':'border:solid 2px #FB8080;',
 								  'message':appMsgs.MAPDATA_newlist_empty_error};
 				  app.enableValidation(options);
 				  isValid = false;				  
@@ -68,9 +68,9 @@ function (template,chosen) {
 			  {				  
 				  var options = {'control':el.find('#existing_lists_chosen'),
 								  'valid_icon':el.find('#list_erroricon'),
-								  'controlcss':'float:left;margin-right:5px; width:288px;',
+								  'controlcss':'width:288px;',
 								  'customfield':el.find('#existing_lists_chosen a'),
-								  'customfieldcss':'border:solid 1px #ff0000;',
+								  'customfieldcss':'border:solid 2px #FB8080;',
 								  'message':appMsgs.MAPDATA_extlist_empty_error};
 				  app.enableValidation(options);				 
 				  isValid = false;
@@ -91,7 +91,7 @@ function (template,chosen) {
 			{				
 				var options = {'control':el.find('#alertemail'),
 								'valid_icon':el.find('#email_erroricon'),
-								'controlcss':'border:solid 1px #ff0000; float:left; margin-right:5px;',
+								'controlcss':'border:solid 2px #FB8080;',
 								'message':appMsgs.MAPDATA_email_format_error};
 				app.enableValidation(options);
 				isValid = false;

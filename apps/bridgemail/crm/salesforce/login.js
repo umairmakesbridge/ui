@@ -72,7 +72,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#sf_userid'),
 										'valid_icon':el.find('#sfuid_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_userid_empty_error};
 						app.enableValidation(options);
 						isValid = false;
@@ -81,7 +81,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#sf_userid'),
 										'valid_icon':el.find('#sfuid_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_userid_format_error};
 						app.enableValidation(options);
 						isValid = false;
@@ -95,7 +95,7 @@ function (template) {
 					{
 						var options = {'control':el.find('#sf_pwd'),
 										'valid_icon':el.find('#sfpwd_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_pwd_empty_error};
 						app.enableValidation(options);
 						isValid = false;
@@ -109,7 +109,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#sf_email'),
 										'valid_icon':el.find('#sfemail_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_email_format_error};
 						app.enableValidation(options);
 						isValid = false;

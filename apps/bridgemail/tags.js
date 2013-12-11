@@ -51,6 +51,20 @@ function (template,Mapping,bmsSearch) {
 							movingElement: 'li',
 							iconsource: 'list',
 					});
+					this.$el.find('div#tagsrecpssearch').searchcontrol({
+							id:'tag-recps-search',
+							width:'210px',
+							height:'25px',
+							placeholder: 'Search Recipients',
+							gridcontainer: 'tagsrecpslist ul',
+							showicon: 'yes',
+							movingElement: 'li',
+							iconsource: 'list',
+					});
+					if(this.$el.find('#tagsrecpslist ul li').length == 0)
+						this.$el.find('#tag-recps-search').attr('disabled','disabled');
+					else
+						this.$el.find('#tag-recps-search').attr('disabled','');
 				},
                 initialize: function () {
 					this.template = _.template(template);				

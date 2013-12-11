@@ -74,7 +74,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#ns_userid'),
 										'valid_icon':el.find('#nsuid_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_userid_empty_error};
 						app.enableValidation(options);
 						isValid = false;
@@ -83,7 +83,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#ns_userid'),
 										'valid_icon':el.find('#nsuid_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_userid_format_error};
 						app.enableValidation(options);						
 						isValid = false;
@@ -97,7 +97,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#ns_pwd'),
 										'valid_icon':el.find('#nspwd_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_pwd_empty_error};
 						app.enableValidation(options);
 						isValid = false;
@@ -111,7 +111,7 @@ function (template) {
 					{
 						var options = {'control':el.find('#ns_accid'),
 										'valid_icon':el.find('#nsaccid_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_accid_empty_error};
 						app.enableValidation(options);						
 						isValid = false;
@@ -125,7 +125,7 @@ function (template) {
 					{						
 						var options = {'control':el.find('#ns_email'),
 										'valid_icon':el.find('#nsemail_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_email_format_error};
 						app.enableValidation(options);						
 						isValid = false;

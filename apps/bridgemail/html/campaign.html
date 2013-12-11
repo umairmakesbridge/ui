@@ -70,7 +70,7 @@
           <div class="row-fluid">
             <div class="">
               <div id="unsubscribe" class="btn-group subs-dd">
-                <select id="campaign_unSubscribeType" data-placeholder="Simple Unsubscribe" class="nosearch">
+                <select id="campaign_unSubscribeType" class="nosearch">
                   <option value="S">Simple Unsubscribe </option>
                   <option value="U">Universal Subscriber Management</option>
                 </select>
@@ -379,17 +379,23 @@
       </div>
     </div>
     <div class="col2">
-      <h2 class="header-list">Recipients<span id="recpcount" class="recpscount"><span>0</span> Records Found</span></h2>
+      <h2 class="header-list">Recipients<!--<span id="recpcount" class="recpscount"><span>0</span> Records Found</span>-->
+      	<div id="listrecpssearch" class="input-append search"> </div>
+      </h2>
       <div class="template-container rightcol" style="margin-left:5px">
       </div>  
     </div>
   </div>
   <!-- template-container  -->  
   <div class="content-inner soruces" style="display:none" id="area_choose_targets">
-    <a class="btn-green" id="addnew_target"><span>Add New</span></a>   
+    <!--<a class="btn-green" id="addnew_target"><span>Add New</span></a>   -->
     <div class="clearfix"></div>
     <div class="col1">
-      <h2 class="header-list">Targets
+      <h2 class="header-list">
+      	<span style="float:left;">Targets</span>
+        <div class="iconpointy">
+           <a class="btn-green"  id="addnew_target"><i class="icon plus left"></i></a>
+        </div>
         <div id="targetsearch" class="input-append search"> </div>
       </h2>
       <div class="template-container leftcol" style="margin-right:5px">
@@ -397,7 +403,9 @@
       </div>
     </div>
     <div class="col2">
-      <h2 class="header-list">Recipients<span id="trecpcount" class="recpscount"><span>0</span> Records Found</span></h2>
+      <h2 class="header-list">Recipients<!--<span id="trecpcount" class="recpscount"><span>0</span> Records Found</span>-->
+      	<div id="targetrecpssearch" class="input-append search"> </div>
+      </h2>
       <div class="template-container rightcol" style="margin-left:5px">
         
       </div>

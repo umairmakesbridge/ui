@@ -60,7 +60,7 @@ h2.header-list span.recpscount {
 
 .bmsgrid div.bDiv table { margin-bottom:15px; min-height:290px; }
 
-h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
+h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
 #area_choose_lists, #area_choose_targets { position:relative; min-height:200px; }
 .SI-FILES-STYLIZED label.cabinet {
     cursor: pointer;
@@ -202,13 +202,17 @@ h2.header-list > span { margin-left:0; font-weight:bold; font-size:15px; color:#
 	text-align:center; margin-top:50px; font-style:italic;
 }
 .settings .cont { position:relative; }
-.erroricon { float:right; display:none; margin-top:6px; 
-background:url(../img/error-icon.png) no-repeat 0 0;
-	width:20px;
-	height:20px;	
+.erroricon { float:right; display:none; 
+background:url("../img/caution.png") no-repeat scroll center center #FB8080;
+	width:18px;
+	height:18px;	
+	border-radius:2px;
+	padding:2px;
+	position:absolute;
+	right:0;
+	top:-20px;
 }
 .addrow label { width:25%; }
-#replyto_erroricon { position:absolute; right:0px; top:0; }
 div.tooltip.right { right:auto; width:auto; top:inherit; margin-left: 5px;
     margin-top: 19px;
     padding: 0 5px; }
@@ -235,7 +239,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .popover.right .arrow { border-right: 0; left:-8px; margin-top:-13px; }
 #mapdata #email_erroricon { float:left; }
 
-.icon.copy {   background: url("../img/copy.png") no-repeat center center; float:left; margin:3px 3px 0 5px !important; }
+.icon.copy {   background: url("../img/copy.png") no-repeat center center; float:left; margin:0px 0px 0 5px !important; }
 #area_choose_tags h2.header-list { margin-top:0; padding:5px 0; }
 .tagslist ul li > .btn-red span {	
 	padding:0 5px 0 10px;
@@ -252,8 +256,19 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 }
 .mergefields h2 { line-height:2.7em; }
 .mergefields h2 > .search { height:37px; }
-.mergefields h2 > .search input[type="text"] { height:31px; }
-.mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:0; }
-.adv_dd .btn-group, .mergefields .btn-group { /*top:0;*/ }
-#existing_lists_chosen { margin-left:5px; margin-top:2px; }
-
+.mergefields h2 > .search input[type="text"] { padding-left:45px; width:100px; height:31px; padding-right:55px; }
+.mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:-2px !important; }
+.adv_dd .btn-group, .mergefields .btn-group { top:2px; }
+#existing_lists_chosen { margin-left:5px; /*margin-top:2px;*/ }
+.iconpointy > a.btn-green:after { left:-6px; }
+.row { position:relative; }
+.subs-dd { position:relative; }
+.exist-new .noti { width:24px; height:24px; }
+.subs-dd .erroricon { top:-18px; }
+.mergefields h2 > .search { width:inherit; }
+.search > .icon { left:2px; }
+.mergefields h2 > .search .close-icon { right:38px; top:11px; }
+.chosen-container-single .chosen-single span { color:#495A83; }
+.bmsgrid div.bDiv tr .action { top:inherit; margin-top:-25px; }
+.bmsgrid div.bDiv tr .action a { margin-left:0; margin-right:10px; }
+.bmsgrid div.bDiv tr .action a.move-row { margin-right:0; }
