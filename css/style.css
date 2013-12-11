@@ -2125,7 +2125,7 @@ ol.progtrckr li.incomplete:after {
     height: 35px;
     left: 10px;
     position: relative;
-    top: 2px;
+    top: -1px;
 }
 .iconpointy .pointy {
     background: none;
@@ -2171,8 +2171,8 @@ ol.progtrckr li.incomplete:after {
     margin: 12px 0 0 14px;
 }
 
-.iconpointy:hover a.icon {background-color: #91ABBC;  }
-.iconpointy:hover a.btn-green:after {  border-color: rgba(255, 255, 255, 0) #91ABBC rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
+.iconpointy a.icon {background-color: #91ABBC;  }
+.iconpointy a.btn-green:after {  border-color: rgba(255, 255, 255, 0) #91ABBC rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
 
 
 
@@ -2187,7 +2187,7 @@ ol.progtrckr li.incomplete:after {
 
 .iconpointy .pointy:after {  border-color: rgba(255, 255, 255, 0); top:0px;}
 .iconpointy .pointy { display:none;  }
-.iconpointy:hover  .pointy { display:block;} 
+.iconpointy .pointy { display:block;} 
 .iconpointy .pointy ul li { float:left;} 
 .iconpointy .pointy ul li { margin:0 0 0 2px;  } 
 .iconpointy .pointy ul li:first-child { margin:0 0 0;}

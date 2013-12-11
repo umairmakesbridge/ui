@@ -7,6 +7,7 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                         events: {                            
                             'click .btn-gray':function(obj){
                                 this.hideEditor();
+                                //this.page.wizard.back();
                             },
                             'click .mergefields-box' :function(obj){
                                 this.showMergeFieldDialog(obj);
@@ -154,9 +155,9 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                             this.$el.show();                            
                             $("body").css("overflow","hidden");
                             $("html,body").scrollTop(0);
-                            var editor_height = $(window).height()-154;
+                            var editor_height = $(window).height()-166;
                             this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});
-                            var editor_window_height = editor_height - 160;
+                            var editor_window_height = editor_height - 172;
                             this.$("#bmseditor_ifr").css("height",editor_window_height+"px");
                             $("#activities,#search,.icons-bar").hide();
                             $(".camp_header #more-tool-actions li:nth-child(2)").hide();

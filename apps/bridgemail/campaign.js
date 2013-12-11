@@ -106,7 +106,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 return false;
                       },
                       'click .scheduled-campaign':function(){
-                          this.scheduledCampaign();
+                          this.scheduledCampaign('S');
+                      },
+                      'click .draft-campaign':function(){
+                          this.scheduledCampaign('D');
                       }
                     },
 
@@ -121,7 +124,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
-                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""}},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},ns_filters:{customer:"",contact:"",parnter:"",nsObject:""}},
                                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
@@ -251,10 +254,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
                         this.states.step1.change = true;
-                    },this));
-                    this.$("#campaign_schedule_time").chosen({ width: "76px",disable_search: "true"});       
-                    this.$("#campaign_schedule_timeam").chosen({ width: "62px",disable_search: "true"});       
-                    this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!',disable_search: "true"});
+                    },this));                    
+                    this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});
                     
                     //Init icheck boxes 
                      
@@ -262,8 +263,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 initCheckbox:function(){
                     this.$('input').iCheck({
-                        checkboxClass: 'checkinput',
-                        radioClass: 'radioinput'
+                        checkboxClass: 'checkinput'
                      });
                      this.$('input.checkpanel').iCheck({
                          checkboxClass: 'checkpanelinput',
@@ -272,10 +272,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      this.$( "ul.socialbtns li label " ).click(function() {
                         $(this).toggleClass( "btnchecked" );
                      });
-                     this.$('input.radiopanel').iCheck({
-                            radioClass: 'radiopanelinput',
-                            insert: '<div class="icheck_radio-icon"></div>'
-                     });
+                     
                      var camp = this;
                      this.$(".iCheck-helper").click(function(){
                          var icheck = $(this).parent().find("input");
@@ -297,17 +294,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 else{
                                    $(this).parent().next().addClass("btnchecked");
                                 }
-                            }
+                            }                            
                          }
-                         else if(icheck.attr("type")=="radio" && icheck.attr("name")=="options_sf"){
-                             camp.$("#salesforce_setup .filterbtn").hide();
-                             icheck.parents(".ui-accordion-header").find(".filterbtn").show();
-                             
-                             var icheck_val = icheck.attr("value");
-                             if(icheck_val!=="campaign"){
-                                 camp.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
-                             }
+                         if(camp.wizard.active_step==1){
+                             camp.states.step1.change = true;
                          }
+                         
                      })
                 },
                 initTemplateListing:function(){
@@ -559,7 +551,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 initStep4:function(){
                     if(this.states.step4.init===false){                        
-                        this.$("#accordion_info").accordion({ collapsible: true});
+                        this.$("#accordion_info").accordion({ collapsible: true,heightStyle: "fill"});
                         this.$("#accordion_recipients").accordion({ collapsible: true});
                         this.createCalender();        
                         
@@ -567,16 +559,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.states.step4.datetime['month'] = this.states.step4.cal.today.getMonth()+1 
                         this.states.step4.datetime['year'] = this.states.step4.cal.today.getFullYear();
                         var hour = this.states.step4.cal.today.getHours();
+                        var min = this.states.step4.cal.today.getMinutes();
                         if(hour>=12){
-                            var hour = hour-12;
-                            this.$("#campaign_schedule_timeam").val("pm").trigger("chosen:updated");
+                            var hour = hour-12;                            
+                            this.$(".timebox-hours button.pm").addClass("active");
                         }
                         else{
-                            this.$("#campaign_schedule_timeam").val("am").trigger("chosen:updated");
+                            this.$(".timebox-hours button.am").addClass("active");
                         }
                         hour = hour==0 ? "12":hour;
                         hour = hour.toString().length==1?("0"+hour):hour;
-                        this.$("#campaign_schedule_time").val(hour+":00:00").trigger("chosen:updated");
+                        this.$(".timebox-hour").val(hour);
+                        this.$(".timebox-min").val(min);
                         this.states.step4.init = true;                        
                     }
                     this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
@@ -632,7 +626,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 setupCampaign:function(){
                   var active_ws = this.$el.parents(".ws-content");
                   if(this.camp_id===0){                      
-                      active_ws.find(".camp_header .c-name h2").hide();                      
+                      active_ws.find(".camp_header .c-name h2,.camp_header  #campaign_tags").hide();                      
                       active_ws.find(".camp_header .c-name .edited ").show();                      
                       active_ws.find("#camp_tags").children().remove();
                       active_ws.find(".camp_header .tags-contents,.camp_header .ellipsis").hide();                      
@@ -642,7 +636,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   }
                   else{
                        active_ws.find(".camp_header .c-name .edited").hide();                        
-                       active_ws.find(".camp_header .c-name h2,#campaign_tags").show();                        
+                       active_ws.find(".camp_header .c-name h2,.camp_header  #campaign_tags").show();                        
                        active_ws.find("#header_wp_field").focus().attr("process-id",this.camp_id);  
                        active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",false);
                        this.setFooterArea();
@@ -652,7 +646,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 saveCampaign:function(obj){                                      
                     var camp_obj = this;
-                    var camp_name_input =  $(obj.target).parent().find("input");                       
+                    var camp_name_input =  $(obj.target).parents(".edited").find("input");                       
                     var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                     if(camp_name_input.val()!==""){
 
@@ -948,7 +942,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        }
                        this.step3SaveCall({'recipientType':'Target',filterNumber:targets});
                   }
-				  else if(source=="choose_tags"){
+                  else if(source=="choose_tags"){
                        var tagsView = this.states.step3.tags;
 					   var tags = tagsView.saveTags();
                        if(!tags){
@@ -1914,7 +1908,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     templates_html +='<div class="feat_temp showtooltip" title="Featured Template"></div>';
                                 }                                
                                 
-                                templates_html +='<div class="img"><div><a class="previewbtn" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Preview Template</a> <a class="selectbtn"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
+                                templates_html +='<div class="img"><div><a class="previewbtn" ><span ></span>Preview Template</a> <a class="selectbtn select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
                                 templates_html +='<a class="cat">Category</a>';
@@ -2209,7 +2203,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var self = this;
                     if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
                         if(this.states.saleforce_campaigns ===null)
-                                this.showSalesForceCampaigns();
+                          this.showSalesForceCampaigns();
 
                         this.$("#salesforce_welcome").hide();                        
                         this.$("#salesforce_setup").show();
@@ -2224,6 +2218,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(!this.states.step3.salesforce){
                         this.$("#sf_accordion").accordion({ active: 0, collapsible: false});                       
                         self.$("#salesforce_setup .filterbtn").click(_.bind(self.showSalesForceFitler,self));
+                        this.$('.salesforce_campaigns input.radiopanel').iCheck({
+                            radioClass: 'radiopanelinput',
+                            insert: '<div class="icheck_radio-icon"></div>'
+                         });
+                                                
+                         this.$('.salesforce_campaigns input.radiopanel').on('ifChecked', function(event){                                                          
+                             camp_obj.$("#salesforce_setup .ui-accordion-header.selected").removeClass("selected");
+                             $(this).parents(".ui-accordion-header").addClass("selected");
+                             var icheck_val = $(this).attr("value");
+                             if(icheck_val!=="campaign"){
+                                 camp_obj.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
+                             }                         
+                         });
+                         if(this.states.step3.recipientType.toLowerCase()!=="salesforce"){
+                             this.$("input[name='options_sf']").eq(0).iCheck('check');                   
+                         }                             
                         self.$("#salesforce_setup .sf_all_count,#salesforce_setup .sf_lead_count,#salesforce_setup .sf_contact_count").addClass("loading-wheel-inline").html('');
                         var URL = '/pms/io/salesforce/getData/?BMS_REQ_TK='+self.app.get('bms_token')+'&type=allCount';
                         jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -2284,7 +2294,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                },
                showSalesForceFitler:function(obj){
                      var dialog_title= "Lead";
-                     var filter_type = $(obj.target).parents(".ui-accordion-header").find("input.radiopanel").val();
+                     var input_radio = $(obj.target).parents(".ui-accordion-header").find("input.radiopanel");
+                     var filter_type = input_radio.val();
+                     input_radio.iCheck('check');
                      if(filter_type=="contact"){
                          dialog_title= "Contant";
                      }
@@ -2312,21 +2324,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                },
                setSalesForceData:function(){
                    if(this.states.step3.recipientDetial && this.states.step3.recipientType.toLowerCase()=="salesforce"){
-                       var recipient_obj = this.states.step3.recipientDetial;
-                       if(recipient_obj.filterType=="filter" && recipient_obj.sfObject=="both" && !recipient_obj.filterFields){
-                           this.$("#campaign_salesforce").val("all").trigger("chosen:updated").change(); 
-                       }
-                       else {
-                           this.$("#campaign_salesforce").val(recipient_obj.filterType).trigger("chosen:updated").change(); 
-                       }
+                       var recipient_obj = this.states.step3.recipientDetial;                       
                        if(recipient_obj.filterType==="campaign"){
-                           this.$("input[name='options_sf']").eq(3).iCheck('check');
+                           this.$("input[name='options_sf']").eq(3).iCheck('check');                           
                            this.$("#sfcamp_list_grid tr[id='row_"+recipient_obj.sfCampaignId+"']").addClass("selected");    
                        }
                        else if(recipient_obj.filterType==="filter" && recipient_obj.sfObject!=="both"){
-                           this.$("#salesforce_import_type").val(recipient_obj.sfObject).trigger("chosen:updated").change(); 
+                           if(recipient_obj.sfObject=="lead"){
+                               this.$("input[name='options_sf']").eq(1).iCheck('check');
+                           }
+                           else if(recipient_obj.sfObject=="contact"){
+                               this.$("input[name='options_sf']").eq(2).iCheck('check');
+                           }
                        }
-                       else if(recipient_obj.filterType=="both"){
+                       else if(recipient_obj.filterType=="filter" && recipient_obj.sfObject=="both"){
                            this.$("input[name='options_sf']").eq(0).iCheck('check');
                        }
                        this.states.step3.change = false;
@@ -2404,84 +2415,38 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    var netsuite_setting = this.app.getAppData("netsuite");
                     if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){
                         this.loadNetSuiteGroup();
-                        this.$("#netsuite_login,#netsuite_mapping,#netsuite_welcome").hide();                        
+                        this.$("#netsuite_login,#netsuite_welcome").hide();                        
                         this.$("#netsuite_setup").show();                        
                     }
                     else{
-                       this.$("#netsuite_login,#netsuite_setup,#netsuite_mapping").hide();
+                       this.$("#netsuite_login,#netsuite_setup").hide();
                         this.$("#netsuite_welcome").show();                         
                    }
                    if(this.states.step3.recipientType.toLowerCase()=="netsuite"){
                         this.setRecipients();
                     }
                    var self = this;
-                   if(!this.states.step3.netsuite){                            
-                       this.$("#groups_netsuite").chosen({width: "290px",disable_search: "true"}).change(function(){
-                         $(this).val($(this).val())
-                         $(this).trigger("chosen:updated")  
-                         if($(this).val()=="group"){
-                            self.$("#netsuite_setup .netsuite_groups").slideDown("fast"); 
-                            self.$("#netsuite_setup .netsuite_after_filter").hide(); 
-                            self.$("#netsuite_setup  .sf_lcdd,#netsuite_setup  .customer-type").hide();
-                            self.$("#netsuite_setup #netsuite-group-search").show();
-                                                                                    
-                         }
-                         else if($(this).val()=="filter"){
-                             self.$("#netsuite_setup .netsuite_after_filter").slideDown("fast"); 
-                             self.$("#netsuite_setup .netsuite_groups").hide(); 
-                             
-                             self.$("#netsuite_setup #netsuite-group-search").hide();
-                             if(self.$("#netsuite_setup .netsuite_after_filter").children().length==0){
-                                self.app.showLoading("Loading Filters...",self.$(".netsuite_after_filter"));  
-                                require(["crm/netsuite/after_filter"],function(afterFilter){
-                                   self.app.showLoading(false,self.$(".netsuite_after_filter"));  
-                                   var step3_obj= self.states.step3;
-                                   var recipient_obj = (step3_obj.recipientType && step3_obj.recipientType.toLowerCase()=="netsuite" && step3_obj.recipientDetial.filterType==="filter")?step3_obj.recipientDetial:null;
-                                   var afilter = new afterFilter({camp:self,savedObject:recipient_obj});
-                                   afilter.$el.css("margin","10px 0px");
-                                   self.$(".netsuite_after_filter").append(afilter.$el);
-                                   self.$("#netsuite_setup  .sf_lcdd").show();
-                                   if(self.$("#netsuite_import_type").val()=="customer"){
-                                        self.$("#netsuite_setup  .customer-type").show();
-                                    }
-                               }); 
-                            }
-                            else{
-                                self.$("#netsuite_setup  .sf_lcdd").show();
-                                if(self.$("#netsuite_import_type").val()=="customer"){
-                                    self.$("#netsuite_setup  .customer-type").show();
-                                }
-                            }
-                         }
-                         self.states.step3.change = true;
-                       })
-                       this.$("#netsuite_import_type").chosen({width: "190px",disable_search: "true"}).change(function(){                           
-                            $(this).val($(this).val());
-                            $(this).trigger("chosen:updated");
-                            if($(this).val()=="customer"){
-                                self.$("#netsuite_setup  .customer-type").show();
-                                self.$(".netsuite_after_filter .customer-accordion").show();
-                                self.$(".netsuite_after_filter .contact-accordion").hide();
-                                self.$(".netsuite_after_filter .partner-accordion").hide();
-                            }
-                            else if($(this).val()=="contact"){
-                                self.$("#netsuite_setup  .customer-type").hide();
-                                self.$(".netsuite_after_filter .customer-accordion").hide();
-                                self.$(".netsuite_after_filter .contact-accordion").show();
-                                self.$(".netsuite_after_filter .partner-accordion").hide();
-                            }
-                            else if($(this).val()=="partner"){                                
-                                 self.$("#netsuite_setup  .customer-type").hide();
-                                 self.$(".netsuite_after_filter .customer-accordion").hide();
-                                self.$(".netsuite_after_filter .contact-accordion").hide();
-                                self.$(".netsuite_after_filter .partner-accordion").show();
-                            }
-                            self.states.step3.change = true;                                
-                       })
-                       this.$("#netsuite_setup .customer-type button").click(function(){
-                           $(this).find("input").prop("checked",!$(this).find("input").prop("checked"));
-                           self.states.step3.change = true;                                
-                       })
+                   if(!this.states.step3.netsuite){
+                       this.$("#ns_accordion").accordion({ active: 0, collapsible: false});                       
+                       self.$("#netsuite_setup .filterbtn").click(_.bind(self.showNetSuiteFitler,self));
+                       this.$('#netsuite_setup input.radiopanel').iCheck({
+                            radioClass: 'radiopanelinput',
+                            insert: '<div class="icheck_radio-icon"></div>'
+                       });
+                         
+                       this.$('.netsuite_groups input.radiopanel').on('ifChecked', function(event){                                                          
+                             camp_obj.$("#netsuite_setup .ui-accordion-header.selected").removeClass("selected");
+                             $(this).parents(".ui-accordion-header").addClass("selected");
+                             var icheck_val = $(this).attr("value");
+                             if(icheck_val!=="campaign"){
+                                 camp_obj.$("#netsuite-group-listing tr.selected").removeClass("selected");    
+                             }                         
+                       });
+                       
+                       if(this.states.step3.recipientType.toLowerCase()!=="netsuite"){
+                             this.$("input[name='options_ns']").eq(0).iCheck('check');                   
+                       }
+                       
                        this.$("#netsuite-group-search").searchcontrol({
                             id:'netsuite-group-search',
                             width:'300px',
@@ -2497,11 +2462,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var target_obj = $.getObj(obj,"li");
                             if(target_obj.attr("id")=="ns_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Customers, Contacts or/and Partners to Import',
-                                                                css:{"width":"1200px","margin-left":"-600px"},
-                                                                bodyCss:{"min-height":"430px"},
-                                                                buttons: {saveBtn:{text:'Save Mapping'} }
-                                  });
-                                
+                                    css:{"width":"1200px","margin-left":"-600px"},
+                                    bodyCss:{"min-height":"430px"},
+                                    buttons: {saveBtn:{text:'Save Mapping'} }
+                                });                                
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/netsuite/mapping"],function(mappingPage){                                     
                                      var mPage = new mappingPage({camp:self,app:camp_obj.app,dialog:dialog});
@@ -2529,31 +2493,58 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(this.checkRecipientsSaved("netsuite")){
                             return false;
                         }
-                        this.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
-                        if(this.$("#netsuite_setup .netsuite_after_filter .customer-filter").length){
-                            this.$("#netsuite_setup .netsuite_after_filter .customer-filter").data("crmfilters").initFilters();
-                            this.$("#netsuite_setup .netsuite_after_filter .contact-filter").data("crmfilters").initFilters();
-                            this.$("#netsuite_setup .netsuite_after_filter .partner-filter").data("crmfilters").initFilters();
-                        }
-                        this.$("#netsuite_import_type").val("customer").trigger("chosen:updated").change(); 
-                        this.$("#groups_netsuite").val("group").trigger("chosen:updated").change();                         
+                        this.$("#nsgroup_list_grid tr.selected").removeClass("selected");                            
                    }
+               },
+               showNetSuiteFitler:function(obj){
+                     var dialog_title= "Customer";
+                     var input_radio = $(obj.target).parents(".ui-accordion-header").find("input.radiopanel");
+                     var filter_type = input_radio.val();
+                     input_radio.iCheck('check');
+                     if(filter_type=="contact"){
+                         dialog_title= "Contant";
+                     }
+                     else if(filter_type=="partner"){
+                         dialog_title= "Partner";
+                     }
+                     var self = this;
+                     var dialog_width = $(document.documentElement).width()-60;
+                     var dialog_height = $(document.documentElement).height()-219; 
+                     var dialog = this.app.showDialog({title:dialog_title,
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              bodyCss:{"min-height":dialog_height+"px"},							   
+                              buttons: {saveBtn:{text:'Save Filter'} }                                                                           
+                    });                    
+                    
+                    this.app.showLoading("Loading Filters...",dialog.getBody());
+                    require(["crm/netsuite/after_filter"],function(afterFilter){                        
+                        var step3_obj= self.states.step3;
+                        var recipient_obj = (step3_obj.recipientType && step3_obj.recipientType.toLowerCase()=="netsuite" && step3_obj.recipientDetial.filterType==="filter")?step3_obj.recipientDetial:null;
+                        var afilter = new afterFilter({camp:self,savedObject:recipient_obj,type:filter_type});
+                        afilter.$el.css("margin","10px 0px");
+                        dialog.getBody().html(afilter.$el);
+                        dialog.saveCallBack(_.bind(afilter.saveFilter,afilter,dialog));
+                    }); 
+                    self.states.step3.change = true;
+                    
                },
                setNetSuiteData:function(){
                    if(this.states.step3.recipientDetial && this.states.step3.recipientType.toLowerCase()=="netsuite"){
                        var self = this;
-                       var recipient_obj = this.states.step3.recipientDetial;
-                       this.$("#groups_netsuite").val(recipient_obj.filterType).trigger("chosen:updated").change(); 
+                       var recipient_obj = this.states.step3.recipientDetial;                       
                        if(recipient_obj.filterType==="group"){
+                           this.$("input[name='options_ns']").eq(3).iCheck('check');                   
                            this.$("#nsgroup_list_grid tr[id='row_"+recipient_obj.nsGroupId+"']").addClass("selected");    
                        }
                        else if(recipient_obj.filterType==="filter"){
-                           this.$("#netsuite_import_type").val(recipient_obj.nsObject).trigger("chosen:updated").change(); 
                            if(recipient_obj.nsObject.indexOf("customer")>-1){
-                               var ns_obj = recipient_obj.nsObject.split(",");
-                               $.each(ns_obj,function(key,val){
-                                  self.$("#netsuite_setup .customer-type input[value='"+val+"']").prop("checked",true);
-                               });
+                               this.$("input[name='options_ns']").eq(0).iCheck('check');                   
+                           }
+                           else if(recipient_obj.nsObject=="contact"){
+                               this.$("input[name='options_ns']").eq(1).iCheck('check');                   
+                           }
+                           else if(recipient_obj.nsObject=="partner"){
+                               this.$("input[name='options_ns']").eq(2).iCheck('check');                   
                            }
                        }
                        this.states.step3.change = false;
@@ -2612,7 +2603,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                },
                saveNetSuiteDetails:function(){
                    var camp_obj = this;
-                   var netsuite_val = this.$("#groups_netsuite").val();    
+                   var netsuite_val = this.$(".netsuite_groups input[name='options_ns']:checked").val();    
                    var post_data = {type:'import',synchType:'recipients',campNum:this.camp_id};
                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');
                    if(netsuite_val=="group"){
@@ -2626,32 +2617,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            return false;
                        }
                    }
-                   else if(netsuite_val=="filter"){
-                       var importType = this.$("#netsuite_import_type").val();
+                   else{                       
                        post_data['filterType']= "filter";
-                       post_data['nsObject'] = importType;          
-                       if(importType=="customer"){
-                           var cust_val = $(".customer-type input:checked").map(function(){
-                                            return $(this).val()
-                                        }).toArray().join()
-                           if(cust_val){
-                               post_data['nsObject'] = cust_val;
-                           }          
-                           else{
-                             this.app.showAlert('Please at least on option from Customer, Lead, Or Prospect',$("body"),{fixed:true});  
-                             return false;
-                           }
-                       }
-                       var customerPost = $("#netsuite_setup .netsuite_after_filter .customer-filter").data("crmfilters").saveFilters('customer');
-                       var contactPost= $("#netsuite_setup .netsuite_after_filter .contact-filter").data("crmfilters").saveFilters('contact');
-                       var partnerPost= $("#netsuite_setup .netsuite_after_filter .partner-filter").data("crmfilters").saveFilters('partner');
-                       if(importType=="customer"){
+                       post_data['nsObject'] =  camp_obj.states.step3.ns_filters.nsObject;          
+                       
+                       var customerPost = camp_obj.states.step3.ns_filters.customer;
+                       var contactPost= camp_obj.states.step3.ns_filters.contact;
+                       var partnerPost= camp_obj.states.step3.ns_filters.partner;
+                       if(netsuite_val=="customer"){
                           $.extend(post_data,customerPost)
                        }
-                       else if(importType=="contact"){
+                       else if(netsuite_val=="contact"){
                           $.extend(post_data,contactPost)
                        }
-                       else if(importType=="partner"){
+                       else if(netsuite_val=="partner"){
                           $.extend(post_data,partnerPost)                                                  
                        }
                        
@@ -2761,17 +2740,17 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      }).fail(function() { console.log( "Receipts data load failed" ); });
                     
                },               
-               scheduledCampaign:function(){
+               scheduledCampaign:function(flag){
                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                    var step4_obj = this.states.step4.datetime;
                    var _date = step4_obj.year +"-"+step4_obj.month+"-"+step4_obj.day; 
-                   var _time = this.$("#campaign_schedule_time").val().split(":");
-                   var _hour = this.$("#campaign_schedule_timeam").val()=="pm"?parseInt(_time[0])+12:parseInt(_time[0]);
-                   var time =  _hour+":"+_time[1]+":00";                  
+                   var _time = this.$(".timebox-hour").val();
+                   var _hour = this.$(".timebox-hours button.pm").hasClass("active")?parseInt(_time)+12:parseInt(_time);
+                   var time =  _hour+":"+this.$(".timebox-min").val()+":00";                  
                    var camp_obj = this;
                    var post_data = {"campNum": this.camp_id,
                                     "type":"saveStep4",
-                                    "status":"S",
+                                    "status":flag,
                                     "scheduleType":"now",
                                     "scheduleDate":_date+" "+time
                                     }

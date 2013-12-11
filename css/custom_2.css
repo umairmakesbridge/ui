@@ -50,8 +50,7 @@
 }
 
 .custom-header {
-    background: none repeat scroll 0 0 #FBFBFB;
-    border-bottom: 1px solid #ccc;
+    background: none repeat scroll 0 0 #FBFBFB;    
     height: 35px;
     padding: 0 10px ;
     position: relative;
@@ -89,7 +88,7 @@
 	top: 5px;
 	width: 20px;
 	background-size:cover;
-	
+	cursor: pointer;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -212,7 +211,7 @@
 }
 
 .fc-calendar .fc-row > div {
-	background: #fff;
+	background: #DDEBFA;
 	cursor: pointer;
 }
 
@@ -221,14 +220,14 @@
 }
 
 .fc-calendar .fc-row > div > span.fc-date {
-	top: 50%;
+	top: 41%;
 	left: 50%;
 	color: #5A5A5A;
-    font-size: 16px;
+        font-size: 13px;
 	text-align: center;
 	margin: -10px 0 0 -15px;
-	color: #686a6e;
-	font-weight: 400;
+	color: #fff;
+	font-weight: 700;
 	pointer-events: none;
 }
 

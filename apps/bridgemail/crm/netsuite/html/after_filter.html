@@ -2,7 +2,13 @@
     <div class="accordion-group customer-accordion" style="display:block">
       <div class="accordion-heading">
         <a  class="accordion-toggle">
-          Customer<b class="caret"></b>
+          Customer
+          <div class="customer-type" >
+                <input type="checkbox" id="ch_customer" value="customer" class="checkinput" checked><label for="ch_customer">Customer</label>
+                <input type="checkbox" id="ch_lead" value="lead" class="checkinput"><label for="ch_lead">Lead</label>
+                <input type="checkbox" id="ch_prospect" value="prospect" class="checkinput"><label for="ch_prospect">Prospect</label>
+          </div>
+          <b class="caret"></b>
         </a>
       </div>
       <div class="accordion-body">

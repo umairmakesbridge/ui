@@ -44,7 +44,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
                                 if(!this.app.getAppData("campaigns")){
                                     this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
                                     this.app.getData({
-                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns",
+                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=300&status=D",
                                         "key":"campaigns",
                                         "callback":_.bind(this.createListTable,this)
                                     });
@@ -60,7 +60,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 				var camp_list_json = this.app.getAppData("campaigns");
 				var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camps_grid"><tbody>';				
                                 if(camp_list_json.count!=="0"){
-                                    $.each(camp_list_json.lists[0], function(index, val) {
+                                    $.each(camp_list_json.campaigns[0], function(index, val) {
                                             list_html += camp_obj.makecamprows(val);					
                                     });	
 
@@ -91,7 +91,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 			,
 			makecamprows: function (val){
 				var camp_obj = this;
-				var row_html = '<tr id="row_'+val[0].campNum+'">';
+				var row_html = '<tr id="row_'+val[0]['campNum.encode']+'">';
 				row_html += '<td class="firstcol"><div class="name-type"><h3>'+ val[0].name +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div></td>';
 				var datetime = val[0].scheduledDate;
 				if(datetime)
@@ -111,7 +111,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
 					dateFormat = '';					
                                      }   
 				row_html += '<td><div class="subscribers show" style="width:60px"><span class=""></span>0</div></td>';
-				row_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div><div id="'+ val[0].campNum +'" class="action"><a id="'+ val[0].campNum +'" class="btn-green"><span>Select</span></a></div></td>';					
+				row_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div><div id="'+ val[0]['campNum.encode'] +'" class="action"><a id="'+ val[0]['campNum.encode'] +'" class="btn-green"><span>Select</span></a></div></td>';					
 				row_html += '</tr>';
 				return row_html;
 			}

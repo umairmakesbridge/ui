@@ -421,39 +421,39 @@
       </div>
      </div>      
       <div id="salesforce_setup" style="display:none">          
-           <h2 class="header-list" style="padding-left:0px">                                    
-                <div id="salesforce-camp-search" class="input-append search">         
-                </div>
-               <div class="btn-group left">
-                   <div  class="btn dropdown-toggle setting" data-toggle="dropdown"> 
-                      <span class="sf_settings"></span> Salesforce settings <b class="caret"></b>
-                   </div>
-                   <ul class="dropdown-menu" id="sf_setting_menu">
-                    <li id="sf_mapping"><a>Change Fields Mapping</a></li>
-                    <li id="sf_user_setting"><a>Edit Login Settings</a></li>
-                  </ul>
-               </div>
-           </h2>
+          
+            <div class="heading">
+                <strong class="left">Salesforce</strong>
+                <div class="iconpointy">
+                    <a class="icon setting"></a>
+                    <div class="pointy">
+                        <ul id="sf_setting_menu">
+                        <li id="sf_mapping"><a><span>Change Fields Mapping</span></a></li>
+                        <li id="sf_user_setting"><a><span>Edit Login Settings</span></a></li>
+                        </ul>
+                    </div>
+                </div>       
+            </div>
           <div class="clearfix"></div>
           <div class="salesforce_campaigns" style="display: block">                           
               <div class="ui-accordion">
                 <h3 class="ui-accordion-header" role="tab">
-                  <input type="radio" class="radiopanel " value="both" name="options_sf" checked>
-                  <span class="left">Leads & Contacts </span> <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <input type="radio" class="radiopanel " value="both" name="options_sf">
+                  <span class="left">Leads & Contacts </span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
                   <div class="sub-count show" style="width:"><strong class="badge sf_all_count"></strong></div>
                   </h3>
               </div>      
               <div class="ui-accordion" >
                 <h3 class="ui-accordion-header">
                   <input type="radio" class="radiopanel " value="lead" name="options_sf">
-                  <span class="left">Leads</span>  <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <span class="left">Leads</span>  <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
                   <div class="sub-count show" style="width:"><strong class="badge sf_lead_count"></strong></div>
                   </h3>
               </div>       
               <div class="ui-accordion" > 
                 <h3 class="ui-accordion-header">
                   <input type="radio" class="radiopanel " value="contact" name="options_sf">
-                  <span class="left">Contacts</span> <a class="btn-blue filterbtn" style="display:none"><span>Manage Filter</span><i class="icon filter"></i></a>                 
+                  <span class="left">Contacts</span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>                 
                   <div class="sub-count show" style="width:"><strong class="badge sf_contact_count"></strong></div>                  
                   </h3>
               </div>
@@ -461,6 +461,8 @@
                     <h3> 
                       <input type="radio" class="radiopanel " value="campaign" name="options_sf" id="">
                       <span class="left">Salesforce Campaigns</span> <b class="caret"></b></b> 
+                        <div id="salesforce-camp-search" class="input-append search">         
+                        </div>
                      </h3>
                     <div class="accordion-inner">
                         <div class="template-container fields single-row" style="min-height:300px; margin:4px  0;">
@@ -468,19 +470,7 @@
                        </div>
                     </div>
                </div>                   
-          </div>
-          <div class="salesforce_after_filter" style="display: none;"></div>          
-          <div class="salesforce_all_leads_contants" style="display: none">
-               <div style="height: ; margin:10px  0;" class="template-container fields gray-panel">                                
-                    <div class="ialc">
-                         <div class="tag_msg1"><span class="caution"></span>All Leads and Contacts will be fetched from your Salesforce Account.	</div>
-                        <div class="lcbox" style="margin-top:40px;">* Total count of Leads  <span class="right sf_lcount">0</span>	</div>
-                        <div class="lcbox">* Total count of Contacts  <span class="right sf_ccount">0</span>	</div>
-                        <p>* Only the unique subscribers will be chosen amongst leads and contacts.</p>
-                    </div>
-                </div>
-          </div>
-                    
+          </div>                            
       </div>
   </div>
   <!-- Saelsforce import section Ends -->
@@ -495,44 +485,62 @@
             </div>
       </div>    
       <div id="netsuite_setup" style="display:none">
-           <h2 class="header-list" style="padding-left:0px">
-                  <div class="btn-group subs-dd sf_dd" style="background-color:transparent">
-                    <select id="groups_netsuite"  class="chosen-select">
-                      <option value="group">NetSuite Static Group</option>
-                      <option value="filter">Apply filter</option>                      
-                    </select>
-                  </div>
-                  <div class="btn-group sf_lcdd" style="display: none">
-                      <select id="netsuite_import_type"  class="chosen-select">
-                          <option value="customer">Customers</option>
-                          <option value="contact">Contacts</option>
-                          <option value="partner">Partners</option>
-                      </select>
-                  </div>
-                  <div class="btn-group customer-type" style="display:none">
-                    <button class="btn btn-default" type="button"><input type="checkbox" checked="checked" name="" value="customer"> Customer   </button>
-                    <button class="btn btn-default" type="button"><input type="checkbox" name="" value="lead"> Lead</button>
-                    <button class="btn btn-default" type="button"><input type="checkbox" name="" value="prospect"> Prospect </button>
-                  </div>
-                <div id="netsuite-group-search" class="input-append search">         
-                </div>
-               <div class="btn-group right">
-                   <div  class="btn dropdown-toggle setting" data-toggle="dropdown"> 
-                      <span class="ns_settings"></span> NetSuite settings <b class="caret"></b>
-                   </div>
-                    <ul class="dropdown-menu" id="ns_setting_menu">
-                        <li id="ns_mapping"><a>Change Fields Mapping</a></li>
-                        <li id="ns_user_setting"><a>Edit Login Settings</a></li>
-                      </ul>
-               </div>
-           </h2>
+            <div class="heading">
+                <strong class="left">Netsuite</strong>
+                <div class="iconpointy">
+                    <a class="icon setting"></a>
+                    <div class="pointy">
+                        <ul id="ns_setting_menu">
+                        <li id="ns_mapping"><a><span>Change Fields Mapping</span></a></li>
+                        <li id="ns_user_setting"><a><span>Edit Login Settings</span></a></li>
+                        </ul>
+                    </div>
+                </div> 
+                                
+                                                
+                
+            </div>
+           
           <div class="clearfix"></div>
            <div class="netsuite_groups" style="display: block">                           
-              <div class="template-container fields" style="min-height:300px; margin:4px  0;">
-               <div class="target-listing netsuite_grp" id="netsuite-group-listing"> </div>
+              
+               <div class="ui-accordion">
+                <h3 class="ui-accordion-header" role="tab">
+                  <input type="radio" class="radiopanel " value="customer" name="options_ns">
+                  <span class="left">Customer </span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge ns_customer_count"></strong></div>
+                  </h3>
+              </div>      
+              <div class="ui-accordion" >
+                <h3 class="ui-accordion-header">
+                  <input type="radio" class="radiopanel " value="contact" name="options_ns">
+                  <span class="left">Contact</span>  <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge ns_contact_count"></strong></div>
+                  </h3>
+              </div>       
+              <div class="ui-accordion" > 
+                <h3 class="ui-accordion-header">
+                  <input type="radio" class="radiopanel " value="partner" name="options_ns">
+                  <span class="left">Partner</span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>                 
+                  <div class="sub-count show" style="width:"><strong class="badge ns_partner_count"></strong></div>                  
+                  </h3>
               </div>
+               <div id="ns_accordion">
+                    <h3> 
+                      <input type="radio" class="radiopanel " value="group" name="options_ns" id="">
+                      <span class="left">Netsuite Groups</span> <b class="caret"></b></b> 
+                        <div id="netsuite-group-search" class="input-append search">   
+                        </div>
+                     </h3>
+                    <div class="accordion-inner">
+                        <div class="template-container fields single-row" style="min-height:300px; margin:4px  0;">
+                            <div class="target-listing netsuite_grp" id="netsuite-group-listing"> </div>
+                        </div>
+                    </div>
+               </div>   
+              
           </div>
-          <div class="netsuite_after_filter" style="display: none;"></div>
+          
           
       </div>
   </div>
@@ -541,7 +549,7 @@
 <!-- Step3 End -->
 <div class="wizard-steps step4">
   <div class="row-fluid show-grid schedule-container">
-    <div class="span6">
+    <div class="span6" style="height:368px;">
         
      <div id="accordion_info">
       <h3  class="clearfix"><span class="icon settings "></span>Settings<b class="caret"></b> </h3>
@@ -626,19 +634,19 @@
             <div class="sch-right">                                                                	
                 <div class="set-time">
                     <div class="timebox hour">
-                        <input type="text" value="14" name="" />
+                        <input type="text" value="" name="" class="timebox-hour" />
                     </div>
                     <span class="colon">:</span>
                     <div class="timebox min">
-                        <input type="text" value="35" name="" />
+                        <input type="text" value="" name="" class="timebox-min" />
                     </div>
-                    <div data-toggle="buttons-radio" class="btn-group all-any">
-                      <button rule="A" class="btn active">AM</button>
-                      <button rule="1" class="btn">PM</button>
+                    <div data-toggle="buttons-radio" class="btn-group all-any timebox-hours">
+                      <button class="btn am">AM</button>
+                      <button class="btn pm">PM</button>
                     </div>
                 </div>
                 <a class="btn-green sch-btn left scheduled-campaign"><span>Schedule </span><i  class="icon schedule"></i></a>
-                <a class="btn-blue sch-btn left"><span>Draft </span><i  class="icon edit"></i></a>
+                <a class="btn-blue sch-btn left draft-campaign"><span>Draft </span><i  class="icon edit"></i></a>
             </div>
           </div>                
         </div>

@@ -10,6 +10,7 @@
 <%@page import="com.PMSystems.template.*" %>
 
 <%@page import="com.PMSystems.SFIntegration.*" %>
+<%@page import="com.PMSystems.*" %>
 
 <%
 //=======================Default Processing=============================
@@ -52,6 +53,11 @@ if(userInfo == null) {
     <link href="css/tan_changes.css" rel="stylesheet" type="text/css" >
     
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
+    <script  type="text/javascript">
+        var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
+        var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
+        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";
+    </script>
     
     <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >
     <script type="text/javascript" src="js/require.js" data-main="build/bridgemail/bridgemail_0.1.min"></script>-->
