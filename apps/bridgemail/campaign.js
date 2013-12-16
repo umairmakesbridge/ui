@@ -117,18 +117,17 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .draft-campaign':function(){
                           this.scheduledCampaign('D');
                       },
-					  'click #campaign_from_email_btn':function(){
-						  this.$el.find('#campaign_from_email_input').hide();
-						  this.$el.find('#campaign_from_email_btn').hide();
-						  this.$el.find("#campaign_from_email_default").hide();
-						  this.$el.find('#campaign_from_email_chosen').show();
-						  //this.$el.find('#campaign_from_email_chosen').trigger("chosen:updated")
-						  //this.$("#campaign_from_email_chosen a").mousedown();						  
-						  var subj_w = this.$el.find('#campaign_subject').width();
-						  var fegb_w = this.$el.find('#fecol3').width();
-						  this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-40));
-					  }
-                    },
+                        'click #campaign_from_email_btn':function(){
+                                this.$el.find('#campaign_from_email_input').hide();
+                                this.$el.find('#campaign_from_email_btn').hide();
+                                this.$el.find("#campaign_from_email_default").hide();
+                                this.$el.find('#campaign_from_email_chosen').show();                                	
+                                setTimeout(_.bind(this.showFromEmailDropDown,this),50);
+                                var subj_w = this.$el.find('#campaign_subject').width();
+                                var fegb_w = this.$el.find('#fecol3').width();
+                                this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-40));
+                        }
+                    },                    
 
                 initialize: function () {
                         this.template = _.template(template);				                        
@@ -903,30 +902,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else
                     {
-                        /*camp_obj.$el.find('#campaign_reply_to').attr('style','');
-                        camp_obj.$el.find('#campaign_default_reply_to').attr('style','');
-                        this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
-                        if(this.$("#campaign_subject").val()==""){
-                                proceed = 0;
-                                this.$("#campaign_subject").addClass("form-error");
-                                errorHTML +="- Subject can't be blank. <br/>";
-                        }
-                        if(this.$("#campaign_subject").val().length>100){
-                                this.$("#campaign_subject").addClass("form-error");
-                                errorHTML +="- Subject length cann't be greater than 100 characters. <br/>";
-                                proceed = 0;
-                        }
-                        if(this.$("#campaign_from_name").val()==""){
-                                this.$("#campaign_from_name").addClass("form-error");
-                                errorHTML +="- From name can't be empty. <br/>";
-                                proceed = 0;
-                        }
-                        if(errorHTML){
-                                 var messageObj = {};
-                                 messageObj["heading"] = "Step 1: Following error(s) occured:" 
-                                 messageObj["detail"] = errorHTML;
-                                 this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
-                        }*/
+                       
                         if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
                                 this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
@@ -1263,6 +1239,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(this.states.step3.recipientType.toLowerCase()=="list"){
                         this.setRecipients();
                     }
+                },
+                showFromEmailDropDown:function(){
+                  this.$("#campaign_from_email_chosen a").mousedown();
                 },
                 setSalesForceStep1:function(obj){
                    if(obj.prop("checked")){ 
