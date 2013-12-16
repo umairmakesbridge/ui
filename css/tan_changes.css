@@ -2,7 +2,15 @@ h2.header-list {
     padding: 5px 1px 3px 10px;
 	margin-top:20px;
 }
-
+h2.header-list span#targettitle {
+	background-color: #FFFFFF;
+    color: #6494AF;
+    font-size: 15px;
+    font-weight: bold;
+	float:left;
+    /*height: 40px;
+    line-height: 40px;*/
+}
 #campaigns_list h2.header-list, #area_copy_campaign h2.header-list { padding-left:0; text-align:right; }
 #campaigns_list h2.header-list .search { float:none; }
 
@@ -17,6 +25,14 @@ h2.header-list {
     right: 43px;
     top: 10px;
 }
+#salesforce-camp-search.search .close-icon, 
+#netsuite-group-search.search .close-icon {    
+    right: 40px;
+    top: 14px;
+}
+#salesforce-camp-search.search > .icon,
+#netsuite-group-search.search > .icon
+ { top:5px; }
 .highlight { 
     background-color: #0088CC !important;
     color: #FFFFFF !important;
@@ -259,7 +275,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:-2px !important; }
 .adv_dd .btn-group, .mergefields .btn-group { top:2px; }
 #existing_lists_chosen { margin-left:5px; /*margin-top:2px;*/ }
-.iconpointy > a.btn-green:after { left:-6px; }
+.iconpointy > a.btn-green:after { left:-5px; }
 .row { position:relative; }
 .subs-dd { position:relative; }
 .exist-new .noti { width:24px; height:24px; }
@@ -271,3 +287,57 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .bmsgrid div.bDiv tr .action { top:inherit; margin-top:-25px; }
 .bmsgrid div.bDiv tr .action a { margin-left:0; margin-right:10px; }
 .bmsgrid div.bDiv tr .action a.move-row { margin-right:0; }
+#fromemail_default_chosen { float:right; text-align:left; }
+#campaign_from_email_chosen { /*margin-left:-4px;*/ width:335px; text-align:left; float:right; }
+#campaign_from_email_input{ 
+	/*width:92%;*/
+	/*margin-left:-4px;*/
+	background: none repeat scroll 0 0 #FFFFFF;
+    /*border: 2px solid #EAF4F9;
+    border-radius: 2px;*/
+    color: #495A63;
+    display: block;
+    font-size: 13px !important;
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+    padding: 5px 8px;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+	/*float:left;*/
+	display:none;
+	/*margin-left:-4px;*/
+	/*top:1px;*/
+}
+#campaign_from_email_btn
+{
+	background: none repeat scroll 0 0 #F8FDFF;
+    display: block;
+    height: 35px;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    width: 35px;
+	float:left;
+	display:none;
+	/*margin-top:2px;*/
+	cursor:pointer;
+}
+#campaign_from_email_btn b
+{
+	background: url("../img/arrow-up-down.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    height: 6px;
+    margin: 16px auto 0;
+    width: 9px;
+	display:block;
+}
+.iconpointy { top:0; }
+#fetable { width:100%; display:table; }
+.fecols { display:table-cell; }
+#fecol1 { width:auto; }
+#fecol2 { width:35px; }
+#fecol3 { width:65px; }
+.settings .adv_dd input[type="text"] { width:92%; }
+#fecol1 .chosen-container-single .chosen-single { float:right; }

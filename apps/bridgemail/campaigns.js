@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html'],
-function (bmsgrid,jqhighlight,jsearchcontrol,template) {
+define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html','bms-filters'],
+function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
         'use strict';
         return Backbone.View.extend({
 			id: 'campaigns_list',
@@ -34,6 +34,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template) {
                     iconsource: 'campaigns',
 					countcontainer: 'no_of_camps'
 				 });
+				 
+				 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 			}
 			,
 			init:function(){
