@@ -160,6 +160,10 @@ define([
                 $(".workspace .ws-content").css("min-height",(body_size-100)); 
                 $(".bDiv").css("height",body_size-397);                
                 this.set("wp_height",(body_size-100));
+				
+				var subj_w = $('#campaign_subject').width();
+				var fegb_w = $('#fecol3').width();
+				$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
              },
              openModule:function(obj){
                  alert($(obj.target).attr("id"));

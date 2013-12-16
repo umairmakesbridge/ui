@@ -62,7 +62,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       },
                       'change .step2 #myhtml':function(){
                           this.states.editor_change = true;
-                      }                      
+                      }
                       ,
                       'click .step3 #addnew_target':function(){
                           this.initCreateEditTarget();
@@ -116,7 +116,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       },
                       'click .draft-campaign':function(){
                           this.scheduledCampaign('D');
-                      }
+                      },
+					  'click #campaign_from_email_btn':function(){
+						  this.$el.find('#campaign_from_email_input').hide();
+						  this.$el.find('#campaign_from_email_btn').hide();
+						  this.$el.find("#campaign_from_email_default").hide();
+						  this.$el.find('#campaign_from_email_chosen').show();
+						  //this.$el.find('#campaign_from_email_chosen').trigger("chosen:updated")
+						  //this.$("#campaign_from_email_chosen a").mousedown();						  
+						  var subj_w = this.$el.find('#campaign_subject').width();
+						  var fegb_w = this.$el.find('#fecol3').width();
+						  this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-40));
+					  }
                     },
 
                 initialize: function () {
@@ -140,7 +151,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.mapdataview = new MapDataView({camp:this});*/
                         this.render();
                 },
-
                 render: function () {
                         this.$el.html(this.template({}));				                        
                         this.app = this.options.app;
@@ -193,7 +203,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 placeholder: 'Search Recipients',
                                 gridcontainer: 'recipients',
                                 showicon: 'yes',
-                                iconsource: 'list'
+                                iconsource: 'target'
                          });
                         this.$el.find('div#targetsearch').searchcontrol({
                                 id:'target-search',
@@ -202,7 +212,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 placeholder: 'Search Targets',
                                 gridcontainer: 'targets_grid',
                                 showicon: 'yes',
-                                iconsource: 'list'
+                                iconsource: 'target'
                          });
                          this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 },
@@ -364,7 +374,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
-                        camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail));                        
+						
+						var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+						
+						if(field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
+						{
+							camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+							camp_obj.$("#campaign_from_email_btn").show();
+							camp_obj.$("#campaign_from_email_input").show();							
+							camp_obj.$("#campaign_from_email_chosen").hide();
+							camp_obj.$("#campaign_from_email_default").show();
+							camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+						}
+						else
+						{
+                        	camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+							camp_obj.$("#campaign_from_email_btn").hide();
+							camp_obj.$("#campaign_from_email_input").hide();							
+							camp_obj.$("#campaign_from_email_chosen").show();
+							camp_obj.$("#campaign_from_email_default").hide();
+							var subj_w = camp_obj.$el.find('#campaign_subject').width();
+							var fegb_w = camp_obj.$el.find('#fecol3').width();
+							camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
+						}
+						
                         camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                                        
                         camp_obj.$("#campaign_footer_text").val(camp_json.footerText);
@@ -569,6 +602,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         else if(this.states.step3.recipientType.toLowerCase()=="target"){
                             source_li = "choose_targets";
+                        }
+						else if(this.states.step3.recipientType.toLowerCase()=="tags"){
+                            source_li = "choose_tags";
                         }
                         else if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
                             source_li = "salesforce_import";
@@ -797,8 +833,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             'valid_icon':el.find('#fromname_erroricon'),
                             'customfield':el.find('.input-append .fromname-group')
                             };
-                            app.disableValidation(options);						
-                        }
+                            app.disableValidation(options);
+                        }						
                         if(replyto == '')
                         {                            
                             var options = {
@@ -852,7 +888,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                            'valid_icon':el.find('#email_erroricon')
                                           };
                             app.disableValidation(options);                            
-                        }
+                        }							
+						if(el.find('#campaign_from_email_input').css('display') == 'none')
+							var fromEmail = el.find('#campaign_from_email').val();
+						else
+						{
+							var fromEmail = el.find('#fromemail_default').val();
+							var fromEmailMF = el.find('#campaign_from_email_input').val();
+						}
 
                     if(!isValid)
                     {                            											
@@ -860,7 +903,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else
                     {
-                        camp_obj.$el.find('#campaign_reply_to').attr('style','');
+                        /*camp_obj.$el.find('#campaign_reply_to').attr('style','');
                         camp_obj.$el.find('#campaign_default_reply_to').attr('style','');
                         this.$(".settings .adv_dd input[type='text']").removeClass("form-error").attr("title","");
                         if(this.$("#campaign_subject").val()==""){
@@ -883,13 +926,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  messageObj["heading"] = "Step 1: Following error(s) occured:" 
                                  messageObj["detail"] = errorHTML;
                                  this.app.showAlertDetail(messageObj,this.$el.parents(".ws-content.active"));
-                        }
+                        }*/
                         if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
                                 this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                                 $.post(URL, { type: "saveStep1",campNum:this.camp_id,
                                         subject : this.$("#campaign_subject").val(),
                                         senderName :this.$("#campaign_from_name").val(),
+										fromEmail : fromEmailMF,
+										defaultFromEmail : fromEmail,
                                         defaultSenderName :this.$("#campaign_default_from_name").val(),
                                         replyTo :this.$("#campaign_reply_to").val(),
                                         defaultReplyToEmail :this.$("#campaign_default_reply_to").val(),
@@ -1061,6 +1106,25 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(defaults_json.footerText));                          
                             camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(defaults_json.fromEmail));
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(defaults_json.fromName));
+							var fromEmails = defaults_json.fromEmail;
+							if(defaults_json.optionalFromEmails)
+								fromEmails += ',' + defaults_json.optionalFromEmails;
+							var fromEmailsArray = fromEmails.split(',');
+							var fromOptions = '';
+							for(var i=0;i<fromEmailsArray.length;i++)
+							{
+								if(fromEmailsArray[i] == defaults_json.fromEmail)
+									fromOptions += '<option value="'+ fromEmailsArray[i] +'" selected="selected">'+fromEmailsArray[i] + '</option>';
+								else
+									fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
+							}
+							camp_obj.$el.find('#campaign_from_email').append(fromOptions);
+							camp_obj.$el.find('#fromemail_default').append(fromOptions);
+							camp_obj.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: "true"});
+							camp_obj.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});
+							var subj_w = camp_obj.$el.find('#campaign_subject').width();
+							var fegb_w = camp_obj.$el.find('#fecol3').width();
+							camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-40));
                             if(defaults_json.customFooter==""){
                                 camp_obj.$("#campaign_useCustomFooter_div").hide();
                             }
@@ -1498,7 +1562,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                                         
                 },
-                showMergeFieldDialog:function(obj){                    
+                showMergeFieldDialog:function(obj){   
+					var self = this;                 
                     if(this.camp_id==0){
                         return false;
                     }
@@ -1520,7 +1585,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         
                         m_fields_box.css({"top":top+"px","left":left+"px"}).show();
                         
-                        var input_container = btn.parents("div.row").find("input[type='text']").attr("id");
+						if(btn.parents("div.row").find("input[type='text']") && btn.parents("div.row").find("input[type='text']").attr("id"))
+                        	var input_container = btn.parents("div.row").find("input[type='text']").attr("id");
+						else if(btn.parents("div.row").find("select"))
+							var input_container = btn.parents("div.row").find("select").attr("id");
                         m_fields_box.attr("input-source",input_container);
                         
                         if($(".merge-feilds-type li.active").length==0){
@@ -1626,8 +1694,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            var merge_field = $(this).parents("li").attr("mergeval");
                            var input_field = $(this).parents(".mergefields").attr("input-source");
                            if(input_field!=="campaign_subject"){
-                            active_ws.find("#"+input_field).val(merge_field);
-                           }
+							   if(input_field == 'campaign_from_email')
+							   {								   
+								   camp_obj.$el.find('#campaign_from_email_chosen').hide();
+								   camp_obj.$el.find('#campaign_from_email_input').show();								   
+								   camp_obj.$el.find('#campaign_from_email_btn').show();
+								   camp_obj.$el.find('#campaign_from_email_input').val(merge_field);								  
+							   }
+							   else
+                            	active_ws.find("#"+input_field).val(merge_field);
+                           }						   
                            else{
                                var caretPos = active_ws.find("#"+input_field)[0].selectionStart;
                                var textAreaTxt = active_ws.find("#"+input_field).val();
@@ -2314,7 +2390,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             height:'22px',
                             placeholder: 'Search Salesforce Campaign',
                             gridcontainer: 'sfcamp_list_grid',
-                            showicon: 'no',
+                            showicon: 'yes',
                             iconsource: 'campaigns'
                         });
                         this.states.step3.salesforce=true;
@@ -2516,7 +2592,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             height:'22px',
                             placeholder: 'Search NetSuite Groups',
                             gridcontainer: 'nsgroup_list_grid',
-                            showicon: 'no',
+                            showicon: 'yes',
                             iconsource: 'campaigns'
                         });                        
                         this.states.step3.netsuite=true;

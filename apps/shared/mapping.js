@@ -61,10 +61,10 @@
 	//alert(tr_obj);      
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
-          $(this).remove();		  
-
+          $(this).remove();		  			
               if(self.options.movingElement == 'tr')
                   tr_copy.find(".action").children().hide();
+				  
                   tr_copy.find(".move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
                   tr_copy.find(".move-row").show();
                   tr_copy.find(".move-row").click(_.bind(self.removeFromCol2,self));
@@ -73,14 +73,15 @@
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
 					  if(self.$element.find(".col2 .rightcol tbody tr").length > 0)
 					  	self.$element.find(".col2 .search input").removeAttr('disabled');
+						tr_copy.find("td:nth-child(1)").removeHighlight();
 				  }
                   else
 				  {
+					  tr_copy.find('a.tag:nth-child(1)').removeHighlight();
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol ul"));
 					  if(self.$element.find(".col2 .rightcol ul li").length > 0)
 					  	self.$element.find(".col2 .search input").removeAttr('disabled');
 				  }
-
                   tr_copy.fadeIn("fast");
 		  
 		  //++ Recipients count
@@ -107,7 +108,7 @@
       tr_obj.fadeOut("fast", function(){
           var tr_copy = tr_obj.clone();
           $(this).remove();
-
+			
 		  tr_copy.find(".action").children().show();
           tr_copy.find(".move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>')
           tr_copy.find(".move-row").click(_.bind(self.addToCol2,self))
@@ -117,17 +118,20 @@
 			 tr_copy.find(".action .copy-action").click(_.bind(self.options.copyTarget,self));
           var _index = tr_copy.attr("item_index")
           var next_element = null
+		  tr_copy.find("a:nth-child(1)").removeHighlight();
 		  if(self.options.movingElement == 'tr')
 		  {
          	 var col1_rows = self.$element.find(".col1 .leftcol tr");
 			 if(self.$element.find(".col2 .rightcol tbody tr").length == 0)
 				self.$element.find(".col2 .search input").attr('disabled','disabled');
+				tr_copy.find("td:nth-child(1)").removeHighlight();
 		  }
 		  else
 		  {
 		  	var col1_rows = self.$element.find(".col1 .leftcol li");
 			if(self.$element.find(".col2 .rightcol ul li").length == 0)
 				self.$element.find(".col2 .search input").attr('disabled','disabled');
+			tr_copy.find('a.tag:nth-child(1)').removeHighlight;
 		  }
           	for(var i=0;i<col1_rows.length;i++){
               if(parseInt($(col1_rows[i]).attr("item_index"))>_index){

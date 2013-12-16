@@ -778,14 +778,5 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.social2 {
    background: url("../img/social2.png") no-repeat center center;
 }
-
-
-
-
-
-
-
-
-
-
-
+.icon.tags {  background: url("../img/tag.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
+.icon.target {  background: url("../img/target.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
