@@ -96,9 +96,8 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
 
                 wp_view.$el.attr("id","workspace_"+wp_count);
                 $("#workspace .ws-content.active").removeClass('active').css("display","none");
-                $("#workspace .workspace").append(wp_view.$el.fadeIn('fast',function(){
-                     wp_view.initScroll(wp_view.$el);
-                }));
+                $("#workspace .workspace").append(wp_view.$el);
+                wp_view.initScroll(wp_view.$el);
                 wp_view.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 
                 var self = this;
@@ -118,12 +117,11 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
 
          if(!obj.hasClass("active")){
              $(".ws-tabs li").removeClass('active');
-             $("#workspace .ws-content.active").removeClass('active').css("display","none");
+             $("#workspace .ws-content.active").removeClass('active').hide();
              obj.addClass("active");
-             var workspace_id = obj.attr("id").split("_")[2];
-             $("#workspace #workspace_"+workspace_id).fadeIn('fast',function(){
-                 $("#workspace #workspace_"+workspace_id).addClass("active");
-             });
+             var workspace_id = obj.attr("id").split("_")[2];             
+             $("#workspace #workspace_"+workspace_id).show().addClass("active");
+            
          }
       },
       openCampaign:function(camp_id){

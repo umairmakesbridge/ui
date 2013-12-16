@@ -27,16 +27,17 @@
       this.lists = null;
       this.formats = []
       this.rules = []
+      this.listFilter = null
       var self = this;
       if(this.options.filterFor==="C"){
         this.$element.find(".filter-div").append(this.options.toprow)
-        this.$element.find(".filter-div").find(".all-any").button()
+        this.$element.find(".filter-div").find(".all-any").t_button()
         addFilterRow()
       } 
       function addFilterRow(){
         var  basicFilter = $('<li><a class="btn-green"><span>Basic Filter</span> <i class="filter"></i> </a></li>')
         var  emailFilter = $('<li><a class="btn-green"><span>Email Activity</span> <i class="email"></i></a></li>')
-        var  listFilter = $('<li><a  class="btn-green"><span>Lists</span> <i class="list"></i> </a></li>')
+        self.listFilter = $('<li><a  class="btn-green"><span>Lists</span> <i class="list"></i> </a></li>')
         var  formFilter = $('<li><a  class="btn-green"><span>Form Submissions</span> <i class="form"></i></a></li>')
         var  websiteFilter = $('<li><a  class="btn-green"><span>Website Actions</span> <i class="web"></i></a></li>')
         var  leadScoreFilter = $('<li><a  class="btn-green"><span>Lead Score</span> <i class="score"></i></a></li>')
@@ -45,7 +46,7 @@
         //adding different filter to add row
         add_filter_row.find("ul").append(basicFilter)
         add_filter_row.find("ul").append(emailFilter)
-        add_filter_row.find("ul").append(listFilter)
+        add_filter_row.find("ul").append(self.listFilter)
         add_filter_row.find("ul").append(formFilter)
         add_filter_row.find("ul").append(websiteFilter)
         add_filter_row.find("ul").append(leadScoreFilter)
@@ -54,7 +55,7 @@
         //Attaching events to filter buttons
         basicFilter.on("click",$.proxy(self.addBasicFilter,self))
         emailFilter.on("click",$.proxy(self.addEmailFilter,self))
-        listFilter.on("click",$.proxy(self.addListFilter,self))
+        self.listFilter.on("click",$.proxy(self.addListFilter,self))
         formFilter.on("click",$.proxy(self.addFormFilter,self))
         leadScoreFilter.on("click",$.proxy(self.addLeadScoreFilter,self))
         websiteFilter.on("click",$.proxy(self.addWebsiteFilter,self))
@@ -66,6 +67,7 @@
   , addBasicFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
       filter.addClass("filter")
+      var nofield_change = false;
       var selected_field = "",selected_rule="",selected_formats="", matchValue="",gapValue = "0",list_html='<div class="btn-group sub-date-container" style="display:none"><a class="icon add-list"></a></div>',
           format_display="none",value_display="block",gap_display="none"
       //In case of edit set parameters    
@@ -80,19 +82,24 @@
              if(params.rule=="prior" || params.rule=="after" || params.rule=="pbday"){
                  gap_display="block"
              }
-             value_display = "none"       
+             if(params.rule=="dr"){
+                value_display = "block"
+             }
+             else{
+                value_display = "none" 
+             }
         }
       }
              
-      var filter_html = '<div class="btn-group"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
-          filter_html +='</select></div>'
+      var filter_html = '<div class="btn-group field-container"><div class="inputcont"><div class="error-mark"></div><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
+          filter_html +='</select></div></div>'
           filter_html +=list_html
-          filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
-          filter_html +='</select></div>'          
-          filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><input type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div>'
-          filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><select data-placeholder="Choose a format" class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
-          filter_html +='</select></div>'
-          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:120px;" /></div>'
+          filter_html +='<div class="btn-group rules-container"><div class="inputcont"><div class="error-mark"></div><select  class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
+          filter_html +='</select></div></div>'          
+          filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><div class="error-mark"></div><input type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
+          filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><div class="error-mark"></div><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
+          filter_html +='</select></div></div>'
+          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><div class="error-mark"></div><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:240px;" /></div></div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');    
       filter.find(".filter-cont").append(filter_html)
       //Chosen with fields
@@ -103,6 +110,17 @@
           else{
               filter.find(".sub-date-container").hide();
           }
+          if($(this).val()=="{{SUBSCRIPTION_DATE}}" || $(this).val()=="{{BIRTH_DATE}}" ){
+              filter.find(".formats-container").show()
+          }
+          else{
+              filter.find(".formats-container").hide()
+          }
+          
+          filter.find(".selectbox.rules").change()             
+          
+          
+          
       })
       var self = this
       //Chosen with rules
@@ -113,18 +131,37 @@
                  return false
              }
              if($(this).val()=="dr" || $(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="dayof" || $(this).val()=="birthday" || $(this).val()=="pbday"){
-                filter.find(".formats-container").show();
+                
+                if(filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}"){
+                    filter.find(".formats-container").hide()
+                }
+                else{
+                    filter.find(".formats-container").show()
+                }
+                
                 if($(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="pbday"){
                     filter.find(".days-container").show().val('0')
                 }
                 else{
                     filter.find(".days-container").hide()
                 }
-                filter.find(".value-container").hide()
+                
+                if($(this).val()=="dr"){
+                    filter.find(".value-container").show()
+                    filter.find(".formats-container").show()
+                }
+                else{
+                    filter.find(".value-container").hide()
+                }
              }
              else{
                 filter.find(".days-container").hide()
-                filter.find(".formats-container").hide()
+                if((filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}")){
+                    filter.find(".formats-container").show()
+                }
+                else{
+                    filter.find(".formats-container").hide()
+                }
                 filter.find(".value-container").show()
              }
              
@@ -165,7 +202,7 @@
                         }
                     });
                     bas_field_html +='</optgroup>'
-                    cust_field_html +='</optgroup>'
+                    cust_field_html +='</optgroup>'                    
                     filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")
                 }
           }).fail(function() { console.log( "error in loading fields" ); });
@@ -196,7 +233,7 @@
                    if(self.options.app.checkError(rules_json)){
                        return false;
                    }                                     
-                   var filter_html ='<option value=""></option>'
+                   var filter_html =''
                    $.each(rules_json,function(k,val){
                         selected_rule = (params && params.rule==val[0]) ? "selected" : ""
                         filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'
@@ -207,7 +244,7 @@
         }).fail(function() { console.log( "error in loading rules" ); });
       }
       else{
-            var filter_html = '<option value=""></option>'
+            var filter_html = ''
             $.each(this.rules,function(k,val){
                 selected_rule = (params && params.rule==val[0]) ? "selected" : ""
                 filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'                
@@ -224,7 +261,7 @@
                        return false;
                    }
                    
-                   var filter_html ='<option value=""></option>'
+                   var filter_html =''
                    $.each(formats_json,function(k,val){
                         selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
                         filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'
@@ -236,7 +273,7 @@
         }).fail(function() { console.log( "error in loading formats" ); });
       }
       else{
-          var filter_html = '<option value=""></option>'
+          var filter_html = ''
             $.each(this.formats,function(k,val){
                 selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
                 filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'                
@@ -261,7 +298,7 @@
             filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
-                  $.each(campaigns_array.lists[0], function(index, val) {
+                  $.each(campaigns_array.campaigns[0], function(index, val) {
                       filter_html +='<option value="'+val[0].campNum+'">'+val[0].name+'</option>'
                   })
                   
@@ -392,11 +429,12 @@
             async: false,
             type:'GET',
             success: function(data) {
-                    self.lists = data;                         
+                    self.lists = data;                                             
               }
         })
     }
   , addListFilter:function(obj,e,params){
+      this.listFilter.find("a.btn-green").addClass("saving")
       var filter = $(this.options.filterRow)      
       filter.addClass("list");
       
@@ -482,6 +520,7 @@
                filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
            })
       }
+      this.listFilter.find("a.btn-green").removeClass("saving")
     }    
   , addFormFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
@@ -489,7 +528,7 @@
       filter.addClass("form");
       var self = this
       var filter_html = '<div class="row"><label>Submitted Form</label>'
-          filter_html += ' <div class="btn-group "><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div>'
+          filter_html += ' <div class="btn-group forms-box-container"><div class="inputcont"><div class="error-mark"></div><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div>'
           filter_html += '</div>'          
             
           filter_html += '<div class="match row"> Happened in last '
@@ -551,8 +590,8 @@
       filter_html += '<div class="btn-group "><select class="condtion-box">'
       filter_html += '<option value="eq">equals</option><option value="less">less than</option><option value="gr8">greater than</option><option value="btw">between</option><option value="incmore">increase more than</option>'
       filter_html += '</select></div>'  
-      filter_html += '<input type="text" value="" name="" style="width:50px;" class="scoreValue" />'
-      filter_html += '<div class="match row days-container" style="display:none"> in last '
+      filter_html += '<div class="btn-group scoreValue-container"><div class="inputcont"><div class="error-mark"></div><input type="text" value="" name="" style="width:50px;" class="scoreValue" /></div></div>'
+      filter_html += '<div class="match row days-container" style="display:none;clear:both"> in last '
             filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
       filter_html += '</div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Lead Score</span>');            
@@ -889,12 +928,71 @@
       _target.find(".filter-div ._row").remove()
       _target.find(".all-any button[rule='A']").click()
   },
+  validate:function(total_rows){
+      var isError = false
+      for(var i=0;i<total_rows.length;i++){
+          var filter = $(total_rows[i])
+          if(filter.hasClass("filter")){
+            if(filter.find(".fields").val()==""){
+                this.options.app.showError({
+                    control:filter.find(".field-container"),
+                    message:this.options.app.messages[0].TRG_basic_no_field
+                })
+                isError = true
+            }
+            else{
+                this.options.app.hideError({control:filter.find(".field-container")})
+            }
+            
+            if(filter.find(".value-container").css("display")=="block" && filter.find(".matchValue").val()==""){
+                 this.options.app.showError({
+                    control:filter.find(".value-container"),
+                    message:this.options.app.messages[0].TRG_basic_no_matchvalue
+                })
+                isError = true
+            }
+            else{
+                this.options.app.hideError({control:filter.find(".value-container")})
+            }
+            //End of basic filter
+          }
+          else if(filter.hasClass("score")){
+              if(filter.find(".scoreValue").val()==""){
+                this.options.app.showError({
+                    control:filter.find(".scoreValue-container"),
+                    message:this.options.app.messages[0].TRG_score_novalue
+                })
+                isError = true
+            }
+            else{
+                this.options.app.hideError({control:filter.find(".scoreValue-container")})
+            }
+            //End of score filter
+          }
+          else if(filter.hasClass("form")){
+             if(filter.find(".forms-box").val()==""){
+                this.options.app.showError({
+                    control:filter.find(".forms-box-container"),
+                    message:this.options.app.messages[0].TRG_form_noform
+                })
+                isError = true
+            }
+            else{
+                this.options.app.hideError({control:filter.find(".forms-box-container")})
+            }
+          }
+      }
+      return isError
+  },
   saveFilters:function(){
       var filters_post = ""
       var _target = this.$element
       var total_rows = _target.find(".filter-div ._row");
       filters_post +="&count="+ total_rows.length
       filters_post +="&applyRuleCount="+ _target.find(".all-any .btn.active").attr("rule")
+      
+      if(this.validate(total_rows)){return false}
+      
       for(var i=0;i<total_rows.length;i++){
           var N = i+1
           var filter = $(total_rows[i])
@@ -984,6 +1082,9 @@
           }
       }
       return filters_post
+  },
+  saveCall:function(){
+      
   }
   , getTimeSpan:function(val){
       var spanHTML = ""

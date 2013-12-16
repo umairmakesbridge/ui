@@ -31,7 +31,8 @@
       this.showTags()      
      //Click on add tag button      
      this.ele.find(".addtag").on("click",$.proxy(this.showTagsDialog,this))
-     this.ele.find(".ellipsis").on("click",$.proxy(this.showOverFlow,this))
+     this.ele.find(".ellipsis").on("mouseover",$.proxy(this.toggleOverFlow,this))
+     this.ele.find(".ellipsis").on("click",$.proxy(this.toggleOverFlow,this))
      
      //Stop propagation so avoid stopping custom dialogs
      this.dialog.click(function(event){
@@ -65,7 +66,7 @@
         var tags_array = tags.split(",")
         var self= this
         $.each(tags_array,function(i,t){            
-            var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross"></i></a></li>')
+            var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross" ></i></a></li>')
             /*li_html.click(function(event){
                 var li = $(this)
                 var ele_offset = li.offset()
@@ -84,7 +85,15 @@
                 self.toolbar.css({"left":left+"px","top":top+"px"}).show();
                 event.stopPropagation();
             })*/
-            tags_ul.append(li_html);        
+            li_html.find(".cross").click(function(event){
+               var li = $(this).parents("li")
+               if(li.attr("id")){
+                    self.tag_id = i   
+                    self.tag_li = li
+                }
+                self.deleteTag()
+            })
+            tags_ul.append(li_html);                    
         });                                    
       }
       if(tags_ul.children().length==0){
@@ -94,12 +103,12 @@
           this.ele.find(".tags-contents").css("display","inline-block");           
           tags_ul.css("width","auto");
           if(tags_ul.width()>260){
-              tags_ul.css("width","250px");
-              this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");
+              tags_ul.css("width","250px");              
+              this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");              
           }
           else{
-              tags_ul.removeClass("overflow");
-              this.$element.find(".tags-buttons").removeClass("overflow");
+              tags_ul.unbind("mouseout")
+              tags_ul.removeClass("overflow");              
               this.$element.find(".tags-buttons .ellipsis").hide();
           }
        }
@@ -259,9 +268,17 @@
       this.options.showAddButton = true
       this.showAddTagButton()
   },
-  showOverFlow:function(){
+  toggleOverFlow:function(){
       this.ele.find("ul").toggleClass("overflow")
       this.$element.find(".tags-buttons").toggleClass("overflow")
+  },
+  showOverFlow:function(){
+      this.ele.find("ul").addClass("overflow")
+      this.$element.find(".tags-buttons").addClass("overflow")
+  },
+  hideOverFlow:function(){
+      this.ele.find("ul").removeClass("overflow")
+      this.$element.find(".tags-buttons").removeClass("overflow")
   },
   showLoading:function(){
      var ele = this.$element.find(".tags-contents ul") 
@@ -293,7 +310,7 @@
   }
   ,showAddTagButton:function(){
     if(this.options.showAddButton){
-        this.$element.find(".tags-buttons").show()
+        this.$element.find(".tags-buttons").attr("style","")
     }
     else{
         this.$element.find(".tags-buttons").hide()

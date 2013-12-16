@@ -63,7 +63,9 @@ function ($,Backbone, _,app,Wizard, template) {
                             page_container = mk_wizard;
                         }
                         
-
+                        if(this.options.noTags){
+                            this.$el.addClass("ws-notags");
+                        }
                         //Load a page 
                         if(this.options.url){
                             this.loadPage(this.options.url,page_container,this.options.params);

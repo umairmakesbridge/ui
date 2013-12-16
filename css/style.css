@@ -1,3 +1,4 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic);
 @font-face {
  font-family: 'PT Sans';
  font-style: normal;
@@ -3654,6 +3655,7 @@ ul.setting-options li img {
 	background-position: -360px -300px;
 }
 .btm-bar .mail {
+	background:	url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 	background-position: -330px -359px;
 }
 .btm-bar .mail:hover {

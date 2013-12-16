@@ -1,3 +1,26 @@
+/*Jquery CSS Overlide*/
+.set-time .timebox input{
+    text-align: left;
+    width:58px;
+    cursor: default !important;
+}
+
+.set-time{
+    width: 213px;
+}
+.set-time .timebox{
+    margin-right: 5px;
+}
+.ui-spinner a.ui-spinner-up {
+    background:url("../img/arrow-up.png") no-repeat scroll center center #6C8B9F;
+}
+.ui-spinner a.ui-spinner-down {
+    background:url("../img/arrow-down.png") no-repeat scroll center center #6C8B9F;
+}
+.schedule-box .sch-btn{
+    width: 220px;
+}
+
 a,div,span,h1,h2,h3,h4,h5,h5{
    -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -981,7 +1004,7 @@ h2.header-list span.recpscount {
   padding: 14px 15px 15px;
   margin-bottom: 0;
   text-align: right;
-  background:#fff;
+  background:#E9EDF6;
   background-color:none;
   border-top: 0px;
   -webkit-border-radius: 0 0 2px 2px;
@@ -1019,8 +1042,7 @@ ul.tabs-btns li.active a{
     z-index:1001; 
     border: 0 none;
     border-radius: 2px;
-    overflow: hidden;
-    padding: 10px;
+    overflow: hidden;    
     top:8%;
 }
 .schedule-container h3 .icon {
@@ -1050,10 +1072,10 @@ ul.tabs-btns li.active a{
     right:-13px;
     height: 44px;
 }
-.ws-notags .pointy{
+.ws-notags .camp_header .pointy{
     display: none !important;
 }
-.ws-notags .tagscont{
+.ws-notags .camp_header .tagscont{
     display: none !important;
 }
 
@@ -1116,4 +1138,33 @@ ul.tabs-btns li.active a{
     padding: 3px 3px 0 5px;
     text-align: left;
     width: 60px;
+}
+.addbutton{
+    top:2px;
+}
+.c-name .edited{
+    margin-top:15px;
+}
+.error-mark{    
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: -20px;
+    width: 20px;
+    z-index: 100;
+    display: none;
+}
+.error .error-mark{
+    display: block;
+}
+.saveing-blue {
+    background: url("../img/loader.gif") no-repeat scroll 25px center #01AEEE;
+    font-size: 0;
+    line-height: 35px;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 30px;
+}
+.saveing-blue span{
+    min-width: 30px;
 }

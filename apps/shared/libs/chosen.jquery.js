@@ -744,8 +744,8 @@
 
       if (el.length) {
         this.result_clear_highlight();
-        this.result_highlight = el;
-        this.result_highlight.addClass("highlighted");
+        this.result_highlight = el;                
+        this.result_highlight.addClass("highlighted");                
         maxHeight = parseInt(this.search_results.css("maxHeight"), 10);
         visible_top = this.search_results.scrollTop();
         visible_bottom = maxHeight + visible_top;
@@ -940,11 +940,17 @@
             selected_index = this.result_single_selected[0].getAttribute('data-option-array-index');
             this.results_data[selected_index].selected = false;
           }
+          else{
+              for(var _i=0;_i<this.results_data.length;_i++){
+                  this.results_data[_i].selected=false;
+              }
+          }
           this.result_single_selected = high;
         }
+        
         high.addClass("result-selected");
         item = this.results_data[high[0].getAttribute("data-option-array-index")];
-        item.selected = true;
+        item.selected = true;        
         this.form_field.options[item.options_index].selected = true;
         this.selected_option_count = null;
         if (this.is_multiple) {

@@ -26,6 +26,7 @@ jQuery.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
 			json_data:null,
 			colresize:false,
                         colWidth:false,
+                        lazyLoading:false,
 			method: 'POST', //data sending method
 			dataType: 'xml', //type of data for AJAX, either xml or json
 			errormsg: 'Connection Error',
@@ -1430,6 +1431,32 @@ jQuery.browser.msie = /msie/.test(navigator.userAgent.toLowerCase());
 		if (p.url && p.autoload) {
 			g.populate();
 		}
+                
+                if(p.lazyLoading){
+                    $(g.bDiv).scrollTop(0);
+                    $(g.bDiv).scroll(function(){
+                        var $w = $(this);
+                        var th = 65*4;
+                        var inview = $(this).find("table tr:last-child").filter(function() {
+                            var $e = $(this),
+                                wt = $w.scrollTop(),
+                                wb = wt + $w.height(),
+                                et = $(g.bDiv).find("table tr").length *  $e.height(),
+                                eb = et + $e.height();
+
+                            return eb >= wt - th && et <= wb + th;
+                          });
+                            if(inview.length && inview.attr("data-load")){
+                               inview.removeAttr("data-load");
+                               if($(g.bDiv).find(".footer-loading").length==0){
+                                    $(g.bDiv).append($('<div class="footer-loading"><hr><div class="gridLoading"> <span class="gridFooterSpinner"></span> </div></div>'))
+                               }
+                               p.lazyLoading();
+                               console.log('call lazy loading')
+                            }  
+                    });
+                    $(g.bDiv).find("table tr:last").attr("data-load","true");
+                }
 		return t;
 	};
 	var docloaded = false;

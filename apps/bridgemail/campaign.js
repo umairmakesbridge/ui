@@ -51,7 +51,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'change #campaign_isFooterText':function(){
                         this.setFooterArea();
                       },
-                      'change .step1 input,change .step1 select,change .step1 textarea':function(){
+                      'change .step1 input':function(){
+                          this.states.step1.change = true;
+                      },
+                      'change .step1 select':function(){
+                          this.states.step1.change = true;
+                      },
+                      'change .step1 textarea':function(){
                           this.states.step1.change = true;
                       },
                       'change .step2 #myhtml':function(){
@@ -125,7 +131,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":null,"events":false,"searchString":"",offset:0,totalcount:0,templateType:'B',getTemplateCall:null,searchValue:'',htmlText:'',change:false},
                                         "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},ns_filters:{customer:"",contact:"",parnter:"",nsObject:""}},
-                                        "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null},
+                                        "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D'},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
                                        };
@@ -202,27 +208,29 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 stepsCall:function(step){
                     var proceed = -1;
-                    if(this.camp_id!==0){
-                        switch (step){
-                            case 'step_1':
-                                proceed = this.saveStep1();
-                                break;
-                            case 'step_2':
-                                proceed = this.saveStep2();
-                                break;    
-                            case 'step_3':
-                                proceed = this.saveStep3();
-                                break;    
-                            case 'step_4':
-                                proceed = this.saveStep4();
-                                break;        
-                            default:
-                                break;
+                    if(this.states.step4.camp_status==='D'){
+                        if(this.camp_id!==0){
+                            switch (step){
+                                case 'step_1':
+                                    proceed = this.saveStep1();
+                                    break;
+                                case 'step_2':
+                                    proceed = this.saveStep2();
+                                    break;    
+                                case 'step_3':
+                                    proceed = this.saveStep3();
+                                    break;    
+                                case 'step_4':
+                                    proceed = this.saveStep4();
+                                    break;        
+                                default:
+                                    break;
+                            }
                         }
-                    }
-                    else{
-                        this.app.showAlert('Please save campaign first to proceed!',this.$el.parents(".ws-content.active"));
-                        proceed = 0 ;
+                        else{
+                            this.app.showAlert('Please save campaign first to proceed!',this.$el.parents(".ws-content.active"));
+                            proceed = 0 ;
+                        }
                     }
                     return proceed;
                 },
@@ -272,10 +280,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
                         this.states.step1.change = true;
+                        $(this).trigger("chosen:updated");
                     },this));
-                    this.$("#campaign_schedule_time").chosen({ width: "76px",disable_search: "true"});       
-                    this.$("#campaign_schedule_timeam").chosen({ width: "62px",disable_search: "true"});       
-                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                 
+                    
+                    this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                 
                     //Init icheck boxes                   
 
                 },
@@ -463,7 +471,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.setConversionPage();
                         }
                         camp_obj.initCheckbox();
+                        
+                        camp_obj.states.step4.camp_status = camp_json.status;
+                        
                         camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
+                        
                     });  
                 }
                 ,
@@ -587,9 +599,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         hour = hour==0 ? "12":hour;
                         hour = hour.toString().length==1?("0"+hour):hour;
-                        this.$(".timebox-hour").val(hour);
-                        this.$(".timebox-min").val(min);
+                        this.$(".timebox-hour").val(hour.length==1?("0"+hour):hour);
+                        this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
+                        
+                        this.$(".timebox-hour").spinner({max: 12,min:1,stop: function( event, ui ) {
+                                
+                        }});
+                        this.$(".timebox-min").spinner({max: 59,min:0,stop: function( event, ui ) {
+                                
+                        }});
                         this.states.step4.init = true;                        
+                    }
+                    if(this.states.step4.camp_status!=='D'){
+                        this.$(".draft-campaign").show();
+                        this.$(".scheduled-campaign").hide();
+                    }
+                    else{
+                        this.$(".draft-campaign").hide();
+                        this.$(".scheduled-campaign").show();
                     }
                     this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email").val()));
@@ -646,8 +673,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   if(this.camp_id===0){                      
                       active_ws.find(".camp_header .c-name h2,.camp_header  #campaign_tags").hide();                      
                       active_ws.find(".camp_header .c-name .edited ").show();                      
-                      active_ws.find("#camp_tags").children().remove();
-                      active_ws.find(".camp_header .tags-contents,.camp_header .ellipsis").hide();                      
+                      active_ws.find("#camp_tags").children().remove();                                          
                       active_ws.find("#header_wp_field").focus().val('');
                       //active_ws.find(".step-contents").find("input,select,textarea").prop("disabled",true);
                       active_ws.find("#campMenu").prop("disabled",false);
@@ -1263,14 +1289,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$("#copy-camp-listing"));
                     this.$el.find("#copy-camp-listing").children().remove();
                     var camp_list_json = this.app.getAppData("campaigns");
-                    if(camp_list_json.count > 1)
-                    	this.$("#copy_no_of_camps").html(camp_list_json.count+" Campaigns found");
+                    if(camp_list_json.totalCount > 1)
+                    	this.$("#copy_no_of_camps").html(camp_list_json.totalCount+" Campaigns found");
                     else
-                        this.$("#copy_no_of_camps").html(camp_list_json.count+" Campaign found");
+                        this.$("#copy_no_of_camps").html(camp_list_json.totalCount+" Campaign found");
                     
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camp_list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
-                    $.each(camp_list_json.lists[0], function(index, val) {     
+                    $.each(camp_list_json.campaigns[0], function(index, val) {     
                         var datetime = val[0].scheduledDate;
                         var dateFormat = '';
                         if(datetime)
@@ -1289,9 +1315,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{
                             dateFormat = '';					
                          }  
-                        list_html += '<tr id="row_'+val[0].campNum+'">';                        
+                        list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
                         list_html += '<td><div class="name-type"><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';                         
-                        list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0].campNum+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';                        
+                        list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';
@@ -1668,16 +1694,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
                          break;
                             case 'copy_campaign':
-                                 if(!this.app.getAppData("campaigns")){
-                                    this.app.showLoading("Loading Campaigns...",this.$("#copy-camp-listing"));                                     
+                                 this.app.showLoading("Loading Campaigns...",this.$("#copy-camp-listing"));  
+                                 if(!this.app.getAppData("campaigns")){                                                                       
                                     this.app.getData({
                                         "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns",
                                         "key":"campaigns",
                                         "callback":_.bind(this.createCampaignListTable,this)
                                     });
                                  }
-                                 else{
-                                    this.createCampaignListTable(); 
+                                 else{                                    
+                                     window.setTimeout(_.bind(this.createCampaignListTable,this),500);
                                  }
                             break;
                         default:
@@ -1789,9 +1815,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var _input = $.getObj(obj,"input");
                     var val = $.trim(_input.val());
                     
+                    if(obj.keyCode==13){                       
+                        this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
+                        this.states.step2.getTemplateCall.abort();
+                        if(val!==""){
+                            this.loadTemplates('search','nameTag',{text:val});
+                        }
+                        else{
+                            this.$("#template_search_menu li:first-child").click();
+                        }                        
+                    }
+                    if(val==""){
                         if(this.states.step2.searchValue!=val){
-                            this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
-                            //this.$("#search-template-input").prop("disabled",true);                        
+                            this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
                             this.states.step2.getTemplateCall.abort();
                             if(val!==""){
                                 this.loadTemplates('search','nameTag',{text:val});
@@ -1800,6 +1836,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 this.$("#template_search_menu li:first-child").click();
                             }
                         }
+                    }
                     
                     
                 },
@@ -2437,13 +2474,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                 },
                setNetSuiteeWiz:function(){
-                    var camp_obj = this;
-                    camp_obj.app.showLoading(false,camp_obj.$el.find('#area_netsuite_import'));
+                   var camp_obj = this;
+                   camp_obj.app.showLoading(false,camp_obj.$el.find('#area_netsuite_import'));
                    var netsuite_setting = this.app.getAppData("netsuite");
-                    if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){
-                        this.loadNetSuiteGroup();
+                   if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){                        
                         this.$("#netsuite_login,#netsuite_welcome").hide();                        
-                        this.$("#netsuite_setup").show();                        
+                        this.$("#netsuite_setup").show();                                              
                     }
                     else{
                        this.$("#netsuite_login,#netsuite_setup").hide();
@@ -2521,6 +2557,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             return false;
                         }
                         this.$("#nsgroup_list_grid tr.selected").removeClass("selected");                            
+                   }
+                   if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){ 
+                         this.loadNetSuiteGroup();
                    }
                },
                showNetSuiteFitler:function(obj){
@@ -2777,10 +2816,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    var camp_obj = this;
                    var post_data = {"campNum": this.camp_id,
                                     "type":"saveStep4",
-                                    "status":flag,
-                                    "scheduleType":"now",
-                                    "scheduleDate":_date+" "+time
+                                    "status":flag                                    
                                     }
+                   if(flag=='S'){
+                       post_data["scheduleType"] = "now";
+                       post_data["scheduleDate"] =_date+" "+time;                                    
+                   }                 
                    this.app.showLoading("Scheduling Campaign...",this.$el.parents(".ws-content"));  
                    $.post(URL,post_data)
                     .done(function(data) {                              

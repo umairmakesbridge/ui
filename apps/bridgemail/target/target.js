@@ -151,14 +151,19 @@ function (template,bmsfilters) {
                    if(target_id){
                        var camp_obj = this;
                        var post_data = "";
-                        if(camp_obj.$("#targets_tags").data("tags")){
+                        if(camp_obj.$("#c_c_target").data("filters")){
                            post_data = camp_obj.$("#c_c_target").data("filters").saveFilters();
                         }
+                        if(!post_data){
+                            return false;
+                        }
                         camp_obj.app.showLoading("Saving Target...",camp_obj.$el);                        
+                        this.dialog.$el.find(".btn-save").addClass("saveing-blue");
                         var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token')+post_data;
                         $.post(URL, {type:'update',filterNumber:target_id})
                         .done(function(data) {                                 
                             camp_obj.app.showLoading(false,camp_obj.$el);                        
+                            camp_obj.dialog.$el.find(".btn-save").removeClass("saveing-blue");
                             var target_json = jQuery.parseJSON(data);  
                             if(camp_obj.app.checkError(target_json)){
                                    return false;

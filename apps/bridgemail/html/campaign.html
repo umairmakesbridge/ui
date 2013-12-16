@@ -71,7 +71,7 @@
             <div class="">
               <div id="unsubscribe" class="btn-group subs-dd">
                 <select id="campaign_unSubscribeType" class="nosearch">
-                  <option value="S">Simple Unsubscribe </option>
+                  <option value="S" >Simple Unsubscribe </option>
                   <option value="U">Universal Subscriber Management</option>
                 </select>
               </div>
@@ -223,8 +223,7 @@
                 <div class="row">
                   <label>Match Type</label>
                   <div id="match_type" class="btn-group subs-dd">
-                    <select id="con_filter_combo" data-placeholder="Select Filter" style="width:150px;" class="chosen-select">
-                      <option value=""></option>
+                    <select id="con_filter_combo" style="width:150px;" class="chosen-select">                      
                       <option value="ct">Contains</option>
                       <option value="=">Equal to</option>
                     </select>
@@ -393,7 +392,7 @@
     <div class="col1">
       <h2 class="header-list">
       	<span style="float:left;">Targets</span>
-        <div class="iconpointy">
+        <div class="iconpointy addbutton">
            <a class="btn-green"  id="addnew_target"><i class="icon plus left"></i></a>
         </div>
         <div id="targetsearch" class="input-append search"> </div>
@@ -642,13 +641,13 @@
             <div class="sch-right">                                                                	
                 <div class="set-time">
                     <div class="timebox hour">
-                        <input type="text" value="" name="" class="timebox-hour" />
+                        <input type="text" value="" name="" class="timebox-hour" readonly="readonly" />
                     </div>
                     <span class="colon">:</span>
                     <div class="timebox min">
-                        <input type="text" value="" name="" class="timebox-min" />
+                        <input type="text" value="" name="" class="timebox-min" readonly="readonly" />
                     </div>
-                    <div data-toggle="buttons-radio" class="btn-group all-any timebox-hours">
+                    <div data-toggle="buttons-radio" class="btn-group all-any timebox-hours" >
                       <button class="btn am">AM</button>
                       <button class="btn pm">PM</button>
                     </div>

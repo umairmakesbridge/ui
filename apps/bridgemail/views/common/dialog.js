@@ -47,12 +47,16 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                           this.$el.modal("show");
                           this.$el.on('hidden', _.bind(function(){
                             this.$el.remove();                          
+                            if($(".modal").length==0){
+                                 $("#header,#activities").show();
+                            }
                           },this))
                           $("#header,#activities").hide();
                         },
                         hide:function(){
+                            
                             this.$el.modal("hide");
-                            $("#header,#activities").show();
+                           
                         },
                         getBody:function(){
                             return this.$(".modal-body");

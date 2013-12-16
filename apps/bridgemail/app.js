@@ -9,7 +9,7 @@ define([
                             'CAMP_replyto_empty_error':'Reply to field can not be empty',
                             'CAMP_replyto_format_error':'Please supply correct format',
                             'CAMP_defaultreplyto_format_error':'Please supply correct email',
-							'CAMP_defaultreplyto_empty_error':'Reply to email can not be empty',
+                            'CAMP_defaultreplyto_empty_error':'Reply to email can not be empty',
                             'SF_userid_empty_error':'User id can not be empty',
                             'SF_userid_format_error':'Please supply correct user id',
                             'SF_pwd_empty_error':'Password can not be empty',				   
@@ -19,10 +19,14 @@ define([
                             'NS_pwd_empty_error':'Password can not be empty',
                             'NS_accid_empty_error':'Account id can not be empty',
                             'NS_email_format_error':'Please supply correct email',
-							'CT_copyname_empty_error':'Copy name can not be empty',
-							'MAPDATA_newlist_empty_error':'List can not be empty',
-							'MAPDATA_extlist_empty_error':'Please select some list',
-							'MAPDATA_email_format_error':'Please select correct email',
+                            'CT_copyname_empty_error':'Copy name can not be empty',
+                            'MAPDATA_newlist_empty_error':'List can not be empty',
+                            'MAPDATA_extlist_empty_error':'Please select some list',
+                            'MAPDATA_email_format_error':'Please select correct email',
+                            'TRG_basic_no_field':'Please select a field to make filter',
+                            'TRG_basic_no_matchvalue':'Please provide match field value',
+                            'TRG_score_novalue' : 'Please provide score value',
+                            'TRG_form_noform' : 'Please select a form.'
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -55,7 +59,8 @@ define([
 				(callback || $.noop)();
 			}, this));
 		},
-                initScript:function(){              
+                initScript:function(){
+                    
                     this.autoLoadImages();
                     var $tiles = $('#tiles');            
                     // add randomish size classes
@@ -145,7 +150,7 @@ define([
                  return isError; 
              },
              autoLoadImages:function(){
-                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif']
+                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif','img/loader.gif']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });
@@ -166,7 +171,7 @@ define([
                     $(container).append('<div class="loading"><p>'+message+'</p></div>');
                  }
                  else{
-                     $(container).find('.loading').remove();
+                     $(container).find(' > .loading').remove();
                  }
              },
              showAlert:function(message, container,option){       
@@ -305,6 +310,18 @@ define([
             {
                     var email_patt = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
                     return email_patt.test(emailVal);
+            },
+            showError:function(params){
+                if(params.control){
+                    params.control.find(".inputcont").addClass("error")                    
+                    params.control.find(".error-mark").attr('data-content',params.message);
+                    params.control.find(".error-mark").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});	
+                }
+            },
+            hideError:function(params){
+                if(params.control){
+                    params.control.find(".inputcont").removeClass("error")                    
+                }
             }
 	});
 

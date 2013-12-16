@@ -12,7 +12,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             /*Menues*/
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
-                                 app.mainContainer.addWorkSpace({type:'',title:'My Campaigns',url:'campaigns',workspace_id: 'campaigns'});
+                                 app.mainContainer.addWorkSpace({type:'',title:'My Campaigns',url:'campaigns',workspace_id: 'campaigns',noTags:true});
                             },
                             
                             'click .studio_bounced-email-li':function(obj){
