@@ -374,28 +374,28 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
 						
-						var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
-						
-						if(field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
-						{
-							camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
-							camp_obj.$("#campaign_from_email_btn").show();
-							camp_obj.$("#campaign_from_email_input").show();							
-							camp_obj.$("#campaign_from_email_chosen").hide();
-							camp_obj.$("#campaign_from_email_default").show();
-							camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-						}
-						else
-						{
-                        	camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-							camp_obj.$("#campaign_from_email_btn").hide();
-							camp_obj.$("#campaign_from_email_input").hide();							
-							camp_obj.$("#campaign_from_email_chosen").show();
-							camp_obj.$("#campaign_from_email_default").hide();
-							var subj_w = camp_obj.$el.find('#campaign_subject').width();
-							var fegb_w = camp_obj.$el.find('#fecol3').width();
-							camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
-						}
+                        var field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+
+                        if(field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
+                        {
+                                camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+                                camp_obj.$("#campaign_from_email_btn").show();
+                                camp_obj.$("#campaign_from_email_input").show();							
+                                camp_obj.$("#campaign_from_email_chosen").hide();
+                                camp_obj.$("#campaign_from_email_default").show();
+                                camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                        }
+                        else
+                        {
+                                camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                                camp_obj.$("#campaign_from_email_btn").hide();
+                                camp_obj.$("#campaign_from_email_input").hide();							
+                                camp_obj.$("#campaign_from_email_chosen").show();
+                                camp_obj.$("#campaign_from_email_default").hide();
+                                var subj_w = camp_obj.$el.find('#campaign_subject').width();
+                                var fegb_w = camp_obj.$el.find('#fecol3').width();
+                                camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
+                        }
 						
                         camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                                        
@@ -616,10 +616,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 initStep4:function(){
                     if(this.states.step4.init===false){                        
-                        this.$("#accordion_info").accordion({ collapsible: true,heightStyle: "fill"});
-                        this.$("#accordion_recipients").accordion({ collapsible: true});
-                        this.createCalender();        
-                        
+                        this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
+                        this.$("#accordion_recipients").accordion({ collapsible: false});
+                        this.createCalender();                                
                         this.states.step4.datetime['day'] = this.states.step4.cal.today.getDate();
                         this.states.step4.datetime['month'] = this.states.step4.cal.today.getMonth()+1 
                         this.states.step4.datetime['year'] = this.states.step4.cal.today.getFullYear();
@@ -643,6 +642,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$(".timebox-min").spinner({max: 59,min:0,stop: function( event, ui ) {
                                 
                         }});
+                        this.$(".gotostep3").click(_.bind(function(){
+                            this.wizard.back();
+                        },this))
+                        this.$(".gotostep2").click(_.bind(function(){
+                            this.wizard.back();
+                            this.wizard.back();
+                        },this))
+                        this.$(".gotostep1").click(_.bind(function(){
+                            this.wizard.back();
+                            this.wizard.back();
+                            this.wizard.back();
+                        },this))
                         this.states.step4.init = true;                        
                     }
                     if(this.states.step4.camp_status!=='D'){

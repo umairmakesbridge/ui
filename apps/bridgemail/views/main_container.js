@@ -97,7 +97,7 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
                 wp_view.$el.attr("id","workspace_"+wp_count);
                 $("#workspace .ws-content.active").removeClass('active').css("display","none");
                 $("#workspace .workspace").append(wp_view.$el);
-                wp_view.initScroll(wp_view.$el);
+                //wp_view.initScroll(wp_view.$el);
                 wp_view.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 
                 var self = this;
