@@ -2831,10 +2831,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else if(source_type=="netsuite"){
                         URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";
-                    }
+                    }					
                     else{
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=recipientType";
-                     }  
+                    }
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                              camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                              
                              if(xhr && xhr.responseText){                               
@@ -2848,16 +2848,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         if(rec_josn.count!=="0"){
                                          $.each(rec_josn.listNumbers[0], function(index, val) { 
                                               camp_obj.$(".step3 #area_choose_lists .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
-                                         })   
+                                         })
                                         }
                                     }
                                     else if(rec_josn.type.toLowerCase()=="target"){
                                         if(rec_josn.count!=="0"){
                                          $.each(rec_josn.filterNumbers[0], function(index, val) { 
                                               camp_obj.$(".step3 #area_choose_targets .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
-                                         })   
+                                         })
                                         }
                                     }
+									else if(rec_josn.type.toLowerCase()=="tags"){                                        
+											var tags = rec_josn.targetTags.split(',');
+                                         	for(var i=0;i<tags.length;i++) { 
+                                              camp_obj.$(".step3 #area_choose_tags .col1 li[checksum='"+tags[i]+"'] .move-row").click();
+											}                                        
+                                    }									
                                 }
                                 else{
                                     if(source_type=="salesforce"){

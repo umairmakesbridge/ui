@@ -22,7 +22,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 			},
 			render: function () {
 				this.$el.html(this.template({}));
-                                this.app = this.options.app;
+                     this.app = this.options.app;
 				this.getallcampaigns();
 				this.$el.find('div#campslistsearch').searchcontrol({
 					id:'list-search',
