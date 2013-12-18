@@ -337,3 +337,31 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 #fecol3 { width:65px; }
 .settings .adv_dd input[type="text"] { width:92%; }
 #fecol1 .chosen-container-single .chosen-single { float:right; }
+.addnew_btn > a:after {
+    border-color: rgba(255, 255, 255, 0) #94CF1E rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);
+    border-style: solid;
+    border-width: 3px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    left: -4px;
+    position: absolute;
+    top: 7px;
+}
+.addnew_btn > a {
+    background: none repeat scroll 0 0 #94CF1E;
+    border: 0 none;
+    border-radius: 1px;
+    color: #FFFFFF;
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    margin: 0;
+    padding: 1px 4px;
+    text-shadow: none;
+}
+.addnew_btn > a strong { font-size:20px; font-weight:bold; position:relative; top:2px; }
+.chosen-search #searchbtn { width:30px; height:32px; margin-left:-31px; }
+.chosen-search .searchbtn .icon-search { margin-top:-3px; }
+.chosen-container .chosen-results { max-height:230px; }

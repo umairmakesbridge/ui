@@ -6,11 +6,11 @@ function (template,Mapping,bmsSearch) {
                     
                 },
 				saveTags: function () {
-					var curview = this;					
+					var curview = this;
 					var tags = '';
 					curview.$el.find(".col2 .rightcol li").each(function(i) {
 						tags += $(this).find("a:nth-child(1) span").text() + ',';
-					});					
+					});
 					return tags.substring(0,tags.length-1);
 				},
 				loadTags: function(){
@@ -18,7 +18,7 @@ function (template,Mapping,bmsSearch) {
 					var curview = this;
 					var campview = this.campview;
 					app.showLoading("Loading Tags...",curview.$el.find('.leftcol'));
-					URL = "/pms/io/user/getData/?BMS_REQ_TK="+app.get('bms_token')+"&type=allSubscriberTags";				
+					URL = "/pms/io/user/getData/?BMS_REQ_TK="+app.get('bms_token')+"&type=subscriberTagCountList";
 					jQuery.getJSON(URL,  function(tsv, state, xhr){				
 						app.showLoading(false,curview.$el.find('.leftcol'));
 						if(xhr && xhr.responseText){
@@ -27,7 +27,7 @@ function (template,Mapping,bmsSearch) {
 							if(tags_array[0] != 'err')
 							{
 								$.each(tags_array.tagList[0],function(key,val){
-									tags_html += '<li class="action"><a class="tag"><span>'+ val[0].tag +'</span><strong class="badge">'+ val[0].subCount +'</strong></a> <a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a></li>';
+									tags_html += '<li class="action" id="row_'+key+'" checksum="'+val[0].tag+'"><a class="tag"><span>'+ val[0].tag +'</span><strong class="badge">'+ val[0].subCount +'</strong></a> <a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a></li>';
 								});
 								curview.$el.find('.leftcol .tagslist ul').children().remove();
 								curview.$el.find('.leftcol .tagslist ul').html(tags_html);
@@ -38,6 +38,9 @@ function (template,Mapping,bmsSearch) {
 										template:'',
 										movingElement:'li'
 								});
+								
+								if(campview.states.step3.recipientType.toLowerCase()=="tags")
+									campview.setRecipients();
 							}
 						}
 					});
@@ -64,7 +67,7 @@ function (template,Mapping,bmsSearch) {
 					if(this.$el.find('#tagsrecpslist ul li').length == 0)
 						this.$el.find('#tag-recps-search').attr('disabled','disabled');
 					else
-						this.$el.find('#tag-recps-search').attr('disabled','');
+						this.$el.find('#tag-recps-search').attr('disabled','');					
 				},
                 initialize: function () {
 					this.template = _.template(template);				
@@ -72,7 +75,6 @@ function (template,Mapping,bmsSearch) {
 					this.app.showLoading(false,this.campview.$el.find('#area_choose_tags'));
 					this.loadTags();
                 },
-
                 render: function () {
 					this.app = this.options.app; 
 					this.campview = this.options.camp;

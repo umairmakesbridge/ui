@@ -13,23 +13,24 @@ function (template) {
                 render: function () {
                         this.app = this.options.app; 
                         this.target_id = this.options.target_id;
+						this.curview = this;
                         this.$el.html(this.template({}));                        
                 },
 				copyTarget:function(){
 					var curview = this;
-					var campview = this.options.camp;
-					var editview = this.options.editview;
-                   var target_id = this.target_id;
-				   var el = this.$el;
-				   var app = this.app;
-				   var appMsgs = this.app.messages[0];
-				   var copydialog = this.options.copydialog;
-				   var source = this.options.source;
+					var campview = curview.options.camp;
+					var editview = curview.options.editview;
+                   var target_id = curview.target_id;
+				   var el = curview.$el;
+				   var app = curview.app;
+				   var appMsgs = curview.app.messages[0];
+				   var copydialog = curview.options.copydialog;
+				   var source = curview.options.source;
 				   if(el.find('#copy_name').val() == '')
 					{
 						var options = {'control':el.find('#copy_name'),
 										'valid_icon':el.find('#copyname_erroricon'),
-										'controlcss':'border:solid 1px #ff0000; float:left; margin-left:15px; width:65%;',
+										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.CT_copyname_empty_error};
 						app.enableValidation(options);						
 					}
@@ -58,7 +59,7 @@ function (template) {
 											return false;
 										  }
 										  if(selected_target){											  
-											editview.$el.find(".targt #target_name_text span").html(selected_target.name);
+											editview.dialog.$el.find("#dialog-title span").html(selected_target.name);
 											campview.states.step3.targetDialog.target_id = selected_target["filterNumber.encode"];											   
 										  }
                     				 });									

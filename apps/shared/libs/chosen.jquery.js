@@ -533,7 +533,7 @@
       if (this.is_multiple) {
         this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><div><ul class="chosen-results"></ul></div></div>');
       } else {
-        this.container.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><div><div class="chosen-search"><input type="text" autocomplete="off" /></div><ul class="chosen-results"></ul></div></div>');
+        this.container.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><div><div class="chosen-search"><input type="text" autocomplete="off" /><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"></span></button></div></div><ul class="chosen-results"></ul></div></div>');
       }
       this.form_field_jq.hide().after(this.container);
       this.dropdown = this.container.find('div.chosen-drop').first();
