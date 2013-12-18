@@ -10,6 +10,7 @@ define([
                             'CAMP_replyto_format_error':'Please supply correct format',
                             'CAMP_defaultreplyto_format_error':'Please supply correct email',
                             'CAMP_defaultreplyto_empty_error':'Reply to email can not be empty',
+                            'CAMP_defaultfromname_empty_error': 'Default From Name cann\'t be empty',
                             'SF_userid_empty_error':'User id can not be empty',
                             'SF_userid_format_error':'Please supply correct user id',
                             'SF_pwd_empty_error':'Password can not be empty',				   

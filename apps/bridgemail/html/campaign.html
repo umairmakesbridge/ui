@@ -29,20 +29,17 @@
                     	<td style="text-align:right">
                         <!--<div id="fecol1" class="fecols">-->
                             <div class="inputcont">
-                              <select id="campaign_from_email" class="nosearch fromemail-group">
-                                
+                              <select id="campaign_from_email" class="nosearch fromemail-group">                                
                               </select>
-                              <input type="text" id="campaign_from_email_input" readonly="readonly" />
-                              <div id="campaign_from_email_btn"><b></b></div>
-                              <!--<span id="fromemail_erroricon" class="erroricon"></span>-->
+                                                           
                             </div>
                         <!--</div>-->
                   		</td>                        
                         <td id="fecol3" style="width:65px">
                         <!--<div id="fecol3" class="fecols">-->
-                            <div class="btn-group fromemail-group">
-                              <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-                            </div>
+                        <div class="btn-group fromemail-group">
+                          <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                        </div>
                         <!--</div>
                     </div>
                 </div>-->
@@ -73,8 +70,9 @@
         </div>
         <div class="row addrow" id="campaign_from_name_default" style="display:none">
             <label>&nbsp;</label>
-            <span class="directarrow"></span>
-            <div class="inputcont"><input id="campaign_default_from_name" type="text" placeholder="Set Default Value"></div>
+            <span class="directarrow"></span>            
+            <div class="inputcont" style="text-align:right;"><input id="campaign_default_from_name" type="text" placeholder="Set Default Value"></div>
+            <span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>
         </div>
         <div class="row">
           <label>Reply To</label>
@@ -689,7 +687,16 @@
                 <a class="btn-green sch-btn left scheduled-campaign"><span>Schedule </span><i  class="icon schedule"></i></a>
                 <a class="btn-blue sch-btn left draft-campaign"><span>Draft </span><i  class="icon edit"></i></a>
             </div>
-          </div>                
+          </div>
+          <div class="sch-right sch-made"  style="display:none;">                                
+                <h2 class="camp-sch-detail"><strong>Jay's Campaign</strong> Has been Scheduled to be sent on 
+                    <span>23 Nov 2013</span> at <em>14:35 am</em>
+                </h2>
+                <a class="btn-green  draft-campaign reschedule"><span>ReSchedule  </span><i  class="icon schedule"></i></a>
+                <a class="btn-blue draft-campaign"><span>Draft   </span><i class="icon next"></i></a>
+                <a class="btn-gray  draft-campaign edit"><span>Edit Campaign </span><i  class="icon edit"></i></a>
+
+        </div>
         </div>
     </div>
     <div class="span12 preview" style="margin:10px 0 15px;">
