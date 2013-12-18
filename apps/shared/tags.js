@@ -24,7 +24,7 @@
       this.tag_id = -1
       this.tag_li = null
       this.tag_action = 'add'
-      this.tags_common = ''
+      this.tags_common = []
       this.$element.children().remove()
       this.$element.append(this.ele)
       
@@ -299,7 +299,9 @@
                   if(self.options.app.checkError(tags_json)){
                       return false;
                   }
-                  self.tags_common = tags_json.tags.split(",");
+                  $.each(tags_json.tags[0], function(index, val) {
+                        self.tags_common.push(val[0].tag);
+                  })
 
                   var typeahead = self.dialog.find("input.tag-input").data('typeahead');
                   if(typeahead) typeahead.source = self.tags_common;

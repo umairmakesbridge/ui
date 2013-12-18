@@ -138,6 +138,8 @@ ol.progtrckr li.no-text{
 }
 .loading p{
     z-index: 10003;
+    width:300px;
+    margin-left: -150px;
 }
 
 .template-container{
@@ -1083,7 +1085,7 @@ ul.tabs-btns li.active a{
 }
 .single-row .bmsgrid tr.selected td:last-child div:after{    
     top:-10px;
-    right:-13px;
+    right:-9px;
     height: 44px;
 }
 .ws-notags .camp_header .pointy{
