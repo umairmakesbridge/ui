@@ -68,6 +68,7 @@
                   tr_copy.find(".move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
                   tr_copy.find(".move-row").show();
                   tr_copy.find(".move-row").click(_.bind(self.removeFromCol2,self));
+				  
                   if(self.options.movingElement == 'tr')
 				  {
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
@@ -83,6 +84,9 @@
 					  	self.$element.find(".col2 .search input").removeAttr('disabled');
 				  }
                   tr_copy.fadeIn("fast");
+				  tr_copy.find(".taglink").click(_.bind(function(obj){
+                            self.initSearch(obj,self.$element.find(".col2 .search input"));
+                  },self));
 		  
 		  //++ Recipients count
 		  if(self.options.sumColumn != '')
@@ -166,6 +170,12 @@
 		  	self.$element.find("#"+self.options.sumTarget).text(recptotalcount);
 		  }
       })
+  },
+  initSearch: function(obj,searchInput)
+  {
+	  var target = $.getObj(obj,"a");
+	  searchInput.val(target.text());				
+	  searchInput.keyup();
   },
   moveAll:function(){
       this.$element.find(".col1 .bmsgrid tr .move-row").click()

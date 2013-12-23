@@ -103,7 +103,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                 this.page.initStepCall("step_"+parseInt(this.active_step));
                                }
                                
-                            },this)); 
+                            },this));
 							
                             //Moving Steps prgoress bar
                             this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
@@ -131,7 +131,6 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             else{
                                 this.next();
                             }
-                                  
                         },
                         next:function(obj){                            
                             

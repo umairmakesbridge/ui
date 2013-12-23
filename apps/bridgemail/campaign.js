@@ -5,7 +5,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
         return Backbone.View.extend({
                 id: 'step_container',                  
                 events: {
-                       "click  .step3 #choose_soruce li":function(obj){
+                       "click .step3 #choose_soruce li":function(obj){
                            var target_li = obj.target.tagName=="LI" ? $(obj.target) : $(obj.target).parents("li");                           
                            if(target_li.hasClass("selected")) return false;
                            this.$(".step3 #choose_soruce li").removeClass("selected");
@@ -14,7 +14,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            target_li.addClass("selected");						   
 						   
                            this.step3SlectSource(target_li);
-                       },
+                      },
                       'click .step2 #choose_soruce li':function(obj){
                           var camp_obj = this;
                            var target_li =$.getObj(obj,"li"); 
@@ -32,13 +32,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            var camp_id= $("#campMenu").val();                          
                            this.loadCampaign(camp_id);
                            
-                       },
-                       'keyup .header-info':function(obj){
+                      },
+                      'keyup .header-info':function(obj){
                            var input_obj = $(obj.target);
                            if(input_obj.val().indexOf("{{") ==-1  && input_obj.val().indexOf("}}")==-1){
                                $("#"+input_obj.attr("id")+"_default").hide();
                            }
-                       },                                            
+                      },                                            
                       'click #save_conversion_filter':function(){
                           this.saveConversionPage();
                       },                      
@@ -387,7 +387,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
-			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
+						var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
                                                                         
                         if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
                         {
@@ -603,7 +603,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
                 initStep3:function(){
-                    if(this.states.step3.recipientType){
+                    if(this.states.step3.recipientType)
+					{
                         var source_li = "choose_lists";
                         if(this.states.step3.recipientType.toLowerCase()=="list"){
                             source_li = "choose_lists";
@@ -1255,7 +1256,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         list_html += '<td><div class="subscribers show" style="min-width:70px;"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add move-row"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
-                    list_html += '</tbody></table>';
+                    list_html += '</tbody></table>';										
 					
                     this.$el.find("#target-lists").html(list_html);
                    
@@ -1270,6 +1271,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#list_grid tr td:first-child").attr("width","100%");
                     this.$("#list_grid tr td:last-child").attr("width","90px");	
                     this.$("#recipients-list").css("height",this.app.get('wp_height')-122);										
+						
+					this.$el.find(".taglink").click(_.bind(function(obj){
+                            camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
+                    },this));
 								
                     this.$el.find("#area_choose_lists").mapping({
                             gridHeight:this.app.get('wp_height')-122,
@@ -1313,7 +1318,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       this.setConversionPage();                          
                           
                 },
-		createTargetsTable:function(){ 
+				createTargetsTable:function(){ 
                     var camp_obj=this;
                     this.$el.find("#trecpcount span").text('0');
                     this.$el.find("#targets").children().remove();
@@ -1335,7 +1340,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     target_html += '</tbody></table>';
 										
                     this.$el.find("#targets").html(target_html);
-					                    
+					
                     this.$el.find("#targets").bmsgrid({
                             useRp : false,
                             resizable:false,
@@ -1360,6 +1365,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.copyTarget(obj);
                             }
                     });
+					
+					this.$el.find(".taglink").click(_.bind(function(obj){
+                            camp_obj.app.initSearch(obj,camp_obj.$el.find("#target-search"));
+                        },camp_obj));
+						
+					this.$el.find("#recipients .taglink").click(_.bind(function(obj){
+                            camp_obj.app.initSearch(obj,camp_obj.$el.find("#target-recps-search"));
+                        },camp_obj));
+						
                     this.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
                     if(this.states.step3.recipientType.toLowerCase()=="target"){
                         this.setRecipients();
@@ -1402,14 +1416,73 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
-                    list_html += '</tbody></table>';
+                    list_html += '</tbody></table>';										
 
                     this.$el.find("#copy-camp-listing").html(list_html);                                                                                
-                    this.initTemplateListing();
+                    
+					//this.initTemplateListing();
+					this.$el.find("#camp_list_grid").bmsgrid({
+                            useRp : false,
+                            resizable:false,
+                            colresize:false,
+							lazyLoading:_.bind(this.appendCampaigns,this),
+                            height:this.app.get('wp_height')-122,
+                            usepager : false,
+                            colWidth : ['100%','90px','66px','132px']
+                    });
+                    this.$("#camp_list_grid tr td:nth-child(1)").attr("width","100%");
+                    this.$("#camp_list_grid tr td:nth-child(2)").attr("width","90px");
+                    this.$("#camp_list_grid tr td:nth-child(4)").attr("width","132px");
+					
+					if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
+						this.$("#camp_list_grid tr:last-child").removeAttr("data-load");
+					}
+					
                     this.$("#copy-camp-listing .action").click(_.bind(this.copyCampaign,this));
-                   
+                   	
+					this.$el.find(".taglink").click(_.bind(function(obj){
+                            camp_obj.app.initSearch(obj,this.$el.find("#copy-camp-search"));
+                        },this));
                 }
-                ,                
+                ,  
+				appendCampaigns:function(){
+					var camp_list_json = this.app.getAppData("campaigns");                            
+					if(camp_list_json){
+						var camp_obj = this;
+						var new_offset = camp_list_json.offset ? (camp_list_json.offset + 50): 50 ;
+						
+						var list_html = "";
+						var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset="+new_offset;
+						jQuery.getJSON(URL,  function(tsv, state, xhr){
+						if(xhr && xhr.responseText){
+							 var campaigns = jQuery.parseJSON(xhr.responseText);                                
+							 if(camp_obj.app.checkError(campaigns)){
+								 return false;
+							 }               
+							 var row_no =1;
+							 camp_obj.$("#copy-camp-listing .footer-loading").remove();
+							 camp_list_json.offset = new_offset;
+							 $.each(campaigns.campaigns[0], function(index, val) {
+									list_html = $(camp_obj.makecamprows(val,true));					                                            
+									if(row_no==50 && camp_list_json.offset+parseInt(campaigns.count)<parseInt(campaigns.totalCount)){
+										list_html.attr("data-load","true")
+									}
+									camp_list_json["campaigns"][0]["campaign"+(new_offset+row_no)] = val;
+									camp_obj.$("#camp_list_grid tbody").append(list_html);
+									row_no = row_no +1;
+							});                                    
+							camp_list_json.count = parseInt(camp_list_json.count) + parseInt(campaigns.count);
+							camp_obj.$el.find(".taglink").click(_.bind(function(obj){
+								camp_obj.app.initSearch(obj,camp_obj.$el.find("#list-search"));
+							},camp_obj));
+							
+						}
+						}).fail(function() { console.log( "error in campaign lazy loading fields" ); }); 
+					}
+					else{
+						this.getallcampaigns();
+					}
+				},              
                 showSalesForceCampaigns:function(){
                     var camp_obj =this;					
                     camp_obj.app.showLoading("Loading Salesforce Campaigns...",camp_obj.$el.find('#salesforce_setup .salesforce_campaigns .template-container'));
@@ -1778,6 +1851,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_footer_text").prop("disabled",!this.$("#campaign_isFooterText")[0].checked)                                            
                 },
                 step2SlectSource:function(target_li){
+					var camp_obj = this;
                     this.$(".step2 #choose_soruce li").removeClass("selected");
                     this.$(".step2 .soruces").hide();  
                     this.$(".step2 #area_"+target_li.attr("id")).fadeIn("fast");
@@ -1793,23 +1867,27 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
                          break;
                             case 'copy_campaign':
-                                 this.app.showLoading("Loading Campaigns...",this.$("#copy-camp-listing"));  
-                                 if(!this.app.getAppData("campaigns")){                                                                       
-                                    this.app.getData({
-                                        "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns",
-                                        "key":"campaigns",
-                                        "callback":_.bind(this.createCampaignListTable,this)
-                                    });
-                                 }
-                                 else{                                    
-                                     window.setTimeout(_.bind(this.createCampaignListTable,this),500);
-                                 }
+								this.getallcampaigns();                                 
                             break;
                         default:
                             break;
                     }
                     
                 },
+				getallcampaigns: function () {
+					var camp_obj = this;
+					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#copy-camp-listing"));  
+				   if(!camp_obj.app.getAppData("campaigns")){                                                                       
+					  camp_obj.app.getData({
+						  "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
+						  "key":"campaigns",
+						  "callback":_.bind(camp_obj.createCampaignListTable,this)
+					  });
+				   }
+				   else{                                    
+					   window.setTimeout(_.bind(camp_obj.createCampaignListTable,this),500);
+				   }
+				},
                 loadTemplateAutoComplete:function(results){
                      var templates_array = [];
                      var map = {};
@@ -2192,7 +2270,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token'),
                                     params:{type:'tags',filterNumber:'',tags:''}
                                 });                            
-                        break;
+                        	break;
                         case 'choose_targets':                                                                
                                 if(this.checkRecipientsSaved("target")){
                                     return false;

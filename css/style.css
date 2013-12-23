@@ -7707,3 +7707,85 @@ div.crms a img {
     margin: 0 -10px 0 0;
     padding: 1px 5px;
 }
+.selection-icons {
+    float: right;
+	position:relative;
+    margin: 0 10px;
+}
+.selection-icons > a.icon {background: url("../img/editortile.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+height: 35px;
+display:block;
+    width: 35px;
+	margin:0;
+	}
+.selection-icons:hover > a.icon {opacity:0.5;}
+
+
+.selection-icons .selectiondropdown { display:none;}
+
+.selection-icons:hover .selectiondropdown {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 2px solid #BADAEC;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+    left: -95px;
+    position: absolute;
+    top: 38px;
+    width: 220px;
+	display:block;
+    z-index: 1010;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:  2px;
+}
+
+.selection-icons .selectiondropdown:after {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;
+    border-style: solid;
+    border-width: 8px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    left: 102px;
+    position: absolute;
+    top:-17px;
+}
+.selection-icons .selectiondropdown ul {
+    overflow: hidden;
+	padding:1px;
+}
+.selection-icons .selectiondropdown ul li {
+    background: none repeat scroll 0 0 #A9C2D5;
+    cursor: pointer;
+    float: left;
+    height: 90px;
+    margin: 2px;
+    position: relative;
+    text-align: center;
+    width: 105px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:  2px;
+}
+.selection-icons .selectiondropdown ul li a span {
+    color: #FFFFFF;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
+    margin: 10px 0 0 10px;
+    padding: 0 5px;
+    position: relative;
+    text-align: left;
+    z-index: 99;
+}
+.selection-icons .selectiondropdown ul li  img {
+    bottom: 0;
+    opacity: 0.5;
+    position: absolute;
+    right: 0;
+    width: 40%;
+}
+.selection-icons .selectiondropdown ul li:hover {background:#7797AE; }
+.selection-icons .selectiondropdown ul li:hover img { opacity:1;}
+.selection-icons .selectiondropdown ul li.selected { background: none repeat scroll 0 0 #97D61D;  opacity: 1;}
+.selection-icons .selectiondropdown ul li.selected img{   opacity: 1;}

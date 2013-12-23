@@ -329,7 +329,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
     width: 9px;
 	display:block;
 }
-.iconpointy { top:0; }
+.iconpointy { /*top:0;*/ }
 #fetable { width:100%; display:table; }
 .fecols { display:table-cell; }
 #fecol1 { width:auto; }
@@ -365,3 +365,13 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .chosen-search #searchbtn { width:30px; height:32px; margin-left:-31px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
+#salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
+.overlay { position:absolute; background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
+.global_messages{
+    position: fixed;
+    top:-1px;
+    left:50%;
+    display: none;
+	z-index:10000;
+	margin-top:0;
+}
