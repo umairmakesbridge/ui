@@ -86,16 +86,19 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
                                 }
 				var camp_count_lable = '';                                
 				if(camp_list_json.totalCount > 1)
-                                    camp_count_lable = 'Campaigns found';
+                	camp_count_lable = 'Campaigns found';
 				else
-                                    camp_count_lable = 'Campaign found';				
-                                if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
-                                    this.$("#camps_grid tr:last-child").removeAttr("data-load");
-                                }
+                    camp_count_lable = 'Campaign found';				
+				if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
+					this.$("#camps_grid tr:last-child").removeAttr("data-load");
+				}
 				this.$el.find("span#no_of_camps").html(camp_list_json.totalCount+' '+camp_count_lable);				
-                                this.app.showLoading(false,this.$("#target-camps"));
+                this.app.showLoading(false,this.$("#target-camps"));
+				this.$el.find(".taglink").click(_.bind(function(obj){
+                            camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
+                        },this));
 			}
-			,
+			,			
 			makecamprows: function (val,extraDiv){				
                                 var start_div ="", end_div = "";
                                 if(extraDiv){
@@ -154,6 +157,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
                                             row_no = row_no +1;
                                     });                                    
                                     camp_list_json.count = parseInt(camp_list_json.count) + parseInt(campaigns.count);
+									camp_obj.$el.find(".taglink").click(_.bind(function(obj){
+										camp_obj.app.initSearch(obj,camp_obj.$el.find("#list-search"));
+									},camp_obj));
                                     
                                 }
                                 }).fail(function() { console.log( "error in campaign lazy loading fields" ); }); 

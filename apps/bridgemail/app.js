@@ -183,9 +183,9 @@ define([
                  if(message){                    
                     var inlineStyle = (option && option.top) ? ('top:'+option.top) : '';
                     var fixed_position = (option && option.fixed)?"fixed":"";
-                    $(container).append('<div class="loading '+fixed_position+'"> <div class="tag_msg1" style='+inlineStyle+'><span class="caution"></span>'+message+'<a class="close-btn">X</a></div> </div>');
-                    $(".loading .close-btn").click(function(){
-                       $(".loading").fadeOut("fast",function(){
+                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox caution" style='+inlineStyle+'><h3>Caution</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
+                    $(".overlay .closebtn").click(function(){
+                       $(".overlay").fadeOut("fast",function(){
                            $(this).remove();
                        }) 
                     });
@@ -206,14 +206,19 @@ define([
                     
              },
              showMessge:function(msg){
-                 $(".global_message").html(msg);
-                 $(".global_message").show();
-                 var marginLeft = $(".global_message").width()/2;
-                 $(".global_message").css("margin-left", (-1*marginLeft)+"px");
-                 $(".global_message").hide();
-                 $(".global_message").slideDown("medium",function(){
-                     setTimeout('$(".global_message").hide()',2000);
+                 $(".global_messages p").html(msg);
+                 $(".global_messages").show();
+                 var marginLeft = $(".global_messages").width()/2;
+                 $(".global_messages").css("margin-left", (-1*marginLeft)+"px");
+                 $(".global_messages").hide();
+                 $(".global_messages").slideDown("medium",function(){
+                     setTimeout('$(".global_messages").hide()',2000);
                  });
+				 $(".global_messages .closebtn").click(function(){
+					 $(".global_messages").fadeOut("fast",function(){
+						 $(this).remove();						 
+					 }) 
+				  });
              },
              encodeHTML:function(str){
                 str = str.replace(/:/g,"&#58;");
@@ -245,14 +250,21 @@ define([
                 return str;
             },
             showTags: function(tags){
-                var tag_array = tags.split(",");                
+				//alert(searchInputControl);
+                var tag_array = tags.split(",");
                 var tag_html ="<ul>";
                 $.each(tag_array,function(key,val){
-                    tag_html +="<li><a>"+val+"</a></li>";                    
+                    tag_html +="<li><a class='taglink'>"+val+"</a></li>";					
                 });
                 tag_html +="</ul>";
                 return tag_html;
             },
+			initSearch: function(obj,searchInput)
+			{
+				var target = $.getObj(obj,"a");
+				searchInput.val(target.text());				
+				searchInput.keyup();
+			},
             setAppData:function(appVar,data){
                 var _data = this.get("app_data");
                 _data[appVar]= data;

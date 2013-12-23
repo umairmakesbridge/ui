@@ -23,7 +23,14 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                             'click .save_continue_editor':function(){
                                 this.hideEditor();
                                 this.page.wizard.validateStep();
-                            }
+                            },
+							'click .selectiondropdown li':function(obj){
+								var camp_obj = this.options.opener;
+								var source_li =$.getObj(obj,"li"); 
+								//camp_obj.step2SlectSource(target_li);
+								this.hideEditor();
+								camp_obj.$el.find(".step2 #"+source_li.attr('id')).click();
+							},
                         },
 			initialize: function () {                            
                             this.template = _.template(template);				
