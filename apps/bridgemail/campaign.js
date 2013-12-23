@@ -874,18 +874,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                           };
                             app.disableValidation(options);                            
                         }	
-                        if(replyto == '')
-                        {                            
-                            var options = {
-                                'control':el.find('#campaign_reply_to'),
-                                'valid_icon':el.find('#replyto_erroricon'),
-                                'message':camp_obj.app.messages[0].CAMP_replyto_empty_error,
-                                'controlcss':'border:solid 2px #FB8080;'
-                               };
-                            app.enableValidation(options);
-                            isValid = false;
-                        }
-                        else if(!merge_field_patt.test(replyto) && !app.validateEmail(replyto))
+                        if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
                         {
                             var options = {'control':el.find('#campaign_reply_to'),
                             'valid_icon':el.find('#replyto_erroricon'),
@@ -2082,7 +2071,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 templates_html +='<div class="img"><div><a class="previewbtn" ><span ></span>Preview Template</a> <a class="selectbtn select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
-                                templates_html +='<a class="cat">Category</a>';
+                                templates_html +='<a class="cat">'+val[0].categoryID+'</a>';
                                 templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                                 templates_html +='<div class="btm-bar">';
                                 templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
@@ -2949,7 +2938,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     "status":flag                                    
                                     }
                    if(flag=='S'){
-                       post_data["scheduleType"] = "now";
+                       post_data["scheduleType"] = "scheduled";
                        post_data["scheduleDate"] =_date+" "+time;                                    
                    }                 
                    var _message = message?message:'Changing mode...';
