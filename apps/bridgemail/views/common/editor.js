@@ -7,7 +7,7 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                         events: {                            
                             'click .btn-gray':function(obj){
                                 this.hideEditor();
-                                //this.page.wizard.back();
+                                this.page.wizard.back();
                             },
                             'click .mergefields-box' :function(obj){
                                 this.showMergeFieldDialog(obj);
