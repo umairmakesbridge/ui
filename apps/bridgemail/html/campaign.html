@@ -329,12 +329,11 @@
             <li text-info="Most Used" title="" class="showtooltip" data-original-title="Sort by: Most Used"><a search="used" tabindex="-1">used</a></li>
           </ul>
         </div>         
-        <div class="input-append search search-template-div">
-          <div class="search-template-icon"></div>
-          <input type="text"  placeholder="Search by Template name or tag" class="search-template" id="search-template-input" style="width:240px" />
-          <div class="btn-group">
-            <button tabindex="-1" class="searchbtn" id="search-text-btn"><span class="icon search"></span></button>
-          </div>
+      
+        <div class="input-append search search-template-div">         
+            <span class="icon templates"></span>
+            <input type="text" style="width:300px;" class="search-control show-image" placeholder="Search by Template name or tag" id="search-template-input">
+            <div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div>
         </div>
        
         <!--  search  --> 
@@ -655,7 +654,8 @@
     <!-- span6 -->
     
     <div class="span6 schedule-box">
-      <div>        
+      <div>     
+        <div class="timezone-note">* Time is according to Pacific time zone</div>  
         <div class="schedule-camp">
             <div class="calendar">
               <div class="custom-calendar-wrap">
@@ -693,8 +693,7 @@
                     <span>23 Nov 2013</span> at <em>14:35 am</em>
                 </h2>
                 <a class="btn-green  draft-campaign reschedule"><span>ReSchedule  </span><i  class="icon schedule"></i></a>
-                <a class="btn-blue draft-campaign"><span>Draft   </span><i class="icon next"></i></a>
-                <a class="btn-gray  draft-campaign edit"><span>Edit Campaign </span><i  class="icon edit"></i></a>
+                <a class="btn-blue draft-campaign"><span>Draft   </span><i class="icon next"></i></a>                
 
         </div>
         </div>

@@ -22,7 +22,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 			},
 			render: function () {
 				this.$el.html(this.template({}));
-                     this.app = this.options.app;
+                                this.app = this.options.app;
 				this.getallcampaigns();
 				this.$el.find('div#campslistsearch').searchcontrol({
 					id:'list-search',
@@ -31,7 +31,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 					placeholder: 'Search Campaigns',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                    iconsource: 'campaigns',
+                                        iconsource: 'campaigns',
 					countcontainer: 'no_of_camps'
 				 });
 				 
@@ -78,22 +78,23 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
                                                     lazyLoading:_.bind(this.appendCampaigns,this),
                                                     height:this.app.get('wp_height')-122,
                                                     usepager : false,
-                                                    colWidth : ['100%','90px','66px','132px']
+                                                    colWidth : ['100%','70px','90ox','132px']
                                     });                                                                
                                     this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
                                     this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
+                                    this.$("#camps_grid tr td:nth-child(3)").attr("width","90px");
                                     this.$("#camps_grid tr td:nth-child(4)").attr("width","132px");
                                 }
 				var camp_count_lable = '';                                
 				if(camp_list_json.totalCount > 1)
-                	camp_count_lable = 'Campaigns found';
+                                    camp_count_lable = 'Campaigns found';
 				else
-                    camp_count_lable = 'Campaign found';				
-				if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
+                                    camp_count_lable = 'Campaign found';				
+				if(parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
 					this.$("#camps_grid tr:last-child").removeAttr("data-load");
 				}
 				this.$el.find("span#no_of_camps").html(camp_list_json.totalCount+' '+camp_count_lable);				
-                this.app.showLoading(false,this.$("#target-camps"));
+                                this.app.showLoading(false,this.$("#target-camps"));
 				this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
                         },this));
@@ -124,7 +125,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 				else{
 					dateFormat = '';					
                                      }   
-				row_html += '<td>'+start_div+'<div class="subscribers show" style="width:60px"><span class=""></span>0</div>'+end_div+'</td>';
+                                row_html += '<td>'+start_div+'<div class="time show" style="min-width:90px">'+this.app.getCampStatus(val[0].status)+'</div>'+end_div+'</td>';     
+				row_html += '<td>'+start_div+'<div class="subscribers show" style="min-width:60px"><span class=""></span>'+val[0].sentCount+'</div>'+end_div+'</td>';
                                 var action_button = (val[0].status=="D" || val[0].status=="S")?'<div id="'+ val[0]['campNum.encode'] +'" class="action"><a id="'+ val[0]['campNum.encode'] +'" class="btn-green"><span>Select</span></a></div>':'';
 				row_html += '<td>'+start_div+'<div class="time show" style="width:105px"><span class=""></span>'+ dateFormat +'</div>'+action_button+end_div+'</td>';					
 				row_html += '</tr>';
@@ -155,11 +157,11 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
                                             camp_list_json["campaigns"][0]["campaign"+(new_offset+row_no)] = val;
                                             camp_obj.$("#camps_grid tbody").append(list_html);
                                             row_no = row_no +1;
-                                    });                                    
-                                    camp_list_json.count = parseInt(camp_list_json.count) + parseInt(campaigns.count);
-									camp_obj.$el.find(".taglink").click(_.bind(function(obj){
-										camp_obj.app.initSearch(obj,camp_obj.$el.find("#list-search"));
-									},camp_obj));
+                                            });                                    
+                                           camp_list_json.count = parseInt(camp_list_json.count) + parseInt(campaigns.count);
+                                           camp_obj.$el.find(".taglink").click(_.bind(function(obj){
+                                           camp_obj.app.initSearch(obj,camp_obj.$el.find("#list-search"));
+                                    },camp_obj));
                                     
                                 }
                                 }).fail(function() { console.log( "error in campaign lazy loading fields" ); }); 

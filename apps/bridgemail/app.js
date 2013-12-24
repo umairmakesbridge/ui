@@ -249,6 +249,23 @@ define([
                 }
                 return str;
             },
+            getCampStatus:function(flag){
+              // A=all, D=draft, S=scheduled, P=pending, C=completed  
+              var status = 'Draf';
+              if(flag=='A'){
+                  status= 'All'
+              }
+              else if(flag=='D'){
+                  status= 'Draft'
+              }
+              else if(flag=='P'){
+                  status='Pending'
+              }
+              else if(flag=='C'){
+                  status='Completed'
+              }
+              return status;
+            },
             showTags: function(tags){
 				//alert(searchInputControl);
                 var tag_array = tags.split(",");

@@ -1184,3 +1184,13 @@ ul.tabs-btns li.active a{
 .saveing-blue span{
     min-width: 30px;
 }
+.timezone-note{
+    position:absolute;
+    bottom:5px;
+    right:10px;
+    color: #7FA7BE;
+    font-weight:bold;
+}
+.search > .icon.templates {
+    background-position: -330px -238px;
+}

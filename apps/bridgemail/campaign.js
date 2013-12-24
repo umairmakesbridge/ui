@@ -117,7 +117,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .draft-campaign':function(obj){
                           var button = $.getObj(obj,"a")
                           if(button.hasClass("reschedule")){
-                             this.scheduledCampaign('D','Setting Campaign for reschedule...');
+                             //this.scheduledCampaign('D','Setting Campaign for reschedule...');
+                             this.$(".schedule-camp").show();
+                             this.$(".sch-made").hide();
+                             this.$(".draft-campaign").hide();
+                             this.$(".scheduled-campaign").show();
                           }
                           else  if(button.hasClass("edit")){
                              this.scheduledCampaign('D','Edit Campaign...'); 
@@ -559,6 +563,25 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       e.stopPropagation();
                   });
                   var camp_obj = this;
+                  previewIconCampaign.click(function(e){
+                       if(camp_obj.states.step2.htmlText!==""){
+                           
+                            var dialog_width = $(document.documentElement).width()-60;
+                            var dialog_height = $(document.documentElement).height()-182;
+                            var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
+                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                      headerEditable:false,
+                                      bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                            });
+                            var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
+                            dialog.getBody().html(preview_iframe);
+                            preview_iframe[0].contentWindow.document.open('text/html', 'replace');
+                            preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(camp_obj.states.step2.htmlText,true));
+                            preview_iframe[0].contentWindow.document.close();
+                        }
+                       e.stopPropagation();     
+                  })
+                  var camp_obj = this;
                   deleteIconCampaign.click(function(){
                       if(confirm('Are you sure you want to delete this campaign?')){
                           var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
@@ -641,17 +664,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{
                             this.$(".timebox-hours button.am").addClass("active");
                         }
-                        hour = hour==0 ? "12":hour;
-                        hour = hour.toString().length==1?("0"+hour):hour;
-                        this.$(".timebox-hour").val(hour.length==1?("0"+hour):hour);
-                        this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
                         
-                        this.$(".timebox-hour").spinner({max: 12,min:1,stop: function( event, ui ) {
+                        hour = hour==0 ? "12":hour;                        
+                                                
+                        this.$(".timebox-hour").spinner({max: 12,min:1,start: function( event, ui ) {
                                 
                         }});
                         this.$(".timebox-min").spinner({max: 59,min:0,stop: function( event, ui ) {
-                                
+                               if($(this).val().length==1){
+                                   $(this).val("0"+$(this).val())
+                               }
                         }});
+                        this.$(".timebox-hour").val(hour);
+                        this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
+                        
                         this.$(".gotostep3").click(_.bind(function(){
                             this.wizard.back();
                         },this))
@@ -1928,7 +1954,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              camp_obj.$("#search-popular-input").val('');
                              camp_obj.$("#popular_template_tags li").show();  
                         })
-                        this.$(".search-template-div input[type='checkbox']").prop("disabled",true);
+                        //this.$(".search-template-div input[type='checkbox']").prop("disabled",true);
                         this.states.step2.events = true;
                         
                         $(window).scroll(_.bind(this.liveLoading,this));
@@ -2078,6 +2104,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             else if(options && options.text){
                                 searchString +="&searchText="+options.text;
                             }
+                            else if(options && options.user_type){
+                                searchString +="&userType="+options.user_type;
+                            }
+                            else if(options && options.category_id){
+                                searchString +="&categoryId="+options.category_id;
+                            }
+                            
+                            if(searchType=="featured"){
+                                searchString +="&isFeatured=Y"                                
+                            }
                         }
                         this.states.step2.offset = 0;
                         this.states.step2.totalcount = 0;
@@ -2126,17 +2162,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
                     }    
                     else if(this.states.step2.searchString.indexOf("=tag")>-1){                        
-                        var hashes = this.states.step2.searchString.split('&');                               
-                        for(var i = 0; i < hashes.length; i++)
-                        {
-                            hash = hashes[i].split('=');
-                            vars.push(hash[0]);
-                            vars[hash[0]] = hash[1];
-                        }
+                        
                         this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> templates found <b>for tag '"+vars["searchText"]+"'</b>");                         
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount +"</strong> templates");
+                    }
+                    var hashes = this.states.step2.searchString.split('&');                               
+                    for(var i = 0; i < hashes.length; i++)
+                    {
+                        hash = hashes[i].split('=');
+                        vars.push(hash[0]);
+                        vars[hash[0]] = hash[1];
                     }
                     if(templates){                        
                         $.each(templates[0], function(index, val) { 
@@ -2149,7 +2186,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 templates_html +='<div class="img"><div><a class="previewbtn" ><span ></span>Preview Template</a> <a class="selectbtn select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
-                                templates_html +='<a class="cat">'+val[0].categoryID+'</a>';
+                                templates_html +=camp_obj.showCategoryTemplate(val[0].categoryID);
                                 templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                                 templates_html +='<div class="btm-bar">';
                                 templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
@@ -2194,6 +2231,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              this.loadTemplates('search','tag',{text:tag.text()});  
                         },this));
                         
+                        template_html.find(".mobile").click(_.bind(function(obj){                             
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.loadTemplates('search','mobile');  
+                        },this));
+                        
+                        template_html.find(".cat").click(_.bind(function(obj){     
+                             var cat = $.getObj(obj,"a");
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.loadTemplates('search','category',{category_id:cat.attr("cat_id")});  
+                        },this));
+                        
+                        template_html.find(".builtin").click(_.bind(function(obj){                             
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.loadTemplates('search','admin',{user_type:'A'});  
+                        },this));
+                        
                         template_html.find(".select-template").click(_.bind(function(obj){
                               this.setEditor();
                               var target = $.getObj(obj,"a");
@@ -2215,6 +2268,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else if(this.states.step2.searchString.indexOf("=tag")>-1){
                         this.$(".step2 .thumbnails .caption p").highlight(vars["searchText"]);
                     }
+                    else if(this.states.step2.searchString.indexOf("=category")>-1){
+                        this.$(".step2 .thumbnails .caption .cat").highlight(vars["categoryId"]);
+                    }
                     this.$(".footer-loading").hide();
                     
                 },
@@ -2228,6 +2284,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     });
                     return tag_html; 
+                },
+                showCategoryTemplate:function(categories){
+                     var _array = categories.split(",");
+                     var _html ="";
+                    $.each(_array,function(key,val){
+                        _html +="<a class='cat' cat_id='"+val+"'>"+val+"</a>";                        
+                    });
+                    return _html
                 },
                 copyCampaign:function(obj){
                     this.setEditor();
