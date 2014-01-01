@@ -69,55 +69,74 @@ function (template) {
 					var app = this.options.app;
 					var appMsgs = this.app.messages[0];
 					if((el.find('#sf_userid').val() == ''))
-					{						
-						var options = {'control':el.find('#sf_userid'),
+					{
+						/*var options = {'control':el.find('#sf_userid'),
 										'valid_icon':el.find('#sfuid_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_userid_empty_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.uid-container'),
+							message:appMsgs.SF_userid_empty_error
+						});
 						isValid = false;
-					}					
+					}
 					else if(!app.validateEmail(el.find('#sf_userid').val()))
 					{						
-						var options = {'control':el.find('#sf_userid'),
+						/*var options = {'control':el.find('#sf_userid'),
 										'valid_icon':el.find('#sfuid_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_userid_format_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.uid-container'),
+							message:appMsgs.SF_userid_format_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#sf_userid'),'valid_icon':el.find('#sfuid_erroricon')};
-						app.disableValidation(options);						
+						/*var options = {'control':el.find('#sf_userid'),'valid_icon':el.find('#sfuid_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".uid-container")});
 					}
 					if(el.find('#sf_pwd').val() == '')
 					{
-						var options = {'control':el.find('#sf_pwd'),
+						/*var options = {'control':el.find('#sf_pwd'),
 										'valid_icon':el.find('#sfpwd_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_pwd_empty_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.pwd-container'),
+							message:appMsgs.SF_pwd_empty_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#sf_pwd'),'valid_icon':el.find('#sfpwd_erroricon')};
-						app.disableValidation(options);
+						/*var options = {'control':el.find('#sf_pwd'),'valid_icon':el.find('#sfpwd_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".pwd-container")});
 					}
 					if(el.find('#sf_email').val() != '' && !app.validateEmail(el.find('#sf_email').val()))
 					{						
-						var options = {'control':el.find('#sf_email'),
+						/*var options = {'control':el.find('#sf_email'),
 										'valid_icon':el.find('#sfemail_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.SF_email_format_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.email-container'),
+							message:appMsgs.SF_email_format_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#sf_email'),'valid_icon':el.find('#sfemail_erroricon')};
-						app.disableValidation(options);
+						/*var options = {'control':el.find('#sf_email'),'valid_icon':el.find('#sfemail_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".email-container")});
 					}
 					return isValid;
 				},				

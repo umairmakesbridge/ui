@@ -1,20 +1,29 @@
 <div style=" min-height:350px;"  class="clearfix template-container gray-panel">
-  <div class="cont-box" style="top:30%;left:57%;">
-    <div class="row">
+  <div class="cont-box loginForm-container" style="top:30%;left:57%;">
+    <div class="row uid-container">
       <label>User ID</label>
-      <input type="text" name="sf_userid" id="sf_userid" placeholder="jadams@makesbridge.com" />
-      <span id="sfuid_erroricon" class="erroricon"></span>
+      <div class="inputcont">
+      	<div class="error-mark"></div>
+      	<input type="text" name="sf_userid" id="sf_userid" placeholder="jadams@makesbridge.com" class="uid" />
+      </div>
+      <!--<span id="sfuid_erroricon" class="erroricon"></span>-->
     </div>
-    <div class="row">
+    <div class="row pwd-container">
       <label>Password</label>
-      <input type="password" name="sf_pwd" id="sf_pwd" placeholder=" ">
-      <span id="sfpwd_erroricon" class="erroricon"></span>
+      <div class="inputcont">
+      	<div class="error-mark"></div>
+      	<input type="password" name="sf_pwd" id="sf_pwd" placeholder=" " class="pwd" />
+      </div>
+      <!--<span id="sfpwd_erroricon" class="erroricon"></span>-->
     </div>
     <h5>Send synchronization confirmation email to:</h5>
-    <div class="row ">
+    <div class="row email-container">
       <label>Email</label>
-      <input type="text" name="sf_email" id="sf_email" placeholder="babar@makesbridge.com">
-      <span id="sfemail_erroricon" class="erroricon"></span>
+      <div class="inputcont">
+      	<div class="error-mark"></div>
+      	<input type="text" name="sf_email" id="sf_email" placeholder="babar@makesbridge.com" class="email" />
+      </div>
+      <!--<span id="sfemail_erroricon" class="erroricon"></span>-->
     </div>
     <div class="row btnrow"><a id="btnTestLogin" class="btn-gray"><span>Test</span></a><a id="btnSaveLogin" class="btn-green"><span>Save</span><i class="icon save"></i></a></div>
     <div class="clearfix"></div>

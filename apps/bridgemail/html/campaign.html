@@ -10,15 +10,17 @@
       <div class="cont">
         <div class="row">
           <label>Subject</label>
-          <div class="input-append adv_dd sort-options">
-              <div class="inputcont"><input type="text" placeholder="Subject of the campaign" id="campaign_subject" class="header-info"></div>
-            <div class="btn-group subject-group">
-              <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-            </div>
-            <span id="subject_erroricon" class="erroricon"></span>
+          <div class="input-append adv_dd sort-options subject-container">
+              <div class="inputcont">
+              	<div class="error-mark"></div>
+              	<input type="text" placeholder="Subject of the campaign" id="campaign_subject" class="header-info">
+                <div class="btn-group subject-group">
+                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                </div>
+              </div>
+            	<!--<span id="subject_erroricon" class="erroricon"></span>-->
           </div>
-        </div>
-        
+        </div>        
         <div class="row">
           <label>From Email</label>
           <div class="input-append adv_dd sort-options">
@@ -30,8 +32,7 @@
                         <!--<div id="fecol1" class="fecols">-->
                             <div class="inputcont">
                               <select id="campaign_from_email" class="nosearch fromemail-group">                                
-                              </select>
-                                                           
+                              </select>                                                           
                             </div>
                         <!--</div>-->
                   		</td>                        
@@ -48,47 +49,60 @@
               </table>
           </div>
         </div>
-        <div class="row addrow" id="campaign_from_email_default" style="display:none">
+        <div class="row addrow femail-container" id="campaign_from_email_default" style="display:none">
           <label>&nbsp;</label>
           <span class="directarrow"></span>
           <div class="inputcont" style="text-align:right;">
+          	<div class="error-mark"></div>
           	<select id="fromemail_default" class="nosearch" style="float:right;">
                   
             </select>
           </div>
-          <span id="fromemaildefault_erroricon" class="erroricon"></span>
+          <!--<span id="fromemaildefault_erroricon" class="erroricon"></span>-->
         </div>
         <div class="row">
           <label>From Name</label>
-          <div class="input-append adv_dd sort-options">
-              <div class="inputcont"><input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" /></div>
-            <div class="btn-group fromname-group">
-              <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-            </div>
-            <span id="fromname_erroricon" class="erroricon"></span>
+          <div class="input-append adv_dd sort-options fname-container">
+              <div class="inputcont">
+              	<div class="error-mark"></div>
+              	<input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" />
+                <div class="btn-group fromname-group">
+                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                </div>
+              </div>
+            <!--<span id="fromname_erroricon" class="erroricon"></span>-->
           </div>
         </div>
         <div class="row addrow" id="campaign_from_name_default" style="display:none">
             <label>&nbsp;</label>
             <span class="directarrow"></span>            
-            <div class="inputcont" style="text-align:right;"><input id="campaign_default_from_name" type="text" placeholder="Set Default Value"></div>
-            <span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>
+            <div class="inputcont fnamedefault-container" style="text-align:right;">
+            	<div class="error-mark"></div>
+            	<input id="campaign_default_from_name" type="text" placeholder="Set Default Value">
+            </div>
+            <!--<span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>-->
         </div>
         <div class="row">
           <label>Reply To</label>
-          <div class="input-append adv_dd sort-options">
-            <div class="inputcont"><input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" /></div>
-            <div class="btn-group replyto-group">
-              <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+          <div class="input-append adv_dd sort-options replyto-container">
+            <div class="inputcont">
+              	<div class="error-mark"></div>
+            	<input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" />                
+                <div class="btn-group replyto-group">
+                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                </div>
             </div>
-            <span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>
+            <!--<span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
           </div>
         </div>
-         <div class="row addrow" id="campaign_reply_to_default" style="display:none">
+         <div class="row addrow replyemail-container" id="campaign_reply_to_default" style="display:none">
             <label>&nbsp;</label>
             <span class="directarrow"></span>
-            <div class="inputcont"><input id="campaign_default_reply_to" type="text" placeholder="Set Default Value"></div>
-            <span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>
+            <div class="inputcont">
+              	<div class="error-mark"></div>
+            	<input id="campaign_default_reply_to" type="text" placeholder="Set Default Value">
+            	<!--<span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
+            </div>
           </div>
       </div>
     </div>

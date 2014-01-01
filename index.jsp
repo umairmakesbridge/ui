@@ -51,6 +51,7 @@ if(userInfo == null) {
     <link href="css/changes.css" rel="stylesheet" type="text/css" >
     <link href="css/skins/lightgray/skin.min.css" rel="stylesheet">
     <link href="css/tan_changes.css" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
     
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">
