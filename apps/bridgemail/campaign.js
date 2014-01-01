@@ -65,8 +65,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       }
                       ,
                       'click .step3 #addnew_target':function(){
-                          this.initCreateEditTarget();
-                      },                      
+                          //this.initCreateEditTarget();
+						  this.createTarget();
+                      },
                       'change .step3 select':function(){
                           this.states.step3.change=true;
                       },
@@ -112,7 +113,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 return false;
                       },
                       'click .scheduled-campaign':function(){
-                          this.scheduledCampaign('S',"Scheduling Campaign...");
+						  var camp_obj = this;
+						  var mapdataview = camp_obj.states.step3.mapdataview;
+						  if(mapdataview && mapdataview.isCampRunning == 'Y')
+						  		camp_obj.app.showAlert('Your campaign is being scheduled please wait.',$(".ws-content"));                          		
+							else
+								this.scheduledCampaign('S',"Scheduling Campaign...");
                       },
                       'click .draft-campaign':function(obj){
                           var button = $.getObj(obj,"a")
@@ -531,7 +537,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   var active_ws = this.$el.parents(".ws-content");
                   
                   var header_title = active_ws.find(".camp_header .edited  h2");
-                  var action_icon = $('<div class="pointy"></div>")');                                                     
+                  var action_icon = $('<div class="pointy"></div>")');
                   action_icon.append(editIconCampaign);
                   action_icon.append(previewIconCampaign);
                   action_icon.append(deleteIconCampaign);
@@ -583,25 +589,37 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   })
                   var camp_obj = this;
                   deleteIconCampaign.click(function(){
-                      if(confirm('Are you sure you want to delete this campaign?')){
-                          var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-                          camp_obj.app.showLoading("Deleting...",camp_obj.$el.parents(".ws-content.active"));
-                          $.post(URL, {type:'delete',campNum:camp_obj.camp_id})
-                          .done(function(data) {                                 
-                                 var del_camp_json = jQuery.parseJSON(data);  
-                                 if(camp_obj.app.checkError(del_camp_json)){
-                                        return false;
-                                 }
-                                 if(del_camp_json[0]!=="err"){
-                                     camp_obj.app.showMessge("Campaign Deleted");
-                                     active_ws.find(".camp_header .close").click();
-                                 }
-                                 camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
-                         });
-                      }
+                      //if(confirm('Are you sure you want to delete this campaign?')){
+						  camp_obj.app.showAlertDetail({heading:'Confirm',
+													detail:'Are you sure you want to delete this campaign?',
+													login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
+													camp_obj.$el.parents(".ws-content.active"));
+						  $(".overlay .btn-ok").click(function(){
+							  $(".overlay").remove();
+							 camp_obj.deleteCampaign(camp_obj.camp_id);
+						  });
+                      //}
                   });
                                     
                 },
+				deleteCampaign: function(camp_id) {
+					var camp_obj = this;
+					var active_ws = this.$el.parents(".ws-content");
+					var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+					camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
+					$.post(URL, {type:'delete',campNum:camp_obj.camp_id})
+					.done(function(data) {                                 
+						   var del_camp_json = jQuery.parseJSON(data);  
+						   if(camp_obj.app.checkError(del_camp_json)){
+								  return false;
+						   }
+						   if(del_camp_json[0]!=="err"){
+							   camp_obj.app.showMessge("Campaign Deleted");
+							   active_ws.find(".camp_header .close").click();
+						   }
+						   camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
+				   });
+				},
                 initStepCall:function(stepNo){
                     if(this.camp_id!==0){
                         switch (stepNo){                                                            
@@ -839,112 +857,146 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var email_addr = el.find('#campaign_default_reply_to').val();                    
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
 					
-                    if(el.find('#campaign_subject').val() == ''){
-                           var options = {
-                                'control':el.find('#campaign_subject'),
-                                'valid_icon':el.find('#subject_erroricon'),
-                                'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
-                                'controlcss':'border:solid 2px #FB8080;'
-                            };
-                            app.enableValidation(options);						
-                            isValid = false;
-                        }
-			else if(el.find('#campaign_subject').val().length > 100){
-                            var options = { 
-                                'control':el.find('#campaign_subject'),
-                                'valid_icon':el.find('#subject_erroricon'),
-                                'message':camp_obj.app.messages[0].CAMP_subject_length_error,
-                                'controlcss':'border:solid 2px #FB8080;'
-                            };
-                            app.enableValidation(options);						
-                            isValid = false;
-                       }
-                       else
-                       {
-                            var options = {
-                             'control':el.find('#campaign_subject'),
-                             'valid_icon':el.find('#subject_erroricon'),
-                             'customfield':el.find('.input-append .subject-group')};
-                             app.disableValidation(options);						
-                        }
-			if(el.find('#campaign_from_name').val() == '')
-                        {
-                            var options = {'control':el.find('#campaign_from_name'),
-                                'valid_icon':el.find('#fromname_erroricon'),
-                                'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
-                                'controlcss':'border:solid 2px #FB8080;'
-                              };
-                            app.enableValidation(options);						
-                            isValid = false;
-						}
-                        else
-                        {
-                            var options = {'control':el.find('#campaign_from_name'),
-                            'valid_icon':el.find('#fromname_erroricon'),
-                            'customfield':el.find('.input-append .fromname-group')
-                            };
-                            app.disableValidation(options);                            
-                        }
-                       if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
-                        {                           
-                            var options = {'control':this.$('#campaign_default_from_name'),
-                            'valid_icon':el.find('#defaultfromname_erroricon'),
-                            'message':camp_obj.app.messages[0].CAMP_defaultfromname_empty_error,
-                            'controlcss':'border:solid 2px #FB8080;'};
-                            app.enableValidation(options);
-                            isValid = false;
-                        }
-                        else
-                        {
-                            var options = {'control':el.find('#campaign_default_from_name'),
-                                           'valid_icon':el.find('#defaultfromname_erroricon')
-                                          };
-                            app.disableValidation(options);                            
-                        }	
-                        if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
-                        {
-                            var options = {'control':el.find('#campaign_reply_to'),
-                            'valid_icon':el.find('#replyto_erroricon'),
-                            'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
-                            'controlcss':'border:solid 2px #FB8080;'
-							};
-                            app.enableValidation(options);
-                            isValid = false;
-                        }
-                        else
-                        {
-                            var options = {'control':el.find('#campaign_reply_to'),
-                                'valid_icon':el.find('#replyto_erroricon'),
-                                'customfield':el.find('.input-append .replyto-group')
-                               };
-                            app.disableValidation(options);                                    
-                            
-                        }
-                        if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
-                        {
-                             var options = {'control':el.find('#campaign_default_reply_to'),
-                            'valid_icon':el.find('#email_erroricon'),
-                            'message':camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error,
-                            'controlcss':'border:solid 2px #FB8080;'};
-                            app.enableValidation(options);
-                            isValid = false;
-                        }
-                        else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
-                        {                           
-                            var options = {'control':el.find('#campaign_default_reply_to'),
-                            'valid_icon':el.find('#email_erroricon'),
-                            'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
-                            'controlcss':'border:solid 2px #FB8080;'};
-                            app.enableValidation(options);
-                            isValid = false;
-                        }
-                        else
-                        {
-                            var options = {'control':el.find('#campaign_default_reply_to'),
-                                           'valid_icon':el.find('#email_erroricon')
-                                          };
-                            app.disableValidation(options);                            
-                        }	
+                    if(el.find('#campaign_subject').val() == '')
+					{
+					   /*var options = {
+							'control':el.find('#campaign_subject'),
+							'valid_icon':el.find('#subject_erroricon'),
+							'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
+							'controlcss':'border:solid 2px #FB8080;'
+						};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.subject-container'),
+							message:camp_obj.app.messages[0].CAMP_subject_empty_error
+						});
+						isValid = false;
+					}
+					else if(el.find('#campaign_subject').val().length > 100)
+					{
+						/*var options = { 
+							'control':el.find('#campaign_subject'),
+							'valid_icon':el.find('#subject_erroricon'),
+							'message':camp_obj.app.messages[0].CAMP_subject_length_error,
+							'controlcss':'border:solid 2px #FB8080;'
+						};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.subject-container'),
+							message:camp_obj.app.messages[0].CAMP_subject_empty_error
+						});
+						isValid = false;
+				   }
+				   else
+				   {
+						/*var options = {
+						 'control':el.find('#campaign_subject'),
+						 'valid_icon':el.find('#subject_erroricon'),
+						 'customfield':el.find('.input-append .subject-group')};
+						 app.disableValidation(options);*/
+						 app.hideError({control:el.find(".subject-container")});
+					}
+					if(el.find('#campaign_from_name').val() == '')
+					{
+						/*var options = {'control':el.find('#campaign_from_name'),
+							'valid_icon':el.find('#fromname_erroricon'),
+							'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
+							'controlcss':'border:solid 2px #FB8080;'
+						  };
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.fname-container'),
+							message:camp_obj.app.messages[0].CAMP_fromname_empty_error
+						});
+						isValid = false;
+					}
+					else
+					{
+						/*var options = {'control':el.find('#campaign_from_name'),
+						'valid_icon':el.find('#fromname_erroricon'),
+						'customfield':el.find('.input-append .fromname-group')
+						};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".fname-container")});
+					}
+				   	if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
+					{                           
+						/*var options = {'control':this.$('#campaign_default_from_name'),
+						'valid_icon':el.find('#defaultfromname_erroricon'),
+						'message':camp_obj.app.messages[0].CAMP_defaultfromname_empty_error,
+						'controlcss':'border:solid 2px #FB8080;'};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.fnamedefault-container'),
+							message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
+						});
+						isValid = false;
+					}
+					else
+					{
+						/*var options = {'control':el.find('#campaign_default_from_name'),
+									   'valid_icon':el.find('#defaultfromname_erroricon')
+									  };
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".fnamedefault-container")});
+					}	
+					if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
+					{
+						/*var options = {'control':el.find('#campaign_reply_to'),
+						'valid_icon':el.find('#replyto_erroricon'),
+						'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
+						'controlcss':'border:solid 2px #FB8080;'
+						};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.replyto-container'),
+							message:camp_obj.app.messages[0].CAMP_replyto_format_error
+						});
+						isValid = false;
+					}
+					else
+					{
+						/*var options = {'control':el.find('#campaign_reply_to'),
+							'valid_icon':el.find('#replyto_erroricon'),
+							'customfield':el.find('.input-append .replyto-group')
+						   };
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".replyto-container")});
+					}
+					if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
+					{
+						/*var options = {'control':el.find('#campaign_default_reply_to'),
+						'valid_icon':el.find('#email_erroricon'),
+						'message':camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error,
+						'controlcss':'border:solid 2px #FB8080;'};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.replyemail-container'),
+							message:camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
+						});
+						isValid = false;
+					}
+					else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
+					{                           
+						/*var options = {'control':el.find('#campaign_default_reply_to'),
+						'valid_icon':el.find('#email_erroricon'),
+						'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
+						'controlcss':'border:solid 2px #FB8080;'};
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.replyemail-container'),
+							message:camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
+						});
+						isValid = false;
+					}
+					else
+					{
+						/*var options = {'control':el.find('#campaign_default_reply_to'),
+									   'valid_icon':el.find('#email_erroricon')
+									  };
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".replyemail-container")});
+					}	
                         
 						
                     if(!isValid)
@@ -2432,6 +2484,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             });
                     }
                 },
+				createTarget: function(){
+					var camp_obj = this;
+					var dialog_title = "New Target";
+                    var dialog = this.app.showDialog({title:dialog_title,
+                              css:{"width":"650px","margin-left":"-325px"},
+                              bodyCss:{"min-height":"100px"},							   
+                              buttons: {saveBtn:{text:'Create Target'} }                                                                           
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["target/newtarget"],function(newtargetPage){                                     
+                             var mPage = new newtargetPage({camp:camp_obj,app:camp_obj.app,newtardialog:dialog});
+                             dialog.getBody().html(mPage.$el);
+                             dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
+                    });
+				},
                 initCreateEditTarget:function(target_id){
                     var self = this;
                     var t_id = target_id?target_id:"";

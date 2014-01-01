@@ -712,7 +712,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.back {	background: url("../img/back.png") no-repeat center center;}
 .icon.next {	background: url("../img/next.png") no-repeat center center;}
 .icon.save {   background: url("../img/save.png") no-repeat center center;}
-.icon.delete {   background: url("../img/delete.png") no-repeat 4px 3px ;}
+.icon.delete {   background: url("../img/delete.png") no-repeat center center;}
 .icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
 .icon.list {   background: url("../img/list.png") no-repeat center center ;}
 .icon.copy {   background: url("../img/copy.png") no-repeat center center ;}
@@ -780,3 +780,5 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 }
 .icon.tags {  background: url("../img/tag.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
 .icon.target {  background: url("../img/target.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
+.icon.calender {   background: url("../img/calender.png") no-repeat scroll center center ;}
+.icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}

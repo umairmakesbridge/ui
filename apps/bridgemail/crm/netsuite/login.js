@@ -72,68 +72,92 @@ function (template) {
 					var appMsgs = campview.app.messages[0];
 					if((el.find('#ns_userid').val() == ''))
 					{						
-						var options = {'control':el.find('#ns_userid'),
+						/*var options = {'control':el.find('#ns_userid'),
 										'valid_icon':el.find('#nsuid_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_userid_empty_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.uid-container'),
+							message:appMsgs.NS_userid_empty_error
+						});
 						isValid = false;
 					}					
 					else if(!app.validateEmail(el.find('#ns_userid').val()))
 					{						
-						var options = {'control':el.find('#ns_userid'),
+						/*var options = {'control':el.find('#ns_userid'),
 										'valid_icon':el.find('#nsuid_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_userid_format_error};
-						app.enableValidation(options);						
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.uid-container'),
+							message:appMsgs.NS_userid_format_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#ns_userid'),'valid_icon':el.find('#nsuid_erroricon')};
-						app.disableValidation(options);
+						/*var options = {'control':el.find('#ns_userid'),'valid_icon':el.find('#nsuid_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".uid-container")});
 					}
 					if(el.find('#ns_pwd').val() == '')
 					{						
-						var options = {'control':el.find('#ns_pwd'),
+						/*var options = {'control':el.find('#ns_pwd'),
 										'valid_icon':el.find('#nspwd_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_pwd_empty_error};
-						app.enableValidation(options);
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.pwd-container'),
+							message:appMsgs.SF_pwd_empty_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#ns_pwd'),'valid_icon':el.find('#nspwd_erroricon')};
-						app.disableValidation(options);						
+						/*var options = {'control':el.find('#ns_pwd'),'valid_icon':el.find('#nspwd_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".pwd-container")});
 					}
 					if(el.find('#ns_accid').val() == '')
 					{
-						var options = {'control':el.find('#ns_accid'),
+						/*var options = {'control':el.find('#ns_accid'),
 										'valid_icon':el.find('#nsaccid_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_accid_empty_error};
-						app.enableValidation(options);						
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.accid-container'),
+							message:appMsgs.SF_email_format_error
+						});
 						isValid = false;
 					}
 					else
 					{
-						var options = {'control':el.find('#ns_accid'),'valid_icon':el.find('#nsaccid_erroricon')};
-						app.disableValidation(options);
+						/*var options = {'control':el.find('#ns_accid'),'valid_icon':el.find('#nsaccid_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".accid-container")});
 					}
 					if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
 					{						
-						var options = {'control':el.find('#ns_email'),
+						/*var options = {'control':el.find('#ns_email'),
 										'valid_icon':el.find('#nsemail_erroricon'),
 										'controlcss':'border:solid 2px #FB8080;',
 										'message':appMsgs.NS_email_format_error};
-						app.enableValidation(options);						
+						app.enableValidation(options);*/
+						app.showError({
+							control:el.find('.email-container'),
+							message:appMsgs.SF_email_format_error
+						});
 						isValid = false;
 					}
 					else
 					{						
-						var options = {'control':el.find('#ns_email'),'valid_icon':el.find('#nsemail_erroricon')};
-						app.disableValidation(options);
+						/*var options = {'control':el.find('#ns_email'),'valid_icon':el.find('#nsemail_erroricon')};
+						app.disableValidation(options);*/
+						app.hideError({control:el.find(".email-container")});
 					}
 					return isValid;
 				},				

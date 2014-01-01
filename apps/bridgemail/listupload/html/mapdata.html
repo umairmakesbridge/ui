@@ -5,16 +5,22 @@
       <button id="old" class="btn active">Existing</button>
       <button id="new" class="btn ">New</button>
     </div>
-    <div class="subs-dd left">
-      <select id="existing_lists" class="lists" data-placeholder="Select Existing List" class="chosen-select">
-      </select>
-      <input type="text" id="newlist" class="emailinput" placeholder="Enter new list" style="display:none;" />
-      <span id="list_erroricon" class="erroricon" data-content="Please supply list"></span> </div>
-    <div class="subs-dd left">
-        <span class="icon noti"></span>
-        <input type="text" id="alertemail" class="emailinput" placeholder="Enter email to receive confirmation">
-        <span id="email_erroricon" class="erroricon" data-content="Please supply correct email"></span>
+    <div class="subs-dd left list-container">
+    	<div class="inputcont">
+            <div class="error-mark"></div>
+            <select id="existing_lists" class="lists" data-placeholder="Select Existing List" class="chosen-select">
+            </select>
+            <input type="text" id="newlist" class="emailinput" placeholder="Enter new list" style="display:none;" />
+            <!--<span id="list_erroricon" class="erroricon" data-content="Please supply list"></span> -->
+      	</div>
     </div>
+    <div class="subs-dd left email-container"> <span class="icon noti"></span>
+    	<div class="inputcont" style="float:left;">
+            <div class="error-mark"></div>
+      		<input type="text" id="alertemail" class="emailinput" placeholder="Enter email to receive confirmation">
+     		<!--<span id="email_erroricon" class="erroricon" data-content="Please supply correct email"></span> -->
+        </div>
+   	</div>
   </div>
 </div>
 <h4>Map Data </h4>

@@ -27,7 +27,9 @@ define([
                             'TRG_basic_no_field':'Please select a field to make filter',
                             'TRG_basic_no_matchvalue':'Please provide match field value',
                             'TRG_score_novalue' : 'Please provide score value',
-                            'TRG_form_noform' : 'Please select a form.'
+                            'TRG_form_noform' : 'Please select a form.',
+							'CRT_tarname_empty_error' : 'Target name can not be empty',
+							'CAMPS_campname_empty_error' : 'Campaign name can not be empty'
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -200,10 +202,9 @@ define([
                     $(".overlay .btn-gray").click(function(){
                        $(".overlay").fadeOut("fast",function(){
                            $(this).remove();
-                       }) 
+                       })
                     });
-                 }                    
-                    
+                 }
              },
              showMessge:function(msg){
                  $(".global_messages p").html(msg);
@@ -233,7 +234,7 @@ define([
              }
              ,
              decodeHTML:function(str,lineFeed){
-                //decoding HTML entites to show in textfield and text area 
+                //decoding HTML entites to show in textfield and text area 				
                 str = str.replace(/&#58;/g,":");
                 str = str.replace(/&#39;/g,"\'");                
                 str = str.replace(/&#61;/g,"=");
@@ -263,6 +264,9 @@ define([
               }
               else if(flag=='C'){
                   status='Completed'
+              }
+			  else if(flag=='S'){
+                  status='Scheduled'
               }
               return status;
             },
@@ -347,7 +351,7 @@ define([
             },
             showError:function(params){
                 if(params.control){
-                    params.control.find(".inputcont").addClass("error")                    
+                    params.control.find(".inputcont").addClass("error")
                     params.control.find(".error-mark").attr('data-content',params.message);
                     params.control.find(".error-mark").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});	
                 }

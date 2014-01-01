@@ -25,7 +25,8 @@
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
            'bms-mapping': '../shared/mapping',
-            bootstrap: '../shared/libs/bootstrap.min'
+           'bootstrap': '../shared/libs/bootstrap.min',
+			'daterangepicker': '../shared/libs/daterangepicker.jQuery'
        },
         shim: {
                 backbone: {
@@ -90,6 +91,10 @@
                ,
                'bms-mapping':{
                    deps: ['jquery']
+               }
+			   ,
+               'daterangepicker':{
+                   deps: ['jquery-ui,jquery']
                }
          }
     });

@@ -4,6 +4,7 @@ function (template,chosen) {
 	return Backbone.View.extend({
 		id: 'mapdata',
 		tags : 'div',
+		isCampRunning : 'Y',
 		events: {				
 			'click .map-toggle .btn':function(obj){		
 				  var el = this.$el;
@@ -37,6 +38,7 @@ function (template,chosen) {
 		   var campview = this.camp_obj;
 		   var curview = campview.states.step3.csvupload;
 		   var app = this.app;
+		   var mapview = this;
 		   var appMsgs = app.messages[0];
 		   var el = this.$el;
 		   var actid = el.find('.map-toggle .active').attr('id');
@@ -48,97 +50,76 @@ function (template,chosen) {
 		   {
 			   if(el.find('#newlist').val() == '')
 			   {				  
-				  var options = {'control':el.find('#newlist'),
-								  'valid_icon':el.find('#list_erroricon'),
-								  'controlcss':'border:solid 2px #FB8080;',
-								  'message':appMsgs.MAPDATA_newlist_empty_error};
-				  app.enableValidation(options);
+				  app.showError({
+					  control:el.find('.list-container'),
+					  message:appMsgs.MAPDATA_newlist_empty_error
+				  });
 				  isValid = false;				  
 			   }
 			   else
 			   {
 				  newlist = el.find('#newlist').val();				  
-				  var options = {'control':el.find('#newlist'),'valid_icon':el.find('#list_erroricon')};
-					app.disableValidation(options);				  
+					app.hideError({control:el.find(".list-container")});
 			   }
 		   }
 		   else if(actid == 'old')
 		   {
 			  if(el.find('#existing_lists').val() == '')
 			  {				  
-				  var options = {'control':el.find('#existing_lists_chosen'),
-								  'valid_icon':el.find('#list_erroricon'),
-								  'controlcss':'width:288px;',
-								  'customfield':el.find('#existing_lists_chosen a'),
-								  'customfieldcss':'border:solid 2px #FB8080;',
-								  'message':appMsgs.MAPDATA_extlist_empty_error};
-				  app.enableValidation(options);				 
+				  app.showError({
+					  control:el.find('.list-container'),
+					  message:appMsgs.MAPDATA_extlist_empty_error
+				  });
 				  isValid = false;
 			  }
 			  else
 			  {				  
-				  listid = el.find('#existing_lists').val();
-				  var options = {'control':el.find('#existing_lists_chosen'),
-								  'valid_icon':el.find('#list_erroricon'),
-								  'customfield':el.find('#existing_lists_chosen a'),
-								  'customfieldcss':'border:inherit;'};					
-				  app.disableValidation(options);
-				  el.find('#existing_lists_chosen').attr('style','width: 288px;');
+				  listid = el.find('#existing_lists').val();				  
+				  app.hideError({control:el.find(".list-container")});
 			  }
 		   }
 		   var email_addr = el.find('#alertemail').val();
 		   if(email_addr != '' && !app.validateEmail(email_addr))
 			{				
-				var options = {'control':el.find('#alertemail'),
-								'valid_icon':el.find('#email_erroricon'),
-								'controlcss':'border:solid 2px #FB8080;',
-								'message':appMsgs.MAPDATA_email_format_error};
-				app.enableValidation(options);
+				app.showError({
+					  control:el.find('.email-container'),
+					  message:appMsgs.MAPDATA_email_format_error
+				  });
 				isValid = false;
 			}
 			else
 			{				
-				var options = {'control':el.find('#alertemail'),'valid_icon':el.find('#email_erroricon')};
-				app.disableValidation(options);
+				app.hideError({control:el.find(".email-container")});
 			}		   
 		   	var sel_lenght = el.find(".mapfields").length;
+			var prevVal = '';
 			el.find(".mapfields").each(function(i,e){
 				var id = $(e).parent().find('.erroricon').attr('id');
 				if($(e).val()==0){
 					layout_map="";					
-					/*$(e).parent().find('.erroricon').attr('style','display:block; float:left; margin-left:5px;');					
-					el.find("#" + id).popover({'placement':'right','container': el,'trigger':'hover',delay: { show: 0, hide:0 },animation:false});
-					el.find("#" + $(e).attr('id')+"_chosen").attr('style','width:200px; float:left;');
-					el.find("#" + $(e).attr('id')+"_chosen a").attr('style','border:solid 1px #ff0000;');*/
 				}
 				else
-				{					
-					/*el.find("#" + id).removeAttr('style');
-					el.find("#" + $(e).attr('id')+"_chosen").removeAttr('style');
-					el.find("#" + $(e).attr('id')+"_chosen a").removeAttr('style');
-					$(e).hide();
-					el.find("#" + $(e).attr('id')+"_chosen").attr('style','width:200px;');*/					
-					 layout_map+= $(e).val();
-					 if(i<sel_lenght-1){
-						 layout_map+=",";
-					 }
+				{
+					if(layout_map.indexOf($(e).val()) == -1)
+					{
+						layout_map+= $(e).val();
+					 	if(i<sel_lenght-1){
+							layout_map+=",";
+					 	}
+					}
+					else
+					{					
+						app.showAlert('BMS fields should be unique',el);
+						isValid = false;
+						return;
+					}					
 				}
 			});
 			if(layout_map == "")
 			{
 				app.showAlert('Please provide BMS fields against each column to fetch data in correct format',el);
 				isValid = false;
-			}
-			/*else
-			{
-				var $maps = layout_map.split(',');
-				if( $maps[0] ==  $maps[1] ||
-				   $maps[0] ==  $maps[2] ||
-				   $maps[2] ==  $maps[3]) 
-				{					  
-					  isValid = false;					  
-				}
-			}*/
+			}			
 			  
 		   if(isValid)
 		   {					 
@@ -150,24 +131,39 @@ function (template,chosen) {
 				   var list_json = jQuery.parseJSON(data);						 
 				   if(list_json[0] == 'success')
 				   {
-
 					   //return curview.mapdataview.savecampaign(list_json[2],list_json[1]);
 					   curview.removeFile();
-                                           app.removeCache("lists");
+                       app.removeCache("lists");
+					   setTimeout(function(){ mapview.checkCampStatus() },30000);
+					   //mapview.checkCampStatus();
 					   campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
-
-					   //return true;
+					   app.showLoading(false,mapview.$el);
 				   }
 				   else
 				   {					  
-					  app.showAlert(list_json[1],curview.$el);
+					  app.showAlert(list_json[1],mapview.$el);
 					  return false;
-				   }
-				   app.showLoading(false,curview.$el);
+				   }				   
 			   });
 		   }
 		   else
 		   	return false;
+		},
+		checkCampStatus:function(){
+			var mapview = this;
+			var campview = this.camp_obj;
+			var importURL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+this.app.get('bms_token');
+			$.post(importURL, { type: "csvUploadRunning",campNum:campview.camp_id })
+			.done(function(data) {
+				var list_json = jQuery.parseJSON(data);
+				if(list_json.csvUploadRunning == 'Y')
+				{
+					setTimeout(function(){ mapview.checkCampStatus() },30000);
+					mapview.isCampRunning = 'Y';
+				}
+				else
+					mapview.isCampRunning = 'N';
+			});
 		},
 		filllistsdropdown:function(){
 			var list_array = '';
