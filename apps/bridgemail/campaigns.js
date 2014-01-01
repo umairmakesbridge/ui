@@ -197,6 +197,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 				 var camp_obj = this;
 				 var active_ws = this.$el.parents(".ws-content");
 				 var header_title = active_ws.find(".camp_header .edited  h2");                 
+				 header_title.append('<div class="pointy add"><a id="addnew_campaign" data-original-title="Add New Campaign" class="icon plus showtooltip"></a></div>');
 				 active_ws.find("#addnew_campaign").click(_.bind(this.createCampaign,this));
 				 var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');				  
 				  $.post(URL, {type:'allStats'})
@@ -273,7 +274,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
                         },this));
 			}
 			,			
-			makecamprows: function (val,extraDiv){				
+			makecamprows: function (val,extraDiv){
+				var camp_obj = this;				
                                 var start_div ="", end_div = "";
                                 if(extraDiv){
                                     start_div = "<div>";
@@ -295,7 +297,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 				{
 					var date = datetime.split(' ');
 					var dateparts = date[0].split('-');					
-					var month = this.app.getMMM(dateparts[1].replace('0','')-1);
+					var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);
 					var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
 				}
 				else{
