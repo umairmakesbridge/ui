@@ -52,7 +52,7 @@ function (template,Mapping,bmsSearch) {
 							gridcontainer: 'tagslist ul',
 							showicon: 'yes',
 							movingElement: 'li',
-							iconsource: 'tags',
+							iconsource: 'tags'
 					});
 					this.$el.find('div#tagsrecpssearch').searchcontrol({
 							id:'tag-recps-search',
@@ -62,7 +62,7 @@ function (template,Mapping,bmsSearch) {
 							gridcontainer: 'tagsrecpslist ul',
 							showicon: 'yes',
 							movingElement: 'li',
-							iconsource: 'tags',
+							iconsource: 'tags'
 					});
 					if(this.$el.find('#tagsrecpslist ul li').length == 0)
 						this.$el.find('#tag-recps-search').attr('disabled','disabled');

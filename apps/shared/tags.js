@@ -221,6 +221,10 @@
            
       }                      
   }  
+  ,addTag:function(){      
+      var _input = this.dialog.find("input.tag-input")
+      var tag = _input.val() 
+  }
   ,showTagsDialog:function(obj){      
       var _ele  = obj?$.getObj(obj,"div"):this.tag_li;
       var _input = this.dialog.find("input.tag-input")      

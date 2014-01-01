@@ -25,6 +25,7 @@
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
            'bms-mapping': '../shared/mapping',
+           'moment': '../shared/libs/moment',
             bootstrap: '../shared/libs/bootstrap.min'
        },
         shim: {

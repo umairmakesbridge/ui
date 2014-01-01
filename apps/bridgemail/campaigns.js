@@ -112,14 +112,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 				if(datetime)
 				{
 					var date = datetime.split(' ');
-					var dateparts = date[0].split('-');
-					 var monthNames = [
-					  "Jan", "Feb", "Mar",
-					  "Apr", "May", "Jun",
-					  "Jul", "Aug", "Sep",
-					  "Oct", "Nov", "Dec"
-					  ];
-					var month = monthNames[dateparts[1].replace('0','')-1];
+					var dateparts = date[0].split('-');					
+					var month = this.app.getMMM(dateparts[1].replace('0','')-1);
 					var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
 				}
 				else{

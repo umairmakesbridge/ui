@@ -632,6 +632,9 @@ ul.nav  ul.tab-icons li a .icon.add {
 .pi {background-position:  -90px 0px;}
 .gp {background-position:  -120px 0px;}
 
+.sf { background:url(../img/sficon2.png) no-repeat  center center ;}
+
+
 .btnchecked .fb {background-position:  -0px -30px;}
 .btnchecked .tw {background-position:  -30px -30px;}
 .btnchecked .in {background-position:  -60px -30px;}
@@ -741,16 +744,40 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.setting {   background: url("../img/setting.png") no-repeat center center ;}
 .icon.filter {   background: url("../img/icon-map.png") no-repeat scroll -210px -838px rgba(0, 0, 0, 0);}
 .icon.time {   background: url("../img/time.png") no-repeat scroll center center !important;}
+.icon.time2 {   background: url("../img/time2.png") no-repeat scroll center center ;}
+
 .icon.sendmail {   background: url("../img/sendmail.png") no-repeat scroll center center ;}
 .icon.hide {   background: url("../img/hide.png") no-repeat scroll center center ;}
 .icon.preview2 {   background: url("../img/preview2.png") no-repeat scroll center center ;}
+.icon.preview3 {   background: url("../img/preview3.png") no-repeat scroll center center ;}
 .icon.mbaction {   background: url("../img/mbaction.png") no-repeat scroll center center ;}
+
+.icon.workflow {   background: url("../img/workflow.png") no-repeat scroll center center ;}
+.icon.segment {   background: url("../img/segment.png") no-repeat scroll center center ;}
 
 .icon.alerticon {   background: url("../img/alert.png") no-repeat scroll center center ;}
 .icon.mail {   background: url("../img/mail.png") no-repeat scroll center center ;}
 .icon.chat {   background: url("../img/chat2.png") no-repeat scroll center center ;}
 .icon.coursecorrect {   background: url("../img/coursecorrect.png") no-repeat scroll center center ;}
 
+.icon.date {   background: url("../img/date.png") no-repeat scroll center center ;}
+.icon.clock {   background: url("../img/clock.png") no-repeat scroll center center ;}
+.icon.pointer {   background: url("../img/pointer.png") no-repeat scroll center center ;}
+
+.icon.mlist {   background: url("../img/mlists.png") no-repeat scroll center center ;}
+.icon.mworkflow {   background: url("../img/mworkflows.png") no-repeat scroll center center ;}
+.icon.mcrm {   background: url("../img/mcrm.png") no-repeat scroll center center ;}
+.icon.editpro {   background: url("../img/editpro.png") no-repeat scroll center center ;}
+.icon.sendmail2 {   background: url("../img/sendmail2.png") no-repeat scroll center center ;}
+
+.icon.actfeed {   background: url("../img/actfeed.png") no-repeat scroll center center ;}
+.icon.socfeed {   background: url("../img/socfeed.png") no-repeat scroll center center ;}
+
+.icon.pageviews {   background: url("../img/pageviews.png") no-repeat scroll center center ;}
+.icon.visits {   background: url("../img/visits.png") no-repeat scroll center center ;}
+
+.icon.calender {   background: url("../img/calender.png") no-repeat scroll center center ;}
+.icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}
 
 
 .icon.h-info {
@@ -780,3 +807,13 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 }
 .icon.tags {  background: url("../img/tag.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
 .icon.target {  background: url("../img/target.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
+
+
+
+
+
+
+
+
+
+

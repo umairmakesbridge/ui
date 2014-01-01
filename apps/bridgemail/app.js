@@ -249,6 +249,15 @@ define([
                 }
                 return str;
             },
+            getMMM:function(month){
+              var monthNames = [
+                "Jan", "Feb", "Mar",
+                "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec"
+                ];  
+                return monthNames[month];
+            },
             getCampStatus:function(flag){
               // A=all, D=draft, S=scheduled, P=pending, C=completed  
               var status = 'Draf';

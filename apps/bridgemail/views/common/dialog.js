@@ -41,6 +41,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                     }
                                 }
                              }
+                             if(this.options.headerIcon){
+                                 this.$(".header-icon").addClass(this.options.headerIcon).show();
+                                 this.$(".modal-header .c-name").addClass("header-icon")
+                             }
+                             
 			},                        
                         show:function(){                          
                           this.$el.modal({backdrop: 'static',keyboard: false});

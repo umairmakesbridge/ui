@@ -275,7 +275,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:-2px !important; }
 .adv_dd .btn-group, .mergefields .btn-group { top:2px; }
 #existing_lists_chosen { margin-left:5px; /*margin-top:2px;*/ }
-.iconpointy > a.btn-green:after { left:-5px; }
+/*.iconpointy > a.btn-green:after { left:-5px; }*/
 .row { position:relative; }
 .subs-dd { position:relative; }
 .exist-new .noti { width:24px; height:24px; }

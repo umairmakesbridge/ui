@@ -77,22 +77,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.states.step3.change=true;
                       }
                       ,
-                        'click #btnSFLogin':function(){
-                            var camp_obj = this;
-                            var dialog = this.app.showDialog({title:'Salesforce Login Setup',
-                                            css:{"width":"650px","margin-left":"-325px"},
-                                            bodyCss:{"min-height":"360px"}
-                            });
-                            this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
-                            require(["crm/salesforce/login"],function(loginPage){                                        
-                                    var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
-                                    dialog.getBody().html(lPage.$el);
-                            })
-                            this.$("#salesforce_welcome").hide();
-                            this.$("#salesforce_mapping").hide();
-                            this.$("#salesforce_login").show();
-                            this.$("#salesforce_setup").hide();
-                            return false;
+                      'click #btnSFLogin':function(){
+                        var camp_obj = this;
+                        var dialog = this.app.showDialog({title:'Salesforce Login Setup',
+                                        css:{"width":"650px","margin-left":"-325px"},
+                                        bodyCss:{"min-height":"360px"}
+                        });
+                        this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                        require(["crm/salesforce/login"],function(loginPage){                                        
+                                var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
+                                dialog.getBody().html(lPage.$el);
+                        })
+                        this.$("#salesforce_welcome").hide();
+                        this.$("#salesforce_mapping").hide();
+                        this.$("#salesforce_login").show();
+                        this.$("#salesforce_setup").hide();
+                        return false;
                       },
                       'click #btnNSLogin':function(){
                                 var camp_obj = this;
@@ -247,19 +247,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     return proceed;
                 },
                 removeCSVUpload: function(){
-                        var camp_obj = this;
-						var csvupload = camp_obj.states.step3.csvupload
-                        if(csvupload && csvupload.fileuploaded == true)
-			{					
-                            csvupload.removeFile();
-                            csvupload.$el.hide();
-                            camp_obj.$el.find('#upload_csv').removeClass('selected');
-                            camp_obj.states.step3.mapdataview.$el.hide();
-                            camp_obj.states.step3.mapdataview.$el.find('#uploadslist').children().remove();
-                            camp_obj.states.step3.mapdataview.$el.find('#newlist').val('');
-                            camp_obj.states.step3.mapdataview.$el.find('#alertemail').val('');
-                            camp_obj.app.showLoading(false,camp_obj.states.step3.mapdataview.$el);
-                         }
+                    var camp_obj = this;
+                    var csvupload = camp_obj.states.step3.csvupload
+                    if(csvupload && csvupload.fileuploaded == true)
+                    {					
+                        csvupload.removeFile();
+                        csvupload.$el.hide();
+                        camp_obj.$el.find('#upload_csv').removeClass('selected');
+                        camp_obj.states.step3.mapdataview.$el.hide();
+                        camp_obj.states.step3.mapdataview.$el.find('#uploadslist').children().remove();
+                        camp_obj.states.step3.mapdataview.$el.find('#newlist').val('');
+                        camp_obj.states.step3.mapdataview.$el.find('#alertemail').val('');
+                        camp_obj.app.showLoading(false,camp_obj.states.step3.mapdataview.$el);
+                     }
                 },
                 init:function(){                                                                                                    
                     //Load mergeFields
@@ -564,8 +564,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   });
                   var camp_obj = this;
                   previewIconCampaign.click(function(e){
-                       if(camp_obj.states.step2.htmlText!==""){
-                           
+                       if(camp_obj.states.step2.htmlText!==""){                           
                             var dialog_width = $(document.documentElement).width()-60;
                             var dialog_height = $(document.documentElement).height()-182;
                             var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
@@ -1424,14 +1423,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(datetime)
                         {
                                 var date = datetime.split(' ');
-                                var dateparts = date[0].split('-');
-                                 var monthNames = [
-                                  "Jan", "Feb", "Mar",
-                                  "Apr", "May", "Jun",
-                                  "Jul", "Aug", "Sep",
-                                  "Oct", "Nov", "Dec"
-                                  ];
-                                var month = monthNames[dateparts[1].replace('0','')-1];
+                                var dateparts = date[0].split('-');                                 
+                                var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);;
                                 dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
                         }
                         else{
@@ -2154,6 +2147,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var vars = [], hash;
                     var camp_obj = this;
                     var templates_html = "";
+                    var hashes = this.states.step2.searchString.split('&');                               
+                    for(var i = 0; i < hashes.length; i++)
+                    {
+                        hash = hashes[i].split('=');
+                        vars.push(hash[0]);
+                        vars[hash[0]] = hash[1];
+                    }
                      if(this.$("#template_search_menu li.active").length){
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
                         this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount+"</strong> <b>"+text+"</b> templates found");                         
@@ -2168,13 +2168,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+this.states.step2.totalcount +"</strong> templates");
                     }
-                    var hashes = this.states.step2.searchString.split('&');                               
-                    for(var i = 0; i < hashes.length; i++)
-                    {
-                        hash = hashes[i].split('=');
-                        vars.push(hash[0]);
-                        vars[hash[0]] = hash[1];
-                    }
+                   
                     if(templates){                        
                         $.each(templates[0], function(index, val) { 
                                 templates_html +='<li class="span3">';
@@ -2183,19 +2177,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     templates_html +='<div class="feat_temp showtooltip" title="Featured Template"></div>';
                                 }                                
                                 
-                                templates_html +='<div class="img"><div><a class="previewbtn" ><span ></span>Preview Template</a> <a class="selectbtn select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
+                                templates_html +='<div class="img"><div><a class="previewbtn" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span>Preview Template</a> <a class="selectbtn select-template" id="temp_'+val[0]["templateNumber.encode"]+'"><span ></span>Select Template</a></div> <img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
                                 templates_html +='<div class="caption">';
                                 templates_html +='<h3><a>'+val[0].name+'</a></h3>';
-                                templates_html +=camp_obj.showCategoryTemplate(val[0].categoryID);
+                                templates_html +="<a class='cat' cat_id='"+val[0].categoryID+"'>"+val[0].categoryID+"</a>";//camp_obj.showCategoryTemplate(val[0].categoryID);
                                 templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                                 templates_html +='<div class="btm-bar">';
                                 templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
                                 templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon mail showtooltip"  title="Used Count"></span></span>';
                                 //templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
                                 if(val[0].isAdmin==='Y'){
-                                    templates_html +='<a class="icon builtin right showtooltip"></a>';                                                                                                        
+                                    templates_html +='<a class="icon builtin right showtooltip" title="Builtin"></a>';                                                                                                        
                                 }       
-                                templates_html +='<a class="icon mobile right"></a>';                                                                    
+                                templates_html +='<a class="icon mobile right showtooltip" title="For Mobile"></a>';                                                                    
                                 templates_html +='</div></div> </div></li>';                      
                         });
                     }
@@ -2255,6 +2249,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                               this.states.editor_change = true;
                               var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                               jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
+                              
+                        },this));
+                        template_html.find(".previewbtn").click(_.bind(function(obj){                              
+                              var target = $.getObj(obj,"a");
+                              var bms_token =this.app.get('bms_token');
+                              
+                              var dialog_width = $(document.documentElement).width()-60;
+                              var dialog_height = $(document.documentElement).height()-182;
+                              var dialog = camp_obj.app.showDialog({title:'Template Preview',
+                                          css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                          headerEditable:false,
+                                          bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                               });
+                              this.app.showLoading('Loading Preview...',dialog.getBody());                              
+                              var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
+                              jQuery.getJSON(URL,function(tsv, state, xhr){
+                                  var html_json = jQuery.parseJSON(xhr.responseText);
+                                  var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
+                                  dialog.getBody().html(preview_iframe);
+                                  preview_iframe[0].contentWindow.document.open('text/html', 'replace');
+                                  preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(html_json.htmlText,true));
+                                  preview_iframe[0].contentWindow.document.close();
+                                  
+                              });
                               
                         },this));
                     }
@@ -2408,8 +2426,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                checkCSVUploaded:function()
                 {
                     var camp_obj = this;
-					var csvupload = camp_obj.states.step3.csvupload;
-					var mapdataview = camp_obj.states.step3.mapdataview;
+                    var csvupload = camp_obj.states.step3.csvupload;
+                    var mapdataview = camp_obj.states.step3.mapdataview;
                     if(csvupload && csvupload.fileuploaded == true)
                     {
                             var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
@@ -2476,30 +2494,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    this.initCreateEditTarget(target_id);
                },
                 loadTargets:function(){
-                            var camp_obj = this;
-                            camp_obj.$el.find("#trecpcount span").text('0');
-                            camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));                                                         
-                            this.app.getData({
-                               "URL":"/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C",
-                               "key":"targets",
-                               "callback":_.bind(this.createTargetsTable,this)
-                           });
+                    var camp_obj = this;
+                    camp_obj.$el.find("#trecpcount span").text('0');
+                    camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));                                                         
+                    this.app.getData({
+                       "URL":"/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C",
+                       "key":"targets",
+                       "callback":_.bind(this.createTargetsTable,this)
+                   });
                 },
                checkSalesForceStatus: function(){
-                        var camp_obj = this;
-                        var salesforce_setting = this.app.getAppData("salesfocre");
-                        if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
-                        {
-                            camp_obj.app.showLoading("Getting Salesforce Status...",camp_obj.$el.find('#area_salesforce_import'));                                 
-                            this.app.getData({
-                                "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
-                                "key":"salesfocre",
-                                "callback":_.bind(this.setSalesForceWiz,this)
-                            });
-                        }
-                        else{
-                            this.setSalesForceWiz();
-                        }
+                    var camp_obj = this;
+                    var salesforce_setting = this.app.getAppData("salesfocre");
+                    if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
+                    {
+                        camp_obj.app.showLoading("Getting Salesforce Status...",camp_obj.$el.find('#area_salesforce_import'));                                 
+                        this.app.getData({
+                            "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                            "key":"salesfocre",
+                            "callback":_.bind(this.setSalesForceWiz,this)
+                        });
+                    }
+                    else{
+                        this.setSalesForceWiz();
+                    }
                 },
                setSalesForceWiz:function(){				   	
                     var camp_obj = this;
@@ -3069,12 +3087,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    var _hour = this.$(".timebox-hours button.pm").hasClass("active")?parseInt(_time)+12:parseInt(_time);
                    var time =  _hour+":"+this.$(".timebox-min").val()+":00";                  
                    var camp_obj = this;
-                   var monthNames = [
-					  "Jan", "Feb", "Mar",
-					  "Apr", "May", "Jun",
-					  "Jul", "Aug", "Sep",
-					  "Oct", "Nov", "Dec"
-					  ];
+                   
                    var post_data = {"campNum": this.camp_id,
                                     "type":"saveStep4",
                                     "status":flag                                    
@@ -3093,7 +3106,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            if(flag=='S'){ 
                                 camp_obj.$(".schedule-camp").hide(); 
                                 var camp_detail = '<strong>'+camp_obj.$el.parents(".ws-content").find("#workspace-header").html()+'</strong> Has been Scheduled to be sent on'; 
-                                camp_detail +='<span>'+step4_obj.day+' '+monthNames[step4_obj.month-1]+' '+step4_obj.year+'</span> at <em>'+camp_obj.$(".timebox-hour").val()+':'+camp_obj.$(".timebox-min").val()+' '+camp_obj.$(".timebox-hours button.active").html()+'</em>'; 
+                                camp_detail +='<span>'+step4_obj.day+' '+camp_obj.app.getMMM(step4_obj.month-1)+' '+step4_obj.year+'</span> at <em>'+camp_obj.$(".timebox-hour").val()+':'+camp_obj.$(".timebox-min").val()+' '+camp_obj.$(".timebox-hours button.active").html()+'</em>'; 
                                 camp_obj.$(".camp-sch-detail").html(camp_detail) 
                                 camp_obj.$(".sch-made").show(); 
                                 camp_obj.states.step4.camp_status = 'P';

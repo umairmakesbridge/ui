@@ -138,6 +138,20 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
                       ]
           });                               
       }
+      ,
+      openSubscriber:function(sub_id){
+          var sub_id = sub_id?sub_id:0;
+          this.addWorkSpace({type:'',
+            title:"Loading...",
+            workspace_id: 'subscriber_'+sub_id,
+            url : 'subscriber',
+            params: {sub_id:sub_id},
+            actions :[{'iconCls':'campaigns','text':'New Campaign','url':''},{'iconCls':'upload-subscribers','text':'Upload Subscribers','url':''}
+                ,{'iconCls':'add-list','text':'Add List','url':''},{'iconCls':'forms','text':'Create Form','url':''}  
+                ,{'iconCls':'segments','text':'Edit Segments','url':''},{'iconCls':'reports','text':'Reports','url':''}  
+            ]
+          });                               
+      }
    });
    
 });

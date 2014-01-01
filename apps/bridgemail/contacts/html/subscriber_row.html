@@ -1,0 +1,70 @@
+<input type="checkbox" value="" name="" id="no1" class="checkpanel" />
+<div class="leftbox">
+    <div class="title show-detail" id="<%- model.get('subNum')%>">
+        <h3><a ><%- model.get('firstName')+' '+ model.get('lastName')%></a></h3>
+        <a class="statusdd color3">Professional <b class="caret"></b></a>
+        <a  class="schedulebtn">Schedule</a>
+    </div>
+    <div class=" tagscont"> 
+        <ul>
+          <% _.each(model.get('tags').split(","),function(t){ %>  
+            <li><a  class="tag"><%- t %></a> </li>
+          <% })%>          
+        </ul>
+      </div><!--   tagscont  --> 
+       <div class="leftboxbtm">
+            <div class="hotness">
+                <span class="on"></span>
+                <span class="on"></span>
+                <span class="on"></span>
+                <span class=""></span>
+            </div> <!--  hotness  --> 
+            <div class="filterbar">
+                <span class="c1">1</span>
+                <span class="c2">2</span>
+                <span class="c3">3</span>
+                <span class="c4">4</span>
+                <span class="c5">5</span>
+                <span class="c6">6</span>
+                <span class="c7 ">7</span>
+                <span class="c8">8</span>
+                <span class="c9">9</span>
+                <span class="c10 activestate">10</span>
+            </div>
+            <div class="score">
+                    <i class="icon score"></i>
+                0
+            </div>
+            <a  class="chatbtn"><sup class="badge">5</sup></a>
+            <div class="crms">
+                <a  class=""><img src="img/nsicon2.png" alt=""/></a>
+                 <a  class=""><img src="img/inicon2.png" alt=""/></a>
+            </div>
+        </div>
+    </div> <!--  leftbox  --> 
+
+<div class="avatarcol">
+    <div class="img"><img src="img/avatar.png" alt=""/></div>
+    <ul><li><a class="icon hide showtooltip" title="Hide Details"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li><li><a class="icon preview2 showtooltip" title="Preview"></a></li></ul>
+</div>
+<div class="rightbox">
+            <div class="actstatus">
+            <div class="time"><i class="icon time"></i>04 Sep, 2009</div>
+            <div class="activity"><i class="icon web"></i>Submission Form</div>
+        </div>
+        <div class="proinfo">
+            <span class="ellipsis showtooltip" title="Show Detail View">...</span>
+            <span>
+                    Company
+            <strong><%- model.get('company')%></strong>
+            </span>
+            <span>
+            Username
+            <strong>&nbsp;</strong>
+            </span>
+            <span>
+            Total Spend
+            <strong>$0</strong>
+            </span>
+            </div>                        
+</div> <!--  rightbox  --> 
