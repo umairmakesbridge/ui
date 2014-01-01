@@ -20,9 +20,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
 						camp_obj.app.showAlertDetail({heading:'Confirm',
-													detail:'Are you sure you want to delete this campaign?',
-													login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
-													camp_obj.$el.parents(".ws-content.active"));
+                                                detail:'Are you sure you want to delete this campaign?',
+                                                login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
+                                                camp_obj.$el.parents(".ws-content.active"));
 						$(".overlay .btn-ok").click(function(){
 							$(".overlay").remove();
 						   camp_obj.deleteCampaign(target.attr("id"));

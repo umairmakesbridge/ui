@@ -443,7 +443,6 @@ ul.c-current-status li .badge {
     font-size: 11px;
     padding: 1px 5px;
 }
-.camp_header ul.c-current-status { display:none; }
 .ws-notags ul.c-current-status { display:block; }
 .camp_header .pointy { display:none; }
 .ws-notags .camp_header .pointy { display:inline-block !important; }
@@ -614,53 +613,7 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
 .iconpointy .pointy ul li a:hover { background-color:#80C000; color:#fff;}
 .ws-notags .camp_header { height:70px; }
 .modal-header .camp_header { height:50px; }
-.pclr1 {background-color: #E7E7E7;    color: #464646 !important;}
-.pclr2 { background-color: #B6CFF5;
-    color: #0D3472 !important;}
-.pclr3 {background-color: #98D7E4;
-    color: #0D3B44 !important;}
-.pclr4 {background-color: #E3D7FF;
-    color: #3D188E !important;}
-.pclr5 {background-color: #FBD3E0;
-    color: #711A36 !important;}
-.pclr6 {background-color: #F2B2A8;
-    color: #8A1C0A !important;}
-.pclr7 {background-color: #C2C2C2;
-    color: #FFFFFF !important;}
-.pclr8 { background-color: #4986E7;
-    color: #FFFFFF !important;}
-.pclr9 {background-color: #2DA2BB;
-    color: #FFFFFF !important;}
-.pclr10 { background-color: #B99AFF;
-    color: #FFFFFF !important;}
-.pclr11 {background-color: #F691B2;
-    color: #994A64 !important;}
-.pclr12 {  background-color: #FB4C2F;
-    color: #FFFFFF !important;}
-.pclr13 {background-color: #FFC8AF;
-    color: #7A2E0B !important;}
-.pclr14 {background-color: #FFDEB5;
-    color: #7A4706 !important;}
-.pclr15 { background-color: #FBE983;
-    color: #594C05 !important;}
-.pclr16 {background-color: #FDEDC1;
-    color: #684E07 !important;}
-.pclr17 { background-color: #B3EFD3;
-    color: #0B4F30 !important;}
-.pclr18 { background-color: #A2DCC1;
-    color: #04502E !important;}
-.pclr19 { background-color: #FF7537;
-    color: #FFFFFF !important;}
-.pclr20 {background-color: #FFAD46;
-    color: #FFFFFF !important;}
-.pclr21 {background-color: #EBDBDE;
-    color: #662E37 !important;}
-.pclr22 {background-color: #CCA6AC;
-    color: #FFFFFF !important;}
-.pclr23 {background-color: #42D692;
-    color: #094228 !important;}
-.pclr24 {background-color: #16A765;
-    color: #FFFFFF !important;}
+
 .ws-notags div.shortcuts > a { height:70px; }
 .ws-notags div.shortcuts .ddicon { margin:20px auto 0; }
 .ws-notags ul.toolbar { top:16px; }
