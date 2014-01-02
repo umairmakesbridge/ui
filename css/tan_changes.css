@@ -796,7 +796,7 @@ width: 100%;
 .camp_listing .bmsgrid div.bDiv tr .action a:first-child { margin-right:2px; }
 
 .camp_listing .bmsgrid .time { min-width:130px; }
-.camp_listing .bmsgrid i.icon { background-position:3px 1px; }
+/*.camp_listing .bmsgrid i.icon { background-position:3px 1px; }*/
 .camp_listing .bmsgrid .btn-red i.icon { background-position:9px 8px; }
 .btn-ok { padding:0 20px; }
 .btn-cancel { padding:0 10px; margin-left:10px; }

@@ -309,7 +309,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 				switch(val[0].status)
 				{					
 					case 'D':
-						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-gray"><span>Edit</span><i class="icon preview3"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
+						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-gray"><span>Edit</span><i class="icon edit"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
 						break;					
 					case 'S':
 						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-green"><span>Reschedule</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-blue btn-draft"><span>Draft</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
