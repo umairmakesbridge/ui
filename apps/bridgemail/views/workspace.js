@@ -63,6 +63,9 @@ function ($,Backbone, _,app,Wizard, template) {
                         if(this.options.noTags){
                             this.$el.addClass("ws-notags");
                         }
+                        if(this.options.addAction){
+                            this.$el.find(".add-action").addClass("show-add");
+                        }
                         //Load a page 
                         if(this.options.url){
                             this.loadPage(this.options.url,page_container,this.options.params);

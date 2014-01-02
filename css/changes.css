@@ -1209,7 +1209,9 @@ ul.tabs-btns li.active a{
 .modal-header .tagscont{
     margin-left: 14px;
 }
-
+.camp_header .pointy.show-add{
+    display:inline-block !important;
+}
 /* --------------------------------------------------------------------------------  Contacts/ Subscribers Listing changes  ----------------------------------------------------------- */
 .sub-manage-list{
     display:none;

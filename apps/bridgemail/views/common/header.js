@@ -12,10 +12,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             /*Menues*/
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
-                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns'});
+                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns','addAction':true});
                             },
                             'click .contacts-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts'});
+                                app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true});
                             },
                             'click .studio_bounced-email-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});

@@ -444,8 +444,8 @@ ul.c-current-status li .badge {
     padding: 1px 5px;
 }
 .ws-notags ul.c-current-status { display:block; }
-.camp_header .pointy { display:none; }
-.ws-notags .camp_header .pointy { display:inline-block !important; }
+/*.camp_header .pointy { display:none; }
+.ws-notags .camp_header .pointy { display:inline-block !important; }*/
 ul.c-current-status  li .color1 { background-color:#79DB6B; }
 ul.c-current-status  li .color2 { background-color:#FFA477; }
 ul.c-current-status  li .color3 { background-color:#69D6FF; }
