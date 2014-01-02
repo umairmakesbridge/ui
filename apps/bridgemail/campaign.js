@@ -589,35 +589,35 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   var camp_obj = this;
                   deleteIconCampaign.click(function(){
                       //if(confirm('Are you sure you want to delete this campaign?')){
-						  camp_obj.app.showAlertDetail({heading:'Confirm',
-													detail:'Are you sure you want to delete this campaign?',
-													login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
-													camp_obj.$el.parents(".ws-content.active"));
-						  $(".overlay .btn-ok").click(function(){
-							  $(".overlay").remove();
-							 camp_obj.deleteCampaign(camp_obj.camp_id);
-						  });
+                        camp_obj.app.showAlertDetail({heading:'Confirm',
+                        detail:'Are you sure you want to delete this campaign?',
+                        login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
+                        camp_obj.$el.parents(".ws-content.active"));
+                        $(".overlay .btn-ok").click(function(){
+                                $(".overlay").remove();
+                               camp_obj.deleteCampaign(camp_obj.camp_id);
+                        });
                       //}
                   });
                                     
                 },
-				deleteCampaign: function(camp_id) {
-					var camp_obj = this;
-					var active_ws = this.$el.parents(".ws-content");
-					var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-					camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
-					$.post(URL, {type:'delete',campNum:camp_obj.camp_id})
-					.done(function(data) {                                 
-						   var del_camp_json = jQuery.parseJSON(data);  
-						   if(camp_obj.app.checkError(del_camp_json)){
-								  return false;
-						   }
-						   if(del_camp_json[0]!=="err"){
-							   camp_obj.app.showMessge("Campaign Deleted");
-							   active_ws.find(".camp_header .close").click();
-						   }
-						   camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
-				   });
+                deleteCampaign: function(camp_id) {
+                        var camp_obj = this;
+                        var active_ws = this.$el.parents(".ws-content");
+                        var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+                        camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
+                        $.post(URL, {type:'delete',campNum:camp_obj.camp_id})
+                        .done(function(data) {                                 
+                                   var del_camp_json = jQuery.parseJSON(data);  
+                                   if(camp_obj.app.checkError(del_camp_json)){
+                                                  return false;
+                                   }
+                                   if(del_camp_json[0]!=="err"){
+                                           camp_obj.app.showMessge("Campaign Deleted");
+                                           active_ws.find(".camp_header .close").click();
+                                   }
+                                   camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
+                   });
 				},
                 initStepCall:function(stepNo){
                     if(this.camp_id!==0){

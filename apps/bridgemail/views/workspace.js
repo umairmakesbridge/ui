@@ -19,10 +19,7 @@ function ($,Backbone, _,app,Wizard, template) {
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        
                     },
-                    'click .toolbar .more':function(){
-                        //this.$el.find("#more-tool-actions").fadeToggle("fast", "linear");
-                        //this.$("#cmpMenu_div").fadeToggle();
-                        //$("#campMenu").prop("disabled",false);
+                    'click .toolbar .more':function(){                       
                     },                    
                     'click .workspace-field':function(obj){                                                
                         obj.stopPropagation();

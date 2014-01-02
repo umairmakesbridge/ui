@@ -95,7 +95,7 @@
                }
 			   ,
                'daterangepicker':{
-                   deps: ['jquery-ui,jquery']
+                   deps: ['jquery-ui','jquery']
                }
          }
     });

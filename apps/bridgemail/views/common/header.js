@@ -12,7 +12,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             /*Menues*/
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
-                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns',noTags:true});
+                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns'});
                             },
                             'click .contacts-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts'});

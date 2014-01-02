@@ -2476,3 +2476,6 @@ ul.c-current-status li .badge {
     color: #FFFFFF !important;}
 .pclr25 {background-color: #F9E9A3!important;
     color: #BB8207 !important;}
+.ui-daterangepickercontain{
+    background-color:#fff;
+}

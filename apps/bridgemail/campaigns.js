@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html','bms-filters'],
-function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
+define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html','bms-filters','daterangepicker'],
+function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicker) {
         'use strict';
         return Backbone.View.extend({
 			id: 'campaigns_list',
@@ -193,7 +193,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters) {
 			,
 			init:function(){
 				this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
-				//this.$el.find('#daterange').daterangepicker();				
+				this.$el.find('#daterange').daterangepicker();				
 				 var camp_obj = this;
 				 var active_ws = this.$el.parents(".ws-content");
 				 var header_title = active_ws.find(".camp_header .edited  h2");                 
