@@ -273,7 +273,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                         },this));
 			}
 			,			
-			makecamprows: function (val,extraDiv){				
+			makecamprows: function (val,extraDiv){
+				var camp_obj = this;				
                                 var start_div ="", end_div = "";
                                 if(extraDiv){
                                     start_div = "<div>";
@@ -295,7 +296,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				{
 					var date = datetime.split(' ');
 					var dateparts = date[0].split('-');					
-					var month = this.app.getMMM(dateparts[1].replace('0','')-1);
+					var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);
 					var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
 				}
 				else{
@@ -307,7 +308,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				switch(val[0].status)
 				{					
 					case 'D':
-						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-gray"><span>Edit</span><i class="icon preview3"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
+						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-gray"><span>Edit</span><i class="icon edit"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
 						break;					
 					case 'S':
 						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-green"><span>Reschedule</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-blue btn-draft"><span>Draft</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';

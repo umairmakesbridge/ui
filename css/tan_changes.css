@@ -284,8 +284,8 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .search > .icon { left:2px; }
 .mergefields h2 > .search .close-icon { right:38px; top:11px; }
 .chosen-container-single .chosen-single span { color:#495A83; }
-.bmsgrid div.bDiv tr .action { top:inherit; margin-top:-25px; }
-.bmsgrid div.bDiv tr .action a { margin-left:0; margin-right:10px; }
+/*.bmsgrid div.bDiv tr .action { top:inherit; margin-top:-25px; }
+.bmsgrid div.bDiv tr .action a { margin-left:0; margin-right:10px; }*/
 .bmsgrid div.bDiv tr .action a.move-row { margin-right:0; }
 #fromemail_default_chosen { float:right; text-align:left; }
 #campaign_from_email_chosen { /*margin-left:-4px;*/ width:335px; text-align:left; float:right; }
@@ -500,119 +500,9 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
     font-size: 12px;
     line-height: 25px;
 }
-.iconpointy {
-    display: inline-block;
-    float: left;
-    height: 35px;
-    left: 10px;
-    position: relative;
-    top: 2px;
-}
-
-.iconpointy .btn-green {
-    height: 20px;
-    line-height: 20px;
-    margin: 9px 0 0;
-}
-.iconpointy .btn-green .icon {
-    height: 20px;
-    width: 20px;
-	background-color:#94CF1E !important;
-}
-.iconpointy .btn-green:after {
-    border-color: rgba(255, 255, 255, 0) #94CF1E  rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);
-    border-style: solid;
-    border-width: 4px;
-    bottom: auto;
-    content: "";
-    display: inline-block;
-    left: -8px;
-    position: absolute;
-    top: 15px;
-}
-.iconpointy .pointy {
-    background: none;
-    display: inline;
-    float: left;
-    height: 25px;
-    left: 2px;
-    margin: 0;
-}
 
 
-
-.iconpointy > a.iconbtn {
-    background-color: #97D61D;
-    float: left;
-	height:25px;
-    margin: 0;
-	position:relative;
-		-webkit-border-radius: 2px;
-	-moz-border-radius:2px;
-	border-radius: 2px;
-}
-/*
-.iconpointy > a.btn-green:after {  
-	border-color: rgba(255, 255, 255, 0) #91ABBC rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); 
-	border-style: solid;
-    border-width: 4px;
-    bottom: auto;
-    content: "";
-    display: inline-block;
-    left: -8px;
-    position: absolute;
-    top: 14px;}
-*/
-
-.iconpointy > a.icon i {
-    float: left;
-    height: 25px;
-    width: 25px;
-}
-.iconpointy > a.icon .caret {
-    border-top: 4px solid #FFFFFF;
-    float: right;
-    margin: 12px 0 0 14px;
-}
-
-.iconpointy:hover a.icon {background-color: #94CF1E;  }
-.iconpointy:hover a.btn-green:after {  border-color: rgba(255, 255, 255, 0) #94CF1E rgba(255, 255, 255, 0) rgba(255, 255, 255, 0); }
-
-
-
-.iconpointy > a.btn-green .caret {
-    border-left: 4px solid rgba(255, 255, 255, 0);
-    border-right: 4px solid rgba(255, 255, 255, 0);
-    border-top: 4px solid #FFFFFF;
-    float: right;
-    margin: 9px 7px 0 5px;
-}
-
-
-.iconpointy .pointy:after {  border-color: rgba(255, 255, 255, 0); top:0px;}
-.iconpointy .pointy { display:none;  }
-.iconpointy:hover  .pointy { display:block;} 
-.iconpointy .pointy ul li { float:left;} 
-.iconpointy .pointy ul li { margin:0 0 0 2px;  } 
-.iconpointy .pointy ul li:first-child { margin:0 0 0;}
-
-
-.iconpointy .pointy ul li a {
-    background: none repeat scroll 0 0 #97D61D;
-    border-radius: 2px;
-    color: #FFFFFF;
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 25px;
-    padding: 0 10px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius:2px;
-	border-radius: 2px;
-}
-.iconpointy .pointy ul li a:hover { background-color:#80C000; color:#fff;}
-.modal-header .camp_header { height:50px; }
-
+.modal-header.ws-notags .camp_header { height:50px; }
 .ws-notags div.shortcuts > a { height:70px; }
 .ws-notags div.shortcuts .ddicon { margin:20px auto 0; }
 .ws-notags ul.toolbar { top:16px; }
@@ -901,12 +791,20 @@ width: 100%;
 	top:50%;
 	width:460px;
 }
-.camp_listing .bmsgrid div.bDiv tr .action a { margin-right:5px; }
-.camp_listing .bmsgrid div.bDiv tr .action a:first-child { margin-right:2; }
+.camp_listing .bmsgrid div.bDiv tr .action a { margin-left:5px; }
+.camp_listing .bmsgrid div.bDiv tr .action a:first-child { margin-right:2px; }
 
 .camp_listing .bmsgrid .time { min-width:130px; }
-.camp_listing .bmsgrid i.icon { background-position:3px 1px; }
+/*.camp_listing .bmsgrid i.icon { background-position:3px 1px; }*/
 .camp_listing .bmsgrid .btn-red i.icon { background-position:9px 8px; }
 .btn-ok { padding:0 20px; }
 .btn-cancel { padding:0 10px; margin-left:10px; }
 .confalert-buttons { padding-left:30%; }
+.pclr24 {background-color: #16A765;
+    color: #FFFFFF !important;}
+.pclr20 {background-color: #FFAD46;
+    color: #FFFFFF !important;}
+.pclr9 {background-color: #2DA2BB;
+    color: #FFFFFF !important;}
+.pclr8 { background-color: #4986E7;
+    color: #FFFFFF !important;}

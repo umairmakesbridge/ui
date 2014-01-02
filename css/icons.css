@@ -715,7 +715,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.back {	background: url("../img/back.png") no-repeat center center;}
 .icon.next {	background: url("../img/next.png") no-repeat center center;}
 .icon.save {   background: url("../img/save.png") no-repeat center center;}
-.icon.delete {   background: url("../img/delete.png") no-repeat center center;}
+.icon.delete {   background: url("../img/delete.png") no-repeat center center ;}
 .icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
 .icon.list {   background: url("../img/list.png") no-repeat center center ;}
 .icon.copy {   background: url("../img/copy.png") no-repeat center center ;}
@@ -749,7 +749,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.sendmail {   background: url("../img/sendmail.png") no-repeat scroll center center ;}
 .icon.hide {   background: url("../img/hide.png") no-repeat scroll center center ;}
 .icon.preview2 {   background: url("../img/preview2.png") no-repeat scroll center center ;}
-.icon.preview3 {   background: url("../img/preview3.png") no-repeat scroll center center ;}
+.icon.preview3, .camp_listing .bmsgrid i.icon.preview3 {   background: url("../img/preview3.png") no-repeat scroll center center ;}
 .icon.mbaction {   background: url("../img/mbaction.png") no-repeat scroll center center ;}
 
 .icon.workflow {   background: url("../img/workflow.png") no-repeat scroll center center ;}
