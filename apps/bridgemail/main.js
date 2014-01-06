@@ -27,6 +27,7 @@
            'bms-mapping': '../shared/mapping',
            'moment': '../shared/libs/moment',
            'bootstrap': '../shared/libs/bootstrap.min',
+		   '_date': '../shared/libs/date',
            'daterangepicker': '../shared/libs/daterangepicker.jQuery'
        },
         shim: {
@@ -95,7 +96,7 @@
                }
 			   ,
                'daterangepicker':{
-                   deps: ['jquery-ui','jquery']
+                   deps: ['_date','jquery-ui','jquery']
                }
          }
     });

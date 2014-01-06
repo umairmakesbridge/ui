@@ -789,7 +789,7 @@ width: 100%;
 {
 	margin-top:-17px;
 	top:50%;
-	width:460px;
+	width:550px;
 }
 .camp_listing .bmsgrid div.bDiv tr .action a { margin-left:5px; }
 .camp_listing .bmsgrid div.bDiv tr .action a:first-child { margin-right:2px; }
@@ -806,5 +806,65 @@ width: 100%;
     color: #FFFFFF !important;}
 .pclr9 {background-color: #2DA2BB;
     color: #FFFFFF !important;}
-.pclr8 { background-color: #4986E7;
+.pclr1 {background-color: #E7E7E7!important;    color: #464646 !important;}
+.pclr2 { background-color: #B6CFF5!important;
+    color: #0D3472 !important;}
+.pclr6 {background-color: #F2B2A8!important;
+    color: #8A1C0A !important;}
+.pclr8 { background-color: #4986E7!important;
     color: #FFFFFF !important;}
+.pclr18 { background-color: #A2DCC1!important;
+    color: #04502E !important;}
+a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { cursor:default; }
+.copy_campbox { background:#eaf5fc; padding:10px; height:150px;}
+.copy_campbox > div:first-child { float:left; width:370px;}
+.copy_campbox  h2 { font-size:18px; padding:0 10px; }
+.copy_campbox .tagscont {
+    height: auto;
+    margin: 0;
+    padding: 0 10px;
+}
+.copy_campbox .tagscont ul {
+    height: auto;
+    padding: 5px 0;
+}
+.copy_campbox  .tagicon.gray {  background-position: -165px -868px;}
+.copy_campbox .img {
+    float: right;
+    height: 150px;
+    overflow: hidden;
+    width: 160px;
+	-webkit-border-radius: 2px ;
+	-moz-border-radius: 2px;
+	border-radius: 2px;}
+.model_form { padding:10px;}
+.model_form .ui-accordion .ui-accordion-content { overflow:hidden; }
+.model_form .row { margin:10px 0 0;}
+.model_form .row .input-append {
+    float: right;
+    margin: 0;
+    position: relative;
+    width: 72.2%;
+}
+.model_form .row .inputcont {padding: 0 24px 0 0;}
+.model_form .row .inputcont textarea, 
+.model_form .row input[type="text"], 
+.model_form .row input[type="password"]{ width: 100%;}
+.model_form .crm-img { text-align:center; padding:10px;}
+.model_form .span6 label {
+    margin: 0;
+    width: 25%;
+}
+.model_form .span6 label {
+    display: block;
+    float: none;
+    line-height: 16px;
+    margin: 0;
+    padding: 5px 0;
+    text-align: left;
+    width: auto;
+}
+.model_form  .span6  .input-append {
+    width: 100%;
+}
+.copy_campbox img { height:inherit; }

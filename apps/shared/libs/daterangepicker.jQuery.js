@@ -21,7 +21,7 @@
 		//defaults
 		var options = $.extend({
 			presetRanges: [
-				{text: 'Yesterday', dateStart: 'today', dateEnd: 'today' },
+				{text: 'Yesterday', dateStart: 'yesterday', dateEnd: 'yesterday' },
 				{text: 'Today', dateStart: 'today', dateEnd: 'today' },
 				{text: 'Last 7 days', dateStart: 'today-7days', dateEnd: 'today' },
 				//{text: 'Month to date', dateStart: function(){ return Date.parse('today').moveToFirstDayOfMonth();  }, dateEnd: 'today' },
@@ -130,7 +130,7 @@
 		var rpPresets = (function(){
 			var ul = $('<ul class="ui-widget-content"></ul>').appendTo(rp);
 			$.each(options.presetRanges,function(){
-				$('<li class="ui-daterangepicker-'+ this.text.replace(/ /g, '') +' ui-corner-all"><a href="#">'+ this.text +'</a></li>')
+				$('<li class="ui-daterangepicker-'+ this.text.replace(/ /g, '') +' ui-corner-all"><a href="#" dateStart="'+this.dateStart+'" dateEnd="'+this.dateEnd+'">'+ this.text +'</a></li>')
 				.data('dateStart', this.dateStart)
 				.data('dateEnd', this.dateEnd)
 				.appendTo(ul);
@@ -152,6 +152,7 @@
 				.click(function(){
 					rp.find('.ui-state-active').removeClass('ui-state-active');
 					$(this).addClass('ui-state-active');
+					//alert($(this).attr('class'));
 					clickActions($(this),rp, rpPickers, doneBtn);
 					return false;
 				});
@@ -264,6 +265,7 @@
 					rpPickers.hide();
 				});
 				var dateStart = (typeof el.data('dateStart') == 'string') ? Date.parse(el.data('dateStart')) : el.data('dateStart')();
+				//alert(dateStart.getMonth());
 				var dateEnd = (typeof el.data('dateEnd') == 'string') ? Date.parse(el.data('dateEnd')) : el.data('dateEnd')();
 				rp.find('.range-start').datepicker('setDate', dateStart).find('.ui-datepicker-current-day').trigger('click');
 				rp.find('.range-end').datepicker('setDate', dateEnd).find('.ui-datepicker-current-day').trigger('click');
