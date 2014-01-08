@@ -161,7 +161,8 @@ define([
              resizeWorkSpace:function(){
                 var body_size =  $('body').height()-90;                
                 $(".workspace .ws-content").css("min-height",(body_size-100)); 
-                $(".bDiv").css("height",body_size-397);                
+                $(".bDiv").css("height",body_size-397);          
+				$("#campaigns_list .bDiv").css("height",body_size-300);      
                 this.set("wp_height",(body_size-100));
 				
 				var subj_w = $('#campaign_subject').width();
@@ -272,7 +273,7 @@ define([
                   status='Pending'
               }
               else if(flag=='C'){
-                  status='Completed'
+                  status='Sent'
               }
 			  else if(flag=='S'){
                   status='Scheduled'

@@ -43,13 +43,29 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						camp_obj.copyCampaign(target.attr("id"));
 					}
 				},
+				"click #camps_grid .btn-schedule,#camps_grid .btn-reschedule":function(obj){
+					var camp_obj = this;
+					var target = $.getObj(obj,"a");
+					if(target.attr("id")){
+						camp_obj.app.mainContainer.openCampaign(target.attr("id"));
+					}
+				},
 				"click .stattype":function(obj){
 					var camp_obj = this;
+					//camp_obj.findCampaigns(obj);
 					var target = $.getObj(obj,"a");
 					camp_obj.$el.find('.stattype').parent().removeClass('active');
 					target.parent().addClass('active');
 					var type = target.attr("search");
-					var schDates = this.$('#daterange').val().split(' - ');
+					var schDates = '';
+					if(this.$('#daterange').val() != '')
+					{
+						schDates = this.$('#daterange').val().split(' - ');
+						if(schDates != '' && schDates.length == 1)
+						{
+							schDates[1] = schDates[0];
+						}
+					}
 					var dateURL = ""
 					if(schDates)
 					{
@@ -58,14 +74,35 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						var toDateParts = schDates[1].split('/');
 						var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
 						var dateURL = "fromDate="+fromDate+"&toDate="+toDate;
-					}
-					camp_obj.app.removeCache("campaigns");
+					}					
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
-					camp_obj.app.getData({
+					
+					/*camp_obj.app.getData({
 						"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL,
 						"key":"campaigns",
 						"callback":_.bind(camp_obj.createListTable,camp_obj)
-					});					
+					});	*/
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
+					jQuery.getJSON(URL,  function(tsv, state, xhr){
+						camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
+						if(xhr && xhr.responseText){
+							 var camps = jQuery.parseJSON(xhr.responseText);                                
+							 camp_obj.$el.find('#total_templates .badge').html(camps.count);
+							 if(camps.count > 0){
+								camp_obj.app.removeCache("campaigns");                      
+								camp_obj.app.setAppData('campaigns',camps);							
+								camp_obj.createListTable();
+							 }
+							 else
+							{
+								camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+							}
+						}
+						else
+						{
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+						}
+					});
 				},
 				"click .btn-draft":function(obj){
 					var camp_obj = this;
@@ -126,6 +163,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						"key":"campaigns",
 						"callback":_.bind(camp_obj.createListTable,camp_obj)
 					});
+				}
+				,
+				"click .calendericon":function(obj)
+				{
+					this.$el.find('#daterange').click();
+					return false;
 				}
 			},			
 			previewCampaign: function(camp_id)
@@ -219,29 +262,67 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var target = $.getObj(obj,"a");
 				var dateStart = target.attr('dateStart');
 				var dateEnd = target.attr('dateEnd');
+				var schDates = [];
 				if(dateStart)
-				{
-					var schDates = [];
+				{					
 					schDates[0] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateStart) );
 					schDates[1] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateEnd) );
 				}
 				else
 				{
 					schDates = this.$('#daterange').val().split(' - ');
+					if(schDates != '' && schDates.length == 1)
+					{
+						schDates[1] = schDates[0];
+					}
 				}
-				var fromDateParts = schDates[0].split('/');
-				var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
-				var toDateParts = schDates[1].split('/');
-				var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
-				var type = camp_obj.$('ul#template_search_menu li.active a').attr('search');
+				if(schDates != '')
+				{
+					var fromDateParts = schDates[0].split('/');
+					var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
+					var toDateParts = schDates[1].split('/');
+					var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
+				}
+				var type = target.attr("search");
 				if(!type)
-					type = 'A';
-				camp_obj.app.removeCache("campaigns");
+					type = $('#template_search_menu li.active a').attr('search');
+				if(target.attr('class') == 'stattype topbadges')
+				{
+					camp_obj.$el.find('#template_search_menu li').removeClass('active');
+					$('#template_search_menu').find("li").each(function(i) {
+						if($(this).find('a').attr('search') == type)
+							$(this).addClass('active');							
+					});
+				}
 				camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
-				camp_obj.app.getData({
+				/*camp_obj.app.getData({
 					"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate,
 					"key":"campaigns",
 					"callback":_.bind(camp_obj.createListTable,camp_obj)
+				});*/
+				if(schDates != '')
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
+				else
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type;
+				jQuery.getJSON(URL,  function(tsv, state, xhr){
+					camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
+					if(xhr && xhr.responseText){
+						 var camps = jQuery.parseJSON(xhr.responseText);                                
+						 camp_obj.$el.find('#total_templates .badge').html(camps.count);
+						 if(camps.count > 0){
+							camp_obj.app.removeCache("campaigns");                      
+							camp_obj.app.setAppData('campaigns',camps);							
+							camp_obj.createListTable();
+						 }
+						 else
+						{
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+						}
+					}
+					else
+					{
+						camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+					}
 				});
 			},
 			initialize:function(){
@@ -261,7 +342,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					placeholder: 'Search Campaigns',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                                        iconsource: 'campaigns',
+                    iconsource: 'campaigns',
 					countcontainer: 'no_of_camps'
 				 });
 				 
@@ -269,8 +350,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			}
 			,
 			init:function(){
-				this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
-				this.$el.find('#daterange').daterangepicker();				
+				//this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
+				this.$el.find('#daterange').daterangepicker();
 				$(".btnDone").click(_.bind(this.findCampaigns,this));
 				$(".ui-daterangepicker li a").click(_.bind(this.findCampaigns,this));
 				 var camp_obj = this;
@@ -286,12 +367,14 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						 }
 						 var header_title = active_ws.find(".camp_header .edited");
 						 var stats = '<ul class="c-current-status">';
-						 stats += '<li><span class="badge pclr8">'+ allStats['sent'] +'</span>Sent</li>';
-						  stats += '<li><span class="badge pclr6">'+ allStats['pending'] +'</span>Pending</li>';
-						   stats += '<li><span class="badge pclr2">'+ allStats['scheduled'] +'</span>Scheduled</li>';
-						    stats += '<li><span class="badge pclr1">'+ allStats['draft'] +'</span>Draft</li>';
-							stats += '</ul>';
+						 stats += '<li><span class="badge pclr18"><a class="stattype topbadges" tabindex="-1" search="C">'+ allStats['sent'] +'</a></span>Sent</li>';
+						  stats += '<li><span class="badge pclr6"><a class="stattype topbadges" tabindex="-1" search="P">'+ allStats['pending'] +'</a></span>Pending</li>';
+						   stats += '<li><span class="badge pclr2"><a class="stattype topbadges" tabindex="-1" search="S">'+ allStats['scheduled'] +'</a></span>Scheduled</li>';
+						    stats += '<li><span class="badge pclr1"><a class="stattype topbadges" tabindex="-1" search="D">'+ allStats['draft'] +'</a></span>Draft</li>';
+							stats += '</ul>';							
 						 header_title.append(stats);
+						 $(".c-current-status li a").click(_.bind(camp_obj.findCampaigns,camp_obj));
+						 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
 				 });
 			}
 			,
@@ -330,7 +413,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 									height:this.app.get('wp_height')-122,
 									usepager : false,
 									colWidth : ['100%','70px','140px']
-					});                                                                
+					});
 					this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
 					this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
 					this.$("#camps_grid tr td:nth-child(3)").attr("width","140px");                                    
@@ -380,7 +463,21 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					editClass = 'Editable';
 				}
 				row_html += '<td class="firstcol">'+start_div+'<div class="name-type"><h3><a id="'+ val[0]['campNum.encode'] +'" class="campname '+ editClass +'">'+ val[0].name +'</a><a class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</a>'+ chartIcon +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div>'+end_div+'</td>';
-				var datetime = val[0].scheduledDate;
+				var datetime = '';
+				var dtHead = '';
+				if(val[0].status != 'D')
+				{
+					dtHead = '<em>Schedule Date</em>';
+					datetime = val[0].scheduledDate;
+				}
+				else
+				{
+					dtHead = '<em>Updation Date</em>';
+					if(val[0].updationDate)
+						datetime = val[0].updationDate;
+					else
+						datetime = val[0].creationDate;
+				}
 				if(datetime)
 				{
 					var date = datetime.split(' ');
@@ -392,7 +489,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					dateFormat = '';					
                                      }   
                                 //row_html += '<td>'+start_div+'<div class="time show" style="min-width:90px">'+this.app.getCampStatus(val[0].status)+'</div>'+end_div+'</td>';     
-				row_html += '<td>'+start_div+'<div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div>'+end_div+'</td>';
+				if(val[0].status != 'D')
+					row_html += '<td>'+start_div+'<div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div>'+end_div+'</td>';
+				else
+					row_html += '<td>'+start_div+''+end_div+'</td>';
 				var action_button = '';
 				var btns = '';
 				switch(val[0].status)
@@ -413,7 +513,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				action_button = camp_obj.drawButtons(btns,val[0]['campNum.encode']);
 				var timeshow = '';
 				if(dateFormat != '')
-					timeshow = '<div class="time show" style="width:105px"><strong><span><em>Schedule Date</em>'+ dateFormat +'</span></strong></div>';
+					timeshow = '<div class="time show" style="width:105px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div>';
 				row_html += '<td>'+start_div+ timeshow +'<div id="'+ val[0]['campNum.encode'] +'" class="action">'+ action_button +'</div>'+end_div+'</td>';					
 				row_html += '</tr>';
 				return row_html;

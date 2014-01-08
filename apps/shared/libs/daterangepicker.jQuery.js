@@ -61,8 +61,6 @@
 		onChange: function(){},
 		datepickerOptions: null //object containing native UI datepicker API options
 	}, settings);
-	
-	
 
 	//custom datepicker options, extended by options
 	var datepickerOptions = {
@@ -312,10 +310,6 @@
 				}
 		)
 		.appendTo(rpPickers);
-
-
-
-
 		//inputs toggle rangepicker visibility
 		$(this).click(function(){
 			toggleRP();

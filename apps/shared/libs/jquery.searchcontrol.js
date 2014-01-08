@@ -47,7 +47,17 @@
 				  var buttons = $('<div class="btn-group"><button tabindex="-1" class="searchbtn" id="searchbtn"><span class="icon-search icon-white"> \
 				  </span></button></div>');
 				  $(this).append(buttons);
-				  function clearSearch() { 				  	
+				  function clearSearch() { 
+				  	if($('ul#template_search_menu'))
+					{
+						$('ul#template_search_menu').find("li").each(function(i) {
+							if($(this).attr('oldactive') == 'active')
+								$(this).addClass('active');
+								$(this).removeAttr('oldactive');
+						});
+					}
+				  	/*if($('ul#template_search_menu li').attr('oldactive') == 'active')
+						$('ul#template_search_menu li').addClass('active');*/
                                         var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
 				  	txt.val('');
 					$(this).parent().find("#clearsearch").hide();
@@ -74,8 +84,8 @@
                                        
                                           
                                   }
-                                  function dosearch_func(obj){
-                                      var searchterm = $(obj.target).val();	
+                                  function dosearch_func(obj){									  
+                                      var searchterm = $(obj.target).val();
                                       if(searchterm.length > 0)
                                       {
                                           closeicon.show();
@@ -90,6 +100,11 @@
                                   }
                                   /****end****/
 				  function dosearch(obj) {
+					  if($('ul#template_search_menu'))
+					{
+						  $('ul#template_search_menu li.active').attr('oldActive','active');
+						  $('ul#template_search_menu li').removeClass('active');
+					}
 					  var movElement = options.movingElement? options.movingElement : 'tr';
 					  var searchterm = $(obj.target).val();					  
                                           var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;

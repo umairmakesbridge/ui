@@ -43,7 +43,7 @@ h2.header-list span#targettitle {
     margin:0px !important;
 }
 .step-contents { overflow-y:inherit; overflow-x:inherit; }
- input[type=text].search-control { padding:5px 6px; }
+ input[type=text].search-control { padding:5px 6px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
  #listssearch,#targetsearch { margin-right:5px; }
 .bmsgrid .time span.highlight { background:none; }
 .unique_rec {
@@ -571,7 +571,7 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
 	right: 144px;
 }
 .since { float:right; position: relative;   line-height: 36px; }
-.since > input { margin:0; width:190px;}
+.since > input { margin:0; width:190px; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; }
 
 .since  .calendericon {
     background-color: #EAF4F9 !important;
@@ -581,6 +581,7 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
     position: absolute;
     top: 2px;
     z-index: 99;
+	cursor:pointer;
 }
 
 .since .calendericon:after {
@@ -620,7 +621,7 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
     border-radius: 20px;
     float: left;
     font-size: 11px !important;
-    font-weight: bold;
+    font-weight: normal;
     line-height: 16px;
     margin: 2px 0 0 10px;
     opacity: 1;
@@ -811,8 +812,6 @@ width: 100%;
     color: #0D3472 !important;}
 .pclr6 {background-color: #F2B2A8!important;
     color: #8A1C0A !important;}
-.pclr8 { background-color: #4986E7!important;
-    color: #FFFFFF !important;}
 .pclr18 { background-color: #A2DCC1!important;
     color: #04502E !important;}
 a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { cursor:default; }
@@ -868,3 +867,6 @@ a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { 
     width: 100%;
 }
 .copy_campbox img { height:inherit; }
+.workspace ul.tabs-menu li#wp_li_1 a .icon {
+	background: url("../img/camplisting.png") repeat scroll 0 0 rgba(0, 0, 0, 0);	
+}
