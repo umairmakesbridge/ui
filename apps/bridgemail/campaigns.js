@@ -179,6 +179,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
 						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
 						  headerEditable:false,
+						  headerIcon : 'dlgpreview',
 						  bodyCss:{"min-height":dialog_height+"px"}                                                                          
 				});	
 				camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									

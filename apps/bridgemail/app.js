@@ -361,9 +361,10 @@ define([
             },
             showError:function(params){
                 if(params.control){
-                    params.control.find(".inputcont").addClass("error")
-                    params.control.find(".error-mark").attr('data-content',params.message);
-                    params.control.find(".error-mark").popover({'placement':'right','trigger':'hover',delay: { show: 0, hide:0 },animation:false});	
+                    params.control.find(".inputcont").addClass("error");
+					params.control.find(".inputcont").append('<span class="errortext"><i class="erroricon"></i><em>'+ params.message +'</em></span>');					
+                    //params.control.find(".error-mark").attr('data-content',params.message);
+                    //params.control.find(".error-mark").popover({'placement':'left','trigger':'hover',delay: { show: 0, hide:0 },animation:false});	
                 }
             },
             hideError:function(params){

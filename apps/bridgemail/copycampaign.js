@@ -33,22 +33,34 @@ function (template) {
 					var copydialog = this.options.copycampdialog;
 					var campview = this.options.camp;
 					var app = this.options.app;
-					var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+app.get('bms_token')+"&type=clone";
-					app.showLoading("Creating copy of campaign...",curview.$el);
-					$.post(URL, { campNum: camp_id,campName: curview.$el.find('#camp_name').val()})
-					.done(function(data) 
+					var el = curview.$el;
+					var appMsgs = app.messages[0];
+					if(el.find('#camp_name').val() == '')
+					{						
+						app.showError({
+							control:el.find('.campname-container'),
+							message:appMsgs.CAMPS_campname_empty_error
+						});
+					}
+					else
 					{
-						app.showLoading(false,curview.$el);
-						var res = jQuery.parseJSON(data);
-						if(res[0] == 'err')
-							app.showAlert(res[1].replace('&#58;',':'),curview.$el);
-						else
+						var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+app.get('bms_token')+"&type=clone";
+						app.showLoading("Creating copy of campaign...",curview.$el);
+						$.post(URL, { campNum: camp_id,campName: curview.$el.find('#camp_name').val()})
+						.done(function(data) 
 						{
-							copydialog.hide();
-							app.removeCache("campaigns");
-							campview.getallcampaigns();
-						}
-					});
+							app.showLoading(false,curview.$el);
+							var res = jQuery.parseJSON(data);
+							if(res[0] == 'err')
+								app.showAlert(res[1].replace('&#58;',':'),curview.$el);
+							else
+							{
+								copydialog.hide();
+								app.removeCache("campaigns");
+								campview.getallcampaigns();
+							}
+						});
+					}
 				}
 		});
 });

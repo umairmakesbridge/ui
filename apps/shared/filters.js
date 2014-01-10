@@ -91,15 +91,15 @@
         }
       }
              
-      var filter_html = '<div class="btn-group field-container"><div class="inputcont"><div class="error-mark"></div><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
+      var filter_html = '<div class="btn-group field-container"><div class="inputcont"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
           filter_html +='</select></div></div>'
           filter_html +=list_html
-          filter_html +='<div class="btn-group rules-container"><div class="inputcont"><div class="error-mark"></div><select  class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
+          filter_html +='<div class="btn-group rules-container"><div class="inputcont"><select  class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
           filter_html +='</select></div></div>'          
-          filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><div class="error-mark"></div><input type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
-          filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><div class="error-mark"></div><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
+          filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><input type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
+          filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
           filter_html +='</select></div></div>'
-          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><div class="error-mark"></div><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:240px;" /></div></div>'
+          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:240px;" /></div></div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');    
       filter.find(".filter-cont").append(filter_html)
       //Chosen with fields
@@ -528,7 +528,7 @@
       filter.addClass("form");
       var self = this
       var filter_html = '<div class="row"><label>Submitted Form</label>'
-          filter_html += ' <div class="btn-group forms-box-container"><div class="inputcont"><div class="error-mark"></div><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div>'
+          filter_html += ' <div class="btn-group forms-box-container"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div>'
           filter_html += '</div>'          
             
           filter_html += '<div class="match row"> Happened in last '
@@ -590,7 +590,7 @@
       filter_html += '<div class="btn-group "><select class="condtion-box">'
       filter_html += '<option value="eq">equals</option><option value="less">less than</option><option value="gr8">greater than</option><option value="btw">between</option><option value="incmore">increase more than</option>'
       filter_html += '</select></div>'  
-      filter_html += '<div class="btn-group scoreValue-container"><div class="inputcont"><div class="error-mark"></div><input type="text" value="" name="" style="width:50px;" class="scoreValue" /></div></div>'
+      filter_html += '<div class="btn-group scoreValue-container"><div class="inputcont"><input type="text" value="" name="" style="width:50px;" class="scoreValue" /></div></div>'
       filter_html += '<div class="match row days-container" style="display:none;clear:both"> in last '
             filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
       filter_html += '</div>'

@@ -28,7 +28,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                               this.step2SlectSource(target_li);
                           }
                       },
-                       "click #campMenubtn":function(){
+                      "click #campMenubtn":function(){
                            var camp_id= $("#campMenu").val();                          
                            this.loadCampaign(camp_id);
                            
@@ -267,7 +267,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.app.showLoading(false,camp_obj.states.step3.mapdataview.$el);
                      }
                 },
-                init:function(){                                                                                                    
+                init:function(){
                     //Load mergeFields
                     this.mergeFieldsSetup();                    
                     this.initHeader();
@@ -772,7 +772,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     if(this.$("#conversion_filter").prop("checked")){
                         this.$(".conversion-page-info").show();
-                        this.$(".conversion-page-info .text").html(this.$("#con_filter_field").val());   
+						var filter = this.$("#con_filter_combo").val() == 'ct' ? 'Contains' : 'Equal to';
+                        this.$(".conversion-page-info .text").html('Text in URL <strong>'+ filter + ' ' + this.$("#con_filter_field").val()+'</strong>');   
                     }
                     else{
                         this.$(".conversion-page-info").hide();                           
