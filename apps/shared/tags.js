@@ -45,7 +45,12 @@
      //Close dialog button
      this.dialog.find("#tag_box_close").on("click",$.proxy(this.hideTagDialog,this))
      //save dialog button
-     this.dialog.find("#add_tag_btn").on("click",$.proxy(this.saveTag,this))
+     if(this.options.tempOpt===false){
+        this.dialog.find("#add_tag_btn").on("click",$.proxy(this.saveTag,this))
+     }
+     else{
+         this.dialog.find("#add_tag_btn").on("click",$.proxy(this.addTag,this))
+     }
      //save dialog button
      this.dialog.find(".tag-input").on("keydown",$.proxy(this.saveTagOnEnter,this))
      //Edit tag from toolbar
@@ -66,25 +71,7 @@
         var tags_array = tags.split(",")
         var self= this
         $.each(tags_array,function(i,t){            
-            var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross" ></i></a></li>')
-            /*li_html.click(function(event){
-                var li = $(this)
-                var ele_offset = li.offset()
-                var ele_width =  li.width()
-                var ele_height =  li.height()
-                var top = ele_offset.top + ele_height+5
-                var left = ele_offset.left + (ele_width/2 - 15)
-
-                if(li.attr("id")){
-                    self.tag_id = i   
-                    self.tag_li = li
-                }
-                //li_html.parent().find("a.active").removeClass("active")
-                //li_html.find("a").addClass("active")
-                $(".custom_popup").hide();
-                self.toolbar.css({"left":left+"px","top":top+"px"}).show();
-                event.stopPropagation();
-            })*/
+            var li_html =$('<li id="_tag_'+i+'"><a class="tag" ><span> '+t+'</span><i class="icon cross" ></i></a></li>')            
             li_html.find(".cross").click(function(event){
                var li = $(this).parents("li")
                if(li.attr("id")){
@@ -153,7 +140,12 @@
     }
   ,saveTagOnEnter:function(e){
       if(e.keyCode==13){
-          this.saveTag()
+          if(this.options.tempOpt===false){
+            this.saveTag()
+          }
+          else{
+              this.addTag()
+          }
       }
       else if(e.keyCode==27){
           this.hideTagDialog()
@@ -224,6 +216,80 @@
   ,addTag:function(){      
       var _input = this.dialog.find("input.tag-input")
       var tag = _input.val() 
+      if(this.options.url && this.validation(tag)){  
+          tag = this.options.app.encodeHTML(tag)
+          var self = this
+          var temp_tags = (this.options.tags)?(this.options.tags+","+tag):tag
+          
+           this.dialog.find("#add_tag_btn").addClass("saving")
+           this.dialog.find(".tag-input").prop("disabled",true);
+           this.dialog.find(".addtag").prop("disabled",true).addClass("saving");
+           var URL = this.options.url
+          
+            this.options.params['tag'] = tag;
+            this.options.params['type'] = 'addTag';
+            var params = this.options.params
+            this.showLoading()
+            $.post(URL, params)
+                .done(function(data) {
+                    self.hideLoading()
+                    var tag_json = jQuery.parseJSON(data);
+                    if(self.options.app.checkError(tag_json) && tag_json[1]=="SESSION_EXPIRED"){
+                        return false;
+                    }
+                    self.dialog.find("#add_tag_btn").removeClass("saving") 
+                    if(tag_json && tag_json.success){
+                        self.options.tags = temp_tags;
+                        self.showTags();                                                                
+                    }
+                    else if(tag_json[0]=="err"){
+                        self.options.app.showAlert(tag_json[1],$("body"));
+                    }
+                    self.dialog.find(".tag-input").prop("disabled",false).val('');
+                    self.dialog.find(".addtag").prop("disabled",false).removeClass("saving");
+
+                    if(self.tag_id!==-1){
+                       self.dialog.hide(); 
+                    }
+                    else{
+                        self.dialog.hide(); 
+                        if(self.options.tags.split(",").length<5){
+                            self.ele.find(".addtag").click();
+                        }
+                    }
+                   
+             });
+      }
+  },
+  delTag:function(){
+    var self = this  
+    var URL = this.options.url      
+    var tags_array = this.options.tags.split(",")
+    var tag = tags_array[this.tag_id]
+    tags_array.splice(this.tag_id,1)    
+    var temp_tags = tags_array.join()
+    
+    this.options.params['tag'] = tag
+    this.options.params['type'] = 'deleteTag'
+    
+    var params = this.options.params
+    this.showLoading()
+    $.post(URL, params)
+        .done(function(data) {
+            self.hideLoading()
+            var tag_json = jQuery.parseJSON(data);
+            if(self.options.app.checkError(tag_json) && tag_json[1]=="SESSION_EXPIRED"){
+                return false;
+            }            
+            if(tag_json && tag_json.success){
+                self.options.tags = temp_tags;
+                self.showTags();                                                                
+            }
+            else if(tag_json[0]=="err"){
+                self.options.app.showAlert(tag_json[1],$("body"));
+            }
+            
+     });
   }
   ,showTagsDialog:function(obj){      
       var _ele  = obj?$.getObj(obj,"div"):this.tag_li;
@@ -235,12 +301,12 @@
         left_minus = 17
         _input.val("")
         this.tag_action = 'add'
-        this.dialog.find("#add_tag_btn").html("Add")
+        this.dialog.find("#add_tag_btn span").html("Add")
       }
       else{
           _input.val($.trim(this.tag_li.find("a").html()))
           left_minus = 20
-          this.dialog.find("#add_tag_btn").html("Save")
+          this.dialog.find("#add_tag_btn span").html("Save")
       }
       var ele_offset = _ele.offset()                    
       var ele_height =  _ele.height()
@@ -264,8 +330,13 @@
       obj.stopPropagation()
   }
   ,deleteTag:function(){
-      this.tag_action = 'delete'      
-      this.saveTag()
+      this.tag_action = 'delete' 
+      if(this.options.tempOpt){
+         this.delTag() 
+      }
+      else{
+         this.saveTag()
+      }
   }
   ,setObjectId:function(key,value){
       this.options.params[key] = value
@@ -295,7 +366,7 @@
   ,
   initTypeAhead:function(){
       if( this.options.typeAheadURL){
-        var self = this
+        var self = this        
         URL = this.options.typeAheadURL;                    
           jQuery.getJSON(URL,  function(tsv, state, xhr){
              if(xhr && xhr.responseText){                        
@@ -303,6 +374,7 @@
                   if(self.options.app.checkError(tags_json)){
                       return false;
                   }
+                  self.tags_common = [];
                   $.each(tags_json.tags[0], function(index, val) {
                         self.tags_common.push(val[0].tag);
                   })
@@ -349,9 +421,10 @@
 
   $.fn.tags.defaults = {
     template: '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="ellipsis" style="display:none">...</span><div class="addtag"><a><strong>+</strong></a></div></div>',
-    dialog:'<div class="tagbox custom_popup"><input type="text" placeholder="Add Tag" class="tag-input" maxlength="30"><a class="btn-green savebtn left" id="add_tag_btn">Add</a><a class="btn-gray left" id="tag_box_close">Close</a></div>;',
+    dialog:'<div class="tagbox custom_popup"><input type="text" placeholder="Add Tag" class="tag-input" maxlength="30"><a class="btn-green savebtn left" id="add_tag_btn"><span>Add</span></a><a class="btn-gray left" id="tag_box_close"><span>Close</span></a></div>;',
     toolbar:'<div class="tooltip tags-div custom_popup" style="display:none"><a class="right"><span class="icon delete"></span></a><a class="left"><span class="icon edit"></span></a></div>',
     tags:'',
+    tempOpt:false,
     tag_limit: 5,
     showAddButton:false,
     url:'',

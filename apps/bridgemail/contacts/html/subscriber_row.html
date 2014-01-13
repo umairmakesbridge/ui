@@ -1,8 +1,10 @@
-<input type="checkbox" value="" name="" id="no1" class="checkpanel" />
+<input type="checkbox" value="" name="" id="no1" class="checkpanel contact-row-check" />
 <div class="leftbox">
     <div class="title show-detail" id="<%- model.get('subNum')%>">
-        <h3><a ><%- model.get('firstName')+' '+ model.get('lastName')%></a></h3>
-        <a class="statusdd color3">Professional <b class="caret"></b></a>
+        <h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
+        <% if(model.get('salesStatus')!==''){%>
+            <a class="statusdd color3"><%- model.get('salesStatus')%> <b class="caret"></b></a>
+        <%}%>    
         <a  class="schedulebtn">Schedule</a>
     </div>
     <div class=" tagscont"> 
@@ -14,13 +16,13 @@
       </div><!--   tagscont  --> 
        <div class="leftboxbtm">
             <div class="hotness">
-                <span class="on"></span>
-                <span class="on"></span>
-                <span class="on"></span>
+                <span class=""></span>
+                <span class=""></span>
+                <span class=""></span>
                 <span class=""></span>
             </div> <!--  hotness  --> 
             <div class="filterbar">
-                <span class="c1">1</span>
+                <span class="c1 activestate">1</span>
                 <span class="c2">2</span>
                 <span class="c3">3</span>
                 <span class="c4">4</span>
@@ -29,13 +31,13 @@
                 <span class="c7 ">7</span>
                 <span class="c8">8</span>
                 <span class="c9">9</span>
-                <span class="c10 activestate">10</span>
+                <span class="c10">10</span>
             </div>
             <div class="score">
                     <i class="icon score"></i>
-                0
+                <%- model.get('score')%>
             </div>
-            <a  class="chatbtn"><sup class="badge">5</sup></a>
+            <a  class="chatbtn"><sup class="badge">0</sup></a>
             <div class="crms">
                 <a  class=""><img src="img/nsicon2.png" alt=""/></a>
                  <a  class=""><img src="img/inicon2.png" alt=""/></a>
@@ -45,26 +47,33 @@
 
 <div class="avatarcol">
     <div class="img"><img src="img/avatar.png" alt=""/></div>
-    <ul><li><a class="icon hide showtooltip" title="Hide Details"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li><li><a class="icon preview2 showtooltip" title="Preview"></a></li></ul>
+    <ul><li><a class="icon hide showtooltip" title="Hide Contact"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li></ul>
 </div>
 <div class="rightbox">
             <div class="actstatus">
-            <div class="time"><i class="icon time"></i>04 Sep, 2009</div>
-            <div class="activity"><i class="icon web"></i>Submission Form</div>
+            <div class="time"><i class="icon time"></i><%- time %></div>
+            <div class="activity" style="display:none"><i class="icon web"></i>Submission Form</div>
         </div>
         <div class="proinfo">
-            <span class="ellipsis showtooltip" title="Show Detail View">...</span>
-            <span>
-                    Company
+            <span class="ellipsis more-detail showtooltip" title="View fields">...</span>            
+            <span style="display:none">
+                Telephone
+            <strong></strong>
+            </span>
+            <span style="display:none">
+                Company
             <strong><%- model.get('company')%></strong>
             </span>
-            <span>
-            Username
-            <strong>&nbsp;</strong>
+            <span style="display:none">
+                Title
+            <strong><%- model.get('title')%></strong>            
             </span>
-            <span>
-            Total Spend
-            <strong>$0</strong>
-            </span>
+            
             </div>                        
 </div> <!--  rightbox  --> 
+<a class="closebtn" style="display:none"></a>       
+<div class="allprofileinfo" style="display:none">
+    <div class="proinfo">
+         
+    </div>
+</div>

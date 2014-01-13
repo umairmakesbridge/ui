@@ -34,6 +34,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                     if(this.options.buttons.saveBtn.text){
                                         this.$(".modal-footer .btn-save span").html(this.options.buttons.saveBtn.text);
                                     }
+                                    if(this.options.buttons.saveBtn.btnicon){
+                                        this.$(".modal-footer .btn-save i").removeClass("save").addClass(this.options.buttons.saveBtn.btnicon);
+                                    }
                                 }
                                 if(this.options.buttons.closeBtn){
                                     if(this.options.buttons.saveButtn.text){
@@ -44,6 +47,16 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                              if(this.options.headerIcon){
                                  this.$(".header-icon").addClass(this.options.headerIcon).show();
                                  this.$(".modal-header .c-name").addClass("header-icon")
+                             }
+                             if(this.options.newButtons){
+                                 var _this = this;
+                                 _.each(this.options.newButtons,function(v,k){
+                                      var _btn =$('<a class="btn btn-blue right btn-custom" style="display: inline;"><span>'+v.btn_name+'</span><i class="icon update"></i></a>');
+                                      _this.$(".btn-save").after(_btn);
+                                      _btn.click(function(){
+                                         _this.saveCall2();
+                                      })
+                                 });
                              }
                              
 			},                        
@@ -68,6 +81,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         },
                         saveCallBack:function(save){
                             this.saveCall = save;
+                        },
+                        saveCallBack2:function(update){
+                            this.saveCall2 = update;
                         }
                         
 		});

@@ -25,6 +25,7 @@
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
            'bms-mapping': '../shared/mapping',
+           'bms-addbox': '../shared/addbox',
            'moment': '../shared/libs/moment',
            'bootstrap': '../shared/libs/bootstrap.min',
            'daterangepicker': '../shared/libs/daterangepicker.jQuery'
@@ -87,6 +88,9 @@
                    deps: ['jquery','bootstrap']
                },
                'bms-tags':{
+                   deps: ['jquery']
+               },
+               'bms-addbox':{
                    deps: ['jquery']
                }
                ,

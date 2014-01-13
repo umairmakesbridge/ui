@@ -693,18 +693,35 @@ div.pGroup {
 .bmsgrid   .icon { margin:0 3px 0 0; float:left !important;}
 .bmsgrid   i.icon { margin:0 0 0; float:right;}
 
-.bmsgrid .subscribers,
+.bmsgrid .subscribers,.bmsgrid .subscribers,
 .bmsgrid .time ,
-.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; /*margin:15px 15px 2px;*/ margin:0; 	min-height:18px; min-width:120px; }
-
-
+.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; margin:0; 	min-height:18px; min-width:120px; }
 
 
 .bmsgrid .subscribers > strong {
-    background: url("../img/subscribersicon.png") no-repeat scroll 8px center #FFFFFF;
+    background: url("../img/subscribersicon.png") no-repeat scroll 8px 23px;
     color: #98B2C6;
     display: inline-block;
     font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bmsgrid .mail > strong {
+    background: url("../img/mailicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bmsgrid .time > strong {
+    background: url("../img/time.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
     margin: 0;
     padding: 5px 10px 5px 35px;
 }
@@ -713,17 +730,15 @@ div.pGroup {
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/subscribersicon.png") no-repeat scroll center  0;}
 
-.bmsgrid .time span, .bmsgrid .time i { 
+/*.bmsgrid .time span, .bmsgrid .time i { 
 float:left; width:18px; height:18px; margin-right:5px;
-background: url("../img/timeicon.png") no-repeat scroll center  0 ;}
+background: url("../img/timeicon.png") no-repeat scroll center  0 ;}*/
 
 .bmsgrid .mail span, .bmsgrid .mail i { 
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 
 /* ----------------------------------------------------------------------------------------------------------------------------- */
-
-
 
 
 
@@ -799,3 +814,34 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 }
 
 .ui-accordion .ui-accordion-header .subscribers .badge { float:right;}
+
+.bmsgrid .sched > strong {
+    background: url("../img/scheduledicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+
+  .bmsgrid  .sched em,  .bmsgrid   .subscribers em ,  .bmsgrid .time em,  .bmsgrid .mail em {
+   color: #9BABB4;
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 18px;
+    margin: 0 0 0 -28px;
+	text-align: left;
+	
+}
+
+.bmsgrid  .sched span,  .bmsgrid  .subscribers span,  .bmsgrid  .time span,  .bmsgrid  .mail span {
+    float: left;
+	display: inline-block;
+    padding: 0 10px 0 0;
+	color: #5E7684;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+}

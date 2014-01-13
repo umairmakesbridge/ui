@@ -28,8 +28,9 @@ define([
                             'TRG_basic_no_matchvalue':'Please provide match field value',
                             'TRG_score_novalue' : 'Please provide score value',
                             'TRG_form_noform' : 'Please select a form.',
-							'CRT_tarname_empty_error' : 'Target name can not be empty',
-							'CAMPS_campname_empty_error' : 'Campaign name can not be empty'
+                            'CRT_tarname_empty_error' : 'Target name can not be empty',
+                            'CAMPS_campname_empty_error' : 'Campaign name can not be empty',
+                            'SUB_updated': 'Subscriber fields updated successfully'
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -107,6 +108,7 @@ define([
                     
                     $("body").click(function(){
                        $(".custom_popup").hide(); 
+                       $(".tagbox-addbox").remove(); 
                        $("#camp_tags").removeClass("active");
                        $(".tooltip-inner").parents(".tooltip").remove();
                        var getCmpField = $(".ws-content.active #header_wp_field");
@@ -131,13 +133,15 @@ define([
                             var messageObj = {};
                             messageObj["heading"] = "Session Expired" 
                             messageObj["detail"] = "1. Your login session has expired.<br/>2. You are trying to access the page without logging-in.<br/>3. You did not follow the provided link to access this page and are trying to reach here by invalid means.";
-                            messageObj["login"] = "<a class='btn-gray' href='/pms/'>Login</a>";
+                            messageObj["login"] = "<a class='btn-gray' href='/pms/'><span>Login</span></a>";
                             _app.showAlertDetail(messageObj,$("body"));
                             return false;
                            }
                        }
                    });
-                   
+                   $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
+                        
+                   });
                    //Cache Clear time set
                    this.clearCache();
                  
@@ -369,6 +373,17 @@ define([
                 if(params.control){
                     params.control.find(".inputcont").removeClass("error")                    
                 }
+            },
+            addCommas :function(nStr){
+                    nStr += '';
+                    var x = nStr.split('.');
+                    var x1 = x[0];
+                    var x2 = x.length > 1 ? '.' + x[1] : '';
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                            x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                    }
+                    return x1 + x2;
             }
 	});
 

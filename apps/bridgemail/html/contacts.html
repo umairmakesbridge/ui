@@ -1,7 +1,8 @@
 <div class="temp-filters clearfix">
     <h2 id="contacts_count">
-        <input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" />
-        <span  class="badge badgebtn"><strong class="total-count">0</strong>  Subscribers</span> 
+        <input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" />        
+        <h2 id="total_templates"><strong class="badge total-count">0</strong> <span class="total-text">Contacts</span></h2>
+        <h2 id="total_selected" style="display:none"><strong class="badge total-selected-count">0</strong> <span class="total-selected-text">Contacts</span></h2>
         <a class=" btn-green actionbtn"  style="display:none;"><i class="icon mbaction"></i><span>Apply Action</span></a>
         <a class="badge badgebtn" style="display:none;"><strong>164</strong> Hidden </a>
     </h2>
@@ -11,20 +12,22 @@
             <option></option>            
         </select>
         <select class="nosearch recent-activities" data-placeholder="Sort By">                               
-            <option value="lastActivityDate">Recent Activities</option>            
-            <option value="creationTime">Created Date</option>            
-            <option value="updationTime">Updated Date</option>            
-            <option value="score">Score</option>            
-            <option value="webVisit">Web Visit</option>            
-            <option value="wfAlert">Alert</option>                        
+            <option value="lastActivityDate">Recent Activity</option>     
+            <option value="score">Score</option>        
+            <option value="firstName">First Name</option>     
+            <option value="creationTime">Creation Date</option>            
+            <option value="updationTime">Updation Date</option>                                       
+           <!-- <option value="webVisit">Web Visit</option>            
+            <option value="wfAlert">Alert</option>-->                        
         </select>
 
       <div class="input-append search contact-search" >         
               
       </div>
      
-    </div>     
-     
+    </div>         
+    <div class="refreshbtn" style="display: none;float:left!important"><img src="img/recurring2.gif" alt="" /></div> 
+    <label class="right top-label">Order By:</label>
   </div>
 
   <div class="contactsdiv">

@@ -12,7 +12,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					var camp_obj = this;
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
-						camp_obj.app.mainContainer.openCampaign(target.attr("id"));
+                                            camp_obj.app.mainContainer.openCampaign(target.attr("id"));
 					}
 				},
 				"click #camps_grid .btn-red":function(obj){
@@ -168,13 +168,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				});
 			},
 			initialize:function(){
-			   this.template = _.template(template);
-			   $('.tagscont').hide();
+			   this.template = _.template(template);			   
 			   this.render();
 			},
 			render: function () {
 				this.$el.html(this.template({}));
-                this.app = this.options.app;
+                                this.app = this.options.app;
 				var camp_obj = this;
 				camp_obj.getallcampaigns();
 				camp_obj.$el.find('div#campslistsearch').searchcontrol({
@@ -214,6 +213,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 							stats += '</ul>';
 						 header_title.append(stats);
 				 });
+                            this.current_ws = this.$el.parents(".ws-content");
+                            this.tagDiv = this.current_ws.find("#campaign_tags");
+                            this.tagDiv.hide();    
 			}
 			,
 			getallcampaigns: function () {				                               				

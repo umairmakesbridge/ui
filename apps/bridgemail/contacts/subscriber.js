@@ -1,4 +1,4 @@
-define(['text!html/subscriber.html','jquery.searchcontrol','jquery.chosen','moment','bms-tags'],
+define(['text!contacts/html/subscriber.html','jquery.searchcontrol','jquery.chosen','moment','bms-tags'],
 function (template,jsearchcontrol,chosen,moment,tags) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -16,15 +16,9 @@ function (template,jsearchcontrol,chosen,moment,tags) {
              * Attach events on elements in view.
             */        
             events: {				
-                'click .toggleinfo':function(obj){
-                    this.toggleFieldsView(obj)           
-                },
-                'click .edit-profile':function(){
-                   this.editProfile();
-                },
-                'click .manage-lists':function(){
-                    this.manageLists();
-                }
+                'click .toggleinfo':'toggleFieldsView',
+                'click .edit-profile':'editProfile',
+                'click .manage-lists':'manageLists'
             },
             /**
              * Initialize view - backbone
@@ -55,6 +49,18 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                 this.current_ws = this.$el.parents(".ws-content");
                 this.tagDiv = this.current_ws.find("#campaign_tags");
                 this.tagDiv.show();
+                                
+                var editIconSub = $('<a class="icon edit"></a>');
+                var deleteIconSub = $('<a class="icon delete"></a>');
+                var action_icon = $('<div class="pointy"></div>")');
+                action_icon.append(editIconSub);
+                action_icon.append(deleteIconSub);
+                this.current_ws.find(".edited  h2").append(action_icon);
+               
+                editIconSub.click(_.bind(function(){
+                    this.editProfile();
+                },this))
+                
             },
             /**
              * Initializing all controls here which need to show in view.
@@ -178,9 +184,11 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                 var tags = this.sub_fields.tags;                                    
                 this.tagDiv.tags({app:this.app,
                     url:'/pms/io/subscriber/setData/?BMS_REQ_TK='+this.app.get('bms_token'),
-                    params:{type:'tags',subNumber:this.sub_id,tags:''}
-                    ,showAddButton:false,
-                    tags:tags
+                    params:{type:'tags',subNum:this.sub_id,tags:''}
+                    ,showAddButton:true,
+                    tempOpt:true,
+                    tags:tags,
+                    typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allSubscriberTags"
                  });
                  
             },
@@ -215,37 +223,54 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                 var _this = this;
                 _this.$(".topinfo").children().remove();
                 $.each(_this.basicFields,function(key,val){
-                    if(_this.sub_fields[key]){
-                       _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_this.sub_fields[key]+'</strong> <a class="movetop">Move to Top</a></span>');
-                    }
+                      var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
+                      _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_val+'</strong> </span>');
+                    
                 })
                 if(_this.sub_fields.cusFldList){
                     $.each(_this.sub_fields.cusFldList[0], function(key, val) {  
                         $.each(val[0],function(key,val){
-                              if(val){
-                                _this.$(".topinfo").append('<span>'+key+'<strong>'+val+'</strong> </span>');
-                              }
+                              var _val = val?val:"&nbsp;";
+                              _this.$(".topinfo").append('<span>'+key+'<strong>'+_val+'</strong> </span>');
+                              
                          });
                     });
                 }
-                _this.$(".topinfo").append('<div class="clearfix"></div>');
+                _this.$(".topinfo").append('<div class="clearfix"></div>');                
+                if(this.sub_fields["salesStatus"]){
+                   this.$(".statusdd").show();  
+                   this.$(".statusdd span").html(this.sub_fields["salesStatus"]);
+                }
+                else{
+                   this.$(".statusdd").hide(); 
+                }
+                this.$(".score span").html(this.sub_fields["score"]);
             },
             /**
              * Open edit profile dialog view.
             */
             editProfile:function(){
                  var _this = this;
-                 var dialog = this.app.showDialog({title:'Edit Profile',
-                        css:{"width":"1000px","margin-left":"-500px","top":"10%"},
+                 var dialog_width = 1000;
+                 var dialog_height = $(document.documentElement).height()-182;                 
+                 var btn_prp ={title:'Edit Profile',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                         headerEditable:false,
                         headerIcon : 'account',
-                        bodyCss:{"min-height":"400px"},
-                        buttons: {saveBtn:{text:'Update'}} 
-                 });
+                        bodyCss:{"min-height":dialog_height+"px"},                                                                          
+                        buttons: {saveBtn:{text:'Update',btnicon:'update'}}                        
+                 }
+                 if(this.sub_fields["conLeadId"]){
+                    btn_prp['newButtons'] = [{'btn_name':'Update at Salesforce'}];
+                 }
+                 var dialog = this.app.showDialog(btn_prp);
                  this.app.showLoading("Loading...",dialog.getBody());                                  
                  require(["contacts/subscriber_fields"],function(sub_detail){                                     
                     var page = new sub_detail({sub:_this});                    
                     dialog.getBody().html(page.$el);
+                    if(_this.sub_fields["conLeadId"]){
+                        dialog.saveCallBack2(_.bind(page.updateSubscriberDetailAtSalesForce,page,dialog));
+                    }
                     dialog.saveCallBack(_.bind(page.updateSubscriberDetail,page,dialog));
                });
             }
@@ -255,13 +280,26 @@ function (template,jsearchcontrol,chosen,moment,tags) {
             ,
             manageLists:function(){
                 var _this = this;
-                this.$(".sub-detail-main").hide();
-                this.$(".sub-manage-list").show();
-                this.app.showLoading("Loading...",this.$(".sub-manage-list")); 
+                 var dialog_width = 1000;
+                 var dialog_height = $(document.documentElement).height()-182;                 
+                 var btn_prp ={title:'Manage Lists',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                        headerEditable:false,
+                        headerIcon : 'mlist2',
+                        bodyCss:{"min-height":"448px"},                                                                          
+                        buttons: {saveBtn:{text:'Save',btnicon:'save'}}                        
+                 }
+                
+                var dialog = this.app.showDialog(btn_prp);
+                this.app.showLoading("Loading...",dialog.getBody());                                                                   
                 require(["contacts/manage_lists"],function(sub_manage_lists){                                     
                     var page = new sub_manage_lists({sub:_this});                    
-                    _this.$(".sub-manage-list").html(page.$el);
+                    dialog.getBody().html(page.$el);
+                    dialog.saveCallBack(_.bind(page.updateSubscriberLists,page,dialog));
                 });
+            },
+            fetchContacts:function(){
+                //this.sub.fetchContacts();
             }
             
         });

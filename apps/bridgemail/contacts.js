@@ -16,18 +16,20 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     var target = $.getObj(obj,"div");
                     if(target.attr("id")){
                        this.app.mainContainer.openSubscriber(target.attr("id"));
-                  }
+                    }
                 }
             },
             /**
              * Initialize view - backbone .
             */
             initialize:function(){
+               _.bindAll(this, 'searchByTag','updateRefreshCount');  
                this.template = _.template(template);		
                //
                this.subscriberRequest = new subscriberCollection();                              
                this.offset = 0;               
                this.searchTxt = '';
+               this.tagTxt = '';
                this.contacts_request = null;
                this.sortBy = 'lastActivityDate';
                this.render();
@@ -41,29 +43,31 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                
                this.$contactList = this.$(".contactsdiv");
                this.$contactLoading = this.$(".loadmore");
-               
-               this.initControls();
-               this.fetchContacts();
+                               
+               this.initControls();               
+               this.fetchContacts();               
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
             */
             ,
             init:function(){
-             var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li><span class="badge pclr18">0</span>Total Contacts</li>';
-                 count_header += '<li><span class="badge pclr11">0</span>Suspended</li>';
-                 count_header += '<li><span class="badge pclr15">0</span>Hidden</li>';
-                 count_header += '<li><span class="badge pclr23">0</span>Added in Last 24hrs </li>';
+               this.current_ws = this.$el.parents(".ws-content");
+               this.current_ws.find("#campaign_tags").hide();
+               this.ws_header = this.current_ws.find(".camp_header .edited"); 
+               
+               this.addCountHeader();
+               this.fetchCount();
+            },
+            addCountHeader:function(){
+               var count_header =  '<ul class="c-current-status">';
+                 count_header += '<li><span class="badge pclr18 tcount">0</span>Total Contacts</li>';
+                 count_header += '<li><span class="badge pclr11 suppressCount">0</span>Suspended</li>';
+                 count_header += '<li><span class="badge pclr15 hiddenCount">0</span>Hidden</li>';
+                 count_header += '<li><span class="badge pclr23 addCount">0</span>Added in Last 24hrs </li>';
                  count_header += '</ul>';  
-                 var $countHeader = $(count_header);     
-                 
-                 this.current_ws = this.$el.parents(".ws-content");
-                 this.current_ws.find("#campaign_tags").hide();
-                 this.ws_header = this.current_ws.find(".camp_header .edited");
-                 
-                 this.ws_header.append($countHeader);
-                 
+                 var $countHeader = $(count_header);                                                        
+                 this.ws_header.append($countHeader);                  
             },
             /**
              * Initializing all controls here which need to show in view.
@@ -74,6 +78,14 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                       checkboxClass: 'checkpanelinput',
                       insert: '<div class="icheck_line-icon"></div>'
                });
+               
+                this.$('input.checkpanel').on('ifChecked', _.bind(function(event){
+                    this.$(".contact-row-check").iCheck('check');
+                },this))
+                
+                this.$('input.checkpanel').on('ifUnchecked', _.bind(function(event){
+                    this.$(".contact-row-check").iCheck('uncheck');  
+                },this))
 
                //this.$(".filter-by").chosen({ width: "220px",disable_search: "true"});
                this.$(".recent-activities").chosen({ width: "220px",disable_search: "true"});
@@ -84,12 +96,31 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                      height:'22px',
                      searchFunc:_.bind(this.searchContacts,this),
                      clearFunc:_.bind(this.clearSearchContacts,this),
-                     placeholder: 'Search Contacts',                     
+                     placeholder: 'Search Contacts & Tags',                     
                      showicon: 'yes',
                      iconsource: 'subscribers'
               });
               $(window).scroll(_.bind(this.liveLoading,this));
               $(window).resize(_.bind(this.liveLoading,this));
+            },
+            /**
+             * Fetching contacts list from server.
+            */
+            fetchCount:function(){
+                var bms_token =this.app.get('bms_token');
+                var _this = this;
+                var URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+bms_token+"&type=getSAMSubscriberStats";
+                jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){                    
+                    _this.app.showLoading(false,_this.$el);   
+                    var _json = jQuery.parseJSON(xhr.responseText); 
+                    if(_this.app.checkError(_json)){
+                        return false;
+                    }
+                    _.each(_json,function(value,key){
+                         _this.ws_header.find("."+key).html(_this.app.addCommas(value));
+                    });
+                    
+                }),this); 
             },
             /**
              * Fetching contacts list from server.
@@ -111,24 +142,32 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 if(this.searchTxt){
                     _data['searchValue'] = this.searchTxt;
                 }
+                else if(this.tagTxt){
+                    _data['searchTag'] = this.tagTxt;
+                }
                 if(this.sortBy){
                     _data['orderBy'] = this.sortBy;
                 }
                 if(this.contacts_request){
                     this.contacts_request.abort();
                 }
+                this.$(".refreshbtn").show();
+                this.$("#total_templates").hide();
                 this.contacts_request = this.subscriberRequest.fetch({data:_data,remove: remove_cache,
                     success: _.bind(function (collection, response) {                                
                         // Display items
                         if(this.app.checkError(response)){
                             return false;
                         }
-                        this.app.showLoading(false,this.$contactList);                                                 
-                        this.$(".total-count").html(response.totalCount);                        
+                        this.app.showLoading(false,this.$contactList);                                                                         
+                        this.showTotalCount(response.totalCount);
+                        
                         this.$contactLoading.hide();
                         
                         for(var s=this.offset;s<collection.length;s++){
                             var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this });                                
+                            subscriberView.on('tagclick',this.searchByTag);
+                            subscriberView.on('updatecount',this.updateRefreshCount);
                             this.$contactLoading.before(subscriberView.$el);
                         }                        
                         
@@ -141,7 +180,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                               search_message +=" containing '"+this.searchTxt+"'" ;
                             }
                             this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
-                        }
+                        }                               
                         
                     }, this),
                     error: function (collection, resp) {
@@ -181,9 +220,17 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             * @returns .
             */
             searchContacts:function(o,txt){
-                this.searchTxt = txt;
+                this.tagTxt = '';
+                this.searchTxt = txt;                                
                 if(o.keyCode==13 && this.searchTxt){
-                   this.fetchContacts();
+                    if(this.searchTxt.indexOf("Tag: ")>-1){
+                       var tagName = this.searchTxt.split(": ");
+                       this.searchByTag(tagName[1]);
+                    }
+                    else{
+                        this.fetchContacts();
+                    }
+                   
                 }                
             },
              /**
@@ -192,6 +239,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             * @returns .
             */
             clearSearchContacts:function(){
+                this.tagTxt = '';
                 this.searchTxt = '';                
                 this.fetchContacts();                
             },
@@ -200,10 +248,50 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             * 
             * @returns .
             */
-            sortContacts:function(){
+            sortContacts:function(){                                
                 this.sortBy = this.$(".recent-activities").val();
                 this.fetchContacts();
             }
-            
+            ,
+            showTotalCount:function(count){
+                this.$(".refreshbtn").hide();
+                this.$("#total_templates").show();
+                this.$(".total-count").html(this.app.addCommas(count));                        
+                if(this.ws_header.find(".tcount").html()=="0"){
+                    this.ws_header.find(".tcount").html(this.app.addCommas(count));                        
+                }
+                var _text = count=="1"?"Contact":"Contacts";
+                if(this.tagTxt){
+                    this.$(".total-text").html(_text+" found containing tag '<b>"+this.tagTxt+"</b>'");
+                }
+                else if(this.searchTxt){
+                    this.$(".total-text").html(_text+" found containing text or tag '<b>"+this.searchTxt+"</b>'");
+                }
+                else{
+                    this.$(".total-text").html(_text)
+                }
+                
+            },
+            searchByTag:function(tag){
+               this.searchTxt = '';
+               this.$("#contact-search").val("Tag: "+tag);
+               this.$("#clearsearch").show();
+               this.tagTxt = tag;
+               this.fetchContacts();
+            },
+            updateRefreshCount:function(){                
+               var checked_count = this.$(".contact-row-check:checked").length;                
+               if(checked_count>0){
+                   this.$("#total_templates").hide();
+                   this.$("#total_selected").show();
+                   this.$(".total-selected-count").html(checked_count);
+                   var _text = checked_count>1 ?"contacts":"contact";
+                   this.$(".total-selected-text").html(_text+" selected");
+               }
+               else{
+                   this.$("#total_templates").show();
+                   this.$("#total_selected").hide();
+               }
+            }
         });
 });

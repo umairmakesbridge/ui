@@ -36,8 +36,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             'click .analytics_reports-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
                             },
-                            'click .analytics_add-template-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
+                            'click .add-template-li':function(obj){
+                                 app.mainContainer.addWorkSpace({type:'',title:'My Templates',url : 'mytemplates',workspace_id: 'mytemplates',noTags:true,'addAction':true});
                             },
                             'click .analytics_add-list-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
