@@ -28,7 +28,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                               this.step2SlectSource(target_li);
                           }
                       },
-                       "click #campMenubtn":function(){
+                      "click #campMenubtn":function(){
                            var camp_id= $("#campMenu").val();                          
                            this.loadCampaign(camp_id);
                            
@@ -267,7 +267,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.app.showLoading(false,camp_obj.states.step3.mapdataview.$el);
                      }
                 },
-                init:function(){                                                                                                    
+                init:function(){
                     //Load mergeFields
                     this.mergeFieldsSetup();                    
                     this.initHeader();
@@ -705,15 +705,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$(".gotostep1").click(_.bind(function(){
                             this.wizard.back();
                             this.wizard.back();
-                            this.wizard.back();
+                            this.wizard.back();							
                         },this))
-                        this.states.step4.init = true;                        
+                        this.states.step4.init = true;
                     }
                     this.setScheduleArea();
                     this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email").val()));
+					if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
+					{
+						this.$("#femail_default").show();
+						this.$("#campaign_preview_fromEmail_default").html(this.app.encodeHTML(this.$("#fromemail_default").val()));
+					}
                     this.$("#campaign_preview_defaultSenderName").html(this.app.encodeHTML(this.$("#campaign_from_name").val()));
+					if(this.$("#campaign_default_from_name").val() != '')
+					{
+						this.$("#fromname_default").show();
+						this.$("#campaign_preview_sendername_default").html(this.$("#campaign_default_from_name").val());
+					}
                     this.$("#campaign_preview_defaultReplyTo").html(this.app.encodeHTML(this.$("#campaign_reply_to").val()));
+					if(this.$("#campaign_default_reply_to").val() != '')
+					{
+						this.$("#replyto_default").show();
+						this.$("#campaign_preview_replyto_default").html(this.$("#campaign_default_reply_to").val());
+					}
                     
                     var settings_field = this.$(".step1-settings .inputlabel");
                     var settings_html = "",recipients_html="";
@@ -733,15 +748,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div>'
                     this.$(".recipients-inner").html(recipients_html);
                     this.$(".settings-inner").html(settings_html+"<div class='clearfix'></div>");
+					var i = 0;
                     this.$(".step1 .socialbtns li").each(function(){
                         var checked = $(this).find("input").prop("checked");
                         if(checked){
                             camp_obj.$(".step4 .socialbtns li."+ $(this)[0].className).show();
+							i++;
                         }
                         else{
                             camp_obj.$(".step4 .socialbtns li."+ $(this)[0].className).hide();
                         }
                     });
+					if(i == 0)
+						this.$('.social_accord').hide();
+					else
+						this.$('.social_accord').show();
                     if(this.$("#campaign_add_to_salesforce").prop("checked")){
                         this.$(".sf-camp-info").show();
                         this.$(".sf-camp-info .text").html('<img width="18" title="Salesforce" src="img/sficon.png" alt="" class="left"/> &nbsp;&nbsp;'+this.$("#sf_campaigns_combo option:selected").text())
@@ -751,11 +772,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     if(this.$("#conversion_filter").prop("checked")){
                         this.$(".conversion-page-info").show();
-                        this.$(".conversion-page-info .text").html(this.$("#con_filter_field").val());   
+						var filter = this.$("#con_filter_combo").val() == 'ct' ? 'Contains' : 'Equal to';
+                        this.$(".conversion-page-info .text").html('Text in URL <strong>'+ filter + ' ' + this.$("#con_filter_field").val()+'</strong>');   
                     }
                     else{
                         this.$(".conversion-page-info").hide();                           
                     }
+					if(this.$("#campaign_add_to_salesforce").prop("checked") || this.$("#conversion_filter").prop("checked"))
+						this.$(".other_accord").show();
+					else
+						this.$(".other_accord").hide();
                     this.$("#email-preview")[0].contentWindow.document.open('text/html', 'replace');
                     this.$("#email-preview")[0].contentWindow.document.write(this.app.decodeHTML(this.states.step2.htmlText,true));
                     this.$("#email-preview")[0].contentWindow.document.close();

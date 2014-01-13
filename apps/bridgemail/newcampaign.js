@@ -3,7 +3,12 @@ function (template) {
         'use strict';
         return Backbone.View.extend({                
                 events: {
-                    
+                    "keyup #camp_name":function(e)
+					{
+						if(e.keyCode==13){
+							 this.createCampaign();
+						 }
+					}
                  },
                 initialize: function () {
                         this.template = _.template(template);				

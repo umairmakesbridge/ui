@@ -152,7 +152,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
 
 .inputcont { position:relative; }
 
-.inputcont.error:after {
+/*.inputcont.error:after {
     background: url("../img/caution.png") no-repeat scroll center center #FB8080;
     border-radius: 2px;
     content: "";
@@ -164,7 +164,7 @@ input[disabled], select[disabled], textarea[disabled], input[readonly], select[r
     top: -20px;
     width: 16px;
     z-index: 9;
-} 
+} */
 
 .inputcont.success input[type="text"], .inputcont.success input[type="password"], .inputcont.success textarea, .inputcont.success .chosen-single
 {border:2px solid #FB8080 !important; }

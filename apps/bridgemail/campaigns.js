@@ -8,7 +8,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				"click #addnew_campaign":function(){             		
 					this.createCampaign();
 				},
-				"click #camps_grid .btn-gray":function(obj){
+				"click #camps_grid .btn-gray, .name-type .Editable":function(obj){
 					var camp_obj = this;
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
@@ -36,13 +36,36 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						camp_obj.previewCampaign(target.attr("id"));
 					}
 				},
+				"click #camps_grid .btn-copy":function(obj){
+					var camp_obj = this;
+					var target = $.getObj(obj,"a");
+					if(target.attr("id")){
+						camp_obj.copyCampaign(target.attr("id"));
+					}
+				},
+				"click #camps_grid .btn-schedule,#camps_grid .btn-reschedule":function(obj){
+					var camp_obj = this;
+					var target = $.getObj(obj,"a");
+					if(target.attr("id")){
+						camp_obj.app.mainContainer.openCampaign(target.attr("id"));
+					}
+				},
 				"click .stattype":function(obj){
 					var camp_obj = this;
+					//camp_obj.findCampaigns(obj);
 					var target = $.getObj(obj,"a");
 					camp_obj.$el.find('.stattype').parent().removeClass('active');
 					target.parent().addClass('active');
 					var type = target.attr("search");
-					var schDates = this.$('#daterange').val().split(' - ');
+					var schDates = '';
+					if(this.$('#daterange').val() != '')
+					{
+						schDates = this.$('#daterange').val().split(' - ');
+						if(schDates != '' && schDates.length == 1)
+						{
+							schDates[1] = schDates[0];
+						}
+					}
 					var dateURL = ""
 					if(schDates)
 					{
@@ -51,14 +74,35 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						var toDateParts = schDates[1].split('/');
 						var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
 						var dateURL = "fromDate="+fromDate+"&toDate="+toDate;
-					}
-					camp_obj.app.removeCache("campaigns");
+					}					
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
-					camp_obj.app.getData({
+					
+					/*camp_obj.app.getData({
 						"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL,
 						"key":"campaigns",
 						"callback":_.bind(camp_obj.createListTable,camp_obj)
-					});					
+					});	*/
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
+					jQuery.getJSON(URL,  function(tsv, state, xhr){
+						camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
+						if(xhr && xhr.responseText){
+							 var camps = jQuery.parseJSON(xhr.responseText);                                
+							 camp_obj.$el.find('#total_templates .badge').html(camps.count);
+							 if(camps.count > 0){
+								camp_obj.app.removeCache("campaigns");                      
+								camp_obj.app.setAppData('campaigns',camps);							
+								camp_obj.createListTable();
+							 }
+							 else
+							{
+								camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+							}
+						}
+						else
+						{
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+						}
+					});
 				},
 				"click .btn-draft":function(obj){
 					var camp_obj = this;
@@ -77,14 +121,34 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						}
 						else
 						{
+							camp_obj.app.showMessge("Campaign draft is complete");
 							camp_obj.app.mainContainer.openCampaign(camp_id);
 						}
 					});					
 				},
-				"click .btnDone,.calendericon":function(obj)
+				"click .btnDone":function(obj)
 				{
 					var camp_obj = this;
-					var schDates = this.$('#daterange').val().split(' - ');
+					var target = $.getObj(obj,"a");
+					var targetText = target.html();
+					switch(targetText)
+					{
+						case "Yesterday":
+							var schDates = this.$('#daterange').val().split(' - ');
+							break;
+						case "Today":
+							var schDates = this.$('#daterange').val().split(' - ');
+							break;
+						case "Last 7 days":
+							var schDates = this.$('#daterange').val().split(' - ');
+							break;
+						case "Last 30 Days":
+							var schDates = this.$('#daterange').val().split(' - ');
+							break;
+						default:
+							var schDates = this.$('#daterange').val().split(' - ');
+							break;
+					}					
 					var fromDateParts = schDates[0].split('/');
 					var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
 					var toDateParts = schDates[1].split('/');
@@ -100,32 +164,42 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						"callback":_.bind(camp_obj.createListTable,camp_obj)
 					});
 				}
-			},
+				,
+				"click .calendericon":function(obj)
+				{
+					this.$el.find('#daterange').click();
+					return false;
+				}
+			},			
 			previewCampaign: function(camp_id)
 			{
-				var camp_obj = this;
-				var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');				
+				var camp_obj = this;				
+				var dialog_width = $(document.documentElement).width()-60;
+				var dialog_height = $(document.documentElement).height()-182;
+				var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
+						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+						  headerEditable:false,
+						  headerIcon : 'dlgpreview',
+						  bodyCss:{"min-height":dialog_height+"px"}                                                                          
+				});	
+				camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
+								
+				var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
 				var camps_json = '';
 				$.post(URL, {type:'basic',campNum:camp_id})
 				.done(function(data) {      
-					camps_json = jQuery.parseJSON(data); 					
-					//if(camps_json.htmlText!==""){                           
-						var dialog_width = $(document.documentElement).width()-60;
-						var dialog_height = $(document.documentElement).height()-182;
-						var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
-								  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-								  headerEditable:false,
-								  bodyCss:{"min-height":dialog_height+"px"}                                                                          
-						});						
+					camps_json = jQuery.parseJSON(data);
+					camp_obj.app.showLoading(false,dialog.getBody());
+					if(camps_json.htmlText!==""){						
 						var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
-						dialog.getBody().html(preview_iframe);
-						camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());
+					dialog.getBody().html(preview_iframe);
 						preview_iframe[0].contentWindow.document.open('text/html', 'replace');
 						preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(camps_json.htmlText,true));
 						preview_iframe[0].contentWindow.document.close();
-						camp_obj.app.showLoading(false,dialog.getBody());
-					//}
-				});							   	
+					}
+					else
+						camp_obj.app.showAlert("Campaign body is missing",dialog.getBody());
+				});
 			},
 			deleteCampaign: function(camp_id)
 			{
@@ -167,6 +241,91 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						 dialog.saveCallBack(_.bind(mPage.createCampaign,mPage));
 				});
 			},
+			copyCampaign: function(camp_id)
+			{
+				var camp_obj = this;
+				var dialog_title = "Copy Campaign";
+				var dialog = this.app.showDialog({title:dialog_title,
+						  css:{"width":"600px","margin-left":"-300px"},
+						  bodyCss:{"min-height":"260px"},							   
+						  buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+				});
+				this.app.showLoading("Loading...",dialog.getBody());
+				require(["copycampaign"],function(copycampaignPage){                                     
+						 var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.app,copycampdialog:dialog});
+						 dialog.getBody().html(mPage.$el);
+						 dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+				});
+			},
+			findCampaigns: function(obj)
+			{
+				var camp_obj = this;
+				var target = $.getObj(obj,"a");
+				var dateStart = target.attr('dateStart');
+				var dateEnd = target.attr('dateEnd');
+				var schDates = [];
+				if(dateStart)
+				{					
+					schDates[0] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateStart) );
+					schDates[1] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateEnd) );
+				}
+				else
+				{
+					schDates = this.$('#daterange').val().split(' - ');
+					if(schDates != '' && schDates.length == 1)
+					{
+						schDates[1] = schDates[0];
+					}
+				}
+				if(schDates != '')
+				{
+					var fromDateParts = schDates[0].split('/');
+					var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
+					var toDateParts = schDates[1].split('/');
+					var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
+				}
+				var type = target.attr("search");
+				if(!type)
+					type = $('#template_search_menu li.active a').attr('search');
+				if(target.attr('class') == 'stattype topbadges')
+				{
+					camp_obj.$el.find('#template_search_menu li').removeClass('active');
+					$('#template_search_menu').find("li").each(function(i) {
+						if($(this).find('a').attr('search') == type)
+							$(this).addClass('active');							
+					});
+				}
+				camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
+				/*camp_obj.app.getData({
+					"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate,
+					"key":"campaigns",
+					"callback":_.bind(camp_obj.createListTable,camp_obj)
+				});*/
+				if(schDates != '')
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
+				else
+					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type;
+				jQuery.getJSON(URL,  function(tsv, state, xhr){
+					camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
+					if(xhr && xhr.responseText){
+						 var camps = jQuery.parseJSON(xhr.responseText);                                
+						 camp_obj.$el.find('#total_templates .badge').html(camps.count);
+						 if(camps.count > 0){
+							camp_obj.app.removeCache("campaigns");                      
+							camp_obj.app.setAppData('campaigns',camps);							
+							camp_obj.createListTable();
+						 }
+						 else
+						{
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+						}
+					}
+					else
+					{
+						camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+					}
+				});
+			},
 			initialize:function(){
 			   this.template = _.template(template);			   
 			   this.render();
@@ -183,7 +342,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					placeholder: 'Search Campaigns',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                                        iconsource: 'campaigns',
+                    iconsource: 'campaigns',
 					countcontainer: 'no_of_camps'
 				 });
 				 
@@ -191,8 +350,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			}
 			,
 			init:function(){
-				this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
-				this.$el.find('#daterange').daterangepicker();				
+				//this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
+				this.$el.find('#daterange').daterangepicker();
+				$(".btnDone").click(_.bind(this.findCampaigns,this));
+				$(".ui-daterangepicker li a").click(_.bind(this.findCampaigns,this));
 				 var camp_obj = this;
 				 var active_ws = this.$el.parents(".ws-content");
 				 var header_title = active_ws.find(".camp_header .edited  h2");                 
@@ -206,12 +367,14 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						 }
 						 var header_title = active_ws.find(".camp_header .edited");
 						 var stats = '<ul class="c-current-status">';
-						 stats += '<li><span class="badge pclr24">'+ allStats['sent'] +'</span>Sent</li>';
-						  stats += '<li><span class="badge pclr20">'+ allStats['pending'] +'</span>Pending</li>';
-						   stats += '<li><span class="badge pclr9">'+ allStats['scheduled'] +'</span>Scheduled</li>';
-						    stats += '<li><span class="badge pclr8">'+ allStats['draft'] +'</span>Draft</li>';
-							stats += '</ul>';
+						 stats += '<li><span class="badge pclr18"><a class="stattype topbadges" tabindex="-1" search="C">'+ allStats['sent'] +'</a></span>Sent</li>';
+						  stats += '<li><span class="badge pclr6"><a class="stattype topbadges" tabindex="-1" search="P">'+ allStats['pending'] +'</a></span>Pending</li>';
+						   stats += '<li><span class="badge pclr2"><a class="stattype topbadges" tabindex="-1" search="S">'+ allStats['scheduled'] +'</a></span>Scheduled</li>';
+						    stats += '<li><span class="badge pclr1"><a class="stattype topbadges" tabindex="-1" search="D">'+ allStats['draft'] +'</a></span>Draft</li>';
+							stats += '</ul>';							
 						 header_title.append(stats);
+						 $(".c-current-status li a").click(_.bind(camp_obj.findCampaigns,camp_obj));
+						 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
 				 });
                             this.current_ws = this.$el.parents(".ws-content");
                             this.tagDiv = this.current_ws.find("#campaign_tags");
@@ -253,7 +416,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 									height:this.app.get('wp_height')-122,
 									usepager : false,
 									colWidth : ['100%','70px','140px']
-					});                                                                
+					});
 					this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
 					this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
 					this.$("#camps_grid tr td:nth-child(3)").attr("width","140px");                                    
@@ -284,16 +447,40 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                 }
 				var flag_class = '';
 				if(val[0].status == 'D')
-					flag_class = 'pclr8';
+					flag_class = 'pclr1';
 				else if(val[0].status == 'P')
-					flag_class = 'pclr20';
+					flag_class = 'pclr6';
 				else if(val[0].status == 'S')
-					flag_class = 'pclr9';
+					flag_class = 'pclr2';
 				else if(val[0].status == 'C')
-					flag_class = 'pclr24';
+					flag_class = 'pclr18';
 				var row_html = '<tr id="row_'+val[0]['campNum.encode']+'">';
-				row_html += '<td class="firstcol">'+start_div+'<div class="name-type"><h3><a>'+ val[0].name +'</a><a class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</a><div class="campaign_stats"><a class="icon report"></a></div></h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div>'+end_div+'</td>';
-				var datetime = val[0].scheduledDate;
+				var chartIcon = '';
+				var editClass = 'notEditable';
+				if(val[0].status == 'P' || val[0].status == 'C')
+				{
+					chartIcon = '<div class="campaign_stats"><a class="icon report"></a></div>';
+				}
+				if(val[0].status == 'D')
+				{
+					editClass = 'Editable';
+				}
+				row_html += '<td class="firstcol">'+start_div+'<div class="name-type"><h3><a id="'+ val[0]['campNum.encode'] +'" class="campname '+ editClass +'">'+ val[0].name +'</a><a class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</a>'+ chartIcon +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div>'+end_div+'</td>';
+				var datetime = '';
+				var dtHead = '';
+				if(val[0].status != 'D')
+				{
+					dtHead = '<em>Schedule Date</em>';
+					datetime = val[0].scheduledDate;
+				}
+				else
+				{
+					dtHead = '<em>Updation Date</em>';
+					if(val[0].updationDate)
+						datetime = val[0].updationDate;
+					else
+						datetime = val[0].creationDate;
+				}
 				if(datetime)
 				{
 					var date = datetime.split(' ');
@@ -305,26 +492,52 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					dateFormat = '';					
                                      }   
                                 //row_html += '<td>'+start_div+'<div class="time show" style="min-width:90px">'+this.app.getCampStatus(val[0].status)+'</div>'+end_div+'</td>';     
-				row_html += '<td>'+start_div+'<div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div>'+end_div+'</td>';
-				var action_button = '<a id="'+ val[0]['campNum.encode'] +'" class="btn-blue btn-preview"><span>Preview</span><i class="icon preview3"></i></a>';
+				if(val[0].status != 'D')
+					row_html += '<td>'+start_div+'<div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div>'+end_div+'</td>';
+				else
+					row_html += '<td>'+start_div+''+end_div+'</td>';
+				var action_button = '';
+				var btns = '';
 				switch(val[0].status)
 				{					
 					case 'D':
-						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-gray"><span>Edit</span><i class="icon edit"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
+						btns = 'DL,P,C,S,E';
 						break;					
 					case 'S':
-						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-green"><span>Reschedule</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-blue btn-draft"><span>Draft</span><i class="icon time2"></i></a><a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
+						btns += 'DL,P,C,R,DR';
 						break;
 					case 'C':
-						action_button += '<a id="'+ val[0]['campNum.encode'] +'" class="btn-red"><i class="icon delete"></i></a>';
+						btns += 'DL,P,C';
+						break;
+					case 'P':
+						btns += 'P,C';
 						break;
 				} 
+				action_button = camp_obj.drawButtons(btns,val[0]['campNum.encode']);
 				var timeshow = '';
 				if(dateFormat != '')
-					timeshow = '<div class="time show" style="width:105px"><strong><span><em>Schedule Date</em>'+ dateFormat +'</span></strong></div>';
+					timeshow = '<div class="time show" style="width:105px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div>';
 				row_html += '<td>'+start_div+ timeshow +'<div id="'+ val[0]['campNum.encode'] +'" class="action">'+ action_button +'</div>'+end_div+'</td>';					
 				row_html += '</tr>';
 				return row_html;
+			},
+			drawButtons: function(buttons,camp_id){
+				var btnsArray = [];
+				btnsArray["DL"] = '<a id="'+ camp_id +'" class="btn-red"><i class="icon delete"></i></a>';
+				btnsArray["P"] = '<a id="'+ camp_id +'" class="btn-blue btn-preview"><span>Preview</span><i class="icon preview3"></i></a>';
+				btnsArray["C"] = '<a id="'+ camp_id +'" class="btn-green btn-copy"><span>Copy</span><i class="icon copy"></i></a>';
+				btnsArray["S"] = '<a id="'+ camp_id +'" class="btn-green btn-schedule"><span>Schedule</span><i class="icon time2"></i></a>';
+				btnsArray["E"] = '<a id="'+ camp_id +'" class="btn-gray btn-edit"><span>Edit</span><i class="icon edit"></i></a>';
+				btnsArray["R"] = '<a id="'+ camp_id +'" class="btn-green btn-reschedule"><span>Reschedule</span><i class="icon time2"></i></a>';
+				btnsArray["DR"] = '<a id="'+ camp_id +'" class="btn-blue btn-draft"><span>Draft</span><i class="icon time2"></i></a>';
+				
+				var buttons = buttons.split(',');
+				var btns = '';
+				for(var i=0; i<buttons.length; i++)
+				{
+					btns += btnsArray[buttons[i]];
+				}
+				return btns;
 			},
 			appendCampaigns:function(){
 				var camp_list_json = this.app.getAppData("campaigns");                            

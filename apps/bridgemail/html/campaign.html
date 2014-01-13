@@ -11,8 +11,7 @@
         <div class="row">
           <label>Subject</label>
           <div class="input-append adv_dd sort-options subject-container">
-              <div class="inputcont">
-              	<div class="error-mark"></div>
+              <div class="inputcont">              	
               	<input type="text" placeholder="Subject of the campaign" id="campaign_subject" class="header-info">
                 <div class="btn-group subject-group">
                   <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -52,8 +51,7 @@
         <div class="row addrow femail-container" id="campaign_from_email_default" style="display:none">
           <label>&nbsp;</label>
           <span class="directarrow"></span>
-          <div class="inputcont" style="text-align:right;">
-          	<div class="error-mark"></div>
+          <div class="inputcont" style="text-align:right;">          	
           	<select id="fromemail_default" class="nosearch" style="float:right;">
                   
             </select>
@@ -63,8 +61,7 @@
         <div class="row">
           <label>From Name</label>
           <div class="input-append adv_dd sort-options fname-container">
-              <div class="inputcont">
-              	<div class="error-mark"></div>
+              <div class="inputcont">              	
               	<input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" />
                 <div class="btn-group fromname-group">
                   <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -76,8 +73,7 @@
         <div class="row addrow" id="campaign_from_name_default" style="display:none">
             <label>&nbsp;</label>
             <span class="directarrow"></span>            
-            <div class="inputcont fnamedefault-container" style="text-align:right;">
-            	<div class="error-mark"></div>
+            <div class="inputcont fnamedefault-container" style="text-align:right;">            	
             	<input id="campaign_default_from_name" type="text" placeholder="Set Default Value">
             </div>
             <!--<span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>-->
@@ -85,8 +81,7 @@
         <div class="row">
           <label>Reply To</label>
           <div class="input-append adv_dd sort-options replyto-container">
-            <div class="inputcont">
-              	<div class="error-mark"></div>
+            <div class="inputcont">              	
             	<input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" />                
                 <div class="btn-group replyto-group">
                   <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -98,8 +93,7 @@
          <div class="row addrow replyemail-container" id="campaign_reply_to_default" style="display:none">
             <label>&nbsp;</label>
             <span class="directarrow"></span>
-            <div class="inputcont">
-              	<div class="error-mark"></div>
+            <div class="inputcont">              	
             	<input id="campaign_default_reply_to" type="text" placeholder="Set Default Value">
             	<!--<span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
             </div>
@@ -562,12 +556,21 @@
                   <div class="row">
                     <label>From Email</label>
                     <span class="text" id="campaign_preview_fromEmail"></span></div>
+                  <div id="femail_default" class="row" style="display:none;">
+                    <label>From Email Value</label>
+                    <span class="text" id="campaign_preview_fromEmail_default"></span></div>
                   <div class="row">
                     <label>From Name</label>
                     <span class="text" id="campaign_preview_defaultSenderName"></span></div>
+                  <div id="fromname_default" class="row" style="display:none;">
+                    <label>From Name Value</label>
+                    <span class="text" id="campaign_preview_sendername_default"></span></div>
                   <div class="row">
                     <label>Reply To</label>
-                    <span class="text" id="campaign_preview_defaultReplyTo"></span></div>
+                    <span class="text" id="campaign_preview_defaultReplyTo"></span></div>                
+                <div id="replyto_default" class="row" style="display:none;">
+                    <label>Reply To Value</label>
+                    <span class="text" id="campaign_preview_replyto_default"></span></div>
                 </div>
             </div>   
             <div class="collapsedivs">    
@@ -576,7 +579,7 @@
                   
               </div>
             </div>
-            <div class="collapsedivs">    
+            <div class="collapsedivs social_accord">    
                 <a ><h4>Social <b class="caret"></b></h4></a>
                 <div>
                     <ul class="socialbtns clearfix">
@@ -598,7 +601,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="collapsedivs">    
+            <div class="collapsedivs other_accord">    
                 <a ><h4>Other <b class="caret"></b></h4></a>
                 <div>
                     <div class="row sf-camp-info"><label>Add Results to Salesforce Campaign</label><span class="text"></span></div>
