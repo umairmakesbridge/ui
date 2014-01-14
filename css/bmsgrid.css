@@ -613,30 +613,33 @@ div.pGroup {
 	-webkit-border-radius: 2px 0 0 2px;
 	}
 .bmsgrid .bDiv tr td:last-child {  
-	padding-left: 10px; 
+	padding-right: 15px;
+	overflow:visible;
 	border-radius: 0 2px 2px 0;
 	-moz-border-radius:  0 2px 2px 0;
 	-webkit-border-radius:  0 2px 2px 0;
 	}
-	
+
+.bmsgrid .bDiv tr td:last-child div {min-height: 50px;}
 .bmsgrid .bDiv tr:nth-child(even) td:first-child {  }
 
-
-
 .bmsgrid .name-type h3 {
-    color: #495B67;
-    font-size: 14px;
-    font-weight: normal;
+    color: #02AFEF;
+    font-size: 18px;
+    font-weight: bold;
+    height: 22px;
     line-height: 1.2;
     margin: 0;
-    padding: 3px 5px;
+    padding: 5px;
 }
 .bmsgrid div.bDiv td > div{
     position: relative; 
 }
 
 .bmsgrid div.bDiv td {
-    padding: 10px;    
+    padding: 5px 5px;    
+	height:52px;
+	color:#6494AF;
 }
 .bmsgrid div.bDiv td:first-child input{
     float: left;
@@ -657,7 +660,7 @@ div.pGroup {
 .bmsgrid .tags a {  }
 .bmsgrid .tagscont {
     height: 15px;
-    margin: 2px 0 0 !important;
+    margin: 4px 0 0 !important;
     overflow: hidden;
     position: static !important;
 }
@@ -673,7 +676,11 @@ div.pGroup {
     padding: 0 5px;
 }
 
-.bmsgrid .tagscont ul li a:hover {background:#19BAF7; color:#fff;}
+.bmsgrid .tagscont ul li .ellipsis {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #01AEEE;
+}
+.bmsgrid .tagscont ul li a:hover, .bmsgrid .tagscont ul li .ellipsis:hover  {background:#19BAF7; color:#fff;}
 
 .bmsgrid .tags .tagicon {
     background-position: -164px -870px;
@@ -682,20 +689,22 @@ div.pGroup {
     margin: 0;
 }
 
-.bmsgrid div.hDiv th, .bmsgrid div.bDiv td { overflow:visible;}
+.bmsgrid div.hDiv th, .bmsgrid div.bDiv td { /*overflow:visible;*/}
 .bmsgrid div.bDiv tr .action { width:350px;}
 
 .bmsgrid div.bDiv tr .action a {
     float: right;
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .bmsgrid   .icon { margin:0 3px 0 0; float:left !important;}
 .bmsgrid   i.icon { margin:0 0 0; float:right;}
 
-.bmsgrid .subscribers,.bmsgrid .subscribers,
+.bmsgrid .subscribers,
 .bmsgrid .time ,
-.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; margin:0; 	min-height:18px; min-width:120px; }
+.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; /*margin:15px 15px 2px;*/ margin:0; 	min-height:18px; min-width:120px; }
+
+
 
 
 .bmsgrid .subscribers > strong {
@@ -726,15 +735,16 @@ div.pGroup {
     padding: 5px 10px 5px 35px;
 }
 
-.bmsgrid .subscribers span, .bmsgrid .subscribers i { 
+
+.bmsgrid .subscribers > span, .bmsgrid .subscribers i { 
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/subscribersicon.png") no-repeat scroll center  0;}
 
-/*.bmsgrid .time span, .bmsgrid .time i { 
+.bmsgrid .time > span, .bmsgrid .time i { 
 float:left; width:18px; height:18px; margin-right:5px;
-background: url("../img/timeicon.png") no-repeat scroll center  0 ;}*/
+background: url("../img/time.png") no-repeat scroll center  0 ;}
 
-.bmsgrid .mail span, .bmsgrid .mail i { 
+.bmsgrid .mail > span, .bmsgrid .mail i { 
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 
@@ -742,12 +752,18 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 
 
 
-.imprtlist .bmsgrid .name-type h3 {
+
+
+ .bmsgrid .name-type h3 {
     font-weight: bold;
-    line-height: 28px;
+}
+ .bmsgrid .name-type h3 a:first-child {
+    color: #02AFEF;
+    float: left;
+    font-size: 18px;
 }
 
-.imprtlist .bmsgrid .sched, .imprtlist .bmsgrid .subscribers {
+ .bmsgrid .sched, .imprtlist .bmsgrid .subscribers {
     color: #787983;
     font-size: 14px;
 	min-height:18px;
@@ -756,29 +772,40 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 	margin:0;
 }
 
-.imprtlist .bmsgrid  .sched span {
-    background: url("../img/scheduledicon.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-    float: left;
-    height: 18px;
-    margin-right: 5px;
-    width: 18px;
+ 
+.bmsgrid .sched > strong {
+    background: url("../img/scheduledicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
 }
-.imprtlist .bmsgrid  .sched em, .imprtlist .bmsgrid   .subscribers em {
+
+ .bmsgrid  .sched em,  .bmsgrid   .subscribers em ,  .bmsgrid .time em,  .bmsgrid .mail em {
+   color: #9BABB4;
     display: block;
-    font-size: 11px;
+    font-size: 12px;
     font-style: normal;
-    line-height: 12px;
-    margin: 0 0 0 23px;
+    line-height: 18px;
+    margin: 0 0 0 -28px;
+	text-align: left;
 	
 }
 
-.imprtlist .bmsgrid  .sched span, .imprtlist .bmsgrid  .subscribers span {
+ .bmsgrid  .sched span,  .bmsgrid  .subscribers span,  .bmsgrid  .time span,  .bmsgrid  .mail span {
     float: left;
-    margin: 8px 5px 0 0;
+	display: inline-block;
+    padding: 0 10px 0 0;
+	color: #5E7684;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
 }
 
 
-.imprtlist .bmsgrid .scheduled {
+ .bmsgrid .scheduled {
 	background:  #97D61D;
 	color: #fff;
 	  display: inline-block;
@@ -790,7 +817,7 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 }
-.imprtlist .bmsgrid .pending {
+ .bmsgrid .pending {
 	background: #FF9C00;
 	color: #fff;
 	  display: inline-block;
@@ -813,35 +840,39 @@ background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 	width: 18px;
 }
 
+
 .ui-accordion .ui-accordion-header .subscribers .badge { float:right;}
 
-.bmsgrid .sched > strong {
-    background: url("../img/scheduledicon.png") no-repeat scroll 8px 23px;
-    color: #98B2C6;
-    display: inline-block;
-    font-size: 13px;
-	font-weight: normal;
-    margin: 0;
-    padding: 5px 10px 5px 35px;
+
+
+
+.ui-accordion .ui-accordion-header .subscribers {
+    float: right;
+    margin: 12px -4px 0 20px;
+	background:#fff;
+	border-radius: 30px;
+	-moz-border-radius: 30px;
+	-webkit-border-radius: 30px;
 }
 
-  .bmsgrid  .sched em,  .bmsgrid   .subscribers em ,  .bmsgrid .time em,  .bmsgrid .mail em {
-   color: #9BABB4;
-    display: block;
+.ui-accordion .ui-accordion-header .subscribers .badge:first-child {
+    float: left;
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+}
+.ui-accordion .ui-accordion-header .subscribers em {
+    float: left;
     font-size: 12px;
     font-style: normal;
-    line-height: 18px;
-    margin: 0 0 0 -28px;
-	text-align: left;
-	
+    font-weight: normal;
+    line-height: 23px;
+    padding: 0 14px 0 0;
+}
+.ui-accordion .ui-accordion-header .subscribers .badge {
+    background: url("../img/subscribersicon.png") no-repeat scroll 8px center rgba(0, 0, 0, 0);
+    color: #98B2C6;
+    float: right;
+    padding: 5px 10px 5px 30px !important;
 }
 
-.bmsgrid  .sched span,  .bmsgrid  .subscribers span,  .bmsgrid  .time span,  .bmsgrid  .mail span {
-    float: left;
-	display: inline-block;
-    padding: 0 10px 0 0;
-	color: #5E7684;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: normal;
-}
+
