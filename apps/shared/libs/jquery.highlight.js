@@ -15,19 +15,22 @@ Johann Burkard
 */
 
 jQuery.fn.highlight = function(pat) {
+	var c = 0;
  function innerHighlight(node, pat) {
-  var skip = 0;
+  var skip = 0;  
   if (node.nodeType == 3) {
    var pos = node.data.toUpperCase().indexOf(pat);
    if (pos >= 0) {
     var spannode = document.createElement('span');
-    spannode.className = 'highlight';
+	if(c == 0)
+    	spannode.className = 'highlight';
     var middlebit = node.splitText(pos);
     var endbit = middlebit.splitText(pat.length);
     var middleclone = middlebit.cloneNode(true);
     spannode.appendChild(middleclone);
     middlebit.parentNode.replaceChild(spannode, middlebit);
     skip = 1;
+	c++;
    }
   }
   else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {

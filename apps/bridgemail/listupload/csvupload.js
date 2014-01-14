@@ -54,7 +54,7 @@ function (app,template,fileuploader,chosen) {
 			var curview = this;
 			var app = this.app;
 			var el = this.$el;
-			el.find('#uploaded-holder').show();
+			//el.find('#uploaded-holder').show();
 			campview.states.step3.change=true;
 			app.showLoading("Uploading file",el);
 			$.each(files, function(index, file) {
@@ -204,7 +204,7 @@ function (app,template,fileuploader,chosen) {
 				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
 				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
 				campview.states.step3.mapdataview=mapPage;
-			});					
+			});
 		},		
 		initialize:function(){
 		   this.template = _.template(template);			   	   

@@ -72,11 +72,6 @@ function (template) {
 					var appMsgs = campview.app.messages[0];
 					if((el.find('#ns_userid').val() == ''))
 					{						
-						/*var options = {'control':el.find('#ns_userid'),
-										'valid_icon':el.find('#nsuid_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.NS_userid_empty_error};
-						app.enableValidation(options);*/
 						app.showError({
 							control:el.find('.uid-container'),
 							message:appMsgs.NS_userid_empty_error
@@ -85,11 +80,6 @@ function (template) {
 					}					
 					else if(!app.validateEmail(el.find('#ns_userid').val()))
 					{						
-						/*var options = {'control':el.find('#ns_userid'),
-										'valid_icon':el.find('#nsuid_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.NS_userid_format_error};
-						app.enableValidation(options);*/
 						app.showError({
 							control:el.find('.uid-container'),
 							message:appMsgs.NS_userid_format_error
@@ -97,18 +87,11 @@ function (template) {
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#ns_userid'),'valid_icon':el.find('#nsuid_erroricon')};
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".uid-container")});
 					}
 					if(el.find('#ns_pwd').val() == '')
 					{						
-						/*var options = {'control':el.find('#ns_pwd'),
-										'valid_icon':el.find('#nspwd_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.NS_pwd_empty_error};
-						app.enableValidation(options);*/
 						app.showError({
 							control:el.find('.pwd-container'),
 							message:appMsgs.SF_pwd_empty_error
@@ -116,18 +99,11 @@ function (template) {
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#ns_pwd'),'valid_icon':el.find('#nspwd_erroricon')};
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".pwd-container")});
 					}
 					if(el.find('#ns_accid').val() == '')
-					{
-						/*var options = {'control':el.find('#ns_accid'),
-										'valid_icon':el.find('#nsaccid_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.NS_accid_empty_error};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.accid-container'),
 							message:appMsgs.SF_email_format_error
@@ -135,18 +111,11 @@ function (template) {
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#ns_accid'),'valid_icon':el.find('#nsaccid_erroricon')};
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".accid-container")});
 					}
 					if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
 					{						
-						/*var options = {'control':el.find('#ns_email'),
-										'valid_icon':el.find('#nsemail_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.NS_email_format_error};
-						app.enableValidation(options);*/
 						app.showError({
 							control:el.find('.email-container'),
 							message:appMsgs.SF_email_format_error
@@ -155,8 +124,6 @@ function (template) {
 					}
 					else
 					{						
-						/*var options = {'control':el.find('#ns_email'),'valid_icon':el.find('#nsemail_erroricon')};
-						app.disableValidation(options);*/
 						app.hideError({control:el.find(".email-container")});
 					}
 					return isValid;
@@ -170,13 +137,13 @@ function (template) {
 					app.showLoading('Loading Credentials',el);
 					if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y")
 					{
-                                                el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').attr('readonly','readonly');
+                        el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').attr('readonly','readonly');
 						var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=getCred";
 						jQuery.getJSON(URL,  function(tsv, state, xhr){							
 							var creds = jQuery.parseJSON(xhr.responseText);
 							if(creds)
 							{				
-                                                                el.find('#ns_pwd').removeAttr('readonly');
+                                el.find('#ns_pwd').removeAttr('readonly');
 								el.find('#ns_userid').removeAttr('readonly').val(creds["nsUserID"]);
 								el.find('#ns_accid').removeAttr('readonly').val(creds["nsAccountID"]);
 								el.find('#ns_email').removeAttr('readonly').val(creds["nsEmail"]);								

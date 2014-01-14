@@ -26,22 +26,15 @@ function (template) {
 				   var appMsgs = curview.app.messages[0];
 				   var copydialog = curview.options.copydialog;
 				   var source = curview.options.source;
-				   if(el.find('#copy_name').val() == '')
-					{
-						/*var options = {'control':el.find('#copy_name'),
-										'valid_icon':el.find('#copyname_erroricon'),
-										'controlcss':'border:solid 2px #FB8080;',
-										'message':appMsgs.CT_copyname_empty_error};
-						app.enableValidation(options);*/
+				   	if(el.find('#copy_name').val() == '')
+					{						
 						app.showError({
 							control:el.find('.cname-container'),
 							message:appMsgs.CT_copyname_empty_error
 						});
 					}
 					else
-					{
-						/*var options = {'control':el.find('#copy_name'),'valid_icon':el.find('#copyname_erroricon')};
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".cname-container")});
 						var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+app.get('bms_token')+"&type=clone";
 						app.showLoading("Creating copy of target...",curview.$el);
