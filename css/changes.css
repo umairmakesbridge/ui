@@ -1138,8 +1138,8 @@ ul.tabs-btns li.active a{
 .iconpointy{
     top:-3px;
 }
-.ui-widget .ui-accordion-header .input-append input{
-    margin-top:3px;
+.ui-widget .ui-accordion-header .input-append #searchbtn{
+    margin-left: -38px;
 }
 .iconpointy a.icon{
     float:left;
@@ -1228,4 +1228,38 @@ ul.tabs-btns li.active a{
 }
 .template-tag{
     margin-left:50px !important;
+}
+
+.camp_header .tagscont  ul.overflow{ overflow: visible;
+    background: none repeat scroll 0 0 #01AEEE;
+    height: auto;
+    left: 0;
+    opacity:1;
+    max-width: 300px;
+    overflow: visible;
+    padding-bottom: 5px;
+    position: relative;
+}
+.filterbtn, .mngbtn{
+    float:left;
+}
+.contactbox a.closebtn {
+    background: url("../img/closebtn-blue.png") no-repeat scroll center center;
+    display: block;
+    height: 18px;
+    opacity: 0;
+    position: absolute;
+    right: 100px;
+	padding:2px;
+    top: 10px;
+    transition: opacity 0.3s ease-out 0s;
+    width: 18px;
+    z-index: 200;
+	
+}
+.contactbox:hover a.closebtn {
+    opacity: 1;
+}
+.contactbox a.closebtn:hover {
+    opacity: 0.7;
 }

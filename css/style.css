@@ -3122,17 +3122,6 @@ a.tw-toggle.wsicon i {
 	-moz-border-radius: 2px;
 	border-radius:2px;
 }
-
-.camp_header .tagscont:hover  ul{ overflow: visible;
-    background: none repeat scroll 0 0 #01AEEE;
-    height: auto;
-    left: 0;
-	opacity:1;
-    max-width: 300px;
-    overflow: visible;
-    padding-bottom: 5px;
-    position: relative;
-}
 .camp_header .tagscont:hover ul li {
     margin: 2px;
     position: relative;
