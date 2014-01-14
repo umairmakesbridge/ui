@@ -6,8 +6,8 @@ function (template) {
                     "keyup #target_name":function(e)
 					{
 						if(e.keyCode==13){
-							 this.createTarget();
-						 }
+							this.createTarget();						
+						}
 					}
                  },
                 initialize: function () {

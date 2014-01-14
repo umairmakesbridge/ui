@@ -178,27 +178,29 @@ function (template,chosen) {
 				{					
 					$.each(list_array.lists[0], function(index, val) { 
 						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-					})					
+					});
+					curview.$el.find("#existing_lists").html(list_html);								
 				}
+				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
 			}
 			else
 			{				
 				URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
 				jQuery.getJSON(URL,  function(tsv, state, xhr){				
 					if(xhr && xhr.responseText){
+						app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
 						list_array = jQuery.parseJSON(xhr.responseText);
 						if(list_array != '')
 						{							
 							$.each(list_array.lists[0], function(index, val) { 
 								list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-							})							
+							})
+							curview.$el.find("#existing_lists").html(list_html);							
 						}
+						curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
 					}
 				}).fail(function() { console.log( "error lists listing" ); });				
-			}
-			curview.$el.find("#existing_lists").html(list_html);			
-			curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-			app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
+			}			
 		},
 		initialize:function(){                    
 		   this.template = _.template(template);
