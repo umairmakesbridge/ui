@@ -35,35 +35,18 @@ function (template) {
             */
             ,
             init:function(){                
+                this.current_ws = this.$el.parents(".ws-content");
+                                
                 this.app.showLoading("Loading Templates...",this.$el);  
                 var _this = this;
                 require(["bmstemplates/templates"],function(templatesPage){  								                                    
-                    var page = new templatesPage({page:_this,app:_this.app,selectCallback:_.bind(_this.editTemplate,_this),selectAction:'Edit Template'});								
+                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Edit Template'});								
                     _this.$el.html(page.$el);                            
                     page.init();
+                    _this.current_ws.find(".camp_header #addnew_action").click(_.bind(page.createTemplate,page));
                 })
             }
-            ,
-            editTemplate:function(){
-                var self = this;
-                var t_id = this.template_id;
-                var dialog_title = this.template_id ? "Edit Target" : "";
-                var dialog_width = $(document.documentElement).width()-60;
-                var dialog_height = $(document.documentElement).height()-219;
-                var dialog = this.app.showDialog({title:dialog_title,
-                          css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                          headerEditable:true,
-                          bodyCss:{"min-height":dialog_height+"px"},
-                          buttons: {saveBtn:{text:'Save Target'} }                                                                           
-                    });
-                this.app.showLoading("Loading...",dialog.getBody());                                  
-                  require(["target/target"],function(targetPage){                                     
-                       var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
-                       self.states.step3.targetDialog =  mPage;
-                       dialog.getBody().html(mPage.$el);
-                       dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
-                  });
-            }
+            
             
             
         });

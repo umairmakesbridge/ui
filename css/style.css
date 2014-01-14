@@ -91,10 +91,11 @@ label {
 	color: #414f58;
 	line-height:14px;
 	font-weight: bold;
+	position:relative;
 	 cursor: default;
 	padding: 12px 8px 0 0;
 	text-align: right;
-	width:25%;
+	width:23%;
 }
 h2 {
 color: #6494AF;

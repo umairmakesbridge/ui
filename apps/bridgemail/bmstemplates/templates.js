@@ -380,6 +380,12 @@ function (template,highlight) {
                         if(camp_obj.options.selectCallback){
                             template_html.find(".select-template").click(camp_obj.options.selectCallback);
                         }
+                        else {
+                            template_html.find(".select-template").click(_.bind(function(obj){
+                                this.template_id = $.getObj(obj,"a").attr("id").split("_")[1];
+                                this.updateTemplate();
+                            },camp_obj));
+                        }
                         
                         template_html.find(".previewbtn").click(_.bind(function(obj){                              
                               var target = $.getObj(obj,"a");
@@ -440,6 +446,65 @@ function (template,highlight) {
                         _html +="<a class='cat' cat_id='"+val+"'>"+val+"</a>";                        
                     });
                     return _html
+                },
+                createTemplate:function(){
+                    var dialog_width = 650;
+                    var dialog_height = 100;
+                    var dialog = this.app.showDialog({title:'New Template',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10%"},                     
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        buttons: {saveBtn:{text:'Create Template'} }                                                                           
+                    });
+                    var create_new_template = this.$("#create-template-container").clone();
+                    create_new_template.css("display","block");
+                    dialog.getBody().html(create_new_template);
+                    create_new_template.find("input").focus();
+                    dialog.saveCallBack(_.bind(this.createTemplateCall,this,dialog));
+                },
+                createTemplateCall:function(dialog){
+                    var _this = this;
+                    var template_name = $.trim(dialog.$("#template_name").val());
+                    if(template_name){
+                        this.app.showLoading("Creating Template...",dialog.$el);
+                        var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                        $.post(URL, {type:'create',templateName:template_name})
+                        .done(function(data) {                  
+                              _this.app.showLoading(false,dialog.$el);   
+                               var _json = jQuery.parseJSON(data);        
+                               if(_json[0]!=='err'){
+                                    this.template_id = _json[1];                                                            
+                                    dialog.hide();
+                                    _this.updateTemplate();
+                               }
+                               else{
+                                   _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                               }
+                       });
+                    }
+                }
+                ,
+                updateTemplate:function(){                                   
+                    var _this = this;                    
+                    var dialog_width = 750;
+                    var dialog_height = 360;
+                    var dialog = this.app.showDialog({title:'Loading ...',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10%"},
+                              headerEditable:true,
+                              headerIcon : 'fav',
+                              bodyCss:{"min-height":dialog_height+"px"},
+                              buttons: {saveBtn:{text:'Save'} }                                                                           
+                        });
+
+                    this.app.showLoading("Loading...",dialog.getBody());                                  
+                      require(["bmstemplates/template"],function(templatePage){                                     
+                           var mPage = new templatePage({template:_this,dialog:dialog});                          
+                           dialog.getBody().html(mPage.$el);
+                           mPage.init();
+                           //dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
+                    });
+                },
+                saveTemplateCall:function(){
+                    
                 }
         });
 });

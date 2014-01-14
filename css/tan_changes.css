@@ -384,7 +384,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
 #salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
-.overlay { position:absolute; background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
+.overlay { background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
 .global_messages{
     position: fixed;
     top:-1px;
@@ -522,7 +522,7 @@ ul.c-current-status  li .color4 { background-color:#B5D1E6; }
 
 .modal-header.ws-notags .camp_header { height:50px; }
 .modal-header ul.toolbar { top:5px; }
-.modal-header .c-name h2 span { margin-left:10px; }
+/* .modal-header .c-name h2 span { margin-left:10px; }*/
 /* End Campaigns page styles */
 
 .temp-filters > h2 {

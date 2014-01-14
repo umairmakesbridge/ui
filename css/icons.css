@@ -380,7 +380,7 @@
 					.grayicons .active >  .icon.delete {
 						background-position: -60px -660px;
 					}
-					.grayicons .active >  .icon.fav {
+					.grayicons .active >  .icon.fav{
 						background-position: -60px -690px;
 					}
 					.grayicons .active >  .icon.close {
@@ -733,7 +733,11 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 #copycampsearch .icon.campaigns {   background: url("../img/campaigns.png") no-repeat center center ;}
 
 .icon.mobile {   background: url("../img/mobile.png") no-repeat center center ;}
-.icon.mobile:hover {   background: url("../img/mobile-hover.png") no-repeat center center ;}
+.icon.mobile:hover, .icon.mobile.active {   background: url("../img/mobile-hover.png") no-repeat center center ;}
+
+.icon.returnpath {   background: url("../img/returnpath.png") no-repeat center center ;}
+.icon.star {   background: url("../img/star.png") no-repeat center center ;}
+
 
 .icon.builtin {   background: url("../img/builtin.png") no-repeat center center ;}
 .icon.schedule {   background: url("../img/schedule.png") no-repeat center center ;}
