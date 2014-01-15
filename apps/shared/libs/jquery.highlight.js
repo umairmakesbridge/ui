@@ -21,15 +21,17 @@ jQuery.fn.highlight = function(pat) {
   if (node.nodeType == 3) {
    var pos = node.data.toUpperCase().indexOf(pat);
    if (pos >= 0) {
-    var spannode = document.createElement('span');
-	if(c == 0)
+	   if(c == 0)
+	   {
+    	var spannode = document.createElement('span');	
     	spannode.className = 'highlight';
-    var middlebit = node.splitText(pos);
-    var endbit = middlebit.splitText(pat.length);
-    var middleclone = middlebit.cloneNode(true);
-    spannode.appendChild(middleclone);
-    middlebit.parentNode.replaceChild(spannode, middlebit);
-    skip = 1;
+    	var middlebit = node.splitText(pos);
+    	var endbit = middlebit.splitText(pat.length);
+    	var middleclone = middlebit.cloneNode(true);
+    	spannode.appendChild(middleclone);
+    	middlebit.parentNode.replaceChild(spannode, middlebit);
+    	skip = 1;
+	   }
 	c++;
    }
   }

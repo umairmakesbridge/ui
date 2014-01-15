@@ -155,7 +155,7 @@ h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; col
 	min-height:290px;
 }
 #campaigns_list .template-container { margin-top:0; }
-.tabel-div .table tbody tr td { border:0; }
+.tabel-div .table tbody tr td { border:0; overflow:visible; }
 .tabel-div .table tbody tr:hover td { border:0 !important; }
 .tabel-div .table thead { border-collapse: separate; }
 .cont-box input[type="password"] {
@@ -243,7 +243,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .mergefields h2 { line-height:2.7em; }
 .mergefields h2 > .search { height:37px; }
 .mergefields h2 > .search input[type="text"] { padding-left:45px; width:100px; height:31px; padding-right:55px; }
-.mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:-2px !important; }
+.mergefields h2 > .search .searchbtn { width:35px; height:35px; margin-top:-5px !important; }
 .adv_dd .btn-group, .mergefields .btn-group { top:2px; }
 #existing_lists_chosen { margin-left:5px; /*margin-top:2px;*/ }
 .row { position:relative; }
@@ -344,10 +344,59 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { cursor:default; }
 .tagslist ul li.inactive > a span:hover,.tagslist ul li.inactive > a:hover { background-color:#fff; color:#6494AF; cursor:default; }
 .tagslist ul li.inactive > a .badge, .tagslist ul li.inactive > a .badge:hover { background-color:#ddd; color:#aaa; cursor:default; }
-.header-icon .dlgpreview { background-position:39% -298px; height:33px; }
+.header-icon .dlgpreview { background-position:39% -301px; height:33px; }
 .inputcont .errortext em {    
 	margin-top:1px;
 	color:#fff;
 }
 .inputcont .errortext:hover em { display:block !important;}
 .settings .pspa-text { width:95.3%; }
+
+#campaigns_list .temp-filters > h2 {   
+    margin: 0;
+}
+.campaign_stats .report {
+    height: 20px;
+    margin: 0;
+    width: 20px;
+}
+.ui-daterangepickercontain {
+    background-color: #FFFFFF;
+}
+.camp_listing .bmsgrid div.bDiv tr .action {
+    margin-top: -17px;
+    top: 50%;
+    width: 550px;
+}
+.since .calendericon { cursor:pointer; }
+.btn-ok { padding:0 20px; }
+.btn-cancel { padding:0 10px; margin-left:10px; }
+.confalert-buttons {
+    padding-left: 30%;
+}
+.copy_campbox img {
+    height: inherit;
+}
+#area_html_code .row { margin-left:0; }
+.bmsgrid .bDiv tr td:last-child div { min-height:inherit; }
+#area_choose_tags .tagsbox { background-color:#EAF4F9; }
+.drop-files .btn-gray { width:inherit; }
+.tabel-div .bmsgrid div.hDiv th, .tabel-div .bmsgrid div.bDiv td { overflow:visible; }
+.exist-new .emailinput { padding:4px 6px; }
+.filter-row .filter-cont { min-height:40px; }
+.iconpointy a.icon {
+    background-color: #91ABBC;
+}
+#netsuite_setup .ui-accordion .ui-accordion-header .search,
+#salesforce_setup .ui-accordion .ui-accordion-header .search
+ { margin:0 0 0 10px; line-height:inherit; }
+#netsuite_setup .filterbtn,
+#salesforce_setup .filterbtn
+{ float:left; margin-left:18px; }
+#mapdata .inputcont { line-height:36px; }
+.ui-accordion .ui-accordion-header .icon.subscribers {
+   background: url("../img/subscribers.png") no-repeat center center;
+   float:left;
+   margin:7px 4px 4px 15px;
+   border-radius:0;
+}
