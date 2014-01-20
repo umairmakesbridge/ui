@@ -11,6 +11,8 @@ define([
                             'CAMP_defaultreplyto_format_error':'Please supply correct email',
                             'CAMP_defaultreplyto_empty_error':'Reply to email can not be empty',
                             'CAMP_defaultfromname_empty_error': 'Default From Name cann\'t be empty',
+							'CAMP_draft_success_msg': 'Campaign draft is complete',
+							'CAMP_copy_success_msg': 'Campaign copy is complete',
                             'SF_userid_empty_error':'User id can not be empty',
                             'SF_userid_format_error':'Please supply correct user id',
                             'SF_pwd_empty_error':'Password can not be empty',				   
@@ -133,7 +135,7 @@ define([
                             var messageObj = {};
                             messageObj["heading"] = "Session Expired" 
                             messageObj["detail"] = "1. Your login session has expired.<br/>2. You are trying to access the page without logging-in.<br/>3. You did not follow the provided link to access this page and are trying to reach here by invalid means.";
-                            messageObj["login"] = "<a class='btn-gray' href='/pms/'><span>Login</span></a>";
+                            messageObj["login"] = '<div class="confalert-buttons"><a href="/pms/" class="btn-green left btn-ok">Login</a><a class="btn-gray left btn-cancel">Cancel</a></div>';
                             _app.showAlertDetail(messageObj,$("body"));
                             return false;
                            }
@@ -186,11 +188,11 @@ define([
                      $(container).find(' > .loading').remove();
                  }
              },
-             showAlert:function(message, container,option){       
+             showAlert:function(message, container, option){       
                  if(message){                    
                     var inlineStyle = (option && option.top) ? ('top:'+option.top) : '';
                     var fixed_position = (option && option.fixed)?"fixed":"";
-                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox caution" style='+inlineStyle+'><h3>Caution</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
+                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox error" style='+inlineStyle+'><h3>Error</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
                     $(".overlay .closebtn").click(function(){
                        $(".overlay").fadeOut("fast",function(){
                            $(this).remove();
@@ -218,7 +220,7 @@ define([
                  $(".global_messages").css("margin-left", (-1*marginLeft)+"px");
                  $(".global_messages").hide();
                  $(".global_messages").slideDown("medium",function(){
-                     setTimeout('$(".global_messages").hide()',2000);
+                     setTimeout('$(".global_messages").hide()',4000);
                  });
 				 $(".global_messages .closebtn").click(function(){
 					 $(".global_messages").fadeOut("fast",function(){
@@ -330,7 +332,8 @@ define([
                              return false;
                          }                        
                         app.setAppData(data.key,salesforce);
-                        data.callback();                                                
+						if(data.callback)
+                        	data.callback();
                     }
                 }).fail(function() { console.log( "error in "+data.key+" fields" ); });                  
             },

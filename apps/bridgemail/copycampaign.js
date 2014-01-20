@@ -9,7 +9,11 @@ function (template) {
                         this.template = _.template(template);				
                         this.render();
 						var app = this.options.app;
-						var copydialog = this.options.copycampdialog;
+						var copydialog = '';
+						if(this.options.copycampsdialog)
+							copydialog = this.options.copycampsdialog;
+						else
+							copydialog = this.options.copycampdialog;
 						var curview = this;
 						this.app.showLoading(false,copydialog.getBody());
 						var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+app.get('bms_token');
@@ -30,7 +34,7 @@ function (template) {
 				{
 					var camp_id = this.options.camp_id;
 					var curview = this;
-					var copydialog = this.options.copycampdialog;
+					//var copydialog = this.options.copycampdialog;
 					var campview = this.options.camp;
 					var app = this.options.app;
 					var el = curview.$el;
@@ -55,9 +59,17 @@ function (template) {
 								app.showAlert(res[1].replace('&#58;',':'),curview.$el);
 							else
 							{
-								copydialog.hide();
 								app.removeCache("campaigns");
-								campview.getallcampaigns();
+								if(curview.options.copycampsdialog)
+								{
+									curview.options.copycampsdialog.hide();
+									campview.getallcampaigns();
+								}
+								else
+								{
+									curview.options.copycampdialog.hide();									
+									campview.getcampaigns();
+								}								
 							}
 						});
 					}

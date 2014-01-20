@@ -60,7 +60,7 @@ h2.header-list span.recpscount {
 }
 #salesforce_campaigns .chosen-container .chosen-drop {  }
 .bmsgrid td .action { margin:auto 0px; }
-.bmsgrid div.bDiv { min-height:290px; }
+.bmsgrid div.bDiv { /*min-height:290px;*/ }
 .bmsgrid div.bDiv table { margin-bottom:15px; min-height:290px; }
 h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
 #area_choose_lists, #area_choose_targets { position:relative; min-height:200px; }
@@ -295,7 +295,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
     width: 9px;
 	display:block;
 }
-.iconpointy { /*top:0;*/ }
+#salesforce_setup .iconpointy { top:2px; }
 #fetable { width:100%; display:table; }
 .fecols { display:table-cell; }
 #fecol1 { width:auto; }
@@ -312,7 +312,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
     display: inline-block;
     left: -4px;
     position: absolute;
-    top: 7px;
+    top: 6px;
 }
 .addnew_btn > a {
     background: none repeat scroll 0 0 #94CF1E;
@@ -327,7 +327,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
     padding: 1px 4px;
     text-shadow: none;
 }
-.addnew_btn > a strong { font-size:20px; font-weight:bold; position:relative; top:2px; }
+.addnew_btn > a strong { font-size:0px; font-weight:bold; position:relative; background:url("../img/plus.png") no-repeat scroll center center rgba(0, 0, 0, 0); width:12px; height:16px; display:block; }
 .chosen-search #searchbtn { width:30px; height:32px; margin-left:-31px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
@@ -341,7 +341,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 	z-index:10000;
 	margin-top:0;
 }
-a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { cursor:default; }
+/*a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { cursor:default; }*/
 .tagslist ul li.inactive > a span:hover,.tagslist ul li.inactive > a:hover { background-color:#fff; color:#6494AF; cursor:default; }
 .tagslist ul li.inactive > a .badge, .tagslist ul li.inactive > a .badge:hover { background-color:#ddd; color:#aaa; cursor:default; }
 .header-icon .dlgpreview { background-position:39% -301px; height:33px; }
@@ -382,7 +382,7 @@ a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { 
 #area_choose_tags .tagsbox { background-color:#EAF4F9; }
 .drop-files .btn-gray { width:inherit; }
 .tabel-div .bmsgrid div.hDiv th, .tabel-div .bmsgrid div.bDiv td { overflow:visible; }
-.exist-new .emailinput { padding:4px 6px; }
+.exist-new .emailinput { /*padding:4px 6px;*/ margin:0px 3px 0 5px; }
 .filter-row .filter-cont { min-height:40px; }
 .iconpointy a.icon {
     background-color: #91ABBC;
@@ -392,11 +392,59 @@ a.notEditable, a.notEditable:focus, a.notEditable:hover, a.notEditable:active { 
  { margin:0 0 0 10px; line-height:inherit; }
 #netsuite_setup .filterbtn,
 #salesforce_setup .filterbtn
-{ float:left; margin-left:18px; }
-#mapdata .inputcont { line-height:36px; }
+{ float:right; }
+#mapdata .inputcont { /*line-height:36px;*/ }
 .ui-accordion .ui-accordion-header .icon.subscribers {
    background: url("../img/subscribers.png") no-repeat center center;
    float:left;
    margin:7px 4px 4px 15px;
    border-radius:0;
 }
+.temp-filters > h2 {
+    color: #748592;
+    float: left;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 42px;
+    margin: 0;
+}
+.dropdown-toggle {
+    /*background: none repeat scroll 0 0 #FFFFFF;*/
+    border: 2px solid #EAF4F9;
+    border-radius: 2px !important;
+    color: #495A63;
+    display: block;
+    font-size: 13px !important;
+    line-height: 25px;
+    padding: 5px 10px;
+    /*text-shadow: 0 1px 0 #FFFFFF;*/
+}
+#area_html_code .dropdown-toggle:active, 
+#area_html_code .dropdown-toggle:focus, 
+.fullwindow .dropdown-toggle:active,
+.fullwindow .dropdown-toggle:focus
+{ color:#495A63; border:2px solid #EAF4F9; box-shadow:none; }
+#area_html_code .dropdown-toggle:hover { /*background:none;*/ }
+#area_html_code .btn:focus, 
+#area_html_code .btn:active,
+.fullwindow .btn:focus, 
+.fullwindow .btn:active 
+{ border:0; }
+#area_html_code .temp-filters .adv_dd,
+.fullwindow .temp-filters .adv_dd
+{ margin-top:2px; }
+a#drop4 { background-color:#fff; }
+ul.c-current-status li .badge { cursor:pointer; }
+.chosen-container .chosen-results li { padding:5px 10px; }
+.chosen-container .chosen-results li.result-selected:after { width:30px; }
+.copy_campbox .tagscont ul li > a { padding:0 10px; }
+.modal-header h2 { margin-left:0; }
+.tagscont .addtag { margin-left:20px; }
+.messagebox a.closebtn { opacity:1; }
+.messagebox a.closebtn:hover { /*opacity:1;*/ }
+#newlist { padding-left:8px; }
+#salesforce-camp-search .icon,#netsuite-group-search .icon { top:5px; }
+#salesforce_setup .iconpointy .pointy, #netsuite_setup .iconpointy .pointy { margin-top:6px; float:right; }
+#netsuite_setup .iconpointy{ top:2px; }
+.modal-header .tagscont { margin-left:0; }
+.chosen-container .chosen-results li.group-result { background-color:#EFF7FB; }

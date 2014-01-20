@@ -20,6 +20,9 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                                 }                                                                
                             }
                             ,
+							'click #drop4' :function(obj){
+								this.$el.find('.mergefields-box').click();
+							},
                             'click .save_continue_editor':function(){
                                 this.hideEditor();
                                 this.page.wizard.validateStep();
