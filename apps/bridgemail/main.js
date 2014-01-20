@@ -28,8 +28,9 @@
            'bms-addbox': '../shared/addbox',
            'moment': '../shared/libs/moment',
            'bootstrap': '../shared/libs/bootstrap.min',
-		   '_date': '../shared/libs/date',
-           'daterangepicker': '../shared/libs/daterangepicker.jQuery'
+           '_date': '../shared/libs/date',
+           'daterangepicker': '../shared/libs/daterangepicker.jQuery',
+           'bms-dragfile': '../shared/dragfile'
        },
         shim: {
                 backbone: {
@@ -98,9 +99,12 @@
                'bms-mapping':{
                    deps: ['jquery']
                }
-			   ,
+               ,
                'daterangepicker':{
                    deps: ['_date','jquery-ui','jquery']
+               },
+               'bms-dragfile':{
+                   deps: ['jquery']
                }
          }
     });

@@ -21,7 +21,9 @@
       //this.mappingInit()     
       if(this.$element){
           this.dialog = $(this.options.template)          
-          
+          if(this.options.placeholder_text){
+               this.dialog.find(".input-field").attr("placeholder",this.options.placeholder_text)
+          }
           this.$element.on("click",$.proxy(this.showBox,this))
           
       }
@@ -95,7 +97,8 @@
   $.fn.addbox.defaults = { 
    template:'<div class="tagbox tagbox-addbox" style=" display: block;width: 365px;"><input type="text" class="left input-field" placeholder="Enter Field name here"> <a class="btn-green btn-add left"><span>Add</span><i class="icon save"></i></a><a class="btn-gray btn-close right"><span>Close</span><i class="icon cross"></i></a></div>',      
    app:null,
-   addCallBack:null
+   addCallBack:null,
+   placeholder_text:''
   }
 
 }(window.jQuery);

@@ -32,9 +32,9 @@ function (app,template,fileuploader,chosen) {
 			},
 			'dragenter #drop-files': function(obj) {
 				if(this.$("#dropped-files .image").length!==0) return false;
-            	this.$("#drop-files").css({'box-shadow' : 'inset 0px 0px 20px rgba(0, 0, 0, 0.1)', 'border' : '1px dashed #bb2b2b'});
+                                this.$("#drop-files").css({'box-shadow' : 'inset 0px 0px 20px rgba(0, 0, 0, 0.1)', 'border' : '1px dashed #bb2b2b'});
 				return false;
-			},
+			}
 		},
 		removeFile:function(){
 			this.$("#dropped-files").children().remove();

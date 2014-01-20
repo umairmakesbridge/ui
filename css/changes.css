@@ -1,4 +1,5 @@
 /*Jquery CSS Overlide*/
+
 .set-time .timebox input{
     text-align: left;
     width:58px;
@@ -20,7 +21,12 @@
 .schedule-box .sch-btn{
     width: 220px;
 }
-
+#activities{
+    display: none !important;
+}
+.icons-bar{
+    display:none !important;
+}
 a,div,span,h1,h2,h3,h4,h5,h5{
    -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -28,6 +34,10 @@ a,div,span,h1,h2,h3,h4,h5,h5{
   -o-user-select: none;
   user-select: none;          
 
+}
+
+.workspace{
+    margin:0 20px 0 55px;
 }
 .grayicons .icon.pin{
     background-position: 0px -600px;
@@ -242,15 +252,15 @@ h2.header-list .search .searchbtn {
     text-rendering: optimizelegibility;
 }
 ul.toolbar li > div.tooltip,div.tooltip{
-    border:1px solid #0096FF;
+    border:1px solid #495B67;
 }
 div.tooltip:before{
-    border-color: transparent transparent #0096FF;
+    border-color: transparent transparent #495B67;
     right:50%;
     margin-right: -6px;
 }
 div.tooltip{
-    background: none repeat scroll 0 0 #0096FF;
+    background: none repeat scroll 0 0 #495B67;
     width: 100px;    
 }
 div.tooltip.tags-div{
@@ -1263,3 +1273,92 @@ ul.tabs-btns li.active a{
 .contactbox a.closebtn:hover {
     opacity: 0.7;
 }
+.contactsdiv{
+    min-height: 450px;
+    overflow-y: auto;
+    position: relative;
+}
+/*****workspace tabs icons ***/
+.wtab-campaignlisting{
+    background: url("../img/camplisting.png") no-repeat scroll center center;
+}
+.wtab-campaign{
+    background: url("../img/campaign.png") no-repeat scroll center center;
+}
+.wtab-contactlisting{
+    background: url("../img/contactlisting.png") no-repeat scroll center center;
+}
+.wtab-contactdetail{
+    background: url("../img/contactdetail.png") no-repeat scroll center center;
+}
+.wtab-mytemplates{
+    background: url("../img/mytemplates.png") no-repeat scroll center center;
+}
+.wtab-reports{
+    background: url("../img/mytemplates.png") no-repeat scroll center center;
+}
+
+.file-border{
+    box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
+    border : 1px dashed #bb2b2b !important;
+}
+.templateimg .droppanel{
+    overflow: hidden;
+}
+ div.rpath {
+   background: url("../img/rpath.png") no-repeat scroll center center #FFFFFF;
+    display: block;
+    height: 25px;
+    overflow: hidden;
+    padding: 0 4px;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    width: 65px;
+    z-index: 999;
+    -webkit-border-radius: 0 0 2px 2px;
+    -moz-border-radius: 0 0 2px 2px;
+    border-radius: 0 0 2px 2px;
+}
+.thumbnail .img > div a{
+    height:35px;
+    width:33.3%;    
+}
+.thumbnail .img > div a.main-action{
+    width:100%;
+    height:35px;
+    float:left;    
+    padding: 10px 0;
+    text-align: center;    
+}
+.thumbnail .img > div a.editbtn:hover {
+	background-color:#98d028;
+}
+
+.thumbnail .img > div a.previewbtn span{
+    background-position: -305px -305px;
+}
+.thumbnail .img > div a.editbtn span{
+    background-position:-305px -335px;
+}
+.thumbnail .img > div a.deletebtn span{
+    background-position: -5px -665px;
+}
+.thumbnail .img > div a span {
+    background: url("../img/icon-map.png") repeat scroll center 0 rgba(0, 0, 0, 0);
+    display: block;
+    height: 20px;
+    margin: 5px auto;
+    width: 20px;    
+}
+.thumbnail .img > div{
+    padding:0px;
+}
+.thumbnail .img > div a.selectbtn span{    
+    width:110px;
+    font-size: 14px;
+    background: url("../img/create_campaign.png") no-repeat scroll center left rgba(0, 0, 0, 0);
+    padding-left:25px;        
+     margin-top: 7px;
+}
+

@@ -92,7 +92,8 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
 
                 $(".ws-tabs li").removeClass('active');
                 var workspaceid = options.workspace_id?('workspace_id="'+options.workspace_id+'"'):"";
-                $('#wp_li_0').before('<li class="active" id="wp_li_'+wp_count+'" '+workspaceid+'><a><span class="icon step1"></span></a></li>');
+                var tab_icon = (options.tab_icon)?"wtab-"+options.tab_icon:"step1";
+                $('#wp_li_0').before('<li class="active" id="wp_li_'+wp_count+'" '+workspaceid+'><a><span class="icon '+tab_icon+'"></span></a></li>');
 
                 wp_view.$el.attr("id","workspace_"+wp_count);
                 $("#workspace .ws-content.active").removeClass('active').css("display","none");
@@ -130,6 +131,7 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
             title:"Campaigns",
             workspace_id: 'campaign_'+camp_id,
             url : 'campaign',
+            tab_icon:'campaign',
             params: {camp_id:camp_id},
             wizard :{steps:4,active_step:1,step_text:["Settings","Create","Recipients","Schedule"]},
             actions :[{'iconCls':'campaigns','text':'New Campaign','url':''},{'iconCls':'upload-subscribers','text':'Upload Subscribers','url':''}
@@ -143,6 +145,7 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
           var sub_id = sub_id?sub_id:0;
           this.addWorkSpace({type:'',
             title:"Loading...",
+            tab_icon:'contactdetail',
             workspace_id: 'subscriber_'+sub_id,
             url : 'contacts/subscriber',
             params: {sub_id:sub_id},

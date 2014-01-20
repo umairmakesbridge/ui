@@ -12,10 +12,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             /*Menues*/
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
-                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns','addAction':true});
+                                 app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns','addAction':true,tab_icon:'campaignlisting'});
                             },
                             'click .contacts-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true});
+                                app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true,tab_icon:'contactlisting'});
                             },
                             'click .studio_bounced-email-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
@@ -37,7 +37,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
                             },
                             'click .add-template-li':function(obj){
-                                 app.mainContainer.addWorkSpace({type:'',title:'My Templates',url : 'mytemplates',workspace_id: 'mytemplates',noTags:true,'addAction':true});
+                                 app.mainContainer.addWorkSpace({type:'',title:'My Templates',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates'});
                             },
                             'click .analytics_add-list-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
