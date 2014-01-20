@@ -19,7 +19,7 @@
               </div>
             	<!--<span id="subject_erroricon" class="erroricon"></span>-->
           </div>
-        </div>        
+        </div>
         <div class="row">
           <label>From Email</label>
           <div class="input-append adv_dd sort-options">
@@ -206,90 +206,102 @@
     </div>
     <!--settings  --> 
   </div>
-  <div style="position:relative">
-    <div id="accordion">
-      <h3> 
-        <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_salesforce" />
-        <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <b class="caret"></b> 
-       </h3>
-      <div class="accordion-inner">
-        <div class="cont">
-          <div class="row-fluid">
-            <div class="span12"> 
-              
-              <!--btn-group  -->
-              
-              <div class="fluidlabel">&nbsp;</div>
-              <div class="span6 " style="margin:0;">
-                <div class="row">
-                  <label>Select Campaign</label>
-                  <div id="salesforce_campaigns" class="btn-group subs-dd">
-                    <select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >
-                        <option value=""></option>
-                    </select>
-                  </div>
-                </div>                
-                  <div class="row">                                                        
-                    <div class="btns left  accordion-action-btn">
-                        <a  class="btn-green left" id="save_results_sf"><span>Save</span><i class="icon save"></i></a>
-                    </div>                        
-                </div>
-              </div>
-            </div>
-            <!--span6  --> 
-            <!-- span6  --> 
-            
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="position:relative">
-    <div id="accordion1">
-      <h3> 
-          <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="conversion_filter">
-          <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <b class="caret"></b>
-       </h3>
-      <div class="accordion-inner">
-        <div class="cont">
-          <div class="row-fluid">
-            <div class="span12"> 
-                            
-              <div class="fluidlabel">&nbsp;</div>
-              <div class="span6 " style="margin:0;">
-                <div class="row">
-                  <label>Match Type</label>
-                  <div id="match_type" class="btn-group subs-dd">
-                    <select id="con_filter_combo" style="width:150px;" class="chosen-select">                      
-                      <option value="ct">Contains</option>
-                      <option value="=">Equal to</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row texturl">
-                  <label>Text in URL</label>
-                  <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
-                 </div>                
-                <div class="row">
-                  <div class="btns left accordion-action-btn"> 
-                       <a  class="btn-green left" id="save_conversion_filter" ><span>Save</span><i class="icon save"></i></a>
-                  </div>
-                   
-                </div>
+  <div class="row-fluid" style="position:relative; margin-top:20px;">
+  	<div class="span6">
+        <div id="accordion">
+          <h3> 
+            <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_salesforce" />
+            <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <b class="caret"></b> 
+           </h3>
+          <div class="accordion-inner">
+            <div class="cont" style="height:170px;">
+              <div class="row-fluid">
+                <div class="span12"> 
                   
+                  <!--btn-group  -->
+                  
+                  <div class="fluidlabel">&nbsp;</div>
+                  <div class="span6 " style="margin:0; width:100%;">
+                    <div class="row">
+                      <label>Select Campaign</label>
+                      <div id="salesforce_campaigns" class="btn-group subs-dd">
+                        <select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >
+                            <option value=""></option>
+                        </select>
+                      </div>
+                    </div>                
+                      <div class="row">                                                        
+                        <div class="btns left  accordion-action-btn">
+                            <a  class="btn-green left" id="save_results_sf"><span>Save</span><i class="icon save"></i></a>
+                        </div>                        
+                    </div>
+                  </div>
+                </div>
+                <!--span6  --> 
+                <!-- span6  --> 
+                
               </div>
             </div>
-            <!--span6  --> 
-            <!-- span6  --> 
-            
           </div>
         </div>
-      </div>
     </div>
-  </div>
+    <div class="span6">
+        <div id="accordion1">
+          <h3> 
+              <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="conversion_filter">
+              <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <b class="caret"></b>
+           </h3>
+          <div class="accordion-inner">
+            <div class="cont" style="height:170px;">
+              <div class="row-fluid">
+                <div class="span12"> 
+                                
+                  <div class="fluidlabel">&nbsp;</div>
+                  <div class="span6" style="margin:0; width:100%;">
+                    <div class="row">
+                      <label>Match Type</label>
+                      <div id="match_type" class="btn-group subs-dd">
+                        <select id="con_filter_combo" style="width:150px;" class="chosen-select">                      
+                          <option value="ct">Contains</option>
+                          <option value="=">Equal to</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row texturl">
+                      <label>Text in URL</label>
+                      <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
+                     </div>                
+                    <div class="row">
+                      <div class="btns left accordion-action-btn"> 
+                           <a  class="btn-green left" id="save_conversion_filter" ><span>Save</span><i class="icon save"></i></a>
+                      </div>
+                       
+                    </div>
+                      
+                  </div>
+                </div>
+                <!--span6  --> 
+                <!-- span6  --> 
+                
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>  
 </div>
-<div class="wizard-steps step2">	
-  <div class="selection-boxes create-temp" >
+<div class="wizard-steps step2">
+	<div class="selection-boxes create-temp">              
+      <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Selecte "<strong>Create</strong>"  options from  below.</p></div>
+      <ul id="choose_soruce">
+          <li id="copy_campaign" class=""><a><img alt="" src="img/copycampaign.png"><span>Copy Campaign</span></a></li>
+          <li id="use_template" class=""><a><img alt="" src="img/usetemplate.png"><span>Use Template</span></a></li>
+          <li id="html_editor" class=""><a><img alt="" src="img/htmleditor.png"><span>HTML Editor</span></a></li>
+          <li id="html_code" class=""><a><img alt="" src="img/myhtml.png"><span>Handcoded HTML</span></a></li>
+      </ul>
+       <div class="clearfix"></div>
+  </div>	
+  <!--<div class="selection-boxes create-temp" >
     <ul id="choose_soruce" >
       <li class="" id="copy_campaign"><a><img src="img/copycampaign.png" alt=""><span>Copy Campaign</span></a></li>
       <li class="" id="use_template"><a><img src="img/usetemplate.png" alt=""><span>Use Template</span></a></li>
@@ -297,9 +309,10 @@
       <li class="" id="html_code"><a><img src="img/myhtml.png" alt=""><span>HTML Code</span></a></li>
     </ul>
     <div class="clearfix"></div>
-  </div>
+  </div>-->
   <div class="content-inner soruces"  id="area_copy_campaign" style="margin: 20px 0 0;display: none" >
-    <h2 class="header-list"><span id="copy_no_of_camps"></span>
+    <h2 class="header-list">
+    	<span id="copy_no_of_camps"><strong class="badge">0</strong> <b> </b> Campaigns</span>        
       <div id="copycampsearch" class="input-append search">         
       </div>
     </h2>
@@ -339,6 +352,7 @@
 </div>
 <div class="wizard-steps step3">  
    <div class="selection-boxes" style="width: 840px;"> <a class="prev"><span></span></a>
+   	<div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Selecte "<strong>Recepients</strong>"  options from  below.</p></div>
     <ul id="choose_soruce">
       <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
       <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>      
@@ -378,7 +392,7 @@
         <!--<div class="iconpointy">
            <a class="btn-green showtooltip" data-original-title="Add New Target" id="addnew_target"><i class="icon plus left"></i></a>
         </div>-->
-        <div style="position:relative; left:5px; top:10px; float:left;">
+        <div style="position:relative; left:5px; top:11px; float:left;">
             <div class="addnew_btn"><a class="showtooltip" data-original-title="Add New Target" id="addnew_target"><strong>+</strong></a></div>
         </div>
         <div id="targetsearch" class="input-append search"> </div>
@@ -418,7 +432,8 @@
             <div class="heading">
                 <strong class="left">Salesforce</strong>
                 <div class="iconpointy">
-                    <a class="icon setting"></a>
+                	<a class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
+                    <!--<a class="icon setting"></a>-->
                     <div class="pointy">
                         <ul id="sf_setting_menu">
                         <li id="sf_mapping"><a><span>Change Fields Mapping</span></a></li>
@@ -432,23 +447,38 @@
               <div class="ui-accordion">
                 <h3 class="ui-accordion-header" role="tab">
                   <input type="radio" class="radiopanel " value="both" name="options_sf">
-                  <span class="left">Leads & Contacts </span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
-                  <div class="sub-count show" style="width:"><strong class="badge sf_all_count"></strong></div>
-                  </h3>
+                  <span class="left">Leads & Contacts </span> <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>-->
+                  <!--<div class="sub-count show" style="width:"><strong class="badge sf_all_count"></strong></div>-->
+                  <div class="subscribers show"><strong class="badge sf_all_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_all_count"></strong></a>
+                  </div>
+                </h3>
               </div>      
               <div class="ui-accordion" >
                 <h3 class="ui-accordion-header">
                   <input type="radio" class="radiopanel " value="lead" name="options_sf">
-                  <span class="left">Leads</span>  <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
-                  <div class="sub-count show" style="width:"><strong class="badge sf_lead_count"></strong></div>
-                  </h3>
-              </div>       
+                  <span class="left">Leads</span>  <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>-->
+                  <!--<div class="sub-count show" style="width:"><strong class="badge sf_lead_count"></strong></div>-->
+                  <div class="subscribers show"><strong class="badge sf_lead_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_lead_count"></strong></a>
+                  </div>
+                </h3>
+              </div>
               <div class="ui-accordion" > 
                 <h3 class="ui-accordion-header">
-                  <input type="radio" class="radiopanel " value="contact" name="options_sf">
-                  <span class="left">Contacts</span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>                 
-                  <div class="sub-count show" style="width:"><strong class="badge sf_contact_count"></strong></div>                  
-                  </h3>
+                  <input type="radio" class="radiopanel" value="contact" name="options_sf">
+                  <span class="left">Contacts</span> <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>-->                 
+                  <!--<div class="sub-count show" style="width:"><strong class="badge sf_contact_count"></strong></div>-->
+                  <div class="subscribers show"><strong class="badge sf_contact_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_contact_count"></strong></a>
+                  </div>
+                </h3>
               </div>
                <div id="sf_accordion">
                     <h3> 
@@ -481,7 +511,8 @@
             <div class="heading">
                 <strong class="left">Netsuite</strong>
                 <div class="iconpointy">
-                    <a class="icon setting"></a>
+                	<a class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
+                    <!--<a class="icon setting"></a>-->
                     <div class="pointy">
                         <ul id="ns_setting_menu">
                         <li id="ns_mapping"><a><span>Change Fields Mapping</span></a></li>
@@ -500,22 +531,37 @@
                <div class="ui-accordion">
                 <h3 class="ui-accordion-header" role="tab">
                   <input type="radio" class="radiopanel " value="customer" name="options_ns">
-                  <span class="left">Customer </span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
-                  <div class="sub-count show" style="width:"><strong class="badge ns_customer_count"></strong></div>
+                  <span class="left">Customer </span> <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge ns_customer_count"></strong></div>-->
+                  <div class="sub-count show"><strong class="badge ns_customer_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge ns_customer_count"></strong></a>
+                  </div>
                   </h3>
               </div>      
               <div class="ui-accordion" >
                 <h3 class="ui-accordion-header">
                   <input type="radio" class="radiopanel " value="contact" name="options_ns">
-                  <span class="left">Contact</span>  <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
-                  <div class="sub-count show" style="width:"><strong class="badge ns_contact_count"></strong></div>
+                  <span class="left">Contact</span>  <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>
+                  <div class="sub-count show" style="width:"><strong class="badge ns_contact_count"></strong></div>-->
+                  <div class="sub-count show"><strong class="badge ns_contact_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge ns_contact_count"></strong></a>
+                  </div>
                   </h3>
               </div>       
               <div class="ui-accordion" > 
                 <h3 class="ui-accordion-header">
                   <input type="radio" class="radiopanel " value="partner" name="options_ns">
-                  <span class="left">Partner</span> <a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>                 
-                  <div class="sub-count show" style="width:"><strong class="badge ns_partner_count"></strong></div>                  
+                  <span class="left">Partner</span> <!--<a class="btn-blue filterbtn" ><span>Manage Filter</span><i class="icon filter"></i></a>                 
+                  <div class="sub-count show" style="width:"><strong class="badge ns_partner_count"></strong></div>--> 
+                  <div class="sub-count show"><strong class="badge ns_partner_count"></strong></div>
+                  <div class="filter-buttons filterbtn">
+                    <a type="button" class="active selectall"><span>Select All</span></a>
+                    <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge ns_partner_count"></strong></a>
+                  </div>                 
                   </h3>
               </div>
                <div id="ns_accordion">

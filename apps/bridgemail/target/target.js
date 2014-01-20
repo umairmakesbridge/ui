@@ -189,7 +189,7 @@ function (template,bmsfilters) {
                     var dialog_title = "Copy Target";
                     var dialog = this.app.showDialog({title:dialog_title,
                                           css:{"width":"650px","margin-left":"-325px"},
-                                          bodyCss:{"min-height":"200px"},							   
+                                          bodyCss:{"min-height":"100px"},							   
                                           buttons: {saveBtn:{text:'Copy Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());                                  

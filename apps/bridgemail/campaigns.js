@@ -29,7 +29,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						});
 					}
 				},
-				"click #camps_grid .btn-preview":function(obj){
+				"click #camps_grid .btn-preview, #camps_grid a.notEditable":function(obj){
 					var camp_obj = this;
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
@@ -121,7 +121,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						}
 						else
 						{
-							camp_obj.app.showMessge("Campaign draft is complete");
+							var appMsgs = camp_obj.app.messages[0];
+							camp_obj.app.showMessge(appMsgs.CAMP_draft_success_msg);							
 							camp_obj.app.mainContainer.openCampaign(camp_id);
 						}
 					});					
@@ -248,11 +249,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var dialog = this.app.showDialog({title:dialog_title,
 						  css:{"width":"600px","margin-left":"-300px"},
 						  bodyCss:{"min-height":"260px"},							   
+						  headerIcon : 'copycamp',
 						  buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
 				});
 				this.app.showLoading("Loading...",dialog.getBody());
 				require(["copycampaign"],function(copycampaignPage){                                     
-						 var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.app,copycampdialog:dialog});
+						 var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.app,copycampsdialog:dialog});
 						 dialog.getBody().html(mPage.$el);
 						 dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
 				});
@@ -261,6 +263,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			{
 				var camp_obj = this;
 				var target = $.getObj(obj,"a");
+				if(target.prevObject && target.prevObject[0].localName == 'span')
+					target = $.getObj(obj,"span");
 				var dateStart = target.attr('dateStart');
 				var dateEnd = target.attr('dateEnd');
 				var schDates = [];
@@ -295,12 +299,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 							$(this).addClass('active');							
 					});
 				}
-				camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
-				/*camp_obj.app.getData({
-					"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate,
-					"key":"campaigns",
-					"callback":_.bind(camp_obj.createListTable,camp_obj)
-				});*/
+				camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
 				if(schDates != '')
 					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
 				else
@@ -367,13 +366,13 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						 }
 						 var header_title = active_ws.find(".camp_header .edited");
 						 var stats = '<ul class="c-current-status">';
-						 stats += '<li><span class="badge pclr18"><a class="stattype topbadges" tabindex="-1" search="C">'+ allStats['sent'] +'</a></span>Sent</li>';
-						  stats += '<li><span class="badge pclr6"><a class="stattype topbadges" tabindex="-1" search="P">'+ allStats['pending'] +'</a></span>Pending</li>';
-						   stats += '<li><span class="badge pclr2"><a class="stattype topbadges" tabindex="-1" search="S">'+ allStats['scheduled'] +'</a></span>Scheduled</li>';
-						    stats += '<li><span class="badge pclr1"><a class="stattype topbadges" tabindex="-1" search="D">'+ allStats['draft'] +'</a></span>Draft</li>';
+						 stats += '<li><span class="badge pclr18 stattype topbadges" tabindex="-1" search="C">'+ allStats['sent'] +'</span>Sent</li>';
+						  stats += '<li><span class="badge pclr6 stattype topbadges" tabindex="-1" search="P">'+ allStats['pending'] +'</span>Pending</li>';
+						   stats += '<li><span class="badge pclr2 stattype topbadges" tabindex="-1" search="S">'+ allStats['scheduled'] +'</span>Scheduled</li>';
+						    stats += '<li><span class="badge pclr1 stattype topbadges" tabindex="-1" search="D">'+ allStats['draft'] +'</span>Draft</li>';
 							stats += '</ul>';							
 						 header_title.append(stats);
-						 $(".c-current-status li a").click(_.bind(camp_obj.findCampaigns,camp_obj));
+						 $(".c-current-status li span").click(_.bind(camp_obj.findCampaigns,camp_obj));
 						 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
 				 });
                             this.current_ws = this.$el.parents(".ws-content");
@@ -413,7 +412,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 									resizable:false,
 									colresize:false,
 									lazyLoading:_.bind(this.appendCampaigns,this),
-									height:this.app.get('wp_height')-122,
+									//height:this.app.get('wp_height')-122,
+									height:'100%',
 									usepager : false,
 									colWidth : ['100%','70px','140px']
 					});
@@ -423,11 +423,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				}
 				else
 					this.$("#area_copy_campaign .bmsgrid").remove();
-				var camp_count_lable = '';                                
-				/*if(camp_list_json.totalCount > 1)
-                                    camp_count_lable = 'Campaigns found';
-				else
-                                    camp_count_lable = 'Campaign found';	*/			
+				var camp_count_lable = '';				
 				if(parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
 					this.$("#camps_grid tr:last-child").removeAttr("data-load");
 				}
@@ -461,9 +457,13 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				{
 					chartIcon = '<div class="campaign_stats"><a class="icon report"></a></div>';
 				}
-				if(val[0].status == 'D')
+				if(val[0].status == 'D' || val[0].status == 'S')
 				{
 					editClass = 'Editable';
+				}
+				else if(val[0].status == 'C' || val[0].status == 'P')
+				{
+					editClass = 'notEditable';
 				}
 				row_html += '<td class="firstcol">'+start_div+'<div class="name-type"><h3><a id="'+ val[0]['campNum.encode'] +'" class="campname '+ editClass +'">'+ val[0].name +'</a><a class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</a>'+ chartIcon +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div>'+end_div+'</td>';
 				var datetime = '';

@@ -48,6 +48,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .mergefields-box' :function(obj){
                           this.showMergeFieldDialog(obj);
                       },
+					  'click #drop4' :function(obj){
+                          this.$el.find('.mergefields-box').click();
+                      },
                       'change #campaign_isFooterText':function(){
                         this.setFooterArea();
                       },
@@ -533,12 +536,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 initHeader:function(){
                   var previewIconCampaign = $('<a class="icon preview"></a>');  
                   var editIconCampaign = $('<a class="icon edit"></a>');
+				  var copyIconCampaign = $('<a class="icon copy"></a>');
                   var deleteIconCampaign = $('<a class="icon delete"></a>');
                   var active_ws = this.$el.parents(".ws-content");
                   
                   var header_title = active_ws.find(".camp_header .edited  h2");
                   var action_icon = $('<div class="pointy"></div>")');
                   action_icon.append(editIconCampaign);
+				  action_icon.append(copyIconCampaign);
                   action_icon.append(previewIconCampaign);
                   action_icon.append(deleteIconCampaign);
                   header_title.append(action_icon); 
@@ -553,22 +558,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          active_ws.find("#save_campaign_btn").click();
                      }
                  });
-                  
-                  editIconCampaign.click(function(e){                      
+                  var camp_obj = this;
+                  editIconCampaign.click(function(e){
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
                       e.stopPropagation();
                   });
+				  copyIconCampaign.click(function(e){
+					 camp_obj.copyCamp();
+				  });
                   active_ws.find("#workspace-header").click(function(e){
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
                       e.stopPropagation();
-                  });
-                  var camp_obj = this;
+                  });                  
                   previewIconCampaign.click(function(e){
                        if(camp_obj.states.step2.htmlText!==""){                           
                             var dialog_width = $(document.documentElement).width()-60;
@@ -576,6 +583,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
                                       css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                       headerEditable:false,
+									  headerIcon : 'dlgpreview',
                                       bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
                             var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
@@ -601,6 +609,32 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   });
                                     
                 },
+				getcampaigns: function () {
+					var camp_obj = this;				                               				
+					this.app.getData({
+						"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
+						"key":"campaigns"
+					});
+					var appMsgs = camp_obj.app.messages[0];
+					camp_obj.app.showMessge(appMsgs.CAMP_copy_success_msg);
+				},
+				copyCamp: function()
+				{
+					var camp_obj = this;
+					var dialog_title = "Copy Campaign";
+					var dialog = this.app.showDialog({title:dialog_title,
+							  css:{"width":"600px","margin-left":"-300px"},
+							  bodyCss:{"min-height":"260px"},							   
+							  headerIcon : 'copycamp',
+							  buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+					});
+					this.app.showLoading("Loading...",dialog.getBody());
+					require(["copycampaign"],function(copycampaignPage){                                     
+							 var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_obj.camp_id,app:camp_obj.app,copycampdialog:dialog});
+							 dialog.getBody().html(mPage.$el);
+							 dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+					});
+				},
                 deleteCampaign: function(camp_id) {
                         var camp_obj = this;
                         var active_ws = this.$el.parents(".ws-content");
@@ -1356,7 +1390,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show" style="min-width:70px;"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add move-row"><span>Use</span><i class="icon next"></i></a></div></td>';                        
+                        list_html += '<td><div class="subscribers show" style="min-width:70px;"><strong><span><em>Subscribers</em>'+val[0].subscriberCount+'</span></strong></div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add move-row"><span>Use</span><i class="icon next"></i></a></div></td>';                        
+						
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';										
@@ -1437,8 +1472,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     $.each(targets_list_json.filters[0], function(index, val) {					
                         target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
                         target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        target_html += '<td><div><div class="subscribers show" style="min-width:70px;"><span  class=""></span>'+val[0].filtersCount+'</div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
-                        target_html += '</tr>';
+                        target_html += '<td><div><div class="subscribers show" style="min-width:70px;"><strong><span><em>Subscribers</em>'+val[0].filtersCount+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
+						target_html += '</tr>';
                     });
                     target_html += '</tbody></table>';
 										
@@ -1488,15 +1523,26 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$("#copy-camp-listing"));
                     this.$el.find("#copy-camp-listing").children().remove();
                     var camp_list_json = this.app.getAppData("campaigns");
-                    if(camp_list_json.totalCount > 1)
-                    	this.$("#copy_no_of_camps").html(camp_list_json.totalCount+" Campaigns found");
-                    else
-                        this.$("#copy_no_of_camps").html(camp_list_json.totalCount+" Campaign found");
+					this.$el.find("#copy_no_of_camps .badge").html(camp_list_json.totalCount);
                     
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camp_list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.campaigns[0], function(index, val) {     
-                        var datetime = val[0].scheduledDate;
+						var dtHead = '';
+						var datetime = '';
+						if(val[0].status != 'D')
+						{
+							dtHead = '<em>Schedule Date</em>';
+                        	datetime = val[0].scheduledDate;
+						}
+						else
+						{
+							dtHead = '<em>Updation Date</em>';
+							if(val[0].updationDate)
+								datetime = val[0].updationDate;
+							else
+								datetime = val[0].creationDate;
+						}
                         var dateFormat = '';
                         if(datetime)
                         {
@@ -1507,10 +1553,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         else{
                             dateFormat = '';					
-                         }  
+                         }
+						 var flag_class = ''; 
+						 if(val[0].status == 'D')
+							  flag_class = 'pclr1';
+						  else if(val[0].status == 'P')
+							  flag_class = 'pclr6';
+						  else if(val[0].status == 'S')
+							  flag_class = 'pclr2';
+						  else if(val[0].status == 'C')
+							  flag_class = 'pclr18'; 
                         list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
-                        list_html += '<td><div class="name-type"><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';                         
-                        list_html += '<td><div class="time show" style="width:105px"><span class=""></span>'+dateFormat+'</div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';                        
+                        list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span></h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
+						if(val[0].status != 'D')
+							list_html += '<td><div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div></td>';
+						else
+							list_html += '<td></td>';
+                        list_html += '<td><div class="time show" style="width:130px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';
                         list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';										
@@ -1523,7 +1582,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             resizable:false,
                             colresize:false,
 							lazyLoading:_.bind(this.appendCampaigns,this),
-                            height:this.app.get('wp_height')-122,
+                            //height:this.app.get('wp_height')-122,
+							height:'100%',
                             usepager : false,
                             colWidth : ['100%','90px','66px','132px']
                     });
@@ -2187,7 +2247,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var dialog_title = "Copy Target";
                     var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":"650px","margin-left":"-325px"},
-                              bodyCss:{"min-height":"200px"},							   
+                              bodyCss:{"min-height":"100px"},
+							  headerIcon : 'copycamp',
                               buttons: {saveBtn:{text:'Copy Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
@@ -2251,7 +2312,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(!this.states.step3.salesforce){
                         this.$("#sf_accordion").accordion({ active: 0, collapsible: false});                       
                         this.$("#sf_accordion h3.ui-accordion-header").unbind("keydown");
-                        self.$("#salesforce_setup .filterbtn").click(_.bind(self.showSalesForceFitler,self));
+                        self.$("#salesforce_setup .filterbtn .managefilter").click(_.bind(self.showSalesForceFitler,self));
                         this.$('.salesforce_campaigns input.radiopanel').iCheck({
                             radioClass: 'radiopanelinput',
                             insert: '<div class="icheck_radio-icon"></div>'
@@ -2462,7 +2523,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    if(!this.states.step3.netsuite){
                        this.$("#ns_accordion").accordion({ active: 0, collapsible: false});   
                        this.$("#ns_accordion h3.ui-accordion-header").unbind("keydown");
-                       self.$("#netsuite_setup .filterbtn").click(_.bind(self.showNetSuiteFitler,self));
+                       self.$("#netsuite_setup .filterbtn .managefilter").click(_.bind(self.showNetSuiteFitler,self));
                        this.$('#netsuite_setup input.radiopanel').iCheck({
                             radioClass: 'radiopanelinput',
                             insert: '<div class="icheck_radio-icon"></div>'
