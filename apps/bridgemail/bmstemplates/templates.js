@@ -339,8 +339,10 @@ function (template,highlight) {
                             //templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
                             if(val[0].isAdmin==='Y'){
                                 templates_html +='<a class="icon builtin right showtooltip" title="Builtin"></a>';                                                                                                        
-                            }       
-                            templates_html +='<a class="icon mobile right showtooltip" title="For Mobile"></a>';                                                                    
+                            }   
+                            if(val[0].isMobile==='Y'){
+                                templates_html +='<a class="icon mobile right showtooltip" title="For Mobile"></a>';                                                                    
+                            }
                             templates_html +='</div></div> </div></li>';                      
                         });
                     }
