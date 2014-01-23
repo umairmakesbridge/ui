@@ -1,4 +1,4 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping'],
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping','moment'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping) {
 
         'use strict';
@@ -117,10 +117,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       },
                       'click .scheduled-campaign':function(){
 						  var camp_obj = this;
-						  var mapdataview = camp_obj.states.step3.mapdataview;
+						  /*var mapdataview = camp_obj.states.step3.mapdataview;
 						  if(mapdataview && mapdataview.isCampRunning == 'Y')
 						  		camp_obj.app.showAlert('Your campaign is being scheduled please wait.',$(".ws-content"));                          		
-							else
+							else*/
 								this.scheduledCampaign('S',"Scheduling Campaign...");
                       },
                       'click .draft-campaign':function(obj){
@@ -152,7 +152,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.wp_id = this.options.params.wp_id;
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":false,htmlText:'',change:false},
-                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},ns_filters:{customer:"",contact:"",parnter:"",nsObject:""}},
+                                        "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},ns_filters:{customer:"",contact:"",parnter:"",nsObject:"",isNewTarget:false,newTargetName:''}},
                                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D'},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
@@ -284,11 +284,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.initCheckbox();
                     }
                     //Init Accoridions on first step
-                    this.$( "#accordion" ).accordion({ active: 1, collapsible: true,activate: _.bind(function(){
+                    this.$( "#campaign_add_to_salesforce_accordion" ).accordion({ active: 0, collapsible: false,activate: _.bind(function(){
                             this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox)
                             
                     },this) });
-                    this.$( "#accordion1" ).accordion({ active: 1, collapsible: true,activate:_.bind(function(){
+                    this.$( "#conversion_filter_accordion" ).accordion({ active: 0, collapsible: false,activate:_.bind(function(){
                             this.$("#conversion_filter").prop("checked",this.states.step1.pageconversation_checkbox);
                     },this) });
                 
@@ -534,10 +534,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 }
                 ,
                 initHeader:function(){
-                  var previewIconCampaign = $('<a class="icon preview"></a>');  
-                  var editIconCampaign = $('<a class="icon edit"></a>');
-				  var copyIconCampaign = $('<a class="icon copy"></a>');
-                  var deleteIconCampaign = $('<a class="icon delete"></a>');
+                  var previewIconCampaign = $('<a class="icon preview showtooltip" data-original-title="Preview Campaign"></a>');  
+                  var editIconCampaign = $('<a class="icon edit showtooltip" data-original-title="Edit Campaign"></a>');
+				  var copyIconCampaign = $('<a class="icon copy showtooltip" data-original-title="Copy Campaign"></a>');
+                  var deleteIconCampaign = $('<a class="icon delete showtooltip" data-original-title="Delete Campaign"></a>');
                   var active_ws = this.$el.parents(".ws-content");
                   
                   var header_title = active_ws.find(".camp_header .edited  h2");
@@ -552,13 +552,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   active_ws.find("#header_wp_field").attr("placeholder","Type in Campaign Name");
                   active_ws.find("#save_campaign_btn").click(_.bind(this.saveCampaign,this));               
                   active_ws.find("#cancel_campaign_btn").click(_.bind(this.setupCampaign,this));               
-                  
+                  active_ws.find(".camp_header .addtag a").addClass('showtooltip');
                  active_ws.find("#header_wp_field").keyup(function(e){
                      if(e.keyCode==13){
                          active_ws.find("#save_campaign_btn").click();
                      }
                  });
                   var camp_obj = this;
+				  var appMsgs = camp_obj.app.messages[0];
                   editIconCampaign.click(function(e){
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();                                            
@@ -571,16 +572,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 				  });
                   active_ws.find("#workspace-header").click(function(e){
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
-                      var text= active_ws.find("#workspace-header").html();                                            
+                      var text= active_ws.find("#workspace-header").html();
                       active_ws.find(".camp_header .c-name .edited ").show();
                       active_ws.find("#header_wp_field").focus().val(text);  
                       e.stopPropagation();
                   });                  
                   previewIconCampaign.click(function(e){
+					  	active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
+                      	var camp_name = active_ws.find("#workspace-header").html();
                        if(camp_obj.states.step2.htmlText!==""){                           
                             var dialog_width = $(document.documentElement).width()-60;
                             var dialog_height = $(document.documentElement).height()-182;
-                            var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
+                            var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
                                       css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                       headerEditable:false,
 									  headerIcon : 'dlgpreview',
@@ -597,16 +600,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   var camp_obj = this;
                   deleteIconCampaign.click(function(){
                       //if(confirm('Are you sure you want to delete this campaign?')){
-                        camp_obj.app.showAlertDetail({heading:'Confirm',
-                        detail:'Are you sure you want to delete this campaign?',
-                        login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
-                        camp_obj.$el.parents(".ws-content.active"));
-                        $(".overlay .btn-ok").click(function(){
-                                $(".overlay").remove();
-                               camp_obj.deleteCampaign(camp_obj.camp_id);
-                        });
+                        camp_obj.app.showAlertDetail({heading:'Confirm Deletion',
+                                                detail:appMsgs.CAMPS_delete_confirm_error,                                                
+												callback: _.bind(function(){
+													camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
+						   							camp_obj.deleteCampaign(camp_obj.camp_id);
+												},camp_obj)},
+                                                camp_obj.$el.parents(".ws-content.active"));
                       //}
                   });
+				  active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                                     
                 },
 				getcampaigns: function () {
@@ -1471,8 +1474,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 					
                     $.each(targets_list_json.filters[0], function(index, val) {					
                         target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
-                        target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        target_html += '<td><div><div class="subscribers show" style="min-width:70px;"><strong><span><em>Subscribers</em>'+val[0].filtersCount+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
+                        target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';
+						var upd_date = moment(val[0].updationDate,'YYYY-M-D');
+						var upd_date_new = upd_date.date() + ' ' + camp_obj.app.getMMM(upd_date.month()) + ', ' + upd_date.year();
+                        target_html += '<td><div><div class="subscribers show" style="min-width:70px;"><strong><span><em>Updation Date</em>'+upd_date_new+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
 						target_html += '</tr>';
                     });
                     target_html += '</tbody></table>';
@@ -1503,6 +1508,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.copyTarget(obj);
                             }
                     });
+					this.addToCol2();
 					
 					this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,camp_obj.$el.find("#target-search"));
@@ -1518,6 +1524,48 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
 					
                 },
+				addToCol2:function(obj){
+					var camp_obj=this;
+					if(this.states.step3.isNewTarget == true)
+					{
+						this.$("#targets").find("tr").filter(function() {
+								if($(this).find("td h3").text().toLowerCase().indexOf(camp_obj.states.step3.newTargetName) > -1)
+								{
+									var tr_copy = $(this).clone();
+									$(this).remove();
+									tr_copy.find(".action").children().hide();
+									tr_copy.find(".move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
+									tr_copy.find(".move-row").show();	
+									tr_copy.find(".move-row").click(_.bind(camp_obj.removeFromCol2,camp_obj)); 
+									tr_copy.appendTo(camp_obj.$(".col2 .rightcol tbody"));
+								}
+						 });						
+					}
+				},
+				removeFromCol2:function(obj){
+					 var camp_obj=this;
+					var tr_obj = $(obj.target).parents("tr");
+					tr_obj.fadeOut("fast", function(){
+						var tr_copy = tr_obj.clone();
+						$(this).remove();
+						tr_copy.find(".action").children().show();
+          				tr_copy.find(".move-row").removeClass("btn-red").addClass("btn-green").html('<span>Use</span><i class="icon next"></i>');
+						tr_copy.find(".move-row").click(_.bind(camp_obj.addToCol2,camp_obj))
+						var _index = tr_copy.attr("item_index")
+          				var next_element = null
+						var col1_rows = camp_obj.$el.find(".col1 .leftcol tr");
+						for(var i=0;i<col1_rows.length;i++){
+							if(parseInt($(col1_rows[i]).attr("item_index"))>_index){
+								next_element = $(col1_rows[i])
+								break
+							}          
+						}
+						if(next_element){
+						  tr_copy.insertBefore(next_element)
+						}
+						tr_copy.appendTo(camp_obj.$el.find(".col1 .leftcol tbody"));
+					});
+				},
                 createCampaignListTable:function(){                    
                     var camp_obj=this;
                     this.app.showLoading(false,this.$("#copy-camp-listing"));
@@ -2181,6 +2229,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                checkCSVUploaded:function()
                 {
                     var camp_obj = this;
+					var appMsgs = this.app.messages[0];
                     var csvupload = camp_obj.states.step3.csvupload;
                     var mapdataview = camp_obj.states.step3.mapdataview;
                     if(csvupload && csvupload.fileuploaded == true)
@@ -2191,7 +2240,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     var list_json = jQuery.parseJSON(data);						   
                                     if(list_json[0] == 'success')
                                     {                                               
-                                           camp_obj.app.showAlert('Your csv upload has cancelled.',camp_obj.$el);
+                                           camp_obj.app.showAlert(appMsgs.CSVUpload_cancel_msg,camp_obj.$el);
                                            csvupload.$el.find("#dropped-files").children().remove();
                                            csvupload.$el.find("#drop-files .middle").css("display","block");
                                            csvupload.dataArray = [];
@@ -2211,6 +2260,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
                         bodyCss:{"min-height":"100px"},							   
+						headerIcon : 'new_headicon',
                         buttons: {saveBtn:{text:'Create Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
@@ -2230,8 +2280,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                               headerEditable:true,
                               bodyCss:{"min-height":dialog_height+"px"},
+							  headerIcon : 'target_headicon',
                               buttons: {saveBtn:{text:'Save Target'} }                                                                           
-                        });
+                        });					
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});

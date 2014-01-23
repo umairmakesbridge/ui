@@ -14,6 +14,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/footer
 			initialize: function () {
 				this.template = _.template(template);				
 				this.render();
+				var today = new Date();
+				var year = today.getFullYear();
+				this.$('#curYear').html(year);				
 			},
 
 			render: function () {

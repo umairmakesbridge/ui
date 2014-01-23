@@ -109,7 +109,7 @@ function (template,chosen) {
 					}
 					else
 					{					
-						app.showAlert('BMS fields should be unique',el);
+						app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
 						isValid = false;
 						return;
 					}					
@@ -117,7 +117,7 @@ function (template,chosen) {
 			});
 			if(layout_map == "")
 			{
-				app.showAlert('Please provide BMS fields against each column to fetch data in correct format',el);
+				app.showAlert(appMsgs.MAPDATA_bmsfields_empty_error,el);
 				isValid = false;
 			}			
 			  
@@ -134,8 +134,9 @@ function (template,chosen) {
 					   //return curview.mapdataview.savecampaign(list_json[2],list_json[1]);
 					   curview.removeFile();
                        app.removeCache("lists");
-					   setTimeout(function(){ mapview.checkCampStatus() },30000);
+					   //setTimeout(function(){ mapview.checkCampStatus() },30000);
 					   //mapview.checkCampStatus();
+					   campview.states.step3.recipientType = 'List';
 					   campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
 					   app.showLoading(false,mapview.$el);
 				   }
@@ -167,7 +168,7 @@ function (template,chosen) {
 		},
 		filllistsdropdown:function(){
 			var list_array = '';
-			var list_html = "<option value=''>Select Existing List</option>";
+			var list_html = "";
 			var campview = this.camp_obj;
 			var app = this.app;
 			var curview = this;
@@ -199,7 +200,7 @@ function (template,chosen) {
 						}
 						curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
 					}
-				}).fail(function() { console.log( "error lists listing" ); });				
+				}).fail(function() { console.log( "error lists listing" ); });
 			}			
 		},
 		initialize:function(){                    

@@ -54,6 +54,7 @@ function (app,template,fileuploader,chosen) {
 			var curview = this;
 			var app = this.app;
 			var el = this.$el;
+			var appMsgs = app.messages[0];
 			//el.find('#uploaded-holder').show();
 			campview.states.step3.change=true;
 			app.showLoading("Uploading file",el);
@@ -61,7 +62,7 @@ function (app,template,fileuploader,chosen) {
 				if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) 
 				{
 					if(errMessage == 0) {
-							el.find('#dropped-files').html('Please select CSV file only');
+							el.find('#dropped-files').html(appMsgs.CSVUpload_wrong_filetype_error);
 							++errMessage
 					}
 					else if(errMessage == 1) {
@@ -83,7 +84,7 @@ function (app,template,fileuploader,chosen) {
 				{
 					var fileReader = new FileReader();
 					fileReader.onload = (function(file) {
-
+					el.find('#dropped-files').hide();
 					return function(e) { 
 						curview.dataArray.push({name : file.name, value : this.result});
 						curview.fileName=file.name;
@@ -96,13 +97,13 @@ function (app,template,fileuploader,chosen) {
 						else {
 							el.find("#drop-files .middle").css("display","block");									
 						}
-						if(el.find('#dropped-files > .image').length < maxFiles) { 
+						/*if(el.find('#dropped-files > .image').length < maxFiles) { 
 								el.find('#dropped-files').html('<div class="filename">'+file.name+'</div><div class="image" style="background: url('+image+'); background-size: cover;"> </div><div  id="remove-file-upload" class="btn btn-small"><i class="icon-trash"></i> Remove</div>'); 
 								el.find("#remove-file-upload").click(function(){
 									curview.removeFile();
 									errMessage =0;
 								});
-						}
+						}*/
 						el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
 						var formData = curview.formdata ? new FormData() : null;																
 						if (curview.formdata) formData.append("file", files[index]);
@@ -202,7 +203,7 @@ function (app,template,fileuploader,chosen) {
 				mapPage = new mapdataPage({camp:campview,app:app});
 				mapPage.$el.find('.tabel-div').append(mappingHTML);
 				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
-				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
+				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px", 'data-placeholder':"---Select Field---"});
 				campview.states.step3.mapdataview=mapPage;
 			});
 		},		
@@ -223,8 +224,8 @@ function (app,template,fileuploader,chosen) {
 			var curview = this;
 			var app = this.app;
 			
-			var chtml="<select  class='mapfields'>";
-			chtml +="<option value='0'>---Select Field---</option>";
+			var chtml="";
+			chtml +="<select class='mapfields'>";
 			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
 			if(curview.map_feilds)
 			{

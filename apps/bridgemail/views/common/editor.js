@@ -154,8 +154,7 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                                 },
                                 setup : function(ed) {
                                         ed.onChange.add(function(ed, l) {
-                                                editor.page.states.editor_change = true;
-                                               // console.log('Editor contents was modified. Contents: ');
+                                                editor.page.states.editor_change = true;                                               
                                         });
                                 }
 

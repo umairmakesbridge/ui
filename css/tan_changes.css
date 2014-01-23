@@ -332,7 +332,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
 #salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
-.overlay { position:absolute; background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
+.overlay { position:fixed; background:none repeat scroll 0 0 rgba(47, 63, 74, 0.8); }
 .global_messages{
     position: fixed;
     top:-1px;
@@ -369,11 +369,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
     width: 550px;
 }
 .since .calendericon { cursor:pointer; }
-.btn-ok { padding:0 20px; }
-.btn-cancel { padding:0 10px; margin-left:10px; }
-.confalert-buttons {
-    padding-left: 30%;
-}
+.btn-cancel { margin-left:5px; }
 .copy_campbox img {
     height: inherit;
 }
@@ -382,14 +378,14 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 #area_choose_tags .tagsbox { background-color:#EAF4F9; }
 .drop-files .btn-gray { width:inherit; }
 .tabel-div .bmsgrid div.hDiv th, .tabel-div .bmsgrid div.bDiv td { overflow:visible; }
-.exist-new .emailinput { /*padding:4px 6px;*/ margin:0px 3px 0 5px; }
+.exist-new .emailinput { /*padding:4px 6px;*/ margin:0px 0px 0 5px; }
 .filter-row .filter-cont { min-height:40px; }
 .iconpointy a.icon {
     background-color: #91ABBC;
 }
 #netsuite_setup .ui-accordion .ui-accordion-header .search,
 #salesforce_setup .ui-accordion .ui-accordion-header .search
- { margin:0 0 0 10px; line-height:inherit; }
+ { margin:3px 0 0 10px; }
 #netsuite_setup .filterbtn,
 #salesforce_setup .filterbtn
 { float:right; }
@@ -443,8 +439,21 @@ ul.c-current-status li .badge { cursor:pointer; }
 .messagebox a.closebtn { opacity:1; }
 .messagebox a.closebtn:hover { /*opacity:1;*/ }
 #newlist { padding-left:8px; }
-#salesforce-camp-search .icon,#netsuite-group-search .icon { top:5px; }
+/*#salesforce-camp-search .icon,#netsuite-group-search .icon { top:5px; }*/
 #salesforce_setup .iconpointy .pointy, #netsuite_setup .iconpointy .pointy { margin-top:6px; float:right; }
 #netsuite_setup .iconpointy{ top:2px; }
 .modal-header .tagscont { margin-left:0; }
-.chosen-container .chosen-results li.group-result { background-color:#EFF7FB; }
+.chosen-container .chosen-results li.group-result { background-color:#fff; }
+.messagebox.delete { padding:20px; margin-top:50px; background-color:#fff; width:440px; }
+.messagebox .btns {
+    height: 35px;
+    margin: 15px 0 0;
+}
+.tagbox { border:0; box-shadow:0 4px 5px rgba(0, 0, 0, 0.25); width:206px; }
+.tagbox:after { border-color:rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF; }
+.tagbox input { margin:0 0 6px; width:191px; }
+.tagbox .btn-green { margin:0; }
+#clearcal { position:absolute; right:61px; top:10px; display:none; }
+.since > input{ padding-right:80px; width:95px; }
+.c-name h2 i.target_headicon { background:url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0); background-position:-90px -690px !important; display:block; width:30px; height:30px; margin:10px 0 0 3px !important; }
+.new_headicon { background:url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0); background-position:-90px -690px !important; display:block; width:30px; height:30px; }
