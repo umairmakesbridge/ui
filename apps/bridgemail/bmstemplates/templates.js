@@ -35,6 +35,7 @@ function (template,highlight) {
                this.app = this.options.app;           
                this.page = this.options.page;
                this.selectText  = this.options.selectAction?this.options.selectAction:'Select Template';
+               this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                
               
             }
@@ -319,12 +320,18 @@ function (template,highlight) {
                             if(val[0].isReturnPath==='Y'){
                                 templates_html +='<div class="rpath"></div>';
                             }       
-                            templates_html +='<div class="img"><div><a class="selectbtn select-template main-action" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
+                            templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
                             templates_html +='<a class="previewbtn" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
                             templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
                             templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                            templates_html += '</div><img alt="" data-src="holder.js"  src="img/templateimg.png"></div>';
-                            templates_html +='<div class="caption">';
+                            var image_src = camp_obj.app.decodeHTML(val[0]["thumbURL"]);
+                            if(image_src==""){
+                                templates_html += '</div><img  src="img/templateimg.png" /></div>';
+                            }
+                            else{
+                                templates_html += '</div><span><img src="'+camp_obj.app.decodeHTML(val[0]["thumbURL"])+'"></span></div>';
+                            }
+                            templates_html +='<div id="editfromname_'+val[0]["templateNumber.encode"]+'" class="caption">';
                             templates_html +='<h3><a>'+val[0].name+'</a></h3>';
                             if(val[0].categoryID){
                                 templates_html +="<a class='cat' cat_id='"+val[0].categoryID+"'>"+val[0].categoryID+"</a>";//camp_obj.showCategoryTemplate(val[0].categoryID);
@@ -394,7 +401,7 @@ function (template,highlight) {
                              this.loadTemplates('search','admin',{user_type:'A'});  
                         },this));
                         
-                        if(camp_obj.options.selectCallback){
+                        if(camp_obj.options.selectCallback){                            
                             template_html.find(".select-template").click(camp_obj.options.selectCallback);
                         }
                         
@@ -403,10 +410,15 @@ function (template,highlight) {
                             this.updateTemplate();
                         },camp_obj));
                         
+                        template_html.find(".caption").click(_.bind(function(obj){
+                            this.template_id = $.getObj(obj,"div").attr("id").split("_")[1];
+                            this.updateTemplate();
+                        },camp_obj));
+                        
                         
                         template_html.find(".deletebtn").click(_.bind(function(obj){
                             this.template_id = $.getObj(obj,"a").attr("id").split("_")[1];
-                            this.deleteTemplate();
+                            this.deleteTemplate(this.template_id);
                         },camp_obj));
                         
                         template_html.find(".previewbtn").click(_.bind(function(obj){                              
@@ -420,17 +432,18 @@ function (template,highlight) {
                                           headerIcon : 'dlgpreview',
                                           bodyCss:{"min-height":dialog_height+"px"}                                                                          
                                });
-                              this.app.showLoading('Loading Preview...',dialog.getBody());                              
+                               var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+target.attr("id").split("_")[1]+"\"></iframe>");                            
+                               dialog.getBody().html(preview_iframe);
+                              /*this.app.showLoading('Loading Preview...',dialog.getBody());                              
                               var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                               jQuery.getJSON(URL,function(tsv, state, xhr){
                                   var html_json = jQuery.parseJSON(xhr.responseText);
-                                  var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
-                                  dialog.getBody().html(preview_iframe);
+                                  
                                   preview_iframe[0].contentWindow.document.open('text/html', 'replace');
                                   preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(html_json.htmlText,true));
                                   preview_iframe[0].contentWindow.document.close();
                                   
-                              });
+                              });*/
                               
                         },this));
                     }
@@ -532,8 +545,25 @@ function (template,highlight) {
                            dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
                     });
                 },
-                deleteTemplate:function(){
-                    
+                deleteTemplate:function(templateNum){
+                    var _this = this;
+                    if(confirm("Are you sure you want to delete this template?")){
+                            this.app.showLoading("Deleting Template...",this.$el);
+                            var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                            $.post(URL, {type:'delete',templateNumber:templateNum})
+                            .done(function(data) {                  
+                                  _this.app.showLoading(false,_this.$el);   
+                                   var _json = jQuery.parseJSON(data);        
+                                   if(_json[0]!=='err'){
+                                    
+                                      _this.$("#template_search_menu li:first-child").removeClass("active").click();
+                                    
+                                   }
+                                   else{
+                                       _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                                   }
+                           });
+                    }
                 }
         });
 });

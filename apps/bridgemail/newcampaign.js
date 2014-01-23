@@ -23,7 +23,7 @@ function (template) {
 						this.curview = this;
                         this.$el.html(this.template({}));
                 },
-				createCampaign:function(){
+				createCampaign:function(templateID){
 					var curview = this;
 					var camp_obj = curview.options.camp;                   
 				   var el = curview.$el;
@@ -43,8 +43,11 @@ function (template) {
 						app.hideError({control:el.find(".campname-container")});
 						app.showLoading("Creating campaign...",curview.$el);
 						var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-						//$(obj.target).addClass("saving");
-                         $.post(URL, { type: "create",campName:el.find('#camp_name').val() })
+                         var post_data = { type: "create",campName:el.find('#camp_name').val() };
+                             if(templateID){
+                                post_data['templateNumber'] = templateID;
+                             }
+                         $.post(URL,post_data )
                           .done(function(data) {  
 						  	app.showLoading(false,curview.$el);                            
                               var camp_json = jQuery.parseJSON(data);                              

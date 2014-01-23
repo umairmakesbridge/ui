@@ -131,7 +131,7 @@ define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templa
             title:"Campaigns",
             workspace_id: 'campaign_'+camp_id,
             url : 'campaign',
-            tab_icon:'campaign',
+            tab_icon:'campaign',            
             params: {camp_id:camp_id},
             wizard :{steps:4,active_step:1,step_text:["Settings","Create","Recipients","Schedule"]},
             actions :[{'iconCls':'campaigns','text':'New Campaign','url':''},{'iconCls':'upload-subscribers','text':'Upload Subscribers','url':''}

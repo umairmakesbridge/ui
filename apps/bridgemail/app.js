@@ -39,6 +39,9 @@ define([
 			this.set(_.extend({
 				env: 'developement',
 				bms_token: $.getUrlVar(false,'BMS_REQ_TK'),
+                                preview_domain : previewDomain,
+                                images_CDN : imagesCDN,
+                                static_CDN : staticCDN,
 				host: window.location.hostname,
 				session: null,
                                 app_data : {}
@@ -250,7 +253,7 @@ define([
                 str = str.replace(/&lt;/g,"<");
                 str = str.replace(/&gt;/g,">");
                 str = str.replace(/&gt;/g,">"); 
-                str = str.replace(/&nbsp;/g," "); 
+                str = str.replace(/&nbsp;/g," ");                 
                 str = str.replace(/&quot;/g,"\"");
                 if(lineFeed){
                     str = str.replace(/&line;/g,"\n");

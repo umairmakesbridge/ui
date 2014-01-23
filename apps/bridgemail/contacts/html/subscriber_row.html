@@ -3,7 +3,7 @@
     <div class="title show-detail" id="<%- model.get('subNum')%>">
         <h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
         <% if(model.get('salesStatus')!==''){%>
-            <a class="statusdd color3"><%- model.get('salesStatus')%> <b class="caret"></b></a>
+            <a class="statusdd color3"><%- model.get('salesStatus')%> </a>
         <%}%>    
         <a  class="schedulebtn">Schedule</a>
     </div>
@@ -14,7 +14,7 @@
           <% })%>          
         </ul>
       </div><!--   tagscont  --> 
-       <div class="leftboxbtm">
+       <div class="leftboxbtm" style="display:none">
             <div class="hotness">
                 <span class=""></span>
                 <span class=""></span>
@@ -47,24 +47,24 @@
 
 <div class="avatarcol">
     <div class="img"><img src="img/avatar.png" alt=""/></div>
-    <ul><li><a class="icon hide showtooltip" title="Hide Contact"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li></ul>
+    <ul style="display:none"><li><a class="icon hide showtooltip" title="Hide Contact"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li></ul>
 </div>
 <div class="rightbox">
             <div class="actstatus">
             <div class="time"><i class="icon time"></i><%- time %></div>
-            <div class="activity" style="display:none"><i class="icon web"></i>Submission Form</div>
+            <div class="activity"><i class="icon web"></i><%- activity_type %></div>
         </div>
         <div class="proinfo">
             <span class="ellipsis more-detail showtooltip" title="View fields">...</span>            
-            <span style="display:none">
+            <span class="fields">
                 Telephone
             <strong></strong>
             </span>
-            <span style="display:none">
+            <span class="fields">
                 Company
             <strong><%- model.get('company')%></strong>
             </span>
-            <span style="display:none">
+            <span class="fields">
                 Title
             <strong><%- model.get('title')%></strong>            
             </span>

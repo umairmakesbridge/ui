@@ -184,23 +184,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						  bodyCss:{"min-height":dialog_height+"px"}                                                                          
 				});	
 				camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
-								
-				var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-				var camps_json = '';
-				$.post(URL, {type:'basic',campNum:camp_id})
-				.done(function(data) {      
-					camps_json = jQuery.parseJSON(data);
-					camp_obj.app.showLoading(false,dialog.getBody());
-					if(camps_json.htmlText!==""){						
-						var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
-					dialog.getBody().html(preview_iframe);
-						preview_iframe[0].contentWindow.document.open('text/html', 'replace');
-						preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(camps_json.htmlText,true));
-						preview_iframe[0].contentWindow.document.close();
-					}
-					else
-						camp_obj.app.showAlert("Campaign body is missing",dialog.getBody());
-				});
+                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id+"&html=Y&original=N";                                
+                                var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                                                            
+				dialog.getBody().html(preview_iframe);
+											
 			},
 			deleteCampaign: function(camp_id)
 			{

@@ -6,7 +6,7 @@ function ($,Backbone, _,app,Wizard, template) {
                 className :'ws-content',
                 html_path : "text!html/",
                 events: {
-                    'click .icon.close':function(obj){
+                    'click .close-wp':function(obj){
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
                         $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();

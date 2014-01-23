@@ -332,7 +332,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
 #salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
-.overlay { position:absolute; background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
+.overlay { background:url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0); }
 .global_messages{
     position: fixed;
     top:-1px;

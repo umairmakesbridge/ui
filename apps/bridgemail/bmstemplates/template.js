@@ -42,21 +42,36 @@ function (template,icheck,bmstags) {
                this.modal = this.$el.parents(".modal");
                this.tagDiv = this.modal.find(".tagscont");
                this.head_action_bar = this.modal.find(".modal-header .pointy");
+               var previewIconCampaign = $('<a class="icon preview"></a>');  
                this.head_action_bar.find(".copy").hide();
+               this.head_action_bar.append(previewIconCampaign);
                this.tagDiv.addClass("template-tag");
                this.loadTemplate();
                this.iThumbnail = this.$(".droppanel");
                this.$("textarea").css("height",(this.$("#area_create_template").height()-180)+"px");
                this.$(".droppanel").dragfile({
-                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=Y',
+                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=Y&th_width=240&th_height=320',
                         callBack : _.bind(this.processUpload,this),
                         app:this.app
                     });
                
                this.$(".add-cat").addbox({app:this.app,
-                                          addCallBack:_.bind(this.addCategory,this),
-                                          placeholder_text:'Please enter category'
-                                        });
+                    addCallBack:_.bind(this.addCategory,this),
+                    placeholder_text:'Please enter category'
+                  });
+                previewIconCampaign.click(_.bind(function(e){                                     
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.app.showDialog({title:'Template Preview',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:false,
+                              headerIcon : 'dlgpreview',
+                              bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                    });
+                    var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+this.template_id+"\"></iframe>");                            
+                    dialog.getBody().html(preview_iframe);                                         
+                    e.stopPropagation();     
+               },this))    
             },
              /**
             * Load template contents and flag doing a get Ajax call.

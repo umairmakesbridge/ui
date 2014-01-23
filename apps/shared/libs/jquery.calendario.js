@@ -45,6 +45,7 @@
 		// left most day in the calendar
 		// 0 - Sunday, 1 - Monday, ... , 6 - Saturday
 		startIn : 1,
+                setDate:'',
 		onDayClick : function( $el, $content, dateProperties ) { return false; }
 	};
 
@@ -55,7 +56,7 @@
 			// options
 			this.options = $.extend( true, {}, $.Calendario.defaults, options );
 
-			this.today = new Date();
+			this.today = this.options.setDate? this.options.setDate: new Date();
 			this.month = ( isNaN( this.options.month ) || this.options.month == null) ? this.today.getMonth() : this.options.month - 1;
 			this.year = ( isNaN( this.options.year ) || this.options.year == null) ? this.today.getFullYear() : this.options.year;
 			this.caldata = this.options.caldata || {};

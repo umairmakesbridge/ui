@@ -68,15 +68,13 @@ a,div,span,h1,h2,h3,h4,h5,h5{
     min-height: 200px;
     overflow-y:auto;
     overflow-x:hidden;
-    margin:10px auto;
+    margin:0px auto;
 }
 .selection-combo{
     clear:both;
     margin-bottom: 10px;
 }
-.wizard-steps{
- margin-top: 40px;
-}
+
 .step3 .selection-boxes{
    margin-top: 6px;
 }
@@ -616,9 +614,9 @@ input[type="text"].search-template{
   /* IE6-9 */
   background:#fff;
 
-  -webkit-box-shadow:  0 2px 8px rgba(0, 0, 0, 0.1);
-     -moz-box-shadow:  0 2px 8px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
+     -moz-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
+          box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
 }
 .thumbnail:hover .btm-bar { background:#F8FDFF; }
 .thumbnails{
@@ -1146,7 +1144,7 @@ ul.tabs-btns li.active a{
     width:0px;
 }
 .iconpointy{
-    top:-3px;
+    top:5px;
 }
 .ui-widget .ui-accordion-header .input-append #searchbtn{
     margin-left: -38px;
@@ -1324,41 +1322,97 @@ ul.tabs-btns li.active a{
     height:35px;
     width:33.3%;    
 }
-.thumbnail .img > div a.main-action{
-    width:100%;
-    height:35px;
-    float:left;    
+
+
+
+
+.thumbnail .img > div a.main-action {
+    float: left;
+    height: 48px;
     padding: 10px 0;
-    text-align: center;    
-}
-.thumbnail .img > div a.editbtn:hover {
-	background-color:#98d028;
+    text-align: center;
+    width: 100%;
 }
 
-.thumbnail .img > div a.previewbtn span{
-    background-position: -305px -305px;
-}
-.thumbnail .img > div a.editbtn span{
-    background-position:-305px -335px;
-}
-.thumbnail .img > div a.deletebtn span{
-    background-position: -5px -665px;
+.thumbnail .img > div a {
+    height: 48px;
+    width: 33.3%;
 }
 .thumbnail .img > div a span {
     background: url("../img/icon-map.png") repeat scroll center 0 rgba(0, 0, 0, 0);
     display: block;
-    height: 20px;
-    margin: 5px auto;
-    width: 20px;    
-}
-.thumbnail .img > div{
-    padding:0px;
-}
-.thumbnail .img > div a.selectbtn span{    
-    width:110px;
-    font-size: 14px;
-    background: url("../img/create_campaign.png") no-repeat scroll center left rgba(0, 0, 0, 0);
-    padding-left:25px;        
-     margin-top: 7px;
+    height: 48px;
+    margin: 2px auto;
+    width: 48px;
 }
 
+.thumbnail .img > div a.selectbtn span {
+    background: url("../img/select48.png") no-repeat scroll left center rgba(0, 0, 0, 0);   
+    font-size: 16px;
+    line-height: 48px;
+    margin: 0 auto;
+    padding-left: 48px;
+    width: 130px;
+}
+
+
+.thumbnail .img > div a.previewbtn span {
+    background: url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+
+
+.thumbnail .img > div a.editbtn span {
+    background: url("../img/edit48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.thumbnail .img > div a.editbtn:hover {
+    background-color: #98D028;
+}
+
+.thumbnail .img > div a.deletebtn span {
+    background: url("../img/delete48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.thumbnail .img > div a.selectbtn.createcamp span{
+    background: url("../img/create48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.profileinfo{
+    overflow-y: auto;
+}
+.subscriber-detail .colright{
+    min-height: 690px;
+}
+.profileinfo span strong{
+    overflow:hidden;
+    width: 225px;
+}
+.activitiespanel .timeline .timestamp{
+    width:90px;
+    left:-162px;
+}
+.activitiespanel .timeline:before{
+    height: 99%;
+    left: 137px;
+    top: 15px;
+}
+.activitybar h3 span{
+    color:#fff;
+    font-size:16px;
+    margin-left: 5px;
+}
+.proinfo .fields{
+    display: inline-block;
+    overflow: hidden;
+    padding-left: 10px;
+    white-space: nowrap;
+    width: 100px;
+    overflow-y: hidden;
+}
+.proinfo .fields strong{
+    display:block;    
+}
+.suppressed h3 a{
+    color:#7A7A7A !important;
+}
+div.shortcuts .ddicon{
+    background:url("../img/closebtn.png") no-repeat scroll center 0 rgba(0, 0, 0, 0);
+    margin:27px auto 0;
+}

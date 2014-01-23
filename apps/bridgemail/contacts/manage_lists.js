@@ -41,7 +41,7 @@ function (template,jqueryui,bms_grid) {
                     if(_this.app.checkError(_json)){
                         return false;
                     }
-                    var options = [{'label':'Subscribe',value:'S',cls:'subscribe'},{'label':'Unsubscriber',value:'U',cls:'unsubscribe'},{'label':'Remove',value:'R',cls:'block'}];
+                    var options = [{'label':'Subscribe',value:'S',cls:'subscribe'},{'label':'Unsubscribe',value:'U',cls:'unsubscribe'},{'label':'Remove',value:'R',cls:'block'}];
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="subscriber_lists_grid"><tbody>';                   
                     $.each(_json.listInfo[0],function(key,val){                        
                         var subscribe_date ="NA",unsubscribe_date = "NA";
@@ -76,7 +76,7 @@ function (template,jqueryui,bms_grid) {
                             colWidth : ['100%','90px','66px']
                     });
                     _this.$(".list-action").chosen({width: "160px",disable_search: "true"});
-                    _this.$(".list-action").onchange(function(){
+                    _this.$(".list-action").change(function(){
                         var parent_row = $(this).parents("tr");
                         _this.change_list[parent_row.attr("id")] = $(this).val() ;
                     })

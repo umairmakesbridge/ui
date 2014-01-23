@@ -14,7 +14,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                 //this.next(obj); 
                                 this.validateStep();
                             },
-                            'click ol.progtrckr li':function(obj){
+                            'click ol.progressbar li':function(obj){
                                 return false;
                                 if(obj.target.className.indexOf("step")==-1){
                                     if(!$(obj.target).hasClass("active")){
@@ -25,10 +25,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
 
                                             if(validate>-1 && parseInt(step_no) > this.active_step){
                                                  if(validate===0){
-                                                    this.$el.find(".progtrckr li").eq(this.active_step).addClass("incomplete");
+                                                    this.$el.find(".progressbar li").eq(this.active_step).addClass("incomplete");
                                                 }
                                                 else{
-                                                    this.$el.find(".progtrckr li").eq(this.active_step).removeClass("incomplete");
+                                                    this.$el.find(".progressbar li").eq(this.active_step).removeClass("incomplete");
                                                 }
                                             }
                                             if(validate>0 || parseInt(step_no) < this.active_step ){
@@ -36,9 +36,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                             this.active_step = parseInt(step_no);
                                             this.$el.find(".step-contents .step"+this.active_step).fadeIn(); 
 
-                                            this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
-                                            this.$el.find(".progtrckr .active").removeClass("active");
-                                            this.$el.find(".progtrckr li").eq(this.active_step).addClass("active");
+                                            this.$el.find(".progressbar li:first")[0].className="step"+this.active_step;
+                                            this.$el.find(".progressbar .active").removeClass("active");
+                                            this.$el.find(".progressbar li").eq(this.active_step).addClass("active");
 
                                              //Making Button enable disable
                                             if(this.active_step==1){
@@ -76,20 +76,19 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                         initStep:function(){
                             this.$el.find(".wizard-steps").hide();
                             this.$el.find(".step"+this.active_step).show();
-                            var _steps = this.$el.find(".progtrckr li");
+                            var _steps = this.$el.find(".progressbar li");
                             if(this.options.step_text && this.options.step_text.length){
                                 var step_text = this.options.step_text;
-                                _steps.each(function(i,step){
-                                    if(i>0){
-                                        $(step).find("a").html(step_text[i-1]);
-                                        $(step).attr("title",step_text[i-1]);
-                                    }
+                                _steps.each(function(i,step){                                    
+                                    $(step).find("a").html(step_text[i]);
+                                    $(step).attr("title",step_text[i]);
+                                    
                                 });
                             }
                             else{
                                 _steps.addClass("no-text");
                             }
-                            this.$(".progtrckr li").tooltip({'placement':'bottom',delay: { show: 500, hide:10 }});
+                            this.$(".progressbar li").tooltip({'placement':'bottom',delay: { show: 500, hide:10 }});
                             //Hides the back button on first step
                             this.$el.find("a.backbtn").hide();
                             
@@ -102,10 +101,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             if(this.page.initStepCall){
                                 this.page.initStepCall("step_"+parseInt(this.active_step));
                              }
-                            //Moving Steps prgoress bar
-                            this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
-                            this.$el.find(".progtrckr .active").removeClass("active");
-                            this.$el.find(".progtrckr li").eq(this.active_step).addClass("active");
+                            //Moving Steps prgoress bar                            
+                            this.$el.find(".progressbar .active").removeClass("active");
+                            this.$el.find(".progressbar li").eq(this.active_step-1).addClass("active");
 
                             //Making Button enable disable
                             if(this.active_step==1){
@@ -119,10 +117,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             var validate = this.page.stepsCall("step_"+parseInt(this.active_step));
                             if(validate>-1){
                                 if(validate===0){
-                                        this.$el.find(".progtrckr li").eq(this.active_step).addClass("incomplete");
+                                        this.$el.find(".progressbar li").eq(this.active_step+1).addClass("incomplete");
                                     }
                                     else{
-                                        this.$el.find(".progtrckr li").eq(this.active_step).removeClass("incomplete");
+                                        this.$el.find(".progressbar li").eq(this.active_step+1).removeClass("incomplete");
                                  }
                             }  
                             else{
@@ -138,19 +136,18 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                                 this.page.initStepCall("step_"+parseInt(this.active_step));
                                }
 
-                            //Moving Steps prgoress bar
-                            this.$el.find(".progtrckr li:first")[0].className="step"+this.active_step;
-                            this.$el.find(".progtrckr .active").removeClass("active");
-                            this.$el.find(".progtrckr li").eq(this.active_step).addClass("active");
+                            //Moving Steps prgoress bar                            
+                            this.$el.find(".progressbar .active").removeClass("active");
+                            this.$el.find(".progressbar li").eq(this.active_step-1).addClass("active");
 
                             //Making Button enable disable
                             if(this.active_step>1){
                                 this.$el.find("a.backbtn").show();
                             }
-							if(this.active_step == 3)
-							{
-								this.page.removeCSVUpload();
-							}
+                            if(this.active_step == 3)
+                            {
+                                    this.page.removeCSVUpload();
+                            }
                             if(this.active_step==this.total_steps){
                                 this.$el.find("a.nextbtn").hide();
                             }

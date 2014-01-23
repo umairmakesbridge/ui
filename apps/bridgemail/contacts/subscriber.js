@@ -59,7 +59,9 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                
                 editIconSub.click(_.bind(function(){
                     this.editProfile();
-                },this))
+                },this));
+                
+                this.loadActivityTimeLine();
                 
             },
             /**
@@ -67,16 +69,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
             */
             initControls:function(){                
                 
-                this.$(".connection-setup").chosen({ width: "150px",disable_search: "true"})
-                this.$(".search-timeline").searchcontrol({
-                    id:'contact-search',
-                    width:'160px',
-                    height:'22px',
-                    placeholder: 'Search Timeline',
-                    gridcontainer: 'targets_grid',
-                    showicon: 'yes',
-                    iconsource: 'actfeed'
-                });
+                this.$(".connection-setup").chosen({ width: "150px",disable_search: "true"})                
                
             },
             /**
@@ -170,12 +163,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                     $.each(_json,function(key,value){
                         _this.$("."+key).html(value);
                     })
-                })
-                
-                /*URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+bms_token+"&subNum="+this.sub_id+"&type=getActivityHistory";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){                    
-                    var _json = jQuery.parseJSON(xhr.responseText); 
-                })*/
+                })                               
             },
             /**
              * Show tags of view called when data is fetched.
@@ -222,6 +210,9 @@ function (template,jsearchcontrol,chosen,moment,tags) {
             showFields:function(){
                 var _this = this;
                 _this.$(".topinfo").children().remove();
+                var changeFieldsBtn = $('<a class="settingbtn"></a>');
+                    changeFieldsBtn.click(_.bind(this.editProfile,this));
+                _this.$(".topinfo").append(changeFieldsBtn);
                 $.each(_this.basicFields,function(key,val){
                       var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
                       _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_val+'</strong> </span>');
@@ -283,7 +274,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                  var dialog_width = 1000;
                  var dialog_height = $(document.documentElement).height()-182;                 
                  var btn_prp ={title:'Manage Lists',
-                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10%"},
                         headerEditable:false,
                         headerIcon : 'mlist2',
                         bodyCss:{"min-height":"448px"},                                                                          
@@ -300,6 +291,14 @@ function (template,jsearchcontrol,chosen,moment,tags) {
             },
             fetchContacts:function(){
                 //this.sub.fetchContacts();
+            },
+            loadActivityTimeLine:function(){
+                var _this = this;
+                this.app.showLoading("Loading...",this.$(".colright"));                                                                   
+                require(["contacts/subscriber_timeline"],function(timeline){                                     
+                    var page = new timeline({sub:_this});                    
+                    _this.$(".colright").html(page.$el);                    
+                });
             }
             
         });

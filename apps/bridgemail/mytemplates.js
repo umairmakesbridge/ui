@@ -44,7 +44,7 @@ function (template) {
                 this.app.showLoading("Loading Templates...",this.$el);  
                 var _this = this;
                 require(["bmstemplates/templates"],function(templatesPage){  								                                    
-                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign'});								
+                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign',selectTextClass:'createcamp',selectCallback:_.bind(_this.createCampaign,_this)});								
                     page.on('updatecount',_.bind(_this.addCountHeader,_this));
                     _this.$el.html(page.$el);                            
                     page.init();
@@ -58,6 +58,23 @@ function (template) {
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader);                  
+            },
+            createCampaign: function(obj)
+            {
+                    var templateId =  $.getObj(obj,"a").attr("id").split("_")[1];
+                    var camp_obj = this;
+                    var dialog_title = "New Campaign";
+                    var dialog = this.app.showDialog({title:dialog_title,
+                                      css:{"width":"650px","margin-left":"-325px"},
+                                      bodyCss:{"min-height":"100px"},							   
+                                      buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["newcampaign"],function(newcampPage){                                     
+                            var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog});
+                            dialog.getBody().html(mPage.$el);
+                            dialog.saveCallBack(_.bind(mPage.createCampaign,mPage,templateId));
+                    });
             }            
             
         });

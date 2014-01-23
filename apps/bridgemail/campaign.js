@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping'],
-function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping','moment'],
+function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
 
         'use strict';
         return Backbone.View.extend({
@@ -116,12 +116,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 return false;
                       },
                       'click .scheduled-campaign':function(){
-						  var camp_obj = this;
-						  var mapdataview = camp_obj.states.step3.mapdataview;
-						  if(mapdataview && mapdataview.isCampRunning == 'Y')
-						  		camp_obj.app.showAlert('Your campaign is being scheduled please wait.',$(".ws-content"));                          		
-							else
-								this.scheduledCampaign('S',"Scheduling Campaign...");
+                            var camp_obj = this;
+                            var mapdataview = camp_obj.states.step3.mapdataview;
+                            if(mapdataview && mapdataview.isCampRunning == 'Y')
+                                  camp_obj.app.showAlert('Your campaign is being scheduled please wait.',$(".ws-content"));                          		
+                                  else
+                                 this.scheduledCampaign('S',"Scheduling Campaign...");
                       },
                       'click .draft-campaign':function(obj){
                           var button = $.getObj(obj,"a")
@@ -129,8 +129,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              //this.scheduledCampaign('D','Setting Campaign for reschedule...');
                              this.$(".schedule-camp").show();
                              this.$(".sch-made").hide();
-                             this.$(".draft-campaign").hide();
-                             this.$(".scheduled-campaign").show();
+                             this.setScheduleArea();                             
                           }
                           else  if(button.hasClass("edit")){
                              this.scheduledCampaign('D','Edit Campaign...'); 
@@ -153,7 +152,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.states = { "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                                         "step2":{"templates":false,htmlText:'',change:false},
                                         "step3":{"target_id":0,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},ns_filters:{customer:"",contact:"",parnter:"",nsObject:""}},
-                                        "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D'},
+                                        "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''},
                                         "editor_change":false,
                                         "saleforce_campaigns":null
                                        };
@@ -527,6 +526,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.initCheckbox();
                         
                         camp_obj.states.step4.camp_status = camp_json.status;
+                        camp_obj.states.step4.sch_date = camp_json.scheduledDate;
                         
                         camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                         
@@ -586,11 +586,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 									  headerIcon : 'dlgpreview',
                                       bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
-                            var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"about:blank\"></iframe>");                            
-                            dialog.getBody().html(preview_iframe);
-                            preview_iframe[0].contentWindow.document.open('text/html', 'replace');
-                            preview_iframe[0].contentWindow.document.write(camp_obj.app.decodeHTML(camp_obj.states.step2.htmlText,true));
-                            preview_iframe[0].contentWindow.document.close();
+                            var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
+                            var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+                            dialog.getBody().html(preview_iframe);                            
                         }
                        e.stopPropagation();     
                   })
@@ -609,32 +607,32 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   });
                                     
                 },
-				getcampaigns: function () {
-					var camp_obj = this;				                               				
-					this.app.getData({
-						"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
-						"key":"campaigns"
-					});
-					var appMsgs = camp_obj.app.messages[0];
-					camp_obj.app.showMessge(appMsgs.CAMP_copy_success_msg);
-				},
-				copyCamp: function()
-				{
-					var camp_obj = this;
-					var dialog_title = "Copy Campaign";
-					var dialog = this.app.showDialog({title:dialog_title,
-							  css:{"width":"600px","margin-left":"-300px"},
-							  bodyCss:{"min-height":"260px"},							   
-							  headerIcon : 'copycamp',
-							  buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
-					});
-					this.app.showLoading("Loading...",dialog.getBody());
-					require(["copycampaign"],function(copycampaignPage){                                     
-							 var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_obj.camp_id,app:camp_obj.app,copycampdialog:dialog});
-							 dialog.getBody().html(mPage.$el);
-							 dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
-					});
-				},
+                getcampaigns: function () {
+                        var camp_obj = this;				                               				
+                        this.app.getData({
+                                "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
+                                "key":"campaigns"
+                        });
+                        var appMsgs = camp_obj.app.messages[0];
+                        camp_obj.app.showMessge(appMsgs.CAMP_copy_success_msg);
+                },
+                copyCamp: function()
+                {
+                        var camp_obj = this;
+                        var dialog_title = "Copy Campaign";
+                        var dialog = this.app.showDialog({title:dialog_title,
+                                          css:{"width":"600px","margin-left":"-300px"},
+                                          bodyCss:{"min-height":"260px"},							   
+                                          headerIcon : 'copycamp',
+                                          buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+                        });
+                        this.app.showLoading("Loading...",dialog.getBody());
+                        require(["copycampaign"],function(copycampaignPage){                                     
+                                         var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_obj.camp_id,app:camp_obj.app,copycampdialog:dialog});
+                                         dialog.getBody().html(mPage.$el);
+                                         dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                        });
+                },
                 deleteCampaign: function(camp_id) {
                         var camp_obj = this;
                         var active_ws = this.$el.parents(".ws-content");
@@ -698,11 +696,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$(".step3 #"+source_li).click();
                     }
                 },
-                initStep4:function(){
-                    if(this.states.step4.init===false){                        
-                        this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
-                        this.$("#accordion_recipients").accordion({ collapsible: false});
-                        this.createCalender();                                
+                fetchServerTime:function(){         
+                   this.app.showLoading("Loading Calender...",this.$(".schedule-box > div")); 
+                   var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
+                   jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
+                        if(xhr && xhr.responseText){
+                            var _json = jQuery.parseJSON(xhr.responseText);
+                            if(this.app.checkError(_json)){
+                                return false;
+                            }
+                            this.loadCalender(_json[0]);
+                        }
+                   },this)); 
+                },
+                loadCalender:function(dateTime){
+                        this.app.showLoading(false,this.$(".schedule-box > div"));
+                        var serverDate = moment(this.app.decodeHTML(dateTime),"YYYY-M-D H:m");
+                        this.createCalender(new Date(serverDate.format("MMMM DD, YYYY HH:mm")));  
                         this.states.step4.datetime['day'] = this.states.step4.cal.today.getDate();
                         this.states.step4.datetime['month'] = this.states.step4.cal.today.getMonth()+1 
                         this.states.step4.datetime['year'] = this.states.step4.cal.today.getFullYear();
@@ -715,11 +725,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{
                             this.$(".timebox-hours button.am").addClass("active");
                         }
-                        
+
                         hour = hour==0 ? "12":hour;                        
-                                                
+
                         this.$(".timebox-hour").spinner({max: 12,min:1,start: function( event, ui ) {
-                                
+
                         }});
                         this.$(".timebox-min").spinner({max: 59,min:0,stop: function( event, ui ) {
                                if($(this).val().length==1){
@@ -728,7 +738,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }});
                         this.$(".timebox-hour").val(hour);
                         this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
-                        
+                    
+                }                
+                ,
+                initStep4:function(){
+                    if(this.states.step4.init===false){                        
+                        this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
+                        this.$("#accordion_recipients").accordion({ collapsible: false});        
+                        if(this.states.step4.camp_status=='S'){
+                            this.loadCalender(this.states.step4.sch_date);
+                            this.showScheduleBox();
+                        }
+                        else{
+                            this.fetchServerTime();
+                        }
                         this.$(".gotostep3").click(_.bind(function(){
                             this.wizard.back();
                         },this))
@@ -746,23 +769,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.setScheduleArea();
                     this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email").val()));
-					if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
-					{
-						this.$("#femail_default").show();
-						this.$("#campaign_preview_fromEmail_default").html(this.app.encodeHTML(this.$("#fromemail_default").val()));
-					}
+                    if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
+                    {
+                        this.$("#femail_default").show();
+                        this.$("#campaign_preview_fromEmail_default").html(this.app.encodeHTML(this.$("#fromemail_default").val()));
+                    }
                     this.$("#campaign_preview_defaultSenderName").html(this.app.encodeHTML(this.$("#campaign_from_name").val()));
-					if(this.$("#campaign_default_from_name").val() != '')
-					{
-						this.$("#fromname_default").show();
-						this.$("#campaign_preview_sendername_default").html(this.$("#campaign_default_from_name").val());
-					}
+                    if(this.$("#campaign_default_from_name").val() != '')
+                    {
+                        this.$("#fromname_default").show();
+                        this.$("#campaign_preview_sendername_default").html(this.$("#campaign_default_from_name").val());
+                    }
                     this.$("#campaign_preview_defaultReplyTo").html(this.app.encodeHTML(this.$("#campaign_reply_to").val()));
-					if(this.$("#campaign_default_reply_to").val() != '')
-					{
-						this.$("#replyto_default").show();
-						this.$("#campaign_preview_replyto_default").html(this.$("#campaign_default_reply_to").val());
-					}
+                    if(this.$("#campaign_default_reply_to").val() != '')
+                    {
+                        this.$("#replyto_default").show();
+                        this.$("#campaign_preview_replyto_default").html(this.$("#campaign_default_reply_to").val());
+                    }
                     
                     var settings_field = this.$(".step1-settings .inputlabel");
                     var settings_html = "",recipients_html="";
@@ -793,10 +816,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$(".step4 .socialbtns li."+ $(this)[0].className).hide();
                         }
                     });
-					if(i == 0)
-						this.$('.social_accord').hide();
-					else
-						this.$('.social_accord').show();
+                    if(i == 0)
+                            this.$('.social_accord').hide();
+                    else
+                            this.$('.social_accord').show();
                     if(this.$("#campaign_add_to_salesforce").prop("checked")){
                         this.$(".sf-camp-info").show();
                         this.$(".sf-camp-info .text").html('<img width="18" title="Salesforce" src="img/sficon.png" alt="" class="left"/> &nbsp;&nbsp;'+this.$("#sf_campaigns_combo option:selected").text())
@@ -812,13 +835,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.$(".conversion-page-info").hide();                           
                     }
-					if(this.$("#campaign_add_to_salesforce").prop("checked") || this.$("#conversion_filter").prop("checked"))
-						this.$(".other_accord").show();
-					else
-						this.$(".other_accord").hide();
-                    this.$("#email-preview")[0].contentWindow.document.open('text/html', 'replace');
-                    this.$("#email-preview")[0].contentWindow.document.write(this.app.decodeHTML(this.states.step2.htmlText,true));
-                    this.$("#email-preview")[0].contentWindow.document.close();
+                    if(this.$("#campaign_add_to_salesforce").prop("checked") || this.$("#conversion_filter").prop("checked"))
+                            this.$(".other_accord").show();
+                    else
+                            this.$(".other_accord").hide();
+                    var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+this.camp_id+"&html=Y&original=N";         
+                    this.$("#email-preview").attr("src",preview_url);                   
                 },
                 setScheduleArea:function(){
                     if(this.states.step4.camp_status!=='D'){
@@ -1845,7 +1867,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     obj.stopPropagation();
                 },
-                createCalender:function(){
+                createCalender:function(_date){
                      var self = this;
                      var transEndEventNames = {
                             'WebkitTransition' : 'webkitTransitionEnd',
@@ -1872,7 +1894,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             }
 
                     },                                    
-                    displayWeekAbbr : true
+                    displayWeekAbbr : true,
+                    setDate : _date
                     } ),
                     $month = this.$( '#custom-month' ).html( cal.getMonthName() +" "+ cal.getYear() ),
                     $year = this.$( '#custom-year' ).html("");
@@ -2877,11 +2900,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var camp_json = jQuery.parseJSON(data);                                                      
                         if(camp_json[0]!=="err"){      
                            if(flag=='S'){ 
-                                camp_obj.$(".schedule-camp").hide(); 
-                                var camp_detail = '<strong>'+camp_obj.$el.parents(".ws-content").find("#workspace-header").html()+'</strong> Has been Scheduled to be sent on'; 
-                                camp_detail +='<span>'+step4_obj.day+' '+camp_obj.app.getMMM(step4_obj.month-1)+' '+step4_obj.year+'</span> at <em>'+camp_obj.$(".timebox-hour").val()+':'+camp_obj.$(".timebox-min").val()+' '+camp_obj.$(".timebox-hours button.active").html()+'</em>'; 
-                                camp_obj.$(".camp-sch-detail").html(camp_detail) 
-                                camp_obj.$(".sch-made").show(); 
+                                camp_obj.showScheduleBox();
                                 camp_obj.states.step4.camp_status = 'P';
                                 camp_obj.setScheduleArea();
                                 camp_obj.app.showMessge("Campaign Scheduled Successfully!");
@@ -2916,6 +2935,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        }
                    }
                    return hour;
+               },
+               showScheduleBox:function(){                   
+                   var step4_obj = this.states.step4.datetime;
+                   this.$(".schedule-camp").hide(); 
+                   var camp_detail = '<strong>'+this.$el.parents(".ws-content").find("#workspace-header").html()+'</strong> Has been Scheduled to be sent on'; 
+                   camp_detail +='<span>'+step4_obj.day+' '+this.app.getMMM(step4_obj.month-1)+' '+step4_obj.year+'</span> at <em>'+this.$(".timebox-hour").val()+':'+this.$(".timebox-min").val()+' '+this.$(".timebox-hours button.active").html()+'</em>'; 
+                   this.$(".camp-sch-detail").html(camp_detail) 
+                   this.$(".sch-made").show(); 
                }
                
                 

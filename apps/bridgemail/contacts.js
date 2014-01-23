@@ -62,8 +62,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             addCountHeader:function(){
                var count_header =  '<ul class="c-current-status">';
                  count_header += '<li><span class="badge pclr18 tcount">0</span>Total Contacts</li>';
-                 count_header += '<li><span class="badge pclr11 suppressCount">0</span>Suspended</li>';
-                 count_header += '<li><span class="badge pclr15 hiddenCount">0</span>Hidden</li>';
+                 count_header += '<li><span class="badge pclr11 suppressCount">0</span>Suppressed</li>';
+                 count_header += '<li style="display:none"><span class="badge pclr15 hiddenCount" >0</span>Hidden</li>';
                  count_header += '<li><span class="badge pclr23 addCount">0</span>Added in Last 24hrs </li>';
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
@@ -145,7 +145,12 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 else if(this.tagTxt){
                     _data['searchTag'] = this.tagTxt;
                 }
+                delete _data['order'];
                 if(this.sortBy){
+                    if(this.sortBy=='firstName'){
+                        _data['order'] = 'asc';
+                        _data['orderBy'] = this.sortBy;
+                    }
                     _data['orderBy'] = this.sortBy;
                 }
                 if(this.contacts_request){
