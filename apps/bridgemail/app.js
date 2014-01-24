@@ -253,6 +253,7 @@ define([
                 str = str.replace(/&lt;/g,"<");
                 str = str.replace(/&gt;/g,">");
                 str = str.replace(/&gt;/g,">"); 
+                str = str.replace(/&#9;/g,"\t");
                 str = str.replace(/&nbsp;/g," ");                 
                 str = str.replace(/&quot;/g,"\"");
                 if(lineFeed){

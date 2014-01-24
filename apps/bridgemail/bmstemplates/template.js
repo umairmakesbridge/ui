@@ -61,9 +61,9 @@ function (template,icheck,bmstags) {
                   });
                 previewIconCampaign.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog_height = $(document.documentElement).height()-162;
                     var dialog = this.app.showDialog({title:'Template Preview',
-                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                               headerEditable:false,
                               headerIcon : 'dlgpreview',
                               bodyCss:{"min-height":dialog_height+"px"}                                                                          
@@ -94,7 +94,8 @@ function (template,icheck,bmstags) {
                             return false;
                         }                                                    
                         _this.modal.find(".dialog-title").html(template_json.name);
-                        _this.$("textarea").html(_this.app.decodeHTML(template_json.htmlText,true));
+                  
+                        _this.$("textarea").val(_this.app.decodeHTML(template_json.htmlText,true));
                         
                         if(template_json.isFeatured=='Y'){
                             _this.$(".featured").iCheck('check');
@@ -108,16 +109,9 @@ function (template,icheck,bmstags) {
                         if(template_json.categoryID){
                             _this.$(".iconpointy").before($('<a class="cat">'+template_json.categoryID+'</a>'))
                         }
-                        if(template_json['imageId.encode']){
-                            _this.imageCheckSum = template_json['imageId.encode'];
-                            _this.app.showLoading("Fetching...",_this.iThumbnail);
-                            URL = '/pms/io/publish/getImagesData/?BMS_REQ_TK='+_this.app.get('bms_token')+'&type=get&imageId='+template_json['imageId.encode'];
-                            jQuery.getJSON(URL,function(tsv, state, xhr){
-                                _this.app.showLoading(false,_this.iThumbnail);
-                                var _json = jQuery.parseJSON(xhr.responseText);                                                                
-                                _this.iThumbnail.find("h4").hide();
-                                _this.iThumbnail.find("img").attr("src",_this.app.decodeHTML(_json.thumbURL)).show();
-                            });
+                        if(template_json.thumbURL){
+                            _this.iThumbnail.find("h4").hide();
+                            _this.iThumbnail.find("img").attr("src",_this.app.decodeHTML(template_json.thumbURL)).show();                                                        
                         }
                         _this.tagDiv.tags({app:_this.app,
                             url:'/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK='+_this.app.get('bms_token'),

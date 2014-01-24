@@ -425,9 +425,9 @@ function (template,highlight) {
                               var target = $.getObj(obj,"a");
                               var bms_token =this.app.get('bms_token');                              
                               var dialog_width = $(document.documentElement).width()-60;
-                              var dialog_height = $(document.documentElement).height()-182;
+                              var dialog_height = $(document.documentElement).height()-162;
                               var dialog = camp_obj.app.showDialog({title:'Template Preview',
-                                          css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                          css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                           headerEditable:false,
                                           headerIcon : 'dlgpreview',
                                           bodyCss:{"min-height":dialog_height+"px"}                                                                          
