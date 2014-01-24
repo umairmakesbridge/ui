@@ -8,32 +8,44 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				"click #addnew_campaign":function(){             		
 					this.createCampaign();
 				},
+				"keyup #daterange":function(){
+					this.$el.find('#clearcal').show();
+				},
+				"click #clearcal":function(obj){
+					this.$el.find('#clearcal').hide();
+					this.$el.find('#daterange').val('');
+					this.findCampaigns(obj);
+				},
 				"click #camps_grid .btn-gray, .name-type .Editable":function(obj){
 					var camp_obj = this;
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
-                                            camp_obj.app.mainContainer.openCampaign(target.attr("id"));
+                      camp_obj.app.mainContainer.openCampaign(target.attr("id"));
 					}
 				},
 				"click #camps_grid .btn-red":function(obj){
 					var camp_obj = this;
+					var appMsgs = camp_obj.app.messages[0];
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
-						camp_obj.app.showAlertDetail({heading:'Confirm',
-                                                detail:'Are you sure you want to delete this campaign?',
-                                                login:'<div class="confalert-buttons"><a class="btn-green left btn-ok">Ok</a><a class="btn-gray left btn-cancel">Cancel</a></div>'},
+						camp_obj.app.showAlertDetail({heading:'Confirm Deletion',
+                                                detail:appMsgs.CAMPS_delete_confirm_error,                                                
+                                                callback: _.bind(function(){
+                                                        camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
+                                                        camp_obj.deleteCampaign(target.attr("id"));
+                                                },camp_obj)},
                                                 camp_obj.$el.parents(".ws-content.active"));
-						$(".overlay .btn-ok").click(function(){
+						/*$(".overlay .btn-ok").click(function(){
 							$(".overlay").remove();
 						   camp_obj.deleteCampaign(target.attr("id"));
-						});
+						});*/
 					}
 				},
 				"click #camps_grid .btn-preview, #camps_grid a.notEditable":function(obj){
 					var camp_obj = this;
 					var target = $.getObj(obj,"a");
 					if(target.attr("id")){
-						camp_obj.previewCampaign(target.attr("id"));
+						camp_obj.previewCampaign(target.attr("id"),target.parents('tr').find('.name-type h3 a').html());
 					}
 				},
 				"click #camps_grid .btn-copy":function(obj){
@@ -50,9 +62,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						camp_obj.app.mainContainer.openCampaign(target.attr("id"));
 					}
 				},
-				"click .stattype":function(obj){
+				"click .stattype":function(obj){					
 					var camp_obj = this;
-					//camp_obj.findCampaigns(obj);
+					var appMsgs = this.app.messages[0];
 					var target = $.getObj(obj,"a");
 					camp_obj.$el.find('.stattype').parent().removeClass('active');
 					target.parent().addClass('active');
@@ -76,12 +88,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						var dateURL = "fromDate="+fromDate+"&toDate="+toDate;
 					}					
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
-					
-					/*camp_obj.app.getData({
-						"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL,
-						"key":"campaigns",
-						"callback":_.bind(camp_obj.createListTable,camp_obj)
-					});	*/
+										
 					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
 					jQuery.getJSON(URL,  function(tsv, state, xhr){
 						camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
@@ -95,12 +102,12 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 							 }
 							 else
 							{
-								camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+								camp_obj.$el.find('#target-camps').html('<p class="notfound">'+ appMsgs.CAMPS_name_empty_error +'</p>');
 							}
 						}
 						else
 						{
-							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">'+ appMsgs.CAMPS_name_empty_error +'</p>');
 						}
 					});
 				},
@@ -172,12 +179,13 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					return false;
 				}
 			},			
-			previewCampaign: function(camp_id)
+			previewCampaign: function(camp_id,camp_name)
 			{
-				var camp_obj = this;				
+				var camp_obj = this;
+				var appMsgs = this.app.messages[0];				
 				var dialog_width = $(document.documentElement).width()-60;
 				var dialog_height = $(document.documentElement).height()-182;
-				var dialog = camp_obj.app.showDialog({title:'Campaign Preview',
+				var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;' + camp_name + '&quot;' ,
 						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
 						  headerEditable:false,
 						  headerIcon : 'dlgpreview',
@@ -191,7 +199,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			},
 			deleteCampaign: function(camp_id)
 			{
-				var camp_obj = this;				
+				var camp_obj = this;
+				var appMsgs = this.app.messages[0];
 				var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
 				camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
 				$.post(URL, {type:'delete',campNum:camp_id})
@@ -201,7 +210,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 							  return false;
 					   }*/
 					   if(del_camp_json[0]!=="err"){
-						   camp_obj.app.showMessge("Campaign Deleted");
+						   camp_obj.app.showMessge(appMsgs.CAMPS_delete_success_msg);
 						   camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
 						   camp_obj.app.removeCache("campaigns");
 						   camp_obj.getallcampaigns();
@@ -220,6 +229,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var dialog = this.app.showDialog({title:dialog_title,
 						  css:{"width":"650px","margin-left":"-325px"},
 						  bodyCss:{"min-height":"100px"},							   
+						  headerIcon : 'new_headicon',
 						  buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
 				});
 				this.app.showLoading("Loading...",dialog.getBody());
@@ -249,68 +259,90 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			findCampaigns: function(obj)
 			{
 				var camp_obj = this;
+				var appMsgs = this.app.messages[0];
 				var target = $.getObj(obj,"a");
-				if(target.prevObject && target.prevObject[0].localName == 'span')
-					target = $.getObj(obj,"span");
-				var dateStart = target.attr('dateStart');
-				var dateEnd = target.attr('dateEnd');
-				var schDates = [];
-				if(dateStart)
-				{					
-					schDates[0] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateStart) );
-					schDates[1] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateEnd) );
-				}
-				else
+				if(target.html() != 'Date Range')
 				{
-					schDates = this.$('#daterange').val().split(' - ');
-					if(schDates != '' && schDates.length == 1)
+					if(target.prevObject && target.prevObject[0].localName == 'span')
 					{
-						schDates[1] = schDates[0];
-					}
-				}
-				if(schDates != '')
-				{
-					var fromDateParts = schDates[0].split('/');
-					var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
-					var toDateParts = schDates[1].split('/');
-					var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
-				}
-				var type = target.attr("search");
-				if(!type)
-					type = $('#template_search_menu li.active a').attr('search');
-				if(target.attr('class') == 'stattype topbadges')
-				{
-					camp_obj.$el.find('#template_search_menu li').removeClass('active');
-					$('#template_search_menu').find("li").each(function(i) {
-						if($(this).find('a').attr('search') == type)
-							$(this).addClass('active');							
-					});
-				}
-				camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
-				if(schDates != '')
-					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
-				else
-					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type;
-				jQuery.getJSON(URL,  function(tsv, state, xhr){
-					camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
-					if(xhr && xhr.responseText){
-						 var camps = jQuery.parseJSON(xhr.responseText);                                
-						 camp_obj.$el.find('#total_templates .badge').html(camps.count);
-						 if(camps.count > 0){
-							camp_obj.app.removeCache("campaigns");                      
-							camp_obj.app.setAppData('campaigns',camps);							
-							camp_obj.createListTable();
-						 }
-						 else
+						target = $.getObj(obj,"span");
+						camp_obj.$el.find('.stattype').parent().removeClass('active');
+						switch(target.attr("search"))
 						{
-							camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
-						}
+							case "C":
+								camp_obj.$el.find('.sent').parent().addClass('active');
+								break;
+							case "P":
+								camp_obj.$el.find('.pending').parent().addClass('active');
+								break;
+							case "S":
+								camp_obj.$el.find('.scheduled').parent().addClass('active');
+								break;
+							case "D":
+								camp_obj.$el.find('.draft').parent().addClass('active');
+								break;
+						}						
+					}
+					var dateStart = target.attr('dateStart');
+					var dateEnd = target.attr('dateEnd');
+					var schDates = [];
+					if(dateStart)
+					{					
+						schDates[0] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateStart) );
+						schDates[1] = $.datepicker.formatDate( 'm/d/yy', Date.parse(dateEnd) );
 					}
 					else
 					{
-						camp_obj.$el.find('#target-camps').html('<p class="notfound">No Campaign found</p>');
+						schDates = this.$('#daterange').val().split(' - ');
+						if(schDates != '' && schDates.length == 1)
+						{
+							schDates[1] = schDates[0];
+						}
 					}
-				});
+					if(schDates != '')
+					{
+						var fromDateParts = schDates[0].split('/');
+						var fromDate = fromDateParts[0] + '-' + fromDateParts[1] + '-' + fromDateParts[2].substring(2,4);
+						var toDateParts = schDates[1].split('/');
+						var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
+					}
+					var type = target.attr("search");
+					if(!type)
+						type = $('#template_search_menu li.active a').attr('search');
+					if(target.attr('class') == 'stattype topbadges')
+					{
+						camp_obj.$el.find('#template_search_menu li').removeClass('active');
+						$('#template_search_menu').find("li").each(function(i) {
+							if($(this).find('a').attr('search') == type)
+								$(this).addClass('active');							
+						});
+					}
+					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
+					if(schDates != '')
+						var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
+					else
+						var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type;
+					jQuery.getJSON(URL,  function(tsv, state, xhr){
+						camp_obj.app.showLoading(false,camp_obj.$("#target-camps"));
+						if(xhr && xhr.responseText){
+							 var camps = jQuery.parseJSON(xhr.responseText);                                
+							 camp_obj.$el.find('#total_templates .badge').html(camps.count);
+							 if(camps.count > 0){
+								camp_obj.app.removeCache("campaigns");                      
+								camp_obj.app.setAppData('campaigns',camps);							
+								camp_obj.createListTable();
+							 }
+							 else
+							{
+								camp_obj.$el.find('#target-camps').html('<p class="notfound">'+ appMsgs.CAMPS_name_empty_error +'</p>');
+							}
+						}
+						else
+						{
+							camp_obj.$el.find('#target-camps').html('<p class="notfound">'+ appMsgs.CAMPS_name_empty_error +'</p>');
+						}
+					});
+				}
 			},
 			initialize:function(){
 			   this.template = _.template(template);			   
@@ -339,7 +371,14 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				//this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
 				this.$el.find('#daterange').daterangepicker();
 				$(".btnDone").click(_.bind(this.findCampaigns,this));
-				$(".ui-daterangepicker li a").click(_.bind(this.findCampaigns,this));
+				$(".ui-daterangepicker li a").click(_.bind(function(obj){
+					this.$el.find('#clearcal').show();
+					this.findCampaigns(obj);
+				},this));
+				$("#daterange").keyup(_.bind(function(obj){
+					this.$el.find('#clearcal').show();
+					this.findCampaigns(obj);
+				},this));
 				 var camp_obj = this;
 				 var active_ws = this.$el.parents(".ws-content");
 				 var header_title = active_ws.find(".camp_header .edited  h2");                 

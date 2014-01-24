@@ -36,7 +36,15 @@ function (template,bmsfilters) {
                          this.copyTarget();
                     },this));
                     this.dialog.$(".pointy .delete").click(_.bind(function(obj){
-                        this.deleteTarget();  
+						var curview = this;
+						var app = this.options.camp.app; 
+						var appMsgs = app.messages[0];
+						app.showAlertDetail({heading:'Confirm Deletion',
+                                                detail:appMsgs.CAMPS_delete_confirm_error,                                                
+												callback: _.bind(function(){													
+						   							curview.deleteTarget();
+												},curview)},
+                                                curview.$el);                         
                     },this));
                     
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj){
@@ -71,7 +79,7 @@ function (template,bmsfilters) {
                                  target_head.$("#dialog-title span").html(target_name_input.val());                                                                                                 
                                  camp_obj.showHideTargetTitle();
                                  camp_obj.app.showMessge("Target Renamed");
-                                 camp_obj.app.removeCache("targets");
+                                 camp_obj.app.removeCache("targets");								 
                                  campview.loadTargets();
                               }
                               else{                                  
@@ -94,7 +102,7 @@ function (template,bmsfilters) {
                                  }                        
                                  camp_obj.showHideTargetTitle();
                                  camp_obj.app.showMessge("Target Created");
-                                 camp_obj.app.removeCache("targets");
+                                 camp_obj.app.removeCache("targets");								 
                                  campview.loadTargets();
                               }
                               else{
@@ -127,22 +135,24 @@ function (template,bmsfilters) {
                ,
                deleteTarget:function(){
                    var camp_obj = this;
-                   if(confirm('Are you sure you want to delete this target?')){
-                        var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-                        camp_obj.app.showLoading("Deleting...",camp_obj.$el);
-                        $.post(URL, {type:'delete',filterNumber:this.target_id})
-                        .done(function(data) {                                 
-                               var del_target_json = jQuery.parseJSON(data);  
-                               if(camp_obj.app.checkError(del_target_json)){
-                                      return false;
-                               }
-                               if(del_target_json[0]!=="err"){
-                                   camp_obj.app.showMessge("Target Deleted");                                   
-                                   camp_obj.showHideTargetTitle(true,true);
-                               }                               
-                               camp_obj.app.showLoading(false,camp_obj.$el);
-                       });
-                    }
+				   var camp = this.options.camp;
+					var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+					camp_obj.app.showLoading("Deleting...",camp_obj.$el);
+					$.post(URL, {type:'delete',filterNumber:this.target_id})
+					.done(function(data) {                                 
+							camp_obj.app.showLoading(false,camp_obj.$el);
+						   var del_target_json = jQuery.parseJSON(data);  
+						   if(camp_obj.app.checkError(del_target_json)){
+								  return false;
+						   }
+						   if(del_target_json[0]!=="err"){
+							   camp_obj.app.showMessge("Target Deleted");                                   
+							   camp_obj.dialog.hide();
+							   camp_obj.dialog.find('.overlay').remove();
+							   camp.loadTargets();							   
+						   }                               
+						   camp_obj.app.showLoading(false,camp_obj.$el);
+				   });                    
                },
                saveTargetFilter:function(){
                    var camp_obj = this;
@@ -174,7 +184,7 @@ function (template,bmsfilters) {
                             }
                             else{
                                 camp_obj.app.showAlert(false,camp_obj.$el);
-                            }
+                            }							
                             campview.loadTargets();
                        });
                    }
@@ -190,6 +200,7 @@ function (template,bmsfilters) {
                     var dialog = this.app.showDialog({title:dialog_title,
                                           css:{"width":"650px","margin-left":"-325px"},
                                           bodyCss:{"min-height":"100px"},							   
+										  headerIcon : 'copycamp',
                                           buttons: {saveBtn:{text:'Copy Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());                                  

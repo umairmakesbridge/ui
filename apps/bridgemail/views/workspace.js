@@ -43,7 +43,7 @@ function ($,Backbone, _,app,Wizard, template) {
                 initialize: function () {
                         this.template = _.template(template);				                                
                         this.render();
-                        
+                        this.$(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
                 },
                 render: function () {
                         this.$el.html(this.template({}));

@@ -208,10 +208,10 @@
   </div>
   <div class="row-fluid" style="position:relative; margin-top:20px;">
   	<div class="span6">
-        <div id="accordion">
+        <div id="campaign_add_to_salesforce_accordion">
           <h3> 
             <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_salesforce" />
-            <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <b class="caret"></b> 
+            <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <!--<b class="caret"></b> -->
            </h3>
           <div class="accordion-inner">
             <div class="cont" style="height:170px;">
@@ -246,10 +246,10 @@
         </div>
     </div>
     <div class="span6">
-        <div id="accordion1">
+        <div id="conversion_filter_accordion">
           <h3> 
               <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="conversion_filter">
-              <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <b class="caret"></b>
+              <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <!--<b class="caret"></b>-->
            </h3>
           <div class="accordion-inner">
             <div class="cont" style="height:170px;">
@@ -292,7 +292,7 @@
 </div>
 <div class="wizard-steps step2">
 	<div class="selection-boxes create-temp">              
-      <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Selecte "<strong>Create</strong>"  options from  below.</p></div>
+      <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose on of the "<strong>Create</strong>" options from  below.</p></div>
       <ul id="choose_soruce">
           <li id="copy_campaign" class=""><a><img alt="" src="img/copycampaign.png"><span>Copy Campaign</span></a></li>
           <li id="use_template" class=""><a><img alt="" src="img/usetemplate.png"><span>Use Template</span></a></li>
@@ -351,17 +351,17 @@
   
 </div>
 <div class="wizard-steps step3">  
-   <div class="selection-boxes" style="width: 840px;"> <a class="prev"><span></span></a>
-   	<div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Selecte "<strong>Recepients</strong>"  options from  below.</p></div>
+   <div class="selection-boxes" style="width: 840px;"> <!--<a class="prev"><span></span></a>-->
+   	<div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recepients</strong>"  options from  below.</p></div>
     <ul id="choose_soruce">
       <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
       <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>      
       <li id="choose_tags"><a><img alt="" src="img/tags.png"><span>Tags</span></a></li>
       <li id="upload_csv"><a><img alt="" src="img/csv.png"><span>Upload CSV</span></a></li>
-      <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span >Salesforce</span></a></li>
-      <li id="netsuite_import"><a><img alt="" src="img/netsuite.png"><span>Netsuite</span></a></li>
+      <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span>Import from Salesforce</span></a></li>
+      <li id="netsuite_import"><a><img alt="" src="img/netsuite.png"><span>Import from Netsuite</span></a></li>
     </ul>
-    <a class="next"><span></span></a>
+    <!--<a class="next"><span></span></a>-->
     <div class="clearfix"></div>
   </div>  
   <div class="soruces" id="area_choose_lists" style="display:none">
@@ -483,7 +483,7 @@
                <div id="sf_accordion">
                     <h3> 
                       <input type="radio" class="radiopanel " value="campaign" name="options_sf" id="">
-                      <span class="left">Salesforce Campaigns</span> <b class="caret"></b></b> 
+                      <span class="left">Salesforce Campaigns</span>
                         <div id="salesforce-camp-search" class="input-append search">         
                         </div>
                      </h3>
@@ -567,7 +567,7 @@
                <div id="ns_accordion">
                     <h3> 
                       <input type="radio" class="radiopanel " value="group" name="options_ns" id="">
-                      <span class="left">Netsuite Groups</span> <b class="caret"></b></b> 
+                      <span class="left">Netsuite Groups</span>
                         <div id="netsuite-group-search" class="input-append search">   
                         </div>
                      </h3>
@@ -603,19 +603,19 @@
                     <label>From Email</label>
                     <span class="text" id="campaign_preview_fromEmail"></span></div>
                   <div id="femail_default" class="row" style="display:none;">
-                    <label>From Email Value</label>
+                    <label>Default From Email</label>
                     <span class="text" id="campaign_preview_fromEmail_default"></span></div>
                   <div class="row">
                     <label>From Name</label>
                     <span class="text" id="campaign_preview_defaultSenderName"></span></div>
                   <div id="fromname_default" class="row" style="display:none;">
-                    <label>From Name Value</label>
+                    <label>Default From Name</label>
                     <span class="text" id="campaign_preview_sendername_default"></span></div>
                   <div class="row">
                     <label>Reply To</label>
                     <span class="text" id="campaign_preview_defaultReplyTo"></span></div>                
                 <div id="replyto_default" class="row" style="display:none;">
-                    <label>Reply To Value</label>
+                    <label>Default Reply To</label>
                     <span class="text" id="campaign_preview_replyto_default"></span></div>
                 </div>
             </div>   

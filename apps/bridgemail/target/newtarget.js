@@ -53,6 +53,8 @@ function (template) {
                                  var target_id = camp_json[1];                                 
                                  //camp_obj.loadTargets();
 								 newtardialog.hide();
+								 camp_obj.states.step3.isNewTarget = true;
+								 camp_obj.states.step3.newTargetName = el.find('#target_name').val();
 								 camp_obj.initCreateEditTarget(target_id);
                               }
                               else{

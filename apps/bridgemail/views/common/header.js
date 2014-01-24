@@ -73,7 +73,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
 
 			render: function () {
 				this.$el.html(this.template({}));
-				
+				this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
 			},
                         getTitle:function(obj){
                            var title =  $(obj.target).parent("li").find("a").text();

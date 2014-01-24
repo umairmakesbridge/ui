@@ -3,36 +3,44 @@ define([
 ], function ($, _, Backbone, isotope, bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
-		messages:[{'CAMP_subject_empty_error':'Subject can not be empty',
-                            'CAMP_subject_length_error':'Subject can be 100 characters long',
-                            'CAMP_fromname_empty_error':'From name can not be empty',
-                            'CAMP_replyto_empty_error':'Reply to field can not be empty',
-                            'CAMP_replyto_format_error':'Please supply correct format',
-                            'CAMP_defaultreplyto_format_error':'Please supply correct email',
-                            'CAMP_defaultreplyto_empty_error':'Reply to email can not be empty',
-                            'CAMP_defaultfromname_empty_error': 'Default From Name cann\'t be empty',
-							'CAMP_draft_success_msg': 'Campaign draft is complete',
+		messages:[{'CAMP_subject_empty_error':'Subject cannot be empty',
+                            'CAMP_subject_length_error':'Subject limit is 100 characters',
+                            'CAMP_fromname_empty_error':'From name cannot be empty',
+                            'CAMP_replyto_empty_error':'Reply field cannot be empty',
+                            'CAMP_replyto_format_error':'Please enter correct email address format',
+                            'CAMP_defaultreplyto_format_error':'Please enter correct email address format',
+                            'CAMP_defaultreplyto_empty_error':'Reply field cannot be empty',
+                            'CAMP_defaultfromname_empty_error': 'From name cannot be empty',
+							'CAMP_draft_success_msg': 'Campaign status is Draft',
 							'CAMP_copy_success_msg': 'Campaign copy is complete',
-                            'SF_userid_empty_error':'User id can not be empty',
-                            'SF_userid_format_error':'Please supply correct user id',
-                            'SF_pwd_empty_error':'Password can not be empty',				   
-                            'SF_email_format_error':'Please supply correct email',
-                            'NS_userid_empty_error':'User id can not be empty',
-                            'NS_userid_format_error':'Please supply correct user id',
-                            'NS_pwd_empty_error':'Password can not be empty',
-                            'NS_accid_empty_error':'Account id can not be empty',
-                            'NS_email_format_error':'Please supply correct email',
-                            'CT_copyname_empty_error':'Copy name can not be empty',
-                            'MAPDATA_newlist_empty_error':'List can not be empty',
-                            'MAPDATA_extlist_empty_error':'Please select some list',
-                            'MAPDATA_email_format_error':'Please select correct email',
-                            'TRG_basic_no_field':'Please select a field to make filter',
+                            'SF_userid_empty_error':'User ID cannot be empty',
+                            'SF_userid_format_error':'Invalid User ID. Hint: IDs are in an email format',
+                            'SF_pwd_empty_error':'Enter password',
+                            'SF_email_format_error':'Please enter correct email address format',
+                            'NS_userid_empty_error':'User ID cannot be empty',
+                            'NS_userid_format_error':'Invalid User ID. Hint: IDs are in an email format',
+                            'NS_pwd_empty_error':'Enter password',
+                            'NS_accid_empty_error':'Account id cannot be empty',
+                            'NS_email_format_error':'Please enter correct email format',
+                            'CT_copyname_empty_error':'Name cannot be empty',
+							'CSVUpload_wrong_filetype_error':'CSV format only. Watch video on how to save an excel file to CSV.',
+							'CSVUpload_cancel_msg':'Your CSV upload has been cancelled',
+                            'MAPDATA_newlist_empty_error':'Enter a list name',
+                            'MAPDATA_extlist_empty_error':'Choose a list',
+                            'MAPDATA_email_format_error':'Please enter correct email address format',
+							'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
+							'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
+                            'TRG_basic_no_field':'Select a field',
                             'TRG_basic_no_matchvalue':'Please provide match field value',
-                            'TRG_score_novalue' : 'Please provide score value',
-                            'TRG_form_noform' : 'Please select a form.',
-                            'CRT_tarname_empty_error' : 'Target name can not be empty',
-                            'CAMPS_campname_empty_error' : 'Campaign name can not be empty',
-                            'SUB_updated': 'Subscriber fields updated successfully'
+                            'TRG_score_novalue' : 'Enter a score value',
+                            'TRG_form_noform' : 'Choose a form',
+                            'CRT_tarname_empty_error' : 'Target name cannot be empty',							
+                            'CAMPS_campname_empty_error' : 'Campaign name cannot be empty',
+							'CAMPS_delete_confirm_error' : 'Are you sure you want to delete?',
+							'CAMPS_name_empty_error' : 'No campaign found',							
+							'CAMPS_html_empty_error' : 'Campaign has not content',
+							'CAMPS_delete_success_msg' : 'Campaign deleted',
+                            'SUB_updated': 'Subscriber updated successfully',
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -138,8 +146,7 @@ define([
                             var messageObj = {};
                             messageObj["heading"] = "Session Expired" 
                             messageObj["detail"] = "1. Your login session has expired.<br/>2. You are trying to access the page without logging-in.<br/>3. You did not follow the provided link to access this page and are trying to reach here by invalid means.";
-                            messageObj["login"] = '<div class="confalert-buttons"><a href="/pms/" class="btn-green left btn-ok">Login</a><a class="btn-gray left btn-cancel">Cancel</a></div>';
-                            _app.showAlertDetail(messageObj,$("body"));
+                            _app.showLoginExpireAlert(messageObj,$("body"));							
                             return false;
                            }
                        }
@@ -205,15 +212,31 @@ define([
              },
              showAlertDetail:function(message,container){
                  if(message){                                        
-                    var dialogHTML = '<div class="overlay"> <div class="tag_msg1"><span class="caution"></span>'+message.heading;                    
-                    var btn = message.login ? message.login :'<a class="btn-gray">Close</a>';
+                    var dialogHTML = '<div class="overlay"><div class="messagebox delete"><h3>'+message.heading+'</h3>';                    
+                    var btn = '<div class="btns"><a class="btn-red btn-ok"><span>Yes, Delete</span><i class="icon delete"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
                     dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div></div>';
                     $(container).append(dialogHTML);
+					$(".overlay .btn-ok").click(function(){
+						if(message.callback)
+							message.callback();
+					});					
                     $(".overlay .btn-gray").click(function(){
                        $(".overlay").fadeOut("fast",function(){
                            $(this).remove();
                        })
                     });
+                 }
+             },
+			 showLoginExpireAlert:function(message,container){
+                 if(message){                                        
+                    var dialogHTML = '<div class="overlay"><div class="messagebox caution"><h3>'+message.heading+'</h3>';                    
+                    var btn = '<div class="btns"><a href="/pms/" class="btn-green btn-ok"><span>Login</span><i class="icon next"></i></a></div><div class="clearfix"></div>';
+                    dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div></div>';
+                    $(container).append(dialogHTML);
+					$(".overlay .btn-ok").click(function(){
+						if(message.callback)
+							message.callback();
+					});                    
                  }
              },
              showMessge:function(msg){
@@ -368,6 +391,7 @@ define([
             validateEmail:function(emailVal)
             {
                     var email_patt = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+					//var email_patt = new RegExp("[A-Za-z0-9'_`-]+(?:\\.[A-Za-z0-9'_`-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])");
                     return email_patt.test(emailVal);
             },
             showError:function(params){
