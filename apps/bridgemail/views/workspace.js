@@ -25,10 +25,10 @@ function ($,Backbone, _,app,Wizard, template) {
                         obj.stopPropagation();
                     },
                     'mouseover .fav':function(){                			
-			$(".fav").parent().addClass('active');
+			//$(".fav").parent().addClass('active');
                     },
                     'mouseout .fav':function(){                			
-			$(".fav").parent().removeClass('active');
+			//$(".fav").parent().removeClass('active');
                     },
                     'mouseover .toolbar .icon':function(obj){                			
                         var obj = $.getObj(obj,"a");

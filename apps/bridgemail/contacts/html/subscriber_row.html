@@ -3,7 +3,7 @@
     <div class="title show-detail" id="<%- model.get('subNum')%>">
         <h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
         <% if(model.get('salesStatus')!==''){%>
-            <a class="statusdd color3"><%- model.get('salesStatus')%> </a>
+            <a class="statusdd color3 captilize"><%- model.get('salesStatus').toLowerCase()%> </a>
         <%}%>    
         <a  class="schedulebtn">Schedule</a>
     </div>

@@ -94,15 +94,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                     _this.sub_fields = _json;
                     _this.showTags();
                     _this.showFields();
-                })
-                /*Load subscriber list info
-                URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+bms_token+"&subNum="+this.sub_id+"&type=getListInfo";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){                    
-                    var _json = jQuery.parseJSON(xhr.responseText); 
-                    if(_this.app.checkError(_json)){
-                        return false;
-                    }
-                })*/
+                })               
                 
                 //Loading subscriber activities like last seen, visists and actions 
                 this.app.showLoading("States..",this.$(".sub-stats"));   
@@ -294,7 +286,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
             },
             loadActivityTimeLine:function(){
                 var _this = this;
-                this.app.showLoading("Loading...",this.$(".colright"));                                                                   
+                this.app.showLoading("Loading Timeline...",this.$(".colright"));                                                                   
                 require(["contacts/subscriber_timeline"],function(timeline){                                     
                     var page = new timeline({sub:_this});                    
                     _this.$(".colright").html(page.$el);                    

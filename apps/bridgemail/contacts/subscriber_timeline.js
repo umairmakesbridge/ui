@@ -50,8 +50,7 @@ function (Timeline,template,TimeLineRowView,moment) {
                     showicon: 'yes',
                     iconsource: 'actfeed'
                 });
-                this.fetchTimeLine(0,'Y');
-                this.fetchTimeLine();
+                this.fetchTime();
             }
             /**
              * Fetching timeline from server.
@@ -82,14 +81,26 @@ function (Timeline,template,TimeLineRowView,moment) {
                         if(response.totalCount=="0"){
                             this.container.parent().hide();
                         }
+                       this.app.showLoading(false,this.$el); 
                         for(var s=this.offset;s<collection.length;s++){
                             var timelineView = new TimeLineRowView({ model: collection.at(s),sub:this });                                                            
                             var model_date = this.getMonthYear(collection.at(s));
                             if(this.monthYear !==model_date){
                                 this.monthYear = model_date;
-                                this.container.append(this.timeStamp(this.monthYear));                                
-                            }                            
-                            this.container.append(timelineView.$el);
+                                 if(future){
+                                    this.container.prepend(this.timeStamp(this.monthYear));                                
+                                 }
+                                 else{
+                                     this.container.append(this.timeStamp(this.monthYear));                                
+                                 }
+                            }      
+                            if(future){
+                                this.container.prepend(timelineView.$el);
+                            }
+                            else{
+                                this.container.append(timelineView.$el);
+                            }
+                            
                         }                                                
                         if(collection.length<parseInt(response.totalCount)){
                             this.$(".filter-row").last().attr("data-load","true");
@@ -101,12 +112,29 @@ function (Timeline,template,TimeLineRowView,moment) {
                     }
                 });
             },
+            fetchTime:function(){
+               this.app.showLoading("Loading Timeline...",this.$el);  
+               var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
+                jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
+                    var _json = jQuery.parseJSON(xhr.responseText);
+                    if(this.app.checkError(_json)){
+                        return false;
+                    }
+                    var _date = moment(this.app.decodeHTML(_json[0]),'YYYY-M-D H:m'); 
+                    this.$timelineContainer.append(this.timeStamp( _date.format("hh:mm A, DD MMM YYYY"),true));
+                    
+                    this.fetchTimeLine(0,'Y');
+                    this.fetchTimeLine();
+                    
+                },this));  
+            },
             getMonthYear:function(model){
                 var _date = moment(this.app.decodeHTML(model.get("activityDate")),'YYYY-M-D H:m');
                 return _date.format("MMM YYYY");
             },
-            timeStamp:function(monthYear){
-                return $('<div class="timestop"><span>'+monthYear+'</span> </div>');
+            timeStamp:function(monthYear,current){
+                var _now = current ? 'now':'';
+                return $('<div class="timestop '+_now+'"><span>'+monthYear+'</span> </div>');
             }
             
         });
