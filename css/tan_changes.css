@@ -429,6 +429,8 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 #area_html_code .temp-filters .adv_dd,
 .fullwindow .temp-filters .adv_dd
 { margin-top:2px; }
+.fullwindow .temp-filters .adv_dd { width:327px; }
+.fullwindow .temp-filters .mergeinput { width:300px; }
 a#drop4 { background-color:#fff; }
 ul.c-current-status li .badge { cursor:pointer; }
 .chosen-container .chosen-results li { padding:5px 10px; }
@@ -462,6 +464,7 @@ ul.c-current-status li .badge { cursor:pointer; }
 .editor_box { min-height:350px; }
 .ed_mergefields .adv_dd .btn-group, .ed_mergefields .mergefields .btn-group
 {
-	right:17px;
+	right:0px;
 	top:4px;
 }
+#area_html_code .adv_dd .btn-group, #area_html_code .mergefields .btn-group { right:17px; }

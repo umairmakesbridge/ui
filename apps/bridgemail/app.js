@@ -13,6 +13,10 @@ define([
                             'CAMP_defaultfromname_empty_error': 'From name cannot be empty',
 							'CAMP_draft_success_msg': 'Campaign status is Draft',
 							'CAMP_copy_success_msg': 'Campaign copy is complete',
+							'CAMP_subject_info' : 'Subject of the email',
+							'CAMP_femail_info' : 'From email of the email',
+							'CAMP_fname_info' : 'From name of the email',
+							'CAMP_replyto_info' : 'Reply to email of the email',
                             'SF_userid_empty_error':'User ID cannot be empty',
                             'SF_userid_format_error':'Invalid User ID. Hint: IDs are in an email format',
                             'SF_pwd_empty_error':'Enter password',
@@ -426,7 +430,11 @@ define([
                             x1 = x1.replace(rgx, '$1' + ',' + '$2');
                     }
                     return x1 + x2;
-            }
+            },
+			showInfo: function(control,message)
+			{
+				control.append('<span class="fieldinfo"><i class="icon"></i><em>'+ message +'</em></span>');
+			}
 	});
 
 	return new App();

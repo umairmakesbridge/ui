@@ -9,7 +9,7 @@
       <h2 class="clearfix"><span class="icon h-info2 "></span>Header Information </h2>
       <div class="cont">
         <div class="row">
-          <label>Subject</label>
+          <label id="lblSubject">Subject</label>
           <div class="input-append adv_dd sort-options subject-container">
               <div class="inputcont">              	
               	<input type="text" placeholder="Subject of the campaign" id="campaign_subject" class="header-info">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="row">
-          <label>From Email</label>
+          <label id="lblFromemail">From Email</label>
           <div class="input-append adv_dd sort-options">
           		<!--<div id="fetable">
                 	<div style="display:table-row">-->
@@ -59,7 +59,7 @@
           <!--<span id="fromemaildefault_erroricon" class="erroricon"></span>-->
         </div>
         <div class="row">
-          <label>From Name</label>
+          <label id="lblFromname">From Name</label>
           <div class="input-append adv_dd sort-options fname-container">
               <div class="inputcont">              	
               	<input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" />
@@ -79,7 +79,7 @@
             <!--<span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>-->
         </div>
         <div class="row">
-          <label>Reply To</label>
+          <label id="lblReplyto">Reply To</label>
           <div class="input-append adv_dd sort-options replyto-container">
             <div class="inputcont">              	
             	<input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" />                
@@ -182,23 +182,23 @@
           <ul class="socialbtns">
             <li class="facebook">
               <input type="checkbox" id="campaign_fb" class="checkpanel" value=""/>
-              <label for="campaign_fb"><span class="social-icon fb"></span><strong>Facebook</strong></label>
+              <label for="campaign_fb" class="showtooltip" data-original-title="Share at Facebook"><span class="social-icon fb"></span><strong>Facebook</strong></label>
             </li>
             <li class="twitter">
               <input type="checkbox" id="campaign_twitter"  class="checkpanel" value=""/>
-              <label for="campaign_twitter"><span class="social-icon tw"></span><strong>Twitter</strong></label>
+              <label for="campaign_twitter" class="showtooltip" data-original-title="Share at Twitter"><span class="social-icon tw"></span><strong>Twitter</strong></label>
             </li>
             <li class="linkedin">
               <input type="checkbox" id="campaign_linkedin"  class="checkpanel" value=""/>
-              <label for="campaign_linkedin"><span class="social-icon in"></span><strong>Linkedin</strong></label>
+              <label for="campaign_linkedin" class="showtooltip" data-original-title="Share at Linkedin"><span class="social-icon in"></span><strong>Linkedin</strong></label>
             </li>
             <li class="pinterest">
               <input type="checkbox" id="campaign_pintrest"  class="checkpanel" value=""/>
-              <label for="campaign_pintrest"><span class="social-icon pi"></span><strong>Pinterest</strong></label>
+              <label for="campaign_pintrest" class="showtooltip" data-original-title="Share at Pinterest"><span class="social-icon pi"></span><strong>Pinterest</strong></label>
             </li>
             <li class="googleplus">
               <input type="checkbox" id="campaign_gplus"  class="checkpanel" value=""/>
-              <label for="campaign_gplus"><span class="social-icon gp"></span><strong>Google Plus</strong></label>
+              <label for="campaign_gplus" class="showtooltip" data-original-title="Share at Google Plus"><span class="social-icon gp"></span><strong>Google Plus</strong></label>
             </li>
           </ul>
         </div>

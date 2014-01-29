@@ -55,6 +55,7 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
                             var top = ele_offset.top + ele_height+11;
                             var left = ele_offset.left -193 ;
                             var m_fields_box = $(".mergefields");
+							$(".mergefields .browsefields #mergefields_links").show();
                             if(m_fields_box.css("display")=="block" && parseInt(m_fields_box.css("top"))==parseInt(top)){
                                 m_fields_box.hide();
                             }
