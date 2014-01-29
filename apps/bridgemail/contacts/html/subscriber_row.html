@@ -51,8 +51,8 @@
 </div>
 <div class="rightbox">
             <div class="actstatus">
-            <div class="time"><i class="icon time"></i><%- time %></div>
-            <div class="activity"><i class="icon web"></i><%- activity_type %></div>
+            <% if(time){ %><div class="time"><i class="icon time"></i><%- time %></div><% } %>
+            <% if(activity_type){ %><div class="activity"><i class="icon web"></i><%- activity_type %></div><% } %>
         </div>
         <div class="proinfo">
             <span class="ellipsis more-detail showtooltip" title="View fields">...</span>            

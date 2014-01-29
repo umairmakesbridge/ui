@@ -37,7 +37,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
                             },
                             'click .add-template-li':function(obj){
-                                 app.mainContainer.addWorkSpace({type:'',title:'My Templates',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates'});
+                                 app.mainContainer.addWorkSpace({type:'',title:'Template Gallery',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates'});
                             },
                             'click .analytics_add-list-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});

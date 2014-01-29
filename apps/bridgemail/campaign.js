@@ -586,12 +586,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
                                       css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                       headerEditable:false,
-									  headerIcon : 'dlgpreview',
-                                      bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                                      headerIcon : 'dlgpreview',
+                                      bodyCss:{"min-height":dialog_height+"px"},
+                                      buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                             });
                             var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
                             var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-                            dialog.getBody().html(preview_iframe);                            
+                            dialog.getBody().html(preview_iframe);               
+                            dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));
                         }
                        e.stopPropagation();     
                   })
@@ -609,6 +611,57 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   });
 				  active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                                     
+                }
+                ,
+                sendTextPreview:function(camp_id){
+                    var camp_obj = this;
+                    var dialog_width = 650;
+                    var dialog_height = 100;
+                    var dialog = camp_obj.app.showDialog({title:'Email Preview' ,
+                            css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
+                            headerEditable:false,
+                            headerIcon : 'copycamp',
+                            bodyCss:{"min-height":dialog_height+"px"},
+                            buttons: {saveBtn:{text:'Send',btnicon:'copycamp'} }
+                    });	
+                    var email_preview ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-template-container">';
+                        email_preview +='<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
+                        email_preview +='<div class="row campname-container">';
+                        email_preview +='<label style="width:10%;">To:</label>';
+                        email_preview +='<div class="inputcont" style="text-align:right;">';
+                        email_preview +='<input type="text" name="_email" id="send_email" placeholder="Enter comma separated email addresses" style="width:83%;" />';
+                        email_preview +='</div></div></div></div>';
+                        email_preview = $(email_preview);                                
+                        dialog.getBody().html(email_preview);
+                        email_preview.find("#send_email").focus();
+                        email_preview.find("#send_email").keydown(_.bind(function(e){
+                            if(e.keyCode==13){
+                                this.sendTestCampaign(dialog,camp_id);
+                            }
+                        },this))
+                        dialog.saveCallBack(_.bind(this.sendTestCampaign,this,dialog,camp_id));
+                },
+                sendTestCampaign:function(dialog,camp_id){
+                    var _this = this;
+                    var _emails = dialog.$el.find("#send_email").val();
+                    if(_emails){
+                        var post_data = {toEmails:_emails};                            
+                        this.app.showLoading("Sending Email...",dialog.$el);
+                        var _this = this;
+                        var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+camp_id+"&type=email";
+                        $.post(URL, post_data)
+                        .done(function(data) {                                 
+                               var _json = jQuery.parseJSON(data);                         
+                               _this.app.showLoading(false,dialog.$el);          
+                               if(_json[0]!=="err"){
+                                   dialog.hide();
+                                   _this.app.showMessge("Email sent successfully!");  
+                               }
+                               else{
+                                   _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                               }
+                       });
+                   }
                 },
                 getcampaigns: function () {
                         var camp_obj = this;				                               				

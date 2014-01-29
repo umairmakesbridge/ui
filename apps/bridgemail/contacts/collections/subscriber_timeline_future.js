@@ -5,7 +5,7 @@ define([
 	return Backbone.Collection.extend({
 		model: Timeline,
 		url: function () {
-                    return '/pms/io/subscriber/getData/?BMS_REQ_TK=' + app.get('bms_token') + '&type=getActivityHistory';
+                    return '/pms/io/subscriber/getData/?BMS_REQ_TK=' + app.get('bms_token') + '&type=getActivityHistory&future=Y';
 		},
                 parse: function(response,sent) {
                     var result = []
@@ -13,8 +13,8 @@ define([
                         return false;
                     }
                     if(response.totalCount!=="0"){
-                        _.each(response.activityHistory[0],function(val,key){                                                                                    
-                            val[0]._id = sent.data.offset + parseInt(key.substring(8));                            
+                        _.each(response.activityHistory[0],function(val,key){                                                                                   
+                            val[0]._id = -1*(sent.data.offset + parseInt(key.substring(8)));                                                          
                             result.push(val[0]);
                         })                    
                     }

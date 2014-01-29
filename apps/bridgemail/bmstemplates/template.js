@@ -50,7 +50,7 @@ function (template,icheck,bmstags) {
                this.iThumbnail = this.$(".droppanel");
                this.$("textarea").css("height",(this.$("#area_create_template").height()-180)+"px");
                this.$(".droppanel").dragfile({
-                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=Y&th_width=240&th_height=320',
+                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
                         callBack : _.bind(this.processUpload,this),
                         app:this.app
                     });

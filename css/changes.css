@@ -1389,9 +1389,9 @@ ul.tabs-btns li.active a{
     left:-162px;
 }
 .activitiespanel .timeline:before{
-    height: 99%;
+    height: 100%;
     left: 137px;
-    top: 15px;
+    top: 0px;
 }
 .activitybar h3 span{
     color:#6494AF;
@@ -1422,4 +1422,36 @@ div.shortcuts .ddicon{
 }
 .captilize{
     text-transform: capitalize;
+}
+.filter-div > div.articleclick:after {    background: url("../img/articleclick.png") no-repeat scroll 7px 6px; }
+.filter-div > div.campaignopen:after {    background: url("../img/campaignopen.png") no-repeat scroll 7px 6px; }
+.filter-div > div.campaignsent:after {    background: url("../img/campaignsent.png") no-repeat scroll 7px 6px; }
+.filter-div > div.clicked:after {    background: url("../img/clicked.png") no-repeat scroll 7px 6px; }
+.filter-div > div.messageclick:after {    background: url("../img/messageclick.png") no-repeat scroll 7px 6px; }
+.filter-div > div.messageopen:after {    background: url("../img/messageopen.png") no-repeat scroll 7px 6px; }
+.filter-div > div.messagesent:after {    background: url("../img/messagesent.png") no-repeat scroll 7px 6px; }
+.filter-div > div.scorechange:after {    background: url("../img/scorechange.png") no-repeat scroll 7px 6px; }
+.filter-div > div.signupform:after {    background: url("../img/signupform.png") no-repeat scroll 7px 6px; }
+.filter-div > div.suppress:after {    background: url("../img/suppress.png") no-repeat scroll 7px 6px; }
+.filter-div > div.tellafriend:after {    background: url("../img/tellafriend.png") no-repeat scroll 7px 6px; }
+.filter-div > div.unsubscribed:after {    background: url("../img/unsubscribed.png") no-repeat scroll 7px 6px; }
+.filter-div > div.webvisit:after {    background: url("../img/webvisit.png") no-repeat scroll 7px 6px; }
+.filter-div > div.workflowalert:after {    background: url("../img/workflowalert.png") no-repeat scroll 7px 6px; }
+.filter-div > div.myc2y:after {    background: url("../img/myc2y.png") no-repeat scroll 7px 6px; }
+.filter-div > div.workflowc2y:after {    background: url("../img/workflowc2y.png") no-repeat scroll 7px 6px; }
+.timestop .ellipsis {
+	background: none repeat scroll 0 0 #19BAF7;
+	border-radius: 2px;
+	color:#fff;
+	font-weight: bold;
+	letter-spacing: 2px;	
+	padding: 0 3px 0 4px;
+	cursor:pointer;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:2px;
+}
+.timestop .ellipsis:hover {
+	background:#4fcfff;
+	color:#fff;
 }

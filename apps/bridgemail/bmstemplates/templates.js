@@ -11,7 +11,7 @@ function (template,highlight) {
              * Attach events on elements in view.
             */            
             events: {				
-                
+                'click .create-tempalte':'createTemplate'
             },
             /**
              * Initialize view - backbone .
@@ -36,7 +36,9 @@ function (template,highlight) {
                this.page = this.options.page;
                this.selectText  = this.options.selectAction?this.options.selectAction:'Select Template';
                this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
-               
+               if(this.options.hideCreateButton){
+                   this.$(".iconpointy").hide();
+               }
               
             }
             /**

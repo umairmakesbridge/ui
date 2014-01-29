@@ -54,7 +54,7 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                 var deleteIconSub = $('<a class="icon delete"></a>');
                 var action_icon = $('<div class="pointy"></div>")');
                 action_icon.append(editIconSub);
-                action_icon.append(deleteIconSub);
+                //action_icon.append(deleteIconSub);
                 this.current_ws.find(".edited  h2").append(action_icon);
                
                 editIconSub.click(_.bind(function(){

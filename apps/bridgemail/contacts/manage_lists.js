@@ -57,7 +57,7 @@ function (template,jqueryui,bms_grid) {
                         }
                         list_html += '<td><div class="time show"><strong><span><em>Subscribed On</em>'+subscribe_date+'</span></strong></div></td>';                        
                         list_html += '<td><div class="time show"><strong><span><em>Unsubscribed On</em>'+unsubscribe_date+'</span></strong></div></td>';                        
-                        list_html += '<td><div class="sur-select"><select  class="list-action" style="width:160px;">'
+                        list_html += '<td><div class="sur-select"><select  class="list-action" style="width:160px;" id="'+val[0].listNumber+'">'
                             $.each(options,function(k,v){ 
                                 var _select = v.value==val[0].status ? "selected":""; 
                                 list_html +='<option value="'+v.value+'" class="'+v.cls+'" '+_select+' >'+v.label+'</option>';
@@ -79,15 +79,29 @@ function (template,jqueryui,bms_grid) {
                     _this.$(".list-action").change(function(){
                         var parent_row = $(this).parents("tr");
                         _this.change_list[parent_row.attr("id")] = $(this).val() ;
-                    })
+                    });
                 })
             },
-            updateSubscriberLists:function(){
-                var _exists = false;
-                _.each(this.change_list,function(v,k){
-                    
-                    _exists = true;
-                })
+            updateSubscriberLists:function(dialog){
+                var post_data = {};
+                _.each(this.$("select.list-action"),function(val,key){
+                    post_data["listNum"+key] = $(val).attr("id");
+                    post_data["status"+key] = $(val).val();
+                },this);
+                this.app.showLoading("Updating Subscriber Lists...",dialog.$el);
+                var _this = this;
+                var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.sub.sub_id+"&type=editListInfo";
+                $.post(URL, post_data)
+                .done(function(data) {                                 
+                       var _json = jQuery.parseJSON(data);                         
+                       _this.app.showLoading(false,dialog.$el);          
+                       if(_json[0]!=="err"){
+                           dialog.hide();
+                       }
+                       else{
+                           _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                       }
+               });
             }
             
         });

@@ -44,7 +44,7 @@ function (template) {
                 this.app.showLoading("Loading Templates...",this.$el);  
                 var _this = this;
                 require(["bmstemplates/templates"],function(templatesPage){  								                                    
-                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign',selectTextClass:'createcamp',selectCallback:_.bind(_this.createCampaign,_this)});								
+                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign',hideCreateButton:true,selectTextClass:'createcamp',selectCallback:_.bind(_this.createCampaign,_this)});								
                     page.on('updatecount',_.bind(_this.addCountHeader,_this));
                     _this.$el.html(page.$el);                            
                     page.init();

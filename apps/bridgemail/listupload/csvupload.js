@@ -203,7 +203,7 @@ function (app,template,fileuploader,chosen) {
 				mapPage = new mapdataPage({camp:campview,app:app});
 				mapPage.$el.find('.tabel-div').append(mappingHTML);
 				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
-				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px", 'data-placeholder':"---Select Field---"});
+				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
 				campview.states.step3.mapdataview=mapPage;
 			});
 		},		
@@ -225,7 +225,7 @@ function (app,template,fileuploader,chosen) {
 			var app = this.app;
 			
 			var chtml="";
-			chtml +="<select class='mapfields'>";
+			chtml +="<select class='mapfields' data-placeholder='Choose Field'><option value=''></option>";
 			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
 			if(curview.map_feilds)
 			{
