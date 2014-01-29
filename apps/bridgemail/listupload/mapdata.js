@@ -1,10 +1,11 @@
-define(['text!listupload/html/mapdata.html','jquery.chosen'],
-function (template,chosen) {
+define(['text!listupload/html/mapdata.html','jquery.chosen','bms-addbox'],
+function (template,chosen,addbox) {
 	'use strict';
 	return Backbone.View.extend({
 		id: 'mapdata',
 		tags : 'div',
 		isCampRunning : 'Y',
+		newFieldName:"",
 		events: {				
 			'click .map-toggle .btn':function(obj){		
 				  var el = this.$el;
@@ -46,6 +47,9 @@ function (template,chosen) {
 		   var listid = '';
 		   var isValid = true;
 		   var layout_map = '';
+		   var list_array = '';
+		   if(app.getAppData("lists"))			
+				list_array = app.getAppData("lists");
 		   if(actid == 'new')
 		   {
 			   if(el.find('#newlist').val() == '')
@@ -55,11 +59,33 @@ function (template,chosen) {
 					  message:appMsgs.MAPDATA_newlist_empty_error
 				  });
 				  isValid = false;				  
-			   }
+			   }			   
 			   else
 			   {
-				  newlist = el.find('#newlist').val();				  
-					app.hideError({control:el.find(".list-container")});
+				   	if(list_array != '')
+					{
+						var exists = false;					
+						$.each(list_array.lists[0], function(index, val) { 
+							if(val[0].name == el.find('#newlist').val())
+							{
+								exists = true;
+								return;
+							}
+						});
+						if(exists)
+						{
+							app.showError({
+								control:el.find('.list-container'),
+								message:appMsgs.MAPDATA_newlist_exists_error
+							});
+							isValid = false;
+						}
+						else
+						{
+							newlist = el.find('#newlist').val();				  
+							app.hideError({control:el.find(".list-container")});
+						}
+					}					
 			   }
 		   }
 		   else if(actid == 'old')
@@ -93,33 +119,39 @@ function (template,chosen) {
 			}		   
 		   	var sel_lenght = el.find(".mapfields").length;
 			var prevVal = '';
+			var j=0;
+			var dup=0;
 			el.find(".mapfields").each(function(i,e){
 				var id = $(e).parent().find('.erroricon').attr('id');
-				if($(e).val()==0){
-					layout_map="";					
+				if($(e).val()=='' && j == 0){
+					layout_map="";
 				}
 				else
 				{
-					if(layout_map.indexOf($(e).val()) == -1)
+					if($(e).val() == "" || layout_map.indexOf($(e).val()) == -1)
 					{
 						layout_map+= $(e).val();
 					 	if(i<sel_lenght-1){
 							layout_map+=",";
 					 	}
+						j++;
 					}
-					else
+					else if($(e).val() != "" && layout_map.indexOf($(e).val()) != -1)
 					{					
-						app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
-						isValid = false;
-						return;
+						dup++;
 					}					
 				}
 			});
-			if(layout_map == "")
+			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
 				app.showAlert(appMsgs.MAPDATA_bmsfields_empty_error,el);
 				isValid = false;
-			}			
+			}
+			if(dup > 0)			
+			{
+				app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
+				isValid = false;						
+			}
 			  
 		   if(isValid)
 		   {					 
@@ -137,6 +169,7 @@ function (template,chosen) {
 					   //setTimeout(function(){ mapview.checkCampStatus() },30000);
 					   //mapview.checkCampStatus();
 					   campview.states.step3.recipientType = 'List';
+					   campview.states.step3.recipientDetial = null;
 					   campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
 					   app.showLoading(false,mapview.$el);
 				   }
@@ -198,6 +231,7 @@ function (template,chosen) {
 							})
 							curview.$el.find("#existing_lists").html(list_html);							
 						}
+						app.setAppData('lists',list_array);
 						curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
 					}
 				}).fail(function() { console.log( "error lists listing" ); });
@@ -206,7 +240,20 @@ function (template,chosen) {
 		initialize:function(){                    
 		   this.template = _.template(template);
 		   this.render();
+		   var curview = this;
+		   var app = this.app;
+		   var campview = this.options.camp;
+		   var appMsgs = app.messages[0];
 		   this.filllistsdropdown();
+		   curview.$el.find('.tabel-div').children().remove();
+		   var mappingHTML = curview.createMappingTable(curview.options.rows);
+		   curview.$el.find('.tabel-div').append(mappingHTML);
+		  campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
+		  curview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px", 'data-placeholder':"---Select Field---"});
+		  curview.$el.find(".add-custom-field").addbox({app:app,
+					addCallBack:_.bind(curview.addCustomField,curview),
+					placeholder_text:appMsgs.MAPDATA_customfield_placeholder
+		   });
 		},
 		render: function () {
 			this.$el.html(this.template({}));
@@ -216,6 +263,103 @@ function (template,chosen) {
 		,
 		init:function(){
 			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
-		}
+		},
+		createMappingTable:function(rows){
+			var campview = this.options.camp;
+			var curview = this;
+			var app = this.app;
+			
+			var tcols = 4;
+			var cols = rows[0].length;
+			var tables_count = Math.ceil(cols/tcols);
+			var mappingHTML = "";
+			for(var t=0;t<tables_count;t++){
+				var oc = t*tcols;
+				mappingHTML +="<table id='uploadslist' class='table'>";
+					for(var r=0;r<5;r++){
+					   if(r==0){
+						   mappingHTML +="<tr>";
+							for(var h=oc;h<(oc+tcols+1);h++){
+								if(h==oc){
+									mappingHTML +="<th width='30px' class='leftalign'>&nbsp;</th>";
+								}
+								else{
+									var hcol = (h<=cols)?"col"+h:"&nbsp;";
+									mappingHTML +="<th width='25%'>"+hcol+"</th>";
+								}
+							}
+						   mappingHTML +="</tr>";
+					   }
+					   else if(r==1){
+						   mappingHTML +="<tr>";
+							for(var f=oc;f<(oc+tcols+1);f++){
+								if(f==oc){
+									mappingHTML +="<td width='30px' class='td_footer lastrow'>&nbsp;</td>";
+								}
+								else{
+									var cbox = (f<=cols)?curview.mapCombo(f):"&nbsp;";
+									mappingHTML +="<td width='25%' class='td_footer lastrow'>"+cbox+"</td>";
+								}
+							}
+						   mappingHTML +="</tr>"; 
+					   }
+					   else{
+						var oddRow = (r%2==0)?"class='colorTd'":"";   
+						mappingHTML +="<tr>";
+							for(var c=oc;c<(oc+tcols+1);c++){
+								if(c==oc){
+									mappingHTML +="<td>"+(r-1)+"</td>";
+								}
+								else{
+									var tdText = rows[r-2][c-1] ? rows[r-2][c-1] : "&nbsp;";
+									
+									mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
+								}
+							}
+						mappingHTML +="</tr>";
+					   }
+					}
+				mappingHTML +="</table>";				
+			}
+			return mappingHTML;			
+		},
+		addCustomField: function(val,obj)
+		{
+			var curview = this;			
+			curview.$el.find('.mapfields').append("<option value='"+val+"'>"+val+"</option>");
+			var elemId = obj.attr('id');
+			curview.$el.find('.mapfields.'+elemId).val(val);
+			curview.$el.find('.mapfields').trigger("chosen:updated");
+		},
+		mapCombo: function(num) {
+			var campview = this.options.camp;
+			var curview = this;
+			var app = this.app;
+			var csvupload = campview.states.step3.csvupload;
+			var map_feilds = csvupload.map_feilds;
+			
+			var chtml="";
+			chtml +="<select class='mapfields "+ num +"'>";
+			chtml +="<option value=''>---Select Field---</option>";
+			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
+			if(map_feilds)
+			{
+				for(var x=0;x<map_feilds.length;x++){
+					var sel ="";
+					if(map_feilds[x][2]=='true'){
+						optgroupbasic += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+					}
+					else{
+					   optgroupcustom += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+					}
+				}
+			}
+			optgroupbasic +="</optgroup>";
+			optgroupcustom +="</optgroup>";
+			chtml += optgroupbasic + optgroupcustom;
+			chtml +="</select>";
+			chtml +='<div class="iconpointy"><a class="btn-green"><i class="icon plus left add-custom-field" id="'+ num +'"></i></a></div>';
+			return chtml;
+		}				
 	});
 });

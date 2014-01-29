@@ -11,8 +11,9 @@
         </ul>
     </div>
 </div>
-<div class="temp-filters clearfix">
-  <div class="dropdown  sort-options adv_dd "> <a class="dropdown-toggle open" id="drop4" role="button" data-toggle="dropdown" href="#">Dynamic Content Items </a>
+<div class="temp-filters clearfix ed_mergefields">
+	<div style="float:left;">Copy this tag and paste in your HTML.</div>
+  <div class="dropdown  sort-options adv_dd "> <input type="text" class="mergeinput" placeholder="{{example merge tag}}" id="editor_mergeinput" />
     <div class="btn-group">
       <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
       <div id="menu1" class="dropdown-menu" role="menu" aria-labelledby="drop4" style="display: none;">
@@ -30,8 +31,8 @@
   </div>
   <!--  sort-options  -->
   
-  <input type="text" class="mergeinput" placeholder="{{example merge tag}}" id="editor_mergeinput" />
-  Copy this tag and paste in your HTML. </div>
+  <!--<input type="text" class="mergeinput" placeholder="{{example merge tag}}" id="editor_mergeinput" />-->
+</div>
 <div class="editor_box">
   <form method="post" action="somepage">
     <textarea name="content" id="bmseditor" name="advText" style="width:100%">

@@ -146,7 +146,8 @@ function (template,jqueryui,addbox) {
                        dialog.hide();
                });
             },
-            updateSubscriberDetailAtSalesForce:function(dialog){
+            updateSubscriberDetailAtSalesForce:function(dialog)
+			{
                 var _this = this;
                 _this.app.showLoading("Saving Subscriber Fields & updating on salesforce...",dialog.$el);
                 var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.subscriber.sub_id+"&type=editProfile&updateAtSF=y";
@@ -172,6 +173,5 @@ function (template,jqueryui,addbox) {
                 newCustomField.find("input").focus();
                 return true;
             }
-            
         });
 });

@@ -26,10 +26,12 @@ define([
 							'CSVUpload_wrong_filetype_error':'CSV format only. Watch video on how to save an excel file to CSV.',
 							'CSVUpload_cancel_msg':'Your CSV upload has been cancelled',
                             'MAPDATA_newlist_empty_error':'Enter a list name',
+							'MAPDATA_newlist_exists_error':'List name already exists',
                             'MAPDATA_extlist_empty_error':'Choose a list',
                             'MAPDATA_email_format_error':'Please enter correct email address format',
 							'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
 							'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
+							'MAPDATA_customfield_placeholder':'Click to enter new custom field',
                             'TRG_basic_no_field':'Select a field',
                             'TRG_basic_no_matchvalue':'Please provide match field value',
                             'TRG_score_novalue' : 'Enter a score value',
@@ -202,7 +204,14 @@ define([
                  if(message){                    
                     var inlineStyle = (option && option.top) ? ('top:'+option.top) : '';
                     var fixed_position = (option && option.fixed)?"fixed":"";
-                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox error" style='+inlineStyle+'><h3>Error</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
+					var cl = 'error';
+					var title = 'Error';
+					if(option && option.type == 'caution')
+					{
+						cl = 'caution';
+						title = 'Caustion';
+					}
+                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
                     $(".overlay .closebtn").click(function(){
                        $(".overlay").fadeOut("fast",function(){
                            $(this).remove();

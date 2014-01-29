@@ -86,7 +86,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						var toDateParts = schDates[1].split('/');
 						var toDate = toDateParts[0] + '-' + toDateParts[1] + '-' + toDateParts[2].substring(2,4);
 						var dateURL = "fromDate="+fromDate+"&toDate="+toDate;
-					}					
+					}
+					camp_obj.$el.find("#target-camps .bmsgrid").remove();
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
 										
 					var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
@@ -164,6 +165,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					var type = camp_obj.$('ul#template_search_menu li.active a').attr('search');
 					if(!type)
 						type = 'A';
+					camp_obj.$el.find("#target-camps .bmsgrid").remove();
 					camp_obj.app.removeCache("campaigns");
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
 					camp_obj.app.getData({
@@ -317,6 +319,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 								$(this).addClass('active');							
 						});
 					}
+					camp_obj.$el.find("#target-camps .bmsgrid").remove();
 					camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
 					if(schDates != '')
 						var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
@@ -406,7 +409,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             this.tagDiv.hide();    
 			}
 			,
-			getallcampaigns: function () {				                               				
+			getallcampaigns: function () {
+				this.$el.find("#target-camps .bmsgrid").remove();				                               				
 				if(!this.app.getAppData("campaigns")){
 					this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
 					this.app.getData({

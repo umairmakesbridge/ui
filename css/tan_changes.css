@@ -332,7 +332,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .chosen-search .searchbtn .icon-search { margin-top:-3px; }
 .chosen-container .chosen-results { max-height:230px; }
 #salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
-.overlay { position:fixed; background:none repeat scroll 0 0 rgba(47, 63, 74, 0.8); }
+.overlay { position:absolute; background:none; }
 .global_messages{
     position: fixed;
     top:-1px;
@@ -449,11 +449,19 @@ ul.c-current-status li .badge { cursor:pointer; }
     height: 35px;
     margin: 15px 0 0;
 }
-.tagbox { border:0; box-shadow:0 4px 5px rgba(0, 0, 0, 0.25); width:196px; }
+.tagbox { border:0; box-shadow:0 4px 5px rgba(0, 0, 0, 0.25); width:206px; }
 .tagbox:after { border-color:rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF; }
-.tagbox input { margin:0 0 6px; width:181px; }
+.tagbox input { margin:0 0 6px; width:191px; }
 .tagbox .btn-green { margin:0; }
 #clearcal { position:absolute; right:61px; top:10px; display:none; }
 .since > input{ padding-right:80px; width:95px; }
 .c-name h2 i.target_headicon { background:url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0); background-position:-90px -690px !important; display:block; width:30px; height:30px; margin:10px 0 0 3px !important; }
 .new_headicon { background:url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0); background-position:-90px -690px !important; display:block; width:30px; height:30px; }
+#uploadslist .iconpointy { float:none; }
+.modal-backdrop { display:none; }
+.editor_box { min-height:350px; }
+.ed_mergefields .adv_dd .btn-group, .ed_mergefields .mergefields .btn-group
+{
+	right:17px;
+	top:4px;
+}
