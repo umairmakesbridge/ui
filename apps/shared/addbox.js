@@ -24,8 +24,7 @@
           if(this.options.placeholder_text){
                this.dialog.find(".input-field").attr("placeholder",this.options.placeholder_text)
           }
-          this.$element.on("click",$.proxy(this.showBox,this))
-          
+          this.$element.on("click",$.proxy(this.showBox,this))          
       }
     }
   ,showBox:function(obj){
@@ -58,7 +57,7 @@
   callBack:function(){
       var input_val = this.dialog.find(".input-field").val()
       if(input_val){
-        if(this.options.addCallBack(input_val)){
+        if(this.options.addCallBack(input_val,this.$element)){
             this.hideBox()
         }
       }

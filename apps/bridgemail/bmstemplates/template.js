@@ -55,10 +55,10 @@ function (template,icheck,bmstags) {
                         app:this.app
                     });
                
-               this.$(".add-cat").addbox({app:this.app,
+               	this.$(".add-cat").addbox({app:this.app,
                     addCallBack:_.bind(this.addCategory,this),
                     placeholder_text:'Please enter category'
-                  });
+                });
                 previewIconCampaign.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-162;

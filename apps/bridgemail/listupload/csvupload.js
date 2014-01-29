@@ -1,5 +1,5 @@
-define(['app','text!listupload/html/csvupload.html','fileuploader','jquery.chosen'],
-function (app,template,fileuploader,chosen) {
+define(['app','text!listupload/html/csvupload.html','fileuploader','jquery.chosen','bms-addbox'],
+function (app,template,fileuploader,chosen,addbox) {
 	'use strict';
 	return Backbone.View.extend({
 		id: 'csvupload',
@@ -115,14 +115,23 @@ function (app,template,fileuploader,chosen) {
 							if (xhr.readyState == 4 && xhr.status == 200) {
 								var jsonResult = eval(xhr.responseText);						  
 								if(jsonResult[0] != 'err'){									
-									var rows = jsonResult;									
+									var rows = jsonResult;
 									var mapURL = curview.url_getMapping+"?BMS_REQ_TK="+app.get('bms_token')+"&type=upload_map_fields";			
 									jQuery.getJSON(mapURL,function(tsv, state, xhr){
-										if(xhr && xhr.responseText){
+										if(xhr && xhr.responseText)
+										{
 											curview.map_feilds = jQuery.parseJSON(xhr.responseText);
-											curview.createMappingTable(rows);
+											//curview.createMappingTable(rows);											
+											curview.fileuploaded=true;
+											curview.$el.hide();
+											var mapPage;
+											require(["listupload/mapdata"],function(mapdataPage){				
+												app.showLoading("Getting mapping fields...",campview.$el.find('.step3 #area_upload_csv'));
+												mapPage = new mapdataPage({camp:campview,app:app,rows:rows});
+												campview.states.step3.mapdataview=mapPage;
+											});
 										}
-									});									
+									});
 								}
 								else
 								{												
@@ -136,77 +145,8 @@ function (app,template,fileuploader,chosen) {
 					fileReader.readAsDataURL(file);
 				}
 			});
-		},
-		createMappingTable:function(rows){
-			var campview = this.camp_obj;
-			var curview = this;
-			var app = this.app;
-			
-			var tcols = 4;
-			var cols = rows[0].length;
-			var tables_count = Math.ceil(cols/tcols);
-			var mappingHTML = "";
-			for(var t=0;t<tables_count;t++){
-				var oc = t*tcols;
-				mappingHTML +="<table id='uploadslist' class='table'>";
-					for(var r=0;r<5;r++){
-					   if(r==0){
-						   mappingHTML +="<tr>";
-							for(var h=oc;h<(oc+tcols+1);h++){
-								if(h==oc){
-									mappingHTML +="<th width='30px' class='leftalign'>&nbsp;</th>";
-								}
-								else{
-									var hcol = (h<=cols)?"col"+h:"&nbsp;";
-									mappingHTML +="<th width='25%'>"+hcol+"</th>";
-								}
-							}
-						   mappingHTML +="</tr>";
-					   }
-					   else if(r==1){
-						   mappingHTML +="<tr>";
-							for(var f=oc;f<(oc+tcols+1);f++){
-								if(f==oc){
-									mappingHTML +="<td width='30px' class='td_footer lastrow'>&nbsp;</td>";
-								}
-								else{
-									var cbox = (f<=cols)?curview.mapCombo():"&nbsp;";
-									mappingHTML +="<td width='25%' class='td_footer lastrow'>"+cbox+"</td>";
-								}
-							}
-						   mappingHTML +="</tr>"; 
-					   }
-					   else{
-						var oddRow = (r%2==0)?"class='colorTd'":"";   
-						mappingHTML +="<tr>";
-							for(var c=oc;c<(oc+tcols+1);c++){
-								if(c==oc){
-									mappingHTML +="<td>"+(r-1)+"</td>";
-								}
-								else{
-									var tdText = rows[r-2][c-1] ? rows[r-2][c-1] : "&nbsp;";
-									
-									mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
-								}
-							}
-						mappingHTML +="</tr>";
-					   }
-					}
-				mappingHTML +="</table>";				
-			}						
-			curview.$el.find('.tabel-div').children().remove();
-			curview.fileuploaded=true;
-			curview.$el.hide();
-			var mapPage;
-			require(["listupload/mapdata"],function(mapdataPage){				
-				app.showLoading("Getting mapping fields...",campview.$el.find('.step3 #area_upload_csv'));
-				mapPage = new mapdataPage({camp:campview,app:app});
-				mapPage.$el.find('.tabel-div').append(mappingHTML);
-				campview.$el.find('.step3 #area_upload_csv').html(mapPage.$el);
-				mapPage.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
-				campview.states.step3.mapdataview=mapPage;
-			});
-		},		
+
+		},			
 		initialize:function(){
 		   this.template = _.template(template);			   	   
 		   this.render();
@@ -218,35 +158,9 @@ function (app,template,fileuploader,chosen) {
 			this.app = this.options.app;
 			this.camp_obj = this.options.camp;
 			jQuery.event.props.push('dataTransfer');
-		},
-		mapCombo: function() {
-			var campview = this.camp_obj;
-			var curview = this;
-			var app = this.app;
-			
-			var chtml="";
-			chtml +="<select class='mapfields' data-placeholder='Choose Field'><option value=''></option>";
-			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
-			if(curview.map_feilds)
-			{
-				for(var x=0;x<curview.map_feilds.length;x++){
-					var sel ="";
-					if(curview.map_feilds[x][2]=='true'){
-						optgroupbasic += "<option class='select_option' value='"+curview.map_feilds[x][0]+"' "+sel+">"+curview.map_feilds[x][1]+"</option>";
-					}
-					else{
-					   optgroupcustom += "<option class='select_option' value='"+curview.map_feilds[x][0]+"' "+sel+">"+curview.map_feilds[x][1]+"</option>";
-					}
-				}
-			}
-			optgroupbasic +="</optgroup>";
-			optgroupcustom +="</optgroup>";
-			chtml += optgroupbasic + optgroupcustom;
-			chtml +="</select>";
-			return chtml;
-		},
-		init:function(){
-			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
 		},		
+		init:function(){
+			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
+		}
 	});
 });

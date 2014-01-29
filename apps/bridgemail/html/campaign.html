@@ -331,17 +331,18 @@
   <!-- content-inner   -->
   
   <div class="content-inner soruces"  id="area_html_code" style="margin: 20px 0 0;display: none" >
-    <div class="row temp-filters clearfix">
+    <div class="row temp-filters clearfix ed_mergefields">
       <label style="width: 145px;">Merge Tags</label>
-      <div class="dropdown  sort-options adv_dd "> <a class="dropdown-toggle open" id="drop4" role="button" data-toggle="dropdown" href="#">Dynamic Content Items </a>
+      <div style="float:left">Copy this tag and paste in your HTML.</div>
+      <div class="dropdown  sort-options adv_dd "> <input type="text" id="myhtmlsoruce" class="mergeinput" placeholder="{{example merge tag}}" />
         <div class="btn-group">
           <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
         </div>
       </div>
       <!--  sort-options  -->
       
-      <input type="text" id="myhtmlsoruce" class="mergeinput" placeholder="{{example merge tag}}" />
-      Copy this tag and paste in your HTML. </div>
+      <!--<input type="text" id="myhtmlsoruce" class="mergeinput" placeholder="{{example merge tag}}" />-->
+    </div>
     <div style="" class="row">
       <label style="width: 145px;">Paste your HTML here</label>
       <textarea class="html-text" id="myhtml" style="min-height:100px;" placeholder="Your HTML goes here..." ></textarea>
@@ -352,7 +353,7 @@
 </div>
 <div class="wizard-steps step3">  
    <div class="selection-boxes" style="width: 840px;"> <!--<a class="prev"><span></span></a>-->
-   	<div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recepients</strong>"  options from  below.</p></div>
+   	<div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recipients</strong>"  options from  below.</p></div>
     <ul id="choose_soruce">
       <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
       <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>      
