@@ -339,8 +339,8 @@ function (template,chosen,addbox) {
 			var map_feilds = csvupload.map_feilds;
 			
 			var chtml="";
-			chtml +="<select class='mapfields "+ num +"' data-placeholder='Choose Field'><option value=''></option>";
-			chtml +="<option value=''>---Select Field---</option>";
+			chtml +="<select class='mapfields "+ num +"' data-placeholder='Choose Field'>";
+			chtml +="<option value=''></option>";
 			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
 			if(map_feilds)
 			{
