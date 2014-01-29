@@ -160,14 +160,14 @@ define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
 
                         });
                         },
-                        showEditor:function(){
+                        showEditor:function(eid){
                             this.$el.show();                            
                             $("body").css("overflow","hidden");
                             $("html,body").scrollTop(0);
                             var editor_height = $(window).height()-166;
                             this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});
                             var editor_window_height = editor_height - 172;
-                            this.$("#bmseditor_ifr").css("height",editor_window_height+"px");
+                            this.$("#bmseditor_"+eid+"_ifr").css("height",editor_window_height+"px");
                             $("#activities,#search,.icons-bar").hide();
                             $(".camp_header #more-tool-actions li:nth-child(2)").hide();
                             $(".camp_header #more-tool-actions li:nth-child(3)").hide();

@@ -2639,8 +2639,7 @@ background: url("../img/icon-map.png") no-repeat scroll -117px -869px #94CF1E;
 .tabel-div {
 	border:1px solid #c2c4c6;
 	margin-bottom:10px;
-	overflow:hidden;
-	position:relative;
+	overflow:hidden;	
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;

@@ -1455,3 +1455,12 @@ div.shortcuts .ddicon{
 	background:#4fcfff;
 	color:#fff;
 }
+
+.filter-row .chosen-search .btn-group{
+    float: right;
+}
+
+.filter-row  .chosen-search #searchbtn{
+    margin-left: -30px;
+    top: 1px;
+}

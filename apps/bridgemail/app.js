@@ -31,7 +31,7 @@ define([
                             'MAPDATA_email_format_error':'Please enter correct email address format',
 							'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
 							'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
-							'MAPDATA_customfield_placeholder':'Click to enter new custom field',
+							'MAPDATA_customfield_placeholder':'New custom field',
                             'TRG_basic_no_field':'Select a field',
                             'TRG_basic_no_matchvalue':'Please provide match field value',
                             'TRG_score_novalue' : 'Enter a score value',

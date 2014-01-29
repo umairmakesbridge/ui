@@ -58,7 +58,7 @@ function (template,crm_filters) {
                         }
                      }
                 },
-                saveFilter:function(dialog){
+                saveFilter:function(dialog,callBack){
                     this.camp.states.step3.ns_filters.customer = this.$(".customer-filter").data("crmfilters").saveFilters('customer');
                     this.camp.states.step3.ns_filters.contact =  this.$(".contact-filter").data("crmfilters").saveFilters('contact');
                     this.camp.states.step3.ns_filters.partner =  this.$(".partner-filter").data("crmfilters").saveFilters('partner');
@@ -78,7 +78,7 @@ function (template,crm_filters) {
                         }
                     }
                     dialog.hide();
-                    
+                    callBack("Netsuite");
                 }
         });
 });
