@@ -254,11 +254,13 @@ function (template,chosen,addbox) {
 					addCallBack:_.bind(curview.addCustomField,curview),
 					placeholder_text:appMsgs.MAPDATA_customfield_placeholder
 		   });
+		   var curview = this;
+		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 		},
 		render: function () {
 			this.$el.html(this.template({}));
 			this.app = this.options.app;                        
-			this.camp_obj = this.options.camp;			
+			this.camp_obj = this.options.camp;					
 		}
 		,
 		init:function(){
@@ -358,7 +360,7 @@ function (template,chosen,addbox) {
 			optgroupcustom +="</optgroup>";
 			chtml += optgroupbasic + optgroupcustom;
 			chtml +="</select>";
-			chtml +='<div class="iconpointy"><a class="btn-green"><i class="icon plus left add-custom-field" id="'+ num +'"></i></a></div>';
+			chtml +='<div class="iconpointy"><a class="btn-green showtooltip" data-original-title="Add custom field"><i class="icon plus left add-custom-field showtooltip" data-original-title="Add custom field" id="'+ num +'"></i></a></div>';
 			return chtml;
 		}				
 	});

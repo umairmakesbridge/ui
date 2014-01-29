@@ -159,6 +159,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         /*this.csvupload = new CSVUploadView({camp:this});
                         this.mapdataview = new MapDataView({camp:this});*/
                         this.render();
+						var appMsgs = this.app.messages[0];
+						this.app.showInfo(this.$el.find('#lblSubject'),appMsgs.CAMP_subject_info);
+						this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
+						this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
+						this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
                 },
                 render: function () {
                         this.$el.html(this.template({}));				                        
@@ -998,14 +1003,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
 					
                     if(el.find('#campaign_subject').val() == '')
-					{
-					   /*var options = {
-							'control':el.find('#campaign_subject'),
-							'valid_icon':el.find('#subject_erroricon'),
-							'message':camp_obj.app.messages[0].CAMP_subject_empty_error,
-							'controlcss':'border:solid 2px #FB8080;'
-						};
-						app.enableValidation(options);*/
+					{					   
 						app.showError({
 							control:el.find('.subject-container'),
 							message:camp_obj.app.messages[0].CAMP_subject_empty_error
@@ -1013,14 +1011,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else if(el.find('#campaign_subject').val().length > 100)
-					{
-						/*var options = { 
-							'control':el.find('#campaign_subject'),
-							'valid_icon':el.find('#subject_erroricon'),
-							'message':camp_obj.app.messages[0].CAMP_subject_length_error,
-							'controlcss':'border:solid 2px #FB8080;'
-						};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.subject-container'),
 							message:camp_obj.app.messages[0].CAMP_subject_empty_error
@@ -1028,22 +1019,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 				   }
 				   else
-				   {
-						/*var options = {
-						 'control':el.find('#campaign_subject'),
-						 'valid_icon':el.find('#subject_erroricon'),
-						 'customfield':el.find('.input-append .subject-group')};
-						 app.disableValidation(options);*/
+				   {						
 						 app.hideError({control:el.find(".subject-container")});
 					}
 					if(el.find('#campaign_from_name').val() == '')
-					{
-						/*var options = {'control':el.find('#campaign_from_name'),
-							'valid_icon':el.find('#fromname_erroricon'),
-							'message':camp_obj.app.messages[0].CAMP_fromname_empty_error,
-							'controlcss':'border:solid 2px #FB8080;'
-						  };
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.fname-container'),
 							message:camp_obj.app.messages[0].CAMP_fromname_empty_error
@@ -1051,21 +1031,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#campaign_from_name'),
-						'valid_icon':el.find('#fromname_erroricon'),
-						'customfield':el.find('.input-append .fromname-group')
-						};
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".fname-container")});
 					}
 				   	if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
-					{                           
-						/*var options = {'control':this.$('#campaign_default_from_name'),
-						'valid_icon':el.find('#defaultfromname_erroricon'),
-						'message':camp_obj.app.messages[0].CAMP_defaultfromname_empty_error,
-						'controlcss':'border:solid 2px #FB8080;'};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.fnamedefault-container'),
 							message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
@@ -1073,21 +1043,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#campaign_default_from_name'),
-									   'valid_icon':el.find('#defaultfromname_erroricon')
-									  };
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".fnamedefault-container")});
 					}	
 					if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
-					{
-						/*var options = {'control':el.find('#campaign_reply_to'),
-						'valid_icon':el.find('#replyto_erroricon'),
-						'message':camp_obj.app.messages[0].CAMP_replyto_format_error,
-						'controlcss':'border:solid 2px #FB8080;'
-						};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.replyto-container'),
 							message:camp_obj.app.messages[0].CAMP_replyto_format_error
@@ -1095,21 +1055,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#campaign_reply_to'),
-							'valid_icon':el.find('#replyto_erroricon'),
-							'customfield':el.find('.input-append .replyto-group')
-						   };
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".replyto-container")});
 					}
 					if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
-					{
-						/*var options = {'control':el.find('#campaign_default_reply_to'),
-						'valid_icon':el.find('#email_erroricon'),
-						'message':camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error,
-						'controlcss':'border:solid 2px #FB8080;'};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.replyemail-container'),
 							message:camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
@@ -1117,12 +1067,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
-					{                           
-						/*var options = {'control':el.find('#campaign_default_reply_to'),
-						'valid_icon':el.find('#email_erroricon'),
-						'message':camp_obj.app.messages[0].CAMP_defaultreplyto_format_error,
-						'controlcss':'border:solid 2px #FB8080;'};
-						app.enableValidation(options);*/
+					{						
 						app.showError({
 							control:el.find('.replyemail-container'),
 							message:camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
@@ -1130,11 +1075,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 						isValid = false;
 					}
 					else
-					{
-						/*var options = {'control':el.find('#campaign_default_reply_to'),
-									   'valid_icon':el.find('#email_erroricon')
-									  };
-						app.disableValidation(options);*/
+					{						
 						app.hideError({control:el.find(".replyemail-container")});
 					}	
                         
@@ -1389,6 +1330,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.mergeTags['basic'] = [];
                             camp_obj.mergeTags['custom'] = [];
 							camp_obj.mergeTags['salesRep'] = [];
+							camp_obj.mergeTags['links'] = [];
                             $.each(mergeFields_json,function(key,val){
                                 if(val[2]=="B"){
                                     camp_obj.mergeTags['basic'].push(val);
@@ -1399,6 +1341,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 								else if(val[2]=="S"){
                                     camp_obj.mergeTags['salesRep'].push(val);
                                 }
+								else if(val[2]=="U"){
+                                    camp_obj.mergeTags['links'].push(val);
+                                }
                             });
                             $.each(camp_obj.mergeTags['salesRep'],function(key,val){
                                     camp_obj.allMergeTags.push({"type":"Sales Rep","name":val[1],"code":val[0]});
@@ -1408,6 +1353,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             });
                             $.each(camp_obj.mergeTags['custom'],function(key,val){
                                     camp_obj.allMergeTags.push({"type":"Custom Field","name":val[1],"code":val[0]});
+                            });
+							$.each(camp_obj.mergeTags['links'],function(key,val){
+                                    camp_obj.allMergeTags.push({"type":"Links","name":val[1],"code":val[0]});
                             });
                             camp_obj.allMergeTags.sort(function(a, b){
                                     var a1= a.name, b1= b.name;
@@ -1952,6 +1900,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else{
                         $(".mergefields .browsefields").show();
+						$(".mergefields .browsefields #mergefields_links").hide();
                         $(".mergefields .browsefields").removeClass("mergefields_editor");
                         $(".mergefields .searchfields,#remove-merge-list").hide();
                         $("#merge_list_search").val("");
@@ -2111,7 +2060,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     return $(this);
                             }
                          }).show();
-                        var ids = ['Basic Field', 'Custom Field', 'Sales Rep'];
+                        var ids = ['Basic Field', 'Custom Field', 'Sales Rep', 'Links'];
                         var items = $(".mergefields .searchfields .searchlist li");
                         $.each(ids, function(index, id) {
                                $(items).filter("li[rel='" + ids[index] + "']")
