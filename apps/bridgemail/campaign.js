@@ -157,11 +157,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         /*this.csvupload = new CSVUploadView({camp:this});
                         this.mapdataview = new MapDataView({camp:this});*/
                         this.render();
-						var appMsgs = this.app.messages[0];
-						this.app.showInfo(this.$el.find('#lblSubject'),appMsgs.CAMP_subject_info);
-						this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
-						this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
-						this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
+                        var appMsgs = this.app.messages[0];
+                        this.app.showInfo(this.$el.find('#lblSubject'),appMsgs.CAMP_subject_info);
+                        this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
+                        this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
+                        this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
                 },
                 render: function () {
                         this.$el.html(this.template({}));				                        
@@ -400,28 +400,33 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
-						var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
+			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
                         if(camp_json.fromEmail != '')
                         {
-                                if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
-                                {
-                                        var merge_field = camp_obj.app.decodeHTML(camp_json.fromEmail);                                
-                                        camp_obj.$("#campaign_from_email").prepend("<option value='"+merge_field+"'>"+merge_field+"</option");
-                                        camp_obj.$("#campaign_from_email").val(merge_field).trigger("chosen:updated")
-                                        camp_obj.$("#campaign_from_email_default").show();
-                                        camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                                }
-                                else
-                                {
-                                        camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");                                
-                                        camp_obj.$("#campaign_from_email_default").hide();                            
-                                }
+                            if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
+                            {
+                                    var merge_field = camp_obj.app.decodeHTML(camp_json.fromEmail);                                
+                                    camp_obj.$("#campaign_from_email").prepend("<option value='"+merge_field+"'>"+merge_field+"</option");
+                                    camp_obj.$("#campaign_from_email").val(merge_field).trigger("chosen:updated")
+                                    camp_obj.$("#campaign_from_email_default").show();
+                                    camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                            }
+                            else
+                            {
+                                    camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");                                
+                                    camp_obj.$("#campaign_from_email_default").hide();                            
+                            }
                         }
                         var subj_w = camp_obj.$el.find('#campaign_subject').width();
                         var fegb_w = camp_obj.$el.find('#fecol3').width();
                         camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
-						if(camp_json.senderName != '')
-                        	camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
+			if(camp_json.senderName != ''){
+                            camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
+                        }
+                        else{
+                            camp_obj.states.step1.change=true;
+                        }
+                        //states.step1.change
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));                                                        
                         camp_obj.$("#campaign_footer_text").val(camp_json.footerText);
                         camp_obj.states.step2.htmlText = camp_json.htmlText;
@@ -429,13 +434,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.states.step3.recipientType = camp_json.recipientType;
                         if(camp_json.defaultSenderName != '')
                         {
-                                if(camp_json.defaultSenderName){
-                                         camp_obj.$("#campaign_from_name_default").show();
-                                         camp_obj.$("#campaign_default_from_name").val(camp_json.defaultSenderName);
-                                }
-                                else{
-                                         camp_obj.$("#campaign_from_name_default").hide();
-                                }
+                            if(camp_json.defaultSenderName){
+                                     camp_obj.$("#campaign_from_name_default").show();
+                                     camp_obj.$("#campaign_default_from_name").val(camp_json.defaultSenderName);
+                            }
+                            else{
+                                     camp_obj.$("#campaign_from_name_default").hide();
+                            }
                         }
 
                         if(camp_json.defaultReplyTo){
