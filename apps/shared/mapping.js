@@ -69,6 +69,8 @@
                   tr_copy.find(".move-row").show();
                   tr_copy.find(".move-row").click(_.bind(self.removeFromCol2,self));
 				  
+				  if(self.$element.find(".col2 .rightcol tbody .recp_empty_info"))
+				  	self.$element.find(".col2 .rightcol tbody .recp_empty_info").remove();
                   if(self.options.movingElement == 'tr')
 				  {
                       tr_copy.appendTo(self.$element.find(".col2 .rightcol tbody"));
