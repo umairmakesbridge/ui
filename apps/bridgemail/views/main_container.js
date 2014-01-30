@@ -1,5 +1,5 @@
-define(['jquery','backbone','app', 'tinymce','views/common/header', 'text!templates/main_container.html','views/common/footer','views/common/news','views/workspace'],
-        function($,Backbone, app,_tinymce, HeaderView ,LandingPage,FooterView,NewsView,WorkSpace){
+define(['jquery','backbone','app','views/common/header', 'text!templates/main_container.html','views/common/footer','views/common/news','views/workspace'],
+        function($,Backbone, app, HeaderView ,LandingPage,FooterView,NewsView,WorkSpace){
   "use strict";
   
    return Backbone.View.extend({       

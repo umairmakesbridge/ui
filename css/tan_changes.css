@@ -451,9 +451,9 @@ ul.c-current-status li .badge { cursor:pointer; }
     height: 35px;
     margin: 15px 0 0;
 }
-.tagbox { border:0; box-shadow:0 4px 5px rgba(0, 0, 0, 0.25); width:196px; }
+.tagbox { border:0; box-shadow:0 4px 5px rgba(0, 0, 0, 0.25); width:200px; }
 .tagbox:after { border-color:rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF; }
-.tagbox input { margin:0 0 6px; width:181px; }
+.tagbox input { margin:0 0 6px; width:186px; }
 .tagbox .btn-green { margin:0; }
 #clearcal { position:absolute; right:61px; top:10px; display:none; }
 .since > input{ padding-right:80px; width:95px; }

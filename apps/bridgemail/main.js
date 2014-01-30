@@ -3,6 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:120,
+       urlArgs: "bust=1" ,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
@@ -16,8 +17,7 @@
            'jquery.calendario': '../shared/libs/jquery.calendario',
            'jquery.icheck': '../shared/libs/jquery.icheck',
            'jquery.chosen': '../shared/libs/chosen.jquery',
-           'jquery.highlight': '../shared/libs/jquery.highlight',
-           'tinymce': 'https://test.bridgemailsystem.com/tiny_mce/tiny_mce',
+           'jquery.highlight': '../shared/libs/jquery.highlight',           
            'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
            'fileuploader': '../shared/libs/jquery.form',
@@ -47,7 +47,7 @@
                    deps: ['jquery'],
                    exports: 'jQuery.fn.isotope'
                },
-			   'jquery-ui':{
+               'jquery-ui':{
                    deps: ['jquery']
                },
                'jquery.bmsgrid':{
@@ -69,10 +69,6 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
-               },                                                           
-                'tinymce':{
-                   deps: ['jquery'],
-                   exports: 'jQuery.fn.tinymce'
                }
                ,
                'jquery.searchcontrol':{

@@ -58,7 +58,7 @@ if(userInfo == null) {
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
-        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";
+        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";        
     </script>
     
     <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >
@@ -69,7 +69,7 @@ if(userInfo == null) {
     <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    
+    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce/tiny_mce.js"></script>
 </head>
 <body>
     

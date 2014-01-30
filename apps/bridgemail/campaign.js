@@ -1,4 +1,4 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','views/common/editor','bms-tags','bms-filters','bms-mapping','moment'],
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor','bms-tags','bms-filters','bms-mapping','moment'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
         'use strict';
         return Backbone.View.extend({
@@ -1490,20 +1490,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     camp_obj.$el.find('#area_choose_targets #targets .bmsgrid').remove();
                     camp_obj.$el.find("#area_choose_targets .col2 .bmsgrid").remove();
                     camp_obj.$el.find("#area_choose_targets").removeData("mapping");
-					
-                    var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
-                    //this.$el.find(".target-count").html("Displaying <b>"+targets_list_json.count+"</b> targets");
-					
-                    $.each(targets_list_json.filters[0], function(index, val) {					
-                        target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
-                        target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';
-						var upd_date = moment(val[0].updationDate,'YYYY-M-D');
-						var upd_date_new = upd_date.date() + ' ' + camp_obj.app.getMMM(upd_date.month()) + ', ' + upd_date.year();
-                        target_html += '<td><div><div class="time show" style="min-width:70px;"><strong><span><em>Updation Date</em>'+upd_date_new+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
-						target_html += '</tr>';
-                    });
-                    target_html += '</tbody></table>';
-										
+                    if(targets_list_json.filters){                        
+                    
+                        var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
+                       
+                        $.each(targets_list_json.filters[0], function(index, val) {					
+                            target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
+                            target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';
+                                                    var upd_date = moment(val[0].updationDate,'YYYY-M-D');
+                                                    var upd_date_new = upd_date.date() + ' ' + camp_obj.app.getMMM(upd_date.month()) + ', ' + upd_date.year();
+                            target_html += '<td><div><div class="time show" style="min-width:70px;"><strong><span><em>Updation Date</em>'+upd_date_new+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
+                                                    target_html += '</tr>';
+                        });
+                        target_html += '</tbody></table>';
+								
+                   }
                     this.$el.find("#targets").html(target_html);
 					
                     this.$el.find("#targets").bmsgrid({

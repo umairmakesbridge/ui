@@ -1,4 +1,4 @@
-define(['jquery','backbone', 'underscore', 'text!templates/common/editor.html'],
+define(['jquery','backbone', 'underscore', 'text!html/editor.html'],
 	function ($,Backbone,_, template) {
 		'use strict';
 		return Backbone.View.extend({			                                               

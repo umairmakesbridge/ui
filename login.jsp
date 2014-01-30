@@ -119,13 +119,17 @@ function isValidPass(string) {
 
         <form name="passwdLogin" action="loginHandler.jsp" method="POST" onsubmit="javascript:return validate();">
             
-            <%=WebSecurityManager.getCSRFToken_FORM(session)%>
-            <% if(message!=null && !message.equals("")) { %>
-                <div class="error"><%=message%></div>            
-            <% } %>
+          
             <div class="loginform">
 
-                    <h4>Please enter your credentials</h4>
+                <h4>Please enter your credentials</h4>
+                <%=WebSecurityManager.getCSRFToken_FORM(session)%>
+                <% if(message!=null && !message.equals("")) { %>
+                    <div class="messageerror ">
+                    <p><%=message%></p>
+                    <div class="clearfix"></div>
+                    </div>
+                <% } %>    
                 <div class="inputrow">
                     <label>User ID</label>
                     <input name="userid" type="text" value="" />

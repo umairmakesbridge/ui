@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap','views/common/dialog'
+	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap','views/common/dialog', 'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox'
 ], function ($, _, Backbone, isotope, bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({

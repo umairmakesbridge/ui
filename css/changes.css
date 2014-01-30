@@ -290,7 +290,7 @@ div.tooltip .icon{
     float: right !important;
     margin: 0;
 }
-.tagbox .btn-gray { float:left !important;  margin-left:5px;}
+.tagbox .btn-gray {  margin-left:5px;}
 div.tags-div:before {
      border-color: transparent transparent #7A7A7A;
     border-style: solid;
