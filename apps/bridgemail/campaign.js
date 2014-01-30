@@ -2975,8 +2975,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                          })
                                         }
                                         else
-                                        {
-                                                camp_obj.$(".step3 #area_choose_lists .rightcol").html('<div style="padding: 20px;" class=""> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
+                                        {											
+                                                camp_obj.$el.find(".step3 #area_choose_lists .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
                                         }
                                     }
                                     else if(rec_josn.type.toLowerCase()=="target"){
@@ -2987,7 +2987,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         }
                                         else
                                         {
-                                                camp_obj.$(".step3 #area_choose_targets .rightcol").html('<div style="padding: 20px;" class=""> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
+                                                camp_obj.$(".step3 #area_choose_targets .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
                                         }
                                     }
 									else if(rec_josn.type.toLowerCase()=="tags"){                                        
@@ -3080,8 +3080,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    camp_detail +='<span>'+step4_obj.day+' '+this.app.getMMM(step4_obj.month-1)+' '+step4_obj.year+'</span> at <em>'+this.$(".timebox-hour").val()+':'+this.$(".timebox-min").val()+' '+this.$(".timebox-hours button.active").html()+'</em>'; 
                    this.$(".camp-sch-detail").html(camp_detail) 
                    this.$(".sch-made").show(); 
-               }
-               
-                
+               }                
         });
 });
