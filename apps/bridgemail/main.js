@@ -2,17 +2,18 @@
    'use strict';
     require.config({  
        deps: ['main'], 
-       waitSeconds:120,
-       urlArgs: "bust=1" ,
+       waitSeconds:300,
+       urlArgs: "bust=1.4" ,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
            backbone:'../shared/libs/backbone-min',
            text:'../shared/libs/text',
            router: '../shared/router',
-           
-           'iframed-app': '../shared/iframed-app',
-           'jquery.isotope': '../shared/libs/jquery.isotope.min',
+           async: '../shared/libs/async',
+           goog: '../shared/libs/goog',
+           propertyParser: '../shared/libs/propertyParser',
+           'iframed-app': '../shared/iframed-app',           
            'jquery.bmsgrid': '../shared/libs/bmsgrid',
            'jquery.calendario': '../shared/libs/jquery.calendario',
            'jquery.icheck': '../shared/libs/jquery.icheck',
@@ -42,10 +43,6 @@
                 },
                 jquery: {
                    exports: 'jQuery'
-               },
-               'jquery.isotope':{
-                   deps: ['jquery'],
-                   exports: 'jQuery.fn.isotope'
                },
                'jquery-ui':{
                    deps: ['jquery']

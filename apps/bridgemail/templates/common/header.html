@@ -1,52 +1,50 @@
-
-   <div class="content clearfix">
-        <a  class="logo"></a>
-        <ul class="toplinks">
-            <li>Welcome <a >User</a>!</li>
-            <li><a  class="showtooltip" data-original-title="Manage Accounts"><span class="icon account"></span>Manage Accounts</a></li>
-            <li><a  class="showtooltip" data-original-title="Logout"><span class="icon logout"></span>Logout</a></li>
-        </ul>
-    </div>
-
-    <nav id="nav" class="content" >
-        <a  class="logoicon"></a>
-        <div class="modules"> <a class="showtooltip" data-original-title="Bridgemail System">bridgemail system</a>
-            <ul aria-labelledby="srch" class="dropdown-menu" style=" ">
-                <li><a id="marketing_automation" class="showtooltip" data-original-title="Marketing Automation">marketing automation</a></li>
-                <li><a id="sales_automation" class="showtooltip" data-original-title="Sales Automation">sales automation</a></li>
-                <li><a id="analytics" class="showtooltip" data-original-title="Analytics Automation">analytics</a></li>
-                <li><a id="push_play_automation" class="showtooltip" data-original-title="Push Play Automation">push play automation</a></li>
-                <li><a id="concierge_serivce" class="showtooltip" data-original-title="Concierge Service">concierge service</a></li>
+<nav id="dashnav">
+            
+    <ul class="leftnav">
+        <li class="icon-menu"><a ><i class="icon menu"></i></a></li>
+        <li><a  class="logo">  Makesbridge</a></li>
+           <li class="ddmenu"><a ><i  class="icon campaigns"></i><span>Campaigns</span></a>
+             <ul class="submenu">
+                <li class="firstblock campaigns-li"><a><i class="icon massemail"></i><span>Mass Email</span></a></li>
+                <li class="add-template-li"><a><i class="icon template_m"></i><span>Template Gallery</span></a></li>
+                <li class="reports-li"><a><i class="icon reports_m"></i><span>Reports</span></a></li>
+                <li><a><i class="icon workflow"></i><span>Workflow</span></a></li>
+                <li><a><i class="icon salesrep"></i><span>1-1 Messages</span></a></li>
             </ul>
-        </div>
-        <div class="search">
-            <button tabindex="-1" class="searchbtn"><span class="icon search"></span></button>
-        </div>     
-        <ul class="nav">
-            <li class="contacts-li"><a class="showtooltip" data-original-title="Studio"><i class="icon studio"></i><span>Studio</span> </a>
-            </li>
-            <li class="campaigns-li"><a class="showtooltip" data-original-title="Campaigns"><i class="icon campaigns"></i><span>Campaigns</span></a></li>
-            <li><a class="showtooltip" data-original-title="Reports & Analytics"><i class="icon analytics"></i><span>Reports & Analytics</span></a>
-                        <ul class=" tab-icons submenu">
-                        <li class="colspan2"><a class="showtooltip" data-original-title="Reports & Analytics"><span class="icon reports"></span> Reports & Analytics</a></li>
-                        <li class="add-template-li"><a class="showtooltip" data-original-title="Add Templates"><span class="icon add-template"></span> Add Templates</a></li>
-                        <li><a class="showtooltip" data-original-title="Add List"><span class="icon add-list"></span> Add List</a></li>
-                        <li><a class="showtooltip" data-original-title="Forms"><span class="icon forms"></span> Forms</a></li>
-                        <li><a class="showtooltip" data-original-title="Segments"><span class="icon segments"></span> Segments</a></li>
-                    </ul>
-            </li>
-            <li class="list-management-li"><a class="showtooltip" data-original-title="List Management"><i class="icon list-management"></i><span>List Management</span></a></li>
-            <li class="automation-li"><a class="showtooltip" data-original-title="Automation"><i class="icon automation"></i><span>Automation</span></a></li>
-            <li  class="account-li"><a class="showtooltip" data-original-title="My Account"><i class="icon account"></i><span>My Account</span></a>
-                <ul class=" tab-icons submenu acct-menu" style="display: ;">
-                    <li><a class="showtooltip" data-original-title="Bounced Emails"><span class="icon bounced-email"></span> Bounced Emails</a></li>
-                    <li><a class="showtooltip" data-original-title="FTP Uploads"><span class="icon ftp-uploads"></span> FTP Uploads</a></li>
-                    <li><a class="showtooltip" data-original-title="Reports"><span class="icon reports"></span> Reports</a></li>
-                    <li><a class="showtooltip" data-original-title="Add"><span class="icon add"></span> Add</a></li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+        </li>
+        <li class="ddmenu"><a ><i class="icon contacts"></i><span>About</span></a>
+            <ul class="submenu">
+                <li class="contacts-li"><a><i class="icon subscribers"></i><span>Add Contacts</span></a></li>
+                <li><a><i class="icon csv"></i><span>Upload CSV</span></a></li>
+                <li><a><i class="icon sf"></i><span><em>Import from</em> Salesforce</span></a></li>
+                <li><a><i class="icon ns"></i><span><em>Import from</em> Netsuite</span></a></li>
+            </ul>
+        </li>
+    </ul>
+
+            <ul class="rightnav">
+    <li class="logout"><a ><i class="icon logout"></i><span>Logout</span></a>
+            <div class="lo-confirm">
+            <p>Are you sure, you want to logout?</p>
+            <a href="/pms/Logout.jsp" class="lo-yes">Yes</a>
+            <a  class="lo-no">No</a>
+            </div>
+    </li>
+        <li class="profiledd">
+            <a  class=""><strong class="user-name">Amy Adams</strong><!-- <b class="caret"></b>--><span class="profile"><img src="images/avatar.jpg" alt=""/></span></a>
+            <ul class="submenu">
+                    <li><a><i class="icon myaccount"></i><span>My Account</span></a></li>
+                    <li><a><i class="icon manage"></i><span>Manage Sub Accounts</span></a></li>
+                    <li><a><i class="icon settings"></i><span>Settings</span></a></li>
+            </ul>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+
 
    
            

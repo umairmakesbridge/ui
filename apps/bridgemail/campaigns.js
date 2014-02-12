@@ -179,7 +179,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				{
 					this.$el.find('#daterange').click();
 					return false;
-				}
+				},
+                                "click .cstats .closebtn":"closeChart"
 			},			
 			previewCampaign: function(camp_id,camp_name)
 			{
@@ -206,11 +207,11 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var dialog_width = 650;
 				var dialog_height = 100;
 				var dialog = camp_obj.app.showDialog({title:'Email Preview' ,
-						css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
-						headerEditable:false,
-						headerIcon : 'copycamp',
-						bodyCss:{"min-height":dialog_height+"px"},
-						buttons: {saveBtn:{text:'Send',btnicon:'copycamp'} }
+                                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
+                                        headerEditable:false,
+                                        headerIcon : 'copycamp',
+                                        bodyCss:{"min-height":dialog_height+"px"},
+                                        buttons: {saveBtn:{text:'Send',btnicon:'copycamp'} }
 				});	
 				var email_preview ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-template-container">';
 					email_preview +='<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
@@ -319,23 +320,23 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				{
 					if(target.prevObject && target.prevObject[0].localName == 'span')
 					{
-						target = $.getObj(obj,"span");
-						camp_obj.$el.find('.stattype').parent().removeClass('active');
-						switch(target.attr("search"))
-						{
-							case "C":
-								camp_obj.$el.find('.sent').parent().addClass('active');
-								break;
-							case "P":
-								camp_obj.$el.find('.pending').parent().addClass('active');
-								break;
-							case "S":
-								camp_obj.$el.find('.scheduled').parent().addClass('active');
-								break;
-							case "D":
-								camp_obj.$el.find('.draft').parent().addClass('active');
-								break;
-						}						
+                                            target = $.getObj(obj,"span");
+                                            camp_obj.$el.find('.stattype').parent().removeClass('active');
+                                            switch(target.attr("search"))
+                                            {
+                                                    case "C":
+                                                            camp_obj.$el.find('.sent').parent().addClass('active');
+                                                            break;
+                                                    case "P":
+                                                            camp_obj.$el.find('.pending').parent().addClass('active');
+                                                            break;
+                                                    case "S":
+                                                            camp_obj.$el.find('.scheduled').parent().addClass('active');
+                                                            break;
+                                                    case "D":
+                                                            camp_obj.$el.find('.draft').parent().addClass('active');
+                                                            break;
+                                            }						
 					}
 					var dateStart = target.attr('dateStart');
 					var dateEnd = target.attr('dateEnd');
@@ -416,7 +417,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					placeholder: 'Search Campaigns',
 					gridcontainer: 'camps_grid',
 					showicon: 'yes',
-                    iconsource: 'campaigns',
+                                        iconsource: 'campaigns',
 					countcontainer: 'no_of_camps'
 				 });				 
 				 camp_obj.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
@@ -488,18 +489,20 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					this.$el.find("#target-camps").html(list_html);
 
 					this.$("#camps_grid").bmsgrid({
-									useRp : false,
-									resizable:false,
-									colresize:false,
-									lazyLoading:_.bind(this.appendCampaigns,this),
-									//height:this.app.get('wp_height')-122,
-									height:'100%',
-									usepager : false,
-									colWidth : ['100%','70px','140px']
+                                            useRp : false,
+                                            resizable:false,
+                                            colresize:false,
+                                            lazyLoading:_.bind(this.appendCampaigns,this),
+                                            //height:this.app.get('wp_height')-122,
+                                            height:'100%',
+                                            usepager : false,
+                                            colWidth : ['100%','70px','140px']
 					});
 					this.$("#camps_grid tr td:nth-child(1)").attr("width","100%");
 					this.$("#camps_grid tr td:nth-child(2)").attr("width","90px");
-					this.$("#camps_grid tr td:nth-child(3)").attr("width","140px");                                    
+					this.$("#camps_grid tr td:nth-child(3)").attr("width","140px");
+                                        this.$("#camps_grid tr .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                                        this.$("#camps_grid tr td:nth-child(1) .report").click(_.bind(this.showChart,this))
 				}
 				else
 					this.$("#area_copy_campaign .bmsgrid").remove();
@@ -508,10 +511,11 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 					this.$("#camps_grid tr:last-child").removeAttr("data-load");
 				}
 				this.$el.find("#total_templates .badge").html(camp_list_json.totalCount);
-                this.app.showLoading(false,this.$("#target-camps"));
+                                this.app.showLoading(false,this.$("#target-camps"));
 				this.$el.find(".taglink").click(_.bind(function(obj){
-                            camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
-                        },this));
+                                    camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
+                                },this));
+                                
 			},			
 			makecamprows: function (val,extraDiv){
 				var camp_obj = this;				
@@ -534,7 +538,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var editClass = 'notEditable';
 				if(val[0].status == 'P' || val[0].status == 'C')
 				{
-					chartIcon = '<div class="campaign_stats"><a class="icon report"></a></div>';
+					chartIcon = '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
 				}
 				if(val[0].status == 'D' || val[0].status == 'S')
 				{
@@ -655,6 +659,68 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				else{
 					this.getallcampaigns();
 				}
-			}                       
+			},
+                        showChart:function(obj){
+                            var _ele = $.getObj(obj,"div");
+                            var left_minus = 96;
+                            var ele_offset = _ele.offset();                    
+                            var ele_height =  _ele.height();
+                            var top = ele_offset.top + ele_height - 134;
+                            var left = ele_offset.left-left_minus;      
+                            var _this = this;                            
+                            var camp_id= _ele.parents("tr").attr("id").split("_")[1];
+                            this.$(".campaign-name").html( _ele.parents("tr").find("h3 a.campname").text()); //Setting name of Campaign in Chart
+                            this.app.showLoading("Loading Chart...",this.$(".cstats .chart-area"));                            
+                            if(!this.chartPage){
+                                require(["reports/campaign_pie_chart"],function(chart){                                    
+                                    _this.chartPage = new chart({page:_this,legend:'none',chartArea:{width:"95%",height:"95%",left:'0px',top:'0px'}});
+                                    _this.$(".campaign-chart").html(_this.chartPage.$el);
+                                    _this.chartPage.$el.css({"width":"280px","height":"280px"});                                   
+                                    _this.loadChart(camp_id);
+                                });
+                            }
+                            else{
+                                 this.loadChart(camp_id);
+                            }
+                                                        
+                            
+                            this.$(".cstats").css({"left":left+"px","top":top+"px"}).show();
+                        },
+                        closeChart:function(){
+                            this.$(".cstats").hide();
+                        },
+                        loadChart:function(camp_id){                            
+                            var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=stats";                  
+                            URL +="&campNums="+camp_id;       
+                            if(this.states_call){
+                                this.states_call.abort();
+                                this.states_call = null;
+                            }
+                            this.chart_data = {clickCount:0,conversionCount:0,openCount:0,pageViewsCount:0,sentCount:0};
+                            this.states_call = jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){                                
+                                var camp_json = jQuery.parseJSON(xhr.responseText);                                
+                                this.app.showLoading(false,this.$(".cstats .chart-area"));                                   
+                                _.each(camp_json.campaigns[0], function(val) {                                    
+                                   this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                                   this.chart_data["conversionCount"] = this.chart_data["conversionCount"] +parseInt(val[0].conversionCount);                                                                                                            
+                                   this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
+                                   this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].openCount);                                                                                                                                                
+                               },this);
+                                var _data =[
+                                 ['Action', 'Count'],
+                                   ['Opens',   this.chart_data["openCount"]],
+                                   ['Page Views',       this.chart_data["pageViewsCount"]],
+                                   ['Conversions',  this.chart_data["conversionCount"]],
+                                   ['Clicks',    this.chart_data["clickCount"]]
+                               ];
+
+                               this.chartPage.createChart(_data);                               
+                               _.each(this.chart_data,function(val,key){
+                                   this.$("."+key).html(this.app.addCommas(val));
+                               },this);
+                               
+                            },this));
+                      }
+                        
 		});
 });

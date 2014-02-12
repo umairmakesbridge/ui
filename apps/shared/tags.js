@@ -423,7 +423,7 @@
   $.fn.tags.Constructor = Tags
 
   $.fn.tags.defaults = {
-    template: '<div class="tags-contents" style="display: inline-block;"><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="showtooltip ellipsis" style="display:none" data-original-title="More Tags">...</span><div class="addtag"><a class="showtooltip" data-original-title="Add Tag"><strong>+</strong></a></div></div>',
+    template: '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="showtooltip ellipsis" style="display:none" data-original-title="More Tags">...</span><div class="addtag"><a class="showtooltip" data-original-title="Add Tag"><strong>+</strong></a></div></div>',
     dialog:'<div class="tagbox custom_popup"><input type="text" placeholder="Add Tag" class="tag-input" maxlength="30"><a class="btn-green savebtn left" id="add_tag_btn"><span>Add</span><i class="icon save"></i></a><a class="btn-gray right" id="tag_box_close"><span>Close</span><i class="icon cross"></i></a></div>;',
     toolbar:'<div class="tooltip tags-div custom_popup" style="display:none"><a class="right"><span class="icon delete"></span></a><a class="left"><span class="icon edit"></span></a></div>',
     tags:'',

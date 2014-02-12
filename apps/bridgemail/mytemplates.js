@@ -28,7 +28,10 @@ function (template) {
             render: function () {
                this.total_count = 0;
                this.$el.html(this.template({}));
-               this.app = this.options.app;           
+               this.app = this.options.app;
+               if(this.options.params && this.options.params.action){
+                this.action = this.options.params.action;
+               }
                
             }
             /**
@@ -49,6 +52,10 @@ function (template) {
                     _this.$el.html(page.$el);                            
                     page.init();
                     _this.addNewTemplateBtn.click(_.bind(page.createTemplate,page));
+                    if(_this.action){
+                        page.createTemplate();
+                        $("#create-template-container .loading").remove();
+                    }
                 })
             },
             addCountHeader:function(){
@@ -65,13 +72,13 @@ function (template) {
                     var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title:dialog_title,
-                                      css:{"width":"650px","margin-left":"-325px"},
-                                      bodyCss:{"min-height":"100px"},							   
-                                      buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+                        css:{"width":"650px","margin-left":"-325px"},
+                        bodyCss:{"min-height":"100px"},							   
+                        buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["newcampaign"],function(newcampPage){                                     
-                            var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog});
+                            var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog,templateID:templateId});
                             dialog.getBody().html(mPage.$el);
                             dialog.saveCallBack(_.bind(mPage.createCampaign,mPage,templateId));
                     });

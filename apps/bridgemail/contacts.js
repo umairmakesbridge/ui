@@ -274,7 +274,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 }
                 else{
                     this.$(".total-text").html(_text)
-                }                
+                }     
+                this.$("#total_selected").hide();
             },
             searchByTag:function(tag){
                this.searchTxt = '';

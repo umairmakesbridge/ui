@@ -10,8 +10,13 @@ function ($,Backbone, _,app,Wizard, template) {
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
                         $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
-                        if($("#wstabs li").length==1){
-                           $(".tw-toggle button:first").click();
+                        if($("#wstabs li").length==1){                           
+                            $(".tw-toggle button").removeClass("active");
+                            $(".tw-toggle button:first").addClass("active");
+                            $("#tiles").show();                      
+                            $('#workspace').animate({left:'150%'},function(){
+                                $(this).hide();
+                            });    
                         }
                         else{
                            $("#wstabs li:first").click();

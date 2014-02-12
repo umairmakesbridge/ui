@@ -5,6 +5,7 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
    return Backbone.View.extend({       
       id: 'main-container', 
       tagName :'div',
+      classNmae:'container',
       wp_counter:0,
       events: {
           'click .tw-toggle button':function(obj){
@@ -15,20 +16,18 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
                       $("#tiles").show();                      
                       $('#workspace').animate({left:'150%'},function(){
                           $(this).hide();
-                      });
-                                            
+                      });                                            
                   }
               }
               else{
                   if(!$(obj.target).hasClass("active")){
+                     if(this.$el.find("#wstabs li").length>1){ 
                        $(".tw-toggle button").removeClass("active");
                        $(obj.target).addClass("active"); 
                        $("#tiles").hide();
                        $('#workspace').show();
-                       $('#workspace').animate({left:'0%'});  
-                       
-                       if(this.$el.find("#wstabs li").length==1){
-                          this.openCampaign();                                                       
+                       $('#workspace').animate({left:'0px'});                         
+                                                                                       
                       }
                   }
               }
@@ -53,9 +52,14 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
           }
           ,
           'click #wp_li_0' : function(){
-              this.addWorkSpace({type:''});
-              
-          }
+              this.addWorkSpace({type:''});              
+          },
+          'click .new-campaign':'createCampaign',
+          'click .new-template':'createTemplate',
+          'click .view-contacts':'viewContacts',
+          'click .campaign-listing':'campaignListing',
+          'click .template-gallery':'templateGallery',
+          'click .camapign-report' :'camapignReport'
           
       },
       initialize:function(){
@@ -67,7 +71,10 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
       ,      
       render:function(){       
           // Render header, main container, footer and news panel          
-          this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
+          //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
+          this.app = this.options.app;   
+          this.$el.append(this.header.$el,LandingPage, this.footer.$el);         
+          
       },
       addWorkSpace:function(options){
            var workspace_li = $("#wstabs li[workspace_id='"+options.workspace_id+"']");
@@ -107,8 +114,11 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
                 });
            }
            else{
-               if(!workspace_li.hasClass("active")){
-                    workspace_li.click();
+               if(!this.$(".tw-toggle button:last-child").hasClass("active")){
+                    this.$(".tw-toggle button:last-child").click();
+               }
+               if(!workspace_li.hasClass("active")){                  
+                   workspace_li.click();
                }
            }
            
@@ -155,6 +165,117 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
             ]
           });                               
       }
+      
+      //Handling Dashboard Scripts for animation stuff. 
+     
+      ,
+      
+      dashBoardScripts:function(){
+          
+          this.$('ul.rightnav > li.logout > a').click(_.bind(function(){
+                this.$( ".lo-confirm" ).animate({right: "0"}, 500 );
+                this.$( "ul.rightnav > li.logout span" ).css({display: "block"}, 500 );
+                this.$( "ul.rightnav > li.logout i.logout" ).addClass( "active" );
+          },this));
+          
+          this.$('a.lo-no').click(_.bind(function(){
+                 this.$( ".lo-confirm" ).animate({right: "-250px"}, 500 );
+                 this.$( "ul.rightnav > li.logout span" ).css({display: "none"}, 500 );
+                 this.$( "ul.rightnav > li.logout i.logout" ).removeClass( "active" );
+          },this));
+          
+          //Video Buttons 
+          this.$('.videobtn').click(_.bind(function(event){
+                this.$(".slideoverlay").fadeIn("slow");
+                this.$( ".videopop" ).fadeIn("slow");
+          },this));
+				
+               
+         this.$('.icon-menu').click(_.bind(function(event){
+            var li = $.getObj(event,"li"); 
+            if(li.hasClass("active")){
+                li.removeClass( "active" );
+                this.$(".slideoverlay").fadeOut("slow");
+                this.$( ".slidenav" ).animate({left: "-300px"}, 500 );
+            }
+            else{
+                li.addClass( "active" );
+                this.$(".slideoverlay").fadeIn("slow");
+                this.$( ".slidenav" ).animate({left: "0"}, 500 );
+            }
+             event.stopPropagation();
+        },this));
+                                               					
+        //Tiles Event Handling        
+        this.$('#tiles .box').click(function(){
+                if($(this).hasClass( "expanded")){
+                    $(".tile-shortcuts").fadeOut();
+                    setTimeout(function() {
+                            $('#tiles .box ').removeClass( "expanded");
+                    }, 500);
+                }
+                else{
+                    $(this).addClass( "expanded");
+                    $(".tile-shortcuts", this).delay('slow').fadeIn();
+                }
+            });
+	this.$(".popup").click(_.bind(this.showPopup,this));
+       },
+       showPopup:function(e){
+           
+           var _arr = {"_liveChat":{title:"Live Chat",cssClass:'livechatdialog',url:"https://server.iad.liveperson.net/hc/69791877/?cmd=file&file=visitorWantsToChat&site=69791877&byhref=1&imageUrl=https://server.iad.liveperson.net/hcp/Gallery/ChatButton-Gallery/English/General/1a/"},
+                       "_knowledgeBase":{title:"Knowledgebase",cssClass:'knowledgebasedialog',url:"http://server.iad.liveperson.net/hc/s-69791877/cmd/kbresource/kb-5320825346138970912/front_page!PAGETYPE"},
+                       "_supportMessage":{title:"Support message",cssClass:'supportmessagedialog',url:"http://server.iad.liveperson.net/hc/s-69791877/web/ticketpub/msgcontroller.jsp"} }
+                   
+           var target = $.getObj(e,"a");    
+           var _id = target.attr("id");
+           var link =  _arr[_id].url;
+           window.open(link,'HELPSUPPORT_'+_id,'width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');
+           /*var dialog_width = $(document.documentElement).width()-60;
+           var dialog_height = $(document.documentElement).height()-182;
+           var dialog = this.app.showDialog({title:_arr[_id].title,
+                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                    headerEditable:false,                 
+                    headerIcon : _arr[_id].cssClass,
+                    newWindow : true,
+                    bodyCss:{"min-height":dialog_height+"px"}
+          });
+          var preview_url = _arr[_id].url;                                                            
+          var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+          dialog.getBody().html(preview_iframe); */    
+       },
+       createCampaign:function(){
+            var camp_obj = this;
+            var dialog_title = "New Campaign";
+            var dialog = this.app.showDialog({title:dialog_title,
+                css:{"width":"650px","margin-left":"-325px"},
+                bodyCss:{"min-height":"100px"},							   
+                headerIcon : 'new_headicon',
+                buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+            });
+            this.app.showLoading("Loading...",dialog.getBody());
+            require(["newcampaign"],function(newcampPage){                                     
+                var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog});
+                dialog.getBody().html(mPage.$el);
+                dialog.saveCallBack(_.bind(mPage.createCampaign,mPage));
+            });
+       },
+       createTemplate:function(){            
+          this.addWorkSpace({type:'',title:'Template Gallery',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates',params: {action:'new'}});
+       },
+       viewContacts:function(){
+           this.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true,tab_icon:'contactlisting'});
+       },
+       campaignListing:function(){
+            this.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns','addAction':true,tab_icon:'campaignlisting'});
+       },
+       templateGallery:function(){            
+          this.addWorkSpace({type:'',title:'Template Gallery',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates'});
+       },
+       camapignReport:function(){
+           this.addWorkSpace({type:'',title:'Reports',url : 'reports/campaign_report',workspace_id: 'camp_reports',tab_icon:'reports',noTags:true});
+       }
+       
       
    });
    

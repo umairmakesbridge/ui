@@ -371,7 +371,7 @@
 		});
 
 		rp.click(function(){return false;}).hide();
-		return this;
+		return {control:this,panel:rp};
 	}
 
 })(jQuery);

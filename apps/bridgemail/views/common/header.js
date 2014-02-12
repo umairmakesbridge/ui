@@ -1,24 +1,22 @@
 define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header.html'],
 	function ($, Backbone, _, app,  template) {
 		'use strict';
-		return Backbone.View.extend({
-			id: 'header',
-                        tagName: 'header',
+		return Backbone.View.extend({			
+                        tagName: 'div',
                         events: {
                             'click .dropdown-menu li':function(obj){              
                               app.openModule(obj);
                             },
-                            
                             /*Menues*/
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
                                  app.mainContainer.addWorkSpace({type:'',title:'Campaigns',url:'campaigns',workspace_id: 'campaigns','addAction':true,tab_icon:'campaignlisting'});
-                            },
+                            },                            
                             'click .contacts-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true,tab_icon:'contactlisting'});
                             },
-                            'click .studio_bounced-email-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
+                            'click .reports-li':function(obj){
+                                app.mainContainer.addWorkSpace({type:'',title:'Reports',url : 'reports/campaign_report',workspace_id: 'camp_reports',tab_icon:'reports'});
                             }
                             ,
                             'click .studio_ftp-uploads-li':function(obj){

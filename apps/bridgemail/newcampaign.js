@@ -4,32 +4,35 @@ function (template) {
         return Backbone.View.extend({                
                 events: {
                     "keyup #camp_name":function(e)
-					{
-						if(e.keyCode==13){
-							 this.createCampaign();
-						 }
-					}
+                    {
+                            if(e.keyCode==13){
+                                     this.createCampaign();
+                             }
+                    }
                  },
                 initialize: function () {
                         this.template = _.template(template);				
                         this.render();
-						var newcampdialog = this.options.newcampdialog;
-						var app = this.options.app;
-						app.showLoading(false,newcampdialog.getBody());
+                        var newcampdialog = this.options.newcampdialog;
+                        var app = this.options.app;
+                        if(this.options.templateID){
+                            this.templateID = this.options.templateID
+                        }
+                        app.showLoading(false,newcampdialog.getBody());
                 },
 
                 render: function () {
                         this.app = this.options.app;						
-						this.curview = this;
+			this.curview = this;
                         this.$el.html(this.template({}));
                 },
-				createCampaign:function(templateID){
-					var curview = this;
-					var camp_obj = curview.options.camp;                   
-				   var el = curview.$el;
-				   var app = curview.app;
-				   var appMsgs = curview.app.messages[0];
-				   var newcampdialog = curview.options.newcampdialog;
+		createCampaign:function(templateID){
+                    var curview = this;
+                    var camp_obj = curview.options.camp;                   
+                    var el = curview.$el;
+                    var app = curview.app;
+                    var appMsgs = curview.app.messages[0];
+                    var newcampdialog = curview.options.newcampdialog;
 				  
 				   if(el.find('#camp_name').val() == '')
 					{						
@@ -44,8 +47,8 @@ function (template) {
 						app.showLoading("Creating campaign...",curview.$el);
 						var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                          var post_data = { type: "create",campName:el.find('#camp_name').val() };
-                             if(templateID){
-                                post_data['templateNumber'] = templateID;
+                             if(this.templateID){
+                                post_data['templateNumber'] = this.templateID;
                              }
                          $.post(URL,post_data )
                           .done(function(data) {  

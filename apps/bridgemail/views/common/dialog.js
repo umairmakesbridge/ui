@@ -12,7 +12,8 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                             },
                             'click .btn-close':function(){
                                 this.hide();
-                            }
+                            },
+                            'click .innew-window':'popoutWindow'
                          },
 			initialize: function () {
 				this.template = _.template(template);				
@@ -58,7 +59,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                       })
                                  });
                              }
-                             
+                             if(this.options.newWindow){
+                                 this.$(".innew-window").show();
+                                 
+                             }
+                             this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 			},                        
                         show:function(){                          
                           this.$el.modal({backdrop: 'static',keyboard: false});
@@ -84,6 +89,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         },
                         saveCallBack2:function(update){
                             this.saveCall2 = update;
+                        },
+                        popoutWindow:function(){
+                            var link = this.$("iframe")[0].src;
+                            window.open(link,'WFMTRX_','width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');
+                            this.hide();
                         }
                         
 		});

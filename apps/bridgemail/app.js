@@ -1,6 +1,6 @@
 define([
-	'jquery', 'underscore', 'backbone','jquery.isotope','bootstrap','views/common/dialog', 'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox'
-], function ($, _, Backbone, isotope, bootstrap,bmsDialog) {
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async'
+], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
 		messages:[{'CAMP_subject_empty_error':'Subject cannot be empty',
@@ -11,12 +11,12 @@ define([
                             'CAMP_defaultreplyto_format_error':'Please enter correct email address format',
                             'CAMP_defaultreplyto_empty_error':'Reply field cannot be empty',
                             'CAMP_defaultfromname_empty_error': 'From name cannot be empty',
-							'CAMP_draft_success_msg': 'Campaign status is Draft',
-							'CAMP_copy_success_msg': 'Campaign copy is complete',
-							'CAMP_subject_info' : 'Subject of the email',
-							'CAMP_femail_info' : 'From email of the email',
-							'CAMP_fname_info' : 'From name of the email',
-							'CAMP_replyto_info' : 'Reply to email of the email',
+                            'CAMP_draft_success_msg': 'Campaign status is Draft',
+                            'CAMP_copy_success_msg': 'Campaign copy is complete',
+                            'CAMP_subject_info' : 'Subject of the email',
+                            'CAMP_femail_info' : 'From email of the email',
+                            'CAMP_fname_info' : 'From name of the email',
+                            'CAMP_replyto_info' : 'Reply to email of the email',
                             'SF_userid_empty_error':'User ID cannot be empty',
                             'SF_userid_format_error':'Invalid User ID. Hint: IDs are in an email format',
                             'SF_pwd_empty_error':'Enter password',
@@ -27,25 +27,25 @@ define([
                             'NS_accid_empty_error':'Account id cannot be empty',
                             'NS_email_format_error':'Please enter correct email format',
                             'CT_copyname_empty_error':'Name cannot be empty',
-							'CSVUpload_wrong_filetype_error':'CSV format only. Watch video on how to save an excel file to CSV.',
-							'CSVUpload_cancel_msg':'Your CSV upload has been cancelled',
+                            'CSVUpload_wrong_filetype_error':'CSV format only. Watch video on how to save an excel file to CSV.',
+                            'CSVUpload_cancel_msg':'Your CSV upload has been cancelled',
                             'MAPDATA_newlist_empty_error':'Enter a list name',
-							'MAPDATA_newlist_exists_error':'List name already exists',
+                            'MAPDATA_newlist_exists_error':'List name already exists',
                             'MAPDATA_extlist_empty_error':'Choose a list',
                             'MAPDATA_email_format_error':'Please enter correct email address format',
-							'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
-							'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
-							'MAPDATA_customfield_placeholder':'New custom field',
+                            'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
+                            'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
+                            'MAPDATA_customfield_placeholder':'New custom field',
                             'TRG_basic_no_field':'Select a field',
                             'TRG_basic_no_matchvalue':'Please provide match field value',
                             'TRG_score_novalue' : 'Enter a score value',
                             'TRG_form_noform' : 'Choose a form',
                             'CRT_tarname_empty_error' : 'Target name cannot be empty',							
                             'CAMPS_campname_empty_error' : 'Campaign name cannot be empty',
-							'CAMPS_delete_confirm_error' : 'Are you sure you want to delete?',
-							'CAMPS_name_empty_error' : 'No campaign found',							
-							'CAMPS_html_empty_error' : 'Campaign has not content',
-							'CAMPS_delete_success_msg' : 'Campaign deleted',
+                            'CAMPS_delete_confirm_error' : 'Are you sure you want to delete?',
+                            'CAMPS_name_empty_error' : 'No campaign found',							
+                            'CAMPS_html_empty_error' : 'Campaign has not content',
+                            'CAMPS_delete_success_msg' : 'Campaign deleted',
                             'SUB_updated': 'Subscriber updated successfully',
 		}],
 		initialize: function () {
@@ -65,18 +65,19 @@ define([
 			if (this.get('env') != 'production') {
                             window.BRIDGEMAIL = this;
 			}
+                        this.getUser();
 		},
-
 		start: function (Router, MainContainer, callback) {
 			//Create the router
 			this.router = new Router('landing');    
 			//Wait for DOM to be ready
 			$(_.bind(function () {
                                 //Create the main container
-				this.mainContainer = new MainContainer();				              
+				this.mainContainer = new MainContainer({app:this});				              
                                 
                                 //attaching main container in body                                
                                 $('body').append(this.mainContainer.$el);
+                                this.mainContainer.dashBoardScripts();
                                 this.initScript();                                
 				//call the callback
 				(callback || $.noop)();
@@ -84,47 +85,9 @@ define([
 		},
                 initScript:function(){
                     
-                    this.autoLoadImages();
-                    var $tiles = $('#tiles');            
-                    // add randomish size classes
-                    $tiles.find('.box').each(function(){
-                      var $this = $(this),
-                          number = parseInt( $this.find('.number').text(), 10 );
-                      if ( number % 7 % 2 === 1 ) {
-                        $this.addClass('width2');
-                      }
-                      if ( number % 3 === 0 ) {
-                        $this.addClass('height2');
-                      }
-                    });
-
-                    $tiles.isotope({
-                      itemSelector: '.box',
-                      masonry : {
-                        columnWidth : 120
-                      }
-                    });
-                    // change size of clicked box
-                    $tiles.delegate( '.box', 'click', function(){
-                      var expanded = $("#tiles .box.expand");  
-                      if(!$(this).hasClass("expand")){
-                        $(expanded).removeClass('expand');
-                        $(this).addClass('expand');
-                       
-                      }
-                      else{
-                         $(this).removeClass('expand'); 
-                      }
-                      $tiles.isotope('reLayout');                      
-                    });
-                    // toggle variable sizes of all boxs
-                    $('#toggle-sizes').find('a').click(function(){
-                      $tiles
-                        .toggleClass('variable-sizes')
-                        .isotope('reLayout');
-                      return false;
-                    });
-                    
+                    this.autoLoadImages();      
+                    this.setInfo();
+                    var app = this;
                     $("body").click(function(){
                        $(".custom_popup").hide(); 
                        $(".tagbox-addbox").remove(); 
@@ -134,6 +97,11 @@ define([
                        if(getCmpField.attr("process-id")){
                             $(".ws-content.active").find(".camp_header .c-name .edited").hide();                        
                             $(".ws-content.active").find(".camp_header .c-name h2,#campaign_tags").show();                                                    
+                        }
+                        if(app.mainContainer.$(".icon-menu").hasClass("active")){
+                            app.mainContainer.$(".icon-menu").removeClass( "active" );
+                            app.mainContainer.$(".slideoverlay").fadeOut("slow");
+                            app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500 );
                         }
                     });
                     
@@ -157,13 +125,26 @@ define([
                            }
                        }
                    });
+                   
+                   //Ajax Error handling
                    $( document ).ajaxError(function( event, jqxhr, settings, exception ) {
-                        
+                        console.log(event + "\n-Jxhr Object=" + jqxhr + "\n-Setttings=" + settings + -"\n-Exception="+exception);
                    });
                    //Cache Clear time set
                    this.clearCache();
                  
              },
+             getUser:function(){
+                 var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.get("bms_token")+"&type=get";
+                 jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
+                    var _json = jQuery.parseJSON(xhr.responseText);
+                    if(this.checkError(_json)){
+                          return false;
+                    }
+                    this.set("user",_json)
+                
+                },this));
+            },
              clearCache:function(){
                 window.setTimeout(_.bind(this.removeAllCache,this),1000*60*30);
              },
@@ -208,16 +189,17 @@ define([
                  if(message){                    
                     var inlineStyle = (option && option.top) ? ('top:'+option.top) : '';
                     var fixed_position = (option && option.fixed)?"fixed":"";
-					var cl = 'error';
-					var title = 'Error';
-					if(option && option.type == 'caution')
-					{
-						cl = 'caution';
-						title = 'Caustion';
-					}
-                    $(container).append('<div class="overlay '+fixed_position+'"> <div class="messagebox '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> </div>');
-                    $(".overlay .closebtn").click(function(){
-                       $(".overlay").fadeOut("fast",function(){
+                    var cl = 'error';
+                    var title = 'Error';
+                    if(option && option.type == 'caution')
+                    {
+                            cl = 'caution';
+                            title = 'Caution';
+                    }
+                    var message_box = $('<div class="messagebox messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
+                    $(container).append(message_box);
+                    message_box.find(".closebtn").click(function(){
+                      message_box.fadeOut("fast",function(){
                            $(this).remove();
                        }) 
                     });
@@ -225,31 +207,36 @@ define([
              },
              showAlertDetail:function(message,container){
                  if(message){                                        
-                    var dialogHTML = '<div class="overlay"><div class="messagebox delete"><h3>'+message.heading+'</h3>';                    
+                    var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete"><h3>'+message.heading+'</h3>';                    
                     var btn = '<div class="btns"><a class="btn-red btn-ok"><span>Yes, Delete</span><i class="icon delete"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
-                    dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div></div>';
-                    $(container).append(dialogHTML);
-					$(".overlay .btn-ok").click(function(){
-						if(message.callback)
-							message.callback();
-					});					
-                    $(".overlay .btn-gray").click(function(){
-                       $(".overlay").fadeOut("fast",function(){
+                    dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div>';
+                    var dialog = $(dialogHTML);
+                    $(container).append(dialog);
+                    dialog.find(".btn-ok").click(function(){
+                        dialog.fadeOut("fast",function(){
+                           $(this).remove();
+                        });
+                        if(message.callback)
+                                message.callback();
+                    });		
+                    
+                    dialog.find(".btn-gray").click(function(){
+                       dialog.fadeOut("fast",function(){
                            $(this).remove();
                        })
                     });
                  }
              },
-			 showLoginExpireAlert:function(message,container){
+             showLoginExpireAlert:function(message,container){
                  if(message){                                        
                     var dialogHTML = '<div class="overlay"><div class="messagebox caution"><h3>'+message.heading+'</h3>';                    
                     var btn = '<div class="btns"><a href="/pms/" class="btn-green btn-ok"><span>Login</span><i class="icon next"></i></a></div><div class="clearfix"></div>';
                     dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div></div>';
                     $(container).append(dialogHTML);
-					$(".overlay .btn-ok").click(function(){
-						if(message.callback)
-							message.callback();
-					});                    
+                    $(".overlay .btn-ok").click(function(){
+                            if(message.callback)
+                                    message.callback();
+                    });                    
                  }
              },
              showMessge:function(msg){
@@ -261,11 +248,11 @@ define([
                  $(".global_messages").slideDown("medium",function(){
                      setTimeout('$(".global_messages").hide()',4000);
                  });
-				 $(".global_messages .closebtn").click(function(){
-					 $(".global_messages").fadeOut("fast",function(){
-						 $(this).remove();						 
-					 }) 
-				  });
+                $(".global_messages .closebtn").click(function(){
+                        $(".global_messages").fadeOut("fast",function(){
+                                $(this).remove();						 
+                        }) 
+                 });
              },
              encodeHTML:function(str){
                 str = str.replace(/:/g,"&#58;");
@@ -410,14 +397,13 @@ define([
             showError:function(params){
                 if(params.control){
                     params.control.find(".inputcont").addClass("error");
-					params.control.find(".inputcont").append('<span class="errortext"><i class="erroricon"></i><em>'+ params.message +'</em></span>');					
-                    //params.control.find(".error-mark").attr('data-content',params.message);
-                    //params.control.find(".error-mark").popover({'placement':'left','trigger':'hover',delay: { show: 0, hide:0 },animation:false});	
+                    params.control.find(".inputcont").append('<span class="errortext"><i class="erroricon"></i><em>'+ params.message +'</em></span>');					                    
                 }
             },
             hideError:function(params){
                 if(params.control){
-                    params.control.find(".inputcont").removeClass("error")                    
+                    params.control.find(".inputcont").removeClass("error");
+                    params.control.find(".inputcont span.errortext").remove();					
                 }
             },
             addCommas :function(nStr){
@@ -431,10 +417,22 @@ define([
                     }
                     return x1 + x2;
             },
-			showInfo: function(control,message)
-			{
-				control.append('<span class="fieldinfo"><i class="icon"></i><em>'+ message +'</em></span>');
-			}
+            showInfo: function(control,message)
+            {
+                    control.append('<span class="fieldinfo"><i class="icon"></i><em>'+ message +'</em></span>');
+            },
+            setInfo:function(){
+                if(this.get("user")){
+                    var _user = this.get("user");
+                    this.mainContainer.$(".user-name").html(_user.firstName +" "+ _user.lastName);
+                    if(!_user.firstName && !_user.lastName){
+                        this.mainContainer.$(".user-name").html(_user.firstName);
+                    }
+                }
+                else{
+                   window.setTimeout(_.bind(this.setInfo,this),200); 
+                }
+            }
 	});
 
 	return new App();
