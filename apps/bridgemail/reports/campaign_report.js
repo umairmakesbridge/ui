@@ -252,7 +252,7 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                            _this.chart_data["googlePlusCount"] = _this.chart_data["googlePlusCount"] + parseInt(val[0].googlePlusCount);
                            _this.chart_data["linkedInCount"] = _this.chart_data["linkedInCount"] + parseInt(val[0].linkedInCount);
                            _this.chart_data["openCount"] = _this.chart_data["openCount"] + parseInt(val[0].openCount);
-                           _this.chart_data["pageViewsCount"] = _this.chart_data["pageViewsCount"] + parseInt(val[0].openCount);
+                           _this.chart_data["pageViewsCount"] = _this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
                            _this.chart_data["pendingCount"] = _this.chart_data["pendingCount"] + parseInt(val[0].pendingCount);
                            _this.chart_data["pinterestCount"] = _this.chart_data["pinterestCount"] + parseInt(val[0].pinterestCount);
                            _this.chart_data["sentCount"] = _this.chart_data["sentCount"] + parseInt(val[0].sentCount);
@@ -450,7 +450,8 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                        this.s_chart_data["clickCount"] = this.s_chart_data["clickCount"] + parseInt(val[0].clickCount);
                        this.s_chart_data["conversionCount"] = this.s_chart_data["conversionCount"] +parseInt(val[0].conversionCount);                                                                                                            
                        this.s_chart_data["openCount"] = this.s_chart_data["openCount"] + parseInt(val[0].openCount);
-                       this.s_chart_data["pageViewsCount"] = this.s_chart_data["pageViewsCount"] + parseInt(val[0].openCount);                                                                                                                                                
+                       this.s_chart_data["pageViewsCount"] = this.s_chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);                                                                                                                                                
+                       this.s_chart_data["sentCount"] = this.s_chart_data["sentCount"] + parseInt(val[0].sentCount);                                                                                                                                                
                    },this);
                     var _data =[
                      ['Action', 'Count'],

@@ -45,7 +45,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .mergefields-box' :function(obj){
                           this.showMergeFieldDialog(obj);
                       },
-					  'click #drop4' :function(obj){
+                      'click #drop4' :function(obj){
                           this.$el.find('.mergefields-box').click();
                       },
                       'change #campaign_isFooterText':function(){
@@ -171,7 +171,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 gridcontainer: 'camp_list_grid',
                                 showicon: 'yes',
                                 iconsource: 'campaigns',
-								countcontainer: 'copy_no_of_camps'
+				countcontainer: 'copy_no_of_camps'
                          });
                          this.$el.find('div#listssearch').searchcontrol({
                                 id:'list-search',
@@ -580,24 +580,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       e.stopPropagation();
                   });                  
                   previewIconCampaign.click(function(e){
-					  	active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
-                      	var camp_name = active_ws.find("#workspace-header").html();
-                       if(camp_obj.states.step2.htmlText!==""){                           
-                            var dialog_width = $(document.documentElement).width()-60;
-                            var dialog_height = $(document.documentElement).height()-182;
-                            var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
-                                      css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                                      headerEditable:false,
-                                      headerIcon : 'dlgpreview',
-                                      bodyCss:{"min-height":dialog_height+"px"},
-                                      buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                            });
-                            var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
-                            var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-                            dialog.getBody().html(preview_iframe);               
-                            dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));
-                        }
-                       e.stopPropagation();     
+                       //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
+                      	var camp_name = active_ws.find("#workspace-header").html();                                                
+                        var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgpreview',
+                                  bodyCss:{"min-height":dialog_height+"px"},
+                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                        });
+                        var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
+                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+                        dialog.getBody().html(preview_iframe);               
+                        dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));                        
+                        e.stopPropagation();     
                   })
                   var camp_obj = this;
                   deleteIconCampaign.click(function(){
@@ -998,19 +996,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 					
                     if(el.find('#campaign_subject').val() == '')
                     {					   
-                            app.showError({
-                                    control:el.find('.subject-container'),
-                                    message:camp_obj.app.messages[0].CAMP_subject_empty_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.subject-container'),
+                                message:camp_obj.app.messages[0].CAMP_subject_empty_error
+                        });
+                        isValid = false;
                     }
                     else if(el.find('#campaign_subject').val().length > 100)
                     {						
-                            app.showError({
-                                    control:el.find('.subject-container'),
-                                    message:camp_obj.app.messages[0].CAMP_subject_empty_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.subject-container'),
+                                message:camp_obj.app.messages[0].CAMP_subject_empty_error
+                        });
+                        isValid = false;
                     }
                     else
                     {						
@@ -1018,11 +1016,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     if(el.find('#campaign_from_name').val() == '')
                     {						
-                            app.showError({
-                                    control:el.find('.fname-container'),
-                                    message:camp_obj.app.messages[0].CAMP_fromname_empty_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.fname-container'),
+                                message:camp_obj.app.messages[0].CAMP_fromname_empty_error
+                        });
+                        isValid = false;
                     }
                     else
                     {						
@@ -1030,47 +1028,47 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
                     {						
-                            app.showError({
-                                    control:el.find('.fnamedefault-container'),
-                                    message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
-                            });
-                            isValid = false;
+                        app.showError({
+                            control:el.find('.fnamedefault-container'),
+                            message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
+                        });
+                        isValid = false;
                     }
                     else
                     {						
-                            app.hideError({control:el.find(".fnamedefault-container")});
+                        app.hideError({control:el.find(".fnamedefault-container")});
                     }	
                     if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
                     {						
-                            app.showError({
-                                    control:el.find('.replyto-container'),
-                                    message:camp_obj.app.messages[0].CAMP_replyto_format_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.replyto-container'),
+                                message:camp_obj.app.messages[0].CAMP_replyto_format_error
+                        });
+                        isValid = false;
                     }
                     else
                     {						
-                            app.hideError({control:el.find(".replyto-container")});
+                        app.hideError({control:el.find(".replyto-container")});
                     }
                     if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
                     {						
-                            app.showError({
-                                    control:el.find('.replyemail-container'),
-                                    message:camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.replyemail-container'),
+                                message:camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
+                        });
+                        isValid = false;
                     }
                     else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
                     {						
-                            app.showError({
-                                    control:el.find('.replyemail-container'),
-                                    message:camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
-                            });
-                            isValid = false;
+                        app.showError({
+                                control:el.find('.replyemail-container'),
+                                message:camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
+                        });
+                        isValid = false;
                     }
                     else
                     {						
-                            app.hideError({control:el.find(".replyemail-container")});
+                        app.hideError({control:el.find(".replyemail-container")});
                     }	
 
 						
@@ -1322,8 +1320,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             }
                             camp_obj.mergeTags['basic'] = [];
                             camp_obj.mergeTags['custom'] = [];
-							camp_obj.mergeTags['salesRep'] = [];
-							camp_obj.mergeTags['links'] = [];
+                            camp_obj.mergeTags['salesRep'] = [];
+                            camp_obj.mergeTags['links'] = [];
                             $.each(mergeFields_json,function(key,val){
                                 if(val[2]=="B"){
                                     camp_obj.mergeTags['basic'].push(val);
@@ -1331,24 +1329,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 else if(val[2]=="C"){
                                     camp_obj.mergeTags['custom'].push(val);
                                 }
-								else if(val[2]=="S"){
+				else if(val[2]=="S"){
                                     camp_obj.mergeTags['salesRep'].push(val);
                                 }
-								else if(val[2]=="U"){
+                                else if(val[2]=="U"){
                                     camp_obj.mergeTags['links'].push(val);
                                 }
                             });
                             $.each(camp_obj.mergeTags['salesRep'],function(key,val){
-                                    camp_obj.allMergeTags.push({"type":"Sales Rep","name":val[1],"code":val[0]});
+                                camp_obj.allMergeTags.push({"type":"Sales Rep","name":val[1],"code":val[0]});
                             });
                             $.each(camp_obj.mergeTags['basic'],function(key,val){
-                                    camp_obj.allMergeTags.push({"type":"Basic Field","name":val[1],"code":val[0]});
+                                camp_obj.allMergeTags.push({"type":"Basic Field","name":val[1],"code":val[0]});
                             });
                             $.each(camp_obj.mergeTags['custom'],function(key,val){
-                                    camp_obj.allMergeTags.push({"type":"Custom Field","name":val[1],"code":val[0]});
+                                camp_obj.allMergeTags.push({"type":"Custom Field","name":val[1],"code":val[0]});
                             });
-							$.each(camp_obj.mergeTags['links'],function(key,val){
-                                    camp_obj.allMergeTags.push({"type":"Links","name":val[1],"code":val[0]});
+                            $.each(camp_obj.mergeTags['links'],function(key,val){
+                                camp_obj.allMergeTags.push({"type":"Links","name":val[1],"code":val[0]});
                             });
                             camp_obj.allMergeTags.sort(function(a, b){
                                     var a1= a.name, b1= b.name;
@@ -1358,7 +1356,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 
                             var fields_html = "<ul>";
                             $.each(camp_obj.allMergeTags,function(key,val){
-                                    fields_html +="<li mergeval='"+val.code+"' rel='"+ val.type +"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
+                                  fields_html +="<li mergeval='"+val.code+"' rel='"+ val.type +"'><span>"+val.type+"</span><div>"+val.name+"</div><a class='search-merge-insert'>Insert</a></li>";                                        
                             });
                             fields_html += "</ul>";
                             $(".searchfields .searchlist").html(fields_html);
@@ -1370,9 +1368,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                      active_ws.find("#"+input_field).val(merge_field);
                                     }
                                     else{
-                                            var caretPos = active_ws.find("#"+input_field)[0].selectionStart;
-                                            var textAreaTxt = active_ws.find("#"+input_field).val();
-                                            active_ws.find("#"+input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos) ); 
+                                       var caretPos = active_ws.find("#"+input_field)[0].selectionStart;
+                                       var textAreaTxt = active_ws.find("#"+input_field).val();
+                                       active_ws.find("#"+input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos) ); 
                                     }
                                     active_ws.find("#"+input_field+"_default").fadeIn("fast");
                                     $(".mergefields").hide();
@@ -1420,12 +1418,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$el.find("#target-lists").html(list_html);
                    
                     this.$el.find("#list_grid").bmsgrid({
-                            useRp : false,
-                            resizable:false,
-                            colresize:false,
-                            height:this.app.get('wp_height')-122,							
-                            usepager : false,
-                            colWidth : ['100%','90px']
+                        useRp : false,
+                        resizable:false,
+                        colresize:false,
+                        height:this.app.get('wp_height')-122,							
+                        usepager : false,
+                        colWidth : ['100%','90px']
                     });					                    
                     this.$("#list_grid tr td:first-child").attr("width","100%");
                     this.$("#list_grid tr td:last-child").attr("width","90px");	
@@ -1492,10 +1490,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         $.each(targets_list_json.filters[0], function(index, val) {					
                             target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
                             target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';
-                                                    var upd_date = moment(val[0].updationDate,'YYYY-M-D');
-                                                    var upd_date_new = upd_date.date() + ' ' + camp_obj.app.getMMM(upd_date.month()) + ', ' + upd_date.year();
+                            var upd_date = moment(val[0].updationDate,'YYYY-M-D');
+                            var upd_date_new = upd_date.date() + ' ' + camp_obj.app.getMMM(upd_date.month()) + ', ' + upd_date.year();
                             target_html += '<td><div><div class="time show" style="min-width:70px;"><strong><span><em>Updation Date</em>'+upd_date_new+'</span></strong></div><div id="'+val[0]["filterNumber.encode"]+'" class="action"><a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-gray edit-action"><span>Edit</span><i class="icon edit"></i></a><a id="'+val[0]["filterNumber.encode"]+'" class="btn-blue copy-action"><span>Copy</span><i class="icon copy"></i></a></div></div></td>';                        
-                                                    target_html += '</tr>';
+                            target_html += '</tr>';
                         });
                         target_html += '</tbody></table>';
 								
@@ -1887,7 +1885,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else{
                         $(".mergefields .browsefields").show();
-						$(".mergefields .browsefields #mergefields_links").hide();
+			$(".mergefields .browsefields #mergefields_links").hide();
                         $(".mergefields .browsefields").removeClass("mergefields_editor");
                         $(".mergefields .searchfields,#remove-merge-list").hide();
                         $("#merge_list_search").val("");
@@ -2032,31 +2030,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 searchMergeFields:function(obj){
                     var searchterm = $(obj.target).val();
-					$(".mergefields .searchfields .searchlist").find('.notfound').hide();
+                    $(".mergefields .searchfields .searchlist").find('.notfound').hide();
                     if(searchterm.length){
                         var camp_obj = this;
                         $(".mergefields .searchfields,#remove-merge-list").show();                                                       
                         $(".mergefields .browsefields").hide();
                         $(".mergefields .searchfields .searchlist li").hide();
                         searchterm = searchterm.toLowerCase();
-						var count = 0;
+                        var count = 0;
                         $(".mergefields .searchfields .searchlist li").filter(function() {
                             if($(this).find("div").text().toLowerCase().indexOf(searchterm) > -1 && $(this).find("div").text().substring(0,9) != '<!DOCTYPE')
                             {
-                                    count++;
-                                    return $(this);
+                                 count++;
+                                 return $(this);
                             }
-                         }).show();
+                        }).show();
                         var ids = ['Basic Field', 'Custom Field', 'Sales Rep', 'Links'];
                         var items = $(".mergefields .searchfields .searchlist li");
                         $.each(ids, function(index, id) {
-                               $(items).filter("li[rel='" + ids[index] + "']")
-                                       .appendTo($(".mergefields .searchfields .searchlist ul"));
-                       });
-                         $(".mergefields .searchfields .searchlist li div").removeHighlight().highlight(searchterm);
+                            $(items).filter("li[rel='" + ids[index] + "']").appendTo($(".mergefields .searchfields .searchlist ul"));
+                        });
+                        $(".mergefields .searchfields .searchlist li div").removeHighlight().highlight(searchterm);
                         if(count == 0)
                          {
-                              $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
+                             $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
                          }
                     }
                     else{
@@ -2248,24 +2245,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var mapdataview = camp_obj.states.step3.mapdataview;
                     if(csvupload && csvupload.fileuploaded == true)
                     {
-                            var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-                            $.post(cancelURL, { stepType: "cancel" })
-                            .done(function(data) {
-                                    var list_json = jQuery.parseJSON(data);						   
-                                    if(list_json[0] == 'success')
-                                    {                                               
-                                           camp_obj.app.showAlert(appMsgs.CSVUpload_cancel_msg,camp_obj.$el,{type:'caution'});
-                                           csvupload.$el.find("#dropped-files").children().remove();
-                                           csvupload.$el.find("#drop-files .middle").css("display","block");
-                                           csvupload.dataArray = [];
-                                           csvupload.fileuploaded=false;
-                                           csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
-                                           mapdataview.$el.find('#uploadslist').children().remove();
-                                           mapdataview.$el.find('#newlist').val('');
-                                           mapdataview.$el.find('#alertemail').val('');
-                                           camp_obj.app.showLoading(false,csvupload.$el);
-                                    }
-                            });
+                        var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+                        $.post(cancelURL, { stepType: "cancel" })
+                        .done(function(data) {
+                                var list_json = jQuery.parseJSON(data);						   
+                                if(list_json[0] == 'success')
+                                {                                               
+                                       camp_obj.app.showAlert(appMsgs.CSVUpload_cancel_msg,camp_obj.$el,{type:'caution'});
+                                       csvupload.$el.find("#dropped-files").children().remove();
+                                       csvupload.$el.find("#drop-files .middle").css("display","block");
+                                       csvupload.dataArray = [];
+                                       csvupload.fileuploaded=false;
+                                       csvupload.$el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
+                                       mapdataview.$el.find('#uploadslist').children().remove();
+                                       mapdataview.$el.find('#newlist').val('');
+                                       mapdataview.$el.find('#alertemail').val('');
+                                       camp_obj.app.showLoading(false,csvupload.$el);
+                                }
+                        });
                     }
                 },
 		createTarget: function(){

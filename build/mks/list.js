@@ -1,1 +1,0 @@
-define(["text!html/list.html"],function(a){return Backbone.View.extend({id:"step_container",events:{},initialize:function(){this.template=_.template(a);this.render()},render:function(){this.$el.html(this.template({}))},stepsCall:function(){}})});

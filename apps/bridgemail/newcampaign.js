@@ -34,36 +34,36 @@ function (template) {
                     var appMsgs = curview.app.messages[0];
                     var newcampdialog = curview.options.newcampdialog;
 				  
-				   if(el.find('#camp_name').val() == '')
-					{						
-						app.showError({
-							control:el.find('.campname-container'),
-							message:appMsgs.CAMPS_campname_empty_error
-						});
-					}
-					else
-					{						
-						app.hideError({control:el.find(".campname-container")});
-						app.showLoading("Creating campaign...",curview.$el);
-						var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    if(el.find('#camp_name').val() == '')
+                    {						
+                            app.showError({
+                                    control:el.find('.campname-container'),
+                                    message:appMsgs.CAMPS_campname_empty_error
+                            });
+                    }
+                    else
+                    {						
+                         app.hideError({control:el.find(".campname-container")});
+                         app.showLoading("Creating campaign...",curview.$el);
+                         var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                          var post_data = { type: "create",campName:el.find('#camp_name').val() };
-                             if(this.templateID){
-                                post_data['templateNumber'] = this.templateID;
-                             }
+                         if(this.templateID){
+                           post_data['templateNumber'] = this.templateID;
+                         }
                          $.post(URL,post_data )
                           .done(function(data) {  
-						  	app.showLoading(false,curview.$el);                            
+                              app.showLoading(false,curview.$el);                            
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){                                 
                                  var camp_id = camp_json[1];                                 
-								 newcampdialog.hide();
-								 app.mainContainer.openCampaign(camp_id);
+                                 newcampdialog.hide();
+                                 app.mainContainer.openCampaign(camp_id);
                               }
                               else{
                                   app.showAlert(camp_json[1],curview.$el);
                               }                              
                          });
-					}
-				}
+                    }
+               }
         });
 });
