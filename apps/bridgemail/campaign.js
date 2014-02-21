@@ -469,19 +469,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 ,
                 initHeader:function(){
                   var previewIconCampaign = $('<a class="icon preview showtooltip" data-original-title="Preview Campaign"></a>');  
-                  var editIconCampaign = $('<a class="icon edit showtooltip" data-original-title="Edit Campaign"></a>');
                   var copyIconCampaign = $('<a class="icon copy showtooltip" data-original-title="Copy Campaign"></a>');
                   var deleteIconCampaign = $('<a class="icon delete showtooltip" data-original-title="Delete Campaign"></a>');
                   var active_ws = this.$el.parents(".ws-content");
                   
                   var header_title = active_ws.find(".camp_header .edited  h2");
                   var action_icon = $('<div class="pointy"></div>")');
-                  action_icon.append(editIconCampaign);
-				  action_icon.append(copyIconCampaign);
-                  action_icon.append(previewIconCampaign);
-                  //action_icon.append(deleteIconCampaign);
+                  action_icon.append(copyIconCampaign);
+                  action_icon.append(deleteIconCampaign);
                   header_title.append(action_icon); 
-                  
+                  header_title.append(previewIconCampaign); 
+                  active_ws.find(".camp_header #workspace-header").attr("data-original-title","Click to rename");
+                  active_ws.find(".camp_header #workspace-header").addClass('showtooltip');
                   active_ws.find(".camp_header").addClass("heighted-header");
                   active_ws.find("#header_wp_field").attr("placeholder","Type in Campaign Name");
                   active_ws.find("#save_campaign_btn").click(_.bind(this.saveCampaign,this));               
@@ -491,19 +490,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      if(e.keyCode==13){
                          active_ws.find("#save_campaign_btn").click();
                      }
-                 });
-                  var camp_obj = this;
-				  var appMsgs = camp_obj.app.messages[0];
-                  editIconCampaign.click(function(e){
-                      active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
-                      var text= active_ws.find("#workspace-header").html();                                            
-                      active_ws.find(".camp_header .c-name .edited ").show();
-                      active_ws.find("#header_wp_field").focus().val(text);  
-                      e.stopPropagation();
                   });
-				  copyIconCampaign.click(function(e){
-					 camp_obj.copyCamp();
-				  });
+                  var camp_obj = this;
+		  var appMsgs = camp_obj.app.messages[0];
+                   
+                    copyIconCampaign.click(function(e){
+                           camp_obj.copyCamp();
+                    });
                   active_ws.find("#workspace-header").click(function(e){
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();
@@ -634,7 +627,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                    }
                                    if(del_camp_json[0]!=="err"){
                                            camp_obj.app.showMessge("Campaign Deleted");
-                                           active_ws.find(".camp_header .close").click();
+                                           active_ws.find(".camp_header  .close-wp").click();
                                    }
                                    camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
                    });

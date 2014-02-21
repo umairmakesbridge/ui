@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                              this.$(".modal-body").css(this.options.bodyCss ? this.options.bodyCss:{});
                              
                              if(this.options.headerEditable){
-                                 this.$(".modal-header").removeClass("ws-notags")
+                                 this.$(".modal-header").removeClass("ws-notags");
                              }
                              if(this.options.buttons){
                                 if(this.options.buttons.saveBtn){ 
@@ -47,7 +47,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                              }
                              if(this.options.headerIcon){
                                  this.$(".header-icon").addClass(this.options.headerIcon).show();
-                                 this.$(".modal-header .c-name").addClass("header-icon")
+                                 this.$(".modal-header .c-name").addClass("header-icon");
                              }
                              if(this.options.newButtons){
                                  var _this = this;

@@ -29,8 +29,7 @@ function (template) {
                     this.$el.html(this.template({}));
                     this.app = this.options.app;
                 },
-                copyCampaign: function()
-                {
+                copyCampaign: function(){
                         var camp_id = this.options.camp_id;
                         var curview = this;
                         //var copydialog = this.options.copycampdialog;
@@ -38,36 +37,30 @@ function (template) {
                         var app = this.options.app;
                         var el = curview.$el;
                         var appMsgs = app.messages[0];
-                        if(el.find('#camp_name').val() == '')
-                        {						
+                        if(el.find('#camp_name').val() == ''){						
                                 app.showError({
                                         control:el.find('.campname-container'),
                                         message:appMsgs.CAMPS_campname_empty_error
                                 });
                         }
-                        else
-                        {
+                        else{
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+app.get('bms_token')+"&type=clone";
                                 app.showLoading("Creating copy of campaign...",curview.$el);
                                 $.post(URL, { campNum: camp_id,campName: curview.$el.find('#camp_name').val()})
-                                .done(function(data) 
-                                {
+                                .done(function(data){
                                         app.showLoading(false,curview.$el);
                                         var res = jQuery.parseJSON(data);
                                         if(res[0] == 'err')
                                                 app.showAlert(res[1].replace('&#58;',':'),curview.$el);
-                                        else
-                                        {
+                                        else{
                                                 app.removeCache("campaigns");
-                                                if(curview.options.copycampsdialog)
-                                                {
+                                                if(curview.options.copycampsdialog){
                                                         curview.options.copycampsdialog.hide();
                                                         campview.getallcampaigns();
                                                 }
-                                                else
-                                                {
+                                                else{
                                                         curview.options.copycampdialog.hide();
-                                                        campview.getcampaigns();
+                                                        campview.getcampaigns(); 
                                                         app.mainContainer.openCampaign(res[1]);
                                                 }								
                                         }

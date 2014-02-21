@@ -34,24 +34,28 @@ function (template,icheck,bmstags) {
                     insert: '<div class="icheck_line-icon"></div>'
                });
                
+               
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
             */
             ,
             init:function(){
+               var self = this;
                this.modal = this.$el.parents(".modal");
                this.tagDiv = this.modal.find(".tagscont");
-               this.head_action_bar = this.modal.find(".modal-header .pointy");
-               var previewIconCampaign = $('<a class="icon preview"></a>');  
-               this.head_action_bar.find(".copy").hide();
-               this.head_action_bar.append(previewIconCampaign);
+               this.head_action_bar = this.modal.find(".modal-header .edited  h2");
+               var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;;  
+               this.head_action_bar.find(".edit").hide();
+               var copyIconTemplate = this.head_action_bar.find(".copy");
+               copyIconTemplate.attr('data-original-title','Copy template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
+               this.head_action_bar.find(".delete").attr('data-original-title','Delete template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
+               this.head_action_bar.append(previewIconTemplate);
                this.initEditor();
                this.tagDiv.addClass("template-tag");
                this.loadTemplate();
                this.iThumbnail = this.$(".droppanel");
                this.$("textarea").css("height",(this.$("#area_create_template").height()-270)+"px");                              
-               
                this.$(".droppanel").dragfile({
                         post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
                         callBack : _.bind(this.processUpload,this),
@@ -62,7 +66,10 @@ function (template,icheck,bmstags) {
                     addCallBack:_.bind(this.addCategory,this),
                     placeholder_text:'Please enter category'
                 });
-                previewIconCampaign.click(_.bind(function(e){                                     
+                copyIconTemplate.click(_.bind(function(e){                                     
+                   // this.copyTemplate(self);
+               },this));  
+               previewIconTemplate.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-162;
                     var dialog = this.app.showDialog({title:'Template Preview',
@@ -115,6 +122,7 @@ function (template,icheck,bmstags) {
             */
             loadTemplate:function(o,txt){
                var _this = this;
+          
                this.app.showLoading("Loading Template...",this.$el);                                  
                var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=get&templateNumber="+this.template_id;
                 this.getTemplateCall = jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -123,8 +131,9 @@ function (template,icheck,bmstags) {
                         var template_json = jQuery.parseJSON(xhr.responseText);                                                                                               
                         if(_this.app.checkError(template_json)){
                             return false;
-                        }                                                    
-                        _this.modal.find(".dialog-title").html(template_json.name);
+                        }
+                         
+                        _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title","Click to rename").addClass("showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
                   
                         //_this.$("textarea").val(_this.app.decodeHTML(template_json.htmlText,true));
                         if(tinyMCE.get('bmseditor_template')){
@@ -158,6 +167,22 @@ function (template,icheck,bmstags) {
                    }
                  }).fail(function() { console.log( "error in loading template" ); }); 
             },
+            copyTemplate: function(_self){
+                        var self = this;
+                        var dialog_title = "Copy Template";
+                        var __dialog = this.app.showDialog({title:dialog_title,
+                                          css:{"width":"600px","margin-left":"-300px"},
+                                          bodyCss:{"min-height":"260px"},							   
+                                          headerIcon : 'copy',
+                                          buttons: {saveBtn:{text:'Create Template'} }                                                                           
+                        });
+                        this.app.showLoading("Loading...",__dialog.getBody());
+                        require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
+                                var mPage = new copyTemplatePage({page:_self,templ:self,template_id:self.template_id,app:self.app,templateDialog:__dialog});
+                                __dialog.getBody().html(mPage.$el);
+                                __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
+                        });
+                },
             addCategory:function(val){
                 if(this.$(".cat").length){
                     this.$(".cat").html(val);
@@ -345,6 +370,22 @@ function (template,icheck,bmstags) {
                     this.dialog.$(".tagscont").show();
                 }
             },
+             updateTemplate:function(){                                   
+                               
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.app.showDialog({title:'Loading ...',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                              headerEditable:true,
+                              headerIcon : 'template',
+                              bodyCss:{"min-height":dialog_height+"px"},
+                              buttons: {saveBtn:{text:'Save'} }                                                                           
+                        });
+
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    this.loadTemplate(this);
+                    dialog.getBody().html(this.$el);
+             },
             deleteTemplate:function(){
                     var _this = this;                   
                     this.app.showLoading("Deleting Template...",this.dialog.$el);

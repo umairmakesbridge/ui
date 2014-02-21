@@ -48,7 +48,8 @@ define([
                             'CAMPS_name_empty_error' : 'No campaign found',							
                             'CAMPS_html_empty_error' : 'Campaign has not content',
                             'CAMPS_delete_success_msg' : 'Campaign deleted',
-                            'SUB_updated': 'Subscriber updated successfully'
+                            'SUB_updated': 'Subscriber updated successfully',
+                            'CAMPS_templatename_empty_error': 'Template name can not be empty'
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -68,6 +69,8 @@ define([
                             window.BRIDGEMAIL = this;
 			}
                         this.getUser();
+                     
+                        
 		},
 		start: function (Router, MainContainer, callback) {
 			//Create the router
@@ -435,7 +438,8 @@ define([
             setInfo:function(){
                 if(this.get("user")){
                     var _user = this.get("user");
-                    this.mainContainer.$(".user-name").html(_user.firstName +" "+ _user.lastName);
+                    var fullName = _user.firstName +" "+ _user.lastName;
+                    this.mainContainer.$(".user-name").addClass("showtooltip").attr('data-original-title',fullName).html(this.stringTruncate(fullName, 20)).tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     if(!_user.firstName && !_user.lastName){
                         this.mainContainer.$(".user-name").html(_user.firstName);
                     }
@@ -443,6 +447,17 @@ define([
                 else{
                    window.setTimeout(_.bind(this.setInfo,this),200); 
                 }
+            },
+            stringTruncate:function(title, length){
+               // var title = 'web administrator';
+           
+                if(title && title.length > length){
+                   return $.trim(title).substring(0, length)
+                    .split(" ").slice(0, -1).join(" ") + "..";
+                }else{
+                    return title;
+                }
+                
             }
 	});
 

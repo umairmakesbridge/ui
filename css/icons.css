@@ -608,7 +608,7 @@ ul.nav  ul.tab-icons li a .icon.add {
 :hover.view {  background-position: -360px -300px;}
 
 .edit {background-position: -300px -330px;}
-.edit:hover {background-position: ;}
+.edit:hover {background-position: '';}
 
 .icon.h-info  {    background-position: -300px -30px; }
 .icon.social  {    background-position: -300px -60px; }
@@ -720,7 +720,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.back {	background: url("../img/back.png") no-repeat center center;}
 .icon.next {	background: url("../img/next.png") no-repeat center center;}
 .icon.save {   background: url("../img/save.png") no-repeat center center;}
-.icon.delete {   background: url("../img/delete.png") no-repeat center center ;}
+.icon.delete {   background: url("../img/delete24.png") no-repeat center center ;}
 .icon.edit {   background: url("../img/edit.png") no-repeat center center ;}
 .icon.list {   background: url("../img/list.png") no-repeat center center ;}
 .icon.target {   background: url("../img/target.png") no-repeat center center ;}
@@ -797,6 +797,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.calender {   background: url("../img/calender.png") no-repeat scroll center center ;}
 .icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}
 .icon.copycamp {   background: url("../img/copycamp.png") no-repeat scroll center center ;}
+.icon.copy-header {   background: url("../img/copy48.png") no-repeat scroll center center ;}
 .icon.template {   background: url("../img/template.png") no-repeat scroll center center ;}
 
 .icon.salesforce {   background: url("../img/sficon.png") no-repeat scroll center center ;}

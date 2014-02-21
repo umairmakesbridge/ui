@@ -326,7 +326,8 @@ function (template,highlight) {
                         this.$("#total_templates").html("<strong class='badge'>"+this.totalcount +"</strong> templates");
                     }
                    
-                    if(templates){                        
+                    if(templates){    
+                        var self = this;
                         $.each(templates[0], function(index, val) { 
                             var adminTemplate = val[0].isAdmin==='Y'?"admin-template":"";
                             templates_html +='<li class="span3">';
@@ -338,9 +339,24 @@ function (template,highlight) {
                                 templates_html +='<div class="rpath"></div>';
                             }       
                             templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
-                            templates_html +='<a class="previewbtn" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                            templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                            templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                            
+                            if(adminTemplate === "admin-template"){
+                                if(self.app.get("isAdmin") === "Y"){
+                                    templates_html +='<a class="previewbtn"  id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="copybtn"  id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                }else{
+                                    templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="copybtn"  style="width:50%" id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    
+                                }
+                            }else{
+                                templates_html +='<a class="previewbtn" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                templates_html +='<a class="copybtn" id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                            }
                             var image_src = camp_obj.app.decodeHTML(val[0]["thumbURL"]);
                             if(image_src==""){
                                 templates_html += '</div><img  src="img/templateimg.png" /></div>';
@@ -430,6 +446,11 @@ function (template,highlight) {
                             }
                             this.template_id = target.attr("id").split("_")[1];
                             this.updateTemplate();
+                        },camp_obj));
+                           template_html.find(".copybtn").click(_.bind(function(obj){
+                            var target = $.getObj(obj,"a");
+                            this.template_id = target.attr("id").split("_")[1];
+                            //this.copyTemplate();
                         },camp_obj));
                         
                         template_html.find("h3.template-name").click(_.bind(function(obj){ 
@@ -560,7 +581,8 @@ function (template,highlight) {
                               bodyCss:{"min-height":dialog_height+"px"},
                               buttons: {saveBtn:{text:'Save'} }                                                                           
                         });
-
+                     
+                      
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["bmstemplates/template"],function(templatePage){                                     
                            var mPage = new templatePage({template:_this,dialog:dialog});                          
@@ -577,6 +599,22 @@ function (template,highlight) {
                                     _this.deleteCall(templateNum);
                             },_this)},
                     _this.$el);                       
+                },
+                copyTemplate: function(){
+                        var self = this;
+                        var dialog_title = "Copy Template";
+                        var __dialog = this.app.showDialog({title:dialog_title,
+                                          css:{"width":"600px","margin-left":"-300px"},
+                                          bodyCss:{"min-height":"260px"},							   
+                                          headerIcon : 'copy',
+                                          buttons: {saveBtn:{text:'Create Template'} }                                                                           
+                        });
+                        this.app.showLoading("Loading...",__dialog.getBody());
+                        require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
+                                var mPage = new copyTemplatePage({templ:self,template_id:self.template_id,app:self.app,templatesDialog:__dialog});
+                                __dialog.getBody().html(mPage.$el);
+                                __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
+                        });
                 },
                 deleteCall:function(templateNum){
                     var _this = this;

@@ -354,7 +354,7 @@ div.tags-div:before {
 	max-width: 300px;
 }
 .tagscont .ellipsis{
-    display: ;
+    
 }
 
 .tagscont .addtag, .targt .tagscont .addtag {
@@ -473,7 +473,7 @@ ol.progtrckr li.incomplete:after{
 .c-name h2 a.preview { 
     float:left; 
     margin:0px !important;
-    background:  url("../img/preview3.png") no-repeat center center ;
+    background:  url("../img/preview24.png") no-repeat center center ;
 }
 .c-name .edited{
     padding-bottom: 5px;
@@ -1278,6 +1278,10 @@ ul.tabs-btns li.active a{
     overflow-y: auto;
     position: relative;
 }
+.contactsdiv ins{
+    width:50px!important;
+}
+
 /*****workspace tabs icons ***/
 .wtab-campaignlisting{
     background: url("../img/camplisting.png") no-repeat scroll center center;
@@ -1338,14 +1342,14 @@ ul.tabs-btns li.active a{
 
 .thumbnail .img > div a {
     height: 48px;
-    width: 33.3%;
+    width: 25%;
 }
 .thumbnail .img > div a span {
     background: url("../img/icon-map.png") repeat scroll center 0 rgba(0, 0, 0, 0);
     display: block;
-    height: 48px;
+    height: 37px;
     margin: 2px auto;
-    width: 48px;
+    width: 37px;
 }
 
 .thumbnail .img > div a.selectbtn span {
@@ -1365,6 +1369,12 @@ ul.tabs-btns li.active a{
 
 .thumbnail .img > div a.editbtn span {
     background: url("../img/edit48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.thumbnail .img > div a.copybtn span {
+    background: url("../img/copy48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.thumbnail .img > div a.copybtn:hover {
+   background-color: #98D028;
 }
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
