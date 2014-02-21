@@ -8,6 +8,8 @@ define([
                             'CAMP_fromname_empty_error':'From name cannot be empty',
                             'CAMP_replyto_empty_error':'Reply field cannot be empty',
                             'CAMP_replyto_format_error':'Please enter correct email address format',
+                            'CAMP_fromemail_format_error':'Please enter correct email address format',
+                            'CAMP_fromemail_default_format_error':'Please enter correct email address format',
                             'CAMP_defaultreplyto_format_error':'Please enter correct email address format',
                             'CAMP_defaultreplyto_empty_error':'Reply field cannot be empty',
                             'CAMP_defaultfromname_empty_error': 'From name cannot be empty',
@@ -46,7 +48,7 @@ define([
                             'CAMPS_name_empty_error' : 'No campaign found',							
                             'CAMPS_html_empty_error' : 'Campaign has not content',
                             'CAMPS_delete_success_msg' : 'Campaign deleted',
-                            'SUB_updated': 'Subscriber updated successfully',
+                            'SUB_updated': 'Subscriber updated successfully'
 		}],
 		initialize: function () {
 			//Load config or use defaults
@@ -164,13 +166,22 @@ define([
              resizeWorkSpace:function(){
                 var body_size =  $('body').height()-90;                
                 $(".workspace .ws-content").css("min-height",(body_size-100)); 
-                $(".bDiv").css("height",body_size-397);          
-				$("#campaigns_list .bDiv").css("height",body_size-300);      
-                this.set("wp_height",(body_size-100));
-				
-				var subj_w = $('#campaign_subject').width();
-				var fegb_w = $('#fecol3').width();
-				$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
+                //$(".bDiv").css("height",body_size-397);          
+                //$("#campaigns_list .bDiv").css("height",body_size-300);      
+                this.set("wp_height",(body_size-100));				
+                var subj_w = $('#campaign_subject').width();
+                var fegb_w = $('#fecol3').width();
+                $('#campaign_from_email_chosen').width(parseInt(subj_w-40));               
+                this.fixEmailFrom();
+             },
+             fixEmailFrom:function(){
+                 var active_workspace = $(".ws-content.active");
+                 if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
+                    active_workspace.find("#campaign_from_email_input").css("width",active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px");
+                  }
+                  if(active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()){
+                    active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()+"px");  
+                  }  
              },
              openModule:function(obj){
                  alert($(obj.target).attr("id"));

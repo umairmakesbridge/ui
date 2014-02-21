@@ -1029,21 +1029,26 @@ h2.header-list span.recpscount {
 ul.tabs-btns li{
     background-color:#fff;
     padding:0px;
+    border-color:#A9C2D5;
 }
 ul.tabs-btns li a{
     padding:8px 25px;
+    background:#A9C2D5;
+    color: #FFFFFF;        
 }
-ul.tabs-btns li.active{
-    margin-bottom: -1px;
-    background-color:#FCFCFC;
+ul.tabs-btns li.active{    
+    background-color:#01AEEE;
+    border-color:#01AEEE;
 }
 ul.tabs-btns li.active a{
     margin-bottom: 1px;
+    background: #01AEEE;
+    color: #FFFFFF;    
 }
 .tab-content{
-    border:1px solid #E5E5E5;
+    border:2px solid #EAF4F9;
     padding: 15px;    
-    background-color:#FCFCFC;
+    background-color:#fff;
 }
 .modal-backdrop{
     z-index:1000; 
@@ -1540,4 +1545,43 @@ div.shortcuts .ddicon{
 .chart-area{
     position: relative;
     min-height: 290px;
+}
+.hide-selected .group1{
+    display:none !important;
+}
+.flyinput{
+    border: 0 none !important;
+    height: 20px !important;
+    right: 41px;
+    line-height: 20px !important;
+    padding-right: 2px !important;
+    padding-left: 3px !important;
+    position: absolute !important;
+    top: 3px; 
+    z-index: 2 !important;
+}
+
+#fromemail_default_chosen.chosen-container .chosen-results li.result-selected:after,#campaign_from_email_chosen.chosen-container .chosen-results li.result-selected:after{
+    background: none !important; 
+}
+#fromemail_default_chosen.chosen-container .chosen-results li.result-selected,#campaign_from_email_chosen.chosen-container .chosen-results li.result-selected{
+    font-weight: normal;
+}
+.inputcont.error > input[type="text"].flyinput{
+    border: 2px solid transparent !important;
+}
+.errortext{
+    z-index: 3;
+}
+.adv_dd .btn-group{
+    z-index: 3;
+}
+.textarea_box{
+    border: 2px solid #EAF4F9;
+    margin-top: 5px;
+}
+.editorbar{
+    background:#EAF4F9;
+    min-height: 42px;
+    position: relative;
 }

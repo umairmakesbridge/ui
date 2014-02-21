@@ -1,38 +1,18 @@
-define(['jquery','backbone', 'underscore', 'text!html/editor.html'],
+define(['jquery','backbone', 'underscore', 'text!editor/html/editor.html'],
 	function ($,Backbone,_, template) {
 		'use strict';
-		return Backbone.View.extend({			                                               
-                        className:'fullwindow campaign-content',
+		return Backbone.View.extend({			                                                                       
+                        className:'editor_box',
                         tagName: 'div',
                         events: {                            
                             'click .btn-gray':function(obj){
                                 this.hideEditor();
                                 this.page.wizard.back();
                             },
-                            'click .mergefields-box' :function(obj){
-                                this.showMergeFieldDialog(obj);
-                            },
-                            'click .save_editor':function(obj){
-                                var button = $.getObj(obj,"a");
-                                if(!button.hasClass("saving")){
-                                    this.page.saveStep2(false);
-                                    button.addClass("saving");
-                                }                                                                
-                            }
-                            ,
-							'click #drop4' :function(obj){
-								this.$el.find('.mergefields-box').click();
-							},
-                            'click .save_continue_editor':function(){
-                                this.hideEditor();
-                                this.page.wizard.validateStep();
-                            },
-                            'click .selectiondropdown li':function(obj){
-                                    var camp_obj = this.options.opener;
-                                    var source_li =$.getObj(obj,"li"); 
-                                    //camp_obj.step2SlectSource(target_li);
-                                    this.hideEditor();
-                                    camp_obj.$el.find(".step2 #"+source_li.attr('id')).click();
+                            'click .editorbtn':function(){
+                                this.$el.hide();
+                                this.$el.prev().show();
+                                this.$el.prev().find("textarea").val(tinyMCE.get('bmseditor_'+this.editor_id).getContent());
                             }
                         },
 			initialize: function () {                            
@@ -45,37 +25,8 @@ define(['jquery','backbone', 'underscore', 'text!html/editor.html'],
 			render: function () {
                             this.$el.html(this.template({}));	                                   
                             this.$("#bmseditor").attr("id","bmseditor_"+this.editor_id);
-                            
+                            this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 			},
-                        showMergeFieldDialog:function(obj){                                      
-                            var btn = $.getObj(obj,"button");
-                            var ele_offset = btn.offset();
-                            var ele_width =  btn.width();
-                            var ele_height =  btn.height();
-                            var top = ele_offset.top + ele_height+11;
-                            var left = ele_offset.left -193 ;
-                            var m_fields_box = $(".mergefields");
-							$(".mergefields .browsefields #mergefields_links").show();
-                            if(m_fields_box.css("display")=="block" && parseInt(m_fields_box.css("top"))==parseInt(top)){
-                                m_fields_box.hide();
-                            }
-                            else{
-                                $(".mergefields .browsefields").show();
-                                m_fields_box.addClass("mergefields_editor");
-                                $(".mergefields .searchfields,#remove-merge-list").hide();                                
-                                $("#merge_list_search").val("");
-
-                                m_fields_box.css({"top":top+"px","left":left+"px"}).show();
-
-                                var input_container = "editor_mergeinput";
-                                m_fields_box.attr("input-source",input_container);
-
-                                if($(".merge-feilds-type li.active").length==0){
-                                    $(".merge-feilds-type li#mergefields_basic").click();
-                                }
-                            }
-                            obj.stopPropagation();
-                        },
                         initEditor:function(options){
                             var editor = this;
                             tinyMCE.init({
@@ -162,26 +113,15 @@ define(['jquery','backbone', 'underscore', 'text!html/editor.html'],
                         });
                         },
                         showEditor:function(eid){
-                            this.$el.show();                            
-                            $("body").css("overflow","hidden");
-                            $("html,body").scrollTop(0);
-                            var editor_height = $(window).height()-166;
-                            this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});
-                            var editor_window_height = editor_height - 172;
-                            this.$("#bmseditor_"+eid+"_ifr").css("height",editor_window_height+"px");
-                            $("#activities,#search,.icons-bar").hide();
-                            $(".camp_header #more-tool-actions li:nth-child(2)").hide();
-                            $(".camp_header #more-tool-actions li:nth-child(3)").hide();
-                            this.$("#editor_mergeinput").val('');
-                            
+                            this.$el.show();                                                                                    
+                            var editor_height = $(window).height()-431;
+                            //this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});                            
+                            this.$("#bmseditor_"+eid+"_ifr").css("height",editor_height+"px"); 
+                            this.$("#bmseditor_"+eid+"_tbl").css("height",(editor_height-100)+"px");
+                            //this.page.$("#bmstexteditor").css({"height":editor_height+"px","width":((this.$("#bmseditor_"+eid+"_tbl").width()-20)+"px")});                                                        
                         },
                         hideEditor:function(){
-                            this.$el.hide();
-                            $("body").css("overflow","auto");                            
-                            $(".camp_header").removeClass("workspace-fixed-editor"); 
-                            $("#activities,#search,.icons-bar").show();
-                            $(".camp_header #more-tool-actions li:nth-child(2)").show();
-                            $(".camp_header #more-tool-actions li:nth-child(3)").show();
+                                                                                
                         }
                         
                         

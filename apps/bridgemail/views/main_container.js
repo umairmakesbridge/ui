@@ -115,11 +115,12 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
            }
            else{
                if(!this.$(".tw-toggle button:last-child").hasClass("active")){
-                    this.$(".tw-toggle button:last-child").click();
+                   this.$(".tw-toggle button:last-child").click();
                }
                if(!workspace_li.hasClass("active")){                  
-                   workspace_li.click();
+                   workspace_li.click();                  
                }
+               setTimeout(_.bind(this.app.fixEmailFrom,this),400);
            }
            
 
@@ -166,10 +167,8 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
           });                               
       }
       
-      //Handling Dashboard Scripts for animation stuff. 
-     
-      ,
-      
+      //Handling Dashboard Scripts for animation stuff.      
+      ,      
       dashBoardScripts:function(){
           
           this.$('ul.rightnav > li.logout > a').click(_.bind(function(){

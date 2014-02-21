@@ -257,22 +257,6 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .bmsgrid div.bDiv tr .action a.move-row { margin-right:0; }
 #fromemail_default_chosen { float:right; text-align:left; }
 #campaign_from_email_chosen { /*margin-left:-4px;*/ width:335px; text-align:left; float:right; }
-#campaign_from_email_input{ 	
-    background: none repeat scroll 0 0 #FFFFFF;    
-    border-color: #EAF4F9;
-    color: #495A63;
-    display: block;
-    font-size: 13px !important;
-    height: 25px;
-    line-height: 25px;
-    overflow: hidden;
-    padding: 5px 8px;
-    position: relative;
-    text-decoration: none;
-    white-space: nowrap;            
-    display:none;
-    cursor: default;
-}
 #campaign_from_email_btn
 {
 	background: none repeat scroll 0 0 #F8FDFF;
@@ -465,4 +449,3 @@ ul.c-current-status li .badge { cursor:pointer; }
 	right:0px;
 	top:4px;
 }
-#area_html_code .adv_dd .btn-group, #area_html_code .mergefields .btn-group { right:17px; }

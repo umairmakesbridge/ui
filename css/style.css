@@ -3697,8 +3697,8 @@ ul.setting-options li img {
 	border: 1px solid #dcdee1;
 }
 .temp-filters .adv_dd {
-	float: left;
-	width: 250px;
+    float: left;
+    width: 250px;
 }
 .temp-filters .mergeinput {
 	margin:0 5px;
@@ -4469,7 +4469,7 @@ ul.setting-options li img {
 	margin: -10px auto 10px;
 	padding: 0px 0 0;
 	position: relative;
-	width: 560px;
+	width: 700px;
 }
 .selection-boxes  .messagebox { margin-bottom:-10px !important; }
 
@@ -6070,13 +6070,13 @@ h2.header-list span.count {
 	margin: 13px 10px 13px 20px;
 }
 .create-temp {
-	width:640px;
+	width:800px;
 	margin: 115px auto;
 }
 
 .create-temp ul {
     height: 150px;
-    width: 640px;
+    width: 800px;
 }
 
 .create-temp li {
@@ -9931,7 +9931,23 @@ display:block;
     float: right;
     margin: 5px 0 0;
 }	
+.editorbtn { position:absolute; right:5px; top:5px;  background: none repeat scroll 0 0 #01AEEE;
+            z-index:99;
+         -webkit-border-radius: 2px;
+	-moz-border-radius:2px;
+	border-radius: 2px;
+}
+.editorbtn i { 
+	width:30px;
+	height:30px;
+	background: url("../img/editorshow.png") no-repeat scroll center center ;
+	-webkit-border-radius: 2px;
+	-moz-border-radius:2px;
+	border-radius: 2px;
 	
+}
+.editorbtn.hideicon { background:#A9C2D5;}
+.editorbtn.hideicon i {background: url("../img/editorhide.png") no-repeat scroll center center #A9C2D5;}	
 	
 	
 	

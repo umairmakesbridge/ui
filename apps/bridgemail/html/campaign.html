@@ -7,14 +7,14 @@
   <div class="row-fluid show-grid">
     <div class="span6 settings">
       <h2 class="clearfix"><span class="icon h-info2 "></span>Header Information </h2>
-      <div class="cont">
+      <div class="cont step1col1">
         <div class="row">
           <label id="lblSubject">Subject</label>
           <div class="input-append adv_dd sort-options subject-container">
               <div class="inputcont">              	
               	<input type="text" placeholder="Subject of the campaign" id="campaign_subject" class="header-info">
                 <div class="btn-group subject-group">
-                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                  <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
                 </div>
               </div>
             	<!--<span id="subject_erroricon" class="erroricon"></span>-->
@@ -22,23 +22,24 @@
         </div>
         <div class="row">
           <label id="lblFromemail">From Email</label>
-          <div class="input-append adv_dd sort-options">
+          <div class="input-append adv_dd sort-options fromeEmail-container">
           		<!--<div id="fetable">
                 	<div style="display:table-row">-->
           		<table border="0" cellpadding="0" cellspacing="0" width="100%">
                 	<tr>
                     	<td style="text-align:right">
                         <!--<div id="fecol1" class="fecols">-->
-                            <div class="inputcont">
+                            <div class="inputcont">                              
                               <select id="campaign_from_email" class="nosearch fromemail-group">                                
-                              </select>                                                           
+                              </select>            
+                                <input value="" name="from_email_input" id="campaign_from_email_input" type="text" class="no-shadow flyinput header-info"  />  
                             </div>
                         <!--</div>-->
                   		</td>                        
                         <td id="fecol3" style="width:61px">
                         <!--<div id="fecol3" class="fecols">-->
                         <div class="btn-group fromemail-group">
-                          <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                            <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
                         </div>
                         <!--</div>
                     </div>
@@ -48,13 +49,13 @@
               </table>
           </div>
         </div>
-        <div class="row addrow femail-container" id="campaign_from_email_default" style="display:none">
+        <div class="row addrow femail-default-container" id="campaign_from_email_default" style="display:none">
           <label>&nbsp;</label>
           <span class="directarrow"></span>
-          <div class="inputcont" style="text-align:right;">          	
-          	<select id="fromemail_default" class="nosearch" style="float:right;">
-                  
-            </select>
+          <div class="inputcont" style="text-align:right;">          	                                
+          	<select id="fromemail_default" class="nosearch" style="float:right;">                  
+                </select>
+              <input value="" name="fromemail_default_input" id="fromemail_default_input" type="text" class="no-shadow flyinput" />  
           </div>
           <!--<span id="fromemaildefault_erroricon" class="erroricon"></span>-->
         </div>
@@ -64,7 +65,7 @@
               <div class="inputcont">              	
               	<input type="text" placeholder="MakesBridge Technology" id="campaign_from_name" class="header-info" />
                 <div class="btn-group fromname-group">
-                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                  <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
                 </div>
               </div>
             <!--<span id="fromname_erroricon" class="erroricon"></span>-->
@@ -84,7 +85,7 @@
             <div class="inputcont">              	
             	<input type="text" placeholder="babar@makesbridge.com" id="campaign_reply_to" class="header-info" />                
                 <div class="btn-group replyto-group">
-                  <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                  <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon" ></span> <span class="caret"></span> </button>
                 </div>
             </div>
             <!--<span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
@@ -123,7 +124,7 @@
                   <input type="checkbox"  id="campaign_tellAFriend" class="checkinput"  value="">
                   <label for="campaign_tellAFriend">Tell A Friend </label>
                 </div>
-                <div class="inputlabel" style="display:none" >
+                <div class="inputlabel" >
                   <input type="checkbox" id="campaign_isTextOnly" class="checkinput"  value="">
                   <label for="campaign_isTextOnly">Send Text version only </label>
                 </div>
@@ -147,30 +148,28 @@
             <!-- span12  --> 
           </div>
           <!-- row-fluid  --> 
+          <div id="campaign_useCustomFooter_div" style="display:none;">
+                <div class="row-fluid" style="margin-top:10px" >
+                  <div class="span6">
+                    <div class="fluidlabel" >
+                      <input type="checkbox"  id="campaign_useCustomFooter" value="">
+                      <label>Use Custom Footer </label>
+                    </div>
+                  </div>
+                  <!-- span6  --> 
+                </div>
+                <!-- row-fluid  -->
 
+                <div class="row-fluid">
+                  <div class="">
+                    <textarea disabled="" class="pspa-text" id="campaign_custom_footer_text" readonly="readonly" style="height:100px"></textarea>
+                  </div>
+                  <!-- span12  --> 
+                </div>
+                <!-- row-fluid  --> 
+              </div>
         </div>
         <!-- Cont -->
-
-        <div id="campaign_useCustomFooter_div" style="display:none;">
-          <div class="row-fluid" style="margin-top:10px" >
-            <div class="span6">
-              <div class="fluidlabel" >
-                <input type="checkbox"  id="campaign_useCustomFooter" value="">
-                <label>Use Custom Footer </label>
-              </div>
-            </div>
-            <!-- span6  --> 
-          </div>
-          <!-- row-fluid  -->
-
-          <div class="row-fluid">
-            <div class="">
-              <textarea disabled="" class="pspa-text" id="campaign_custom_footer_text" readonly="readonly" style="height:100px"></textarea>
-            </div>
-            <!-- span12  --> 
-          </div>
-          <!-- row-fluid  --> 
-        </div>
       </div>          
   </div>
     
@@ -292,25 +291,17 @@
   <div class="clearfix"></div>  
 </div>
 <div class="wizard-steps step2">
-	<div class="selection-boxes create-temp">              
+    <div class="selection-boxes create-temp">              
       <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Create</strong>" options from  below.</p></div>
       <ul id="choose_soruce">
           <li id="copy_campaign" class=""><a><img alt="" src="img/copycampaign.png"><span>Copy Campaign</span></a></li>
           <li id="use_template" class=""><a><img alt="" src="img/usetemplate.png"><span>Use Template</span></a></li>
           <li id="html_editor" class=""><a><img alt="" src="img/htmleditor.png"><span>HTML Editor</span></a></li>
-          <li id="html_code" class=""><a><img alt="" src="img/myhtml.png"><span>Handcoded HTML</span></a></li>
+          <li id="html_code" class=""><a><img alt="" src="img/myhtml.png"><span>Hand Code HTML</span></a></li>
+          <li id="plain_text" class=""><a><img alt="" src="img/plaintext.png"><span>Plain Text</span></a></li>
       </ul>
        <div class="clearfix"></div>
-  </div>	
-  <!--<div class="selection-boxes create-temp" >
-    <ul id="choose_soruce" >
-      <li class="" id="copy_campaign"><a><img src="img/copycampaign.png" alt=""><span>Copy Campaign</span></a></li>
-      <li class="" id="use_template"><a><img src="img/usetemplate.png" alt=""><span>Use Template</span></a></li>
-      <li class="" id="html_editor"><a><img src="img/htmleditor.png" alt=""><span>HTML Editor</span></a></li>
-      <li class="" id="html_code"><a><img src="img/myhtml.png" alt=""><span>HTML Code</span></a></li>
-    </ul>
-    <div class="clearfix"></div>
-  </div>-->
+    </div>	  
   <div class="content-inner soruces"  id="area_copy_campaign" style="margin: 20px 0 0;display: none" >
     <h2 class="header-list">
     	<span id="copy_no_of_camps"><strong class="badge">0</strong> <b> </b> Campaigns</span>        
@@ -327,27 +318,65 @@
   </div>
   <!--- --->
   <div class="content-inner soruces"  id="area_html_editor" style="margin: 20px 0 0;display: none" >
-    <div class="editor_box"> </div>
+    <ul  class="mapTab tabs-btns clearfix" style="float:left;margin-top:8px;">
+        <li class="active"><a data-toggle="tab" href="#editorhtml">HTML</a></li>
+        <li><a  data-toggle="tab" href="#editortext">Text Only</a></li>
+    </ul>
+    <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
+    <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="inputcont "><input type="text" style="width:300px" id="merge-field-editor" placeholder="Merge Tags" ></div>
+        <div class="btn-group">
+          <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="tab-content" style="padding:0px;">
+        <div id="editorhtml" class="tab-pane active">
+            <div class="textdiv" style="display: none;">
+                <div class="textarea_box" style="margin-top:0px;">
+                    <div class="editorbar">
+                        <a class=" btn-blue editorbtn editorbtnshow showtooltip" title="Show Editor" style="right: 3px;top: 2.5px;">
+                            <i class="icon"></i>
+                        </a>
+                    </div>          
+                </div>
+                <textarea id="htmlarea" style="min-height:100px;margin:0px;" placeholder="Enter HTML..." ></textarea>
+            </div>
+        </div>
+        <div id="editortext" class="tab-pane">
+            <textarea name="content" id="bmstexteditor" class="editor-text" style="width:98%;margin-bottom:0px" placeholder="Enter Text only version..."></textarea>
+        </div>
+    </div>    
   </div>
   <!-- content-inner   -->
-  
   <div class="content-inner soruces"  id="area_html_code" style="margin: 20px 0 0;display: none" >
-    <div class="row temp-filters clearfix ed_mergefields">
-      <label style="width: 145px;">Merge Tags</label>
-      <div style="float:left">Copy this tag and paste in your HTML.</div>
-      <div class="dropdown  sort-options adv_dd "> <input type="text" id="myhtmlsoruce" class="mergeinput" placeholder="{{example merge tag}}" />
+    <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
+    <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="inputcont "><input type="text" style="width:300px" id="merge-field-hand" placeholder="Merge Tags" ></div>
         <div class="btn-group">
-          <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+          <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
         </div>
+    </div>
+    <div class="clearfix"></div>
+     <div class="textarea_box">
+          <div class="editorbar"></div>          
       </div>
-      <!--  sort-options  -->
-      
-      <!--<input type="text" id="myhtmlsoruce" class="mergeinput" placeholder="{{example merge tag}}" />-->
+      <textarea class="html-text" id="handcodedhtml" style="min-height:100px;margin-top:0px;" placeholder="Your HTML goes here..." ></textarea>
+  </div>
+  
+  <div class="content-inner soruces"  id="area_plain_text" style="margin: 20px 0 0;display: none" >
+    <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
+    <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="inputcont "><input type="text" style="width:300px" id="merge-field-plain" placeholder="Merge Tags" ></div>
+        <div class="btn-group">
+          <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+        </div>
     </div>
-    <div style="" class="row">
-      <label style="width: 145px;">Paste your HTML here</label>
-      <textarea class="html-text" id="myhtml" style="min-height:100px;" placeholder="Your HTML goes here..." ></textarea>
-    </div>
+    <div class="clearfix"></div>
+      <div class="textarea_box">
+          <div class="editorbar"></div>          
+      </div>
+      <textarea placeholder="Your Plain Text goes here..." style="min-height:100px;margin-top:0px;" id="plain-text" class="html-text"></textarea>
   </div>
   <!-- content-inner   --> 
   
