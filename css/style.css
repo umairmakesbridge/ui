@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic);
+.thumbnail .img > div a@import url(https://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic);
 
 @import url('animate.css');
 
@@ -572,6 +572,7 @@ body {
 #header > div:first-child {
 	display:none;
 }
+
 a.logo {
 	background:url(../img/logo.png) no-repeat 0 0;
 	width:225px;
@@ -2224,32 +2225,30 @@ ol.progressbar li.active a { color:#94CF1E; }
 	float: left;
 	font-size: 20px;
 	font-weight: bold;
-	margin-left: 40px;
+	margin-left: 34px;
 	margin-right: 15px;
+        padding:0px 7px;
+        line-height: 30px;
 }
+
+.row.c-name.edited h2 span.dialog-title:hover,.row.c-name.edited h2 span#workspace-header.showtooltip:hover {background-color:#38c5fb; cursor:pointer; }
+.c-name .preview:hover {background-color:#38c5fb; cursor:pointer; }
 .pointy {
-	background:#4fcfff;
-	display: inline-block;
 	position:relative;
-	margin: 6px 0 0;
-	-webkit-border-radius: 2px;
-	-moz-border-radius:2px;
-	border-radius: 2px;
+	
 }
 
 
 .pointy:after {
-    border-color: rgba(255, 255, 255, 0) #4FCFFF rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);
-    border-style: solid;
-    border-width: 4px;
     bottom: auto;
     content: "";
     display: inline-block;
-    left: -8px;
+    left: -6px;
+    
     position: absolute;
     top: 8px;
 }
-.pointy.add { background:#94CF1E ; opacity:1; margin:10px 0 0 !important;}
+.pointy.add { background:#94CF1E ; opacity:1; margin:7px 0 0 !important;}
 .pointy.add:after {border-color: rgba(255, 255, 255, 0) #94CF1E rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);}
 .pointy.add .icon.plus {
     background: url("../img/plus.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -2257,7 +2256,8 @@ ol.progressbar li.active a { color:#94CF1E; }
     width: 18px !important;
 }
 .pointy.add:after {
-    border-width: 3px;
+   border-style:solid;
+    border-width:3px;
     left: -6px;
     top: 6px;
 	
@@ -2268,9 +2268,9 @@ ol.progressbar li.active a { color:#94CF1E; }
 
 .pointy a.icon {
     float: left;
-    height: 25px;
+    height: 30px;
     margin: 0 !important;
-    width: 25px;
+    width: 30px;
 }
 .pointy a.icon:hover {
 	background-color:#38c5fb;
@@ -3736,7 +3736,9 @@ ul.setting-options li img {
 	overflow:hidden;
 	border:0;
 	border-radius: 2px;
-	-moz-border-radius: 2px;
+        background: none repeat scroll 0% 0% #FFF;
+        border: 2px solid #EAF4F9;
+        -moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	box-shadow: none;
 	-moz-box-shadow:  none;
@@ -3810,6 +3812,7 @@ ul.setting-options li img {
 	text-align: center;
 	width: 50%;
 }
+
 .thumbnail .img > div a:hover {
 	color:#fff;
 }
@@ -4805,7 +4808,7 @@ ul.setting-options li img {
 	display:none;
 }
 .template-container.fields .imprtlist li label .time, .template-container.fields .imprtlist li label .mail, .template-container.fields .imprtlist li label .subscribers, .template-container.fields .imprtlist li label .type, .template-container.fields .imprtlist li label .sched {
-float:;
+ 
 }
 .template-container.fields .imprtlist li label .sched, .template-container.fields .imprtlist li label .subscribers {
 	margin: 3px 10px 6px 20px !important;
@@ -5239,7 +5242,7 @@ p {
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 }
-.filter-row:hover { background:#; }
+.filter-row:hover {  }
 .filter-row:hover:before {background-color:#28BDFF; }
 .filter-div > div.filter-row:hover:before {background-color:#28BDFF; }
 
@@ -6611,7 +6614,7 @@ h3.center_h {
 }
 .ialc_connections .accordion-group {
 	-webkit-box-shadow:0 2px 5px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1));
+	-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 	box-shadow:0 2px 5px rgba(0, 0, 0, 0.1);
 }
 .ialc_connections .accordion-inner {
@@ -7361,12 +7364,10 @@ div.returnpath {
 	background: url("../img/checkiconsbig.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
 	height: 20px;
-	left: 50%;
-	margin: -10px 0 0 -10px;
+	
+	margin: 7px 0 0 7px;
 	overflow: hidden;
 	padding: 0;
-	position: absolute;
-	top: 50%;
 	width: 20px;
 }
 
@@ -7757,7 +7758,7 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
 	border:2px solid #EFF7FB;}
 	
 .contactbox .checkpanelinput.checked {  background-color: #94CF1E; border:2px solid #94CF1E;}
-.contactbox .checkpanelinput { min-width:35px;  height:96px;z-index: 999;}
+.contactbox .checkpanelinput { min-width:35px;  height:65px; padding-top:31px;z-index: 999;}
 .contactbox .checkpanelinput.disabled {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
     border: 2px solid rgba(0, 0, 0, 0);
@@ -7809,8 +7810,8 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
     border-radius: 20px;
     color: #bb8207;
     font-size: 11px;
-    line-height: 16px;
-	font-weight::normal;
+    line-height: 16px; 
+    font-weight:normal;
     opacity: 1;
     padding: 0 8px;
 	-webkit-border-radius: 20px;

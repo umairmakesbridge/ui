@@ -61,7 +61,7 @@ h2.header-list span.recpscount {
 #salesforce_campaigns .chosen-container .chosen-drop {  }
 .bmsgrid td .action { margin:auto 0px; }
 .bmsgrid div.bDiv { /*min-height:290px;*/ }
-.bmsgrid div.bDiv table { margin-bottom:15px; min-height:290px; }
+.bmsgrid div.bDiv table { margin-bottom:15px; }
 h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; color:#62646D; float:left; display:block;/* margin-top:5px;*/ }
 #area_choose_lists, #area_choose_targets { position:relative; min-height:200px; }
 .SI-FILES-STYLIZED label.cabinet {
@@ -225,7 +225,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 .popover .arrow, .popover .arrow:after { border:0; }
 .popover.left { margin-left:17px; }
 #mapdata #email_erroricon { float:left; }
-.icon.copy {   background: url("../img/copy.png") no-repeat center center; float:left; margin:0px 0px 0 5px !important; }
+.icon.copy {   background: url("../img/copy24.png") no-repeat center center; float:left; margin:0px 0px 0 5px !important; }
 #area_choose_tags h2.header-list { margin-top:0; padding:5px 0; }
 .tagslist ul li > .btn-red span {	
 	padding:0 5px 0 10px;
