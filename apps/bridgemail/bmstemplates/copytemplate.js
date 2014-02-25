@@ -8,8 +8,13 @@ function (template) {
         'use strict';
         return Backbone.View.extend({                
                 events: {
-                    
-                 },
+                    'keypress .inputcont #template_name':'enterSave'
+                },
+                enterSave:function(e){
+                     if(e.which === 13){ 
+                        this.options.templatesDialog.$el.find('.btn-save').click();  
+                      }
+                },
                 initialize: function () {
                     this.template = _.template(template);				
                     this.render();
@@ -49,8 +54,8 @@ function (template) {
                copyTemplate : function(){
                         var template_id = this.options.template_id;
                         var curview = this;
-                        var templateView = this.options.templ;
-                        var page = this.options.page;
+                        var page = this.options.templ;
+                        var _current = this.options._current;
                         var app = this.options.app;
                         var el = curview.$el;
                         var appMsgs = app.messages[0];
@@ -73,20 +78,17 @@ function (template) {
                                         else if(!res[1]){
                                             app.showAlert(res[1].replace('&#58;',':'),curview.$el);
                                         }else{
-                                                app.removeCache("templates");
-                                                var id = res[1];
-                                                if(curview.options.templateDialog){
-                                                       templateView.dialog.hide();
-                                                       curview.options.templateDialog.hide();
-                                                       page.template_id = id;
-                                                       page.updateTemplate();
-                                                       //page.$el.find("#template_search_menu li:first-child").removeClass("active").click();
-                                                }else{
+                                                      var id = res[1];
+                                                     
+                                                       
+                                                      if(typeof page !="undefined"){ 
+                                                        page.dialog.hide();
+                                                      }
+                                                      //curview.options.dialog.hide();
                                                       curview.options.templatesDialog.hide();
-                                                      templateView.template_id = id;
-                                                      templateView.updateTemplate();
-                                                      //templateView.$el.find("#template_search_menu li:first-child").removeClass("active").click();
-                                                    }
+                                                      _current.template_id = id;
+                                                      _current.updateTemplate();
+                                                      _current.$el.find("#template_search_menu li:first-child").removeClass("active").click();
                                                 
                                           } 
                                 });
