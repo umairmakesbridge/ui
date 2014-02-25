@@ -8,9 +8,10 @@ function (template,jsearchcontrol,chosen,moment,tags) {
         'use strict';
         return Backbone.View.extend({     
             className:'subscriber-detail',
-            basicFields:{"firstName":{"label":"First Name"},"lastName":{"label":"Last Name"},"email":{"label":"Email"},"company":{"label":"Company"},"city":{"label":"City"},
+            basicFields:{"firstName":{"label":"First Name"},"lastName":{"label":"Last Name"},"title":{"label":"Title"},"company":{"label":"Company"},"areaCode":{"label":"Area Code"},"telephone":{"label":"Telephone"},
+                        "email":{"label":"Email"},"city":{"label":"City"},
                         "country":{"label":"Country"},"state":{"label":"State"},"zip":{"label":"Zip"},"address1":{"label":"Address 1"},"address2":{"label":"Address 2"},
-                        "areaCode":{"label":"Area Code"},"telephone":{"label":"Telephone"},"jobStatus":{"label":"Job Status"},"industry":{"label":"Industry"},"salesRep":{"label":"Sales Rep"},
+                        "jobStatus":{"label":"Job Status"},"industry":{"label":"Industry"},"salesRep":{"label":"Sales Rep"},
                         "source":{"label":"Source"},"salesStatus":{"label":"Sales Status"},"occupation":{"label":"Occupation"},"birthDate":{"label":"Birthday"}},           
             /**
              * Attach events on elements in view.
@@ -206,8 +207,20 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                     changeFieldsBtn.click(_.bind(this.editProfile,this));
                 _this.$(".topinfo").append(changeFieldsBtn);
                 $.each(_this.basicFields,function(key,val){
-                      var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
-                      _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_val+'</strong> </span>');
+                     if(key !=="lastName" && key!=="telephone"){
+                        if(key!=="firstName" && key!=="areaCode"){ 
+                            var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
+                            _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_val+'</strong> </span>');
+                        }
+                        else{
+                           if(key=="firstName") {
+                               _this.$(".topinfo").append('<span>Name<strong>'+_this.sub_fields["firstName"]+' '+_this.sub_fields["lastName"]+'</strong> </span>');
+                           }
+                           else if(key=="areaCode") {
+                               _this.$(".topinfo").append('<span>Telephone<strong>'+_this.sub_fields["areaCode"]+' '+_this.sub_fields["telephone"]+'</strong> </span>');
+                           }
+                        }
+                     }
                     
                 })
                 if(_this.sub_fields.cusFldList){
