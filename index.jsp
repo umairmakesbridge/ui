@@ -53,6 +53,7 @@ if(userInfo == null) {
     <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
     <link rel="stylesheet" href="css/animate.css" type="text/css" />
     <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />
     
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">
