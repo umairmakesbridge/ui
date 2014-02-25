@@ -450,7 +450,7 @@ function (template,highlight) {
                            template_html.find(".copybtn").click(_.bind(function(obj){
                             var target = $.getObj(obj,"a");
                             this.template_id = target.attr("id").split("_")[1];
-                            //this.copyTemplate();
+                            this.copyTemplate();
                         },camp_obj));
                         
                         template_html.find("h3.template-name").click(_.bind(function(obj){ 
@@ -600,18 +600,19 @@ function (template,highlight) {
                             },_this)},
                     _this.$el);                       
                 },
-                copyTemplate: function(){
-                        var self = this;
+                copyTemplate: function(self){
+                        var _this = this;
                         var dialog_title = "Copy Template";
                         var __dialog = this.app.showDialog({title:dialog_title,
                                           css:{"width":"600px","margin-left":"-300px"},
                                           bodyCss:{"min-height":"260px"},							   
                                           headerIcon : 'copy',
+                                          overlay:true,
                                           buttons: {saveBtn:{text:'Create Template'} }                                                                           
                         });
                         this.app.showLoading("Loading...",__dialog.getBody());
                         require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
-                                var mPage = new copyTemplatePage({templ:self,template_id:self.template_id,app:self.app,templatesDialog:__dialog});
+                                var mPage = new copyTemplatePage({templ:self,template_id:_this.template_id,_current:_this,app:_this.app,templatesDialog:__dialog});
                                 __dialog.getBody().html(mPage.$el);
                                 __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
                         });
