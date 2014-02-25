@@ -2230,21 +2230,14 @@ ol.progressbar li.active a { color:#94CF1E; }
         padding:0px 7px;
         line-height: 30px;
 }
-
-.row.c-name.edited h2 span.dialog-title:hover,.row.c-name.edited h2 span#workspace-header.showtooltip:hover {background-color:#38c5fb; cursor:pointer; }
-.c-name .preview:hover {background-color:#38c5fb; cursor:pointer; }
 .pointy {
 	position:relative;
-	
 }
-
-
 .pointy:after {
     bottom: auto;
     content: "";
     display: inline-block;
     left: -6px;
-    
     position: absolute;
     top: 8px;
 }
