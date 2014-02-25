@@ -67,7 +67,7 @@ function (template,icheck,bmstags) {
                     placeholder_text:'Please enter category'
                 });
                 copyIconTemplate.click(_.bind(function(e){                                     
-                   // this.copyTemplate(self);
+                     this.page.copyTemplate(self);
                },this));  
                previewIconTemplate.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
@@ -167,22 +167,6 @@ function (template,icheck,bmstags) {
                    }
                  }).fail(function() { console.log( "error in loading template" ); }); 
             },
-            copyTemplate: function(_self){
-                        var self = this;
-                        var dialog_title = "Copy Template";
-                        var __dialog = this.app.showDialog({title:dialog_title,
-                                          css:{"width":"600px","margin-left":"-300px"},
-                                          bodyCss:{"min-height":"260px"},							   
-                                          headerIcon : 'copy',
-                                          buttons: {saveBtn:{text:'Create Template'} }                                                                           
-                        });
-                        this.app.showLoading("Loading...",__dialog.getBody());
-                        require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
-                                var mPage = new copyTemplatePage({page:_self,templ:self,template_id:self.template_id,app:self.app,templateDialog:__dialog});
-                                __dialog.getBody().html(mPage.$el);
-                                __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
-                        });
-                },
             addCategory:function(val){
                 if(this.$(".cat").length){
                     this.$(".cat").html(val);
