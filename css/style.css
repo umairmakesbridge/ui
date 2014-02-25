@@ -7,25 +7,25 @@
  font-family: 'PT Sans';
  font-style: normal;
  font-weight: 400;
- src: local('PT Sans'), local('PTSans-Regular'), url(http://themes.googleusercontent.com/static/fonts/ptsans/v5/7YGmE4Ls5b94ct65u07hVQLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
+ src: local('PT Sans'), local('PTSans-Regular'), url(https://themes.googleusercontent.com/static/fonts/ptsans/v5/7YGmE4Ls5b94ct65u07hVQLUuEpTyoUstqEm5AMlJo4.woff) format('woff');
 }
 @font-face {
  font-family: 'PT Sans';
  font-style: normal;
  font-weight: 700;
- src: local('PT Sans Bold'), local('PTSans-Bold'), url(http://themes.googleusercontent.com/static/fonts/ptsans/v5/0XxGQsSc1g4rdRdjJKZrNL3hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
+ src: local('PT Sans Bold'), local('PTSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/ptsans/v5/0XxGQsSc1g4rdRdjJKZrNL3hpw3pgy2gAi-Ip7WPMi0.woff) format('woff');
 }
 @font-face {
  font-family: 'PT Sans';
  font-style: italic;
  font-weight: 400;
- src: local('PT Sans Italic'), local('PTSans-Italic'), url(http://themes.googleusercontent.com/static/fonts/ptsans/v5/PIPMHY90P7jtyjpXuZ2cLLO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+ src: local('PT Sans Italic'), local('PTSans-Italic'), url(https://themes.googleusercontent.com/static/fonts/ptsans/v5/PIPMHY90P7jtyjpXuZ2cLLO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
 }
 @font-face {
  font-family: 'PT Sans';
  font-style: italic;
  font-weight: 700;
- src: local('PT Sans Bold Italic'), local('PTSans-BoldItalic'), url(http://themes.googleusercontent.com/static/fonts/ptsans/v5/lILlYDvubYemzYzN7GbLkKRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+ src: local('PT Sans Bold Italic'), local('PTSans-BoldItalic'), url(https://themes.googleusercontent.com/static/fonts/ptsans/v5/lILlYDvubYemzYzN7GbLkKRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
 }
 a,
 .btn-gray, .btn-blue, .btn-green, .btn-red , .btn-yellow,
@@ -7262,7 +7262,7 @@ div.returnpath {
 .exist-new .emailinput {
     margin: 0 0 0 5px;
     padding: 5px 10px 5px 48px;
-    width: 250px;
+    width: 280px;
 }
 .exist-new .noti {
 	background: url("../img/alert.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -9949,7 +9949,21 @@ display:block;
 }
 .editorbtn.hideicon { background:#A9C2D5;}
 .editorbtn.hideicon i {background: url("../img/editorhide.png") no-repeat scroll center center #A9C2D5;}	
-	
+.w-videoicon {
+    background: url("../img/videoicon.png") no-repeat scroll 3px center #73d2f5      ;
+    border-radius: 2px;
+    color: #fff  ;
+    display: inline-block;
+    font-size: 11px;
+    font-weight: bold;
+    height: 16px;
+    margin: 0 3px -3px;
+    padding: 2px 8px 0 25px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius:2px;
+    border-radius: 2px;}
+
+.w-videoicon:hover { color:#fff; background-color:#a6e2f9 ; }	
 	
 	
 	

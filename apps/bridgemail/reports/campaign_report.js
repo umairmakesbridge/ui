@@ -46,7 +46,7 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                 this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange,this));
                 this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi,this));
                 this.current_ws = this.$el.parents(".ws-content");
-                this.current_ws.find(".camp_header #workspace-header").css("margin-top","10px")
+                //this.current_ws.find(".camp_header #workspace-header").css("margin-top","10px")
                 this.$('.campslistsearch').searchcontrol({
                         id:'list-search',
                         width:'300px',

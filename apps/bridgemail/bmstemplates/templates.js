@@ -374,8 +374,8 @@ function (template,highlight) {
                             }
                             templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                             templates_html +='<div class="btm-bar">';
-                            templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
-                            templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon mail showtooltip"  title="Used Count"></span></span>';
+                            templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
+                            templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon mail showtooltip"  title="Used Count"></span></span>';
                             //templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
                             if(val[0].isAdmin==='Y'){
                                 templates_html +='<a class="icon builtin right showtooltip" title="Makesbridge Template"></a>';                                                                                                        

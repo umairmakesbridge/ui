@@ -1,5 +1,8 @@
 <div class="exist-new">
   <div class="temp-filters clearfix">
+       <a class="btn-green right save-contacts" style=" margin-left:5px;margin-top:3px;display: none">
+        <span>Import Contacts</span>
+      </a>  
     <h3>Choose list </h3>
     <div class="btn-group togglebtns map-toggle left">
       <button id="old" class="btn active">Existing</button>
@@ -9,31 +12,32 @@
     	<div class="inputcont">            
             <select id="existing_lists" class="lists" data-placeholder="Select Existing List" class="chosen-select">
             </select>
-            <input type="text" id="newlist" class="emailinput" placeholder="Enter new list" style="display:none;" />
-            <!--<span id="list_erroricon" class="erroricon" data-content="Please supply list"></span> -->
+            <input type="text" id="newlist" class="emailinput" placeholder="Enter new list name" style="display:none;" />            
       	</div>
     </div>
     <div class="email-container">
         <div class="inputcont alerticon">
             <i class="icon alerticon"></i>
-            <input type="text" id="alertemail" placeholder="Upload confirmation email" class="emailinput">        
+            <input type="text" id="alertemail" placeholder="Email address to receive upload confirmation" class="emailinput">        
         </div>
     </div>
-    <!--<div class="subs-dd left email-container"> <span class="icon noti"></span>
-    	<div class="inputcont" style="float:left;">            
-      		<input type="text" id="alertemail" class="emailinput" placeholder="Upload confirmation email">     		
-        </div>
-   	</div>-->
+    
   </div>
 </div>
-<h4>Map Data </h4>
+<h4 style="margin-top:10px">Map Data </h4>
 <div class="content-inner">
-  <p>Map your .csv data to bridgeMail System data fields and your current Custom fields. if you need to add a new custom field, simply choose "Enter a Custom Field" in the drop down menu. 
-    Unmapped fields will not be loaded. Email address is a required field. </p>
+  <p>Map the CSV columns to data fields in Makesbridge. To enter a new custom field by clicking the  [ + ]  icon. To omit a CSV field, simply do not choose a field.<a class="w-videoicon">Watch Video</a>  </p>
   <div class="bmsgrid" style="overflow: inherit; position: inherit;">
     <div class="bDiv" style="overflow: inherit; position: inherit;">
       <div class="tabel-div" style="overflow: inherit !important"> </div>
     </div>
   </div>
   <!-- tabel-div  --> 
+</div>
+
+
+<div class="clearfix"> 
+    <a style="margin-left: 5px; display: inline; margin-top: 3px;display: none;" class="btn-green right save-contacts ">
+        <span>Import Contacts</span>
+    </a>
 </div>

@@ -50,13 +50,15 @@ function (app,template,fileuploader,chosen,addbox) {
 			var z = -40;
 			var maxFiles = 1;
 			var errMessage = 0;
-		    var campview = this.camp_obj;
+                        var campview = this.camp_obj;
 			var curview = this;
-			var app = this.app;
+			var app = this.app?this.app:app;
 			var el = this.$el;
 			var appMsgs = app.messages[0];
 			//el.find('#uploaded-holder').show();
-			campview.states.step3.change=true;
+                        if(campview){
+                            campview.states.step3.change=true;
+                        }
 			app.showLoading("Uploading file",el);
 			$.each(files, function(index, file) {
 				if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) 
@@ -96,14 +98,7 @@ function (app,template,fileuploader,chosen,addbox) {
 						} 
 						else {
 							el.find("#drop-files .middle").css("display","block");									
-						}
-						/*if(el.find('#dropped-files > .image').length < maxFiles) { 
-								el.find('#dropped-files').html('<div class="filename">'+file.name+'</div><div class="image" style="background: url('+image+'); background-size: cover;"> </div><div  id="remove-file-upload" class="btn btn-small"><i class="icon-trash"></i> Remove</div>'); 
-								el.find("#remove-file-upload").click(function(){
-									curview.removeFile();
-									errMessage =0;
-								});
-						}*/
+						}						
 						el.find("#drop-files").css({'box-shadow' : 'none', 'border' : '1px dashed #CCCCCC'});
 						var formData = curview.formdata ? new FormData() : null;																
 						if (curview.formdata) formData.append("file", files[index]);
@@ -123,12 +118,25 @@ function (app,template,fileuploader,chosen,addbox) {
 											curview.map_feilds = jQuery.parseJSON(xhr.responseText);
 											//curview.createMappingTable(rows);											
 											curview.fileuploaded=true;
-											curview.$el.hide();
+                                                                                        if(campview){
+                                                                                            curview.$el.hide();
+                                                                                        }
+                                                                                        else{
+                                                                                            curview.$el.find("div:first-child").hide();
+                                                                                        }
 											var mapPage;
-											require(["listupload/mapdata"],function(mapdataPage){				
-												app.showLoading("Getting mapping fields...",campview.$el.find('.step3 #area_upload_csv'));
-												mapPage = new mapdataPage({camp:campview,app:app,rows:rows});
-												campview.states.step3.mapdataview=mapPage;
+											require(["listupload/mapdata"],function(mapdataPage){	
+                                                                                                if(campview){
+                                                                                                    app.showLoading("Getting mapping fields...",campview.$el.find('.step3 #area_upload_csv'));
+                                                                                                    mapPage = new mapdataPage({camp:campview,app:app,rows:rows});
+                                                                                                    campview.states.step3.mapdataview=mapPage;
+                                                                                                }
+                                                                                                else{
+                                                                                                    app.showLoading("Getting mapping fields...",curview.$el);
+                                                                                                    mapPage = new mapdataPage({csv:curview,app:app,rows:rows});
+                                                                                                }
+												
+												
 											});
 										}
 									});
@@ -150,8 +158,10 @@ function (app,template,fileuploader,chosen,addbox) {
 		initialize:function(){
 		   this.template = _.template(template);			   	   
 		   this.render();
-		   var campview = this.camp_obj;
-		   this.app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
+                   if(this.camp_obj){
+                    var campview = this.camp_obj;
+                    this.app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
+                   }
 		},
 		render: function () {
 			this.$el.html(this.template({}));
@@ -160,7 +170,7 @@ function (app,template,fileuploader,chosen,addbox) {
 			jQuery.event.props.push('dataTransfer');
 		},		
 		init:function(){
-			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
+                    this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
 		}
 	});
 });

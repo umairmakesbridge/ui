@@ -59,7 +59,8 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
           'click .view-contacts':'viewContacts',
           'click .campaign-listing':'campaignListing',
           'click .template-gallery':'templateGallery',
-          'click .camapign-report' :'camapignReport'
+          'click .camapign-report' :'camapignReport',
+          'click .csv-upload':'csvUpload'
           
       },
       initialize:function(){
@@ -273,6 +274,9 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
        },
        camapignReport:function(){
            this.addWorkSpace({type:'',title:'Reports',url : 'reports/campaign_report',workspace_id: 'camp_reports',tab_icon:'reports',noTags:true});
+       },
+       csvUpload:function(){
+           this.addWorkSpace({type:'',title:'CSV Upload',url : 'listupload/csvupload',workspace_id: 'csv_upload',tab_icon:'csvupload', single_row:true});
        }
        
       

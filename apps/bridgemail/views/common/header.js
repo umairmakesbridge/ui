@@ -16,11 +16,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 app.mainContainer.addWorkSpace({type:'',title:'Contacts',url : 'contacts',workspace_id: 'contacts','addAction':true,tab_icon:'contactlisting'});
                             },
                             'click .reports-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:'Reports',url : 'reports/campaign_report',workspace_id: 'camp_reports',tab_icon:'reports'});
+                                app.mainContainer.addWorkSpace({type:'',title:'Reports',url : 'reports/campaign_report',workspace_id: 'camp_reports',tab_icon:'reports', single_row:true});
                             }
                             ,
-                            'click .studio_ftp-uploads-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
+                            'click .csv-li':function(obj){
+                                app.mainContainer.addWorkSpace({type:'',title:'CSV Upload',url : 'listupload/csvupload',workspace_id: 'csv_upload',tab_icon:'csvupload', single_row:true});
                             },
                             'click .studio_reports-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});

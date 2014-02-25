@@ -8,36 +8,57 @@ function (template,chosen,addbox) {
 		newFieldName:"",
 		events: {				
 			'click .map-toggle .btn':function(obj){		
-				  var el = this.$el;
-				  var actid = $(obj.target).attr('id');
-				  if(actid == 'old')
-				  {					  					  
-					   el.find('#list_erroricon').css('display','none');
-				  		el.find('#newlist').removeAttr('style');
-						el.find('#newlist').hide();						
-						el.find('#existing_lists_chosen').attr('style','width:288px; display:block;');
-				  }
-				  else if(actid == 'new')
-				  {					  					  
-					  el.find('#list_erroricon').css('display','none');
-				  		el.find('#existing_lists_chosen').removeAttr('style');
-						el.find('#existing_lists_chosen').hide();
-						el.find('#newlist').show();
-				  }
-				  el.find('.map-toggle .btn').removeClass('active');
-				  $(obj.target).addClass('active');
+                            var el = this.$el;
+                            var actid = $(obj.target).attr('id');
+                            if(actid == 'old')
+                            {					  					  
+                                  el.find('#list_erroricon').css('display','none');
+                                  el.find('#newlist').removeAttr('style');
+                                  el.find('#newlist').hide();						
+                                  el.find('#existing_lists_chosen').attr('style','width:288px; display:block;');
+                            }
+                            else if(actid == 'new')
+                            {					  					  
+                                  el.find('#list_erroricon').css('display','none');
+                                  el.find('#existing_lists_chosen').removeAttr('style');
+                                  el.find('#existing_lists_chosen').hide();
+                                  el.find('#newlist').show();
+                            }
+                            el.find('.map-toggle .btn').removeClass('active');
+                            $(obj.target).addClass('active');
 			 },			
 			 'click .fubackbtn':function(){
 				 var curview = this;
 				 var app = this.app;
-				 this.campview.csvupload.$el.show();
-				 curview.$el.hide();
+                                 if(this.campview){
+                                    this.campview.csvupload.$el.show();                                    
+                                 }
+                                 else{
+                                     this.csv.$el.find("div:first-child").show(); 
+                                 }
+                                 curview.$el.hide();
 				 app.showLoading(false,curview.$el);
-			 }			 
+			 }		
+                         ,
+                         'click .save-contacts':function(){
+                           var csvupload = this.csv;
+                           if(csvupload && csvupload.fileuploaded == true)
+                            {                                                             
+                                var isValid = this.mapAndImport();
+                                if(isValid)
+                                {
+                                        this.$el.hide();                                        
+                                }
+                                return isValid;
+                            }
+                            else{                        
+                                this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));                        
+                            }
+                        }
 		},	
 		mapAndImport: function(){
 		   var campview = this.camp_obj;
-		   var curview = campview.states.step3.csvupload;
+		   var curview = campview?campview.states.step3.csvupload:this.csv;
 		   var app = this.app;
 		   var mapview = this;
 		   var appMsgs = app.messages[0];
@@ -52,41 +73,41 @@ function (template,chosen,addbox) {
 				list_array = app.getAppData("lists");
 		   if(actid == 'new')
 		   {
-			   if(el.find('#newlist').val() == '')
-			   {				  
-				  app.showError({
-					  control:el.find('.list-container'),
-					  message:appMsgs.MAPDATA_newlist_empty_error
-				  });
-				  isValid = false;				  
-			   }			   
-			   else
-			   {
-				   	if(list_array != '')
-					{
-						var exists = false;					
-						$.each(list_array.lists[0], function(index, val) { 
-							if(val[0].name == el.find('#newlist').val())
-							{
-								exists = true;
-								return;
-							}
-						});
-						if(exists)
-						{
-							app.showError({
-								control:el.find('.list-container'),
-								message:appMsgs.MAPDATA_newlist_exists_error
-							});
-							isValid = false;
-						}
-						else
-						{
-							newlist = el.find('#newlist').val();				  
-							app.hideError({control:el.find(".list-container")});
-						}
-					}					
-			   }
+                    if(el.find('#newlist').val() == '')
+                    {				  
+                           app.showError({
+                                   control:el.find('.list-container'),
+                                   message:appMsgs.MAPDATA_newlist_empty_error
+                           });
+                           isValid = false;				  
+                    }			   
+                    else
+                    {
+                        if(list_array != '')
+                        {
+                                var exists = false;					
+                                $.each(list_array.lists[0], function(index, val) { 
+                                        if(val[0].name == el.find('#newlist').val())
+                                        {
+                                                exists = true;
+                                                return;
+                                        }
+                                });
+                                if(exists)
+                                {
+                                        app.showError({
+                                                control:el.find('.list-container'),
+                                                message:appMsgs.MAPDATA_newlist_exists_error
+                                        });
+                                        isValid = false;
+                                }
+                                else
+                                {
+                                        newlist = el.find('#newlist').val();				  
+                                        app.hideError({control:el.find(".list-container")});
+                                }
+                        }					
+                    }
 		   }
 		   else if(actid == 'old')
 		   {
@@ -157,21 +178,28 @@ function (template,chosen,addbox) {
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
 			   app.showLoading("Uploading file",curview.$el);
-			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';
-			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:campview.states.step3.csvupload.fileName,layout:layout_map })
+			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';                           
+			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:curview.fileName,layout:layout_map })
 			   .done(function(data) {
 				   var list_json = jQuery.parseJSON(data);						 
 				   if(list_json[0] == 'success')
-				   {
-					   //return curview.mapdataview.savecampaign(list_json[2],list_json[1]);
-					   curview.removeFile();
-                       app.removeCache("lists");
-					   //setTimeout(function(){ mapview.checkCampStatus() },30000);
-					   //mapview.checkCampStatus();
-					   campview.states.step3.recipientType = 'List';
-					   campview.states.step3.recipientDetial = null;
-					   campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
-					   app.showLoading(false,mapview.$el);
+				   {					   
+					   
+                                           app.removeCache("lists");	
+                                           if(campview){
+                                                curview.removeFile();
+                                                campview.states.step3.recipientType = 'List';
+                                                campview.states.step3.recipientDetial = null;
+                                                campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
+                                                 app.showLoading(false,mapview.$el);
+                                           }
+                                           else{
+                                               app.showLoading(false,curview.$el);
+                                               mapview.$el.hide();
+                                               mapview.$el.parents(".ws-content").find(".camp_header .close-wp").click();
+                                               app.showMessge("Your contacts in CSV file updated successfully");
+                                           }
+					  
 				   }
 				   else
 				   {					  
@@ -216,25 +244,31 @@ function (template,chosen,addbox) {
 					curview.$el.find("#existing_lists").html(list_html);								
 				}
 				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
+                                app.showLoading(false,curview.csv.$el);
 			}
 			else
 			{				
-				URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
-				jQuery.getJSON(URL,  function(tsv, state, xhr){				
-					if(xhr && xhr.responseText){
-						app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
-						list_array = jQuery.parseJSON(xhr.responseText);
-						if(list_array != '')
-						{							
-							$.each(list_array.lists[0], function(index, val) { 
-								list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-							})
-							curview.$el.find("#existing_lists").html(list_html);							
-						}
-						app.setAppData('lists',list_array);
-						curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-					}
-				}).fail(function() { console.log( "error lists listing" ); });
+                            URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
+                            jQuery.getJSON(URL,  function(tsv, state, xhr){				
+                                    if(xhr && xhr.responseText){
+                                            if(campview){
+                                                app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
+                                            }
+                                            else{
+                                                app.showLoading(false,curview.csv.$el);
+                                            }
+                                            list_array = jQuery.parseJSON(xhr.responseText);
+                                            if(list_array != '')
+                                            {							
+                                                    $.each(list_array.lists[0], function(index, val) { 
+                                                            list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+                                                    })
+                                                    curview.$el.find("#existing_lists").html(list_html);							
+                                            }
+                                            app.setAppData('lists',list_array);
+                                            curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
+                                    }
+                            }).fail(function() { console.log( "error lists listing" ); });
 			}			
 		},
 		initialize:function(){                    
@@ -248,11 +282,16 @@ function (template,chosen,addbox) {
 		   curview.$el.find('.tabel-div').children().remove();
 		   var mappingHTML = curview.createMappingTable(curview.options.rows);
 		   curview.$el.find('.tabel-div').append(mappingHTML);
-		  campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
-		  curview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
-		  curview.$el.find(".add-custom-field").addbox({app:app,
-					addCallBack:_.bind(curview.addCustomField,curview),
-					placeholder_text:appMsgs.MAPDATA_customfield_placeholder
+                   if(campview){
+                    campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
+                   }
+                   else{
+                       this.csv.$el.append(curview.$el);                       
+                   }
+		   curview.$el.find(".mapfields").chosen({no_results_text:'Oops, nothing found!', width: "200px"});
+		   curview.$el.find(".add-custom-field").addbox({app:app,
+                        addCallBack:_.bind(curview.addCustomField,curview),
+                        placeholder_text:appMsgs.MAPDATA_customfield_placeholder
 		   });
 		   var curview = this;
 		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
@@ -260,17 +299,22 @@ function (template,chosen,addbox) {
 		render: function () {
 			this.$el.html(this.template({}));
 			this.app = this.options.app;                        
-			this.camp_obj = this.options.camp;					
+			this.camp_obj = this.options.camp;
+                        this.csv = this.options.csv;
+                        if(this.csv){
+                            this.$(".save-contacts").show();
+                        }
+                        if(this.app.get("user")){
+                            var alertEmail = this.app.get("user").alertEmail?this.app.get("user").alertEmail:this.app.get("user").userEmail;
+                            this.$("#alertemail").val(alertEmail);
+                        }
 		}
 		,
 		init:function(){
-			this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
+                    this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
 		},
-		createMappingTable:function(rows){
-			var campview = this.options.camp;
-			var curview = this;
-			var app = this.app;
-			
+		createMappingTable:function(rows){			
+			var curview = this;						
 			var tcols = 4;
 			var cols = rows[0].length;
 			var tables_count = Math.ceil(cols/tcols);
@@ -313,9 +357,10 @@ function (template,chosen,addbox) {
 									mappingHTML +="<td>"+(r-1)+"</td>";
 								}
 								else{
-									var tdText = rows[r-2][c-1] ? rows[r-2][c-1] : "&nbsp;";
-									
-									mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
+                                                                        if(rows[r-2]){
+                                                                            var tdText = rows[r-2][c-1] ? rows[r-2][c-1] : "&nbsp;";									
+                                                                            mappingHTML +="<td "+oddRow+">"+tdText+"</td>";
+                                                                        }
 								}
 							}
 						mappingHTML +="</tr>";
@@ -334,10 +379,8 @@ function (template,chosen,addbox) {
 			curview.$el.find('.mapfields').trigger("chosen:updated");
 		},
 		mapCombo: function(num) {
-			var campview = this.options.camp;
-			var curview = this;
-			var app = this.app;
-			var csvupload = campview.states.step3.csvupload;
+			var campview = this.options.camp;						
+			var csvupload = campview?campview.states.step3.csvupload:this.csv;
 			var map_feilds = csvupload.map_feilds;
 			
 			var chtml="";

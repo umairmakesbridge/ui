@@ -68,6 +68,9 @@ function ($,Backbone, _,app,Wizard, template) {
                         if(this.options.noTags){
                             this.$el.addClass("ws-notags");
                         }
+                        if(this.options.single_row){
+                            this.$("#workspace-header").addClass("single");
+                        }
                         if(this.options.addAction){
                             this.$el.find(".add-action").addClass("show-add");
                         }

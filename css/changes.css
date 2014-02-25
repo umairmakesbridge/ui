@@ -1301,6 +1301,9 @@ ul.tabs-btns li.active a{
 .wtab-reports{
     background: url("../img/reports.png") no-repeat scroll center center;
 }
+.wtab-csvupload{
+    background: url("../img/csvicon.png") no-repeat scroll center center;
+}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -1594,4 +1597,11 @@ div.shortcuts .ddicon{
     background:#EAF4F9;
     min-height: 42px;
     position: relative;
+}
+.single{
+    margin-top:13px;
+}
+#csvupload{
+    position: relative;
+    min-height: 300px;
 }

@@ -1906,14 +1906,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(input_container=="campaign_from_email" || input_container=="campaign_from_name" || input_container=="campaign_reply_to"){
                             m_fields_box.addClass("hide-selected");                            
                             $(".merge-feilds-type li#mergefields_salesRep").click();
-                            _.each($(".mergefields .browsefields #salesRep li"),function(ele,index){
-                                if($(ele).attr("mergeval")!=="{{BMS_SALESREP.EMAIL}}"){
-                                    $(ele).addClass("group1");
-                                }
-                            });
+                             if(input_container=="campaign_from_email" || input_container=="campaign_reply_to"){
+                                _.each($(".mergefields .browsefields #salesRep li"),function(ele,index){
+                                    if($(ele).attr("mergeval")!=="{{BMS_SALESREP.EMAIL}}"){
+                                        $(ele).addClass("group1");
+                                    }
+                                });                          
+                                $(".searchfields li[rel='Sales Rep']").addClass("group1");
+                                $(".searchfields li[mergeval='{{BMS_SALESREP.EMAIL}}']").removeClass("group1");
+                            }
                             $(".searchfields li[rel='Basic Field']").addClass("group1");
-                            $(".searchfields li[rel='Sales Rep']").addClass("group1");
-                            $(".searchfields li[mergeval='{{BMS_SALESREP.EMAIL}}']").removeClass("group1");
                         }
                         else if(input_container=="merge-field-editor" || input_container=="merge-field-hand" || input_container=="merge-field-plain"){
                             $(".merge-feilds-type li#mergefields_basic").click();
@@ -2014,7 +2016,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var fields = this.mergeTags[type];
                         var fields_html = "<ul id='"+ type +"'>";
                         $.each(fields,function(key,val){
-                            var hideClass= (type=="salesRep" && $(".mergefields").hasClass("hide-selected") && val[0]!=="{{BMS_SALESREP.EMAIL}}")?"group1":"";
+                            var hideClass= (type=="salesRep" && $(".mergefields").hasClass("hide-selected") && val[0]!=="{{BMS_SALESREP.EMAIL}}" && $(".mergefields").attr("input-source")!=="campaign_from_name")?"group1":"";
                             fields_html +="<li rel='"+ type +"' mergeval='"+val[0]+"' class='"+hideClass+"'>"+val[1]+"<a class='append-merge-field'>Insert</a></li>";
                         });
                         fields_html += "</ul>";
@@ -2184,6 +2186,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   this.bmseditor.showEditor(this.wp_id);                                       
                   tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                   this.$("#bmstexteditor").val(this.states.step2.plainText);
+                  this.$(".textdiv").hide();
                 },
                 setEditorHTML:function(tsv, state, xhr){
                     this.app.showLoading(false,this.$el);
@@ -2982,8 +2985,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                saveCSVUpload:function(){
                     var camp_obj = this;
                     var isValid = false;    
-					var csvupload = camp_obj.states.step3.csvupload;
-					var mapdataview = camp_obj.states.step3.mapdataview;                
+                    var csvupload = camp_obj.states.step3.csvupload;
+                    var mapdataview = camp_obj.states.step3.mapdataview;                
                     if(csvupload && csvupload.fileuploaded == true)
                     {
                         csvupload.$el.hide();
