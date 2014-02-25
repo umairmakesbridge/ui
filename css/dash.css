@@ -338,7 +338,7 @@ ul.leftnav > li:hover .contacts {background: url("../images/contact2.png") no-re
     margin: 0.5px;
     width: 139px;
 }
-.ddmenu ul.firstMenu.submenu li{
+.ddmenu ul.firstMenu.submenu li,.ddmenu ul.secondMenu.submenu li{
     width:279px;
 }
 .ddmenu:hover ul.submenu .firstblock {width:279px;}
@@ -367,7 +367,7 @@ ul.leftnav > li:hover .contacts {background: url("../images/contact2.png") no-re
     vertical-align: middle;
     width: 95px;
 }
-.ddmenu ul.firstMenu.submenu li a span{
+.ddmenu ul.firstMenu.submenu li a span,.ddmenu ul.secondMenu.submenu li a span{
     width: 270px;
 }
 .ddmenu ul.submenu li a span em { font-style:normal; font-size:12px;}
@@ -1547,6 +1547,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
     overflow: hidden;
 }
 .videopop .video img{ display:block; width:100%;}
+.slidenav > ul >  li ul li:hover i.icon.csvuploadicon {background: url("../img/csvupload.png") no-repeat scroll center center; }
 
 
 
