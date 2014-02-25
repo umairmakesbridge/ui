@@ -330,7 +330,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             return false;
                         }
                         //Setting Campaign Basic Settings
-                        camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_json.name);
+                        camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
 
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
 			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
@@ -339,7 +339,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
                             {
                                     var merge_field = camp_obj.app.decodeHTML(camp_json.fromEmail);                                                                    
-                                    camp_obj.$("#campaign_from_email_input").val(merge_field)
+                                    camp_obj.$("#campaign_from_email_input").val(merge_field);
                                     camp_obj.$("#campaign_from_email_default").show();
                                     camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
                                     camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
