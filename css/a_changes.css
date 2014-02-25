@@ -1,0 +1,34 @@
+/*
+ A_changes.css is simply a file where the change stylesheet is placed.
+*/
+/* 
+    Created on : Feb 24, 2014, 8:47:30 PM
+    Author     : Abdul Wakeel
+*/
+
+.ui-accordion .ui-accordion-header .radiopanelinput.checked .icheck_radio-icon {
+    margin:15px 0px 0px 12px;
+}
+#salesforce_setup .checkpanelinput .icheck_line-icon {
+    margin: 13px 0px 0px 10px;
+ }
+ .ui-accordion .ui-accordion-header .radiopanelinput.checked .icheck_radio-icon {
+    margin:15px 0px 0px 12px;
+}
+.wizard  #contacts_count .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon{
+   margin: 12px 0px 0px 10px;
+}
+.model_form .campname-container label,.templatename-container label{
+    width:auto!important;
+}
+.header-editable-highlight .dialog-title:hover,.header-edible-campaign:hover{
+    background-color:#38c5fb; cursor:pointer; 
+}
+.pointy.add:after {
+    left: -5px;
+}
+.tagscont .addtag > a:after {
+    left: -5px;
+ }
+
+ 
