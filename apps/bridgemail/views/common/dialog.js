@@ -5,7 +5,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         className:'modal',
                         events: {
                             'click .btn-save':function(){
-                                this.saveCall()
+                                this.saveCall();
                             },
                             'click .toolbar .close':function(){
                                 this.hide();
@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                              this.$(".modal-body").css(this.options.bodyCss ? this.options.bodyCss:{});
                              
                              if(this.options.headerEditable){
-                                 this.$(".modal-header").removeClass("ws-notags");
+                                 this.$(".modal-header").removeClass("ws-notags").addClass('header-editable-highlight');
                              }
                              if(this.options.buttons){
                                 if(this.options.buttons.saveBtn){ 
@@ -49,11 +49,16 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                  this.$(".header-icon").addClass(this.options.headerIcon).show();
                                  this.$(".modal-header .c-name").addClass("header-icon");
                              }
+                             if(this.options.overlay){
+                                
+                                 this.doubleBlackOut(this.options.overlay);
+                                 
+                             }
                              if(this.options.newButtons){
                                  var _this = this;
                                  _.each(this.options.newButtons,function(v,k){
                                       var _btn =$('<a class="btn btn-blue right btn-custom" style="display: inline;"><span>'+v.btn_name+'</span><i class="icon update"></i></a>');
-                                      _this.$(".btn-save").after(_btn);
+                                      _this.$(".btn-save").before(_btn);
                                       _btn.click(function(){
                                          _this.saveCall2();
                                       })
@@ -64,7 +69,17 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                  
                              }
                              this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-			},                        
+			},
+                        doubleBlackOut:function(show){
+                            if(show){
+                                $('.modal').css('z-index',-1);
+                                this.$el.css('z-index',1001);
+                            }else{
+                                $('.modal').css('z-index',1001);
+                                this.$el.css('z-index',-1);
+                            }
+                            
+                        },
                         show:function(){                          
                           this.$el.modal({backdrop: 'static',keyboard: false});
                           this.$el.modal("show");
@@ -79,7 +94,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         hide:function(){
                             
                             this.$el.modal("hide");
-                           
+                            this.doubleBlackOut(false);
                         },
                         getBody:function(){
                             return this.$(".modal-body");
