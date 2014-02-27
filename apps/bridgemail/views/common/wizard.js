@@ -104,7 +104,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             //Moving Steps prgoress bar                            
                             this.$el.find(".progressbar .active").removeClass("active");
                             this.$el.find(".progressbar li").eq(this.active_step-1).addClass("active");
-
+                            this.$el.find("a.backbtn span").remove();
                             //Making Button enable disable
                             if(this.active_step==1){
                                 this.$el.find("a.backbtn").hide();
@@ -112,6 +112,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             if(this.active_step < this.total_steps){
                                 this.$el.find("a.nextbtn").show();
                             }
+                           
                         },
                         validateStep:function(){
                             var validate = this.page.stepsCall("step_"+parseInt(this.active_step));
@@ -139,7 +140,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             //Moving Steps prgoress bar                            
                             this.$el.find(".progressbar .active").removeClass("active");
                             this.$el.find(".progressbar li").eq(this.active_step-1).addClass("active");
-
+                            this.$el.find("a.backbtn span").remove();
+                            if(this.active_step==4){
+                                this.$el.find("a.backbtn").append('<span>Back</span>');
+                            }
                             //Making Button enable disable
                             if(this.active_step>1){
                                 this.$el.find("a.backbtn").show();

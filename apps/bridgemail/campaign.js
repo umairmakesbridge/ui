@@ -92,7 +92,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'list-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search Lists',
+                            placeholder: 'Search lists',
                             gridcontainer: 'list_grid',
                             showicon: 'yes',
                             iconsource: 'list'
@@ -101,7 +101,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'list-recps-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search Recipients',
+                            placeholder: 'find recipients',
                             gridcontainer: 'recipients',
                             showicon: 'yes',
                             iconsource: 'list'
@@ -3053,7 +3053,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         }
                                         else
                                         {											
-                                           camp_obj.$el.find(".step3 #area_choose_lists .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
+                                           camp_obj.$el.find(".step3 #area_choose_lists .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email address</p></div></div>');
                                         }
                                     }
                                     else if(rec_josn.type.toLowerCase()=="target"){
@@ -3064,7 +3064,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         }
                                         else
                                         {
-                                                camp_obj.$(".step3 #area_choose_targets .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email addres</p></div></div>');
+                                                camp_obj.$(".step3 #area_choose_targets .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email address</p></div></div>');
                                         }
                                     }
                                     else if(rec_josn.type.toLowerCase()=="tags"){                                        

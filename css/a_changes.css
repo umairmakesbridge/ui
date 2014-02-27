@@ -31,11 +31,20 @@
     left: -5px;
  }
  .tooltip{
-     max-width: 800px;
+     max-width: 400px;
      padding-left:5px!important;
  }
  .tooltip-inner{
      max-width: 800px;
   }
 
- 
+::-webkit-input-placeholder { color:#b4b4b4!important; }
+::-moz-placeholder { color:#b4b4b4!important; } /* firefox 19+ */
+:-ms-input-placeholder { color:#b4b4b4!important; } /* ie */
+input:-moz-placeholder { color:#b4b4b4!important; }
+ #area_create_template .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
+    margin: 4px 0px 0px 5px!important;
+ }
+ .schedule-container h2.clearfix{
+     text-transform: none!important;
+ } 

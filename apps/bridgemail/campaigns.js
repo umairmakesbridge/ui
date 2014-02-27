@@ -269,6 +269,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                         camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                         camp_obj.app.removeCache("campaigns");
                                         camp_obj.getallcampaigns();
+                                     
                                 }
                                 else
                                 {

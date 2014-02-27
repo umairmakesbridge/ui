@@ -3,8 +3,19 @@ function (template) {
         'use strict';
         return Backbone.View.extend({                
                 events: {
-                    
-                 },
+                    'keypress .inputcont #camp_name':'enterSave'
+                },
+                enterSave:function(e){
+                    console.log('here m I');
+                     if(e.which === 13){
+                         var _dilog = '';
+                        if(this.options.copycampsdialog)
+                           _dilog = this.options.copycampsdialog;
+                        else
+                           _dilog = this.options.copycampdialog;
+                        _dilog.$el.find('.btn-save').click();  
+                     }
+                },
                 initialize: function () {
                         this.template = _.template(template);				
                         this.render();
@@ -13,8 +24,9 @@ function (template) {
                         if(this.options.copycampsdialog)
                                 copydialog = this.options.copycampsdialog;
                         else
-                                copydialog = this.options.copycampdialog;
+                               copydialog = this.options.copycampdialog;
                         var curview = this;
+                        
                         this.app.showLoading(false,copydialog.getBody());
                         var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+app.get('bms_token');
                         var camps_json = '';
@@ -23,6 +35,7 @@ function (template) {
                                 camps_json = jQuery.parseJSON(data);
                                 curview.$el.find('.copy_campbox h2 span').html(camps_json.name);
                                 curview.$el.find('.copy_campbox .tagscont').html(app.showTags(camps_json.tags));
+                                curview.$el.find('#camp_name').focus();
                         });						
                 },
                 render: function () {                        						
