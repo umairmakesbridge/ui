@@ -269,10 +269,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                         camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                         camp_obj.app.removeCache("campaigns");
                                         camp_obj.getallcampaigns();
-                                     
+                                        var wp_id = $("#wstabs li[workspace_id=campaign_"+camp_id+"]").attr('id').split("_")[2];
+                                        $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
                                 }
-                                else
-                                {
+                                else{
                                              camp_obj.app.showAlert(del_camp_json[1],camp_obj.$el.parents(".ws-content.active"));							
                                 }
                                 camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));					   
