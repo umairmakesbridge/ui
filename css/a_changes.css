@@ -29,7 +29,7 @@
  #area_create_template .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
     margin: 4px 0px 0px 5px;
  }
- #salesforce_setup #salesforce_campaigns .checkpanelinput .icheck_line-icon,#salesforce_setup #salesforce_campaigns  .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
+  #salesforce_campaigns  .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon  {
     margin: 13px 0px 0px 12px;
  }
 .model_form .campname-container label,.templatename-container label{
