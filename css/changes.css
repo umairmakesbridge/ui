@@ -256,8 +256,7 @@ div.tooltip:before{
 }
 div.tooltip{
     background: none repeat scroll 0 0 #495B67;
-    width: 100px;    
-}
+ }
 div.tooltip.tags-div{
     background: none repeat scroll 0 0 #F6F6F6 !important;
     border:1px solid #7A7A7A !important;

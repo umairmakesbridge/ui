@@ -145,8 +145,13 @@ function (template,icheck,bmstags) {
                         if(template_json.isFeatured=='Y'){
                             _this.$(".featured").iCheck('check');
                         }
-                        if(template_json.isReturnPath=='Y'){
-                            _this.$(".return-path").iCheck('check');
+                        if(template_json.isAdmin == "Y"){ 
+                           if(template_json.isReturnPath=='Y'){
+                               _this.$(".return-path").closest('.btnunchecked').css('display','inline-block');
+                                _this.$(".return-path").iCheck('check');
+                              }
+                        }else{
+                            _this.$(".return-path").closest('.btnunchecked').remove();
                         }
                         if(template_json.isMobile=='Y'){
                             _this.$(".mobile-comp").iCheck('check');

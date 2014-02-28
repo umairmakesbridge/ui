@@ -9,6 +9,7 @@
 .ui-accordion .ui-accordion-header .radiopanelinput.checked .icheck_radio-icon {
     margin:15px 0px 0px 12px;
 }
+
 #salesforce_setup .checkpanelinput .icheck_line-icon {
     margin: 13px 0px 0px 10px;
  }
@@ -17,6 +18,23 @@
 }
 .wizard  #contacts_count .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon{
    margin: 12px 0px 0px 10px;
+}
+
+#campaign_add_to_salesforce_accordion .checkpanelinput .icheck_line-icon,#campaign_add_to_salesforce_accordion  .radiopanelinput .icheck_radio-icon {
+    margin: 13px 0px 0px 13px;
+ }
+ #conversion_filter_accordion .checkpanelinput .icheck_line-icon,#conversion_filter_accordion  .radiopanelinput .icheck_radio-icon {
+    margin: 13px 0px 0px 13px;
+ }
+ #area_create_template .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
+    margin: 4px 0px 0px 5px;
+ }
+  #salesforce_campaigns  .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon,#salesforce_campaigns .radiopanelinput.checked .icheck_radio-icon  {
+    margin: 12px 0px 0px 11px;
+ }
+ #salesforce_campaigns .ui-accordion .ui-accordion-header .checkpanelinput, #salesforce_campaigns .ui-accordion .ui-accordion-header .radiopanelinput {
+    height: 47px;
+    margin: -1px;
 }
 .model_form .campname-container label,.templatename-container label{
     width:auto!important;
@@ -30,5 +48,19 @@
 .tagscont .addtag > a:after {
     left: -5px;
  }
+ .tooltip{
+     max-width: 400px;
+     padding-left:5px!important;
+ }
+ .tooltip-inner{
+     max-width: 800px;
+  }
 
+::-webkit-input-placeholder { color:#b4b4b4!important; }
+::-moz-placeholder { color:#b4b4b4!important; } /* firefox 19+ */
+:-ms-input-placeholder { color:#b4b4b4!important; } /* ie */
+input:-moz-placeholder { color:#b4b4b4!important; }
  
+ .schedule-container h2.clearfix{
+     text-transform: none!important;
+ } 
