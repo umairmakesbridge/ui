@@ -29,9 +29,13 @@
  #area_create_template .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
     margin: 4px 0px 0px 5px;
  }
-  #salesforce_campaigns  .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon  {
-    margin: 13px 0px 0px 12px;
+  #salesforce_campaigns  .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon,#salesforce_campaigns .radiopanelinput.checked .icheck_radio-icon  {
+    margin: 12px 0px 0px 11px;
  }
+ #salesforce_campaigns .ui-accordion .ui-accordion-header .checkpanelinput, #salesforce_campaigns .ui-accordion .ui-accordion-header .radiopanelinput {
+    height: 47px;
+    margin: -1px;
+}
 .model_form .campname-container label,.templatename-container label{
     width:auto!important;
 }
