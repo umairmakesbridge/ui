@@ -101,7 +101,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'list-recps-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search recipient list',
+                            placeholder: 'Search recipient lists',
                             gridcontainer: 'recipients',
                             showicon: 'yes',
                             iconsource: 'list'
@@ -110,7 +110,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'target-list-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search Lists',
+                            placeholder: 'Search lists',
                             gridcontainer: 'target_list_grid',
                             showicon: 'no',
                             iconsource: ''
@@ -119,7 +119,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'target-recps-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search recipient target',
+                            placeholder: 'Search recipient targets',
                             gridcontainer: 'recipients',
                             showicon: 'yes',
                             iconsource: 'target'
@@ -128,7 +128,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'target-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'Search target',
+                            placeholder: 'Search targets',
                             gridcontainer: 'targets_grid',
                             showicon: 'yes',
                             iconsource: 'target'
