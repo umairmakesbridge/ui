@@ -60,7 +60,8 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
           'click .campaign-listing':'campaignListing',
           'click .template-gallery':'templateGallery',
           'click .camapign-report' :'camapignReport',
-          'click .csv-upload':'csvUpload'
+          'click .csv-upload':'csvUpload',
+          'click .connect-crm':'connectCrm'
           
       },
       initialize:function(){
@@ -145,7 +146,8 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
             url : 'campaign',
             tab_icon:'campaign',            
             params: {camp_id:camp_id},
-            wizard :{steps:4,active_step:1,step_text:["Settings","Create","Recipients","Schedule"]},
+            wizard :{steps:4,active_step:1,step_text:["Settings","Create","Recipients","Schedule"],step_tooltip:["Basic message setup.",
+                    "Create email with a template, copying an existing campaign or use your own html.","Set who should receive this campaign.","Schedule date and time for email transmission."]},
             actions :[{'iconCls':'campaigns','text':'New Campaign','url':''},{'iconCls':'upload-subscribers','text':'Upload Subscribers','url':''}
                       ,{'iconCls':'add-list','text':'Add List','url':''},{'iconCls':'forms','text':'Create Form','url':''}  
                       ,{'iconCls':'segments','text':'Edit Segments','url':''},{'iconCls':'reports','text':'Reports','url':''}  
@@ -277,7 +279,10 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
        },
        csvUpload:function(){
            this.addWorkSpace({type:'',title:'CSV Upload',url : 'listupload/csvupload',workspace_id: 'csv_upload',tab_icon:'csvupload', single_row:true});
-       }
+       },
+      connectCrm:function(){
+         // this.addWorkSpace({type:'',title:'Connections',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
+      }
        
       
    });

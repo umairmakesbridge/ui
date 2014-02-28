@@ -207,17 +207,29 @@ function (template,jsearchcontrol,chosen,moment,tags) {
                     changeFieldsBtn.click(_.bind(this.editProfile,this));
                 _this.$(".topinfo").append(changeFieldsBtn);
                 $.each(_this.basicFields,function(key,val){
-                     if(key !=="lastName" && key!=="telephone"){
-                        if(key!=="firstName" && key!=="areaCode"){ 
+                     if(key!=="telephone"){
+                        if(key!=="title" && key!=="areaCode" && key!=="email"){ 
                             var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
                             _this.$(".topinfo").append('<span>'+val.label+'<strong>'+_val+'</strong> </span>');
                         }
                         else{
-                           if(key=="firstName") {
-                               _this.$(".topinfo").append('<span>Name<strong>'+_this.sub_fields["firstName"]+' '+_this.sub_fields["lastName"]+'</strong> </span>');
+                           if(key=="areaCode") {
+                               var _val = "&nbsp;";
+                               if( _this.sub_fields["areaCode"]!=="" && _this.sub_fields["telephone"]!==""){
+                                   _val = _this.sub_fields["areaCode"]+'-'+_this.sub_fields["telephone"];
+                               }
+                               else if(_this.sub_fields["areaCode"]=="" && _this.sub_fields["telephone"]!==""){
+                                   _val = _this.sub_fields["telephone"];
+                               }                               
+                               else if(_this.sub_fields["areaCode"]!=="" && _this.sub_fields["telephone"]===""){
+                                   _val = _this.sub_fields["areaCode"];
+                               }                               
+                               _this.$(".topinfo").append('<span>Area Code - Telephone<strong>'+_val+'</strong> </span>');
                            }
-                           else if(key=="areaCode") {
-                               _this.$(".topinfo").append('<span>Telephone<strong>'+_this.sub_fields["areaCode"]+' '+_this.sub_fields["telephone"]+'</strong> </span>');
+                           else{
+                                var _val = _this.sub_fields[key] ? _this.sub_fields[key] : "&nbsp;";
+                                var border=(key=="email")?"border-bottom:1px solid #fff;padding-bottom:20px;margin-bottom:15px":"";
+                               _this.$(".topinfo").append('<span style="width:98%;'+border+'">'+val.label+'<strong style="width:98%">'+_val+'</strong> </span>');
                            }
                         }
                      }

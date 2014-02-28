@@ -79,9 +79,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             var _steps = this.$el.find(".progressbar li");
                             if(this.options.step_text && this.options.step_text.length){
                                 var step_text = this.options.step_text;
+                                var step_tooltip = this.options.step_tooltip;
                                 _steps.each(function(i,step){                                    
                                     $(step).find("a").html(step_text[i]);
-                                    $(step).attr("title",step_text[i]);
+                                    if(step_tooltip){
+                                        $(step).attr("title",step_tooltip[i]);
+                                    }
                                     
                                 });
                             }

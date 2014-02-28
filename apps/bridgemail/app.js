@@ -210,6 +210,7 @@ define([
                             cl = 'caution';
                             title = 'Caution';
                     }
+                    
                     var message_box = $('<div class="messagebox messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
                     $(container).append(message_box);
                     message_box.find(".closebtn").click(function(){

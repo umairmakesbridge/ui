@@ -22,8 +22,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             'click .csv-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:'CSV Upload',url : 'listupload/csvupload',workspace_id: 'csv_upload',tab_icon:'csvupload', single_row:true});
                             },
-                            'click .studio_reports-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
+                            'click .crm-li':function(obj){
+                                app.mainContainer.addWorkSpace({type:'',title:'Connections',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
                             }
                             ,
                             'click .studio_add-li':function(obj){

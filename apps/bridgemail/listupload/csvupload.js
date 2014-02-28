@@ -48,10 +48,10 @@ function (app,template,fileuploader,chosen,addbox) {
 		},
 		showSelectedfile:function(files){
 			var z = -40;
-			var maxFiles = 1;
-			var errMessage = 0;
+			var maxFiles = 1;			
                         var campview = this.camp_obj;
 			var curview = this;
+                        var errMessage = this.errMessage;
 			var app = this.app?this.app:app;
 			var el = this.$el;
 			var appMsgs = app.messages[0];
@@ -61,23 +61,24 @@ function (app,template,fileuploader,chosen,addbox) {
                         }
 			app.showLoading("Uploading file",el);
 			$.each(files, function(index, file) {
-				if (!(files[index].type=="application/vnd.ms-excel" || files[index].type.indexOf("csv")>-1)) 
+                                var extension = files[index].name.split(".")[files[index].name.split(".").length - 1].toLowerCase();
+				if (extension!=="csv") 
 				{
 					if(errMessage == 0) {
-							el.find('#dropped-files').html(appMsgs.CSVUpload_wrong_filetype_error);
-							++errMessage
+                                            el.find('#dropped-files').html(appMsgs.CSVUpload_wrong_filetype_error);
+                                            ++errMessage
 					}
 					else if(errMessage == 1) {
-							el.find('#dropped-files').html('Stop it! CSV only!');
-							++errMessage
+                                            el.find('#dropped-files').html('Stop it! CSV only!');
+                                            ++errMessage
 					}
-					else if(errMessage == 2) {
-							el.find('#dropped-files').html("Can't you read?! CSV only!");
-							++errMessage
+                                        else if(errMessage == 2) {
+                                            el.find('#dropped-files').html("Can't you read?! CSV only!");
+                                            ++errMessage
 					}
 					else if(errMessage == 3) {
-							el.find('#dropped-files').html("Fine! Keep selecting non-CSV.");
-							errMessage = 0;
+                                            el.find('#dropped-files').html("Fine! Keep selecting non-CSV.");
+                                            errMessage = 0;
 					}
 					app.showLoading(false,el);
 					return false;
@@ -157,7 +158,7 @@ function (app,template,fileuploader,chosen,addbox) {
 		},			
 		initialize:function(){
 		   this.template = _.template(template);			   	   
-		   this.render();
+		   this.render();                   
                    if(this.camp_obj){
                     var campview = this.camp_obj;
                     this.app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
@@ -166,6 +167,7 @@ function (app,template,fileuploader,chosen,addbox) {
 		render: function () {
 			this.$el.html(this.template({}));
 			this.app = this.options.app;
+                        this.errMessage = 0;
 			this.camp_obj = this.options.camp;
 			jQuery.event.props.push('dataTransfer');
 		},		

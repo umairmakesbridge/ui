@@ -1304,6 +1304,9 @@ ul.tabs-btns li.active a{
 .wtab-csvupload{
     background: url("../img/csvicon.png") no-repeat scroll center center;
 }
+.wtab-crm{
+    background:url("../img/connection.png") no-repeat scroll center center;
+}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -1604,4 +1607,7 @@ div.shortcuts .ddicon{
 #csvupload{
     position: relative;
     min-height: 300px;
+}
+.profileinfo span strong{
+    line-height: 23px;    
 }
