@@ -101,7 +101,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             id:'list-recps-search',
                             width:'300px',
                             height:'22px',
-                            placeholder: 'find recipients',
+                            placeholder: 'Search recipient list',
                             gridcontainer: 'recipients',
                             showicon: 'yes',
                             iconsource: 'list'
