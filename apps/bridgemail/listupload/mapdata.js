@@ -244,7 +244,9 @@ function (template,chosen,addbox) {
 					curview.$el.find("#existing_lists").html(list_html);								
 				}
 				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-                                app.showLoading(false,curview.csv.$el);
+                                if(curview.csv){
+                                    app.showLoading(false,curview.csv.$el);
+                                }
 			}
 			else
 			{				
