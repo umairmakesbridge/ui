@@ -6,7 +6,7 @@ function (template) {
                     'keypress .inputcont #camp_name':'enterSave'
                 },
                 enterSave:function(e){
-                    console.log('here m I');
+                
                      if(e.which === 13){
                          var _dilog = '';
                         if(this.options.copycampsdialog)
