@@ -54,6 +54,7 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
           'click #wp_li_0' : function(){
               this.addWorkSpace({type:''});              
           },
+          
           'click .new-campaign':'createCampaign',
           'click .new-template':'createTemplate',
           'click .view-contacts':'viewContacts',
@@ -135,7 +136,12 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
              obj.addClass("active");
              var workspace_id = obj.attr("id").split("_")[2];             
              $("#workspace #workspace_"+workspace_id).show().addClass("active");
-            
+             if(obj.attr("workspace_id")){
+               var objAttr = obj.attr("workspace_id").split('_');
+                if(objAttr[0]==='campaign'){
+                    this.app.fixEmailFrom();
+                }
+             }
          }
       },
       openCampaign:function(camp_id){

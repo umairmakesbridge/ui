@@ -229,12 +229,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 setFromNameField:function(){
-                  if(this.$("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
-                    this.$("#campaign_from_email_input").css("width",this.$("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px");
-                  }
-                  if(this.$("#fromemail_default_input").prev().find(".chosen-single span").width()){
-                    this.$("#fromemail_default_input").css("width",this.$("#fromemail_default_input").prev().find(".chosen-single span").width()+"px")  
-                  }
+                    this.app.fixEmailFrom();
                 },
                 fromNameSelectBoxChange:function(obj){
                      var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -354,9 +349,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.$("#campaign_from_email_default").hide();                            
                             }
                         }
-                        var subj_w = camp_obj.$el.find('#campaign_subject').width();
+                        var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah Check
                         var fegb_w = camp_obj.$el.find('#fecol3').width();
-                        camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
+                        //camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
 			if(camp_json.senderName != ''){
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         }
@@ -650,6 +645,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             default:
                                 break;
                         }
+                        if(stepNo=='step_1'){
+                            this.app.fixEmailFrom();
+                        }
                     }
                 },
                 initStep2:function(){
@@ -831,8 +829,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.$(".other_accord").show();
                     else
                             this.$(".other_accord").hide();
-                    var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+this.camp_id+"&html=Y&original=N";         
-                    this.$("#email-preview").attr("src",preview_url);                   
+                    var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+this.camp_id+"&html=Y&original=N";  
+                    this.$("#email-preview").attr("src",preview_url);
+                    this.$('#email-preview').height("600px");
+                    /* Set the Height of Iframe*/
+                    $( "#email-preview" ).load(_.bind(function() {
+                        console.log('Iframe has been loaded successfuly');
+                        var iframe_height = this.$("#email-preview").contents().find("body").height();
+                        if(iframe_height < 600){
+                            this.$('#email-preview').height('600');
+                        }else{
+                            this.$('#email-preview').height(iframe_height);
+                        }
+                    },this));
                 },
                 setScheduleArea:function(){
                     if(this.states.step4.camp_status!=='D'){
@@ -1282,8 +1291,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$(".flyinput").val(selected_fromEmail);
                             setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);                            
                             
-                            var subj_w = camp_obj.$el.find('#campaign_subject').width();                            
-                            camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w-40));
+                            var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck   
+                            //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40));
+                            camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
                             
                             if(defaults_json.customFooter==""){
                                 camp_obj.$("#campaign_useCustomFooter_div").hide();                                

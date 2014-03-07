@@ -12,7 +12,7 @@ function (template,moment) {
                     "SU":{"name":"Signup Form","action":"Form","cssClass":"signupform"}
                     ,"CS":{"name":"Campaign Sent","action":"Campaign","cssClass":"campaignsent"}
                     ,"OP":{"name":"Campaign Open","action":"Campaign","cssClass":"campaignopen"}
-                    ,"CK":{"name":"Article Click","action":"Campaign","cssClass":"articleclick"}
+                    ,"CK":{"name":"Email Click","action":"Campaign","cssClass":"articleclick"}
                     ,"MT":{"name":"Single Message Sent","action":"Email","cssClass":"messagesent"}
                     ,"MO":{"name":"Single Message Open","action":"Email","cssClass":"messageopen"}
                     ,"MC":{"name":"Single Message URL Click","action":"Email","cssClass":"messageclick"}

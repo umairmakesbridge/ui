@@ -1610,3 +1610,47 @@ div.shortcuts .ddicon{
 .profileinfo span strong{
     line-height: 23px;    
 }
+/*----------
+    Abdullah Changes 
+ -----------*/	
+.bms-input-tags {
+    padding-right: 67px !important;
+    width: 244px;
+}
+.campaign-headerinfo-input{
+     padding-right: 68px !important;
+    /* width: 79.7% !important;*/
+}
+.create-email-templates{
+    background: url('../images/createtemplate1.png');
+}
+
+.create-email-templates2{
+    background: url('../images/createtemplate2.png');
+}
+.slidenav > ul > li ul li:hover i.icon.create-email-templates2 {
+    background: url("../images/createtemplate1.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+#fromemail_default_chosen{
+    max-width:63.5% !important;
+}
+.directarrow {
+    left:34%;
+}
+.addrow input[type="text"] {
+    width: 60.5%;
+    padding-left:1%;
+}
+.campaign-fields-right-wrapper{
+    float: right;
+    width: 74%;
+}
+@media (min-width: 1920px) {
+    .adv_dd {
+    width: 80%;
+    }
+}
+@media (max-width: 1199px) { 
+   .addrow input[type="text"] { width: 59.3%; }
+}
+/* ENDS */
