@@ -612,7 +612,7 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
 .slidenav > ul >  li.dd {background: url("../images/arrowright.png") no-repeat scroll 225px 20px rgba(0, 0, 0, 0);}
 .slidenav > ul >  li.dd:hover {background: url("../images/arrowright.png") no-repeat scroll 225px 20px rgba(0, 0, 0, 0);}
 
-.slidenav > ul >  li:hover ul { display:block;}
+/*.slidenav > ul >  li:hover ul { display:block;}*/
 .slidenav > ul >  li ul {
     margin: 0 0 0 ;
     width: 250px;
