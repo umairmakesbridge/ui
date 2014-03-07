@@ -258,7 +258,10 @@ function (template,highlight) {
                                 searchString +="&isFeatured=Y"                                
                             }
                             if(searchType=="mobile"){
-                                searchString +="&isMobile=Y"                                
+                                searchString +="&isMobile=Y";                                
+                            }
+                            if(searchType=="returnpath"){
+                               searchString +="&isReturnPath=Y";
                             }
                         }
                         this.offset = 0;
@@ -336,7 +339,7 @@ function (template,highlight) {
                                 templates_html +='<div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>';
                             }                                
                             if(val[0].isReturnPath==='Y'){
-                                templates_html +='<div class="rpath"></div>';
+                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Templates"></div>';
                             }       
                             templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
                             
@@ -422,7 +425,11 @@ function (template,highlight) {
                              this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
                              this.loadTemplates('search','mobile');  
                         },this));
-                        
+                        /*Search return Path by abdullah*/
+                        template_html.find(".rpath").click(_.bind(function(obj){ 
+                            this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                             this.loadTemplates('search','returnpath');
+                        },this));
                         template_html.find(".cat").click(_.bind(function(obj){     
                              var cat = $.getObj(obj,"a");
                              this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  

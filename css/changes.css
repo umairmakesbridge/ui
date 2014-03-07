@@ -1645,6 +1645,9 @@ div.shortcuts .ddicon{
     float: right;
     width: 74%;
 }
+div.rpath {
+    cursor: pointer;
+}
 @media (min-width: 1920px) {
     .adv_dd {
     width: 80%;

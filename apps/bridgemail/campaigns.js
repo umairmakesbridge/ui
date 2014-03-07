@@ -465,7 +465,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             if(!this.app.getAppData("campaigns")){
                                     this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
                                     this.app.getData({
-                                            "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
+                                            "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=131&bucket=20",
                                             "key":"campaigns",
                                             "callback":_.bind(this.createListTable,this)
                                     });
