@@ -734,7 +734,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 initStep4:function(){
                     if(this.states.step4.init===false){                        
                         this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
-                        this.$("#accordion_recipients").accordion({ collapsible: false});        
+                        this.$("#accordion_recipients").accordion({ collapsible: false}); 
                         if(this.states.step4.camp_status=='S'){
                             this.loadCalender(this.states.step4.sch_date);
                             this.showScheduleBox();
@@ -793,6 +793,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     var camp_obj =this;
                     recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div>'
+                    //console.log(this.states.step3.recipientDetial.listNumbers.length);
                     this.$(".recipients-inner").html(recipients_html);
                     this.$(".settings-inner").html(settings_html+"<div class='clearfix'></div>");
 					var i = 0;
@@ -834,7 +835,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$('#email-preview').height("600px");
                     /* Set the Height of Iframe*/
                     $( "#email-preview" ).load(_.bind(function() {
-                        console.log('Iframe has been loaded successfuly');
                         var iframe_height = this.$("#email-preview").contents().find("body").height();
                         if(iframe_height < 600){
                             this.$('#email-preview').height('600');
