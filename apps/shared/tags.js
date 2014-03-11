@@ -17,7 +17,11 @@
 
   , init: function (element, options) {           
       this.$element = $(element)
-      this.options = this.getOptions(options)            
+      this.options = this.getOptions(options)
+      if(this.options.module == "Image"){
+         
+         this.options.template =  '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="showtooltip ellipsis" style="display:none" data-original-title="More Tags">...</span><div class="addtag pointy add"><a class="showtooltip" data-original-title="Add Tag"><strong>+</strong></a></div></div>';    
+      }
       this.ele = $(this.options.template)
       this.dialog = $(this.options.dialog)
       this.toolbar = $(this.options.toolbar)
@@ -86,19 +90,18 @@
       }
       if(tags_ul.children().length==0){
            this.ele.find(".tags-contents").hide();
-        }
-       else{
-          this.ele.find(".tags-contents").css("display","inline-block");           
-          tags_ul.css("width","auto");
-          if(tags_ul.width()>260){
-              tags_ul.css("width","250px");              
-              this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");              
-          }
-          else{
-              tags_ul.unbind("mouseout")
-              tags_ul.removeClass("overflow");              
-              this.$element.find(".tags-buttons .ellipsis").hide();
-          }
+        }else{
+            this.ele.find(".tags-contents").css("display","inline-block");           
+            tags_ul.css("width","auto");
+            if(tags_ul.width()>260){
+                tags_ul.css("width","250px");              
+                this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");              
+            }
+            else{
+                tags_ul.unbind("mouseout")
+                tags_ul.removeClass("overflow");              
+                this.$element.find(".tags-buttons .ellipsis").hide();
+            }
        }
        this.initTypeAhead()
   },
@@ -131,7 +134,7 @@
             }
         }                    
         else if(edit_id===null && tags_arr.length>=this.options.tag_limit){                        
-            this.options.app.showAlert('You can enter '+this.options.tag_limit+' tags for campaign.',$("body"),{fixed:true});
+            this.options.app.showAlert('You can enter '+this.options.tag_limit+' tags for '+this.options.module+'.',$("body"),{fixed:true});
             isValid = false;
         }
         if(isValid===false){
@@ -192,7 +195,9 @@
                     self.dialog.find("#add_tag_btn").removeClass("saving") 
                     if(tag_json[0]=="success"){
                         self.options.tags = temp_tags;
-                        self.showTags();                                                                
+                        self.showTags();
+                        if(self.options.module == "Image")
+                            self.options.callBack(temp_tags);
                     }
                     
                     if(self.tag_action!=="delete"){
@@ -363,6 +368,14 @@
   hideLoading:function(){
       var ele = this.$element.find(".tags-contents ul .tags-load-mask")       
           ele.remove()
+  },
+  isChildOverflow:function(child,parent){
+        var p = parent;
+        var el = child;
+        console.log(p.offsetHeight + "parent");
+        console.log(el.offsetHeight);
+        return (el.offsetTop < p.offsetTop || el.offsetLeft < p.offsetLeft) ||
+            (el.offsetTop + el.offsetHeight > p.offsetTop + p.offsetHeight || el.offsetLeft + el.offsetWidth > p.offsetLeft + p.offsetWidth);
   }
   ,
   initTypeAhead:function(){
@@ -431,6 +444,7 @@
     tag_limit: 5,
     showAddButton:false,
     url:'',
+    module:"Campaign",
     params:{},
     typeAheadURL:''
   , app:null
