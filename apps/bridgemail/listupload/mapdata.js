@@ -163,11 +163,25 @@ function (template,chosen,addbox) {
 					}					
 				}
 			});
+                        /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
 				app.showAlert(appMsgs.MAPDATA_bmsfields_empty_error,el);
 				isValid = false;
 			}
+                        else{
+                            var layout_map = layout_map.split(',');
+                            var email_flag = null; 
+                            for(var i=0;i<layout_map.length;i++){
+                                if(layout_map[i]==='EMAIL_ADDR'){
+                                   email_flag = 1;
+                                }
+                            }
+                            if(email_flag!==1){
+                                 app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
+                                isValid = false;
+                            }
+                        }
 			if(dup > 0)			
 			{
 				app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
@@ -244,7 +258,9 @@ function (template,chosen,addbox) {
 					curview.$el.find("#existing_lists").html(list_html);								
 				}
 				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-                                app.showLoading(false,curview.csv.$el);
+                                if(curview.csv){
+                                    app.showLoading(false,curview.csv.$el);
+                                }
 			}
 			else
 			{				

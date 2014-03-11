@@ -115,8 +115,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/editor.html'],
                         showEditor:function(eid){
                             this.$el.show();                                                                                    
                             var editor_height = $(window).height()-431;
-                            //this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});                            
-                            this.$("#bmseditor_"+eid+"_ifr").css("height",editor_height+"px"); 
+                            var ifr_height = 0;
+                            if(editor_height < 600){
+                                ifr_height = 504;
+                            }else{
+                                ifr_height = editor_height;
+                            }
+                            //this.$el.css({width:($(window).width()-32)+"px",height:editor_height+"px"});
+                            this.$("#bmseditor_"+eid+"_ifr").css("height",ifr_height+"px"); 
                             this.$("#bmseditor_"+eid+"_tbl").css("height",(editor_height-100)+"px");
                             //this.page.$("#bmstexteditor").css({"height":editor_height+"px","width":((this.$("#bmseditor_"+eid+"_tbl").width()-20)+"px")});                                                        
                         },
