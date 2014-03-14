@@ -325,13 +325,11 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 });
             },
             updateHeaderCountDialog:function(offset){
-               
-               this.$el.parents(".modal").find(".modal-footer").append("<button class='ScrollToTop' style='display:none;position: relative;left: 95%;bottom: 70px;' type='button'></button>");  
                if(this.$el.parents(".modal").find(".camp_header .c-current-status").length){
                    return;
                }
                this.offsetLength = offset;
-                            
+              this.$el.parents(".modal").find(".modal-footer").append("<button class='ScrollToTop' style='display:none;position: relative;left: 95%;bottom: 70px;' type='button'></button>");                
                var header =  '<ul class="c-current-status" style="margin: 0px 0px 0px 50px;">';
                  header += '<li><span class="badge pclr18 tcount">'+0+'</span>Total Images</li>';             
                  header += '</ul>';  
