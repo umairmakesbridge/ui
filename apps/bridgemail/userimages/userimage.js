@@ -1,8 +1,12 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Module Name : Image Uploading / Image Module / Graphics Module.
+ * Author: Pir Abdul Wakeel
+ * Date Created: 10 March 2014
+ * Description: Single view for each each, each image have there own events, triggers etc.
+ * The html of this single image view is place in html/userimage.html, change may cause changes in single
+ * Image view in grid. require bms_tags and userimage html. events remove/preview/select/show url/mark fav/ etc.
  */
+
 define(['text!userimages/html/userimage.html','bms-tags'],
 function (template,bmstags) {
         'use strict';
@@ -13,13 +17,15 @@ function (template,bmstags) {
                 "click #delete":"remove",
                 "click #graphics-title":"preview",
                 "click #preview":"preview",
+                "click .select-image":"useImage",
                 "click .link":"showURL",
                 "click .fav":"markFavourite"
             },
             initialize:function(options){
                this.template = _.template(template);
-               this.render();
-               this.showTags();
+               this._dialog = this.options._dialog;
+                this.render();
+               
                
             },
             markFavourite:function(ev){
@@ -54,27 +60,39 @@ function (template,bmstags) {
                 }
             },
             showURL:function(ev){
+                
                 var obj = $(ev.target);
+                
                 if($(".tip-dialogue")){
                     $(".tip-dialogue").remove();
                 }
                 var url = $(ev.target).data('url');
                 var position = obj.offset(); 
                 var top = position.top - 190;
-                var urlHTML = "<div class='tip-dialogue'>";
+                var left = 0;
+                left = position.left-388;
+                var urlHTML = "<div class='tip-dialogue' >";
                     urlHTML +="<a class='closebtn'></a>";
                     urlHTML +="<h4>Image URL</h4>";
                     urlHTML +="<input type='text' value='"+url+"' style='width:202px;' class='left tginput' placeholder='Image URL'>";
                     urlHTML +="</div>"; 
-                $('.thumbnails').append(urlHTML);
-                $(".tip-dialogue").css({left:position.left-378,top:top});
-                $(".tip-dialogue").show('fast');
+                    if(this.options.fromDialog){
+                        $('.modal .modal-body .thumbnails').append(urlHTML);
+                        top = top + $(".modal .modal-body").scrollTop();
+                        $(".tip-dialogue").css({left:left + 50,top:top+55});
+                    }else{
+                          
+                       $('.thumbnails').append(urlHTML);
+                       $(".tip-dialogue").css({left:left,top:top});
+                     }
+                    $(".tip-dialogue").show('fast');
             },
            render:function(){
-                  var that = this;
                   this.$el.html(this.template(this.model.toJSON()));
-                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
-                  return this;
+                  this.showTags();
+                 if(this.options.fromDialog)
+                   this.$el.find(".select-image").show();
+                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
             showTags:function(){
                 var that = this;
@@ -143,17 +161,30 @@ function (template,bmstags) {
                     });
                     if(this.model.get('isFavorite') == "Y")
                         dialog.$el.find('.dialog-title').append("<i class='icon fav left active' style='display:inline;top:0px;'></i>");
+                   // dialog.$el.find('#dialog-title').append("&nbsp;<span class='icon link-preview showtooltip' data-original-title='Click to view link' data-url='"+this.model.get("originalURL")+"'></span>").click(function(ev){
+                     ///   that.showURL(ev,true);
+                   /// });
+                    
                     dialog.$el.find('.tagscont').append(this.SplitCommaTagsWithoutCross(this.model.get('tags'))).css('margin-left','48px');
                     dialog.$el.find('.pointy').remove();
+                    dialog.$el.find("camp_header .icon").css("margin","0px");
                     dialog.$el.find('.dialog-title').addClass('images-preview');
                     var img = "<img id='img1' src='"+this.model.get("originalURL")+"'>";
                     dialog.getBody().html(img);  
-                    this.options.app.showLoading('Loading '+ that.model.get("fileName") + ' ...',dialog.getBody());
+                    this.showLoadingWheel(true, dialog.$el.find(".images-preview"));
                     $('#img1').load(function(){
-                        that.options.app.showLoading(false,dialog.getBody());
+                       that.showLoadingWheel(false, dialog.$el.find(".images-preview"));
                     });   
                  
            } ,
+           showLoadingWheel:function(isShow, ele){
+               if(isShow)
+                ele.append("<div class='loading-wheel right' style='margin-left:5px;margin-top: 9px;position: inherit!important;'></div>")
+               else{
+                var ele = ele.find(".loading-wheel") ;      
+                    ele.remove();
+                }
+           },
            remove:function(e){
              var _this = this;
              var imageId = $(e.target).attr('rel').split("__")[1];
@@ -165,9 +196,10 @@ function (template,bmstags) {
                                     $.post(URL, {type:'delete',imageId:imageId})
                                     .done(function(data) {                  
                                           _this.options.app.showLoading(false,_this.$el);   
-                                           var _json = jQuery.parseJSON(data);        
+                                           var _json = jQuery.parseJSON(data);
                                            if(_json[0]!=='err'){
                                                $(e.target).parents('.span3').fadeOut('slow');
+                                               _this.updateCount();
                                              }
                                            else{
                                                 _this.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
@@ -175,8 +207,25 @@ function (template,bmstags) {
                                    });
                             },_this)},
                     _this.$el);      
-           }
-            
-        });
+           },
+           useImage:function(ev){
+               this.options._select_page.useImage($(ev.target).data('url'));
+               $('.modal-open .custom_popup').remove();
+               this._dialog.hide();
+           },
+           // Update header count when delete called inside success for deletion.
+           updateCount:function(){
+               var parents = 0;
+               if(this.options.fromDialog){
+                   parents = this.$el.parents(".modal");
+               }else{
+                   parents= this.$el.parents(".ws-content");
+               }
+                var headerSet = parents.find(".camp_header .tcount").text();
+                parents.find(".camp_header .tcount").text(parseInt(headerSet) - 1);
+                $('#total_graphics .badge').text(parseInt(headerSet) - 1);
+                 
+              }
+        });  
 });
  

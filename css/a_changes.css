@@ -71,6 +71,9 @@
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
   }
+  .template_gallry .span3{
+      max-width:240px!important;
+  }
   .graphics .iconpointy{
       top:0px;
   }
@@ -115,8 +118,8 @@ border-radius: 3px;
 	background-color: #11ACF3;
 }
 .graphics .img > div a {
-    height: 48px;
-    width: 50%;
+   height: 40px;
+width: 50%; 
 }
 .graphics .img{
     height:230px!important;
@@ -128,25 +131,31 @@ border-radius: 3px;
     background: none repeat scroll 0 0 #eff7fb;
     border-top: 0 solid #EAF4F9;
     color: #8A8A8A;
-    font-size: 12px;
+    font-size:100%;
     height: 24px;
     margin: 0 -10px -10px;
     padding: 5px 10px;
 }
 .graphics  .icon {
 }
+.graphics .icon.fav {
+    background-position: 0px -690px;
+}
 .graphics  .fav.active, .graphics  .active > .fav {
 	background-position: -90px -690px !important;
 }
-.graphics  .link {
+.graphics  .link   {
 	background-position: -240px -390px;
 }
-
-.graphics  .copy-link {
+.link-preview {
+	background-position: -200px -390px;
+}
+.graphics  .copy-link ,.copy-link-preview{
     float: right;
     margin: -3px;
     position: relative;
 }
+
 .graphics  .copy-link > .icon { margin:0; }
 .graphics  .copy-link .linkbox {
 	display:none;
@@ -355,4 +364,30 @@ input:-moz-placeholder { color:#b4b4b4!important; }
     background: url("../img/closeiconurl.png") no-repeat scroll center center rgba(0, 0, 0, 0);
     right: 10px;
     top: 10px;
+}
+.ScrollToTop {
+background: url("../img/scrolltop.png") no-repeat scroll center center #33404B;
+border: 0 none;
+bottom: -3px;
+display: block;
+height: 50px;
+opacity: 0.7;
+padding: 0;
+position: fixed;
+right: 14px;
+width: 50px;
+-webkit-transition: opacity .3s ease-out;
+-moz-transition: opacity .3s ease-out;
+-o-transition: opacity .3s ease-out;
+transition: opacity .3s ease-out;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+-webkit-box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+z-index: 99999;
+}
+.ScrollToTop:hover {
+opacity: 0.9;
 }

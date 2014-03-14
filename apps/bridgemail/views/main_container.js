@@ -62,7 +62,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .template-gallery': 'templateGallery',
                     'click .camapign-report': 'camapignReport',
                     'click .csv-upload': 'csvUpload',
-                    'click .connect-crm': 'connectCrm'
+                    'click .connect-crm': 'connectCrm' 
+                    
 
                 },
                 initialize: function() {
@@ -299,21 +300,13 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 createGraphics:function(){
                      this.addWorkSpace({type:'',title:'Images',url:'userimages/userimages',workspace_id: 'userimages',tab_icon:'graphiclisting'});
                      return;
-                     var camp_obj = this;
-                     var dialog_title = "New Graphic";
-                     var dialog = this.app.showDialog({title:dialog_title,
-                         css:{"width":"650px","margin-left":"-325px"},
-                         bodyCss:{"min-height":"100px"},							   
-                         headerIcon : 'new_headicon',
-                         buttons: {saveBtn:{text:'Create Graphic'} }                                                                           
-                     });
-                     this.app.showLoading("Loading...",dialog.getBody());
-                     require(["newgraphic"],function(newgraphicPage){                                     
-                         var mPage = new newgraphicPage({camp:camp_obj,app:camp_obj.app,newgraphicdialog:dialog});
-                         dialog.getBody().html(mPage.$el);
-                         dialog.saveCallBack(_.bind(mPage.createGraphic,mPage));
-                     });
+                  
                 }
+              //  createSegment:function(){
+                 //    this.addWorkSpace({type:'',title:'Test Images',url:'segments/segments',workspace_id: 'segments',tab_icon:'graphiclisting'});
+                 //    return;
+                  
+               // }
 
 
             });

@@ -22,7 +22,7 @@ define([
             },
             parse: function(response,res) {
                 var result = []
-                if(response.totalCount!=="0"){
+                if(!app.checkError(response) && response.totalCount!=="0"){
                     _.each(response.images[0],function(val,key){
                         val[0]._id = val[0]['imageId.encode'];
                         result.push(val[0]);

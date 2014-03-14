@@ -19,7 +19,7 @@
       this.$element = $(element)
       this.options = this.getOptions(options)
       if(this.options.module == "Image"){
-         
+         //this.dialog.addClass("image-url-preview");
          this.options.template =  '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="showtooltip ellipsis" style="display:none" data-original-title="More Tags">...</span><div class="addtag pointy add"><a class="showtooltip" data-original-title="Add Tag"><strong>+</strong></a></div></div>';    
       }
       this.ele = $(this.options.template)

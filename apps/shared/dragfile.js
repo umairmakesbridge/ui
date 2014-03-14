@@ -21,6 +21,7 @@
       this.options = this.getOptions(options);            
       this.module = this.options.module;
       this.name = "";
+      this.from = this.options.from_dialog;
       this.post_url = this.options.post_url;
       this.progressElement = this.options.progressElement;
       this.app = this.options.app;
@@ -91,7 +92,12 @@
        if(this.module == "Image"){
          var id = $('.li-progress').size() + 1;
          data_id = id;
-         $(".thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+         if(this.from)
+            $(".modal .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+         else
+            $(".thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+         console.log($('#templi_'+data_id));
+         console.log(data_id);
          $('#templi_'+data_id).fadeIn();
         }
        if(this.module !=="Image")this.app.showLoading("Uploading...",this.$element);
@@ -183,6 +189,7 @@
   $.fn.dragfile.defaults = {    
     app:null,
     post_url:'',
+    from:'',
     progressElement:null,
     module:'',
     extraData:{}
