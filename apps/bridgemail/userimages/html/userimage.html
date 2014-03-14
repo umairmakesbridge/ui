@@ -1,0 +1,31 @@
+<div class="thumbnail graphics">
+    <div class="img">
+        <div style="height:auto!important">
+            <a style="display:none;" class="selectbtn select-image main-action _graphics" data-url="<%=originalURL%>">
+                <span style="margin: 5px auto;" data-url="<%=originalURL%>">Use Image</span></a>
+            <a class="previewbtn" id="preview" data-id="<%=this.getId('imageId.encode')%>"><span></span></a>
+           
+            <a class="deletebtn" id="delete" rel="delete__<%=this.getId('imageId.encode')%>">
+                <span rel="delete__<%=this.getId('imageId.encode')%>"></span>
+            </a>
+        </div>
+            <span style="line-height: 230px;width:250px;"> <img src="<%=thumbURL%>"></span>
+    </div>
+     <div class="caption">
+                <h3 id="graphics-title" class="graphics-name">
+                    <a data-show="1"><span data-original-title="<%=this.PreviewfileName('fileName')%>" class="showtooltip"> <%=this.fileName("fileName")%></span>  </a>
+                </h3>
+               
+                <p id="tags"> 
+                  
+                </p>
+                <div class="btm-bar">
+                    <span><small class="gray"><%=this.bytesToSize("fileSizeInBytes")%></small> | </span>
+                       
+                    <span><small class="gray"><%=width%> <small class="f">x</small> <%=height%></small> </span>
+                       <a data-id="<%=this.getId('imageId.encode')%>" id="fav" class="icon fav gray <%=this.isFavourite('isFavorite')%> right showtooltip" data-original-title="Click to mark favourite"></a>
+                       <a class="icon link right showtooltip" data-original-title="Click to view link" data-url="<%=originalURL%>"></a>
+                       
+              </div> 
+</div>
+</div>

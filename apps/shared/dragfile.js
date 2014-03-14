@@ -18,12 +18,15 @@
   , init: function (element, options) {           
       this.$element = $(element)
       this.$element.css("position:relative");
-      this.options = this.getOptions(options)            
-      this.post_url = this.options.post_url     
+      this.options = this.getOptions(options);            
+      this.module = this.options.module;
+      this.name = "";
+      this.from = this.options.from_dialog;
+      this.post_url = this.options.post_url;
+      this.progressElement = this.options.progressElement;
       this.app = this.options.app;
      //Click on add tag button      
      //this.ele.find(".addtag").on("click",$.proxy(this.showTagsDialog,this))
-     
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
      this.$element.on("dragover",$.proxy(this._dragover,this))
      this.$element.on("drop",$.proxy(this._drop,this))      
@@ -72,6 +75,7 @@
       return isImage;
   },
   handleFileUpload:function(files,obj){
+      this.name = files;
       for (var i = 0; i < files.length; i++)
         {
             if(this.validate(files[i])){
@@ -84,7 +88,19 @@
   sendFileToServer:function(formData){
        var uploadURL =this.post_url;  
        var _this = this;
-       this.app.showLoading("Uploading...",this.$element);
+       var data_id = 0;
+       if(this.module == "Image"){
+         var id = $('.li-progress').size() + 1;
+         data_id = id;
+         if(this.from)
+            $(".modal .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+         else
+            $(".thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+         console.log($('#templi_'+data_id));
+         console.log(data_id);
+         $('#templi_'+data_id).fadeIn();
+        }
+       if(this.module !=="Image")this.app.showLoading("Uploading...",this.$element);
        var jqXHR=$.ajax({
             xhr: function() {
             var xhrobj = $.ajaxSettings.xhr();
@@ -96,8 +112,9 @@
                         if (event.lengthComputable) {
                             percent = Math.ceil(position / total * 100);
                         }
-                        //Set progress
-                        //status.setProgress(percent);
+                         if(_this.module == "Image"){
+                           $('#templi_'+data_id+' #progress div').css('width',percent+"%") 
+                          }
                     }, false);
                 }
             return xhrobj;
@@ -110,6 +127,7 @@
             data: formData,
             success: function(data){
                 _this.app.showLoading(false,_this.$element);
+                 $('#templi_'+data_id).remove();
                 _this.options.callBack(data);  
             }
         });
@@ -121,7 +139,35 @@
     }
   , tip: function () {
       return this.$tip = this.$tip || $(this.options.template)
-    }
+    },
+     bytesToSize: function (bytes) {
+                var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+                if (bytes == 0) return '0 Bytes';
+                var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+                return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    },uploadInProgressHTML:function(id){
+               var li = "<li id=templi_"+id+" class='span3 li-progress' style='display:none;'><div class='thumbnail graphics'>\n\
+                            <div id='progress' style='position:absolute; top:50%; z-index:1001; opacity:100;height: 10px; width: 238px;margin-left:1px;'><div style='background:#97D61D'></div></div>\n\
+                            <div class='img' style='opacity:0.3; line-height: 230px; '>\n\
+                                    <img src='img/graphicimg.png'>\n\
+                            </div>\n\
+                            <div class='caption' style='opacity:0.1; height:83px;'>\n\
+                                <h3 class='graphics-name'>\n\
+                                <a><span>"+this.name[0].name+"</span></a>\n\
+                                </h3>\n\
+                             <p>\n\
+                             <em class='iconpointy'><a class='btn-green showtooltip' original-data-title='Add Tags' ><i class='icon plus left'></i></a></em>\n\
+                             </p></div>\n\
+                             <div class='btm-bar' style='opacity:0.3; margin:0px;'>\n\
+                               <span><small class='gray'>"+this.bytesToSize(this.name[0].size)+"</small> | </span>\n\
+                               <span><small class='gray'>0<small>  x  </small> 0 </small> </span>\n\
+                                <a class='icon fav gray active right showtooltip' ></a>\n\
+                                <a class='icon link right showtooltip'></a>\n\
+                            </div>\n\
+                            </div>\n\
+                         </li>";
+               return li;
+            }
   }
 
  /* DRAGFILE PLUGIN DEFINITION
@@ -143,6 +189,9 @@
   $.fn.dragfile.defaults = {    
     app:null,
     post_url:'',
+    from:'',
+    progressElement:null,
+    module:'',
     extraData:{}
   }
 

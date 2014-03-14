@@ -36,6 +36,7 @@ define([
                             'MAPDATA_extlist_empty_error':'Choose a list',
                             'MAPDATA_email_format_error':'Please enter correct email address format',
                             'MAPDATA_bmsfields_empty_error':'Match your CSV columns to fields. Columns that you do not match will not be uploaded',
+                            'MAPDATA_bmsfields_email_error':'Please select atleast Email address as a mapping column',
                             'MAPDATA_bmsfields_duplicate_error':'Your have duplicate field names. Field names must be unique',
                             'MAPDATA_customfield_placeholder':'New custom field',
                             'TRG_basic_no_field':'Select a field',
@@ -172,18 +173,21 @@ define([
                 //$(".bDiv").css("height",body_size-397);          
                 //$("#campaigns_list .bDiv").css("height",body_size-300);      
                 this.set("wp_height",(body_size-100));				
-                var subj_w = $('#campaign_subject').width();
-                var fegb_w = $('#fecol3').width();
-                $('#campaign_from_email_chosen').width(parseInt(subj_w-40));               
+               
+                //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
                 this.fixEmailFrom();
              },
              fixEmailFrom:function(){
-                 var active_workspace = $(".ws-content.active");
+                
+                var active_workspace = $(".ws-content.active");
+                var subj_w = active_workspace.find('#campaign_subject').width(); // Abdullah Check
+                active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+21)+"px","padding-right":"61px"});   // Abdullah Try
                  if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
-                    active_workspace.find("#campaign_from_email_input").css("width",active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px");
+                    active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
+                    active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");
                   }
                   if(active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()){
-                    active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()+"px");  
+                    active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()-6+"px");   // Abdullah Check
                   }  
              },
              openModule:function(obj){

@@ -42,11 +42,14 @@
 .header-editable-highlight .dialog-title:hover,.header-edible-campaign:hover{
     background-color:#38c5fb; cursor:pointer; 
 }
-.pointy.add:after {
-    left: -5px;
+.images-preview:hover{
+   background: none repeat scroll 0px 0px #01AEEE!important;
+   cursor: default;
 }
-.tagscont .addtag > a:after {
-    left: -5px;
+
+
+ .tagscont{
+     margin-left: 45px;
  }
  .tooltip{
      max-width: 400px;
@@ -55,7 +58,255 @@
  .tooltip-inner{
      max-width: 800px;
   }
+  .graphics{
+    background: #f8fdff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    border: 0;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+  .template_gallry .span3{
+      max-width:240px!important;
+  }
+  .graphics .iconpointy{
+      top:0px;
+  }
+  .graphics .img span {
+    display: table-cell;
+    margin: 0px auto;
+    text-align: center;
+    vertical-align: middle;
+    width: 240px;
+    height: 20px;
+}
+.graphics.browse .droppanel:hover {
+border: 3px dashed #d7e8f1!important;
+}
+.graphics.browse .droppanel {
+border: 3px dashed #EAF4F9!important;
+color: #666666;
+position: relative;
+font-size: 13px;
+height: 280px;
+margin: 0 0 20px;
+text-align: center;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+}
 
+.graphics #progress {
+	background-color: #fff;
+        -webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius:3px;
+
+}
+
+.graphics #progress div {
+	height: 100%;
+	color: #11ACF3;
+	text-align: right;
+	line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+	width: 0;
+	background-color: #11ACF3;
+}
+.graphics .img > div a {
+   height: 40px;
+width: 50%; 
+}
+.graphics .img{
+    height:230px!important;
+}
+.graphics .caption p > a {
+    font-weight:normal;
+}
+.graphics .caption .btm-bar {
+    background: none repeat scroll 0 0 #eff7fb;
+    border-top: 0 solid #EAF4F9;
+    color: #8A8A8A;
+    font-size:100%;
+    height: 24px;
+    margin: 0 -10px -10px;
+    padding: 5px 10px;
+}
+.graphics  .icon {
+}
+.graphics .icon.fav {
+    background-position: 0px -690px;
+}
+.graphics  .fav.active, .graphics  .active > .fav {
+	background-position: -90px -690px !important;
+}
+.graphics  .link   {
+	background-position: -240px -390px;
+}
+.link-preview {
+	background-position: -200px -390px;
+}
+.graphics  .copy-link ,.copy-link-preview{
+    float: right;
+    margin: -3px;
+    position: relative;
+}
+
+.graphics  .copy-link > .icon { margin:0; }
+.graphics  .copy-link .linkbox {
+	display:none;
+}
+.graphics  .copy-link:hover .linkbox {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #0096FF;
+	display:block;
+	height: 75px;
+	position: absolute;
+	right: -32px;
+	top: -95px;
+	padding:5px;
+	width: 210px;
+	position: absolute;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius:3px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.graphics  .copy-link .linkbox:after {
+	border-top: 6px solid #0096FF;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	content: "";
+	display: inline-block;
+	right: 33px;
+	position: absolute;
+	bottom: -6px;
+}
+.graphics  .copy-link .linkbox input {
+	color: #000000;
+	font-size: 14px;
+	margin: 0 0 5px;
+	width: 196px;
+}
+.search > .icon._graphics {
+     background:url('../img/graphic24.png')  no-repeat scroll center center transparent;
+}
+.graphics .img > div {
+    background: url('../img/trans_white.png') repeat scroll center 0px transparent;
+    height: 60px;
+    padding: 0px;
+    width:100%;
+}
+.graphics .caption p > a span{
+    padding-right:6px;
+    color: #6494AF;
+    font-weight:normal;
+    margin-right: 5px;
+}
+.graphics .addtag {
+    float: right;
+    margin: 0px;
+    position: relative;
+    margin-top: 1px;
+}
+.graphics .pointy.add:after {
+    border-style: solid;
+    left: -5px;
+    top: 6px;
+    border-width:initial!important;
+}
+.graphics .tags-buttons .addtag a strong {
+    background:url('../img/plus.png') no-repeat scroll center center transparent;
+    display: block;
+    font-size: 0px;
+    height: 16px;
+    width: 12px;
+}
+.graphics .addtag > a {
+    background: none repeat scroll 0px 0px #94CF1E;
+    border: 0px none;
+    border-radius: 1px;
+    color: #FFF;
+    float: left;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 16px;
+    margin: 0px;
+    padding: 1px 3px;
+    text-shadow: none;
+}
+.graphics .caption .tags-buttons{
+    float: none;
+    margin-left:4px;
+}
+.graphics .caption .pointy.add {
+     
+    margin: 0px !important;
+}
+.graphics .caption .tags-contents{
+    display:inline!important;
+}
+
+.graphics .caption ul li a{
+    background: none repeat scroll 0 0 #EFF7FB;
+border-radius: 2px;
+color: #6494AF;
+display: block;
+float: left;
+font-weight:normal;
+font-size: 11px;
+line-height: 18px;
+padding: 0px 0px 0px 5px;
+-webkit-border-radius: 2px 2px;
+-moz-border-radius: 2px 2px;
+border-radius: 2px 2px;
+}
+.graphics .caption ul li a:hover{
+    color:#fff;
+}
+.graphics i.update{
+float: right;
+height:18px;
+margin: 0px !important;
+width: 35px;
+}
+.graphics i.cross{
+float: right;
+height:18px;
+margin: 0px !important;
+width: 20px;
+}
+.graphics.browse .btn-blue.g-btn{
+    width: 223px;
+} 
+.graphics i.icon:hover{
+    background-color: rgb(56, 197, 251) !important;
+ }
+#graphics-title-input{
+    height: 28.5px;
+}
+#graphics-title-input .btn-gray, #graphics-title-input .btn-green{
+    font-size: 12px;
+    line-height: 15px;
+    padding:0px 0px;
+}
+#graphics-title-input .btn-gray span, #graphics-title-input .btn-green span{
+    padding:0px 10px;
+}
+#graphics-title-input input{
+    height:9px!important;
+    width:85px;
+    font-size:10px;
+}
+.wtab-graphiclisting {
+    background: url('../img/graphicicon.png') no-repeat scroll center center transparent;
+}
 ::-webkit-input-placeholder { color:#b4b4b4!important; }
 ::-moz-placeholder { color:#b4b4b4!important; } /* firefox 19+ */
 :-ms-input-placeholder { color:#b4b4b4!important; } /* ie */
@@ -64,3 +315,79 @@ input:-moz-placeholder { color:#b4b4b4!important; }
  .schedule-container h2.clearfix{
      text-transform: none!important;
  } 
+
+ .tip-dialogue {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    cursor: default;
+    display: block;
+    height: auto;
+    left: 71px;
+    margin: 1%;
+    min-height: 50px;
+    padding: 10px !important;
+    position: absolute;
+    text-align: left;
+    top: 24px;
+    width: 310px;
+    z-index: 993;
+}
+.tip-dialogue:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+    border-style: solid;
+    border-width: 8px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    right: 25px;
+    position: absolute;
+    top: -14px;
+}
+.tip-dialogue h4 {
+    margin: 0;
+    padding: 0 0 5px;
+    color: #1D91BC;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0;
+    margin: 0;
+    padding: 5px;
+}
+.tip-dialogue input[type="text"] {
+    float: left;
+    height: 30px;
+    margin: 6px 0 0;
+    padding: 1px 6px 0;
+    width: 300px!important;
+}
+.tip-dialogue a.closebtn {
+    background: url("../img/closeiconurl.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    right: 10px;
+    top: 10px;
+}
+.ScrollToTop {
+background: url("../img/scrolltop.png") no-repeat scroll center center #33404B;
+border: 0 none;
+bottom: -3px;
+display: block;
+height: 50px;
+opacity: 0.7;
+padding: 0;
+position: fixed;
+right: 14px;
+width: 50px;
+-webkit-transition: opacity .3s ease-out;
+-moz-transition: opacity .3s ease-out;
+-o-transition: opacity .3s ease-out;
+transition: opacity .3s ease-out;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+-moz-box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+-webkit-box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
+z-index: 99999;
+}
+.ScrollToTop:hover {
+opacity: 0.9;
+}

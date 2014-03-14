@@ -12,7 +12,7 @@ function (template,highlighter) {
                         "country":{"label":"Country"},"state":{"label":"State"},"zip":{"label":"Zip"},"address1":{"label":"Address 1"},"address2":{"label":"Address 2"},
                         "areaCode":{"label":"Area Code"},"telephone":{"label":"Telephone"},"jobStatus":{"label":"Job Status"},"industry":{"label":"Industry"},"salesRep":{"label":"Sales Rep"},
                         "source":{"label":"Source"},"salesStatus":{"label":"Sales Status"},"occupation":{"label":"Occupation"},"birthDate":{"label":"Birthday"}},
-             mapping:{"SU":{"name":"Signup Form"},"CS":{"name":"Campaign Sent"},"OP":{"name":"Campaign Open"},"CK":{"name":"Article Click"},"MT":{"name":"Single Message Sent"}
+             mapping:{"SU":{"name":"Signup Form"},"CS":{"name":"Campaign Sent"},"OP":{"name":"Campaign Open"},"CK":{"name":"Email Click"},"MT":{"name":"Single Message Sent"}
                     ,"MO":{"name":"Single Message Open"},"MC":{"name":"Single Message URL Click"},"MS":{"name":"Single Message Surpress"},"WM":{"name":"WF C2Y Trigger Mail"}
                     ,"MM":{"name":"MY C2Y Trigger Mail"},"UN":{"name":"Unsubscribe"},"SP":{"name":"Suppress"},"SC":{"name":"Score Change"},"TF":{"name":"Tell a friend"}
                     ,"WV":{"name":"Web Visit"},"WA":{"name":"Workflow Alert"},"S":{"name":"Sent"},"O":{"name":"Opened"},"C":{"name":"Clicked"}},        

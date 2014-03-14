@@ -258,7 +258,10 @@ function (template,highlight) {
                                 searchString +="&isFeatured=Y"                                
                             }
                             if(searchType=="mobile"){
-                                searchString +="&isMobile=Y"                                
+                                searchString +="&isMobile=Y";                                
+                            }
+                            if(searchType=="returnpath"){
+                               searchString +="&isReturnPath=Y";
                             }
                         }
                         this.offset = 0;
@@ -333,29 +336,29 @@ function (template,highlight) {
                             templates_html +='<li class="span3">';
                             templates_html +='<div class="thumbnail '+adminTemplate+'">';
                             if(val[0].isFeatured==='Y'){
-                                templates_html +='<div class="feat_temp showtooltip" title="Featured Template"></div>';
+                                templates_html +='<div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>';
                             }                                
                             if(val[0].isReturnPath==='Y'){
-                                templates_html +='<div class="rpath"></div>';
+                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Templates"></div>';
                             }       
                             templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
                             
                             if(adminTemplate === "admin-template"){
                                 if(self.app.get("isAdmin") === "Y"){
-                                    templates_html +='<a class="previewbtn"  id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                    templates_html +='<a class="copybtn"  id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                    templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                    templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="previewbtn showtooltip"  id="preview_'+val[0]["templateNumber.encode"]+'" title="Preview Template"><span ></span></a>';
+                                    templates_html +='<a class="copybtn showtooltip"  id="copy_'+val[0]["templateNumber.encode"]+'" title="Copy Template"><span ></span></a>';
+                                    templates_html +='<a class="editbtn showtooltip" id="edit_'+val[0]["templateNumber.encode"]+'" title="Edit Template"><span ></span></a>';
+                                    templates_html +='<a class="deletebtn showtooltip" id="delete_'+val[0]["templateNumber.encode"]+'" title="Delete Template"><span ></span></a>';
                                 }else{
-                                    templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                    templates_html +='<a class="copybtn"  style="width:50%" id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                    templates_html +='<a class="previewbtn showtooltip"  style="width:50%" id="preview_'+val[0]["templateNumber.encode"]+'" title="Preview Template" ><span ></span></a>';
+                                    templates_html +='<a class="copybtn showtooltip"  style="width:50%" id="copy_'+val[0]["templateNumber.encode"]+'" title="Copy Template"><span ></span></a>';
                                     
                                 }
                             }else{
-                                templates_html +='<a class="previewbtn" id="preview_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                templates_html +='<a class="copybtn" id="copy_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                templates_html +='<a class="editbtn" id="edit_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
-                                templates_html +='<a class="deletebtn" id="delete_'+val[0]["templateNumber.encode"]+'" ><span ></span></a>';
+                                templates_html +='<a class="previewbtn showtooltip" id="preview_'+val[0]["templateNumber.encode"]+'" title="Preview Template" ><span ></span></a>';
+                                templates_html +='<a class="copybtn showtooltip" id="copy_'+val[0]["templateNumber.encode"]+'" title="Copy Template" ><span ></span></a>';
+                                templates_html +='<a class="editbtn showtooltip" id="edit_'+val[0]["templateNumber.encode"]+'" title="Edit Template"><span ></span></a>';
+                                templates_html +='<a class="deletebtn showtooltip" id="delete_'+val[0]["templateNumber.encode"]+'" title="Delete Template"><span ></span></a>';
                             }
                             var image_src = camp_obj.app.decodeHTML(val[0]["thumbURL"]);
                             if(image_src==""){
@@ -367,21 +370,21 @@ function (template,highlight) {
                             templates_html +='<div  class="caption">';
                             templates_html +='<h3 id="editfromname_'+val[0]["templateNumber.encode"]+'" class="template-name"><a>'+val[0].name+'</a></h3>';
                             if(val[0].categoryID){
-                                templates_html +="<a class='cat' cat_id='"+val[0].categoryID+"'>"+val[0].categoryID+"</a>";//camp_obj.showCategoryTemplate(val[0].categoryID);
+                                templates_html +="<a class='cat showtooltip' cat_id='"+val[0].categoryID+"' title='Click to View All Templates In This Category'>"+val[0].categoryID+"</a>";//camp_obj.showCategoryTemplate(val[0].categoryID);
                             }
                             else{
                                 templates_html +="<a class='cat' style='visibility:hidden'>&nbsp;</a>";
                             }
                             templates_html +='<p>'+camp_obj.showTagsTemplate(val[0].tags)+'</p>';
                             templates_html +='<div class="btm-bar">';
-                            templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon view showtooltip" title="View Count"></span></span>';
+                            templates_html +='<span><em>'+val[0].viewCount+'</em> <span class="icon view showtooltip" title="Click to View Most Viewed Templates"></span></span>';
                             templates_html +='<span><em>'+val[0].usageCount+'</em> <span class="icon mail showtooltip"  title="Used Count"></span></span>';
                             //templates_html +='<a class="icon temp'+val[0].layoutID+' layout-footer right showtooltip" l_id="'+val[0].layoutID+'" title="Layout '+val[0].layoutID+'"></a>';
                             if(val[0].isAdmin==='Y'){
-                                templates_html +='<a class="icon builtin right showtooltip" title="Makesbridge Template"></a>';                                                                                                        
+                                templates_html +='<a class="icon builtin right showtooltip" title="Click to View All Makesbridge Templates"></a>';                                                                                                        
                             }   
                             if(val[0].isMobile==='Y'){
-                                templates_html +='<a class="icon mobile right showtooltip" title="For Mobile"></a>';                                                                    
+                                templates_html +='<a class="icon mobile right showtooltip" title="Click to View All Mobile Enabled Templates"></a>';                                                                    
                             }
                             templates_html +='</div></div> </div></li>';                      
                         });
@@ -422,7 +425,11 @@ function (template,highlight) {
                              this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
                              this.loadTemplates('search','mobile');  
                         },this));
-                        
+                        /*Search return Path by abdullah*/
+                        template_html.find(".rpath").click(_.bind(function(obj){ 
+                            this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                             this.loadTemplates('search','returnpath');
+                        },this));
                         template_html.find(".cat").click(_.bind(function(obj){     
                              var cat = $.getObj(obj,"a");
                              this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
@@ -512,7 +519,7 @@ function (template,highlight) {
                    var tag_array = tags.split(",");
                    var tag_html ="";
                     $.each(tag_array,function(key,val){
-                        tag_html +="<a>"+val+"</a>";
+                        tag_html +="<a class='abdullah showtooltip' title='Click to View Templates With Same Tag'>"+val+"</a>";
                         /*if(key<tag_array.length-1){
                             tag_html +=", ";
                         }*/
@@ -523,7 +530,7 @@ function (template,highlight) {
                      var _array = categories.split(",");
                      var _html ="";
                     $.each(_array,function(key,val){
-                        _html +="<a class='cat' cat_id='"+val+"'>"+val+"</a>";                        
+                        _html +="<a class='cat' cat_id='"+val+"' >"+val+"</a>";                        
                     });
                     return _html
                 },
