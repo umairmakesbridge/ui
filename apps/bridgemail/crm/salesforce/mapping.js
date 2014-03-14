@@ -1,20 +1,23 @@
-define(['text!crm/salesforce/html/mapping.html','bms-mapping'],
+define(['text!crm/salesforce/html/mapping.html','bms-mapping','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight'],
 function (template,Mapping) {
         'use strict';
         return Backbone.View.extend({                
                 events: {
-
-                 },
+                    'click .btn-save-mapping':'saveCall'
+                },
                 initialize: function () {
                         this.template = _.template(template);				
                         this.render();
                 },
 
                 render: function () {
-                        this.camp = this.options.camp; 
-                        this.app = this.camp.app;
+                        this.camp = this.options.camp?this.options.camp:this.options.page; 
+                        this.app = this.camp.app
                         this.$el.html(this.template({}));                        
                         this.$(".mapTab a:first").tab('show');
+                        if(this.options.showSaveButton){
+                            this.$(".button-bar").show();
+                        }
                         this.loadMappings();
                 },
                 loadMappings:function(){
@@ -37,17 +40,16 @@ function (template,Mapping) {
                                 $.each(import_fields.fldList[0], function(index, val) {                                              
                                     system_flag = val[0].defaultSetup=="Y"?"system":""; 
                                     if(val[0].sfObject=="Lead"){
-                                     fields_html += '<tr id="row_'+val[0].name+'">';                                                           
-                                     fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                                                           
-                                     fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                        
-
+                                     fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
+                                     fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Salesforce Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     fields_html += '<td><div class="type colico mbr show" style="width:162px"> <strong><span><em>Makesbridge Field</em>'+val[0].bmsMappingField+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      fields_html += '</tr>';
                                     }
                                     else{
                                      c_fields_html+= '<tr id="row_'+val[0].name+'">';                        
-                                     c_fields_html += '<td><div class="name-type"><h3>'+val[0].label+'</h3> </td>';                                                       
-                                     c_fields_html += '<td><div class="type show" style="width:144px"><span class=""></span>'+val[0].bmsMappingField+'</div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                        
-
+                                     c_fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Salesforce Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                       
+                                     c_fields_html += '<td><div class="type colico mbr show" style="width:162px"> <strong><span><em>Makesbridge Field</em>'+val[0].bmsMappingField+'</span></strong></div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                        
+                                                            
                                      c_fields_html += '</tr>';
                                     }
                                    

@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async'
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -323,7 +323,7 @@ define([
               else if(flag=='C'){
                   status='Sent'
               }
-			  else if(flag=='S'){
+              else if(flag=='S'){
                   status='Scheduled'
               }
               return status;
@@ -374,16 +374,15 @@ define([
                              return false;
                          }                        
                         app.setAppData(data.key,salesforce);
-						if(data.callback)
-                        	data.callback();
+			if(data.callback)
+                           data.callback();
                     }
                 }).fail(function() { console.log( "error in "+data.key+" fields" ); });                  
             },
             showDialog:function(options){
                 var dialog = new bmsDialog(options);                                
                 $("body").append(dialog.$el);
-                dialog.show();
-               
+                dialog.show();               
                 return dialog;
             },
             enableValidation:function(options)

@@ -1,0 +1,46 @@
+<div class="ui-accordion">
+    <h3 class="ui-accordion-header" role="tab">
+      <input type="radio" class="radiopanel " value="both" name="options_sf">
+      <span class="left">Leads & Contacts </span> 
+      <div class="subscribers show"><strong class="badge sf_all_count"></strong></div>
+      <div class="filter-buttons filterbtn">
+        <a type="button" class="active selectall"><span>Select All</span></a>
+        <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_all_count" style="display: none"></strong></a>
+      </div>
+    </h3>
+  </div>      
+  <div class="ui-accordion" >
+    <h3 class="ui-accordion-header">
+      <input type="radio" class="radiopanel " value="lead" name="options_sf">
+      <span class="left">Leads</span>  
+      <div class="subscribers show"><strong class="badge sf_lead_count"></strong></div>
+      <div class="filter-buttons filterbtn">
+        <a type="button" class="active selectall"><span>Select All</span></a>
+        <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_lead_count" style="display: none"></strong></a>
+      </div>
+    </h3>
+  </div>
+  <div class="ui-accordion" > 
+    <h3 class="ui-accordion-header">
+      <input type="radio" class="radiopanel" value="contact" name="options_sf">
+      <span class="left">Contacts</span> 
+      <div class="subscribers show"><strong class="badge sf_contact_count"></strong></div>
+      <div class="filter-buttons filterbtn">
+        <a type="button" class="active selectall"><span>Select All</span></a>
+        <a type="button" class="managefilter"><span>Manage Filter</span><i class="icon filter"></i><strong class="badge sf_contact_count" style="display: none"></strong></a>
+      </div>
+    </h3>
+  </div>
+   <div id="sf_accordion">
+        <h3> 
+          <input type="radio" class="radiopanel " value="campaign" name="options_sf" id="">
+          <span class="left">Salesforce Campaigns</span>
+            <div id="salesforce-camp-search" class="input-append search">         
+            </div>
+         </h3>
+        <div class="accordion-inner">
+            <div class="template-container fields single-row" style="min-height:300px; margin:4px  0;">
+               <div class="target-listing salesforce_camp" id="salesforce-camp-listing"> </div>
+           </div>
+        </div>
+   </div>                   

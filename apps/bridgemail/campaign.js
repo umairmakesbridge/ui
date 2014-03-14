@@ -10,7 +10,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click #save_conversion_filter':'saveConversionPage',                      
                       'click #save_results_sf':'saveResultToSF',
                       'click .mergefields-box' :'showMergeFieldDialog',
-                      'click #drop4' :function(obj){
+                      'click #drop4' : function(obj){
                           this.$('.mergefields-box').click();
                       },
                       'change #campaign_isFooterText':'setFooterArea',
@@ -29,7 +29,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .scheduled-campaign': 'scheduleCamp',
                       'click .draft-campaign':'setDraftCampaign',
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
-                      'click .save-step2':function(obj){
+                      'click .save-step2': function(obj){
                             var button = $.getObj(obj,"a");
                             if(!button.hasClass("saving")){
                                 this.saveStep2(false);

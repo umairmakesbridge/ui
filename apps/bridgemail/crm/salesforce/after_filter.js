@@ -1,4 +1,4 @@
-define(['text!crm/salesforce/html/after_filter.html','bms-crm_filters'],
+define(['text!crm/salesforce/html/after_filter.html','bms-crm_filters','jquery.chosen'],
 function (template,crm_filters) {
         'use strict';
         return Backbone.View.extend({

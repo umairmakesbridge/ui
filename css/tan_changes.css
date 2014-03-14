@@ -369,9 +369,11 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 #netsuite_setup .ui-accordion .ui-accordion-header .search,
 #salesforce_setup .ui-accordion .ui-accordion-header .search
  { margin:3px 0 0 10px; }
+ 
 #netsuite_setup .filterbtn,
-#salesforce_setup .filterbtn
+.salesforce_campaigns .filterbtn
 { float:right; }
+
 #mapdata .inputcont { /*line-height:36px;*/ }
 .ui-accordion .ui-accordion-header .icon.subscribers {
    background: url("../img/subscribers.png") no-repeat center center;

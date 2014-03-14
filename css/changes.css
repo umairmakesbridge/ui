@@ -1306,6 +1306,9 @@ ul.tabs-btns li.active a{
 .wtab-crm{
     background:url("../img/connection.png") no-repeat scroll center center;
 }
+.wtab-salesforce{
+    background:url("../img/sf-icon30.png") no-repeat scroll center center;
+}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -1609,4 +1612,44 @@ div.shortcuts .ddicon{
 }
 .profileinfo span strong{
     line-height: 23px;    
+}
+.tiles-area{
+    min-height: 300px;
+    position: relative;
+}
+#ownerfields_list_grid  .checkpanelinput .icheck_line-icon{
+	background: url("../img/checkiconsbig.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+	border: medium none;
+	height: 20px;
+	left: 50%;
+	margin: -10px 0 0 -10px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	top: 50%;
+	width: 20px;
+}
+#ownerfields_list_grid .checkpanelinput.checked .icheck_line-icon {
+	background-position: -20px 0;
+}
+.total-steps-3 .s4{
+    display: none;
+}
+.total-steps-3 ol.progressbar:before{
+    width:57%;
+    left:62px;
+}
+.total-steps-3 ol.progressbar{
+    width:302px;
+}
+.bms-lists .bmsgrid tr.selected td:last-child div:after
+{
+    height: 66px;    
+    right: -14px;
+    top: -8px;
+    width: 50px;
+}
+#salesforce-new-import .wizard-steps{
+    position: relative;
+    min-height: 300px;
 }

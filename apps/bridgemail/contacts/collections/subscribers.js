@@ -9,7 +9,7 @@ define([
 		},
                 parse: function(response,sent) {
                     var result = []
-                    if(response.totalCount!=="0"){
+                    if(!app.checkError(response) && response.totalCount!=="0"){
                         _.each(response.subscriberList[0],function(val,key){
                             val[0]._id = sent.data.offset + parseInt(key.substring(10));
                             result.push(val[0]);

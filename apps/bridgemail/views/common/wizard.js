@@ -94,6 +94,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             this.$(".progressbar li").tooltip({'placement':'bottom',delay: { show: 500, hide:10 }});
                             //Hides the back button on first step
                             this.$el.find("a.backbtn").hide();
+                            this.$el.addClass("total-steps-"+this.total_steps);
+                            
                             
                         },
                         back:function(obj){
@@ -144,7 +146,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             this.$el.find(".progressbar .active").removeClass("active");
                             this.$el.find(".progressbar li").eq(this.active_step-1).addClass("active");
                             this.$el.find("a.backbtn span").remove();
-                            if(this.active_step==4){
+                            if(this.active_step==this.total_steps){
                                 this.$el.find("a.backbtn").append('<span>Back</span>');
                             }
                             //Making Button enable disable
@@ -153,7 +155,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             }
                             if(this.active_step == 3)
                             {
-                                    this.page.removeCSVUpload();
+                                    if(this.page.removeCSVUpload){
+                                        this.page.removeCSVUpload();
+                                    }
                             }
                             if(this.active_step==this.total_steps){
                                 this.$el.find("a.nextbtn").hide();

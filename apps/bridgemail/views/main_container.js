@@ -4,8 +4,7 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
   
    return Backbone.View.extend({       
       id: 'main-container', 
-      tagName :'div',
-      classNmae:'container',
+      tagName :'div',      
       wp_counter:0,
       events: {
           'click .tw-toggle button':function(obj){
@@ -281,7 +280,7 @@ define(['jquery','backbone','app','views/common/header', 'text!templates/main_co
            this.addWorkSpace({type:'',title:'CSV Upload',url : 'listupload/csvupload',workspace_id: 'csv_upload',tab_icon:'csvupload', single_row:true});
        },
       connectCrm:function(){
-         // this.addWorkSpace({type:'',title:'Connections',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
+          this.addWorkSpace({type:'',title:'Connections',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
       }
        
       

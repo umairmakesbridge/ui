@@ -82,6 +82,6 @@ function (template,Mapping,bmsSearch) {
 					this.app = this.options.app; 
 					this.campview = this.options.camp;
 					this.$el.html(this.template({}));					
-                },
+                }
         });
 });

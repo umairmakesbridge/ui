@@ -1,0 +1,192 @@
+<div class="wizard-steps step1">
+    <h3 class="center_h"> Specify Target Import List  </h3>
+    <div class="temp-filters clearfix" style="margin:0px;">      
+        <h2 class="header-list">                                    
+            <strong class="left" style="font-size:15px"> Choose From Existing List</strong>
+            <div class="iconpointy" style="top:3px">
+                <a class="btn-green add-list"><i class="icon plus left"></i></a>
+            </div>
+        </h2>                            		 
+        <div style=" " class="srt-div">      
+            <div id="" class="input-append search myimports-search"></div>      		        
+        </div>
+    </div>     
+
+    <div style="margin: 0px 0 0;" id="area_choose_targets" class="content-inner">
+        <div class="template-container fields bms-lists" style="margin:0 0 10px 0;">
+
+        </div>
+    </div>
+
+</div>
+<div class="wizard-steps step2">
+    <h3 class="center_h"  > Choose to Import a Salesforce Campaign - OR - Apply Filter </h3>
+</div>
+<div class="wizard-steps step3">
+    <h3 class="center_h"> Import Records </h3>
+    <div class=" clearfix template-container " id="" style=" margin:20px 0 0; ">
+        <div class="col1" style="">
+
+            <div id="lead_accordion" class="summary-accordion" style="margin-top:0px">
+                <h3>                   
+                    <span class="left">0<i> of Contacts being transfered </i></span>
+                    <b class="caret"></b>
+                </h3>
+                <div class="accordion-inner">
+
+                </div>
+            </div>    
+            <div id="lead_accordion" class="summary-accordion">
+                <h3>                   
+                    <span class="left">0<i> of Leads being transfered </i></span>
+                    <b class="caret"></b>
+                </h3>
+                <div class="accordion-inner">
+                    <h4>Lead Record Import Sample</h4>
+                    <div class="template-container">
+                        <div class="target-listing copy_camp" id="copy-camp-listing">
+                            <div class="bmsgrid">
+                                <div class="hDiv">
+                                    <div class="hDivBox">
+                                        <table cellspacing="0" cellpadding="0">
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="bDiv">
+                                    <table cellspacing="0" cellpadding="0" border="0" id="camp_list_grid" class="">
+
+                                        <thead>
+                                            <tr>
+                                                <th>Email</th>
+                                                <th>Account ID</th>
+                                                <th>MasterRecord ID</th>
+                                                <th>Last Name</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td> rose@edge.com</td>
+                                                <td>0136gsgVAAQ</td>
+                                                <td>-</td>
+                                                <td>Gonzalez</td>
+                                            </tr>
+                                            <tr>
+                                                <td> rose@edge.com</td>
+                                                <td>0136gsgVAAQ</td>
+                                                <td>-</td>
+                                                <td>Gonzalez</td>
+                                            </tr>                                            
+                                        </tbody>
+                                    </table>
+                                    <div style="display: none;" class="iDiv"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>     
+        </div>                             
+        <div class="col2">  
+            <div class="c-frequency">                
+                <div>
+                    <div class="ui-accordion">
+                    <h3 class="ui-accordion-header" role="tab">
+                        <input type="radio" class="radiopanel " value="schedule" name="options_import" checked="checked">
+                      <span class="left">Schedule Import </span>                                             
+                    </h3>
+                  </div>   
+                    <div class="row">
+                        <label>Frequency</label>
+
+                        <select class="nosearch">
+                            <option>Once every two Weeks </option>
+                            <option>Everyday</option>
+                            <option>Once a month</option>
+                            <option>Once Only </option>
+                        </select>        
+                    </div>             
+
+                    <div class="row">           
+                        <label>Day</label>      
+                        <div class="btn-group s-days">
+                            <button type="button" class="btn btn-default selected">Mon</button>
+                            <button type="button" class="btn btn-default">Tue</button>
+                            <button type="button" class="btn btn-default">Wed</button>
+                            <button type="button" class="btn btn-default">Thu</button>
+                            <button type="button" class="btn btn-default">Fri</button>
+                            <button type="button" class="btn btn-default">Sat</button>
+                            <button type="button" class="btn btn-default">Sun</button>
+                        </div>
+
+                        <div class="row">        
+                            <label>Date</label>      
+                            <div class="s-time">
+
+                                <select class="nosearch" style="width:90px;">
+                                    <option>Day </option>
+                                    <option>30 </option>
+                                    <option>31 </option>
+                                </select>
+
+
+                                <select class="nosearch" style="width:120px;">
+                                    <option>Month </option>
+                                    <option>January</option>
+                                </select>
+                                <select class="nosearch" style="width:100px;">
+                                    <option>Year </option>
+                                    <option>2014</option>
+                                </select>
+
+
+
+
+                            </div>
+                        </div>
+
+
+                        <div class="row">        
+                            <label>Time</label>      
+                            <div class="s-time">
+
+                                <select class="nosearch" style="width:100px;">
+                                    <option>12:00 </option>
+                                    <option>12:30</option>
+                                    <option>01:00</option>
+                                    <option>01:30 </option>
+                                </select>
+
+
+                                <select class="nosearch" style="width:90px;">
+                                    <option>AM </option>
+                                    <option>PM</option>
+                                </select>
+
+
+
+                            </div>
+                        </div>                      
+                    </div> <!--  Row -->
+                    <div class="ui-accordion">
+                        <h3 class="ui-accordion-header" role="tab">
+                          <input type="radio" class="radiopanel " value="now" name="options_import">
+                          <span class="left">Import Now </span>                                             
+                        </h3>
+                      </div>   
+                    <div>
+                </div>
+                
+
+            </div>
+        </div>
+        <div class="btns" style="margin-top: 20px;">
+            <!--<a class="btn-gray left"><i class="icon cross "></i><span>Cancel</span></a>
+            <a class="btn-blue left"><i class="icon update "></i><span>Update</span></a>-->
+            <a class="btn-green left"><span>Activate</span><i class="icon activate"></i></a>
+          </div>    
+    </div>
+
+    <div class="clearfix"></div>
+    
+     
+</div>

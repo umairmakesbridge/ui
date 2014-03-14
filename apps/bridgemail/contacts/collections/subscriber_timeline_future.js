@@ -9,7 +9,7 @@ define([
 		},
                 parse: function(response,sent) {
                     var result = []
-                    if(app.checkError(response)){
+                    if(!app.checkError(response) && app.checkError(response)){
                         return false;
                     }
                     if(response.totalCount!=="0"){

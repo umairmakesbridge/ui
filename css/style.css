@@ -7355,8 +7355,7 @@ div.returnpath {
 .checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
 	background: url("../img/checkiconsbig.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
 	border: medium none;
-	height: 20px;
-	
+	height: 20px;	
 	margin: 7px 0 0 7px;
 	overflow: hidden;
 	padding: 0;
@@ -9956,8 +9955,81 @@ display:block;
     border-radius: 2px;}
 
 .w-videoicon:hover { color:#fff; background-color:#a6e2f9 ; }	
-	
-	
+
+
+.ui-accordion .ui-accordion-content .cont-box { margin:0; position:static; width: 100%;}
+.ui-accordion .cont-box label {width: 110px;}
+.ui-accordion .cont-box.row-fluid .span6 {
+    padding: 2%;
+    width: 49.6%;
+}
+.ui-accordion .ui-accordion-content  .cont-box h5 {
+    clear: both;
+    color: #6494AF;
+    margin: 22px 0 0;
+    padding: 0 0 8px 27%;
+    text-align: left;
+}
+.ui-accordion .ui-accordion-content  .cont-box  label { width:23%;}
+.ui-accordion .ui-accordion-content  .cont-box  input[type="text"] ,
+.ui-accordion .ui-accordion-content  .cont-box  input[type="password"]{ width: 95%;}
+
+input.search-control[type="text"] {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 5px 6px;
+}
+
+#leads h2.header-list a, #contacts h2.header-list a {
+    background-position: 92% center;
+    color: #FFFFFF;
+    margin-top: -2px;
+    padding: 2px 35px 2px 15px !important;
+}
+#leads .useallf:hover,#contacts .useallf:hover {
+    background-image: url("../img/rightarrow.png");
+    background-position: 97% center;
+    background-repeat: no-repeat;
+}
+
+
+
+.bmsgrid .colico > strong {
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bmsgrid .colico > strong em {
+    color: #9BABB4;
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 18px;
+    margin: 0 0 0 -28px;
+}
+.bmsgrid .colico  span {
+    color: #5E7684;
+    display: inline-block;
+    float: left;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+    padding: 0 10px 0 0;
+}
+.bmsgrid .colico.sfr > strong {
+    background: url("../img/sfricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.mbr > strong {
+    background: url("../img/mbricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.nst > strong {
+    background: url("../img/nsticon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.score span { color:#57b916; }
+
+.bmsgrid .colico.score.red span { color:#cc0000; } 
+.bmsgrid .colico.mbr > strong  b ,
+.bmsgrid .colico.sfr > strong  b,
+.bmsgrid .colico.nst > strong  b  {color:#6494AF;}	
 	
 	
 	
