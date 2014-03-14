@@ -30,8 +30,10 @@ function (template) {
                         this.app.showLoading(false,copydialog.getBody());
                         var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK='+app.get('bms_token');
                         var camps_json = '';
+                        this.app.showLoading("Loading Copy Data..",this.$el);
                         $.post(URL, {type:'basic',campNum:this.options.camp_id})
                         .done(function(data) {      
+                                curview.app.showLoading(false,curview.$el);
                                 camps_json = jQuery.parseJSON(data);
                                 curview.$el.find('.copy_campbox h2 span').html(camps_json.name);
                                 curview.$el.find('.copy_campbox .tagscont').html(app.showTags(camps_json.tags));
