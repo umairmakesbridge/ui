@@ -199,6 +199,7 @@ function (template,bmstags) {
                                            var _json = jQuery.parseJSON(data);
                                            if(_json[0]!=='err'){
                                                $(e.target).parents('.span3').fadeOut('slow');
+                                               $(e.target).parents('.span3').remove();
                                                _this.updateCount();
                                              }
                                            else{

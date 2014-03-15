@@ -75,12 +75,13 @@
       return isImage;
   },
   handleFileUpload:function(files,obj){
-      this.name = files;
+      this.name= files;
       for (var i = 0; i < files.length; i++)
         {
             if(this.validate(files[i])){
                 var fd = new FormData();
-                fd.append('file', files[i]);          
+                fd.append('file', files[i]);
+                this.name = files[i];
                 this.sendFileToServer(fd);
             }
         }
@@ -90,14 +91,13 @@
        var _this = this;
        var data_id = 0;
        if(this.module == "Image"){
-         var id = $('.li-progress').size() + 1;
-         data_id = id;
+         var index = $('.li-mew-images').size();
+         var id =  index + 1;
+            data_id = id;
          if(this.from)
-            $(".modal .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
+            $(".modal .images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
          else
-            $(".thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
-         console.log($('#templi_'+data_id));
-         console.log(data_id);
+            $(".images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
          $('#templi_'+data_id).fadeIn();
         }
        if(this.module !=="Image")this.app.showLoading("Uploading...",this.$element);
@@ -145,29 +145,30 @@
                 if (bytes == 0) return '0 Bytes';
                 var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
                 return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-    },uploadInProgressHTML:function(id){
-               var li = "<li id=templi_"+id+" class='span3 li-progress' style='display:none;'><div class='thumbnail graphics'>\n\
-                            <div id='progress' style='position:absolute; top:50%; z-index:1001; opacity:100;height: 10px; width: 238px;margin-left:1px;'><div style='background:#97D61D'></div></div>\n\
-                            <div class='img' style='opacity:0.3; line-height: 230px; '>\n\
-                                    <img src='img/graphicimg.png'>\n\
-                            </div>\n\
-                            <div class='caption' style='opacity:0.1; height:83px;'>\n\
-                                <h3 class='graphics-name'>\n\
-                                <a><span>"+this.name[0].name+"</span></a>\n\
-                                </h3>\n\
-                             <p>\n\
-                             <em class='iconpointy'><a class='btn-green showtooltip' original-data-title='Add Tags' ><i class='icon plus left'></i></a></em>\n\
-                             </p></div>\n\
-                             <div class='btm-bar' style='opacity:0.3; margin:0px;'>\n\
-                               <span><small class='gray'>"+this.bytesToSize(this.name[0].size)+"</small> | </span>\n\
-                               <span><small class='gray'>0<small>  x  </small> 0 </small> </span>\n\
-                                <a class='icon fav gray active right showtooltip' ></a>\n\
-                                <a class='icon link right showtooltip'></a>\n\
-                            </div>\n\
-                            </div>\n\
-                         </li>";
-               return li;
-            }
+    },
+    uploadInProgressHTML:function(id){
+        var li = "<li id=templi_"+id+" class='span3 li-progress li-mew-images' style='display:none;'><div class='thumbnail graphics'>\n\
+                     <div id='progress' style='position:absolute; top:50%; z-index:1001; opacity:100;height: 10px; width: 238px;margin-left:1px;'><div style='background:#97D61D'></div></div>\n\
+                     <div class='img' style='opacity:0.6; line-height: 230px; '>\n\
+                             <img src='img/graphicimg.png'>\n\
+                     </div>\n\
+                     <div class='caption' style='opacity:0.6; height:83px;'>\n\
+                         <h3 class='graphics-name'>\n\
+                         <a><span>"+this.name.name+"</span></a>\n\
+                         </h3>\n\
+                      <p>\n\
+                      <em class='iconpointy'><a class='btn-green showtooltip' original-data-title='Add Tags' ><i class='icon plus left'></i></a></em>\n\
+                      </p></div>\n\
+                      <div class='btm-bar' style='opacity:0.6; margin:0px;'>\n\
+                        <span><small class='gray'>"+this.bytesToSize(this.name.size)+"</small> | </span>\n\
+                        <span><small class='gray'>0<small>  x  </small> 0 </small> </span>\n\
+                         <a class='icon fav gray active right showtooltip' ></a>\n\
+                         <a class='icon link right showtooltip'></a>\n\
+                     </div>\n\
+                     </div>\n\
+                  </li>";
+        return li;
+     }
   }
 
  /* DRAGFILE PLUGIN DEFINITION
