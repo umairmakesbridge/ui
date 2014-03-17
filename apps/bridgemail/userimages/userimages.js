@@ -84,16 +84,23 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                    this.fetchImages();
            }
            ,searchKeyPress:function(ev){
+              var code = ev.keyCode ? ev.keyCode : ev.which;
+              var nonKey =[17, 40 , 38 , 37 , 39 , 16];
+              if ((ev.ctrlKey==true)&& (code == '65' || code == '97')) {
+                    return;
+              }
+              if($.inArray(code, nonKey)!==-1) return;
                var that = this;
                  if(this.fromDialog){
                         var parents = this.$el.parents(".modal");
                     }else{
                         var parents = this.$el.parents(".ws-content");
                     }
-                 parents.find('#clearsearch').show();
-               if (ev.keyCode == 13){
+                 
+               if (code == 13){
+                   parents.find('#clearsearch').show();
                  that.search(true,ev);
-               }else if(ev.keyCode == 8){
+               }else if(code == 8 || code == 46){
                    var text = $(ev.target).val();
                    if(!text){
                     this.search_text = text;
@@ -107,6 +114,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                     this.fetchImages();
                    }
                }else{ 
+                   parents.find('#clearsearch').show();
                      clearTimeout(that.timer); // Clear the timer so we don't end up with dupes.
                      that.timer = setTimeout(function() { // assign timer a new timeout 
                         that.search(true, ev)
