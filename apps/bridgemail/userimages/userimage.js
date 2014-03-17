@@ -191,11 +191,11 @@ function (template,bmstags) {
                    _this.options.app.showAlertDetail({heading:'Confirm Deletion',
                         detail:"Are you sure you want to delete this image?",                                                
                             callback: _.bind(function(){													
-                                this.options.app.showLoading("Deleting Graphics...",this.$el);
+                                this.options.app.showLoading("Deleting Graphics...",$(e.target).parents('.span3'));
                                     var URL = "/pms/io/publish/saveImagesData/?BMS_REQ_TK="+this.options.app.get('bms_token');
                                     $.post(URL, {type:'delete',imageId:imageId})
                                     .done(function(data) {                  
-                                          _this.options.app.showLoading(false,_this.$el);   
+                                          _this.options.app.showLoading(false,$(e.target).parents('.span3'));   
                                            var _json = jQuery.parseJSON(data);
                                            if(_json[0]!=='err'){
                                                $(e.target).parents('.span3').fadeOut('slow');
