@@ -1,4 +1,4 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment','bms-mergefields'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
         'use strict';
         return Backbone.View.extend({
@@ -9,7 +9,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'keyup .header-info':'defaultFieldHide',                                            
                       'click #save_conversion_filter':'saveConversionPage',                      
                       'click #save_results_sf':'saveResultToSF',
-                      'click .mergefields-box' :'showMergeFieldDialog',
+                     // 'click .mergefields-box' :'showMergeFieldDialog',
                       'click #drop4' :function(obj){
                           this.$('.mergefields-box').click();
                       },
@@ -69,6 +69,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
                     this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
                     this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
+                    this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true},elementID:'campaign_from_name'});
+                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true},elementID:'campaign_reply_to'});
+                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject'});
+                    this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge-field-editor'});
+                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge-field-hand'});
+                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge-field-plain'});
+                    this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true},elementID:'campaign_from_email'});
                 },
                 render: function () {
                     this.$el.html(this.template({}));				                        
@@ -229,7 +236,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 setFromNameField:function(){
-                    this.app.fixEmailFrom();
+                    this.app.fixCampaignInputStepOne();
                 },
                 fromNameSelectBoxChange:function(obj){
                      var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -246,7 +253,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$("#"+input_obj.attr("id")+"_default").hide();
                     }  
                 },
-                fromEmailDefaultFieldHide:function(){
+                /*fromEmailDefaultFieldHide:function(){
                     var fromEmail = $.getObj(e,"input").val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     if($.trim(fromEmail)=="" || !merge_field_patt.test(fromEmail) || this.app.validateEmail(fromEmail)){
@@ -255,7 +262,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.$("#campaign_from_email_default").show();
                     }
-                },
+                },*/
                 initCheckbox:function(){
                     this.$('input').iCheck({
                         checkboxClass: 'checkinput'
@@ -646,7 +653,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 break;
                         }
                         if(stepNo=='step_1'){
-                            this.app.fixEmailFrom();
+                            this.app.fixCampaignInputStepOne();
                         }
                     }
                 },
@@ -792,9 +799,98 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         settings_html += '</div>';
                     }
                     var camp_obj =this;
-                    recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div>'
-                    //console.log(this.states.step3.recipientDetial.listNumbers.length);
+                    recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div><div class="recipient-details"></div>';
                     this.$(".recipients-inner").html(recipients_html);
+                    /*List Values Abdullah */
+                    var recipientLists = this.states.step3.recipientList;
+                    var type = this.states.step3.recipientType;
+
+                    var recipientChecksum = null;
+                    if (recipientLists) {
+                        if (type === "Target") {
+                            recipientChecksum = this.recipientTarget(recipientLists);
+                        }
+                        else if (type === "List") {
+                            var csvflag = this.states.step3.csvFlag;
+                            recipientChecksum = this.recipientList(recipientLists, csvflag);
+                        }
+                        else {
+                            recipientChecksum = this.recipientTags(recipientLists);
+                        }
+                        if(recipientChecksum!=false){
+                             _.each(recipientChecksum, function(val) {
+                            this.$(".recipient-details").append('<label>' + $("[checksum='" + val + "']").find('h3').text() + ', </label>');
+                        }, this);
+                        // Making Comma Separated String
+                        var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        }
+                       
+                    }
+                    else {
+                        if (type === "Target" || type === "List") {
+                            var recipientDetailsVal = this.$("#recipients tr");
+                            _.each(recipientDetailsVal,function(val) {
+                                var checksum = $(val).attr('checksum');
+                                this.$(".recipient-details").append('<label>' + $("[checksum='" + checksum + "']").find('h3').text() + ', </label>');
+                            },this);
+                            // Making Comma Separated String
+                            var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        } 
+                        else if (type === "Tags") {
+                            var recipientDetailsVal = this.$("#tagsrecpslist ul li");
+                           _.each(recipientDetailsVal,function(val) {
+                               var tag= $(val).attr('checksum');
+                                this.$(".recipient-details").append('<label>' + $("[checksum='" + tag + "'] a:first-child").find('span').text() + ', </label>');
+                            },this);
+                      // Making Comma Separated String
+                           var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        }
+                        else if (type === "Salesforce") {
+                            if (this.states.step3.sfObject) {
+                                this.sfRecipient(this.states.step3.sfObject);
+                            }
+                            else {
+                                var sfRecipientVal = this.$("input[name=options_sf]:checked").val();
+                                if (sfRecipientVal === "campaign") {
+                                    this.$(".recipient-details").append('<label>' + this.$('#sfcamp_list_grid .selected').find('h3').text() + '</label>');
+                                } else {
+                                    if (sfRecipientVal == "both") {
+                                        this.$(".recipient-details").append('<label>Leads & Contacts</label>');
+                                    }
+                                    if (sfRecipientVal == "lead") {
+                                        this.$(".recipient-details").append('<label>Leads</label>');
+                                    }
+                                    if (sfRecipientVal == "contact") {
+                                        this.$(".recipient-details").append('<label>Contacts</label>');
+                                    }
+                                }
+                            }
+                        }else{
+                            if (this.states.step3.nsObject) {
+                                this.nsRecipient(this.states.step3.nsObject);
+                            }else{
+                                var nsRecipientVal = this.$("input[name=options_ns]:checked").val();
+                                if (nsRecipientVal === "group") {
+                                    this.$(".recipient-details").append('<label>' + this.$('#nsgroup_list_grid .selected').find('h3').text() + '</label>');
+                                } else {
+                                    if (nsRecipientVal == "contact") {
+                                        this.$(".recipient-details").append('<label>Contact</label>');
+                                    }
+                                    else if (nsRecipientVal == "partner") {
+                                        this.$(".recipient-details").append('<label>Partner</label>');
+                                    }
+                                    else{
+                                        this.$(".recipient-details").append('<label>Customer</label>');
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                   /* Recipient Listing Ends */
                     this.$(".settings-inner").html(settings_html+"<div class='clearfix'></div>");
 					var i = 0;
                     this.$(".step1 .socialbtns li").each(function(){
@@ -1175,7 +1271,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        if(!lists){
                            return false;
                        }   
-                       this.step3SaveCall({'recipientType':'List',listNum:lists});
+                       this.step3SaveCall({'recipientType':'List',listNum:lists,"csvflag":false});
                   }
                   else if(source=="choose_targets"){
                        var targets = this.saveTargets();    
@@ -1223,6 +1319,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                       
                        if(step3_json[0]!=="err"){                           
                            camp_obj.states.step3.recipientType = post_data['recipientType'];
+                           if(post_data['recipientType']=="Target"){
+                               camp_obj.states.step3.recipientList = post_data['filterNumber'];
+                           }else if (post_data['recipientType']=="List"){
+                                camp_obj.states.step3.recipientList = post_data['listNum'];
+                                camp_obj.states.step3.csvFlag  = post_data['csvflag'];
+                            }else{
+                                camp_obj.states.step3.recipientList = post_data['tags'];
+                            }
                            camp_obj.states.step3.change= false;
                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                            if(camp_obj.states.step3.recipientType=="Salesforce"){
@@ -1291,9 +1395,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$(".flyinput").val(selected_fromEmail);
                             setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);                            
                             
-                            var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck   
+                            var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth();   
                             //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40));
-                            camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
+                            camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); 
                             
                             if(defaults_json.customFooter==""){
                                 camp_obj.$("#campaign_useCustomFooter_div").hide();                                
@@ -1316,7 +1420,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText)
 						{
-                            var mergeFields_json = jQuery.parseJSON(xhr.responseText);                            
+                            var mergeFields_json = jQuery.parseJSON(xhr.responseText);
                             if(camp_obj.app.checkError(mergeFields_json)){
                                 return false;
                             }
@@ -2602,6 +2706,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var select_sCamp = this.$("#salesforce_setup .salesforce_campaigns #sfcamp_list_grid tr.selected")
                        if(select_sCamp.length===1){
                             post_data['filterType']= "campaign";
+                            this.states.step3.sfObject = post_data['filterType'];
                             post_data['sfCampaignId']= select_sCamp.attr("id").split("_")[1];                            
                        }
                        else{
@@ -2613,7 +2718,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var importType = salesforce_val;
                        post_data['filterType']= "filter";
                        post_data['sfObject'] = importType;               
-                       
+                       this.states.step3.sfObject = post_data['sfObject'];
                        var leadPost = camp_obj.states.step3.sf_filters.lead;
                        var contactPost= camp_obj.states.step3.sf_filters.contact;
                        if(importType=="lead"){
@@ -2943,7 +3048,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var select_sCamp = this.$("#netsuite_setup .netsuite_groups #nsgroup_list_grid tr.selected")
                        if(select_sCamp.length===1){
                             post_data['filterType']= "group";
-                            post_data['nsGroupId']= select_sCamp.attr("id").split("_")[1];                            
+                            post_data['nsGroupId']= select_sCamp.attr("id").split("_")[1];
+                            this.states.step3.nsObject = post_data['filterType'];
                        }
                        else{
                            this.app.showAlert('Please select a netsuite group to proceed.',$("body"),{fixed:true});
@@ -2960,6 +3066,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        }
                        
                        var customerPost = camp_obj.states.step3.ns_filters.customer;
+                       this.states.step3.nsObject =  post_data['nsObject'];
                        var contactPost= camp_obj.states.step3.ns_filters.contact;
                        var partnerPost= camp_obj.states.step3.ns_filters.partner;
                        if(netsuite_val=="customer"){
@@ -3188,6 +3295,83 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.scheduledCampaign('D','Changing Campaign to Draft...');
                     }
-               }
+               },
+               recipientList : function(lists,flag){
+                   var returnList = [];  
+                    lists = lists.split(','); 
+                     var listValue = null;
+                    if(flag){
+                       var toggleBtn = this.$('.map-toggle').find('.active').text();
+                       if(toggleBtn==="Existing"){
+                             listValue =  $('#existing_lists option:selected').text();
+                        }else{
+                             listValue = $('#newlist').val();
+                        }
+                        this.$(".recipient-details").append('<label>'+listValue+'</label>');
+                    }else{
+                        var  totalRecipientList = this.app.getAppData("lists");
+                        _.each(lists,function(values,k){
+                            _.each(totalRecipientList.lists[0],function(val){
+                                if(val[0]["listNumber.encode"]===values){
+                                returnList.push(val[0]["listNumber.checksum"]);
+                                }
+                            });
+                    });
+                    return returnList;
+                    }
+                    
+                },
+                recipientTarget : function(lists){
+                    
+                     var  totalRecipientTarget = this.app.getAppData("targets");
+                   var returnList = [];  
+                    lists = lists.split(','); 
+                        _.each(lists,function(values,k){
+                            _.each(totalRecipientTarget.filters[0],function(val){
+                                if(val[0]["filterNumber.encode"]===values){
+                                returnList.push(val[0]["filterNumber.checksum"]);
+                                }
+                            })
+                    });
+                    return returnList;
+                },
+                recipientTags : function(lists){
+                    lists = lists.split(','); 
+                    _.each(lists,function(val){
+                        this.$(".recipient-details").append('<label>'+val+', </label>');
+                    },this);
+                    // Making Comma Separated String
+                        var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        return false;
+                },
+                sfRecipient:function(sfObject){
+                   if(sfObject=="both"){
+                               this.$(".recipient-details").append('<label>Leads & Contacts</label>');
+                           }
+                  if(sfObject=="lead"){
+                               this.$(".recipient-details").append('<label>Leads</label>');
+                           }
+                   if(sfObject=="contact"){
+                       this.$(".recipient-details").append('<label>Contacts</label>');
+                   }
+                   if(sfObject=="campaign"){
+                       this.$(".recipient-details").append('<label>'+this.$('#sfcamp_list_grid .selected').find('h3').text()+'</label>');
+                   }
+                },
+                nsRecipient:function(nsObject){
+                   if(nsObject=="contact"){
+                               this.$(".recipient-details").append('<label>Contact</label>');
+                           }
+                  if(nsObject=="partner"){
+                               this.$(".recipient-details").append('<label>Partner</label>');
+                           }
+                   if(nsObject=="customer"){
+                       this.$(".recipient-details").append('<label>Customer</label>');
+                   }
+                   if(nsObject=="group"){
+                       this.$(".recipient-details").append('<label>'+this.$('#nsgroup_list_grid .selected').find('h3').text()+'</label>');
+                   }
+                }
         });
 });

@@ -213,10 +213,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         event.stopPropagation();
                     }, this));
                     // Slide Nav Handling Event 
-                    this.$('.slidenav > ul > li').click(function(event) {
-                        $('.slidenav > ul > li').find('ul').hide();
+                    this.$('.slidenav li').click(function(event) {
+                        $(this).find('ul').hide();
                         $(this).find('ul').show();
-                        event.stopPropagation();
+                        //event.stopPropagation();
                     });
 
                     //Tiles Event Handling        

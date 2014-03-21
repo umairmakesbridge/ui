@@ -204,7 +204,7 @@ function (template,chosen,addbox) {
                                                 curview.removeFile();
                                                 campview.states.step3.recipientType = 'List';
                                                 campview.states.step3.recipientDetial = null;
-                                                campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2]});
+                                                campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2],"csvflag":true});
                                                  app.showLoading(false,mapview.$el);
                                            }
                                            else{

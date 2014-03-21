@@ -339,7 +339,7 @@ function (template,highlight) {
                                 templates_html +='<div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>';
                             }                                
                             if(val[0].isReturnPath==='Y'){
-                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Templates"></div>';
+                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Tested Templates"></div>';
                             }       
                             templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
                             

@@ -1,4 +1,4 @@
-define(['text!bmstemplates/html/template.html','jquery.icheck','bms-tags','bms-addbox','bms-dragfile'],
+define(['text!bmstemplates/html/template.html','jquery.icheck','bms-tags','bms-addbox','bms-dragfile','bms-mergefields'],
 function (template,icheck,bmstags) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -66,6 +66,9 @@ function (template,icheck,bmstags) {
                     addCallBack:_.bind(this.addCategory,this),
                     placeholder_text:'Please enter category'
                 });
+                
+                // Merge Field Abdullah 
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge_field_plugin'});
                 copyIconTemplate.click(_.bind(function(e){                                     
                      this.page.copyTemplate(self);
                },this));  
