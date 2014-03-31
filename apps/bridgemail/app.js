@@ -70,7 +70,7 @@ define([
                             window.BRIDGEMAIL = this;
 			}
                         this.getUser();
-                     
+                        this.CRMGetStatus();
                         
 		},
 		start: function (Router, MainContainer, callback) {
@@ -342,12 +342,12 @@ define([
                 tag_html +="</ul>";
                 return tag_html;
             },
-			initSearch: function(obj,searchInput)
-			{
-				var target = $.getObj(obj,"a");
-				searchInput.val(target.text());				
-				searchInput.keyup();
-			},
+            initSearch: function(obj,searchInput)
+            {
+                    var target = $.getObj(obj,"a");
+                    searchInput.val(target.text());				
+                    searchInput.keyup();
+            },
             setAppData:function(appVar,data){
                 var _data = this.get("app_data");
                 _data[appVar]= data;
@@ -464,6 +464,16 @@ define([
                     return title;
                 }
                 
+            },
+            CRMGetStatus:function(){
+                 this.getData({
+                        "URL":"/pms/io/netsuite/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status",
+                        "key":"netsuite"
+                 });
+                 this.getData({
+                        "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status",
+                        "key":"salesfocre"
+                 });
             }
 	});
 

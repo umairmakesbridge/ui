@@ -62,7 +62,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .template-gallery': 'templateGallery',
                     'click .camapign-report': 'camapignReport',
                     'click .csv-upload': 'csvUpload',
-                    'click .connect-crm': 'connectCrm' 
+                    'click .connect-crm': 'connectCrm', 
+                    'click .crm-salesforce': 'salesforceCrm', 
+                    'click .crm-netsuite': 'netsuiteCrm'
                     
 
                 },
@@ -289,7 +291,25 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      this.addWorkSpace({type:'',title:'Images',url:'userimages/userimages',workspace_id: 'userimages',tab_icon:'graphiclisting'});
                      return;
                   
-                }              
+                },
+                salesforceCrm:function(){
+                    this.addWorkSpace({
+                        type:'',
+                        title:'Salesforce',
+                        url : 'crm/salesforce/salesforce',
+                        workspace_id: 'crm_salesforce',
+                        tab_icon:'salesforce'
+                    });                    
+                },
+                netsuiteCrm:function(){
+                    this.addWorkSpace({
+                        type:'',
+                        title:'NetSuite',
+                        url : 'crm/netsuite/netsuite',
+                        workspace_id: 'crm_netsuite',
+                        tab_icon:'netsuite'
+                    });                 
+                }
 
             });
 
