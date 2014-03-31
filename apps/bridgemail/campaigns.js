@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html','bms-filters','daterangepicker'],
-function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicker) {
+define(['jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','text!html/campaigns.html','bms-filters','daterangepicker','moment'],
+function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicker,moment) {
         'use strict';
         return Backbone.View.extend({
 			id: 'campaigns_list',
@@ -553,25 +553,31 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				row_html += '<td class="firstcol">'+start_div+'<div class="name-type"><h3><a id="'+ val[0]['campNum.encode'] +'" class="campname '+ editClass +'">'+ val[0].name +'</a><a class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</a>'+ chartIcon +'</h3>   <div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div>'+end_div+'</td>';
 				var datetime = '';
 				var dtHead = '';
-				if(val[0].status != 'D')
+				if(val[0].status == 'P' || val[0].status == 'S')
 				{
 					dtHead = '<em>Schedule Date</em>';
 					datetime = val[0].scheduledDate;
 				}
-				else
+                                else if(val[0].status == 'C')
 				{
-					dtHead = '<em>Updation Date</em>';
-					if(val[0].updationDate)
-						datetime = val[0].updationDate;
-					else
-						datetime = val[0].creationDate;
+					dtHead = '<em>Sent Date</em>';
+					datetime = val[0].scheduledDate;
+				}
+				else if(val[0].status == 'D')
+				{
+                                    dtHead = '<em>Last Edited</em>';
+                                    if(val[0].updationDate)
+                                            datetime = val[0].updationDate;
+                                    else
+                                            datetime = val[0].creationDate;
 				}
 				if(datetime)
 				{
-					var date = datetime.split(' ');
-					var dateparts = date[0].split('-');					
-					var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);
-					var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
+					var date = moment(this.app.decodeHTML(datetime),'YYYY-M-D H:m');														
+					var dateFormat = date.format("DD MMM, YYYY");
+                                        if(val[0].status == 'S' || val[0].status =='P'){
+                                            dateFormat = date.format("DD MMM, YYYY<br/>hh:mm A");
+                                        }
 				}
 				else{
 					dateFormat = '';					

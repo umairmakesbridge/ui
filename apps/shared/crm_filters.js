@@ -370,7 +370,7 @@
           var N = i+1
           var filter = $(total_rows[i])
           if($(total_rows[i]).hasClass("filter")){
-              filters_post[src+"Fields"+N] = filter.find(".fields").val()
+              filters_post[src+"Field"+N] = filter.find(".fields").val()
               filters_post[src+"Operator"+N] = filter.find(".rules").val()
               filters_post[src+"Value"+N] = filter.find(".matchValue").val()                            
           }

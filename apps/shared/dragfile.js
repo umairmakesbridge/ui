@@ -20,7 +20,7 @@
       this.$element.css("position:relative");
       this.options = this.getOptions(options);            
       this.module = this.options.module;
-      this.name = "";
+      this.name = [];
       this.from = this.options.from_dialog;
       this.post_url = this.options.post_url;
       this.progressElement = this.options.progressElement;
@@ -75,7 +75,6 @@
       return isImage;
   },
   handleFileUpload:function(files,obj){
-      this.name= files;
       for (var i = 0; i < files.length; i++)
         {
             if(this.validate(files[i])){
@@ -91,6 +90,7 @@
        var _this = this;
        var data_id = 0;
        if(this.module == "Image"){
+         $(".messagebox").hide('fast');  
          var index = $('.li-mew-images').size();
          var id =  index + 1;
             data_id = id;
@@ -129,6 +129,11 @@
                 _this.app.showLoading(false,_this.$element);
                  $('#templi_'+data_id).remove();
                 _this.options.callBack(data);  
+            }
+            ,
+            error:function(){
+                 _this.app.showLoading(false,_this.$element);
+                 $('#templi_'+data_id).remove();
             }
         });
 

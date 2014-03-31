@@ -9978,13 +9978,13 @@ input.search-control[type="text"] {
     padding: 5px 6px;
 }
 
-#leads h2.header-list a, #contacts h2.header-list a {
+#leads h2.header-list a, #contacts h2.header-list a,#customers h2.header-list a,#partners h2.header-list a {
     background-position: 92% center;
     color: #FFFFFF;
     margin-top: -2px;
     padding: 2px 35px 2px 15px !important;
 }
-#leads .useallf:hover,#contacts .useallf:hover {
+#leads .useallf:hover,#contacts .useallf:hover,#customers .useallf:hover,#partners .useallf:hover {
     background-image: url("../img/rightarrow.png");
     background-position: 97% center;
     background-repeat: no-repeat;

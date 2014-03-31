@@ -59,22 +59,44 @@ function (template,crm_filters) {
                      }
                 },
                 saveFilter:function(dialog,callBack){
-                    this.camp.states.step3.ns_filters.customer = this.$(".customer-filter").data("crmfilters").saveFilters('customer');
-                    this.camp.states.step3.ns_filters.contact =  this.$(".contact-filter").data("crmfilters").saveFilters('contact');
-                    this.camp.states.step3.ns_filters.partner =  this.$(".partner-filter").data("crmfilters").saveFilters('partner');
-                    if(this.filter_type!=="customer"){
-                        this.camp.states.step3.ns_filters.nsObject = this.filter_type;
+                    if(this.camp.states){
+                        this.camp.states.step3.ns_filters.customer = this.$(".customer-filter").data("crmfilters").saveFilters('customer');
+                        this.camp.states.step3.ns_filters.contact =  this.$(".contact-filter").data("crmfilters").saveFilters('contact');
+                        this.camp.states.step3.ns_filters.partner =  this.$(".partner-filter").data("crmfilters").saveFilters('partner');
+                        if(this.filter_type!=="customer"){
+                            this.camp.states.step3.ns_filters.nsObject = this.filter_type;
+                        }
+                        else{                        
+                            var cust_val = this.$(".customer-type input:checked").map(function(){
+                                return $(this).val()
+                            }).toArray().join();
+                            if(cust_val){
+                                   this.camp.states.step3.ns_filters.nsObject = cust_val;
+                            }          
+                            else{
+                              this.app.showAlert('Please at least on option from Customer, Lead, Or Prospect',$("body"),{fixed:true});  
+                              return false;
+                            }
+                        }
                     }
-                    else{                        
-                        var cust_val = this.$(".customer-type input:checked").map(function(){
-                            return $(this).val()
-                        }).toArray().join();
-                        if(cust_val){
-                               this.camp.states.step3.ns_filters.nsObject = cust_val;
-                        }          
-                        else{
-                          this.app.showAlert('Please at least on option from Customer, Lead, Or Prospect',$("body"),{fixed:true});  
-                          return false;
+                    else{
+                        this.camp.customerFilter = this.$(".customer-filter").data("crmfilters").saveFilters('customer');
+                        this.camp.contactFilter =  this.$(".contact-filter").data("crmfilters").saveFilters('contact');
+                        this.camp.partnerFilter =  this.$(".partner-filter").data("crmfilters").saveFilters('partner');
+                        if(this.filter_type!=="customer"){
+                            this.camp.nsObject = this.filter_type;
+                        }
+                        else{                        
+                            var cust_val = this.$(".customer-type input:checked").map(function(){
+                                return $(this).val()
+                            }).toArray().join();
+                            if(cust_val){
+                                   this.camp.nsObject = cust_val;
+                            }          
+                            else{
+                              this.app.showAlert('Please at least on option from Customer, Lead, Or Prospect',$("body"),{fixed:true});  
+                              return false;
+                            }
                         }
                     }
                     dialog.hide();

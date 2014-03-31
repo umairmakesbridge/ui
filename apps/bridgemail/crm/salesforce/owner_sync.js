@@ -85,6 +85,9 @@ function (template,OwnerFields) {
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){                        
                          this.app.showLoading(false,this.$fieldsContainer);
                          var owner_trans = jQuery.parseJSON(xhr.responseText);
+                         if(owner_trans[0]=="err"){
+                             return false;
+                         }
                          if(owner_trans.status=="D"){
                              this.$(".update-fields,.deactivate-fields").hide();
                              this.$(".activate-fields").show();
@@ -96,9 +99,11 @@ function (template,OwnerFields) {
                          this.tid = owner_trans.tId;                          
                          this.$(".frequency .active").removeClass("active");
                          this.$(".frequency button[rule='"+owner_trans.frequency+"']").addClass("active");
-                         _.each(owner_trans.fldList[0],function(val,key){
-                              this.$("input.field-row-checkbox[value='"+val[0].name+"']").iCheck('check');
-                         },this);
+                         if(owner_trans.count!=="0"){
+                            _.each(owner_trans.fldList[0],function(val,key){
+                                 this.$("input.field-row-checkbox[value='"+val[0].name+"']").iCheck('check');
+                            },this);
+                         }
                          
                         
                     },this));

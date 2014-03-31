@@ -1,4 +1,4 @@
-define(['text!crm/salesforce/html/myimports.html','crm/salesforce/collections/myimports','moment','jquery.searchcontrol','jquery.bmsgrid'],
+define(['text!crm/netsuite/html/myimports.html','crm/netsuite/collections/myimports','moment','jquery.searchcontrol','jquery.bmsgrid'],
 function (template,MyImports,moment) {
         'use strict';
         return Backbone.View.extend({                                
@@ -18,7 +18,6 @@ function (template,MyImports,moment) {
                     this.$el.html(this.template({}));                    
                     this.$myImportsContainer = this.$(".myimports-table");
                     this.initControl();                                                              
-                    
                 },
                 initControl:function(){
                    this.$(".myimports-search").searchcontrol({
@@ -73,10 +72,6 @@ function (template,MyImports,moment) {
                              this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
                           }
                           
-                          
-                          
-                          
-                          
                             
                       }, this),
                       error: function (collection, resp) {
@@ -126,8 +121,8 @@ function (template,MyImports,moment) {
                     this.$el);       
                 },
                 deactivateCall:function(tId){
-                    this.app.showLoading("Deactivating Import...",this.$el);
-                    var URL = "/pms/io/salesforce/setData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    this.app.showLoading("Deleting Import...",this.$el);
+                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'delete',tId:tId})
                     .done(_.bind(function(data) {                  
                           this.app.showLoading(false,this.$el);   
@@ -143,13 +138,13 @@ function (template,MyImports,moment) {
                    },this));
                 },
                 getImport:function(e){
-                    this.parent.$("#choose_soruce .salesforce-new-import").click();
-                    this.parent.$("#choose_soruce .salesforce-new-import").removeClass("selected");
+                    this.parent.$("#choose_soruce .netsuite-new-import").click();
+                    this.parent.$("#choose_soruce li.netsuite-new-import").removeClass("selected");
                     var tid = $.getObj(e,"a").attr("id").split("_")[1];
                     this.app.showLoading("Loading Import...",this.parent.$el);
-                    var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=import&tId="+tid;
+                    var URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=import&tId="+tid;
                     jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
-                        this.app.showLoading(false,this.parent.$el);
+                         this.app.showLoading(false,this.parent.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
                         this.app.showLoading(false,this.parent.newImportArea);                                                
                         this.loadImport(_json)

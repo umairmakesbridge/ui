@@ -1,4 +1,4 @@
-define(['text!crm/salesforce/html/export.html','moment','jquery.chosen','jquery-ui'],
+define(['text!crm/netsuite/html/export.html','moment','jquery.chosen','jquery-ui'],
 function (template,moment) {
         'use strict';
         return Backbone.View.extend({                                                              
@@ -71,7 +71,7 @@ function (template,moment) {
                             var _json = jQuery.parseJSON(xhr.responseText);
                             if(this.app.checkError(_json)){
                                 return false;
-                            }                            
+                            }
                             this.$(".timebox-hour").spinner({max: 12,min:1,start: function( event, ui ) {
 
                             }});
@@ -82,9 +82,11 @@ function (template,moment) {
                             }});
                             if(!this.editImport){
                                 this.setDateTime(_json[0]);
-                            }else{
+                            }
+                            else{
                                 this.setDateTime(this.editImport.scheduledDate);
                             }
+                            
                         }
                    },this)); 
                 },
@@ -110,7 +112,7 @@ function (template,moment) {
                             this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);  
                 },
                 getExport:function(){
-                   var URL = '/pms/io/salesforce/getData/?type=export&BMS_REQ_TK='+this.app.get('bms_token');
+                   var URL = '/pms/io/netsuite/getData/?type=export&BMS_REQ_TK='+this.app.get('bms_token');
                    this.app.showLoading("Getting Export Data...",this.$el);
                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
                         this.app.showLoading(false,this.$el);
@@ -212,7 +214,7 @@ function (template,moment) {
                    this.update(post_data);   
                 },
                 update:function(post_data){
-                    var URL = "/pms/io/salesforce/setData/?BMS_REQ_TK="+ this.app.get('bms_token');                            
+                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+ this.app.get('bms_token');                            
                     $.post(URL,post_data)
                     .done(_.bind(function(data) {  
                         this.app.showLoading(false,this.$el);     

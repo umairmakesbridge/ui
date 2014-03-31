@@ -269,7 +269,7 @@ define([
                  });
                 $(".global_messages .closebtn").click(function(){
                         $(".global_messages").fadeOut("fast",function(){
-                                $(this).remove();						 
+                                $(this).hide();						 
                         }) 
                  });
              },
@@ -314,7 +314,7 @@ define([
             },
             getCampStatus:function(flag){
               // A=all, D=draft, S=scheduled, P=pending, C=completed  
-              var status = 'Draf';
+              var status = 'Draft';
               if(flag=='A'){
                   status= 'All'
               }
@@ -375,6 +375,8 @@ define([
                     if(xhr && xhr.responseText){
                          var salesforce = jQuery.parseJSON(xhr.responseText);                                
                          if(app.checkError(salesforce)){
+                             if(data.errorCallback)
+                                data.errorCallback();
                              return false;
                          }                        
                         app.setAppData(data.key,salesforce);

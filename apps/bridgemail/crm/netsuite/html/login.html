@@ -1,35 +1,84 @@
+<% if(layout=='') { %>
 <div style=" min-height:365px;"  class="clearfix template-container gray-panel">
-  <div class="cont-box" style="margin-top:10px; top:-3%;left:57%;">
-    <div class="row uid-container">
-      <label>User ID</label>
-      <div class="inputcont">      	
-      	<input type="text" name="ns_userid" id="ns_userid" placeholder="jadams@makesbridge.com">
-      </div>
-      <!--<span id="nsuid_erroricon" class="erroricon"></span>-->
+    <div class="cont-box" style="margin-top:10px; top:-3%;left:57%;">
+        <div class="row uid-container">
+            <label>User ID</label>
+            <div class="inputcont">      	
+                <input type="text" name="ns_userid" id="ns_userid" placeholder="Enter netsuite user id">
+            </div>
+            <!--<span id="nsuid_erroricon" class="erroricon"></span>-->
+        </div>
+        <div class="row pwd-container">
+            <label>Password</label>
+            <div class="inputcont">      	
+                <input type="password" name="ns_pwd" id="ns_pwd" placeholder=" ">
+            </div>
+            <!--<span id="nspwd_erroricon" class="erroricon"></span>-->
+        </div>
+        <div class="row accid-container">
+            <label>Account ID</label>
+            <div class="inputcont">      	
+                <input type="text" name="ns_accid" id="ns_accid" placeholder="Enter netsuite account id">
+            </div>
+            <!--<span id="nsaccid_erroricon" class="erroricon"></span>-->
+        </div>
+        <h5>Send synchronization confirmation email to:</h5>
+        <div class="row email-container">
+            <label>Email</label>
+            <div class="inputcont">      	
+                <input type="text" name="ns_email" id="ns_email" placeholder="babar@makesbridge.com">
+            </div>
+            <!--<span id="nsemail_erroricon" class="erroricon"></span>-->
+        </div>
+        <div class="row btnrow"><a id="btnTestLogin" class="btn-gray"><span>Test</span></a><a id="btnSaveLogin" class="btn-green btnSaveLogin"><span>Save</span><i class="icon save"></i></a></div>
+        <div class="clearfix"></div>
     </div>
-    <div class="row pwd-container">
-      <label>Password</label>
-      <div class="inputcont">      	
-      	<input type="password" name="ns_pwd" id="ns_pwd" placeholder=" ">
-      </div>
-      <!--<span id="nspwd_erroricon" class="erroricon"></span>-->
-    </div>
-    <div class="row accid-container">
-      <label>Account ID</label>
-      <div class="inputcont">      	
-      	<input type="text" name="ns_accid" id="ns_accid" placeholder=" ">
-      </div>
-      <!--<span id="nsaccid_erroricon" class="erroricon"></span>-->
-    </div>
-    <h5>Send synchronization confirmation email to:</h5>
-    <div class="row email-container">
-      <label>Email</label>
-      <div class="inputcont">      	
-      	<input type="text" name="ns_email" id="ns_email" placeholder="babar@makesbridge.com">
-      </div>
-      <!--<span id="nsemail_erroricon" class="erroricon"></span>-->
-    </div>
-    <div class="row btnrow"><a id="btnTestLogin" class="btn-gray"><span>Test</span></a><a id="btnSaveLogin" class="btn-green"><span>Save</span><i class="icon save"></i></a></div>
-    <div class="clearfix"></div>
-  </div>
 </div>
+<% } else { %>
+
+<div style=" position:static; margin:0;" class="cont-box row-fluid ">
+    <div class="span6">
+        <div class="row uid-container">
+            <label>User ID</label>
+            <div class="input-append adv_dd sort-options">
+                <div class="inputcont ">
+                    <input type="text" class="header-info textfield"  name="ns_userid" id="ns_userid" placeholder="Enter netsuite user id" >
+                </div>
+            </div>
+
+        </div>
+        <div class="row pwd-container">
+            <label>Password</label>
+            <div class="input-append adv_dd sort-options">
+                <div class="inputcont ">
+                    <input type="password" class="header-info textfield" name="ns_pwd" id="ns_pwd"  >
+                </div>
+            </div> 
+        </div>
+        <div class="row accid-container">
+            <label>Account ID</label>
+            <div class="input-append adv_dd sort-options">
+                <div class="inputcont ">
+                    <input type="text" class="header-info textfield" name="ns_accid" id="ns_accid"  >
+                </div>
+            </div> 
+        </div>
+        <div class="row btnrow"><a class="btn-green right btnSaveLogin"><span>Save</span><i class="icon save"></i></a> <a class="btn-blue right" id="btnTestLogin"><span>Test</span></a></div>
+    </div>
+    <div class="span6">
+        <h5>Send synchronization confirmation email to:</h5>
+        <div class="row email-container">
+            <label>Email</label>
+            <div class="input-append adv_dd sort-options">
+                <div class="inputcont ">
+                    <input type="text" name="ns_email" id="ns_email" class="header-info textfield"  placeholder="Enter email to send confirmation">
+                </div>
+            </div>
+
+        </div>
+        <div class="row btnrow"><a class="btn-green right setEmail"><span>Save</span><i class="icon save"></i></a></div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<% } %>

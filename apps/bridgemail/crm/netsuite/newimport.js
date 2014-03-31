@@ -1,4 +1,4 @@
-define(['views/common/wizard','text!crm/salesforce/html/newimport.html','moment','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight','bms-addbox','jquery.chosen','jquery-ui'],
+define(['views/common/wizard','text!crm/netsuite/html/newimport.html','moment','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight','bms-addbox','jquery.chosen','jquery-ui','jquery.icheck'],
 function (Wizard,template,moment) {
         'use strict';
         return Backbone.View.extend({                                
@@ -12,14 +12,13 @@ function (Wizard,template,moment) {
                     this.improtLoaded = false;
                     this.tId = null;       
                     this.editImport = null;
-                    this.render();
                     this.isFilterChange = false;
+                    this.render();
                 },
 
                 render: function () {
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
-                    
                     var wizard_options = {steps:3,active_step:1};
                     this.mk_wizard = new Wizard(wizard_options);  
                     this.$el.append(this.mk_wizard.$el);                                       
@@ -71,12 +70,12 @@ function (Wizard,template,moment) {
                     if( this.improtLoaded==false){
                          this.improtLoaded = true; 
                         this.app.showLoading("Loading Import...",this.$(".step2"));
-                        require(["crm/salesforce/import"],_.bind(function(page){    
+                        require(["crm/netsuite/import"],_.bind(function(page){    
                             this.Import_page = new page({
                                 page:this
                             })
                             this.app.showLoading(false,this.$(".step2"));
-                            this.$(".step2 .salesforce_campaigns").remove();
+                            this.$(".step2 .netsuite_campaigns").remove();
                             this.$(".step2").append(this.Import_page.$el);                       
                         },this));
                     }
@@ -154,9 +153,7 @@ function (Wizard,template,moment) {
                         }
                     })
                     this.$(".step3 .frequency-type").change();
-                    this.fetchServerTime();   
-                    
-                    
+                    this.fetchServerTime();                    
                 },
                 stepsCall:function(step){
                     var proceed = -1;
@@ -188,7 +185,7 @@ function (Wizard,template,moment) {
                       return 0;
                   }
                   if(valid !==0 && this.isFilterChange==false){
-                        this.Import_page.saveFilter('salesforce',true);
+                        this.Import_page.saveFilter('netsuite',true);
                         proceed = 0;
                     }
                   return proceed;
@@ -218,7 +215,6 @@ function (Wizard,template,moment) {
                     });				
                     this.$(".bms-lists .select-list").click(_.bind(this.markSelectList,this));
                     this.loadData(this.editImport);
-                   
                 },
                 markSelectList:function(e){
                     var target = $.getObj(e,"a");
@@ -232,7 +228,7 @@ function (Wizard,template,moment) {
                     
                 },
                 startImport:function(){                    
-                    var URL = "/pms/io/salesforce/setData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');
                     var post_data = {type:'import',synchType:'crm',listNumber:this.listNumber};
                     this.app.showLoading("Starting Import...",this.$el);  
                     $.extend(post_data,this.Import_page.getImportData());
@@ -275,7 +271,7 @@ function (Wizard,template,moment) {
                     .done(_.bind(function(data) {  
                         this.app.showLoading(false,this.$el);     
                         var _json = jQuery.parseJSON(data); 
-                        if(_json[0]!=="err"){                            
+                        if(_json[0]!=="err"){
                             if(_json.tId){
                                 if(this.tId){
                                     this.app.showMessge("Your import has been successfully updated.");
@@ -284,11 +280,10 @@ function (Wizard,template,moment) {
                                     this.app.showMessge("Your import has been successfully created.");
                                     this.parent.updateCount(1);
                                 }
-                                this.tId = _json.tId;                                
-                                this.parent.$(".salesforce-imports").click();                                
-                                this.parent.myimports_page.getMyImports();                                
+                                this.tId = _json.tId;
+                                this.parent.$(".netsuite-imports").click();                               
+                                this.parent.myimports_page.getMyImports();
                             }
-                            
                         }
                         else{
                             this.app.showAlert(_json[1],$("body"),{fixed:true}); 
@@ -320,6 +315,7 @@ function (Wizard,template,moment) {
                             if(this.app.checkError(_json)){
                                 return false;
                             }
+                            
                             this.$(".timebox-hour").spinner({max: 12,min:1,start: function( event, ui ) {
 
                             }});
@@ -334,7 +330,6 @@ function (Wizard,template,moment) {
                             else{
                                 this.setDateTime(_json[0]);
                             }
-                            
                        
                         }
                    },this)); 
@@ -347,7 +342,8 @@ function (Wizard,template,moment) {
                             var min = serverDate.minute();
                             this.$(".import-year").val(serverDate.year()).trigger("chosen:updated");
                             this.$(".import-month").val(month).trigger("chosen:updated");
-                            this.$(".import-day").val(date).trigger("chosen:updated");                            
+                            this.$(".import-day").val(date).trigger("chosen:updated");
+                            
                             if(hour>=12){
                                 var hour = hour-12;                            
                                 this.$(".timebox-hours button.pm").addClass("active");
@@ -360,7 +356,7 @@ function (Wizard,template,moment) {
                             this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);  
                 },
                 loadData:function(data){
-                    if(data){
+                     if(data){
                         this.tId = data.tId;
                         this.editImport=data;
                         this.$(".bms-lists tr").removeClass("selected");
@@ -368,17 +364,17 @@ function (Wizard,template,moment) {
                         this.$(".bms-lists tr[checksum='"+data.checkSum+"']").scrollintoview(); 
                         this.improtLoaded = false;
                         this.showHideButton(true);
+                        if(this.Import_page){
+                         this.Import_page.$(".managefilter .badge").hide();
+                        }
                     }
                 },
                 initData:function(){
                     this.$(".bms-lists tr").removeClass("selected");
                     this.editImport = null;
-                    this.tId = null;
-                    this.showHideButton(false);
+                     this.tId = null;
                     this.improtLoaded = false;
-                    if(this.Import_page){
-                        this.Import_page.$(".managefilter .badge").hide();
-                    }
+                    this.showHideButton(false);
                 },
                 showHideButton:function(flag){
                     if(flag){
@@ -392,6 +388,5 @@ function (Wizard,template,moment) {
                         this.$(".activate-import").css({display:"block"});
                     }
                 }
-                
         });
 });

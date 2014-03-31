@@ -166,14 +166,14 @@
     opacity: 1;
   }
 }
-.rotateIn, .selection-boxes li:hover img {
+/*.rotateIn, .selection-boxes li:hover img {
   -webkit-animation-name: rotateIn;
   animation-name: rotateIn;
 }
 .rotateIn, .selection-boxes li img {
   -webkit-animation-name: rotateOut;
   animation-name: rotateOut;
-}
+}*/
 
 
 

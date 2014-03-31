@@ -370,7 +370,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
 #salesforce_setup .ui-accordion .ui-accordion-header .search
  { margin:3px 0 0 10px; }
  
-#netsuite_setup .filterbtn,
+.netsuite_campaigns .filterbtn,
 .salesforce_campaigns .filterbtn
 { float:right; }
 

@@ -73,10 +73,37 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             //this.$el.find(".step-contents").css("height",step_area+"px");
                             
 			},                        
+                        gotoStep:function(step){
+                            this.$el.find(".step-contents > .wizard-steps").hide();
+                            this.$el.find(".step-contents .step"+step).fadeIn();
+                            if(this.page.initStepCall){
+                                this.page.initStepCall("step_"+step);
+                            }
+                            this.$el.find(".progressbar .active").removeClass("active");
+                            this.$el.find(".progressbar li").eq(parseInt(step)-1).addClass("active");
+                            
+                            if(step==1){
+                                this.$el.find("a.backbtn").hide();
+                            }
+                            else{
+                                this.$el.find("a.backbtn").show();
+                            }
+                            
+                            if(step < this.total_steps){
+                                this.$el.find("a.nextbtn").show();
+                            }
+
+                            if(step == this.total_steps){
+                                this.$el.find("a.nextbtn").hide();
+                            }
+                            this.active_step = parseInt(step);
+                        },
                         initStep:function(){
                             this.$el.find(".wizard-steps").hide();
                             this.$el.find(".step"+this.active_step).show();
                             var _steps = this.$el.find(".progressbar li");
+                            //_steps.removeClass("active");
+                             //this.$el.find(".progressbar li:first-child").addClass("active");
                             if(this.options.step_text && this.options.step_text.length){
                                 var step_text = this.options.step_text;
                                 var step_tooltip = this.options.step_tooltip;

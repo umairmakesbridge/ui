@@ -57,8 +57,14 @@ function (template,crm_filters) {
                     }
                 },
                 saveFilter:function(dialog,callBack){
-                    this.camp.states.step3.sf_filters.contact = this.$(".contact-filter").data("crmfilters").saveFilters('contact');
-                    this.camp.states.step3.sf_filters.lead =  this.$(".lead-filter").data("crmfilters").saveFilters('lead');
+                    if(this.camp.states){
+                        this.camp.states.step3.sf_filters.contact = this.$(".contact-filter").data("crmfilters").saveFilters('contact');
+                        this.camp.states.step3.sf_filters.lead =  this.$(".lead-filter").data("crmfilters").saveFilters('lead');
+                    }
+                    else{
+                        this.camp.contactFilter = this.$(".contact-filter").data("crmfilters").saveFilters('contact');
+                        this.camp.leadFilter =  this.$(".lead-filter").data("crmfilters").saveFilters('lead');
+                    }
                     dialog.hide();
                     callBack("Salesforce");
                 }

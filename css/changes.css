@@ -1309,6 +1309,9 @@ ul.tabs-btns li.active a{
 .wtab-salesforce{
     background:url("../img/sf-icon30.png") no-repeat scroll center center;
 }
+.wtab-netsuite{
+    background:url("../img/ns-icon30.png") no-repeat scroll center center;
+}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -1630,7 +1633,7 @@ div.shortcuts .ddicon{
 	width: 20px;
 }
 #ownerfields_list_grid .checkpanelinput.checked .icheck_line-icon {
-	background-position: -20px 0;
+    background-position: -20px 0;
 }
 .total-steps-3 .s4{
     display: none;
@@ -1652,6 +1655,40 @@ div.shortcuts .ddicon{
 #salesforce-new-import .wizard-steps{
     position: relative;
     min-height: 300px;
+}
+.campaign_stats.cstats ul.chosen-results{
+    float:none;
+    margin:0px;
+    width: auto;    
+}
+.cstats ul.chosen-results li:after{
+    left:auto;    
+}
+.campaign_stats.cstats ul.chosen-results li{
+    font-size: 13px;
+    line-height: 20px;
+}
+.cstats .searchbtn{
+    margin-top:2px;
+}
+.bmsgrid div.bDiv tr .action a.system{
+    display: none !important;
+}
+.top-margin-zero{
+    margin-top:0px;
+}
+#salesforce-setup .ui-accordion .ui-accordion-content .cont-box label,
+#netsuite-setup .ui-accordion .ui-accordion-content .cont-box label{
+    width:15%;
+}
+#salesforce-setup .ui-accordion .cont-box.row-fluid .span6,#netsuite-setup .ui-accordion .cont-box.row-fluid .span6{
+    padding:20px 26px;
+}
+.netsuite_groups .filterbtn, .mngbtn{
+ float:right;   
+}
+.filter-buttons a:first-child{
+    margin-right: 5px;
 }
 /*----------
     Abdullah Changes 

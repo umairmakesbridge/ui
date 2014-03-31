@@ -607,9 +607,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                         this.app.showLoading("Loading...",dialog.getBody());
                         require(["copycampaign"],function(copycampaignPage){                                     
-                                         var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_obj.camp_id,app:camp_obj.app,copycampdialog:dialog});
-                                         dialog.getBody().html(mPage.$el);
-                                         dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                            var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_obj.camp_id,app:camp_obj.app,copycampdialog:dialog});
+                            dialog.getBody().html(mPage.$el);
+                            dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
                         });
                 },
                 deleteCampaign: function(camp_id) {
@@ -2505,7 +2505,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             if(target_obj.attr("id")=="sf_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
                                     css:{"width":"1200px","margin-left":"-600px"},
-                                    bodyCss:{"min-height":"430px"},
+                                    bodyCss:{"min-height":"443px"},
                                     buttons: {saveBtn:{text:'Save Mapping'} }  
                                   });
          
@@ -2787,7 +2787,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             if(target_obj.attr("id")=="ns_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Customers, Contacts or/and Partners to Import',
                                     css:{"width":"1200px","margin-left":"-600px"},
-                                    bodyCss:{"min-height":"430px"},
+                                    bodyCss:{"min-height":"443px"},
                                     buttons: {saveBtn:{text:'Save Mapping'} }
                                 });                                
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
@@ -2972,7 +2972,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           $.extend(post_data,partnerPost)                                                  
                        }
                        
-                   }
+                    }
                    this.app.showLoading("Saving Netsuite settings...",this.$el.parents(".ws-content"));  
                    $.post(URL,post_data)
                     .done(function(data) {                              
