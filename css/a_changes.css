@@ -586,7 +586,7 @@ ul.chartstatdetail li.active { background:#97D61D;}
 }
 
 .bmsgrid .colico.link > strong {
-    background: url("../img/linkicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+    background: url("../img/maillink.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.open > strong {
     background: url("../img/openicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.click > strong {
@@ -1000,26 +1000,10 @@ ul.spusb li a:hover { background: #009fda;}
 .campaign-clickers a.closebtn:hover {
     opacity: 0.7;
 }
-.campaign-summary  .link   {
-	background-position: -240px -390px;
+.campaign-summary  .link24   {
+	 background: url("../img/maillink24.png") no-repeat center center;
 }
-
-.campaign-summary .colico.link > strong {
-    background: url("../img/linkicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.open > strong {
-    background: url("../img/openicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.click > strong {
-    background: url("../img/clickicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.pgview > strong {
-    background: url("../img/pgviewicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.ptype > strong {
-    background: url("../img/ptypeicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.score > strong {
-    background: url("../img/scoreicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-.campaign-summary .colico.duration > strong {
-    background: url("../img/durationicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-
-
+ 
 .campaign-summary  .cstats {  padding:15px; z-index: 9;
 height: 340px;
 position: relative;
