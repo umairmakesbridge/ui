@@ -32,9 +32,7 @@ function (template,icheck,bmstags) {
                this.$('input.checkpanel').iCheck({
                     checkboxClass: 'checkpanelinput',
                     insert: '<div class="icheck_line-icon"></div>'
-               });
-               
-               
+               });                              
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
@@ -173,6 +171,7 @@ function (template,icheck,bmstags) {
                  }).fail(function() { console.log( "error in loading template" ); }); 
             },
             addCategory:function(val){
+                val = this.app.encodeHTML(val);
                 if(this.$(".cat").length){
                     this.$(".cat").html(val);
                 }
@@ -333,7 +332,7 @@ function (template,icheck,bmstags) {
                   .done(function(data) {                              
                       var _json = jQuery.parseJSON(data);                              
                       if(_json[0]!=="err"){                                  
-                         dailog_head.$("#dialog-title span").html(template_name_input.val());                                                                                                 
+                         dailog_head.$("#dialog-title span").html(_this.app.encodeHTML(template_name_input.val()));                                                                                                 
                          _this.showHideTargetTitle();
                          _this.app.showMessge("Templated Renamed");    
                           _this.page.$("#template_search_menu li:first-child").removeClass("active").click();
@@ -350,8 +349,7 @@ function (template,icheck,bmstags) {
                     this.dialog.$("#dialog-title").hide();
                     this.dialog.$("#dialog-title-input").show();                    
                     this.dialog.$(".tagscont").hide();                   
-                    this.dialog.$("#dialog-title-input input").val(this.dialog.$("#dialog-title span").html());
-                    this.dialog.$("#dialog-title-input input").focus();
+                    this.dialog.$("#dialog-title-input input").val(this.app.decodeHTML(this.dialog.$("#dialog-title span").html())).focus();                    
                 }
                 else{
                     this.dialog.$("#dialog-title").show();

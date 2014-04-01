@@ -499,7 +499,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                       var text= active_ws.find("#workspace-header").html();
                       active_ws.find(".camp_header .c-name .edited ").show();
-                      active_ws.find("#header_wp_field").focus().val(text);  
+                      active_ws.find("#header_wp_field").focus().val(camp_obj.app.decodeHTML(text));  
                       e.stopPropagation();
                   });                  
                   previewIconCampaign.click(function(e){
@@ -650,8 +650,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     }
                 },
-                initStep2:function(){
-                    
+                initStep2:function(){                    
                     if(this.states.step2.htmlText){
                         this.$("#html_editor").click();
                     }
@@ -666,7 +665,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 initStep3:function(){
                     if(this.states.step3.recipientType)
-					{
+                    {
                         var source_li = "choose_lists";
                         if(this.states.step3.recipientType.toLowerCase()=="list"){
                             source_li = "choose_lists";
@@ -886,7 +885,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           .done(function(data) {                              
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){
-                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_name_input.val());                                                                
+                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_obj.app.encodeHTML(camp_name_input.val()));                                                                
                                  camp_obj.setupCampaign();
                                  camp_obj.app.showMessge("Campaign Renamed");
                                  camp_obj.app.removeCache("campaigns");
@@ -904,7 +903,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           .done(function(data) {                              
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){
-                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_name_input.val());
+                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_obj.app.encodeHTML(camp_name_input.val()));
                                  camp_obj.camp_id = camp_json[1];             
                                  var active_ws = camp_obj.$el.parents(".ws-content");
                                  var camp_tag_ele = active_ws.find(".camp_header #campaign_tags");

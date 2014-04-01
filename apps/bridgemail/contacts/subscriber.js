@@ -214,11 +214,9 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     _this.$(".topinfo").append(changeFieldsBtn);
                     /*Contact Name on Header*/
                     if (_this.sub_fields["firstName"] !== "" || _this.sub_fields["lastName"] !== "")
-                    {
-                        console.log(_this.$el);
+                    {                        
                         _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"]);
-                    } else {
-                        console.log('Email should appear now');
+                    } else {                     
                        _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["email"]);
                     }
 

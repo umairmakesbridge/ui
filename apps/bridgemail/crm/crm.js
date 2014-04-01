@@ -80,6 +80,7 @@ define(['text!crm/html/crm.html','app'],
                     });
                 }
                 else{
+                    this.app.showLoading(false,this.$(".salesforce-tile"));                            
                     this.$(".salesforce-tile").addClass("complete"); 
                 }
                 
@@ -110,6 +111,7 @@ define(['text!crm/html/crm.html','app'],
                     });
                 }
                 else{
+                     this.app.showLoading(false,this.$(".netsuite-tile"));                            
                      this.$(".netsuite-tile").addClass("complete");
                 }
                 

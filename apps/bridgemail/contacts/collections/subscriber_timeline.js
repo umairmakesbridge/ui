@@ -12,7 +12,7 @@ define([
                     if(!app.checkError(response) && app.checkError(response)){
                         return false;
                     }
-                    if(response.totalCount!=="0"){
+                    if(response.totalCount && response.totalCount!=="0"){
                         _.each(response.activityHistory[0],function(val,key){                                                                                    
                             val[0]._id = sent.data.offset + parseInt(key.substring(8));                            
                             result.push(val[0]);

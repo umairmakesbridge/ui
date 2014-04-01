@@ -102,7 +102,7 @@ function (template,jqueryui,addbox) {
             updateValues:function(){
                 var _this = this;
                 this.$(".basic-field-container input").each(function(){
-                    _this.subscriber.sub_fields[$(this).attr("name")] = $(this).val();
+                    _this.subscriber.sub_fields[$(this).attr("name")] = _this.app.encodeHTML($(this).val());
                 });
                 var last_val = 0;
                 if(_this.subscriber.sub_fields.cusFldList){
@@ -113,7 +113,7 @@ function (template,jqueryui,addbox) {
                             $.each(custFieldList[0],function(k,v){
                                 key = k;
                             });
-                            custFieldList[0][key] = $(this).val();                            
+                            custFieldList[0][key] = _this.app.encodeHTML($(this).val());                            
                        } 
                        else{
                            
