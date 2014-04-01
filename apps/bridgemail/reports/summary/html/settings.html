@@ -1,0 +1,62 @@
+
+<h3>Header Information </h3>
+<div>
+    <div class="row"><label>Subject</label><span class="text">
+            <%=this.model.get('subject')%>
+     </span></div>
+    <div class="row"><label>From Email</label><span class="text">
+            <%= (this.model.get('fromEmail')) ? this.model.get('fromEmail') : this.model.get('defaultFromEmail') %>
+     </span></div>
+    <div class="row"><label>From Name</label><span class="text">
+            <%= (this.model.get('senderName')) ? this.model.get('senderName') : this.model.get('defaultSenderName') %> 
+            </span></div>
+    <div class="row"><label>Reply To</label><span class="text">
+            <%= (this.model.get('replyTo')) ? this.model.get('replyTo') : this.model.get('defaultReplyTo') %>
+             </span></div>
+</div>
+<br><br>
+
+<h3>Campaign Setting</h3>
+
+<div>
+   
+    
+    <div class="step1-settings">
+                <div class="inputlabel" style="margin-top:10px; display:none;">
+                  <div style="position: relative;" class="checkinput <%=this.checkSubscriber()%>"><input style="position: absolute; opacity: 0;" id="campaign_profileUpdate" value="" type="checkbox"><ins style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;" class="iCheck-helper"></ins></div>
+                  <label for="campaign_profileUpdate">Subscriber Information Update <a style="display:none">Choose  fields</a> </label>
+                </div>                
+                <div class="inputlabel">
+                  <div style="position: relative;" class="checkinput   <%=this.checkTellAFriend()%>"><input style="position: absolute; opacity: 0;" id="campaign_tellAFriend" class="checkinput" value="" type="checkbox"><ins style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;" class="iCheck-helper"></ins></div>
+                  <label class="" for="campaign_tellAFriend">Tell A Friend </label>
+                </div>
+                <div class="inputlabel">
+                  <div style="position: relative;" class="checkinput <%=this.checkTextOnly()%>"><input style="position: absolute; opacity: 0;" id="campaign_isTextOnly" class="checkinput" value="" type="checkbox"><ins style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;" class="iCheck-helper"></ins></div>
+                  <label class="" for="campaign_isTextOnly">Send Text version only </label>
+                </div>
+                <div class="inputlabel">
+                  <div style="position: relative;" class="checkinput <%=this.checkShowWebVersion()%> "><input style="position: absolute; opacity: 0;" id="campaign_isWebVersion" class="checkinput" value="" type="checkbox"><ins style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;" class="iCheck-helper"></ins></div>
+                  <label class="" for="campaign_isWebVersion">Show web version on my email </label>
+                </div>
+                <div class="inputlabel">
+                  <div style="position: relative;" class="checkinput <%=this.checkUseCustomFooter()%>"><input style="position: absolute; opacity: 0;" value="" id="campaign_isFooterText" class="checkinput" type="checkbox"><ins style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% rgb(255, 255, 255); border: 0px none; opacity: 0;" class="iCheck-helper"></ins></div>
+                  <label class="" for="campaign_isFooterText">Place Company and Physical Address in my email footer</label>
+                </div>
+     </div>
+    
+    
+    
+    
+    <div class="row fluidlabel" style="margin:15px 0 0;"> <label class=""><strong><% this.isFooterText()%></strong></label> 
+        <p> 
+            <br/>
+            <%=this.model.get("footerText") %>
+            
+             
+    
+    
+        </p></div>
+
+    <div class="clearfix"></div>
+</div>
+
