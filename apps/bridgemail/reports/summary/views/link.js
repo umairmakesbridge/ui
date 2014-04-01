@@ -17,13 +17,13 @@ function (template,contactsView) {
              'mouseout .load-contacts':'hidePreview'
             },
             showPreview:function(ev){
-                $(ev.target).next(".preview2").show();
+                $(ev.target).next(".preview2").css('opacity',0);
             },
             showPreview2:function(ev){
-                $(ev.target).show();
+                $(ev.target).css('opacity',1);
             },
             hidePreview:function(ev){
-                $(ev.target).find(".preview2").hide();
+                $(ev.target).find(".preview2").css('opacity',0);
                  
             },
             initialize: function () {
@@ -44,9 +44,9 @@ function (template,contactsView) {
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();
                      active_ws.append("<div class='dddiv campaign-clickers'></div>"); 
-                      active_ws.find('.campaign-clickers').css({top:offset.top-90})
+                      active_ws.find('.campaign-clickers').css({top:offset.top-40})
                       active_ws.find('.campaign-clickers').each(function () {
-                         this.style.setProperty( 'right', '5px', 'important' );
+                         this.style.setProperty( 'right', '10px', 'important' );
                       });
                       
                       active_ws.find('.campaign-clickers').append(new contactsView({campNum:this.options.campNum,url:url,article:this.model.get('articleNum.encode'),type:"CK",app:this.options.app}).el)

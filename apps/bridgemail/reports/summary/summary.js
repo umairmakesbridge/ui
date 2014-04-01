@@ -35,7 +35,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading('Loading Campaign....',this.$el);
                 this.fetchStats();
                 this.options.app.showLoading(false,this.$el);
-                this.active_ws = this.$el.parents(".ws-content.active");
+                this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
             },
@@ -53,16 +53,17 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 _data['type'] =  "stats";
                 _data['isSummary'] = "Y";
                 _data['campNums'] = this.campNum;
-                
+                 self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
+                    self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                 this.stats.fetch({data:_data,success:function(data){
                     self.$el.html(self.template({stats:data}));
-                    self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                    self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
-                    self.active_ws = self.$el.parents(".ws-content.active");
+                   
+                    self.active_ws = self.$el.parents(".ws-content");
                     self.openViews();
                     self.addLinks();
                  }});
-               
+                self.options.app.showLoading(false,self.$el.find('.links-container'));
+                    self.options.app.showLoading(false,self.$el.find('.col-cstats'));
                 var _data = {};
                 _data['type'] = this.type;
                 _data['campNum'] = this.campNum;
@@ -97,6 +98,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
 
                     var percent =  ((numbers/sent) * 100);
                     percent = Math.ceil(percent);
+                    percent = (isNaN(percent = parseInt(percent, 10)) ? 0 : percent)
                     var span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
                     return span;
             },
@@ -234,10 +236,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         that.options.app.showAlertDetail({heading:'Confirm Deletion',
                         detail: that.options.app.messages[0].CAMPS_delete_confirm_error,                                                
                         callback: _.bind(function(){
-                                that.$el.parents(".ws-content.active").find(".overlay").remove();
+                                that.$el.parents(".ws-content").find(".overlay").remove();
                                 that.deleteCampaign(that.campNum);
                         },that)},
-                        that.$el.parents(".ws-content.active"));
+                        that.$el.parents(".ws-content"));
                       //}
                 });
                 
@@ -315,7 +317,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         var camp_obj = this;
                         var active_ws = this.$el.parents(".ws-content");
                         var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.options.app.get('bms_token');
-                        camp_obj.options.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
+                        camp_obj.options.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content"));
                         $.post(URL, {type:'delete',campNum:this.campNum})
                         .done(function(data) {                                 
                                    var del_camp_json = jQuery.parseJSON(data);  
@@ -326,7 +328,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                            camp_obj.options.app.showMessge("Campaign Deleted");
                                            active_ws.find(".camp_header  .close-wp").click();
                                    }
-                                   camp_obj.options.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
+                                   camp_obj.options.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                    });
 		 },
                  copyCampaign: function(camp_id)

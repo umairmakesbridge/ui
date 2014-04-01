@@ -122,7 +122,7 @@ function (template) {
                      }
                      
                      if($(ev.target).html() == "0")return;
-                     var dialog_height = $(document.documentElement).height()-300;
+                     var dialog_height = $(document.documentElement).height()-200;
                      var dialog = this.options.app.showDialog(
                            {           
                                        title:'Page Views',
