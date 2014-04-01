@@ -14,7 +14,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
         return Backbone.View.extend({
             className: 'images_grid',
             events: {
-               "change .upload #file_control":"upload",
+               "change .upload #file_control":"uploadControl",
                "keyup #search-graphics-input":"searchKeyPress",
                "click #clearsearch":"clearSearch",
                "click .search-graphics-div ._graphics":"TryDialog",
@@ -53,6 +53,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               this.$el.html(this.template({}));
               
               this.fetchImages();
+              console.log(this.objUserImages);
               if(this.fromDialog){
                 $(".modal-body").scroll(_.bind(this.liveLoading,this));
                 $(".modal-body").resize(_.bind(this.liveLoading,this));
@@ -238,6 +239,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
            // Drag and Drop file to upload, append the upload box every time grid empty /search/tags search/new load
            dragFileSetting:function(){
                var that = this;
+               var parents = "";
                  if(this.fromDialog){
                         var parents = this.$el.parents(".modal");
                     }else{
@@ -353,11 +355,13 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 });
             },
             // Upload while Click on button to call the drag file area to upload
-            upload:function(obj){
+            uploadControl:function(obj){
                 var input_obj = obj.target;
-                var files = input_obj.files;  
+                var files = input_obj.files;
+                
                 if(this.dropPanel.data("dragfile")){
                     this.dropPanel.data("dragfile").handleFileUpload(files);
+                    
                 }
             },
             // After Uploading/ Call back function to render new Li element for newly uploaded image.

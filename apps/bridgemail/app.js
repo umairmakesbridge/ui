@@ -437,6 +437,20 @@ define([
                     }
                     return x1 + x2;
             },
+            dateSetting:function(dateText,sep){
+                dateText = this.decodeHTML(dateText);
+                var date = dateText.split(' ');
+                
+                var dateparts = date[0].split(sep);
+                if(sep === "/"){
+                    var month = this.getMMM(dateparts[0].replace('0','')-1);
+                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[1];
+                }else{
+                    var month = this.getMMM(dateparts[1].replace('0','')-1);
+                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
+                }
+                return dateFormat;
+            },
             showInfo: function(control,message)
             {
                     control.append('<span class="fieldinfo"><i class="icon"></i><em>'+ message +'</em></span>');
@@ -456,7 +470,7 @@ define([
             },
             stringTruncate:function(title, length){
                // var title = 'web administrator';
-           
+               
                 if(title && title.length > length){
                    return $.trim(title).substring(0, length)
                     .split(" ").slice(0, -1).join(" ") + "..";

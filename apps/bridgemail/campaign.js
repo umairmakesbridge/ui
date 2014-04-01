@@ -1438,7 +1438,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#list_grid tr td:first-child").attr("width","100%");
                     this.$("#list_grid tr td:last-child").attr("width","90px");	
                     this.$("#recipients-list").css("height",this.app.get('wp_height')-122);										
-						
+                                            
                     this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
                     },this));
@@ -1635,12 +1635,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  flag_class = 'pclr2';
                          else if(val[0].status == 'C')
                                  flag_class = 'pclr18'; 
-                        list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
-                        list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span></h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
+                        list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';  
+                        var chartIcon = '';
+                        if(val[0].status == 'P' || val[0].status == 'C')  {
+                          chartIcon = '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                        }
+                        list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span>'+ chartIcon +'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
 			if(val[0].status != 'D')
                             list_html += '<td><div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div></td>';
                             else
                             list_html += '<td></td>';
+                        
+                        
+                        
                         list_html += '<td><div class="time show" style="width:130px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';
                         list_html += '</tr>';
                     });
@@ -1659,7 +1666,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#camp_list_grid tr td:nth-child(1)").attr("width","100%");
                     this.$("#camp_list_grid tr td:nth-child(2)").attr("width","90px");
                     this.$("#camp_list_grid tr td:nth-child(4)").attr("width","132px");
-
+                    
                     if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
                             this.$("#camp_list_grid tr:last-child").removeAttr("data-load");
                     }
@@ -1668,6 +1675,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,this.$el.find("#copy-camp-search"));
                     },this));
+                     var that = this;
+                    this.$el.find(".report").click(function(){
+                          var camp_id=$(this).parents("tr").attr("id").split("_")[1];
+                          console.log(camp_id);
+                          that.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
+                      })      
                 }
                 ,  
                 appendCampaigns:function(){

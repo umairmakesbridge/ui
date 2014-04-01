@@ -131,7 +131,15 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                     this.$("#camps_grid_report tr td:nth-child(2)").attr("width","140px");    
                     this.$("#camps_grid_report tr td:nth-child(2) .check-box").click(_.bind(this.addToChart,this));                    
                     this.$("#camps_grid_report tr td:nth-child(1) .campname").click(_.bind(this.previewCampaign,this));
-                     this.$("#camps_grid_report tr td:nth-child(1) .report").click(_.bind(this.showChart,this));
+                    // this.$("#camps_grid_report tr td:nth-child(1) .report").click(_.bind(this.showChart,this));
+                      var that = this;
+                    this.$("#camps_grid_report tr td:nth-child(1) .report").click(function(){
+                            var camp_id=$(this).parents("tr").attr("id").split("_")[1];
+                            that.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
+                    })
+                     
+                     
+                     
                     if(!this.$(".filter-camp li:first-child").hasClass("active")){
                         this.createChart();
                     }

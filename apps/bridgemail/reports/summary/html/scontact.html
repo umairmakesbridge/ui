@@ -1,0 +1,25 @@
+
+    <td width="100%"><div>
+            <div class="name-type">
+                <h3><a class='view-profile showtooltip' data-original-title="Click to view profile"><%=this.getFullName()%></a> 
+                </h3>
+                <a class="statusdd color2 salestatus"><%=this.firstLetterUpperCase()%> </a>
+                <div class="tags tagscont">
+                    <ul>
+                            <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                            <li><a  class="tag"><%- t %></a> </li>
+                            <% })%> 
+                    </ul>
+                </div>
+            </div>
+        </div></td>
+
+       
+                                	<%=this.linkTd()%>
+                  	<%=this.pageViewsTd()%> 
+                          
+        
+        
+  
+                <%=this.getRightText()%>
+           
