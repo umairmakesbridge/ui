@@ -10,6 +10,7 @@
 <%@page import="com.PMSystems.template.*" %>
 
 <%@page import="com.PMSystems.SFIntegration.*" %>
+<%@page import="com.PMSystems.*" %>
 
 <%
 //=======================Default Processing=============================
@@ -41,15 +42,25 @@ if(userInfo == null) {
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
     <link href="css/icons.css" rel="stylesheet" type="text/css" >
     <link href="css/style.css" rel="stylesheet" type="text/css" >    
-    <link href="css/isotope.css" rel="stylesheet" type="text/css" >
     <link href="css/bmsgrid.css" rel="stylesheet" type="text/css" >
+    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" >
     <link href="css/calendar.css" rel="stylesheet" type="text/css" >
     <link href="css/custom_2.css" rel="stylesheet" type="text/css" >
     <link href="css/chosen.css" rel="stylesheet" type="text/css" >
     <link href="css/changes.css" rel="stylesheet" type="text/css" >
+    <link href="css/skins/lightgray/skin.min.css" rel="stylesheet">
     <link href="css/tan_changes.css" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
+    <link rel="stylesheet" href="css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />
     
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
+    <script  type="text/javascript">
+        var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
+        var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
+        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";        
+    </script>
     
     <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >
     <script type="text/javascript" src="js/require.js" data-main="build/bridgemail/bridgemail_0.1.min"></script>-->
@@ -59,7 +70,7 @@ if(userInfo == null) {
     <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    
+    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce/tiny_mce.js"></script>
 </head>
 <body>
     

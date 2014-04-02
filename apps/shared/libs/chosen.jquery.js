@@ -531,9 +531,9 @@
       }
       this.container = $("<div />", container_props);
       if (this.is_multiple) {
-        this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+        this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><div><ul class="chosen-results"></ul></div></div>');
       } else {
-        this.container.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" /></div><ul class="chosen-results"></ul></div>');
+        this.container.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><div><div class="chosen-search"><input type="text" autocomplete="off" /><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"></span></button></div></div><ul class="chosen-results"></ul></div></div>');
       }
       this.form_field_jq.hide().after(this.container);
       this.dropdown = this.container.find('div.chosen-drop').first();
@@ -744,8 +744,8 @@
 
       if (el.length) {
         this.result_clear_highlight();
-        this.result_highlight = el;
-        this.result_highlight.addClass("highlighted");
+        this.result_highlight = el;                
+        this.result_highlight.addClass("highlighted");                
         maxHeight = parseInt(this.search_results.css("maxHeight"), 10);
         visible_top = this.search_results.scrollTop();
         visible_bottom = maxHeight + visible_top;
@@ -940,11 +940,17 @@
             selected_index = this.result_single_selected[0].getAttribute('data-option-array-index');
             this.results_data[selected_index].selected = false;
           }
+          else{
+              for(var _i=0;_i<this.results_data.length;_i++){
+                  this.results_data[_i].selected=false;
+              }
+          }
           this.result_single_selected = high;
         }
+        
         high.addClass("result-selected");
         item = this.results_data[high[0].getAttribute("data-option-array-index")];
-        item.selected = true;
+        item.selected = true;        
         this.form_field.options[item.options_index].selected = true;
         this.selected_option_count = null;
         if (this.is_multiple) {

@@ -1,27 +1,20 @@
 @charset "UTF-8";
 /* CSS Document */
 .bmsgrid {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
 	position: relative;
-	border: 0px solid #eee;
 	overflow: hidden;
-	color: #000;
 }
 
 .bmsgrid.hideBody {
 	height: 26px !important;
-	border-bottom: 1px solid #ccc;
 }
 
 .ie6fullwidthbug {
-	border-right: 0px solid #ccc;
 	padding-right: 2px;
 }
 
 .bmsgrid div.nDiv {
 	background: #eee url(images/line.gif) repeat-y -1px top;
-	border: 1px solid #ccc;
 	border-top: 0px;
 	overflow: auto;
 	left: 0px;
@@ -32,6 +25,10 @@
 
 .bmsgrid div.nDiv table {
 	margin: 2px;
+    border-collapse: separate;
+    border-spacing: 0 2px;
+	
+
 }
 
 .bmsgrid div.hDivBox {
@@ -41,8 +38,16 @@
 
 .bmsgrid div.bDiv table {
 	margin-bottom: 10px;
+	border-collapse: separate;
+    border-spacing: 0 2px;
 }
-
+.bmsgrid div.bDiv table th { text-align:left;line-height: 20px;
+    vertical-align: middle;
+	background:#D4E8F4;
+    white-space: nowrap;
+	padding: 10px;
+	color:#6494AF;
+	}
 .bmsgrid div.bDiv table.autoht {
 	border-bottom: 0px;
 	margin-bottom: 0px;
@@ -50,32 +55,26 @@
 
 .bmsgrid div.nDiv td {
 	padding: 2px 3px;
-	border: 1px solid #eee;
 	cursor: default;
 }
 
 .bmsgrid div.nDiv tr:hover td,.bmsgrid div.nDiv tr.ndcolover td {
 	background: #d5effc url(images/hl.png) repeat-x top;
-	border: 1px solid #a8d8eb;
 }
 
 .bmsgrid div.nDiv td.ndcol1 {
-	border-right: 1px solid #ccc;
 }
 
 .bmsgrid div.nDiv td.ndcol2 {
-	border-left: 1px solid #fff;
 	padding-right: 10px;
 }
 
 .bmsgrid div.nDiv tr:hover td.ndcol1,.bmsgrid div.nDiv tr.ndcolover td.ndcol1
 	{
-	border-right: 1px solid #d2e3ec;
 }
 
 .bmsgrid div.nDiv tr:hover td.ndcol2,.bmsgrid div.nDiv tr.ndcolover td.ndcol2
 	{
-	border-left: 1px solid #eef8ff;
 }
 
 .bmsgrid div.nBtn {
@@ -85,7 +84,6 @@
 	z-index: 900;
 	background: #fafafa url(images/fhbg.gif) repeat-x bottom;
 	border: 0px solid #ccc;
-	border-left: 1px solid #ccc;
 	top: 0px;
 	left: 0px;
 	margin-top: 1px;
@@ -96,7 +94,6 @@
 .bmsgrid div.nBtn div {
 	height: 24px;
 	width: 12px;
-	border-left: 1px solid #fff;
 	float: left;
 	background: url(images/ddn.png) no-repeat center;
 }
@@ -107,7 +104,6 @@
 
 .bmsgrid div.mDiv {
 	background: url(images/wbg.gif) repeat-x top;
-	border: 1px solid #ccc;
 	border-bottom: 0px;
 	border-top: 0px;
 	font-weight: bold;
@@ -141,9 +137,6 @@
 
 .bmsgrid div.mDiv div.ptogtitle span {
 	display: block;
-	border-left: 1px solid #eee;
-	border-top: 1px solid #fff;
-	border-bottom: 1px solid #ddd;
 	width: 14px;
 	height: 14px;
 	background: url(images/uup.png) no-repeat center;
@@ -156,7 +149,6 @@
 .bmsgrid div.tDiv /*toolbar*/ {
 	background: #fafafa url(images/bg.gif) repeat-x top;
 	position: relative;
-	border: 1px solid #ccc;
 	border-bottom: 0px;
 	overflow: hidden;
 }
@@ -170,7 +162,6 @@
 .bmsgrid div.sDiv /*toolbar*/ {
 	background: #fafafa url(images/bg.gif) repeat-x top;
 	position: relative;
-	border: 1px solid #ccc;
 	border-top: 0px;
 	overflow: hidden;
 	display: none;
@@ -191,8 +182,6 @@
 .bmsgrid div.btnseparator {
 	float: left;
 	height: 22px;
-	border-left: 1px solid #ccc;
-	border-right: 1px solid #fff;
 	margin: 1px;
 }
 
@@ -216,15 +205,10 @@
 
 .bmsgrid div.fbutton:hover,.bmsgrid div.fbutton.fbOver {
 	padding: 0px;
-	border: 1px solid #ccc;
 }
 
 .bmsgrid div.fbutton:hover div,.bmsgrid div.fbutton.fbOver div {
 	padding: 0px 2px;
-	border-left: 1px solid #fff;
-	border-top: 1px solid #fff;
-	border-right: 1px solid #eee;
-	border-bottom: 1px solid #eee;
 }
 
 /* end toolbar*/
@@ -262,7 +246,6 @@
 }
 
 .bmsgrid div.iDiv {
-	border: 1px solid #316ac5;
 	position: absolute;
 	overflow: visible;
 	background: none;
@@ -291,8 +274,7 @@
 	position: relative;
 }
 
-.bmsgrid div.bDiv table {
-	border-bottom: 1px solid #ccc;
+.bmsgrid div.bDiv table {width:100%;
 }
 
 .bmsgrid div.hGrip {
@@ -307,7 +289,6 @@
 }
 
 .bmsgrid div.hGrip:hover,.bmsgrid div.hGrip.hgOver {
-	border-right: 1px solid #999;
 	margin-right: 0px;
 }
 
@@ -316,7 +297,6 @@
 	overflow: hidden;
 	position: relative;
 	background: #fafafa url(images/wbg.gif) repeat-x 0px -1px;
-	border: 1px solid #ccc;
 	border-top: 0px;
 	text-align: center;
 	cursor: row-resize;
@@ -328,18 +308,14 @@
 	width: 20px;
 	height: 1px;
 	overflow: hidden;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;
 	background: none;
 }
 
 .bmsgrid div.hDiv th,.bmsgrid  div.bDiv td
 	/* common cell properties*/ {
 	text-align: left;
-	border-right: 0px solid #ddd;
-	border-left: 0px solid #fff;
 	overflow: hidden;
-	vertical-align: top !important;
+	vertical-align: middle !important;
 	padding-left: 0;
 	padding-right: 0;
 }
@@ -361,7 +337,6 @@ div.colCopy {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	background: #fafafa url(images/fhbg.gif) repeat-x bottom;
-	border: 1px solid #ccc;
 	border-bottom: 0px;
 	overflow: hidden;
 }
@@ -377,7 +352,6 @@ div.colCopy {
 
 .bmsgrid div.hDiv th.thOver div,.bmsgrid div.hDiv th.sorted.thOver div
 	{
-	border-bottom: 1px solid orange;
 	padding-bottom: 4px;
 }
 
@@ -392,7 +366,6 @@ div.colCopy {
 }
 
 .bmsgrid div.hDiv th.sorted.thMove div {
-	border-bottom: 1px solid #fff;
 	padding-bottom: 4px
 }
 
@@ -409,10 +382,10 @@ div.colCopy {
 }
 
 .bmsgrid div.bDiv td {
-	border-bottom: 0px solid #fff;
 	vertical-align: top;
 	white-space: nowrap;
 	line-height: 20px;
+	background:#EFF7FB;
 }
 
 .bmsgrid div.hDiv th div {
@@ -442,11 +415,9 @@ div.colCopy {
 	margin-bottom: -24px;
 }
 
-
+.bmsgrid tr { padding:1px 0;}
 .bmsgrid tr td.sorted {
 	background: #f3f3f3;
-	border-right: 1px solid #ddd;
-	border-bottom: 1px solid #f3f3f3;
 }
 
 .bmsgrid tr td.sorted div {
@@ -454,14 +425,11 @@ div.colCopy {
 }
 
 .bmsgrid tr:nth-child(even) td {
-	background: #fcfcfc;
-	border-bottom: 1px solid #f7f7f7;
-        border-top: 1px solid transparent !important;
+	background: #f4f9fc;
 }
 
 .bmsgrid tr:nth-child(even) td.sorted {
 	background: #e3e3e3;
-	border-bottom: 1px solid #e3e3e3;
 }
 
 .bmsgrid tr:nth-child(even) td.sorted div {
@@ -470,69 +438,62 @@ div.colCopy {
 
 .bmsgrid div.bDiv tr:hover td,.bmsgrid div.bDiv tr:hover td.sorted,.bmsgrid div.bDiv tr.trOver td.sorted,.bmsgrid div.bDiv tr.trOver td
 	{	
-	background:#edf8ff;	
-	border-top:1px solid #51b0e7 !important;
-	border-bottom:1px solid #51b0e7 !important;
+	background:#dcf3fe;	
 }
-.bmsgrid div.bDiv tr .action{
-    position: absolute;
-    top:-2px;
-    right:11px;
+.bmsgrid div.bDiv tr .action {
     cursor: pointer;
+    margin: -17px 0 0;
+    position: absolute;
+    right: 0;
+    top: 50%;
 }
-.bmsgrid div.bDiv tr .action, .bmsgrid div.bDiv tr:hover .show{
+.bmsgrid div.bDiv tr .action, .bmsgrid div.bDiv tr:hover .show,.bmsgrid div.bDiv tr.selected:hover .action,.bmsgrid div.bDiv tr.selected .show{
     visibility: hidden;
+		opacity: 0;
+-webkit-transition: opacity .3s ease-in;
+    -moz-transition: opacity .3s ease-in;
+    -o-transition: opacity .3s ease-in;
+    transition: opacity .3s ease-in;
+	
 }
 .bmsgrid div.bDiv tr:hover .action, .bmsgrid div.bDiv tr .show{
     visibility: visible;
+	opacity:1;
 }
 .bmsgrid div.bDiv tr:hover{
-    -webkit-box-shadow: 0px 0px 2px  #bde5ff;
-	-moz-box-shadow: 0px 0px 2px  #bde5ff;
-	box-shadow: 0px 0px 2px  #bde5ff;
+    -webkit-box-shadow: 0px 0px 2px  #bde5ff inset;
+	-moz-box-shadow: 0px 0px 2px  #bde5ff inset;
+	box-shadow: 0px 0px 2px  #bde5ff inset;
 }
 
+.bmsgrid tr.selected td:last-child div:after { content:""; height:57px; width:50px; position:absolute; right:0; top:-20px;   background: url("../img/check.png") no-repeat scroll center center #97D61D;}
+.bmsgrid tr.selected td { background:#f8ffea !important;}
+
 .bmsgrid div.bDiv tr.trSelected:hover td,.bmsgrid div.bDiv tr.trSelected:hover td.sorted,.bmsgrid div.bDiv tr.trOver.trSelected td.sorted,.bmsgrid div.bDiv tr.trOver.trSelected td,.bmsgrid tr.trSelected td.sorted,.bmsgrid tr.trSelected td
-	{
-	
-	background:#edf8ff;	
-	border-top:1px solid #51b0e7 !important;
-	border-bottom:1px solid #51b0e7 !important;
-}
+	{ background:#edf8ff;	}
 
 /* novstripe adjustments */
 .bmsgrid.novstripe .bDiv table {
-	border-bottom: 1px solid #ccc;
-	border-right: 1px solid #ccc;
 }
 
 .bmsgrid.novstripe  div.bDiv td {
-	border-right-color: #fff;
 }
 
 .bmsgrid.novstripe div.bDiv tr:nth-child(even) td.sorted {
-	border-right-color: #e3e3e3;
 }
 
 .bmsgrid.novstripe div.bDiv tr td.sorted {
-	border-right-color: #f3f3f3;
 }
 
 .bmsgrid.novstripe  div.bDiv tr:nth-child(even) td {
-	border-right-color: #f7f7f7;
-	border-left-color: #f7f7f7;
 }
 
 .bmsgrid.novstripe div.bDiv tr.trSelected:hover td,.bmsgrid.novstripe div.bDiv tr.trSelected:hover td.sorted,.bmsgrid.novstripe div.bDiv tr.trOver.trSelected td.sorted,.bmsgrid.novstripe div.bDiv tr.trOver.trSelected td,.bmsgrid.novstripe tr.trSelected td.sorted,.bmsgrid.novstripe tr.trSelected td
 	{
-	border-right: 1px solid #0066FF;
-	border-left: 1px solid #0066FF;
 }
 
 .bmsgrid.novstripe div.bDiv tr.trOver td,.bmsgrid.novstripe div.bDiv tr:hover td
 	{
-	border-left-color: #d9ebf5;
-	border-right-color: #d9ebf5;
 }
 
 /* end novstripe */
@@ -599,8 +560,6 @@ div.pGroup {
 	{
 	width: 19px;
 	height: 19px;
-	border-top: 1px solid #fff;
-	border-left: 1px solid #fff;
 }
 
 .bmsgrid .pSearch {
@@ -647,24 +606,40 @@ div.pGroup {
 	right:10px;
 }
 
-.bmsgrid .bDiv tr td:first-child { border-left:3px solid #35deec;padding-left: 10px;}
-.bmsgrid .bDiv tr:nth-child(even) td:first-child { border-left:3px solid #35ec64; }
+.bmsgrid .bDiv tr td:first-child {  
+	padding-left: 10px; 
+	border-radius: 2px 0 0 2px;
+	-moz-border-radius: 2px 0 0 2px;
+	-webkit-border-radius: 2px 0 0 2px;
+	}
+.bmsgrid .bDiv tr td:last-child {  
+	padding-right: 15px;
+	overflow:visible;
+	border-radius: 0 2px 2px 0;
+	-moz-border-radius:  0 2px 2px 0;
+	-webkit-border-radius:  0 2px 2px 0;
+	}
+
+.bmsgrid .bDiv tr td:last-child div {min-height: 50px;}
+.bmsgrid .bDiv tr:nth-child(even) td:first-child {  }
 
 .bmsgrid .name-type h3 {
-    color: #343434;
-    font-size: 14px;
-    font-weight:normal;
-    line-height: 1.9;
+    color: #02AFEF;
+    font-size: 18px;
+    font-weight: bold;
+    height: 22px;
+    line-height: 1.2;
     margin: 0;
+    padding: 5px;
 }
-.bmsgrid div.bDiv td div{
-    position: relative;
+.bmsgrid div.bDiv td > div{
+    position: relative; 
 }
+
 .bmsgrid div.bDiv td {
-    border-bottom:1px solid #f0f0f0; 
-    border-top:1px solid transparent; 
-    height: 44px;
-    padding: 6px 0;    
+    padding: 5px 5px;    
+	height:52px;
+	color:#6494AF;
 }
 .bmsgrid div.bDiv td:first-child input{
     float: left;
@@ -680,66 +655,224 @@ div.pGroup {
 .bmsgrid div.bDiv td div .name-type > span span { float:left;}
 
 .bmsgrid .tags {
-    float: left;
-    line-height: 11px;
-    margin: 0 0 0 15px;
-    padding:0px !important;
-}
-.bmsgrid .tags a { font-size:11px; }
 
-
-.bmsgrid .tags .tagicon {
-    float: left;
-    margin: -1px 6px 0 0;
 }
+.bmsgrid .tags a {  }
 .bmsgrid .tagscont {
-    background: none repeat scroll 0 0 transparent;
-    border: 0 none;
-    float: left;
-    margin: -4px 0 0 10px;
-    padding: 0;
+    height: 15px;
+    margin: 4px 0 0 !important;
+    overflow: hidden;
+    position: static !important;
 }
 .bmsgrid .tagscont ul { }
 .bmsgrid .tagscont ul li { }
 
 
+
+
 .bmsgrid .tagscont ul li a {
-    border: 0 none;
-    font-size: 11px;
-    padding: 0 8px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #01AEEE;
+    padding: 0 5px;
 }
 
+.bmsgrid .tagscont ul li .ellipsis {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #01AEEE;
+}
+.bmsgrid .tagscont ul li a:hover, .bmsgrid .tagscont ul li .ellipsis:hover  {background:#19BAF7; color:#fff;}
 
 .bmsgrid .tags .tagicon {
+    background-position: -164px -870px;
+    display: none;
     float: left;
-    margin: -1px 6px 0 0;
+    margin: 0;
 }
-.bmsgrid .tagscont {
-    background: none repeat scroll 0 0 transparent;
-    border: 0 none;
-    float: left;
-    margin: -4px 0 0 10px;
-    padding: 0;
+
+.bmsgrid div.hDiv th, .bmsgrid div.bDiv td { /*overflow:visible;*/}
+.bmsgrid div.bDiv tr .action { width:350px;}
+
+.bmsgrid div.bDiv tr .action a {
+    float: right;
+    margin-left: 5px;
 }
 
 .bmsgrid   .icon { margin:0 3px 0 0; float:left !important;}
+.bmsgrid   i.icon { margin:0 0 0; float:right;}
 
-.bmsgrid .subscribers {  color:#787983; font-size: 14px; line-height:18px; margin:13px 15px;width:52px;}
-.bmsgrid .time  {  color:#787983;  font-size: 14px;  line-height:18px; margin:13px 15px;} 
-.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; margin:13px 15px; }
+.bmsgrid .subscribers,
+.bmsgrid .time ,
+.bmsgrid .mail  { color:#787983;  font-size: 14px;  line-height:18px; /*margin:15px 15px 2px;*/ margin:0; 	min-height:18px; min-width:120px;background:none; }
 
 
-.bmsgrid .subscribers span { 
+
+
+.bmsgrid .subscribers > strong {
+    background: url("../img/subscribersicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bmsgrid .mail > strong {
+    background: url("../img/mailicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bmsgrid .time > strong {
+    background: url("../img/time.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+
+
+.bmsgrid .subscribers > span, .bmsgrid .subscribers i { 
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/subscribersicon.png") no-repeat scroll center  0;}
 
-.bmsgrid .time span { 
+.bmsgrid .time > span, .bmsgrid .time i { 
 float:left; width:18px; height:18px; margin-right:5px;
-background: url("../img/timeicon.png") no-repeat scroll center  0 ;}
+background: url("../img/time.png") no-repeat scroll center  0 ;}
 
-.bmsgrid .mail span { 
+.bmsgrid .mail > span, .bmsgrid .mail i { 
 float:left; width:18px; height:18px; margin-right:5px;
 background: url("../img/mailicon.png") no-repeat scroll 0 0 ;}
 
+/* ----------------------------------------------------------------------------------------------------------------------------- */
+
+
+
+
+
+ .bmsgrid .name-type h3 {
+    font-weight: bold;
+}
+ .bmsgrid .name-type h3 a:first-child {
+    color: #02AFEF;
+    float: left;
+    font-size: 18px;
+}
+
+ .bmsgrid .sched, .imprtlist .bmsgrid .subscribers {
+    color: #787983;
+    font-size: 14px;
+	min-height:18px;
+    line-height: 18px;
+    /*margin: 7px 15px 2px;*/
+	margin:0;
+}
+
+ 
+.bmsgrid .sched > strong {
+    background: url("../img/scheduledicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+
+ .bmsgrid  .sched em,  .bmsgrid   .subscribers em ,  .bmsgrid .time em,  .bmsgrid .mail em {
+   color: #9BABB4;
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 18px;
+    margin: 0 0 0 -28px;
+	text-align: left;
+	
+}
+
+ .bmsgrid  .sched span,  .bmsgrid  .subscribers span,  .bmsgrid  .time span,  .bmsgrid  .mail span {
+    float: left;
+	display: inline-block;
+    padding: 0 10px 0 0;
+	color: #5E7684;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+ .bmsgrid .scheduled {
+	background:  #97D61D;
+	color: #fff;
+	  display: inline-block;
+	font-size: 11px;
+	margin: 0;
+	padding: 0 5px;
+	width:60px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+ .bmsgrid .pending {
+	background: #FF9C00;
+	color: #fff;
+	  display: inline-block;
+	font-size: 11px;
+	margin:0;
+	width:60px;
+	padding: 0 5px;
+	border-radius: 2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+.imprtlist .bmsgrid  div.bDiv td:last-child > div { text-align:center;}
+
+
+.recurringicon {
+	background: url("../img/recurring.gif") no-repeat scroll center center transparent;
+	display: inline-block;
+	height: 18px;
+	margin: 10px 10px 2px 2px;
+	width: 18px;
+}
+
+
+.ui-accordion .ui-accordion-header .subscribers .badge { float:right;}
+
+
+
+
+.ui-accordion .ui-accordion-header .subscribers {
+    float: right;
+    margin: 12px -4px 0 20px;
+	background:#fff;
+	border-radius: 30px;
+	-moz-border-radius: 30px;
+	-webkit-border-radius: 30px;
+}
+
+.ui-accordion .ui-accordion-header .subscribers .badge:first-child {
+    float: left;
+    margin: 0;
+    padding: 5px 10px 5px 10px;
+}
+.ui-accordion .ui-accordion-header .subscribers em {
+    float: left;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 23px;
+    padding: 0 14px 0 0;
+}
+.ui-accordion .ui-accordion-header .subscribers .badge {
+    background: url("../img/subscribersicon.png") no-repeat scroll 8px center rgba(0, 0, 0, 0);
+    color: #98B2C6;
+    float: right;
+    padding: 5px 10px 5px 30px !important;
+}
 
 

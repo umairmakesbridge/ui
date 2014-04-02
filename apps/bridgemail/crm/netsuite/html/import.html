@@ -1,0 +1,46 @@
+<div class="ui-accordion">
+    <h3 class="ui-accordion-header" role="tab">
+        <input type="radio" class="radiopanel " value="customer" name="options_ns">
+        <span class="left">Customer </span> 
+        <div class="sub-count show"><strong class="badge ns_customer_count"></strong></div>
+        <div class="filter-buttons filterbtn">
+            <a type="button" class="active selectall"><span>Import All</span></a>
+            <a type="button" class="managefilter"><span>Apply Filter</span><i class="icon filter"></i><strong class="badge ns_customer_count"></strong></a>
+        </div>
+    </h3>
+</div>      
+<div class="ui-accordion" >
+    <h3 class="ui-accordion-header">
+        <input type="radio" class="radiopanel " value="contact" name="options_ns">
+        <span class="left">Contact</span> 
+        <div class="sub-count show"><strong class="badge ns_contact_count"></strong></div>
+        <div class="filter-buttons filterbtn">
+            <a type="button" class="active selectall"><span>Import All</span></a>
+            <a type="button" class="managefilter"><span>Apply Filter</span><i class="icon filter"></i><strong class="badge ns_contact_count"></strong></a>
+        </div>
+    </h3>
+</div>       
+<div class="ui-accordion" > 
+    <h3 class="ui-accordion-header">
+        <input type="radio" class="radiopanel " value="partner" name="options_ns">
+        <span class="left">Partner</span> 
+        <div class="sub-count show"><strong class="badge ns_partner_count"></strong></div>
+        <div class="filter-buttons filterbtn">
+            <a type="button" class="active selectall"><span>Import All</span></a>
+            <a type="button" class="managefilter"><span>Apply Filter</span><i class="icon filter"></i><strong class="badge ns_partner_count"></strong></a>
+        </div>                 
+    </h3>
+</div>
+<div id="ns_accordion">
+    <h3> 
+        <input type="radio" class="radiopanel " value="group" name="options_ns" id="">
+        <span class="left">Netsuite Groups</span>
+        <div id="netsuite-group-search" class="input-append search">   
+        </div>
+    </h3>
+    <div class="accordion-inner">
+        <div class="template-container fields single-row" style="min-height:300px; margin:4px  0;">
+            <div class="target-listing netsuite_grp" id="netsuite-group-listing"> </div>
+        </div>
+    </div>
+</div>   

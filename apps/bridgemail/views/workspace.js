@@ -6,36 +6,49 @@ function ($,Backbone, _,app,Wizard, template) {
                 className :'ws-content',
                 html_path : "text!html/",
                 events: {
-                    'click .icon.close':function(obj){
+                    'click .close-wp':function(obj){
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
                         $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
-                        if($("#wstabs li").length==1){
-                           $(".tw-toggle button:first").click();
+                        if($("#wstabs li").length==1){                           
+                            $(".tw-toggle button").removeClass("active");
+                            $(".tw-toggle button:first").addClass("active");
+                            $("#tiles").show();                      
+                            $('#workspace').animate({left:'150%'},function(){
+                                $(this).hide();
+                            });    
                         }
                         else{
                            $("#wstabs li:first").click();
                         }
+                        $("body").css("overflow","auto");                                                    
+                        $("#activities,#search,.icons-bar").show();                        
                     },
-                    'click .toolbar .more':function(){
-                        //this.$el.find("#more-tool-actions").fadeToggle("fast", "linear");
-                        //this.$("#cmpMenu_div").fadeToggle();
-                        //$("#campMenu").prop("disabled",false);
+                    'click .toolbar .more':function(){                       
                     },                    
                     'click .workspace-field':function(obj){                                                
                         obj.stopPropagation();
                     },
                     'mouseover .fav':function(){                			
-			$(".fav").parent().addClass('active');
+			//$(".fav").parent().addClass('active');
                     },
                     'mouseout .fav':function(){                			
-			$(".fav").parent().removeClass('active');
+			//$(".fav").parent().removeClass('active');
+                    },
+                    'mouseover .toolbar .icon':function(obj){                			
+                        var obj = $.getObj(obj,"a");
+			//obj.parent().addClass('active');
+                    },
+                    'mouseout .toolbar .icon':function(obj){                			
+                        var obj = $.getObj(obj,"a");
+			//obj.parent().removeClass('active');
                     }
+                    
                 },
                 initialize: function () {
                         this.template = _.template(template);				                                
                         this.render();
-                        
+                        this.$(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
                 },
                 render: function () {
                         this.$el.html(this.template({}));
@@ -52,7 +65,15 @@ function ($,Backbone, _,app,Wizard, template) {
                             page_container = mk_wizard;
                         }
                         
-
+                        if(this.options.noTags){
+                            this.$el.addClass("ws-notags");
+                        }
+                        if(this.options.single_row){
+                            this.$("#workspace-header").addClass("single");
+                        }
+                        if(this.options.addAction){
+                            this.$el.find(".add-action").addClass("show-add");
+                        }
                         //Load a page 
                         if(this.options.url){
                             this.loadPage(this.options.url,page_container,this.options.params);
@@ -76,7 +97,7 @@ function ($,Backbone, _,app,Wizard, template) {
                     require(
                             [_url],function(pageView){
                                 app.showLoading(false,wsp);
-                                var page_view = new pageView({'app':app,params:params});
+                                var page_view = new pageView({'app':app,params:params,wizard:container});
                                 if(container){
                                     //giving access to wizard 
                                     container.page = page_view; 
@@ -101,16 +122,17 @@ function ($,Backbone, _,app,Wizard, template) {
                 ,this.$nav = this.$('.camp_header')
                 ,this.$tabs = $('.ws-tabs')
                 ,this.$tray = $('.icons-bar')
+                ,this.container = $("#container")
                 , this.navTop = el.find('.camp_header').length && el.find('.camp_header').offset().top                
                 , this.isFixed = 0;
                 
                 this.processScroll=_.bind(function(){
                  // fix sub nav on scroll                
                   var i, scrollTop = this.$win.scrollTop();
-                  if (scrollTop >= this.navTop && !this.isFixed) {
+                  if (scrollTop >= this.navTop && !this.isFixed && this.container.height()>803) {
                     this.isFixed = 1
                     this.$nav.addClass('workspace-fixed');
-                    this.$nav.css("width",this.$(".campaign-content").width()+30);
+                    this.$nav.css("width",this.$(".campaign-content").width());
                     this.$tabs.addClass('tab-fixed');
                     this.$tray.addClass('tray-fixed');
                   } else if (scrollTop <= this.navTop && this.isFixed) {

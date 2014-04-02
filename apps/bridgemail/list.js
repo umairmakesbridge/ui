@@ -3,7 +3,7 @@ function (template) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',
-                events: {
+                events: { 
 
                  },
 

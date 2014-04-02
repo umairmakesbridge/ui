@@ -50,8 +50,7 @@
 }
 
 .custom-header {
-    background: none repeat scroll 0 0 #FBFBFB;
-    border-bottom: 1px solid #ccc;
+    background: none repeat scroll 0 0 #FBFBFB;    
     height: 35px;
     padding: 0 10px ;
     position: relative;
@@ -63,11 +62,14 @@
 
 }
 .custom-header h2 {
-    color: #343434;
+    text-align: center;
+    color: #6494AF;
     font-size: 16px;
-    font-weight: normal;
-    height: 35px;
-    line-height: 35px;
+    font-weight: bold;
+    line-height: 28px;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
 }
 
 .custom-header h3 {
@@ -77,17 +79,16 @@
 }
 
 .custom-header nav span {
+        
+        background: url("../img/arrows.png") no-repeat scroll 0 bottom rgba(0, 0, 0, 0);
+	color: #cbd1d2;
+	height: 20px;
+	font-size:0;
 	position: absolute;
-	top: 3px;
-	width: 30px;
-	height: 30px;
-	color: transparent;
+	top: 5px;
+	width: 20px;
+	background-size:cover;
 	cursor: pointer;
-	margin: 0 1px;
-	background:	url("../img/icon-map.png") no-repeat scroll 0 bottom transparent;
-
-	font-size: 20px;
-	line-height: 30px;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -97,13 +98,12 @@
 }
 
 .custom-header nav span:first-child {
-	left: 5px;
-	background-position:-60px bottom;
+	left: 0;	
 }
 
 .custom-header nav span:last-child {
-	right: 5px;
-	background-position:-90px bottom;
+       background-position: right center;
+       right: 0;
 }
 
 .custom-header nav span:before {
@@ -211,7 +211,7 @@
 }
 
 .fc-calendar .fc-row > div {
-	background: #fff;
+	background: #DDEBFA;
 	cursor: pointer;
 }
 
@@ -220,20 +220,32 @@
 }
 
 .fc-calendar .fc-row > div > span.fc-date {
-	top: 50%;
+	top: 41%;
 	left: 50%;
 	color: #5A5A5A;
-    font-size: 16px;
+        font-size: 13px;
 	text-align: center;
 	margin: -10px 0 0 -15px;
-	color: #686a6e;
-	font-weight: 400;
+	color: #fff;
+	font-weight: 700;
 	pointer-events: none;
 }
 
 .fc-calendar .fc-row > div.fc-today {
 	background: #0096ff;
 
+}
+.fc-calendar .fc-row > div.selected > span.fc-date{
+    color:#fff !important;
+    text-shadow: none;
+}
+.fc-calendar .fc-row > div.fc-disabled {
+	background: #eee;
+}
+.fc-calendar .fc-row > div.selected{
+    background: #94CF1E;
+    color:#fff;
+    font-weight: bold;
 }
 
 .fc-calendar .fc-row > div.fc-today > span.fc-date {

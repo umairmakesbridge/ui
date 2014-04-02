@@ -1,9 +1,11 @@
 node_modules/
 nbproject/
 json/
+backup/
 
 Gruntfile.js
 package.json
+test.html
 
 DS_Store
 .DS_Store?

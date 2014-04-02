@@ -2,20 +2,36 @@
    'use strict';
     require.config({  
        deps: ['main'], 
+       waitSeconds:300,
+       urlArgs: "bust=1.11" ,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
            backbone:'../shared/libs/backbone-min',
            text:'../shared/libs/text',
            router: '../shared/router',
-           
-           'iframed-app': '../shared/iframed-app',
-           'jquery.isotope': '../shared/libs/jquery.isotope.min',
+           async: '../shared/libs/async',
+           goog: '../shared/libs/goog',
+           propertyParser: '../shared/libs/propertyParser',
+           'iframed-app': '../shared/iframed-app',           
            'jquery.bmsgrid': '../shared/libs/bmsgrid',
            'jquery.calendario': '../shared/libs/jquery.calendario',
+           'jquery.icheck': '../shared/libs/jquery.icheck',
            'jquery.chosen': '../shared/libs/chosen.jquery',
-           'jquery.highlight': '../shared/libs/jquery.highlight',
-           bootstrap: '../shared/libs/bootstrap.min'
+           'jquery.highlight': '../shared/libs/jquery.highlight',           
+           'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
+           'jquery-ui': '../shared/libs/jquery-ui',
+           'fileuploader': '../shared/libs/jquery.form',
+           'bms-filters': '../shared/filters',
+           'bms-crm_filters': '../shared/crm_filters',
+           'bms-tags': '../shared/tags',
+           'bms-mapping': '../shared/mapping',
+           'bms-addbox': '../shared/addbox',
+           'moment': '../shared/libs/moment',
+           'bootstrap': '../shared/libs/bootstrap.min',
+           '_date': '../shared/libs/date',
+           'daterangepicker': '../shared/libs/daterangepicker.jQuery',
+           'bms-dragfile': '../shared/dragfile'
        },
         shim: {
                 backbone: {
@@ -28,9 +44,8 @@
                 jquery: {
                    exports: 'jQuery'
                },
-               'jquery.isotope':{
-                   deps: ['jquery'],
-                   exports: 'jQuery.fn.isotope'
+               'jquery-ui':{
+                   deps: ['jquery']
                },
                'jquery.bmsgrid':{
                    deps: ['jquery'],
@@ -40,6 +55,10 @@
                    deps: ['jquery'],
                    exports: 'jQuery.fn.calendario'
                },
+               'jquery.icheck':{
+                   deps: ['jquery'],
+                   exports: 'jQuery.fn.icheck'
+               },
                'jquery.chosen':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.chosen'
@@ -47,8 +66,39 @@
                'jquery.highlight':{
                    deps: ['jquery'],
                    exports: 'jQuery.fn.highlight'
+               }
+               ,
+               'jquery.searchcontrol':{
+                   deps: ['jquery']
+               },
+			   'fileuploader':{
+                   deps: ['jquery']
                },
                bootstrap: ['jquery']
+               ,
+               'bms-filters':{
+                   deps: ['jquery','bootstrap']
+               },
+               'bms-crm_filters':{
+                   deps: ['jquery','bootstrap']
+               },
+               'bms-tags':{
+                   deps: ['jquery']
+               },
+               'bms-addbox':{
+                   deps: ['jquery']
+               }
+               ,
+               'bms-mapping':{
+                   deps: ['jquery']
+               }
+               ,
+               'daterangepicker':{
+                   deps: ['_date','jquery-ui','jquery']
+               },
+               'bms-dragfile':{
+                   deps: ['jquery']
+               }
          }
     });
  
