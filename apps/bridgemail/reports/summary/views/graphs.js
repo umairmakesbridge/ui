@@ -63,7 +63,7 @@ function (template,chart,contactsView) {
                  }
                  var type = $(ev.target).parents('li').data('type');
                   active_ws.find(".campaign-clickers").removeAttr('style');
-                  active_ws.find(".campaign-clickers").css({top:offset.top-105, left:offset.left-540});
+                  active_ws.find(".campaign-clickers").css({top:offset.top-90, left:offset.left-530});
                   active_ws.find(".campaign-clickers").show();
                   active_ws.find(".campaign-clickers").html(new contactsView({type:type,app:this.options.app,campNum:this.campNum}).el);
             },
