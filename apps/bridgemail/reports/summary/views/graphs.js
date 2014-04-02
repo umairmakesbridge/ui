@@ -53,7 +53,7 @@ function (template,chart,contactsView) {
                                 
             },
             openContacts:function(ev){
-                 $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");  
+                // $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");  
                  var offset = $(ev.target).parents('li').offset();
                  var count = $(ev.target).parents('li').data("count");
                  var active_ws = this.$el.parents(".ws-content");
