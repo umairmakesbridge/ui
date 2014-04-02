@@ -118,16 +118,22 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_count).click(function() {
                             self.activeWorkSpace($(this));
                         });
+                        
                          $("#wp_li_" + wp_count).mouseover(function(){
                              if($(this).hasClass("active")===false){
                                  $(this).addClass("hover")
                              }                             
-                         })
-                         $("#wp_li_" + wp_count).mouseout(function(){                             
-                             $(this).removeClass("hover")                            
                          });
+                         
+                         $("#wp_li_" + wp_count).mouseout(function(){                             
+                             $(this).removeClass("hover");                            
+                         });
+                                                  
                          $("#wp_li_" + wp_count+" .closehover").click(function(event){
-                             $(this).parents("li").removeClass("hover");                            
+                             var li = $(this).parents("li");
+                             li.removeClass("hover");                            
+                             var wp_id = li.attr("id").split("_")[2];
+                             $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();   
                              event.stopPropagation();
                          });                       
                     }
@@ -163,8 +169,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 setTabDetails:function(params){
                     var wp_id = params.workspace_id ? params.workspace_id.split("_")[1]:"";
                     if(wp_id){
-                        $("#wp_li_" + wp_id+" .heading").html(params.heading);
-                        $("#wp_li_" + wp_id+" .heading").attr("title",params.heading);
+                        $("#wp_li_" + wp_id+" .heading").html(params.heading);                        
                         $("#wp_li_" + wp_id+" .subheading").html(params.subheading);
                     }                    
                 },
