@@ -54,7 +54,7 @@ function (template,chart,contactsView) {
             },
             openContacts:function(ev){
                  $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");  
-                 var offset = $(ev.target).offset();
+                 var offset = $(ev.target).parents('li').offset();
                  var count = $(ev.target).parents('li').data("count");
                  var active_ws = this.$el.parents(".ws-content");
                  if(!count){
@@ -63,7 +63,7 @@ function (template,chart,contactsView) {
                  }
                  var type = $(ev.target).parents('li').data('type');
                   active_ws.find(".campaign-clickers").removeAttr('style');
-                  active_ws.find(".campaign-clickers").css({top:offset.top-110, left:offset.left-545});
+                  active_ws.find(".campaign-clickers").css({top:offset.top-105, left:offset.left-540});
                   active_ws.find(".campaign-clickers").show();
                   active_ws.find(".campaign-clickers").html(new contactsView({type:type,app:this.options.app,campNum:this.campNum}).el);
             },
