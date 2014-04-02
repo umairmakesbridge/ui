@@ -106,7 +106,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $(".ws-tabs li").removeClass('active');
                         var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
                         var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";
-                        $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a></li>');
+                        $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">'+options.title+'</div><div class="subheading"></div><i class="closehover"></i></div></li>');
 
                         wp_view.$el.attr("id", "workspace_" + wp_count);
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
@@ -118,6 +118,18 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_count).click(function() {
                             self.activeWorkSpace($(this));
                         });
+                         $("#wp_li_" + wp_count).mouseover(function(){
+                             if($(this).hasClass("active")===false){
+                                 $(this).addClass("hover")
+                             }                             
+                         })
+                         $("#wp_li_" + wp_count).mouseout(function(){                             
+                             $(this).removeClass("hover")                            
+                         });
+                         $("#wp_li_" + wp_count+" .closehover").click(function(event){
+                             $(this).parents("li").removeClass("hover");                            
+                             event.stopPropagation();
+                         });                       
                     }
                     else {
                         if (!this.$(".tw-toggle button:last-child").hasClass("active")) {
@@ -134,6 +146,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 activeWorkSpace: function(obj) {
 
                     if (!obj.hasClass("active")) {
+                        obj.removeClass("hover");
                         $(".ws-tabs li").removeClass('active');
                         $("#workspace .ws-content.active").removeClass('active').hide();
                         obj.addClass("active");
@@ -146,6 +159,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             }
                         }
                     }
+                },
+                setTabDetails:function(params){
+                    var wp_id = params.workspace_id ? params.workspace_id.split("_")[1]:"";
+                    if(wp_id){
+                        $("#wp_li_" + wp_id+" .heading").html(params.heading);
+                        $("#wp_li_" + wp_id+" .heading").attr("title",params.heading);
+                        $("#wp_li_" + wp_id+" .subheading").html(params.subheading);
+                    }                    
                 },
                 openCampaign: function(camp_id) {
                     var camp_id = camp_id ? camp_id : 0;

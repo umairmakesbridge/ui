@@ -327,7 +327,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
-
+                        //Setting tab details
+                        var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
+                        camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
+                        
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
 			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
                         if(camp_json.fromEmail != '')

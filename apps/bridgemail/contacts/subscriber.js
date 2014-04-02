@@ -213,12 +213,16 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     changeFieldsBtn.click(_.bind(this.editProfile, this));
                     _this.$(".topinfo").append(changeFieldsBtn);
                     /*Contact Name on Header*/
+                    var workspaceTitle = _this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"];
                     if (_this.sub_fields["firstName"] !== "" || _this.sub_fields["lastName"] !== "")
-                    {                        
-                        _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"]);
+                    {                       
+                         workspaceTitle = _this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"];                        
                     } else {                     
-                       _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["email"]);
+                         workspaceTitle = _this.sub_fields["email"];                        
                     }
+                    _this.$el.parents(".ws-content").find("#workspace-header").html(workspaceTitle);
+                    var workspace_id = _this.$el.parents(".ws-content").attr("id");
+                    _this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:workspaceTitle,subheading:"Contacts"});
 
                     $.each(_this.basicFields, function(key, val) {
                         if (key !== "telephone") {
