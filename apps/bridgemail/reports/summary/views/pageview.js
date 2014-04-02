@@ -28,6 +28,10 @@ function (template) {
                     return url = url.substring(0,45);
                 else return url;
             },
+            checkTitle:function(title){
+                if(!title) return this.model.get('pageURL');
+                else return title;
+            },
             getLogTime:function(){
 
                 var logTime = this.options.app.decodeHTML(this.model.get('logTime'));

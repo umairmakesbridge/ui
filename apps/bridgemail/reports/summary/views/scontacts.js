@@ -122,7 +122,7 @@ function (template,Contacts,viewContact) {
                       that.$el.find('#tblcontacts tbody').find('.tag').on('click',function(){
                           var html = $(this).html();
                           that.searchText = $.trim(html);
-                          that.$el.find(".search-control").val("Tag: "+ html); 
+                          that.$el.find(".search-control").val("Tag: "+ that.searchText); 
                           that.$el.find('#clearsearch').show();
                           
                               that.showSearchFilters(html);
@@ -132,7 +132,7 @@ function (template,Contacts,viewContact) {
                       that.$el.find('#tblcontacts tbody').find('.salestatus').on('click',function(){
                           var html = $(this).html();
                           that.searchText = $.trim(html);
-                          that.$el.find(".search-control").val("Sale Status: "+ html);
+                          that.$el.find(".search-control").val("Sale Status: "+ that.searchText);
                           that.$el.find('#clearsearch').show();
                           that.showSearchFilters(html);
                           that.loadContacts();
@@ -150,14 +150,18 @@ function (template,Contacts,viewContact) {
                     return;
               }
               if($.inArray(code, nonKey)!==-1) return;
-               
+               var text = $(ev.target).val();
+               text = text.replace('Sale Status:', '');
+               text = text.replace('Tag:', '');
+               $(ev.target).val(text);
+                   
                if (code == 13 || code == 8){
                  that.$el.find('#clearsearch').show();
-                 var text = $(ev.target).val();
+                
                  this.searchText = text;
                  that.loadContacts();
                }else if(code == 8 || code == 46){
-                   var text = $(ev.target).val();
+                    
                    if(!text){
                     that.$el.find('#clearsearch').hide();
                     this.searchText = text;
@@ -165,10 +169,10 @@ function (template,Contacts,viewContact) {
                    }
                }else{ 
                      that.$el.find('#clearsearch').show();
-                     var text = $(ev.target).val();
+                     
                      clearTimeout(that.timer); // Clear the timer so we don't end up with dupes.
                      that.timer = setTimeout(function() { // assign timer a new timeout 
-                         if ($(ev.target).val().length < 2) return;
+                         if (text.length < 2) return;
                          that.searchText = text;
                          that.loadContacts();
                     }, 500); // 2000ms delay, tweak for faster/slower
