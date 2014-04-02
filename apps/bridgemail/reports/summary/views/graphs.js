@@ -53,7 +53,8 @@ function (template,chart,contactsView) {
                                 
             },
             openContacts:function(ev){
-                 var offset = $(ev.target).offset();
+                // $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");  
+                 var offset = $(ev.target).parents('li').offset();
                  var count = $(ev.target).parents('li').data("count");
                  var active_ws = this.$el.parents(".ws-content");
                  if(!count){
@@ -62,7 +63,7 @@ function (template,chart,contactsView) {
                  }
                  var type = $(ev.target).parents('li').data('type');
                   active_ws.find(".campaign-clickers").removeAttr('style');
-                  active_ws.find(".campaign-clickers").css({top:offset.top-120, left:offset.left-570});
+                  active_ws.find(".campaign-clickers").css({top:offset.top-90, left:offset.left-530});
                   active_ws.find(".campaign-clickers").show();
                   active_ws.find(".campaign-clickers").html(new contactsView({type:type,app:this.options.app,campNum:this.campNum}).el);
             },
@@ -98,8 +99,9 @@ function (template,chart,contactsView) {
                      html = html+ '  Conversions = '+that.options.app.addCommas(that.chart_data["conversionCount"]);
                      html = html+ '   Page Views = '+that.options.app.addCommas(that.chart_data["pageViewsCount"]);
                      doc.text(20, 35, html);
-                  
-                    doc.addImage(imgData, 'PNG', 35, 30,130,90);
+                    if(imgData){
+                      doc.addImage(imgData, 'PNG', 35, 30,130,90);
+                    }
                     doc.save('datauri');
                     //var string = doc.output('datauristring');
                     //var x = window.open();

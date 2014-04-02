@@ -57,20 +57,21 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                 this.stats.fetch({data:_data,success:function(data){
                     self.$el.html(self.template({stats:data}));
-                   
+                    var _data = {};
+                    _data['type'] = self.type;
+                    _data['campNum'] = self.campNum;
+                    self.objSummary.fetch({data:_data,success:function(){
+                        self.addGraphs(self); 
+                        self.setHeader(self);
+
+                    }});
                     self.active_ws = self.$el.parents(".ws-content");
                     self.openViews();
                     self.addLinks();
                  }});
                 self.options.app.showLoading(false,self.$el.find('.links-container'));
-                    self.options.app.showLoading(false,self.$el.find('.col-cstats'));
-                var _data = {};
-                _data['type'] = this.type;
-                _data['campNum'] = this.campNum;
-               self.objSummary.fetch({data:_data,success:function(){
-                        self.setHeader(self);
-                        self.addGraphs(self);
-               }});
+                self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+                
             }
             ,
             getTabbedText:function(tab){
