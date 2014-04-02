@@ -1735,8 +1735,8 @@ div.shortcuts .ddicon{
     height: 22px;
     opacity: 1;
     position: absolute;
-    right: 4px;
-    top: 4px;
+    right: 6px;
+    top: 0px;
     transition: opacity 0.3s ease-out 0s;
     width: 22px;
     -webkit-border-radius: 2px;
@@ -1744,7 +1744,7 @@ div.shortcuts .ddicon{
     border-radius: 2px;
     cursor: pointer;
 }
-.workspace ul.tabs-menu li .detial i.closehover:hover{
+.workspace ul.tabs-menu li i.closehover:hover{
     opacity: 0.7;
 }
 
@@ -1755,7 +1755,7 @@ div.shortcuts .ddicon{
     margin-top: 10px;
 }
 .workspace .ws-tabs{
-    z-index: 1000;
+    z-index: 10003;
 }
 
 /*----------

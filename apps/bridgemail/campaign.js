@@ -759,7 +759,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.states.step4.init = true;
                     }
                     this.setScheduleArea();
-                    this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
+                    this.$("#campaign_preview_subject").html(this.app.encodeHTML(this.$("#campaign_subject").val()));
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email_input").val()));
                     if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
                     {
