@@ -1613,6 +1613,7 @@ div.shortcuts .ddicon{
 /*----------
     Abdullah Changes 
  -----------*/	
+
 .bms-input-tags {
     padding-right: 67px !important;
     width: 244px;
@@ -1687,8 +1688,133 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 #merge-field-plug-wrap{
     width:386px;
 }
-
-
+/*Template Preview Css*/
+ .previewbar {
+    background: none repeat scroll 0 0 #EAF4F9;
+    height: 30px;
+    margin: -10px;
+    padding: 10px;
+    position: relative;
+}
+.previewbar > a {
+    background: none repeat scroll 0 0 #26BCF5;
+    border: 0 none;
+    border-radius: 2px;
+    color: #FFFFFF;
+    display: inline-block;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+    margin: 0 5px 0 0;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+}
+.previewbar > a span {
+    color: #FFFFFF;
+    display: inline-block;
+    float: left;
+    padding: 0 15px;
+}
+.previewbar i.downarrow {
+    background: url("../img/arrow-down.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+}
+.previewbar > a.active {
+    background: none repeat scroll 0 0 #91ABBC;
+}
+.previewbar .scontct {
+    color: #6494AF;
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+}
+.previewbar .scontct i {
+    float: left;
+    height: 30px;
+    margin: 0 5px !important;
+    width: 30px;
+}
+.previewbar .sendcamp {
+    background: none repeat scroll 0 0 #94CF1E;
+    float: right;
+    margin: 0;
+}
+.previewbar .sendcamp i {
+    background: url("../img/campaignsent.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    padding: 0 5px;
+}
+.sendpreview:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: -12px;
+}
+.sendpreview {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    height: 100px;
+    padding: 5px;
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    width: 360px;
+    z-index: 111;
+}
+.sendpreview .row {
+    margin-left: 0;
+    margin-top: 10px;
+}
+.sendpreview .input-append {
+    margin-bottom: 0;
+}
+.sendpreview .row input {
+    width: 242px;
+}
+.sendpreview .row .btn-blue {
+    margin-right: 5px;
+}
+.successfull-preview-sent{
+    color: #49c62b;
+    float: left;
+    margin: 7px;
+}
+.selection-boxes {
+    clear: both;
+    margin: -10px auto 10px;
+    padding: 0;
+    position: relative;
+    width: 560px;
+}
+#choose_soruce {
+    overflow: hidden;
+}
+.selection-boxes ul {
+    float: none;
+    margin: 0 auto;
+}
+.selection-boxes li {
+    background: none repeat scroll 0 0 #A9C2D5;
+    border-radius: 2px;
+    cursor: pointer;
+    float: left;
+    height: 90px;
+    margin: 15px 5px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 130px;
+}
 @media (min-width: 1920px) {
     .adv_dd {
     width: 80%;
@@ -1697,4 +1823,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 @media (max-width: 1199px) { 
    .addrow input[type="text"] { width: 59.3%; }
 }
+
+
+
 /* ENDS */
