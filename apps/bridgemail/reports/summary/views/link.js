@@ -14,17 +14,20 @@ function (template,contactsView) {
              'click .lcount':"loadContact",
              'mouseover .link-bar':'showPreview',
               'mouseover .preview2':'showPreview2',
-             'mouseout .load-contacts':'hidePreview'
+             'mouseout .load-contacts':'hidePreview', 
+             'mouseover .load-contacts':'showPreviewParent'
             },
             showPreview:function(ev){
-                $(ev.target).next(".preview2").css('opacity',0);
+                $(ev.target).next(".preview2").css('opacity',1);
+            },
+            showPreviewParent:function(ev){
+                $(ev.target).find(".preview2").css('opacity',1);
             },
             showPreview2:function(ev){
                 $(ev.target).css('opacity',1);
             },
             hidePreview:function(ev){
                 $(ev.target).find(".preview2").css('opacity',0);
-                 
             },
             initialize: function () {
                  this.template = _.template(template);	
@@ -40,6 +43,7 @@ function (template,contactsView) {
                   var title = this.model.get('articleTitle');
                   url = title+'|-.-|'+url;
                 if($("body").hasClass('modal-open')){
+                    $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");  
                      var offset = $(ev.target).offset();
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();

@@ -1638,7 +1638,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';  
                         var chartIcon = '';
                         if(val[0].status == 'P' || val[0].status == 'C')  {
-                          chartIcon = '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                          chartIcon = '<div class="campaign_stats showtooltip" data-original-title="Click to View Chart"><a class="icon report"></a></div>';
                         }
                         list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span>'+ chartIcon +'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
 			if(val[0].status != 'D')
@@ -1680,7 +1680,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           var camp_id=$(this).parents("tr").attr("id").split("_")[1];
                           console.log(camp_id);
                           that.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
-                      })      
+                      }) 
+                      
+                      this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 }
                 ,  
                 appendCampaigns:function(){

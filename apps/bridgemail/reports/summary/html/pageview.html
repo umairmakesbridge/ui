@@ -1,5 +1,5 @@
                             <td width=""><div>
-                                    <div class="colico link"> <strong><span><em>Link URL</em><a  class="showtooltip" data-original-title="<%=this.model.get('pageTitle')%>" href="<%=this.model.get('pageURL')%>" target='_blank'><%=this.truncateURL(this.model.get('pageTitle'))%></a></span></strong> </div>
+                                    <div class="colico link"> <strong><span><em>Page View</em><a  class="showtooltip" data-original-title="<%=this.model.get('pageURL')%>" href="<%=this.model.get('pageURL')%>" target='_blank'><%=this.truncateURL(this.checkTitle(this.model.get('pageTitle')))%></a></span></strong> </div>
                                 </div></td>
                             <td width="90px"><div>
                                     <div class="colico ptype"> <strong><span><em>Page Type</em>&nbsp;<%=this.model.get('pageType')%></span></strong> </div>
