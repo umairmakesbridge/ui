@@ -119,6 +119,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             self.activeWorkSpace($(this));
                         });
                         
+                        //Handling for tab hover 
                          $("#wp_li_" + wp_count).mouseover(function(){
                              if($(this).hasClass("active")===false){
                                  $(this).addClass("hover")
@@ -133,7 +134,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                          });
                          
                          $("#wp_li_" + wp_count).mouseout(function(){                             
-                             $(this).removeClass("hover");                            
+                             $(this).removeClass("hover");  
+                             setTimeout(_.bind(function(){
+                                 $(".tooltip-inner").parents(".tooltip").remove();
+                              },this),50);
                          });                                                  
                          $("#wp_li_" + wp_count+" .closehover").click(function(event){                             
                              var li = $(this).parents("li");
