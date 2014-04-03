@@ -39,7 +39,8 @@ define(['text!crm/html/crm.html','app'],
                     title:'Salesforce',
                     url : 'crm/salesforce/salesforce',
                     workspace_id: 'crm_salesforce',
-                    tab_icon:'salesforce'
+                    tab_icon:'salesforce',
+                    sub_title:'Connection With Apps'
                 });
             },
             loadNetSuiteCRM:function(e){
@@ -52,7 +53,8 @@ define(['text!crm/html/crm.html','app'],
                     title:'NetSuite',
                     url : 'crm/netsuite/netsuite',
                     workspace_id: 'crm_netsuite',
-                    tab_icon:'netsuite'
+                    tab_icon:'netsuite',
+                    sub_title:'Connection With Apps'
                 });
             },
             checkSalesForceStatus: function(){                

@@ -222,7 +222,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     }
                     _this.$el.parents(".ws-content").find("#workspace-header").html(workspaceTitle);
                     var workspace_id = _this.$el.parents(".ws-content").attr("id");
-                    _this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:workspaceTitle,subheading:"Contacts"});
+                    _this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:workspaceTitle,subheading:"Contact Profile"});
 
                     $.each(_this.basicFields, function(key, val) {
                         if (key !== "telephone") {

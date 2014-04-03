@@ -1696,7 +1696,7 @@ div.shortcuts .ddicon{
     -webkit-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
      -moz-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
           box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
-    width: 290px;
+    width: 330px;
     -webkit-border-radius: 2px;
     -moz-border-radius:2px;
     border-radius: 2px;
@@ -1706,7 +1706,7 @@ div.shortcuts .ddicon{
     float: right;
     height: 54px;
     margin-top: -55px;
-    width: 225px;
+    width: 265px;
 }
 .workspace ul.tabs-menu li .detail{
     display: none;
@@ -1719,7 +1719,7 @@ div.shortcuts .ddicon{
     color:#02AFEF;
     height: 20px;
     overflow: hidden;
-    width:206px;
+    width:235px;
     cursor: pointer;
     text-overflow:ellipsis;
     line-height: 20px;
@@ -1757,7 +1757,16 @@ div.shortcuts .ddicon{
 .workspace .ws-tabs{
     z-index: 10003;
 }
-
+.dialog-wizard .btns{
+    float:right;
+}
+.dialog-wizard .btns a {
+    float: left;
+    margin-left: 10px;
+}
+.dialog-wizard .bottom-btn {
+    margin-top: 10px;
+}
 /*----------
     Abdullah Changes 
  -----------*/	

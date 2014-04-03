@@ -105,8 +105,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
 
                         $(".ws-tabs li").removeClass('active');
                         var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
-                        var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";
-                        $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">'+options.title+'</div><div class="subheading"></div><i class="closehover"></i></div></li>');
+                        var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";                        
+                        $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">'+options.title+'</div><div class="subheading">'+options.sub_title+'</div><i class="closehover" title="Close Workspace"></i></div></li>');
 
                         wp_view.$el.attr("id", "workspace_" + wp_count);
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
@@ -122,20 +122,41 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                          $("#wp_li_" + wp_count).mouseover(function(){
                              if($(this).hasClass("active")===false){
                                  $(this).addClass("hover")
-                             }                             
+                             }
+                            var heading = $(this).find(".heading");
+                            if(!heading.data("tooltip") && heading.text().length>20){ 
+                                heading.tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false,trigger:'manual'});                             
+                            } 
+                            if(!$(this).find(".closehover").data("tooltip")){ 
+                                $(this).find(".closehover").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false,trigger:'manual'});                             
+                            }
                          });
                          
                          $("#wp_li_" + wp_count).mouseout(function(){                             
                              $(this).removeClass("hover");                            
-                         });
-                                                  
-                         $("#wp_li_" + wp_count+" .closehover").click(function(event){
+                         });                                                  
+                         $("#wp_li_" + wp_count+" .closehover").click(function(event){                             
                              var li = $(this).parents("li");
                              li.removeClass("hover");                            
                              var wp_id = li.attr("id").split("_")[2];
                              $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();   
+                             $(".tooltip-inner").parents(".tooltip").remove();
                              event.stopPropagation();
-                         });                       
+                         });         
+                          $("#wp_li_" + wp_count+" .closehover").hover(function(){
+                              setTimeout(_.bind(function(){
+                                  $(this).tooltip("show");
+                              },this),50);
+                          },function(){
+                              $(this).tooltip("hide")
+                          })
+                          $("#wp_li_" + wp_count+" .heading").hover(function(){
+                              setTimeout(_.bind(function(){
+                                  $(this).tooltip("show");
+                              },this),50);
+                          },function(){
+                              $(this).tooltip("hide")
+                          })
                     }
                     else {
                         if (!this.$(".tw-toggle button:last-child").hasClass("active")) {
@@ -170,6 +191,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var wp_id = params.workspace_id ? params.workspace_id.split("_")[1]:"";
                     if(wp_id){
                         $("#wp_li_" + wp_id+" .heading").html(params.heading);                        
+                        if(params.heading.length>20){
+                            $("#wp_li_" + wp_id+" .heading").attr("title",params.heading);                        
+                        }
                         $("#wp_li_" + wp_id+" .subheading").html(params.subheading);
                     }                    
                 },
@@ -293,28 +317,28 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                 },
                 createTemplate: function() {
-                    this.addWorkSpace({type: '', title: 'Template Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
+                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
                 },
                 viewContacts: function() {
-                    this.addWorkSpace({type: '', title: 'Contacts', url: 'contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                    this.addWorkSpace({type: '', title: 'Contacts',sub_title:'Listing', url: 'contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
                 },
                 campaignListing: function() {
-                    this.addWorkSpace({type: '', title: 'Campaigns', url: 'campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
+                    this.addWorkSpace({type: '', title: 'Campaigns',sub_title:'Listing', url: 'campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
                 },
                 templateGallery: function() {
-                    this.addWorkSpace({type: '', title: 'Template Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
+                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
                 },
                 camapignReport: function() {
-                    this.addWorkSpace({type: '', title: 'Reports', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Reports',sub_title:'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});
                 },
                 csvUpload: function() {
-                    this.addWorkSpace({type: '', title: 'CSV Upload', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
+                    this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                 },
                 connectCrm: function() {
-                   this.addWorkSpace({type:'',title:'Connections',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
+                   this.addWorkSpace({type:'',title:'Connections',sub_title:'CRM',url : 'crm/crm',workspace_id: 'crm',tab_icon:'crm', single_row:true});
                 },
                 createGraphics:function(){
-                     this.addWorkSpace({type:'',title:'Images',url:'userimages/userimages',workspace_id: 'userimages',tab_icon:'graphiclisting'});
+                     this.addWorkSpace({type:'',title:'Images',sub_title:'Gallery',url:'userimages/userimages',workspace_id: 'userimages',tab_icon:'graphiclisting'});
                      return;
                   
                 },
@@ -324,7 +348,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         title:'Salesforce',
                         url : 'crm/salesforce/salesforce',
                         workspace_id: 'crm_salesforce',
-                        tab_icon:'salesforce'
+                        tab_icon:'salesforce',
+                        sub_title:'Connection With Apps'
                     });                    
                 },
                 netsuiteCrm:function(){
@@ -333,7 +358,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         title:'NetSuite',
                         url : 'crm/netsuite/netsuite',
                         workspace_id: 'crm_netsuite',
-                        tab_icon:'netsuite'
+                        tab_icon:'netsuite',
+                        sub_title:'Connection With Apps'
                     });                 
                 }
 

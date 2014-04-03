@@ -47,7 +47,7 @@ function (template,icheck,bmstags) {
                this.head_action_bar.find(".edit").hide();
                var copyIconTemplate = this.head_action_bar.find(".copy");
                copyIconTemplate.attr('data-original-title','Copy template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
-               this.head_action_bar.find(".delete").attr('data-original-title','Delete template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
+               this.head_action_bar.find(".delete").attr('data-original-title','Delete template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                this.head_action_bar.append(previewIconTemplate);
                this.initEditor();
                this.tagDiv.addClass("template-tag");
@@ -273,7 +273,7 @@ function (template,icheck,bmstags) {
 
                     // Theme options
                     theme_advanced_buttons1 : "newdocument,bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect",
-                    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,search,replace,bullist,numlist,outdent,indent,blockquote,undo,redo,hr,removeformat,sub,sup,forecolor,backcolor,link,unlink,anchor,image,insertimage,cleanup,code,fullscreen,preview",
+                    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,search,replace,bullist,numlist,outdent,indent,blockquote,undo,redo,hr,removeformat,sub,sup,forecolor,backcolor,link,unlink,anchor,image,cleanup,code,fullscreen,preview",
                     theme_advanced_buttons3 : "",
 
                     //preview options
