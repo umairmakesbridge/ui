@@ -37,6 +37,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             'click .add-template-li':function(obj){
                                  app.mainContainer.addWorkSpace({type:'',title:'Template Gallery',sub_title:'Gallery',url : 'mytemplates',workspace_id: 'mytemplates','addAction':true,tab_icon:'mytemplates'});
                             },
+                            'click .image-gallery-li':function(obj){
+                                 app.mainContainer.addWorkSpace({type:'',title:'Images',sub_title:'Gallery',url:'userimages/userimages',workspace_id: 'userimages',tab_icon:'graphiclisting'});
+                            },
                             'click .analytics_add-list-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
                             },
