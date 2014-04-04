@@ -153,7 +153,7 @@ function (template,Contacts,viewContact) {
                var text = $(ev.target).val();
                text = text.replace('Sale Status:', '');
                text = text.replace('Tag:', '');
-               $(ev.target).val(text);
+                
                    
                if (code == 13 || code == 8){
                  that.$el.find('#clearsearch').show();
