@@ -48,7 +48,7 @@
 }
 
 
- .tagscont{
+ .graphics .tagscont{
      margin-left: 45px;
  }
  .tooltip{
@@ -1196,129 +1196,6 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center ;}
 //// End Campaign Summary /////
 
-
-		/* -------------------------------------------- */
-/* -------------------- PDF REPORT/CHART ------------------------ */
-		/* -------------------------------------------- */
-
- 
-.report_pdf { width:900px; margin:0 auto; }
-
-.report_pdf .pdf_header {
-    height: 60px;
-    padding: 20px 0 10px;
-}
-
-.report_pdf .conn_img { margin:18px 0 0; }
-
-.report_pdf .report_contnt {}
-.report_pdf .report_contnt h1 {
-    color: #4292BB;
-	 width: 500px;
-    display: block;
-    font-family: 'proxima_nova_semibold',Arial,sans-serif;
-    font-size: 32px;
-    line-height: 36px;
-    margin: 20px auto 10px;
-    text-align: left;
-	float:left;
- 
-}
-.report_pdf .report_contnt h1 span { 
-	display:block; 
-	font-size:14px;  
-	 line-height: 18px;
-	font-weight: 400; 
-	font-family: 'proxima_nova_semibold',Arial,sans-serif;
-	}
-
-.report_pdf .tagscont { width:auto; height:auto; max-width:none; margin: 15px 0 0; }
-.report_pdf .tagscont > span { float:left; color: #4292BB;line-height: 16px; }
-.report_pdf .tagscont ul { max-width:none; height:auto; }
-.report_pdf .tagscont ul li { margin:0;   margin: 0 1px; }
-.report_pdf .tagscont ul li > a {  font-size: 13px; }
-.report_pdf .tagscont ul li > a span { line-height: 22px; }
-
-
-
-.report_pdf .sentat {
-    color: #4292BB;
-    float: right;
-    font-size: 18px;
-    margin: 30px 0 0;
-}
-.report_pdf .sentat em { font-size:14px; display:block; text-align:right; }
-
-.report_pdf .chart {
-    background: none repeat scroll 0 0 #EFF7FB;
-    display: block;
-    margin: 20px 0 0;
-    padding: 0 0 10px;
-		-webkit-border-radius: 2px;
-	-moz-border-radius:2px;
-	border-radius: 2px;
-}
-
-.report_pdf .toplinks { margin:40px 0 0; }
-.report_pdf .toplinks > h3 span { font-size:14px; }
-
-
-.report_pdf  ul.chartstatdetail {font-family: 'proxima_nova_regular',Arial,sans-serif; border: 0 none;
-    height: 80px;}
-
-.report_pdf  ul.chartstatdetail li span {
-    clear: both;
-    display: block;
-    font-size: 14px; 
-    text-transform: uppercase;
-}
-
-.report_pdf ul.chartstatdetail li a {    height: 58px;}
-
-.report_pdf ul.chartstatdetail li strong {
-    float: right;
-    font-size: 24px;
-    line-height: 40px;
-    margin: 2px 0 0;
-}
-
-.report_pdf ul.chartstatdetail li em {
-    margin: 14px 0 0;}
-
-.report_pdf .sent-pending {
-    height: 50px;
-    padding: 5px;
-}
-
-.report_pdf .sent-pending span {
-    background: none repeat scroll 0 0 #A9C2D5;
-    border-radius: 2px;
-    color: #FFFFFF;
-    display: block;
-    float: left;
-    font-size: 18px;
-    margin: 0.5%;
-    padding: 1%;
-    width: 47%;
-}
-.report_pdf .sent-pending strong {
-    float: right;
-    font-size: 20px;
-    padding: 0 0 0 4px;
-    text-align: right;
-}
-.report_pdf  ul.chartstatdetail {
-    border: 0 none;
-    height: 80px;
-    margin: 15px 0 0;
-	width:auto;
-    padding: 0 10px;
-}
-
-
-		/* -------------------------------------------- */
-/* -------------------- PDF REPORT/CHART ------------------------ */
-		/* -------------------------------------------- */
 
  
 
