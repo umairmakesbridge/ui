@@ -196,8 +196,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
             },
             
             getMonthYear:function(model,isValue){
-                var val = isValue?model:model.get("activityDate");
-                var _date = moment(this.app.decodeHTML(val),'YYYY-M-D H:m');
+                var val = isValue?model:model.get("logTime");
+                var _date = moment(this.app.decodeHTML(val),'M/D/YYYY H:m');
                 return _date.format("MMM YYYY");
             },
             timeStamp:function(monthYear,current){

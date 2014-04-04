@@ -72,6 +72,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.header = new HeaderView();
                     this.footer = new FooterView();
                     this.news = new NewsView();
+                    this.lastActiveWorkSpace = "";
                     this.render();
                 }
                 ,
@@ -107,7 +108,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
                         var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";                        
                         $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">'+options.title+'</div><div class="subheading">'+options.sub_title+'</div><i class="closehover" title="Close Workspace"></i></div></li>');
-
+                        this.lastActiveWorkSpace = "wp_li_" + wp_count;
                         wp_view.$el.attr("id", "workspace_" + wp_count);
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                         $("#workspace .workspace").append(wp_view.$el);
@@ -182,6 +183,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#workspace .ws-content.active").removeClass('active').hide();
                         obj.addClass("active");
                         var workspace_id = obj.attr("id").split("_")[2];
+                        this.lastActiveWorkSpace = "wp_li_" + workspace_id;
                         $("#workspace #workspace_" + workspace_id).show().addClass("active");
                         if (obj.attr("workspace_id")) {
                             var objAttr = obj.attr("workspace_id").split('_');

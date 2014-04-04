@@ -25,6 +25,11 @@ function (template,moment) {
                     ,"TF":{"name":"Tell a friend","action":"Campaign","cssClass":"tellafriend"}
                     ,"WV":{"name":"Web Visit","action":"Web","cssClass":"webvisit"}
                     ,"WA":{"name":"Workflow Alert","action":"Workflow","cssClass":"workflowalert"}
+                    ,"CT":{"name":"Campaign Conversions","action":"Campaign","cssClass":"campaignopen"}
+                    ,"CB":{"name":"Email Bounced","action":"Email","cssClass":"articleclick"}
+                    ,"A":{"name":"Workflow Alert","action":"Workflow","cssClass":"workflowalert"}
+                    ,"N":{"name":"Workflow Do Nothing","action":"Workflow","cssClass":"workflowalert"}
+                    ,"W":{"name":"Workflow Wait","action":"Workflow","cssClass":"workflowalert"}                    
                 },
             /**
              * Attach events on elements in view.
@@ -68,8 +73,9 @@ function (template,moment) {
               
             },
             getActivityDate:function(){
-                var _date = moment(this.app.decodeHTML(this.model.get("activityDate")),'YYYY-M-D H:m');
+                var _date = moment(this.app.decodeHTML(this.model.get("logTime")),'M/D/YYYY H:m');
                 return {date:_date.format("DD MMM YYYY"),time:_date.format("hh:mm A")};
+                                
             },
             filterData:function(){
                 var model = this.model;
@@ -89,14 +95,14 @@ function (template,moment) {
                     break;      
                      //Signup Form
                     case "SU":
-                       title += model.get("name");
+                       title += model.get("formName");
                        preview_id = model.get("id");
                     break;
                     //Article Click
                     case "CK":
                        title += model.get("subject");
                        preview_id = model.get("id");
-                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("url")+"'>"+model.get("url")+"</a>"):""; 
+                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("articleURL")+"'>"+model.get("articleTitle")+"</a>"):""; 
                     break;
                     //Single Message Sent
                     case "MT":
@@ -121,7 +127,7 @@ function (template,moment) {
                     break;
                     //WF C2Y Trigger Mail
                     case "WM":
-                       title += model.get("name");                       
+                       title += model.get("workflowName");                       
                     break;
                     //MY C2Y Trigger Mail
                     case "MM":
@@ -151,7 +157,7 @@ function (template,moment) {
                      case "WV":
                        title += model.get("subject");
                        preview_id = model.get("id");
-                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("url")+"'>"+model.get("url")+"</a>"):"";                        
+                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("pageURL")+"'>"+model.get("pageTitle")+"</a>"):"";                        
                     break;
                     //Workflow Alert
                     case "WA":
@@ -162,7 +168,7 @@ function (template,moment) {
                       title += this.mapping[model.get("activityType")].name;
                     break;  
                 }    
-               return {name:this.app.decodeHTML(title),id:preview_id,summary:this.app.decodeHTML(summary)};     
+               return {name:this.app.decodeHTML(title),summary:this.app.decodeHTML(summary)};     
             }
             
             
