@@ -217,10 +217,11 @@ define([
                     
                     var message_box = $('<div class="messagebox messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
                     $(container).append(message_box);
-                    message_box.find(".closebtn").click(function(){
+                    message_box.find(".closebtn").click(function(e){
                       message_box.fadeOut("fast",function(){
                            $(this).remove();
                        }) 
+                       e.stopPropagation()
                     });
                  }
              },

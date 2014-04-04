@@ -12,6 +12,7 @@ function (Wizard,template,moment) {
                     this.improtLoaded = false;
                     this.tId = null;       
                     this.editImport = null;
+                    this.newList = null;
                     this.render();
                     this.isFilterChange = false;
                 },
@@ -42,7 +43,14 @@ function (Wizard,template,moment) {
                             iconsource: 'list'
                      });
                     this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)}); 
-                    if(!this.app.getAppData("lists")){
+                    this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    this.getLists();
+                    this.setHeaderDialog();
+                    this.showHideButton(false);
+                                      
+                },        
+                getLists:function(){
+                  if(!this.app.getAppData("lists")){
                         this.app.showLoading("Loading Lists...",this.$(".bms-lists"));                                    
                         this.app.getData({
                             "URL":"/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all",
@@ -52,11 +60,8 @@ function (Wizard,template,moment) {
                     }
                     else{
                         this.createListTable();
-                    }
-                    this.setHeaderDialog();
-                    this.showHideButton(false);
-                                      
-                },                
+                    }  
+                },
                 setHeaderDialog:function(){
                    if(!this.dialog) return;                                      
                    this.dialog.$(".modal-footer .btn-save").hide();
@@ -260,7 +265,12 @@ function (Wizard,template,moment) {
                     });				
                     this.$(".bms-lists .select-list").click(_.bind(this.markSelectList,this));
                     this.loadData(this.editImport);
-                   
+                    if(this.newList){
+                        this.$(".bms-lists tr").removeClass("selected");
+                        this.$(".bms-lists tr[checksum='"+this.newList+"']").addClass("selected");
+                        this.$(".bms-lists tr[checksum='"+this.newList+"']").scrollintoview(); 
+                        this.newList = null;
+                    }
                 },
                 markSelectList:function(e){
                     var target = $.getObj(e,"a");
@@ -270,8 +280,42 @@ function (Wizard,template,moment) {
                         parent_row.addClass("selected");
                     }
                 },
-                addlist:function(){
-                    
+                checkListName:function(listName){
+                    var camp_list_json = this.app.getAppData("lists");
+                    var isListExits = false;
+                    this.app.showLoading(false,this.$el);                                                        			                    
+                    $.each(camp_list_json.lists[0], _.bind(function(index, val) { 
+                        if(val[0].name==listName){
+                            isListExits = true;
+                            return false;
+                        }
+                    },this));
+                    return isListExits;
+                },
+                addlist:function(listName,ele){                    
+                    if(this.checkListName(listName)){
+                        this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
+                        return false;
+                    }
+                    var add_box = this.$(".add-list").data("addbox");
+                    add_box.dialog.find(".btn-add").addClass("saving");
+                    var URL = "/pms/io/list/saveListData/";
+                    var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"create",listName:listName};
+                    $.post(URL,post_data)
+                    .done(_.bind(function(data) {                          
+                        add_box.dialog.find(".btn-add").removeClass("saving");
+                        add_box.dialog.find(".input-field").val("");
+                        add_box.hideBox();                        
+                        var _json = jQuery.parseJSON(data); 
+                        if(_json[0]!=="err"){
+                            this.app.removeCache("lists");
+                            this.getLists();
+                            this.newList = _json[2];
+                        }
+                        else{
+                            this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                        }
+                    },this));
                 },
                 startImport:function(){                    
                     var URL = "/pms/io/salesforce/setData/?BMS_REQ_TK="+this.app.get('bms_token');
