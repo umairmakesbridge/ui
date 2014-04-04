@@ -198,6 +198,9 @@ width: 50%;
 .search > .icon._graphics {
      background:url('../img/graphic24.png')  no-repeat scroll center center transparent;
 }
+ .step2-mergefields .icon._graphics {
+     background:url('../img/graphic24.png')  no-repeat scroll center center transparent;
+}
 .graphics .img > div {
     background: url('../img/trans_white.png') repeat scroll center 0px transparent;
     height: 60px;

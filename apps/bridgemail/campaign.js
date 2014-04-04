@@ -39,7 +39,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .editorbtnshow':function(){
                           this.$(".textdiv").hide();
                           this.$(".editor_box").show();                          
-                      }
+                      },
+                      'click #btn_image_url':"TryDialog"
                     },                    
 
                 initialize: function () {
@@ -3203,6 +3204,31 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.scheduledCampaign('D','Changing Campaign to Draft...');
                     }
-               }
+               },
+               TryDialog:function(){
+                    var that = this;
+                    var app = this.options.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.options.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });
+                         //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
+                     this.options.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                         dialog.getBody().html(mPage.$el);
+                        // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
+                       // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
+                         //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
+                     });
+                     
+                },
+                useImage:function(url){
+                    this.$el.find("#image_url").val(url);
+                }
         });
 });
