@@ -196,8 +196,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                                   //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
 				});	
 				camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
-                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id+"&html=Y&original=N";  
-                                require(["bmstemplates/templatePreview"],_.bind(function(templatePreview){
+                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                                require(["common/templatePreview"],_.bind(function(templatePreview){
                                 var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id});
                                  dialog.getBody().html(tmPr.$el);
                                  tmPr.init();

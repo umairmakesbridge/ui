@@ -512,7 +512,7 @@ function (template,highlight) {
                                     headerIcon : 'dlgpreview',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
-                         require(["bmstemplates/templatePreview"],_.bind(function(templatePreview){
+                         require(["common/templatePreview"],_.bind(function(templatePreview){
                            var tmPr =  new templatePreview({frameSrc:srcUrl,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:target.attr("id").split("_")[1]});
                             dialog.getBody().html(tmPr.$el);
                             tmPr.init();

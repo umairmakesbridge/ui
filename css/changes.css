@@ -1712,6 +1712,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     padding: 0;
     text-align: center;
 }
+
 .previewbar > a span {
     color: #FFFFFF;
     display: inline-block;
@@ -1814,6 +1815,105 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     position: relative;
     text-align: center;
     width: 130px;
+}
+.icon.sendemail {
+    background: url("../img/create_campaign.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.loading-preview {
+    background: url("../img/greenloader.gif") no-repeat scroll 24px center #01AEEE;
+    font-size: 0;
+    line-height: 35px;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 100px;
+}
+.checkedadded-preview{
+    background: none repeat scroll 0 0 #97D61D;
+    border-radius: 0 2px 2px 0;
+    display: block;
+    height: 67px;
+    margin: -34px -14px 0 0px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+}
+ 
+.checkedadded-preview > .icon.check{
+    padding-top: 30px;
+}
+.checkedadded-preview:hover{background:#F71A1A;}
+ .checkedadded-preview:hover  .icon.check {
+    background: url("../img/cross2.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.dddiv-prevCam {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    height: 242px;
+    left: 240px;
+    padding: 5px;
+    position: absolute;
+    top: 50px;
+    width: 360px;
+    z-index: 111;
+}
+.dddiv-prevCam:before {
+      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    left: 129px;
+    position: absolute;
+    top: -12px;
+}
+.dddiv-prevCam .bmsgrid .tagscont {
+    width: 300px;
+}
+.show-original-wrap > .checkpanelinput{
+    min-height: 28px;
+    min-width: 36px;
+    border: 1px solid #26BCF5;
+}
+.show-original-wrap > .checkpanelinput.checked{
+    background-color: #01AEEE;
+}
+
+.ScrollToTop {
+    background: url("../img/scrolltop.png") no-repeat scroll center center #33404B;
+    border: 0 none;
+    border-radius: 2px;
+    bottom: -3px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    display: block;
+    height: 50px;
+    opacity: 0.7;
+    padding: 0;
+    position: fixed;
+    right: 14px;
+    transition: opacity 0.3s ease-out 0s;
+    width: 50px;
+    z-index: 99999;
+}
+i.contact-name-prev {
+    background: url("../img/closebtn-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    cursor: pointer;
+    display: block;
+    height: 22px;
+    opacity: 1;
+    position: absolute;
+    right: 6px;
+    top: 0;
+    transition: opacity 0.3s ease-out 0s;
+    width: 22px;
+}
+.merge-fields-wrapper{
+     float: right;
+    margin-bottom: 4px;
+    margin-right: 6px;
 }
 @media (min-width: 1920px) {
     .adv_dd {

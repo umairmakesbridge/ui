@@ -519,12 +519,17 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   headerEditable:false,
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"},
-                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                                  //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                         });
-                        var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
-                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+                        var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id;  
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                                var tmPr =  new templatePreview({frameSrc:preview_url,app:camp_obj.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_obj.camp_id});
+                                 dialog.getBody().html(tmPr.$el);
+                                 tmPr.init();
+                               },this));
+                      /* var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
                         dialog.getBody().html(preview_iframe);               
-                        dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));                        
+                        dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));  */                      
                         e.stopPropagation();     
                   })
                   var camp_obj = this;
