@@ -109,6 +109,7 @@ define([
                             app.mainContainer.$(".slideoverlay").fadeOut("slow");
                             app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500 );
                         }
+                        
                     });
                     
                    var self = this;                                                                         
@@ -175,10 +176,9 @@ define([
                 this.set("wp_height",(body_size-100));				
                
                 //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
-                this.fixEmailFrom();
+                this.fixCampaignInputStepOne();
              },
-             fixEmailFrom:function(){
-                
+             fixCampaignInputStepOne:function(){  // Fixing All inputs on 
                 var active_workspace = $(".ws-content.active");
                 var subj_w = active_workspace.find('#campaign_subject').width(); // Abdullah Check
                 active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+21)+"px","padding-right":"61px"});   // Abdullah Try

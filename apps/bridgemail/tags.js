@@ -26,6 +26,7 @@ function (template,Mapping,bmsSearch) {
 							var tags_html = '';
 							if(tags_array[0] != 'err')
 							{
+                                                            app.setAppData('tags',tags_array);
 								$.each(tags_array.tagList[0],function(key,val){
 									if(val[0].subCount == 0)
 										tags_html += '<li class="action inactive" id="row_'+key+'" checksum="'+val[0].tag+'"><a class="tag"><span>'+ val[0].tag +'</span><strong class="badge">'+ val[0].subCount +'</strong></a></li>';

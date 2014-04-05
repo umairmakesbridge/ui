@@ -10,8 +10,8 @@
             <div class="cont step1col1">
                 <div class="row">
                     <label id="lblSubject">Subject</label>
-                    <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options subject-container" >
+                    <div class="campaign-fields-right-wrapper" id="campaign_subject-wrap">
+                        <div class="input-append adv_dd sort-options subject-container check-fahad" >
                             <div class="inputcont" style="float:right;width:100%;">              	
                                 <input type="text" style="width:100%" placeholder="Enter subject" id="campaign_subject" class="header-info campaign-headerinfo-input">
                                 <div class="btn-group subject-group">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     <label id="lblFromemail">From Email</label>
-                    <div class="campaign-fields-right-wrapper" style="">
+                    <div class="campaign-fields-right-wrapper" id="campaign_from_email-wrap">
                         <div class="input-append adv_dd sort-options fromeEmail-container" style="width:90.5%">
                             <!--<div id="fetable">
                             <div style="display:table-row">-->
@@ -61,7 +61,7 @@
                 </div>
                 <div class="row">
                     <label id="lblFromname">From Name</label>
-                    <div class="campaign-fields-right-wrapper" style="">
+                    <div class="campaign-fields-right-wrapper" style="" id="campaign_from_name-wrap">
                         <div class="input-append adv_dd sort-options fname-container">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter from name" style="width:100%;" id="campaign_from_name" class="header-info campaign-headerinfo-input" />
@@ -83,7 +83,7 @@
                 </div>
                 <div class="row">
                     <label id="lblReplyto">Reply To</label>
-                    <div class="campaign-fields-right-wrapper" style="">
+                    <div class="campaign-fields-right-wrapper" id="campaign_reply_to-wrap">
                         <div class="input-append adv_dd sort-options replyto-container">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter reply to" id="campaign_reply_to" style="width:100%" class="header-info campaign-headerinfo-input" />                
@@ -335,9 +335,10 @@ width: 244px;" ></div>
                 <button tabindex="-1" data-toggle="dropdown" id="btn_image_url" class="btn dropdown-toggle" style="margin-top:-3px auto;"> 
                     <span class="icon _graphics left" style="margin:0px auto;"></span> <span class="caret right"></span> </button>
             </div>
-        </div>
-        
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px; ">
+        </div>        
+
+        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px" id="merge_field_plugin-wrap">
+
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-editor" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -366,7 +367,7 @@ width: 244px;" ></div>
     <!-- content-inner   -->
     <div class="content-inner soruces"  id="area_html_code" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="input-append adv_dd sort-options right step2-mergefields" id="merge_field_plugin-wrap-hand" style="width:325px" >
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-hand" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -381,7 +382,7 @@ width: 244px;" ></div>
 
     <div class="content-inner soruces"  id="area_plain_text" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="input-append adv_dd sort-options right step2-mergefields" id="merge_field_plugin-wrap-plain" style="width:325px">
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-plain" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>

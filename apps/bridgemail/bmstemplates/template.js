@@ -1,4 +1,4 @@
-define(['text!bmstemplates/html/template.html','jquery.icheck','bms-tags','bms-addbox','bms-dragfile'],
+define(['text!bmstemplates/html/template.html','jquery.icheck','bms-tags','bms-addbox','bms-dragfile','bms-mergefields'],
 function (template,icheck,bmstags) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -11,7 +11,8 @@ function (template,icheck,bmstags) {
              * Attach events on elements in view.
             */            
             events:{				
-               'change #file_control':'uploadImage'
+               'change #file_control':'uploadImage',
+               'click #btn_image_url':"TryDialog"
             },
             /**
              * Initialize view - backbone .
@@ -64,6 +65,9 @@ function (template,icheck,bmstags) {
                     addCallBack:_.bind(this.addCategory,this),
                     placeholder_text:'Please enter category'
                 });
+                
+                // Merge Field Abdullah 
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge_field_plugin'});
                 copyIconTemplate.click(_.bind(function(e){                                     
                      this.page.copyTemplate(self);
                },this));  
@@ -76,8 +80,13 @@ function (template,icheck,bmstags) {
                               headerIcon : 'dlgpreview',
                               bodyCss:{"min-height":dialog_height+"px"}                                                                          
                     });
-                    var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+this.template_id+"\"></iframe>");                            
-                    dialog.getBody().html(preview_iframe);                                         
+                    var preview_iframe = "https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+this.template_id;
+                    require(["common/templatePreview"],_.bind(function(templatePreview){
+                           var tmPr =  new templatePreview({frameSrc:preview_iframe,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.template_id});
+                            dialog.getBody().html(tmPr.$el);
+                            tmPr.init();
+                          },this));
+//                    dialog.getBody().html(preview_iframe);                                         
                     e.stopPropagation();     
                },this));  
                
@@ -390,6 +399,31 @@ function (template,icheck,bmstags) {
                            }
                    });
                     
+                },
+                 TryDialog:function(){
+                    var that = this;
+                    var app = this.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });
+                         //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                         dialog.getBody().html(mPage.$el);
+                        // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
+                       // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
+                         //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
+                     });
+                     
+                },
+                useImage:function(url){
+                    this.$el.find("#image_url").val(url);
                 }
         });
 });

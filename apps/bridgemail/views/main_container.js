@@ -170,7 +170,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if (!workspace_li.hasClass("active")) {
                             workspace_li.click();
                         }
-                        setTimeout(_.bind(this.app.fixEmailFrom, this), 400);
+                        setTimeout(_.bind(this.app.fixCampaignInputStepOne, this), 400);
                     }
 
 
@@ -188,7 +188,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if (obj.attr("workspace_id")) {
                             var objAttr = obj.attr("workspace_id").split('_');
                             if (objAttr[0] === 'campaign') {
-                                this.app.fixEmailFrom();
+                                this.app.fixCampaignInputStepOne();
                             }
                         }
                     }
