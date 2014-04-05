@@ -68,7 +68,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                     this.offset = 0;                              
                 }
                 else{
-                    this.offset = this.offset + 20;                    
+                    this.offset = this.offset + 30;                    
                 }
                 var _data = {offset:this.offset,subNum: this.sub.sub_id};                
                
@@ -115,7 +115,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                     this.offsetFuture = 0;                              
                 }
                 else{
-                    this.offsetFuture = this.offsetFuture + 20;
+                    this.offsetFuture = this.offsetFuture + 30;
                 }
                 var _data = {offset:this.offsetFuture,subNum: this.sub.sub_id};                
                
@@ -197,7 +197,13 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
             
             getMonthYear:function(model,isValue){
                 var val = isValue?model:model.get("logTime");
-                var _date = moment(this.app.decodeHTML(val),'M/D/YYYY H:m');
+                var _date = null;
+                if(isValue){
+                    _date = moment(this.app.decodeHTML(val),'YYYY-M-D H:m');
+                }
+                else{
+                   _date = moment(this.app.decodeHTML(val),'M/D/YYYY H:m');
+                }
                 return _date.format("MMM YYYY");
             },
             timeStamp:function(monthYear,current){

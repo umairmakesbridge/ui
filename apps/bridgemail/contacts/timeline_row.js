@@ -102,7 +102,7 @@ function (template,moment) {
                     case "CK":
                        title += model.get("subject");
                        preview_id = model.get("id");
-                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("articleURL")+"'>"+model.get("articleTitle")+"</a>"):""; 
+                       summary = model.get("articleURL")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("articleURL")+"'>"+model.get("articleTitle")+"</a>"):""; 
                     break;
                     //Single Message Sent
                     case "MT":
@@ -155,9 +155,9 @@ function (template,moment) {
                     break;
                     //Web Visit
                      case "WV":
-                       title += model.get("subject");
+                       title += model.get("subject")?model.get("subject"):"";
                        preview_id = model.get("id");
-                       summary = model.get("url")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("pageURL")+"'>"+model.get("pageTitle")+"</a>"):"";                        
+                       summary = model.get("pageURL")?("<b>Page Visit</b> : <a  target='_blank' href='"+model.get("pageURL")+"'>"+model.get("pageTitle")+"</a>"):"";                        
                     break;
                     //Workflow Alert
                     case "WA":
