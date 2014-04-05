@@ -2080,6 +2080,11 @@ i.contact-name-prev {
 @media (max-width: 1199px) { 
    .addrow input[type="text"] { width: 59.3%; }
 }
-
+#campaign-temp-contact-dialog .stats_listing .bmsgrid div.bDiv tr .action{
+    opacity:0;
+}
+#campaign-temp-contact-dialog .stats_listing .bmsgrid div.bDiv tr:hover .action{
+    opacity:1;
+}
 /* ENDS */
 
