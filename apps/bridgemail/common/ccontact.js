@@ -35,7 +35,7 @@ function (template) {
             },
             openContact:function(){
                 this.$el.parents('.modal').find('.close').click();
-                this.app.mainContainer.openSubscriber(this.model.get('subNum.encode'));
+                this.app.mainContainer.openSubscriber(this.model.get('subNum'));
             },
            
             getFullName:function(){

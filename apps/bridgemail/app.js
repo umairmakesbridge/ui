@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async'*/
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields'
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -176,9 +176,10 @@ define([
                 this.set("wp_height",(body_size-100));				
                
                 //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
-                this.fixCampaignInputStepOne();
+                //this.fixCampaignInputStepOne();
              },
-             fixCampaignInputStepOne:function(){  // Fixing All inputs on 
+             fixEmailFrom:function(){
+                
                 var active_workspace = $(".ws-content.active");
                 var subj_w = active_workspace.find('#campaign_subject').width(); // Abdullah Check
                 active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+21)+"px","padding-right":"61px"});   // Abdullah Try

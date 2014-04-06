@@ -59,7 +59,7 @@
               }
             this.template.find('input').attr('id', id);
             this.$element.append(this.template);
-            options.app.fixCampaignInputStepOne();
+            //options.app.fixCampaignInputStepOne();
             
             if (!options.app.getAppData("mergetags")) {                             
                 options.app.getData({
@@ -131,9 +131,12 @@
             if(this.options.elementID==="campaign_from_email")
             {
                 this.$element.find("#plugin-merge-dropdown").on("click", $.proxy(this.showMergeDialogBox, this));
+                this.$element.find("#plugin-merge-dropdown").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false})
             }else{
-            this.template.find("#plugin-merge-dropdown").on("click", $.proxy(this.showMergeDialogBox, this));
+                this.template.find("#plugin-merge-dropdown").on("click", $.proxy(this.showMergeDialogBox, this));
+                this.template.find("#plugin-merge-dropdown").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false})
             }
+            
                 return;
         },
         showMergeDialogBox: function(obj) {
@@ -345,11 +348,12 @@
                     
                     var fromEmail = $.getObj(obj,"input").val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                    
                     if($.trim(fromEmail)=="" || !merge_field_patt.test(fromEmail) || this.options.app.validateEmail(fromEmail)){
-                        $("#campaign_from_email_default").hide();
+                        this.$element.parents(".ws-content.active").find("#campaign_from_email_default").hide();
                     }
                     else{
-                       $("#campaign_from_email_default").show();
+                       this.$element.parents(".ws-content.active").find("#campaign_from_email_default").show();
                     }
                 },
         getOptions: function(options) {
@@ -379,7 +383,7 @@
     $.fn.mergefields.Constructor = MergeFields
 
     $.fn.mergefields.defaults = {
-        template: '<div class="input-append adv_dd sort-options right step2-mergefields" id="addv_dd_merge_pulgin"><div class="inputcont" style="float:right;width:100%;" id="input-wrap-plugin"><input type="text"  style="width:100%" class="bms-input-tags" id="merge_field_plugin" placeholder="Merge Tags" ></div><div class="btn-group"><button tabindex="-1" data-toggle="dropdown" id="plugin-merge-dropdown" class="btn dropdown-toggle open mergefields-box plugin-merge-dropdown btn-border-merge-plugin"> <span class="icon mergeicon"></span> <span class="caret"></span> </button></div></div>',
+        template: '<div class="input-append adv_dd sort-options right step2-mergefields" id="addv_dd_merge_pulgin"><div class="inputcont" style="float:right;width:100%;" id="input-wrap-plugin"><input type="text"  style="width:100%" class="bms-input-tags" id="merge_field_plugin" placeholder="Merge Tags" ></div><div class="btn-group"><button tabindex="-1" data-toggle="dropdown" id="plugin-merge-dropdown" title="Use Merge Tags" class="btn dropdown-toggle open mergefields-box plugin-merge-dropdown btn-border-merge-plugin"> <span class="icon mergeicon"></span> <span class="caret"></span> </button></div></div>',
         app: null,
         addCallBack: null,
         placeholder_text: '',

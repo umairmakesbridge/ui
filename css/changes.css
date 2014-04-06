@@ -2086,5 +2086,11 @@ i.contact-name-prev {
 #campaign-temp-contact-dialog .stats_listing .bmsgrid div.bDiv tr:hover .action{
     opacity:1;
 }
+.temp-preview{
+    width:217px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
 /* ENDS */
 

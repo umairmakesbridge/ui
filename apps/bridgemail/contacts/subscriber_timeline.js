@@ -96,7 +96,12 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                             this.$(".filter-row").last().attr("data-load","true");
                         }
                         else{
-                           this.$timelineContainer.append($('<div class="filter-row signedup"><div class="filter-cont"> <h4>Signed Up on '+this.getMonthYear(this.sub.sub_fields.creationDate,true)+'</h4> </div></div>'));                                                        
+                           if(this.sub.sub_fields){ 
+                            this.$timelineContainer.append($('<div class="filter-row signedup"><div class="filter-cont"> <h4>Signed Up on '+this.getMonthYear(this.sub.sub_fields.creationDate,true)+'</h4> </div></div>'));                                                        
+                           }
+                           else{
+                               this.$timelineContainer.append($('<div class="filter-row signedup"><div class="filter-cont"> <h4>Signed Up on </h4> </div></div>'));                                                        
+                           }
                         }
                         
                     }, this),
