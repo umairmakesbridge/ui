@@ -631,6 +631,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                    if(del_camp_json[0]!=="err"){
                                            camp_obj.app.showMessge("Campaign Deleted");
                                            active_ws.find(".camp_header  .close-wp").click();
+                                           camp_obj.app.removeCache("campaigns");
+                                           camp_obj.refreshCampaignList();
                                    }
                                    camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
                    });
@@ -878,6 +880,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        this.setConversionPage();
                   }  
                 },
+                refreshCampaignList:function(){
+                  var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
+                  if(campaign_listing.length){
+                    campaign_listing.data("viewObj").getallcampaigns();
+                  }
+                },
                 saveCampaign:function(obj){                                      
                     var camp_obj = this;
                     var camp_name_input =  $(obj.target).parents(".edited").find("input");                       
@@ -890,10 +898,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           .done(function(data) {                              
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){
-                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(camp_obj.app.encodeHTML(camp_name_input.val()));                                                                
+                                 var new_name = camp_obj.app.encodeHTML(camp_name_input.val());
+                                 camp_obj.$el.parents(".ws-content").find("#workspace-header").html(new_name);                                                                
                                  camp_obj.setupCampaign();
                                  camp_obj.app.showMessge("Campaign Renamed");
                                  camp_obj.app.removeCache("campaigns");
+                                 camp_obj.refreshCampaignList();
+                                 var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
+                                 camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:new_name,subheading:"Campaign Wizard"});
                               }
                               else{                                  
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el.parents(".ws-content.active"));
@@ -922,6 +934,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  var li_id =  camp_obj.$el.parents(".ws-content").attr("id").split("_")[1];
                                  $("#wp_li_"+li_id).attr("workspace_id","campaign_"+camp_json[1]);
                                  camp_obj.app.removeCache("campaigns");
+                                 camp_obj.refreshCampaignList();
                               }
                               else{
                                   camp_obj.app.showAlert(camp_json[1],camp_obj.$el.parents(".ws-content.active"));
@@ -3157,6 +3170,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 camp_obj.setScheduleArea();
                                 camp_obj.app.showMessge("Campaign is now in draft mode!");
                            }
+                           camp_obj.app.removeCache("campaigns");
+                           camp_obj.refreshCampaignList();
                            
                         }
                         else{                                  

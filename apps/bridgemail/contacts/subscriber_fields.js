@@ -142,7 +142,7 @@ function (template,jqueryui,addbox) {
                        _this.app.showLoading(false,dialog.$el);
                        _this.updateValues();
                        _this.subscriber.showFields();                       
-                       _this.subscriber.fetchContacts();
+                       _this.refreshContactList();
                        dialog.hide();
                });
             },
@@ -157,10 +157,16 @@ function (template,jqueryui,addbox) {
                        _this.app.showLoading(false,dialog.$el);
                        _this.updateValues();
                        _this.subscriber.showFields();                       
-                       _this.subscriber.fetchContacts();
+                       _this.refreshContactList();
                        dialog.hide();
                });
             },
+             refreshContactList:function(){
+                var contact_listing = $(".ws-tabs li[workspace_id='contacts']");
+                if(contact_listing.length){
+                  contact_listing.data("viewObj").fetchContacts();
+                }
+              },
             addCustomField:function(val){
                 var newCustomField = $('<div class="row new-field"><label>'+val+'</label><div class="input-append"><div class="inputcont "><input type="text" class="header-info textfield" value="" name="frmFld_'+val+'"></div></div></div>') 
                 if(this.$('.cust_col1 div.row').length > this.$('.cust_col2 div.row').length){

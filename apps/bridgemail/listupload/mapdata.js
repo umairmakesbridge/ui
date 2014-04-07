@@ -181,11 +181,12 @@ function (template,chosen,addbox) {
                                  app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
                                 isValid = false;
                             }
+                            layout_map = layout_map.join();
                         }
 			if(dup > 0)			
 			{
-				app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
-				isValid = false;						
+                            app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
+                            isValid = false;						
 			}
 			  
 		   if(isValid)

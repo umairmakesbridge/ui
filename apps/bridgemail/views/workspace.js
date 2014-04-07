@@ -95,6 +95,7 @@ function ($,Backbone, _,app,Wizard, template) {
                 },
                 loadPage:function(_url,container,params){                       
                     app.showLoading(true,this.$el);
+                    var _this = this;
                     var wsp = this.$el;
                     require(
                             [_url],function(pageView){
@@ -115,9 +116,14 @@ function ($,Backbone, _,app,Wizard, template) {
                                         page_view.init();      //This will initilize any controls that are in page.
                                     }
                                 }
+                                _this.attachView(wsp,page_view);
                             }
                      );
-                },         
+                },   
+                attachView:function(ws,pageView){
+                    var workspace_id = ws.attr("id").split("_")[1]; 
+                    $("#wp_li_"+workspace_id).data('viewObj',pageView);
+                },
                 initScroll:function(el){
             
                 this.$win=$(window)

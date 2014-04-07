@@ -1767,6 +1767,9 @@ div.shortcuts .ddicon{
 .dialog-wizard .bottom-btn {
     margin-top: 10px;
 }
+.subscriber-detail .btnslist i.workflow{
+     background: url("../img/workflow.png") no-repeat scroll center center;
+}
 /*----------
     Abdullah Changes 
  -----------*/	
