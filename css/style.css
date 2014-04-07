@@ -4099,7 +4099,7 @@ ul.setting-options li img {
 .accordion-heading .accordion-toggle:hover {
 }
 .accordion-heading .edit, .accordion-heading .newwin, .accordion-heading .edit2, .accordion-heading .newwin2 {
-	display:none;
+	display:block;
 	position: absolute;
 	top: 9px;
 	margin: 0;
