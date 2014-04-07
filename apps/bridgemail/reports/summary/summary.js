@@ -258,12 +258,18 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                   headerEditable:false,
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"},
-                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                                  //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                         });
-                        var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";                                                            
-                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-                        dialog.getBody().html(preview_iframe);               
-                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                        //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                        var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum;
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:that.options.app,frameHeight:dialog_height,prevFlag:'C',tempNum:that.campNum});
+                             dialog.getBody().html(tmPr.$el);
+                             tmPr.init();
+                         },this));       
+//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+//                        dialog.getBody().html(preview_iframe);               
+//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
                         e.stopPropagation();     
                   })
                 

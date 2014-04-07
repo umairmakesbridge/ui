@@ -1902,8 +1902,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 .previewbar .sendcamp {
     background: none repeat scroll 0 0 #94CF1E;
-    float: right;
-    margin: 0;
+    margin: 0 6px;
 }
 .previewbar .sendcamp i {
     background: url("../img/campaignsent.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -1980,7 +1979,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background: url("../img/create_campaign.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 .loading-preview {
-    background: url("../img/greenloader.gif") no-repeat scroll 24px center #01AEEE;
+    background: url("../img/greenloader.gif") no-repeat scroll 24px center #94CF1E !important;
     font-size: 0;
     line-height: 35px;
     min-height: 20px;
@@ -2015,7 +2014,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     padding: 5px;
     position: absolute;
     top: 50px;
-    width: 360px;
+    width: 515px;
     z-index: 111;
 }
 .dddiv-prevCam:before {
@@ -2040,7 +2039,11 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 .show-original-wrap > .checkpanelinput.checked{
     background-color: #01AEEE;
 }
-
+.dddiv-prevCam .search {
+    float: left;
+    margin-left: 0;
+    margin-top: 2px;
+}
 .ScrollToTop {
     background: url("../img/scrolltop.png") no-repeat scroll center center #33404B;
     border: 0 none;
@@ -2075,6 +2078,15 @@ i.contact-name-prev {
     margin-bottom: 4px;
     margin-right: 6px;
 }
+.image-gallery {
+    background: url("../img/graphics1.png") no-repeat scroll center center rgba(0, 0, 0, 0); /*Added due to not present in dash.css */
+}
+.ddmenu ul.submenu li a:hover .image-gallery {
+    background: url("../img/graphics.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.search .close-icon {
+    top: 13px !important;
+}
 @media (min-width: 1920px) {
     .adv_dd {
     width: 80%;
@@ -2094,6 +2106,16 @@ i.contact-name-prev {
     overflow:hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
+}
+.accordion-heading .preview-camp{
+    display: none;
+    margin: 0;
+    position: absolute;
+    top: 9px;
+    background-position: -331px -361px;
+}
+.accordion-heading:hover .preview-camp{
+    display:block;
 }
 /* ENDS */
 
