@@ -29,6 +29,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .scheduled-campaign': 'scheduleCamp',
                       'click .draft-campaign':'setDraftCampaign',
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
+                      'click .preview-camp':'previewCampaignstep4',
                       'click .save-step2': function(obj){
                             var button = $.getObj(obj,"a");
                             if(!button.hasClass("saving")){
@@ -3230,6 +3231,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 useImage:function(url){
                     this.$el.find("#image_url").val(url);
+                },
+                previewCampaignstep4:function(){
+                    var active_ws = this.$el.parents(".ws-content");
+                    var camp_name = active_ws.find("#workspace-header").html();                                                
+                        var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgpreview',
+                                  bodyCss:{"min-height":dialog_height+"px"}
+                        });                        
+                        var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+this.camp_id;  
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:this.camp_id});
+                             dialog.getBody().html(tmPr.$el);
+                             tmPr.init();
+                         },this));             
                 }
         });
 });

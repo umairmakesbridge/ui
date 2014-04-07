@@ -2104,5 +2104,15 @@ i.contact-name-prev {
     text-overflow:ellipsis;
     white-space: nowrap;
 }
+.accordion-heading .preview-camp{
+    display: none;
+    margin: 0;
+    position: absolute;
+    top: 9px;
+    background-position: -331px -361px;
+}
+.accordion-heading:hover .preview-camp{
+    display:block;
+}
 /* ENDS */
 
