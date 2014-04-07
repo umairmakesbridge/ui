@@ -12,7 +12,8 @@ function (template,Contacts,viewContact) {
             events: {
                 "keyup .search-control":"search",
                 "click  #clearsearch":"clearSearch",
-                'click .stats-scroll':'scrollToTop'
+                'click .stats-scroll':'scrollToTop',
+                'click #prev-closebtn':'closeContactsListing'
             },
             className:'contacts-div',
             initialize: function () {
@@ -213,6 +214,15 @@ function (template,Contacts,viewContact) {
             },
             scrollToTop:function(){
                 this.$el.find(".stats_listing").animate({scrollTop:0},600);    
+            },
+            closeContactsListing:function(){
+                this.$el.parents('.modal-body').find('#contact-search').val('');
+                this.$el.parents('.modal-body').find('#campaign-temp-contact-dialog').hide();
+                  if(this.parent.subNum === null){
+                      this.$el.parents('.modal-body').find('.annonymous-btn').removeClass('active');
+                      this.$el.parents('.modal-body').find('#camp-prev-select-contact').addClass('active');
+                  }
+                console.log('Hit');
             }
         });
     

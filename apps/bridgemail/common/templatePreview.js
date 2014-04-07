@@ -1,5 +1,5 @@
-define(['text!common/html/templatePreview.html','common/ccontacts',,'jquery.icheck'],
-function (template,contactsView,icheck) {
+define(['text!common/html/templatePreview.html','common/ccontacts','jquery.icheck','jquery.chosen'],
+function (template,contactsView,icheck,chosen) {
      /////////////////////////////////////////////////////////////////////////////////////////////////////////
      //
      // Template Preview
@@ -11,7 +11,8 @@ function (template,contactsView,icheck) {
              * Attach events on elements in view.
             */     
             events: {				
-                'click .sendcamp':'emailbtnToggle',  // Click event of Send email
+                //'click .sendcamp':'emailbtnToggle',  // Click event of Send email
+                //'click .btn-cancel':'emailbtnToggle',
                 'click #send-template-preview':'sendTempPreview',
                 'click #camp-prev-select-contact':'loadContact',
                 'keyup #prev-email':'sendTempKey',
@@ -60,6 +61,9 @@ function (template,contactsView,icheck) {
                     this.$('.show-original').on('ifUnchecked',_.bind(function(event){
                         this.setiFrameSrc();
                     },this));
+                    
+                    /* Chosen Plugin dropdown*/
+                    this.$("#campaign-prev-select").chosen();
                //this.loadTemplates();
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
@@ -76,13 +80,14 @@ function (template,contactsView,icheck) {
                     this.$('#prev-email').parent().find('span').remove();
                 }else{
                     this.$('#prevtem-sendpreview').fadeOut('slow');
+                    this.$('#prev-email').val('');
                 }
             },
             showFrame: function(){ // Show Iframe on default load
                 if(this.options.prevFlag==='C'){
                   this. setiFrameSrc();
                 }else{
-               this.$('#email-template-iframe').attr('src',this.options.frameSrc).css('height',this.options.frameHeight-36);
+               this.$('#email-template-iframe').attr('src',this.options.frameSrc).css('height',this.options.frameHeight-56);
                 }
              },
             setiFrameSrc:function(){ // HTML & Text Tab Click
@@ -102,15 +107,17 @@ function (template,contactsView,icheck) {
                   var frame = this.options.frameSrc+"&html="+this.html+"&original="+this.original;
                   /*Check if Contact is selected or not*/
                    if(this.subNum !== null){
-                      frame+="&subNum="+this.subNum; 
+                      frame+="&snum="+this.subNum; 
                    }
-                  this.$('#email-template-iframe').attr('src',frame).css('height',this.options.frameHeight-161);
+                  this.$('#email-template-iframe').attr('src',frame).css('height',this.options.frameHeight-48);
             },
             loadPrevTemplates: function(){
                 if(this.options.prevFlag==='T'){
                     this.$('.previewbtns').hide();
+                     this.$('#prev-email').focus();
                 }else if(this.options.prevFlag==='C'){
-                    this.$('.previewbtns').show();
+                    this.$('.previewbtns').hide();
+                     this.$('#prev-email').focus();
                 }
             },
             sendTempPreview: function(){ // Template Preview Send
@@ -119,6 +126,7 @@ function (template,contactsView,icheck) {
                 if(validEmail){
                     this.$('#prev-email').parent().removeClass('error');
                     this.$('#prev-email').parent().find('span').remove();
+                    this.$('#temp-camp-previewbar').removeAttr('style');
                     this.dynamicRequest();
                     var post_val = this.$('#sendtemp-preview').serialize();
                     this.$('#send-template-preview').addClass('loading-preview');
@@ -132,12 +140,13 @@ function (template,contactsView,icheck) {
                                         this.$('#send-template-preview').removeClass('loading-preview');
                                         this.$('#prev-email').removeAttr('disabled');
                                         this.$('.contact-name').text('');
-                                        this.$('#prevtem-sendpreview').hide();
-                                        this.$('#contact-name-prev').hide();
-                                        this.subNum = null;
+                                       // this.$('#prevtem-sendpreview').hide();
+                                        //this.$('#contact-name-prev').hide();
+                                        //this.subNum = null;
                                     }
                                 },this));
                 }else{
+                    this.$('#temp-camp-previewbar').css({'padding-bottom':'14px','padding-top': '25px'});
                     this.$('#prev-email').parent().addClass('error');
                     this.$('#prev-email').parent().append('<span class="errortext"><i class="erroricon"></i><em>'+this.options.app.messages[0].CAMP_fromemail_format_error+'</em></span>');
                 }
@@ -145,11 +154,11 @@ function (template,contactsView,icheck) {
             },
             loadContact:function(ev){
                 var btnID = ev.currentTarget.id;
-                if(!$('#'+btnID).hasClass('active')){
+                if(!$('#'+btnID).hasClass('active') && this.subNum===null){
                      this.$('#'+btnID).addClass('active');
-                     this.$('.annonymous-btn').removeClass('active');
-                    var active_ws = $(".modal-body");
-                    active_ws.find('.campaign-clickers').fadeOut('fast');
+                     this.$('.annonymous-btn').removeClass('active');   
+                     var active_ws = $(".modal-body");
+                     active_ws.find('.campaign-clickers').fadeOut('fast');
                 }else{
                     $('#'+btnID).removeClass('active');
                    this.$('.annonymous-btn').addClass('active');
@@ -235,6 +244,7 @@ function (template,contactsView,icheck) {
                 this.$('.annonymous-btn').removeClass('active');
                  active_ws.find('.campaign-clickers').fadeOut('fast');
                 this.$('#contact-name-prev').hide();
+                this.subNum = null;
                 this.setiFrameSrc();
             }
        });

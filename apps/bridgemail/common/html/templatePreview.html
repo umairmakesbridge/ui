@@ -1,17 +1,19 @@
-<div class="previewbar" id='temp-camp-previewbar'>
+<div class="previewbar" id='temp-camp-previewbar' style="">
     <span class="show-original-wrap"><input type="checkbox" class="show-original" /></span><a class="previewbtns show-original-btn active" style="border-radius: 0 2px 2px 0;"><span>Show Original</span></a>
                 <a class="previewbtns annonymous-btn" id="prev-annonymous-btn"><span>Anonymous</span></a>
                 <a class="previewbtns active" id="camp-prev-select-contact"><span>Select Contact</span><i class="icon downarrow"></i></a>
-                <div class="scontct previewbtns"><i class="icon subscribers"></i><span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-top: 7px;display: none;"></a></div>
+                <div class="scontct previewbtns"><i class="icon subscribers"></i><span class='contact-name contact-name-prev' style="float:left;"></span><a class="close-icon contact-remove-prev" id="contact-name-prev" style="float:left;margin-left: 6px;margin-top: 8px;display: none;"></a></div>
                     
                     
-                <a class="sendcamp showtooltip" href="#" data-original-title="Send this preview to your email"><i class="icon"></i></a>
-                <form id="sendtemp-preview" onSubmit="return false;"> 
-                <div class="sendpreview" id="prevtem-sendpreview" style="display:none">
-                	<div class="row "><label>Email</label>
+                <!--<a class="sendcamp showtooltip" href="#" data-original-title="Send this preview to your email"><i class="icon"></i></a>-->
+                <form id="sendtemp-preview" onSubmit="return false;" style="margin: 0 27px 20px;"> 
+                <div class="" id="prevtem-sendpreview" style="">
+                	<div class="row "style="margin-top: -2px;float: left;">
                     <div class="input-append ">
-                    <div class="inputcont " style="text-align:right;"><input type="text" placeholder="Enter comma separated email addresses." id="prev-email" name="toEmails"></div></div></div>
-                    <div class="row btnrow" ><a class="btn-blue right" id="send-template-preview"><span>Send Preview</span><i class="icon sendemail"></i></a></div>
+                    <div class="inputcont " style="text-align:right;"><input type="text" style="width: 247px;" placeholder="Enter comma separated email addresses." id="prev-email" name="toEmails"></div></div></div>
+                    <div class="row btnrow" style="float:left;margin: 0 4px;"><a class="btn-green sendcamp" id="send-template-preview"><span>Send Preview</span><i class="icon sendemail"></i></a>
+                        <!--<a class="btn-gray btn-cancel right"><span>Cancel</span><i class="icon cross"></i></a>-->
+                    </div>
                 </div> <!--  selectcontact  -->
                 </form>
 </div>

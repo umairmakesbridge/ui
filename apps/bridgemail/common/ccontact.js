@@ -58,9 +58,10 @@ function (template) {
                 this.parent.parent.subNum = this.model.get('subNum');
                 this.$el.parents('#tblcontacts').find('.checkedadded-preview').hide();
                 this.$el.parents('#tblcontacts').find('.use-preview-btn').show();
-               
+                this.parent.$el.parent().hide();
+                
                 this.$('.use-preview-btn').hide();
-                this.$('.checkedadded-preview').show();
+                //this.$('.checkedadded-preview').show();
                 this.parent.parent.setiFrameSrc();
             },
             removeContact:function(){
@@ -68,6 +69,7 @@ function (template) {
                 this.$el.parents('.modal-body').find('#contact-name-prev').hide();
                 this.$('.use-preview-btn').show();
                 this.$('.checkedadded-preview').hide();
+                this.parent.parent.subNum = null;
                 this.parent.parent.setiFrameSrc();
             }
             
