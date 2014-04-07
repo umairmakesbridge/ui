@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async'
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -109,6 +109,7 @@ define([
                             app.mainContainer.$(".slideoverlay").fadeOut("slow");
                             app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500 );
                         }
+                        
                     });
                     
                    var self = this;                                                                         
@@ -175,7 +176,7 @@ define([
                 this.set("wp_height",(body_size-100));				
                
                 //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
-                this.fixEmailFrom();
+                //this.fixCampaignInputStepOne();
              },
              fixEmailFrom:function(){
                 
@@ -217,10 +218,11 @@ define([
                     
                     var message_box = $('<div class="messagebox messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
                     $(container).append(message_box);
-                    message_box.find(".closebtn").click(function(){
+                    message_box.find(".closebtn").click(function(e){
                       message_box.fadeOut("fast",function(){
                            $(this).remove();
                        }) 
+                       e.stopPropagation()
                     });
                  }
              },

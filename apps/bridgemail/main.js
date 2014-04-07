@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:300,
-       urlArgs: "bust=1.11" ,
+       urlArgs: "bust=1.14" ,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
@@ -31,7 +31,8 @@
            'bootstrap': '../shared/libs/bootstrap.min',
            '_date': '../shared/libs/date',
            'daterangepicker': '../shared/libs/daterangepicker.jQuery',
-           'bms-dragfile': '../shared/dragfile'
+           'bms-dragfile': '../shared/dragfile',
+           'bms-mergefields':'../shared/mergefields'
        },
         shim: {
                 backbone: {
@@ -86,6 +87,9 @@
                    deps: ['jquery']
                },
                'bms-addbox':{
+                   deps: ['jquery']
+               },
+               'bms-mergefields':{
                    deps: ['jquery']
                }
                ,

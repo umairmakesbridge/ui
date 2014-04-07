@@ -339,7 +339,7 @@ function (template,highlight) {
                                 templates_html +='<div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>';
                             }                                
                             if(val[0].isReturnPath==='Y'){
-                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Templates"></div>';
+                                templates_html +='<div class="rpath showtooltip" title="Click To View All Return Path Tested Templates"></div>';
                             }       
                             templates_html +='<div class="img"><div><a class="selectbtn select-template main-action '+camp_obj.selectTextClass+'" id="temp_'+val[0]["templateNumber.encode"]+'"><span>'+camp_obj.selectText+'</span></a>';
                             
@@ -505,14 +505,20 @@ function (template,highlight) {
                         var bms_token =this.app.get('bms_token');                              
                         var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-162;
+                        var srcUrl = "https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+target.attr("id").split("_")[1];
                         var dialog = this.app.showDialog({title:'Template Preview',
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:false,
                                     headerIcon : 'dlgpreview',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
-                         var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+target.attr("id").split("_")[1]+"\"></iframe>");                            
-                         dialog.getBody().html(preview_iframe);                              
+                         require(["common/templatePreview"],_.bind(function(templatePreview){
+                           var tmPr =  new templatePreview({frameSrc:srcUrl,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:target.attr("id").split("_")[1]});
+                            dialog.getBody().html(tmPr.$el);
+                            tmPr.init();
+                          },this));
+                         //var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\"https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+target.attr("id").split("_")[1]+"\"></iframe>");                            
+                         //dialog.getBody().html(preview_iframe);                              
 
                 },
                 showTagsTemplate:function(tags){

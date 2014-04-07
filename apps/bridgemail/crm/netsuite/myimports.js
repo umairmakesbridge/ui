@@ -4,7 +4,7 @@ function (template,MyImports,moment) {
         return Backbone.View.extend({                                
                 className:'clearfix',
                 events: {
-
+                    'click #addnew_import':'newImport'
                  },
                 initialize: function () {
                     this.template = _.template(template);				
@@ -29,6 +29,7 @@ function (template,MyImports,moment) {
                             showicon: 'yes',
                             iconsource: 'campaigns'
                      });
+                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                     
                      this.getMyImports();
                     
                 },
@@ -40,7 +41,8 @@ function (template,MyImports,moment) {
                             var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
                            _.each(collection.models,function(val,key){
                               myimports_html += '<tr id="row_'+val.get("tId")+'">';                                
-                                myimports_html += '<td><div class="name-type"><h3><a id="editname_'+val.get("tId")+'" class="get-import">'+val.get("listName")+'</a>'+this.setStatus(val.get("status"))+'</h3></div></td>';
+                                var import_name = val.get("name")?val.get("name"):val.get("listName");
+                                myimports_html += '<td><div class="name-type"><h3><a id="editname_'+val.get("tId")+'" class="get-import">'+import_name+'</a>'+this.setStatus(val.get("status"))+'</h3></div></td>';
                                 myimports_html += '<td>';
                                 if(val.get("frequency")!==''){
                                     myimports_html += '<img src="img/recurring2.gif"  class="recurring2img" alt=""/>';                                
@@ -137,17 +139,15 @@ function (template,MyImports,moment) {
                            }
                    },this));
                 },
-                getImport:function(e){
-                    this.parent.$("#choose_soruce .netsuite-new-import").click();
-                    this.parent.$("#choose_soruce li.netsuite-new-import").removeClass("selected");
+                getImport:function(e){                   
                     var tid = $.getObj(e,"a").attr("id").split("_")[1];
                     this.app.showLoading("Loading Import...",this.parent.$el);
                     var URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=import&tId="+tid;
                     jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
-                         this.app.showLoading(false,this.parent.$el);
-                        var _json = jQuery.parseJSON(xhr.responseText);
-                        this.app.showLoading(false,this.parent.newImportArea);                                                
-                        this.loadImport(_json)
+                        this.app.showLoading(false,this.parent.$el);
+                        var _json = jQuery.parseJSON(xhr.responseText);                        
+                        this.parent.updateImport(false,_json);
+                        //this.loadImport(_json)                        
                         
                     },this));
                 },
@@ -158,6 +158,39 @@ function (template,MyImports,moment) {
                      else{
                          setTimeout(_.bind(this.loadImport,this,data),200);
                      }
+                },
+                newImport:function(){
+                    var camp_obj = this;
+                    var dialog_width = 650;
+                    var dialog_height = 100;
+                    var dialog = camp_obj.app.showDialog({title:'New Import' ,
+                            css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
+                            headerEditable:false,
+                            headerIcon : 'import',
+                            bodyCss:{"min-height":dialog_height+"px"},
+                            buttons: {saveBtn:{text:'Create Import',btnicon:'save'} }
+                    });	
+                    var new_import ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-import-container">';
+                        new_import +='<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
+                        new_import +='<div class="row campname-container">';
+                        new_import +='<label style="width:10%;">Name:</label>';
+                        new_import +='<div class="inputcont" style="text-align:right;">';
+                        new_import +='<input type="text" name="_import" id="import_name" placeholder="Enter netsuite import name" style="width:83%;" />';
+                        new_import +='</div></div></div></div>';
+                        new_import = $(new_import);                                
+                        dialog.getBody().html(new_import);
+                        new_import.find("#import_name").focus();                        
+                        new_import.find("#import_name").keydown(_.bind(function(e){
+                            if(e.keyCode==13){
+                                this.editImport(dialog);
+                            }
+                        },this))
+                        dialog.saveCallBack(_.bind(this.editImport,this,dialog));
+                },
+                editImport:function(dialog){
+                    dialog.hide();
+                    var importName = dialog.$("#import_name").val();
+                    this.parent.updateImport(importName);
                 }
         });
 });

@@ -114,10 +114,10 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         }
                         _this.$("._visits").html(_json.visits);
                         _this.$("._actions").html(_json.actions);
-                        if (_json.lastSeanDate) {
+                        if (_json.lastSeenDate) {
                             var date_today = new Date();
                             var date1 = moment(date_today.getFullYear() + '-' + (date_today.getMonth() + 1) + '-' + date_today.getDate() + " " + date_today.getHours() + ":" + date_today.getMinutes(), 'YYYY-M-D H:m');
-                            var date2 = moment(_this.app.decodeHTML(_json.lastSeanDate), 'YYYY-M-D H:m');
+                            var date2 = moment(_this.app.decodeHTML(_json.lastSeenDate), 'YYYY-M-D H:m');
                             var diffMin = date1.diff(date2, 'minutes');
                             var diffHour = date1.diff(date2, 'hours');
                             var diffDays = date1.diff(date2, 'days');
@@ -213,12 +213,16 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     changeFieldsBtn.click(_.bind(this.editProfile, this));
                     _this.$(".topinfo").append(changeFieldsBtn);
                     /*Contact Name on Header*/
+                    var workspaceTitle = _this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"];
                     if (_this.sub_fields["firstName"] !== "" || _this.sub_fields["lastName"] !== "")
-                    {                        
-                        _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"]);
+                    {                       
+                         workspaceTitle = _this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"];                        
                     } else {                     
-                       _this.$el.parents(".ws-content").find("#workspace-header").html(_this.sub_fields["email"]);
+                         workspaceTitle = _this.sub_fields["email"];                        
                     }
+                    _this.$el.parents(".ws-content").find("#workspace-header").html(workspaceTitle);
+                    var workspace_id = _this.$el.parents(".ws-content").attr("id");
+                    _this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:workspaceTitle,subheading:"Contact Profile"});
 
                     $.each(_this.basicFields, function(key, val) {
                         if (key !== "telephone") {

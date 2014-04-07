@@ -192,14 +192,19 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
 						  headerEditable:false,
 						  headerIcon : 'dlgpreview',
-						  bodyCss:{"min-height":dialog_height+"px"},
-                                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+						  bodyCss:{"min-height":dialog_height+"px"}
+                                                  //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
 				});	
 				camp_obj.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
-                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id+"&html=Y&original=N";                                
-                                var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                                                            
-				dialog.getBody().html(preview_iframe);
-                                dialog.saveCallBack(_.bind(this.sendTextPreview,this,camp_id));
+                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                                require(["common/templatePreview"],_.bind(function(templatePreview){
+                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id});
+                                 dialog.getBody().html(tmPr.$el);
+                                 tmPr.init();
+                               },this));
+                                //var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                                                            
+				//dialog.getBody().html(preview_iframe);
+                                //dialog.saveCallBack(_.bind(this.sendTextPreview,this,camp_id));
 											
 			},
 			sendTextPreview:function(camp_id){
@@ -467,8 +472,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             if(!this.app.getAppData("campaigns")){
                                     this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));                                    
                                     this.app.getData({
-                                            "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0", // For Online Repo
-                                            //"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=131&bucket=20", // for Abdullah local
+                                           "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0", // For Online Repo
+                                             //"URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=131&bucket=20", // for Abdullah local
                                             "key":"campaigns",
                                             "callback":_.bind(this.createListTable,this)
                                     });

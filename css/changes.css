@@ -1690,9 +1690,87 @@ div.shortcuts .ddicon{
 .filter-buttons a:first-child{
     margin-right: 5px;
 }
+.workspace ul.tabs-menu li.hover {
+    background: none repeat scroll 0 0 #FFFFFF;    
+    border-radius: 2px;
+    -webkit-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
+     -moz-box-shadow:  0 1px 15px rgba(102, 147, 170, 0.5);
+          box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
+    width: 330px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius:2px;
+    border-radius: 2px;
+}
+.workspace ul.tabs-menu li.hover .detail{
+    display: inline-block;
+    float: right;
+    height: 54px;
+    margin-top: -55px;
+    width: 265px;
+}
+.workspace ul.tabs-menu li .detail{
+    display: none;
+    position: relative;
+    
+}
+.workspace ul.tabs-menu li .detail .heading{
+    font-size:16px;
+    font-weight:600;
+    color:#02AFEF;
+    height: 20px;
+    overflow: hidden;
+    width:235px;
+    cursor: pointer;
+    text-overflow:ellipsis;
+    line-height: 20px;
+    white-space: nowrap;
+}
+.workspace ul.tabs-menu li .detail .subheading{
+    font-size:12px;    
+    color:#9BABB4;
+}
+.workspace ul.tabs-menu li i.closehover{
+    background: url("../img/closebtn-blue.png") no-repeat scroll center center;
+    display: block;
+    height: 22px;
+    opacity: 1;
+    position: absolute;
+    right: 6px;
+    top: 0px;
+    transition: opacity 0.3s ease-out 0s;
+    width: 22px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius:2px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.workspace ul.tabs-menu li i.closehover:hover{
+    opacity: 0.7;
+}
+
+.workspace ul.tabs-menu li a {    
+    width: 60px;
+}
+.workspace ul.tabs-menu li a .icon{
+    margin-top: 10px;
+}
+.workspace .ws-tabs{
+    z-index: 10003;
+}
+.dialog-wizard .btns{
+    float:right;
+}
+.dialog-wizard .btns a {
+    float: left;
+    margin-left: 10px;
+}
+.dialog-wizard .bottom-btn {
+    margin-top: 10px;
+}
 /*----------
     Abdullah Changes 
  -----------*/	
+
 .bms-input-tags {
     padding-right: 67px !important;
     width: 244px;
@@ -1715,11 +1793,15 @@ div.shortcuts .ddicon{
     max-width:63.5% !important;
 }
 .directarrow {
-    left:34%;
+     left:34%;
 }
 .addrow input[type="text"] {
     width: 60.5%;
     padding-left:1%;
+}
+#fromemail_default_input{
+  width: 55.4%;
+    
 }
 .campaign-fields-right-wrapper{
     float: right;
@@ -1728,6 +1810,268 @@ div.shortcuts .ddicon{
 div.rpath {
     cursor: pointer;
 }
+.score-buttons{
+    background-color: #fff;
+    padding-right: 0px;
+}
+.score-buttons ul li{
+    width: 31.7%;
+    padding: 0 0 0 1.5%;
+}
+.recipient-details{
+    padding-left:3%;
+    clear: both;
+}
+.recipient-details label {
+    color: #556670;
+    font-size: 13px;
+    font-weight: normal;
+    text-align: left;
+    width:auto;
+    margin-right:5px;
+}
+a:focus, a:active, 
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+select::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: 0;
+    outline : 0;
+    outline-style:none;
+}
+
+#merge-field-plug-wrap{
+    width:386px;
+}
+/*Template Preview Css*/
+ .previewbar {
+    background: none repeat scroll 0 0 #EAF4F9;
+    height: 30px;
+    margin: -10px;
+    padding: 10px;
+    position: relative;
+}
+.previewbar > a {
+    background: none repeat scroll 0 0 #26BCF5;
+    border: 0 none;
+    border-radius: 2px;
+    color: #FFFFFF;
+    display: inline-block;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+    margin: 0 5px 0 0;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+}
+
+.previewbar > a span {
+    color: #FFFFFF;
+    display: inline-block;
+    float: left;
+    padding: 0 15px;
+}
+.previewbar i.downarrow {
+    background: url("../img/arrow-down.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+}
+.previewbar > a.active {
+    background: none repeat scroll 0 0 #91ABBC;
+}
+.previewbar .scontct {
+    color: #6494AF;
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    line-height: 30px;
+}
+.previewbar .scontct i {
+    float: left;
+    height: 30px;
+    margin: 0 5px !important;
+    width: 30px;
+}
+.previewbar .sendcamp {
+    background: none repeat scroll 0 0 #94CF1E;
+    float: right;
+    margin: 0;
+}
+.previewbar .sendcamp i {
+    background: url("../img/campaignsent.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    padding: 0 5px;
+}
+.sendpreview:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: -12px;
+}
+.sendpreview {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    height: 100px;
+    padding: 5px;
+    position: absolute;
+    right: 10px;
+    top: 50px;
+    width: 360px;
+    z-index: 111;
+}
+.sendpreview .row {
+    margin-left: 0;
+    margin-top: 10px;
+}
+.sendpreview .input-append {
+    margin-bottom: 0;
+}
+.sendpreview .row input {
+    width: 242px;
+}
+.sendpreview .row .btn-blue {
+    margin-right: 5px;
+}
+.successfull-preview-sent{
+    color: #49c62b;
+    float: left;
+    margin: 7px;
+}
+.selection-boxes {
+    clear: both;
+    margin: -10px auto 10px;
+    padding: 0;
+    position: relative;
+    width: 560px;
+}
+#choose_soruce {
+    overflow: hidden;
+}
+.selection-boxes ul {
+    float: none;
+    margin: 0 auto;
+}
+.selection-boxes li {
+    background: none repeat scroll 0 0 #A9C2D5;
+    border-radius: 2px;
+    cursor: pointer;
+    float: left;
+    height: 90px;
+    margin: 15px 5px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 130px;
+}
+.icon.sendemail {
+    background: url("../img/create_campaign.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.loading-preview {
+    background: url("../img/greenloader.gif") no-repeat scroll 24px center #01AEEE;
+    font-size: 0;
+    line-height: 35px;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 100px;
+}
+.checkedadded-preview{
+    background: none repeat scroll 0 0 #97D61D;
+    border-radius: 0 2px 2px 0;
+    display: block;
+    height: 67px;
+    margin: -34px -14px 0 0px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+}
+ 
+.checkedadded-preview > .icon.check{
+    padding-top: 30px;
+}
+.checkedadded-preview:hover{background:#F71A1A;}
+ .checkedadded-preview:hover  .icon.check {
+    background: url("../img/cross2.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.dddiv-prevCam {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    height: 242px;
+    left: 240px;
+    padding: 5px;
+    position: absolute;
+    top: 50px;
+    width: 360px;
+    z-index: 111;
+}
+.dddiv-prevCam:before {
+      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    left: 129px;
+    position: absolute;
+    top: -12px;
+}
+.dddiv-prevCam .bmsgrid .tagscont {
+    width: 300px;
+}
+.show-original-wrap > .checkpanelinput{
+    min-height: 28px;
+    min-width: 36px;
+    border: 1px solid #26BCF5;
+}
+.show-original-wrap > .checkpanelinput.checked{
+    background-color: #01AEEE;
+}
+
+.ScrollToTop {
+    background: url("../img/scrolltop.png") no-repeat scroll center center #33404B;
+    border: 0 none;
+    border-radius: 2px;
+    bottom: -3px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    display: block;
+    height: 50px;
+    opacity: 0.7;
+    padding: 0;
+    position: fixed;
+    right: 14px;
+    transition: opacity 0.3s ease-out 0s;
+    width: 50px;
+    z-index: 99999;
+}
+i.contact-name-prev {
+    background: url("../img/closebtn-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    border-radius: 2px;
+    cursor: pointer;
+    display: block;
+    height: 22px;
+    opacity: 1;
+    position: absolute;
+    right: 6px;
+    top: 0;
+    transition: opacity 0.3s ease-out 0s;
+    width: 22px;
+}
+.merge-fields-wrapper{
+     float: right;
+    margin-bottom: 4px;
+    margin-right: 6px;
+}
 @media (min-width: 1920px) {
     .adv_dd {
     width: 80%;
@@ -1735,6 +2079,18 @@ div.rpath {
 }
 @media (max-width: 1199px) { 
    .addrow input[type="text"] { width: 59.3%; }
+}
+#campaign-temp-contact-dialog .stats_listing .bmsgrid div.bDiv tr .action{
+    opacity:0;
+}
+#campaign-temp-contact-dialog .stats_listing .bmsgrid div.bDiv tr:hover .action{
+    opacity:1;
+}
+.temp-preview{
+    width:217px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 }
 /* ENDS */
 

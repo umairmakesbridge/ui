@@ -12,6 +12,7 @@ function (Wizard,template,moment) {
                     this.improtLoaded = false;
                     this.tId = null;       
                     this.editImport = null;
+                    this.newList = null;
                     this.isFilterChange = false;
                     this.render();
                 },
@@ -19,6 +20,7 @@ function (Wizard,template,moment) {
                 render: function () {
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
+                    this.dialog = this.options.dialog;
                     var wizard_options = {steps:3,active_step:1};
                     this.mk_wizard = new Wizard(wizard_options);  
                     this.$el.append(this.mk_wizard.$el);                                       
@@ -39,7 +41,14 @@ function (Wizard,template,moment) {
                             showicon: 'yes',
                             iconsource: 'list'
                      });
-                    this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)}); 
+                    this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
+                    this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    this.getLists();
+                    this.setHeaderDialog();
+                    this.showHideButton(false);
+                                      
+                },                
+                getLists:function(){
                     if(!this.app.getAppData("lists")){
                         this.app.showLoading("Loading Lists...",this.$(".bms-lists"));                                    
                         this.app.getData({
@@ -51,8 +60,44 @@ function (Wizard,template,moment) {
                     else{
                         this.createListTable();
                     }
-                    this.showHideButton(false);
-                                      
+                },
+                setHeaderDialog:function(){
+                   if(!this.dialog) return;        
+                   this.dialog.$(".modal-footer .btn-save").hide();
+                   this.head_action_bar = this.dialog.$(".modal-header .edited  h2");                   
+                   this.head_action_bar.css("margin-top","10px");
+                   this.head_action_bar.find(".edit,.copy,.delete").hide();
+                   this.head_action_bar.find(".dialog-title").attr("title","Click to rename").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                   this.head_action_bar.find(".delete").attr("title","Delete import").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                   
+                   this.dialog.$("#dialog-title span").click(_.bind(function(obj){
+                     this.showHideTitle(true);
+                   },this));
+                   
+                   this.dialog.$(".cancelbtn").click(_.bind(function(){                        
+                       this.showHideTitle();                        
+                   },this));
+                   this.dialog.$(".savebtn").click(_.bind(function(obj){
+                     this.saveImportName(obj)
+                   },this));
+                },
+                showHideTitle:function(show,isNew){
+                    if(show){
+                        this.dialog.$("#dialog-title").hide();
+                        this.dialog.$("#dialog-title-input").show();                    
+                        this.dialog.$(".tagscont").hide();                   
+                        this.dialog.$("#dialog-title-input input").val(this.app.decodeHTML(this.dialog.$("#dialog-title span").html())).focus();                    
+                    }
+                    else{
+                        this.dialog.$("#dialog-title").show();
+                        this.dialog.$("#dialog-title-input").hide();   
+                        this.dialog.$(".tagscont").show();
+                    }
+                },
+                saveImportName:function(obj){
+                    var name_input =  $(obj.target).parents(".edited").find("input");                       
+                    this.dialog.$("#dialog-title span").html(this.app.encodeHTML(name_input.val()));                                                                                                 
+                    this.showHideTitle();
                 },
                 initStepCall:function(stepNo){                    
                     switch (stepNo){                                                            
@@ -67,6 +112,7 @@ function (Wizard,template,moment) {
                     }
                 },
                 initStep2:function(){
+                    this.dialog.$(".modal-footer .btn-save").hide();
                     if( this.improtLoaded==false){
                          this.improtLoaded = true; 
                         this.app.showLoading("Loading Import...",this.$(".step2"));
@@ -82,6 +128,7 @@ function (Wizard,template,moment) {
                 },
                 initStep3:function(){
                     var _this = this;
+                    this.dialog.$(".modal-footer .btn-save").show();
                     this.$(".step3 .summary-accordion").accordion({ active: 1, collapsible: true});   
                      this.$('.step3 input.radiopanel').iCheck({
                         radioClass: 'radiopanelinput',
@@ -215,6 +262,12 @@ function (Wizard,template,moment) {
                     });				
                     this.$(".bms-lists .select-list").click(_.bind(this.markSelectList,this));
                     this.loadData(this.editImport);
+                    if(this.newList){
+                        this.$(".bms-lists tr").removeClass("selected");
+                        this.$(".bms-lists tr[checksum='"+this.newList+"']").addClass("selected");
+                        this.$(".bms-lists tr[checksum='"+this.newList+"']").scrollintoview(); 
+                        this.newList = null;
+                    }
                 },
                 markSelectList:function(e){
                     var target = $.getObj(e,"a");
@@ -224,8 +277,42 @@ function (Wizard,template,moment) {
                         parent_row.addClass("selected");
                     }
                 },
-                addlist:function(){
-                    
+                checkListName:function(listName){
+                    var camp_list_json = this.app.getAppData("lists");
+                    var isListExits = false;
+                    this.app.showLoading(false,this.$el);                                                        			                    
+                    $.each(camp_list_json.lists[0], _.bind(function(index, val) { 
+                        if(val[0].name==listName){
+                            isListExits = true;
+                            return false;
+                        }
+                    },this));
+                    return isListExits;
+                },
+                addlist:function(listName,ele){                    
+                    if(this.checkListName(listName)){
+                        this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
+                        return false;
+                    }
+                    var add_box = this.$(".add-list").data("addbox");
+                    add_box.dialog.find(".btn-add").addClass("saving");
+                    var URL = "/pms/io/list/saveListData/";
+                    var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"create",listName:listName};
+                    $.post(URL,post_data)
+                    .done(_.bind(function(data) {                          
+                        add_box.dialog.find(".btn-add").removeClass("saving");
+                        add_box.dialog.find(".input-field").val("");
+                        add_box.hideBox();
+                        var _json = jQuery.parseJSON(data); 
+                        if(_json[0]!=="err"){
+                            this.app.removeCache("lists");
+                            this.getLists();
+                            this.newList = _json[2];
+                        }
+                        else{
+                            this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                        }
+                    },this));
                 },
                 startImport:function(){                    
                     var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');
@@ -267,6 +354,7 @@ function (Wizard,template,moment) {
                     if(this.tId){
                         post_data['tId'] = this.tId;
                     }
+                    post_data['name'] = $.trim(this.dialog.$("#dialog-title span").html());
                     $.post(URL,post_data)
                     .done(_.bind(function(data) {  
                         this.app.showLoading(false,this.$el);     
@@ -281,7 +369,10 @@ function (Wizard,template,moment) {
                                     this.parent.updateCount(1);
                                 }
                                 this.tId = _json.tId;
-                                this.parent.$(".netsuite-imports").click();                               
+                                if(this.dialog){
+                                     this.dialog.hide();
+                                }
+                                //this.parent.$(".netsuite-imports").click();                               
                                 this.parent.myimports_page.getMyImports();
                             }
                         }
@@ -362,6 +453,15 @@ function (Wizard,template,moment) {
                         this.$(".bms-lists tr").removeClass("selected");
                         this.$(".bms-lists tr[checksum='"+data.checkSum+"']").addClass("selected");
                         this.$(".bms-lists tr[checksum='"+data.checkSum+"']").scrollintoview(); 
+                        var list_ = this.$(".bms-lists tr[checksum='"+data.checkSum+"']").find(".name-type h3");
+                        if(list_.length){
+                            list_ = this.app.encodeHTML(list_.html());
+                        }
+                        else{
+                            list_ = "Import";
+                        }
+                        var import_name = data.name?data.name:list_;
+                        this.dialog.$("#dialog-title span").html(import_name);
                         this.improtLoaded = false;
                         this.showHideButton(true);
                         if(this.Import_page){

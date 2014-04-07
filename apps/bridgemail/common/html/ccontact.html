@@ -1,0 +1,29 @@
+<td width="100%">
+    <div>
+            <div class="name-type">
+                <h3><a class='view-profile showtooltip temp-preview' data-original-title="Click to view profile"><%=this.getFullName()%></a> 
+                </h3>
+                
+                <div class="tags tagscont">
+                    <ul>
+                            <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                            <li><a  class="tag"><%- t %></a> </li>
+                            <% })%> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+</td>
+<td width="90px">
+    <div>
+                                  <a class="checkedadded-preview check-box" style="display: none;"><i class="icon check"></i></a>
+                                  <div class="action use-preview-btn"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div>
+     </div>
+</td>
+
+       
+                  	
+                          
+        
+        
+  

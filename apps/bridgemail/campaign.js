@@ -39,7 +39,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .editorbtnshow':function(){
                           this.$(".textdiv").hide();
                           this.$(".editor_box").show();                          
-                      }
+                      },
+                      'click #btn_image_url':"TryDialog"
                     },                    
 
                 initialize: function () {
@@ -327,7 +328,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
-
+                        //Setting tab details
+                        var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
+                        camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
+                        
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
 			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
                         if(camp_json.fromEmail != '')
@@ -511,13 +515,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
                                   headerIcon : 'dlgpreview',
-                                  bodyCss:{"min-height":dialog_height+"px"},
-                                  buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                        });
-                        var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id+"&html=Y&original=N";                                                            
-                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-                        dialog.getBody().html(preview_iframe);               
-                        dialog.saveCallBack(_.bind(camp_obj.sendTextPreview,camp_obj,camp_obj.camp_id));                        
+                                  bodyCss:{"min-height":dialog_height+"px"}
+                        });                        
+                        var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id;  
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:camp_obj.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_obj.camp_id});
+                             dialog.getBody().html(tmPr.$el);
+                             tmPr.init();
+                         },this));             
                         e.stopPropagation();     
                   })
                   var camp_obj = this;
@@ -756,7 +761,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.states.step4.init = true;
                     }
                     this.setScheduleArea();
-                    this.$("#campaign_preview_subject").html(this.$("#campaign_subject").val());
+                    this.$("#campaign_preview_subject").html(this.app.encodeHTML(this.$("#campaign_subject").val()));
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email_input").val()));
                     if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
                     {
@@ -3202,6 +3207,31 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{
                         this.scheduledCampaign('D','Changing Campaign to Draft...');
                     }
-               }
+               },
+               TryDialog:function(){
+                    var that = this;
+                    var app = this.options.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.options.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });
+                         //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
+                     this.options.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                         dialog.getBody().html(mPage.$el);
+                        // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
+                       // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
+                         //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
+                     });
+                     
+                },
+                useImage:function(url){
+                    this.$el.find("#image_url").val(url);
+                }
         });
 });

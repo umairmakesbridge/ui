@@ -20,6 +20,8 @@ function ($,Backbone, _,app,Wizard, template) {
                         }
                         else{
                            $("#wstabs li:first").click();
+                           //$("#"+app.mainContainer.lastActiveWorkSpace).click();
+                           
                         }
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        

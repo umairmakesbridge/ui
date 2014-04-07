@@ -223,7 +223,30 @@ define(['text!crm/salesforce/html/salesforce.html'],
             },
             hidePeeringDialog:function(){
                 this.current_ws.find(".camp_header .cstats").hide();
-            }
+            },
+            updateImport:function(importName,json){                                       
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialogTitle = importName?importName:"Loading...";
+                    var dialog = this.app.showDialog({title:dialogTitle,
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                              headerEditable:true,
+                              headerIcon : 'import',
+                              bodyCss:{"min-height":dialog_height+"px"},
+                              buttons: {saveBtn:{text:'Save'} }                                                                           
+                        });                                           
+                    this.app.showLoading("Loading...",dialog.getBody());                                  
+                    require(["crm/salesforce/newimport"],_.bind(function(page){                                     
+                           this.newImport_page = new page({
+                                page:this,
+                                dialog:dialog
+                           })                        
+                           dialog.getBody().html(this.newImport_page.$el);                           
+                           dialog.getBody().addClass("dialog-wizard")
+                           dialog.saveCallBack(_.bind(this.newImport_page.startImport,this.newImport_page));
+                           this.myimports_page.loadImport(json);
+                    },this));                   
+                }
             
         });
     });
