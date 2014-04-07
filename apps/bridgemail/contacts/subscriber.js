@@ -114,10 +114,10 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         }
                         _this.$("._visits").html(_json.visits);
                         _this.$("._actions").html(_json.actions);
-                        if (_json.lastSeanDate) {
+                        if (_json.lastSeenDate) {
                             var date_today = new Date();
                             var date1 = moment(date_today.getFullYear() + '-' + (date_today.getMonth() + 1) + '-' + date_today.getDate() + " " + date_today.getHours() + ":" + date_today.getMinutes(), 'YYYY-M-D H:m');
-                            var date2 = moment(_this.app.decodeHTML(_json.lastSeanDate), 'YYYY-M-D H:m');
+                            var date2 = moment(_this.app.decodeHTML(_json.lastSeenDate), 'YYYY-M-D H:m');
                             var diffMin = date1.diff(date2, 'minutes');
                             var diffHour = date1.diff(date2, 'hours');
                             var diffDays = date1.diff(date2, 'days');
