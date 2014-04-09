@@ -65,6 +65,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
 				this.render();
                                 this.active_step = this.options.active_step;
                                 this.total_steps = this.options.steps;
+                                this.cssClass = this.options.cssClass;
 			},
 
 			render: function () {
@@ -122,6 +123,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             //Hides the back button on first step
                             this.$el.find("a.backbtn").hide();
                             this.$el.addClass("total-steps-"+this.total_steps);
+                            if(this.cssClass){
+                                this.$(".progressbar").addClass(this.cssClass)
+                            }
                             
                             
                         },

@@ -1770,6 +1770,14 @@ div.shortcuts .ddicon{
 .subscriber-detail .btnslist i.workflow{
      background: url("../img/workflow.png") no-repeat scroll center center;
 }
+ol.campaign_progress {    margin-top: 15px;}
+ol.campaign_progress li:before {background-position:center center !important; background-repeat:no-repeat !important;}
+ol.campaign_progress li.s1:before { content:""; background-image:url("../img/icon-s1.png");  }
+ol.campaign_progress li.s2:before {content:""; background-image: url("../img/icon-s2.png");}
+ol.campaign_progress li.s3:before {content:""; background-image: url("../img/icon-s3.png"); }
+ol.campaign_progress li.s4:before {content:""; background-image: url("../img/icon-s4.png");background-position:2.7px 2.7px !important; }
+.campaign-content ol.campaign_progress + .btns {    margin-top: -60px ;}
+
 /*----------
     Abdullah Changes 
  -----------*/	
