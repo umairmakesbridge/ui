@@ -7,7 +7,8 @@ define(['text!crm/html/crm.html','app'],
             */  
             events: {
                 'click .salesforce-tile': 'loadSalesForceCRM',
-                'click .netsuite-tile': 'loadNetSuiteCRM'
+                'click .netsuite-tile': 'loadNetSuiteCRM',
+                'click .highrise-tile':'loadHighRiseCRM'
                     
             },	
             /**
@@ -19,6 +20,7 @@ define(['text!crm/html/crm.html','app'],
                 this.render();              
                 this.checkSalesForceStatus();
                 this.checkNetSuiteStatus();
+                this.checkHighriseStatus();
             },
             /**
              * Render view .
@@ -54,6 +56,19 @@ define(['text!crm/html/crm.html','app'],
                     url : 'crm/netsuite/netsuite',
                     workspace_id: 'crm_netsuite',
                     tab_icon:'netsuite',
+                    sub_title:'Connection With Apps'
+                });
+            },
+            loadHighRiseCRM:function(e){
+                var tile = $.getObj(e,"li");
+                if(tile.find(".loading").length>0){
+                    return false;
+                }
+                app.mainContainer.addWorkSpace({ 
+                    type:'',
+                    title:'Highrise',
+                    url:'crm/highrise/highrise',
+                    tab_icon:'highrise',
                     sub_title:'Connection With Apps'
                 });
             },
@@ -115,6 +130,36 @@ define(['text!crm/html/crm.html','app'],
                 else{
                      this.app.showLoading(false,this.$(".netsuite-tile"));                            
                      this.$(".netsuite-tile").addClass("complete");
+                }
+                
+            },
+            checkHighriseStatus: function(){                                
+                var highrise_setting = this.app.getAppData("highrise");
+                this.app.showLoading("...",this.$(".highrise-tile"));
+                if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
+                {                        
+                    this.app.getData({
+                        "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"highrise",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$(".highrise-tile"));
+                            var ns = this.app.getAppData("highrise");
+                            if(ns[0]=="err" || ns.isHighriseUser=="N"){
+                                this.$(".highrise-tile").addClass("incomplete");
+                            }
+                            else{
+                                this.$(".highrise-tile").addClass("complete");
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$(".highrise-tile"));                            
+                            this.$(".highrise-tile").addClass("incomplete");                            
+                        },this)
+                    });
+                }
+                else{
+                     this.app.showLoading(false,this.$(".highrise-tile"));                            
+                     this.$(".highrise-tile").addClass("complete");
                 }
                 
             }

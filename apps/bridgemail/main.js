@@ -32,7 +32,8 @@
            '_date': '../shared/libs/date',
            'daterangepicker': '../shared/libs/daterangepicker.jQuery',
            'bms-dragfile': '../shared/dragfile',
-           'bms-mergefields':'../shared/mergefields'
+           'bms-mergefields':'../shared/mergefields',
+           'datetimepicker':'../shared/libs/jquery.datetimepicker'
        },
         shim: {
                 backbone: {
@@ -101,6 +102,9 @@
                    deps: ['_date','jquery-ui','jquery']
                },
                'bms-dragfile':{
+                   deps: ['jquery']
+               },
+               'datetimepicker':{
                    deps: ['jquery']
                }
          }

@@ -1,0 +1,113 @@
+<h2 class="header-list" style="text-align: center">Schedule Export</h2>
+<div style="float:none; width:auto; margin:0 auto;width:598px;position: relative" class="c-frequency">
+    <div>
+        <div class="row">
+            <label>Frequency</label>
+
+            <select class="nosearch frequency-type" style="width:300px;">
+                <option value="O">Weekly</option>
+                <option value="T">Once every two Weeks</option>
+                <option value="M">Once per month</option>
+                <option value="">Once Only </option>
+            </select>
+        </div>                     
+        <div class="row">         
+            <span class="week-days-row">
+                <label>Day</label>      
+                <div class="btn-group s-days">
+                     <button type="button" value="2" class="btn btn-default selected">Mon</button>
+                    <button type="button" value="3" class="btn btn-default">Tue</button>
+                    <button type="button" value="4" class="btn btn-default">Wed</button>
+                    <button type="button" value="5" class="btn btn-default">Thu</button>
+                    <button type="button" value="6" class="btn btn-default">Fri</button>
+                    <button type="button" value="7" class="btn btn-default">Sat</button>
+                    <button type="button" value="1" class="btn btn-default">Sun</button>
+                </div>
+            </span>    
+            <div class="row date-row" style="margin-top: 0px">        
+                <label>Date</label>      
+                <div class="s-time">
+
+                    <select class="nosearch import-day" style="width:90px;"  data-placeholder="Day">
+                        <option value=""></option>
+                        <option value="1">01 </option>
+                        <option value="2">02 </option>
+                        <option value="3">03 </option>
+                        <option value="4">04 </option>
+                        <option value="5">05 </option>
+                        <option value="6">06 </option>
+                        <option value="7">07 </option>
+                        <option value="8">08 </option>
+                        <option value="9">09 </option>
+                        <option value="10">10 </option>
+                        <option value="11">11 </option>
+                        <option value="12">12 </option>
+                        <option value="13">13 </option>
+                        <option value="14">14 </option>
+                        <option value="15">15 </option>
+                        <option value="16">16 </option>
+                        <option value="17">17 </option>
+                        <option value="18">18 </option>
+                        <option value="19">19 </option>
+                        <option value="20">20 </option>
+                        <option value="21">21 </option>
+                        <option value="22">22 </option>
+                        <option value="23">23 </option>
+                        <option value="24">24 </option>
+                        <option value="25">25 </option>
+                        <option value="26">26 </option>
+                        <option value="27">27 </option>
+                        <option value="28">28 </option>
+                        <option value="29">29 </option>
+                        <option value="30">30 </option>
+                        <option value="31">31 </option>
+                    </select>
+                    <span class="month-year">
+                        <select class="nosearch import-month" style="width:120px;"  data-placeholder="Month">
+                            <option value=""></option>
+                            <option value="01">January</option>
+                            <option value="02">February</option>
+                            <option value="03">March</option>
+                            <option value="04">April</option>
+                            <option value="05">May</option>
+                            <option value="06">June</option>
+                            <option value="07">July</option>
+                            <option value="08">August</option>
+                            <option value="09">September</option>
+                            <option value="10">October</option>
+                            <option value="11">November</option>
+                            <option value="12">December</option>                                    
+                        </select>
+                        <select class="nosearch import-year" style="width:100px;" data-placeholder="Year" id="year-select">                                    
+                        </select>
+                    </span>     
+
+
+
+                </div>
+            </div>
+            <div class="row">        
+                <label>Time</label>      
+                <div class="set-time" style="margin-top:2px;margin-left: 127px;">
+                    <div class="timebox hour">
+                        <input type="text" value="" name="" class="timebox-hour" readonly="readonly" />
+                    </div>
+                    <span class="colon">:</span>
+                    <div class="timebox min">
+                        <input type="text" value="" name="" class="timebox-min" readonly="readonly" />
+                    </div>
+                    <div data-toggle="buttons-radio" class="btn-group all-any timebox-hours" >
+                        <button class="btn am">AM</button>
+                        <button class="btn pm">PM</button>
+                    </div>
+                </div>
+            </div>                      
+        </div> <!--  Row -->
+    </div> <!--  Row -->
+    <div class="timezone-note" style="bottom:-10px;right:-9px;background-color: rgba(0, 0, 0, 0) !important;">* Time is according to Pacific time zone</div>
+</div>
+<div class="btns">
+    <a class="btn-blue update-export"><span>Update</span><i class="icon update"></i></a>
+    <a class="btn-red deactivate-export"><span>Deactivate</span><i class="icon deactivate"></i></a>
+    <a class="btn-green activate-export"><span>Activate</span><i class="icon activate"></i></a>
+</div>

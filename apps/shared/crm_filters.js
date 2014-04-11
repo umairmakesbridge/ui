@@ -67,9 +67,13 @@
       matchValue = (params && params.fieldValue)?params.fieldValue :""
       filter.addClass("filter")           
       var filter_html = '<div class="btn-group"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
-          filter_html +='</select></div>'          
-          filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
-          filter_html +='</select></div>'                              
+          filter_html +='</select></div>' 
+          if(this.options.filterFor==="H"){
+              matchValue = (params && params[1])?params[1] :""
+          }else{
+            filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
+            filter_html +='</select></div>'                              
+          }
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" /></div>'
       
       filter.find(".filter-cont").append(filter_html)
@@ -85,7 +89,7 @@
                   self.updateAdvanceFilter()
             })
           }
-          else if(this.options.filterFor==="N"){
+          else if(this.options.filterFor==="N" || this.options.filterFor==="H"){
               condition_row.find(".btn-group").html('<button data-toggle="dropdown" class="btn dropdown-toggle" style="padding:1px 12px">And</button>')
           }
       }
@@ -99,8 +103,10 @@
                           rule_html +='<option value="'+val.name+'" rule_type="'+val.type+'">'+val.label+'</option>'                           
                      }           
                 })
-                filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
-                self.updateAdvanceFilter()
+                
+                    filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
+                    self.updateAdvanceFilter()
+                 
            }
       })
       filter.find(".rules").chosen({disable_search: "true",width:'170px'}).change(function(){
@@ -122,6 +128,8 @@
       else if(this.options.filterFor==="N"){
           this.addNetSuiteField(filter,params)
           this.addNetSuiteRules(filter,params)
+      }else if(this.options.filterFor==="H"){
+          this.addHighriseField(filter,params)
       }
       
     }
@@ -230,6 +238,40 @@
             })
         filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
       }
+  },
+  addHighriseField:function(filter,params){
+      var URL = ""
+      var self = this
+      var selected_field = ""
+      if(this.fields.length===0){
+          URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=importFields";
+          jQuery.getJSON(URL,  function(tsv, state, xhr){
+                if(xhr && xhr.responseText){                        
+                     var fields_json = jQuery.parseJSON(xhr.responseText);                                
+                     if(self.options.app.checkError(fields_json)){
+                         return false;
+                     }       
+                    var field_html ='<option value=""></option>'                                            
+                    $.each(fields_json.fldList[0],function(key,val){
+                        selected_field = (params && params[0]==val[0].name) ? "selected" : ""                        
+                        self.fields.push(val[0])                            
+                        field_html +='<option value="'+val[0].name+'" '+selected_field+' >'+val[0].label+'</option>'                           
+                        
+                    });
+                    
+                    filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
+                }
+          }).fail(function() { console.log( "error in loading fields" ); });
+      }
+      else{
+          var field_html ='<option value=""></option>'                                            
+          $.each(this.fields,function(key,val){
+                selected_field = (params && params[0]==val[0]) ? "selected" : ""                
+                field_html +='<option value="'+val.name+'" '+selected_field+' >'+val.label+'</option>'                           
+
+            })
+        filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
+      }
   }
   ,addNetSuiteRules:function(filter,params){
       var URL = ""
@@ -299,13 +341,27 @@
     }
   ,
   loadFilters:function(data){
-      var _target = this.$element
       var self = this
+    if(this.options.filterFor=='H'){
+        if(data.filterQuery){
+            var filters = data.filterQuery.split(',');
+            $.each(filters,function(key,value){
+                var value = self.options.app.decodeHTML(value);
+                var split = value.split("=");
+                self.addBasicFilter(false,false,split)  
+                console.log(split);
+            });
+        }
+        return;
+    }
+      var _target = this.$element
+      
       _target.find(".filter-div ._row").remove()      
       if(data.filterFields){
       var filters_data = data.filterFields[0]
         $.each(filters_data,function(i,v){
             var filter =  v[0]
+            
             if(self.options.filterFor=='N'){
               if(v[0].nsObject.indexOf(self.objType)>-1){
                 self.addBasicFilter(false,false,filter)                    
@@ -335,6 +391,8 @@
       }
       else if(this.options.filterFor==="N"){
           filters_post = this.saveNetSuite(src)
+      }else if(this.options.filterFor==="H"){
+          filters_post = this.saveHighrise(src)
       }
       return filters_post
   }
@@ -373,6 +431,20 @@
               filters_post[src+"Field"+N] = filter.find(".fields").val()
               filters_post[src+"Operator"+N] = filter.find(".rules").val()
               filters_post[src+"Value"+N] = filter.find(".matchValue").val()                            
+          }
+      }
+      return filters_post 
+  }
+  ,saveHighrise:function(src){
+     src = "search" 
+     var filters_post = {}
+      var _target = this.$element
+      var total_rows = _target.find(".filter-div ._row");               
+      for(var i=0;i<total_rows.length;i++){
+          var N = i+1
+          var filter = $(total_rows[i])
+          if($(total_rows[i]).hasClass("filter")){
+              filters_post[filter.find(".fields").val()] = filter.find(".matchValue").val()  
           }
       }
       return filters_post 
