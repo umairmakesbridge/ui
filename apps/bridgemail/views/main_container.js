@@ -64,7 +64,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .csv-upload': 'csvUpload',
                     'click .connect-crm': 'connectCrm', 
                     'click .crm-salesforce': 'salesforceCrm', 
-                    'click .crm-netsuite': 'netsuiteCrm'
+                    'click .crm-netsuite': 'netsuiteCrm',
+                    'click .crm-highrise':'highriseCrm' 
                     
 
                 },
@@ -381,6 +382,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         tab_icon:'netsuite',
                         sub_title:'Connection With Apps'
                     });                 
+                },
+                highriseCrm:function(){
+                    this.addWorkSpace({ 
+                        type:'',
+                        title:'Highrise',
+                        url:'crm/highrise/highrise',
+                        tab_icon:'highrise',
+                        sub_title:'Connection With Apps'
+                    });
                 }
 
             });
