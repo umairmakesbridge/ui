@@ -52,12 +52,12 @@ define(['text!crm/netsuite/html/login.html'],
                 if(netsuiteLoggedIn && this.passwordChange==true){
                     postData['nsPass']= curview.$el.find('#ns_pwd').val();
                 }    
-                this.$(".btnTestLogin").addClass("saving");
+                this.$("#btnTestLogin").addClass("saving");
                 var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=testCred";
                 $.post(URL,postData )
                 .done(function(data) { 
                     var creds = jQuery.parseJSON(data);                            
-                    curview.$(".btnTestLogin").removeClass("saving");
+                    curview.$("#btnTestLogin").removeClass("saving");
                     if(creds.err)							
                         app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
                     else
@@ -89,7 +89,7 @@ define(['text!crm/netsuite/html/login.html'],
                 var app = this.app;
                 var el = this.$el;
                 el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').attr('readonly','readonly');
-                el.find('#btnSaveLogin').addClass('saving');
+                el.find('.btnSaveLogin').addClass('saving');
                 var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";				
                 $.post(URL, {
                     nsUserID: curview.$el.find('#ns_userid').val(),
@@ -100,7 +100,7 @@ define(['text!crm/netsuite/html/login.html'],
                 .done(function(data) { 
                     var creds = jQuery.parseJSON(data);     
                     el.find('#ns_userid,#ns_pwd,#ns_email,#ns_accid').removeAttr('readonly');                                                
-                    el.find('#btnSaveLogin').removeClass('saving');
+                    el.find('.btnSaveLogin').removeClass('saving');
                     if(creds.err)
                     {							
                         app.showAlert(creds.err.replace('&#58;',':'),curview.$el);							
@@ -195,7 +195,7 @@ define(['text!crm/netsuite/html/login.html'],
                     });
                     isValid = false;
                 }
-                if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
+                else if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
                 {						
                     app.showError({
                         control:el.find('.email-container'),
