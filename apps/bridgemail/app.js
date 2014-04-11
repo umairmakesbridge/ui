@@ -70,7 +70,7 @@ define([
                             window.BRIDGEMAIL = this;
 			}
                         this.getUser();
-                        this.CRMGetStatus();
+                        //this.CRMGetStatus();
                         
 		},
 		start: function (Router, MainContainer, callback) {

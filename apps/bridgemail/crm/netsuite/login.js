@@ -52,10 +52,12 @@ define(['text!crm/netsuite/html/login.html'],
                 if(netsuiteLoggedIn && this.passwordChange==true){
                     postData['nsPass']= curview.$el.find('#ns_pwd').val();
                 }    
+                this.$(".btnTestLogin").addClass("saving");
                 var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=testCred";
                 $.post(URL,postData )
                 .done(function(data) { 
                     var creds = jQuery.parseJSON(data);                            
+                    curview.$(".btnTestLogin").removeClass("saving");
                     if(creds.err)							
                         app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
                     else
@@ -68,10 +70,12 @@ define(['text!crm/netsuite/html/login.html'],
                 var app = curview.app;                
                 var URL = "/pms/io/netsuite/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setEmail";
                 curview.$el.find('#ns_email').attr('readonly','readonly');
+                this.$(".setEmail").addClass("saving");
                 $.post(URL, { nsEmail:curview.$el.find('#ns_email').val()})
                 .done(function(data) { 
                         var creds = jQuery.parseJSON(data);                            
-                        curview.$el.find('#ns_email').removeAttr('readonly')
+                        curview.$el.find('#ns_email').removeAttr('readonly');
+                        curview.$(".setEmail").removeClass("saving");
                         if(creds.err)							
                             app.showAlert(creds.err.replace('&#58;',':'),curview.$el);
                         else						
@@ -184,6 +188,13 @@ define(['text!crm/netsuite/html/login.html'],
                 var isValid = true;
                 var app = this.app;
                 var appMsgs = campview.app.messages[0];
+                if(el.find('#ns_email').val() == ''){
+                    app.showError({
+                            control:el.find('.email-container'),
+                            message:'Email cann\'t be empty'
+                    });
+                    isValid = false;
+                }
                 if(el.find('#ns_email').val() != '' && !app.validateEmail(el.find('#ns_email').val()))
                 {						
                     app.showError({

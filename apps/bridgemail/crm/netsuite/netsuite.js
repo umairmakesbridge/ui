@@ -41,16 +41,41 @@ define(['text!crm/netsuite/html/netsuite.html'],
             */
             init:function(){
                 this.current_ws = this.$el.parents(".ws-content");
-                var ns = this.app.getAppData("netsuite");                
-                if(!ns || ns.isNetsuiteUser=="N"){
-                    this.loadSetupArea();  
+                this.checkNetSuiteStatus();
+            },
+            checkNetSuiteStatus: function(){                                
+                var netsuite_setting = this.app.getAppData("netsuite");
+                this.app.showLoading("Checking Netsuite Status...",this.$el);
+                if(!netsuite_setting || netsuite_setting[0] == "err" || netsuite_setting.isNetsuiteUser=="N")
+                {                        
+                    this.app.getData({
+                        "URL":"/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"netsuite",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);
+                            var ns = this.app.getAppData("netsuite");
+                            if(ns[0]=="err" || ns.isNetsuiteUser=="N"){
+                                this.loadSetupArea();  
+                            }
+                            else{
+                                this.netsuiteSetup = true;
+                                this.showHeader();
+                                this.$(".netsuite-imports").click();                                            
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);                            
+                            this.loadSetupArea();  
+                        },this)
+                    });
                 }
-                else{                   
-                    this.netsuiteSetup = true;
-                    this.showHeader();
-                    this.$(".netsuite-imports").click();                                            
-
+                else{
+                     this.app.showLoading(false,this.$el);                            
+                     this.netsuiteSetup = true;
+                     this.showHeader();
+                     this.$(".netsuite-imports").click();                                            
                 }
+                
             },
             showHeader:function(){                               
                 var header_part = $('<div class="bottomdiv">\n\

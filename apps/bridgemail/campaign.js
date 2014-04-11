@@ -317,7 +317,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     //remove previous data 
                     camp_obj.$(".step1 input").val("");
                     camp_obj.$(".step1 input[type='checkbox']").prop("checked",false);
-                    this.camp_id = camp_id;
+                    this.camp_id = camp_id;                    
                     this.setupCampaign();
                     this.app.showLoading(true,this.$el.parents(".ws-content"));
                     $("#campMenubtn").attr("disabled",true).html("Loading...");
@@ -327,6 +327,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(camp_obj.app.checkError(camp_json)){
                             return false;
                         }
+                        camp_obj.checksum = camp_json['campNum.checksum'];
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
                         //Setting tab details
@@ -1619,56 +1620,58 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="camp_list_grid"><tbody>';
                     this.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.campaigns[0], function(index, val) {     
-                        var dtHead = '';
-                        var datetime = '';
-                        if(val[0].status != 'D')
-                        {
-                            dtHead = '<em>Schedule Date</em>';
-                            datetime = val[0].scheduledDate;
-                        }
-                        else
-                        {
-                            dtHead = '<em>Updation Date</em>';
-                            if(val[0].updationDate)
-                              datetime = val[0].updationDate;
+                        if(camp_obj.checksum!==val[0]["campNum.checksum"]){
+                            var dtHead = '';
+                            var datetime = '';
+                            if(val[0].status != 'D')
+                            {
+                                dtHead = '<em>Schedule Date</em>';
+                                datetime = val[0].scheduledDate;
+                            }
                             else
-                              datetime = val[0].creationDate;
+                            {
+                                dtHead = '<em>Updation Date</em>';
+                                if(val[0].updationDate)
+                                  datetime = val[0].updationDate;
+                                else
+                                  datetime = val[0].creationDate;
+                            }
+                            var dateFormat = '';
+                            if(datetime)
+                            {
+                                var date = datetime.split(' ');
+                                var dateparts = date[0].split('-');                                 
+                                var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);;
+                                dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
+                            }
+                            else{
+                                dateFormat = '';					
+                             }
+                            var flag_class = ''; 
+                            if(val[0].status == 'D')
+                                     flag_class = 'pclr1';
+                             else if(val[0].status == 'P')
+                                     flag_class = 'pclr6';
+                             else if(val[0].status == 'S')
+                                     flag_class = 'pclr2';
+                             else if(val[0].status == 'C')
+                                     flag_class = 'pclr18'; 
+                            list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';  
+                            var chartIcon = '';
+                            if(val[0].status == 'P' || val[0].status == 'C')  {
+                              chartIcon = '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                            }
+                            list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span>'+ chartIcon +'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
+                            if(val[0].status != 'D')
+                                list_html += '<td><div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div></td>';
+                                else
+                                list_html += '<td></td>';
+
+
+
+                            list_html += '<td><div class="time show" style="width:130px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';
+                            list_html += '</tr>';
                         }
-                        var dateFormat = '';
-                        if(datetime)
-                        {
-                            var date = datetime.split(' ');
-                            var dateparts = date[0].split('-');                                 
-                            var month = camp_obj.app.getMMM(dateparts[1].replace('0','')-1);;
-                            dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
-                        }
-                        else{
-                            dateFormat = '';					
-                         }
-                        var flag_class = ''; 
-                        if(val[0].status == 'D')
-                                 flag_class = 'pclr1';
-                         else if(val[0].status == 'P')
-                                 flag_class = 'pclr6';
-                         else if(val[0].status == 'S')
-                                 flag_class = 'pclr2';
-                         else if(val[0].status == 'C')
-                                 flag_class = 'pclr18'; 
-                        list_html += '<tr id="row_'+val[0]['campNum.encode']+'">';  
-                        var chartIcon = '';
-                        if(val[0].status == 'P' || val[0].status == 'C')  {
-                          chartIcon = '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
-                        }
-                        list_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname" style="float:left;">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+camp_obj.app.getCampStatus(val[0].status)+'</span>'+ chartIcon +'</h3><div class="tags tagscont">'+camp_obj.app.showTags(val[0].tags)+'</div></div></td>';
-			if(val[0].status != 'D')
-                            list_html += '<td><div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em>'+val[0].sentCount+'</span></strong></div></td>';
-                            else
-                            list_html += '<td></td>';
-                        
-                        
-                        
-                        list_html += '<td><div class="time show" style="width:130px"><strong><span>'+ dtHead + dateFormat +'</span></strong></div><div id="'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Copy</span><i class="icon copy"></i></a></div></td>';
-                        list_html += '</tr>';
                     });
                     list_html += '</tbody></table>';										
 

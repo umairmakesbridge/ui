@@ -66,8 +66,11 @@ function (template,MyImports,moment) {
                                     usepager : false,
                                     colWidth : ['100%','20px','60px']
                             });
+                            this.$("#myimports_list_grid tr td:nth-child(1)").attr("width","100%");
+                            this.$("#myimports_list_grid tr td:nth-child(2)").attr("width","20px");
+                            this.$("#myimports_list_grid tr td:nth-child(3)").attr("width","60px");
                             this.$myImportsContainer.find(".deactivate-import").click(_.bind(this.deactivateImport,this)); 
-                             this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
+                            this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
                             
                           }
                           else{

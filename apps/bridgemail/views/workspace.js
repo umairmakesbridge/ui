@@ -77,7 +77,7 @@ function ($,Backbone, _,app,Wizard, template) {
                             this.$el.find(".add-action").addClass("show-add");
                         }
                         //Load a page 
-                        if(this.options.url){
+                        if(this.options.url){                            
                             this.loadPage(this.options.url,page_container,this.options.params);
                         }
                         

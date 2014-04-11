@@ -44,16 +44,40 @@ define(['text!crm/salesforce/html/salesforce.html'],
             */
             init:function(){
                 this.current_ws = this.$el.parents(".ws-content");                
-                var sf = this.app.getAppData("salesfocre");
-                if(!sf || sf.isSalesforceUser=="N"){
-                    this.loadSetupArea();                  
+                this.checkSalesforceStatus();
+            },
+            checkSalesforceStatus:function(){
+              var salesforce_setting = this.app.getAppData("salesfocre");  
+              this.app.showLoading("Checking Salesforce status...",this.$el);    
+              if(!salesforce_setting || salesforce_setting[0] == "err" || salesforce_setting.isSalesforceUser=="N")
+                {                    
+                    this.app.getData({
+                        "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"salesfocre",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);    
+                            var sf = this.app.getAppData("salesfocre");
+                            if(sf[0] == "err" ||sf.isSalesforceUser=="N"){
+                               this.loadSetupArea();  
+                            }
+                            else{
+                                this.salesforceSetup = true;
+                                this.$(".salesforce-imports").click();    
+                                this.showHeader();
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);                        
+                            this.loadSetupArea();  
+                        },this)
+                    });
                 }
-                else{                 
+                else{
+                    this.app.showLoading(false,this.$el);                            
                     this.salesforceSetup = true;
                     this.$(".salesforce-imports").click();    
                     this.showHeader();
-                    
-                }
+                }  
             },
             showHeader:function(){                               
                 var header_part = $('<div class="bottomdiv">\n\

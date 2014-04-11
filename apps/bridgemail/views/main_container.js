@@ -83,7 +83,21 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.$el.append(this.header.$el, LandingPage, this.footer.$el);
 
                 },
+                allowWorkspace:function(options){                                    
+                  var allow = false;
+                  if(this.app.get("user").hasSalesOnlyAccess=="N"){
+                      allow=true;
+                  }
+                  else {
+                      if(options.url=="contacts" || options.url=="contacts/subscriber"){
+                          allow=true;
+                      }
+                  }
+                  return allow;
+                },
                 addWorkSpace: function(options) {
+                   if(this.allowWorkspace(options)){
+                    
                     var workspace_li = $("#wstabs li[workspace_id='" + options.workspace_id + "']");
                     if (workspace_li.length === 0) {
                         this.wp_counter = this.wp_counter + 1;
@@ -173,7 +187,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         //setTimeout(_.bind(this.app.fixCampaignInputStepOne, this), 400);
                     }
 
-
+                   }
                 },
                 activeWorkSpace: function(obj) {
 
