@@ -1525,3 +1525,16 @@ position:relative;
     min-width: inherit;
     min-height: inherit;
 }
+#btnTestLogin.saving{
+background: url('../img/greenloader.gif') no-repeat scroll 24px center #08C;
+    display: block;
+    float: right;
+        right: auto;
+        top: auto;
+        width: auto;
+        height: auto;
+    position: relative;
+    min-width: inherit;
+    min-height: inherit;
+}
+
