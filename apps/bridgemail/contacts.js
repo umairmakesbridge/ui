@@ -102,6 +102,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
               });
               $(window).scroll(_.bind(this.liveLoading,this));
               $(window).resize(_.bind(this.liveLoading,this));
+              this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
             },
             /**
              * Fetching contacts list from server.

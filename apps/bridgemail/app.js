@@ -490,7 +490,27 @@ define([
                         "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.get('bms_token')+"&type=status",
                         "key":"salesfocre"
                  });
+            },
+             scrollingTop:function(scrollObj){
+                var scrolltoDiv = scrollObj.scrollDiv;
+                var appendtoDiv = scrollObj.appendto;
+                if(typeof(scrolltoDiv) === "string" &&  scrolltoDiv === 'window'){
+                   var top_button = $('<button class="ScrollToTop scroll-summary" type="button" style="display: none"></button>');
+                   $(appendtoDiv).append(top_button);
+                     top_button.click(_.bind(function(){
+                         $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");
+                     },this));
+                    $(window).scroll(_.bind(function(){
+                        if ($(window).scrollTop() > 50) {
+                            top_button.fadeIn('slow');
+                        } else {
+                            top_button.fadeOut('slow');
+                        }
+                    },this));
+                    //console.log(scrolltoDiv + '   ' + appendtoDiv);
+                }
             }
+
 	});
 
 	return new App();

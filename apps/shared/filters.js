@@ -434,7 +434,8 @@
         })
     }
   , addListFilter:function(obj,e,params){
-      this.listFilter.find("a.btn-green").addClass("saving")
+      this.listFilter.find("a.btn-green").addClass("saving");
+      var self = this;
       var filter = $(this.options.filterRow)      
       filter.addClass("list");
       
@@ -456,7 +457,7 @@
                         filter_html += '<tr id="row_'+val[0]["listNumber.encode"]+'">';      
                         filter_html +='<td><input class="check-list" type="checkbox" value="'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'" /></td>'
                         filter_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+filter_ref.options.app.showTags(val[0].tags)+'</div></div></td>';                        
-                        filter_html += '<td><div class="subscribers show" style="min-width:80px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></td>';                        
+                        filter_html += '<td><div class="subscribers" style="min-width:80px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         filter_html += '</tr>';
                     });
             filter_html += '</tbody></table>'
@@ -482,6 +483,7 @@
                 showicon: 'yes',
                 iconsource: 'list'
          });
+         
       
       this.addActionBar(filter)      
       this.$element.find(".addfilter").before(filter)
@@ -494,22 +496,32 @@
                 usepager : false,
                 colWidth : ['40px','100%','100px']
         });
+        /*ICHECK IMPLEMENTATION BY ABDULLAH*/
+            if(filter.find('#__list_grid .check-list').iCheck){
+             self.icheckCreate(filter.find('#__list_grid .check-list'));
+         }
+      /*Ends*/
         filter.find("#__list_grid").find("tr td:nth-child(1)").attr("width","40px")
         filter.find("#__list_grid").find("tr td:nth-child(2)").attr("width","100%")
         filter.find("#__list_grid").find("tr td:nth-child(3)").attr("width","100px")
-      filter.find("#__list_grid .action").click(function(){
+        filter.find("#__list_grid .action").click(function(event){
           $(this).parents("tr").addClass("selected")
-          $(this).parents("tr").find(".check-list").prop("checked",true)
-      })  
-      filter.find("#__list_grid .check-list").click(function(){
+          //$(this).parents("tr").find(".check-list").prop("checked",true);
+          /* ICHECK BY ABDULLAH */
+           if(filter.find('#__list_grid .check-list').iCheck){
+            $(event.target).parents("tr").find(".check-list").iCheck('check');
+        }
+      });
+     
+      /*filter.find("#__list_grid .check-list").click(function(){
           if($(this).prop("checked")){
-              $(this).parents("tr").addClass("selected")
+              $(this).parents("tr").addClass("selected");
           }
           else{
-              $(this).parents("tr").removeClass("selected")
+              $(this).parents("tr").removeClass("selected");  
           }
-      })
-      
+      });*/
+ 
       if(params){ 
            var isMemberOfList = params.isMemberOfList=="false"?"N":"Y"
            filter.find(".member-box").val(isMemberOfList).trigger("chosen:updated")
@@ -517,7 +529,11 @@
            filter.find(".match-box").val(matchAll).trigger("chosen:updated")
            var list_arr = params["listNumbers.checksums"].split(",")
            $.each(list_arr,function(k,v){
-               filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
+               //filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
+               filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").addClass("selected")               
+           });
+           $.each($('#__list_grid .selected'),function(k,v){
+              $(this).find('.check-list').iCheck('check');
            })
       }
       this.listFilter.find("a.btn-green").removeClass("saving")
@@ -816,13 +832,24 @@
       })*/
   }
   ,showDialog:function(obj){
-    
-      var dialog = this.options.app.showDialog({title:'Choose List',
+     
+      if($("body").hasClass('modal-open')){
+                     var active_ws = $(".modal-body");
+                     active_ws.find('.filter-clickers').remove();
+                     var parentDiv = $(obj.target).parents('.filter-cont');
+                     parentDiv.append("<div class='filter-clickers' id='subname-filters-dialog'><div id='show-loading' style='width:300px;height:300px;position:relative;'></div></div>");
+                     active_ws.find('.filter-clickers').css({top:'55px'});
+                    }
+           
+      /*var dialog = this.options.app.showDialog({title:'Choose List',
             css:{"width":"700px","margin-left":"-350px"},
             bodyCss:{"min-height":"290px"}
-      });
-      this.options.app.showLoading("Loading Lists...",dialog.getBody()); 
+      });*/
+      var dialog = $('#subname-filters-dialog');
+      var showloading = $('#show-loading');
+      this.options.app.showLoading("Loading Lists...",showloading); 
       if(this.lists){
+          //dialog.append('Ready to load list');
           this.populateDialog(obj,dialog)
       }
       else{
@@ -839,42 +866,52 @@
       
   },
   populateDialog:function(obj,dialog){
+      var self = this;
+      var filter = $(this.options.filterRow)
       var list_icon = $.getObj(obj,"div")
       var selected_list = list_icon.attr("list_checksum")
       var d = "";
-      
-       var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="filter_list_grid"><tbody>'
+ 
+       var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="filter_list_grid" class="filter_list_grid"><tbody>'
             var list_array =this.lists
             var filter = this;
-            $.each(list_array.lists[0], function(index, val) {     
-                        list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'">';                            
-                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags"><h5>Tags:</h5>'+filter.options.app.showTags(val[0].tags)+'</div></div></td>';                        
+            $.each(list_array.lists[0], function(index, val) {  
+                        if(val[0].name.substring(0,13)==='Supress_List_'){
+                        list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'" class="filter-supress-row" >';  
+                        }else{
+                            list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'">';
+                        }
+                        list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+filter.options.app.showTags(val[0].tags)+'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show" style="min-width:70px"><span  class=""></span>'+val[0].subscriberCount+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                         list_html += '</tr>';
                     });
-            list_html += '</tbody></table>'
-        
-        d +='<div><h2 class="header-list">&nbsp; <div id="listssearch" class="input-append search"></div></h2>'
-        d += '<div class="template-container" style="margin-right:5px;min-height:290px"><div class="target-listing" id="filter-lists">'+list_html+'</div></div>'
+            list_html += '<button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></tbody></table>'
+       
+        d +='<div><h2 class="header-list filter-target-head">&nbsp; <div id="listssearch" class="input-append search"></div><a class="closebtn" id="filter-dropdown-close"></a></h2>'
+        d += '<div class="template-container" style="margin-right:5px;min-height:290px"><div class="target-listing" id="filter-lists"><div style="display: inline-block; padding: 4px 0px; margin-left: 1%;" class="temp-filters clearfix"><h2 id="total_subscriber"><strong class="badge">'+list_array.count+'</strong><span>lists found</span></h2></div>'+list_html+'</div></div>'
         d += '</div>'
         
         d = $(d)
         d.find(".search").searchcontrol({
                 id:'list-search',
-                width:'300px',
+                width:'467px',
                 height:'22px',
                 placeholder: 'Search Lists',
                 gridcontainer: 'filter-lists',
                 showicon: 'yes',
                 iconsource: 'list',
-                closeiconid: 'dialoglistssearch'
+                closeiconid: 'dialoglistssearch',
+                searchFunc: _.bind(self.searchContacts,self),
+                clearFunc:_.bind(self.clearSearchLists,self)
          });        
-        dialog.getBody().html(d)
-        d.find("#filter_list_grid").bmsgrid({
+        //dialog.getBody().html(d)
+        dialog.html(d)
+        
+      d.find("#filter_list_grid").bmsgrid({
                 useRp : false,
                 resizable:false,
                 colresize:false,
-                height:290,
+                height:320,  //previous : 290
                 usepager : false,
                 colWidth : ['100%','100px']
         });
@@ -893,6 +930,18 @@
                 tr.addClass("selected");
             }
         }
+        // Attaching Event with close button
+       dialog.find('#filter-dropdown-close').click(function(){
+            self.closefilterBox();
+        });
+      dialog.find('#filter-lists .bDiv').on('scroll', function () {
+            self.scrolling(dialog);
+        });
+       dialog.find('.stats-scroll').click(function(){
+            self.scrollingTop(dialog);
+       });
+
+       // filter.$("#filter_list_grid tr[checksum='"+this.newList+"']").scrollintoview();
   },
  
   loadFilters:function(data){
@@ -986,7 +1035,8 @@
   },
   saveFilters:function(){
       var filters_post = ""
-      var _target = this.$element
+      var _target = this.$element;
+      var self = this;
       var total_rows = _target.find(".filter-div ._row");
       filters_post +="&count="+ total_rows.length
       filters_post +="&applyRuleCount="+ _target.find(".all-any .btn.active").attr("rule")
@@ -1081,11 +1131,40 @@
               }
           }
       }
+      /*Closing Filter Clickers*/
+      self.closefilterBox();
+
+      /**/
       return filters_post
   },
   saveCall:function(){
       
-  }
+  },
+    searchContacts:function(){
+                //var filter = $(this.options.filterRow);
+                var dialog = $('#subname-filters-dialog')
+                var display = dialog.find('#filter_list_grid tr');
+                var i = 0;
+                $.each(display,function(k,v){
+                    if($(v).css('display')=='table-row'){
+                        i = i+1;
+                    }
+                });
+                $('#total_subscriber strong').text(i);
+                /*if(o.keyCode==13 && this.searchTxt){
+                    if(this.searchTxt.indexOf("Tag: ")>-1){
+                       var tagName = this.searchTxt.split(": ");
+                       this.searchByTag(tagName[1]);
+                    }
+                    else{
+                        this.fetchContacts();
+                    }
+                   
+                }  */              
+            },
+             clearSearchLists:function(){
+                  $('#total_subscriber strong').text($('#filter_list_grid tr').length);          
+            }
   , getTimeSpan:function(val){
       var spanHTML = ""
       var selected_val = ""
@@ -1105,6 +1184,34 @@
   }
   , tip: function () {
       return this.$tip = this.$tip || $(this.options.template)
+    },
+    icheckCreate: function(obj){
+        //var filter = $(this.options.filterRow)
+                obj.iCheck({
+                          checkboxClass: 'checkpanelinput filtercheck',
+                          insert: '<div class="icheck_line-icon" style="margin: 22px 0 0 10px;"></div>'
+                        });
+             obj.on('ifChecked', function(event){
+                       $(event.target).parents("tr").addClass("selected");
+                   });
+              obj.on('ifUnchecked', function(event){
+                       $(event.target).parents("tr").removeClass("selected");
+                   });
+    },
+    closefilterBox : function(){
+            var active_ws = $(".modal-body");
+            active_ws.find('.filter-clickers').remove();
+    },
+    scrolling:function(dialog){
+       var scrollVal = dialog.find('#filter_list_grid').parent().scrollTop();
+        if (scrollVal>70) {
+                          dialog.find(".stats-scroll").fadeIn('slow');
+                       } else {
+                          dialog.find(".stats-scroll").fadeOut('slow');
+                    }
+    },
+    scrollingTop:function(dialog){
+        dialog.find('#filter_list_grid').parent().animate({scrollTop:0},600);
     }
   }
 

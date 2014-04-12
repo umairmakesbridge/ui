@@ -388,6 +388,7 @@ function (template,highlight) {
                             }
                             templates_html +='</div></div> </div></li>';                      
                         });
+                       this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                     }
                     
                     if(templates_html==="" && this.offset==0){                        
@@ -525,7 +526,7 @@ function (template,highlight) {
                    var tag_array = tags.split(",");
                    var tag_html ="";
                     $.each(tag_array,function(key,val){
-                        tag_html +="<a class='abdullah showtooltip' title='Click to View Templates With Same Tag'>"+val+"</a>";
+                        tag_html +="<a class='showtooltip' title='Click to View Templates With Same Tag'>"+val+"</a>";
                         /*if(key<tag_array.length-1){
                             tag_html +=", ";
                         }*/
