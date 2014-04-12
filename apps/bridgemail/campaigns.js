@@ -45,7 +45,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     var camp_obj = this;
                                     var target = $.getObj(obj,"a");
                                     if(target.attr("id")){
-                                            camp_obj.previewCampaign(target.attr("id"),target.parents('tr').find('.name-type h3 a').html());
+                                            camp_obj.previewCampaign(target.attr("id"),target.parents('tr').find('.name-type h3 a').text());
                                     }
                             },
                             "click #camps_grid .btn-copy":function(obj){
@@ -261,6 +261,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			{
                             var camp_obj = this;
                             var appMsgs = this.app.messages[0];
+                            camp_obj.$('#list-search').val('');
                             var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
                             camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
                             $.post(URL, {type:'delete',campNum:camp_id})
@@ -515,7 +516,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     this.$("#camps_grid tr td:nth-child(1) .report").click(function(){
                                         var camp_id=$(this).parents("tr").attr("id").split("_")[1];
                                         that.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
-                                    })
+                                    });
+                                     this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                             }
                             else
                                     this.$("#area_copy_campaign .bmsgrid").remove();

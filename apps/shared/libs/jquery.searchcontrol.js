@@ -38,7 +38,7 @@
                                     txt.bind( "keyup", dosearch );
                                     closeicon.click(clearSearch);                                  
                                   }
-				  else if(options.searchFunc){
+				  if(options.searchFunc){
                                     txt.bind( "keyup", dosearch_func );
                                     txt.bind( "keydown", keydown_func );    
                                     closeicon.click(clearSearch_func);                                       

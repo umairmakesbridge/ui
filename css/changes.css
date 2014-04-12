@@ -1979,12 +1979,12 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background: url("../img/create_campaign.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 .loading-preview {
-    background: url("../img/greenloader.gif") no-repeat scroll 24px center #94CF1E !important;
+    background: url("../img/greenloader.gif") no-repeat scroll 65px center #94CF1E !important;
     font-size: 0;
     line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
-    min-width: 100px;
+    min-width: 173px;
 }
 .checkedadded-preview{
     background: none repeat scroll 0 0 #97D61D;
@@ -2117,5 +2117,109 @@ i.contact-name-prev {
 .accordion-heading:hover .preview-camp{
     display:block;
 }
+	.filter-clickers{
+	    background: none repeat scroll 0 0 #FFFFFF;
+	    border: 2px solid #BADAEC;
+	    border-radius: 2px;
+	    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+	    display: block;
+	    margin: 0;
+	    min-width: 500px;
+	    padding: 0 2px;
+	    position: absolute;
+	    top: 135px;
+	    width: 580px;
+	    z-index: 993;
+	    min-height: 320px;
+	}
+	.filter-clickers:before {
+	    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;
+	    border-style: solid;
+	    border-width: 8px;
+	    bottom: auto;
+	    content: "";
+	    display: inline-block;
+	    position: absolute;
+	    top: -18px;
+	    left: 210px !important;
+	}
+	.filter-clickers a.closebtn {
+	    background: url("../img/closebtn-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+	    border-radius: 2px;
+	    display: block;
+	    height: 22px;
+	    opacity: 0;
+	    position: absolute;
+	    right: 10px;
+	    top: 18px;
+	    transition: opacity 0.3s ease-out 0s;
+	    width: 22px;
+	}
+	.filter-clickers a.closebtn {
+	    opacity: 1;
+	}
+	.sub-date-container{
+	     border: 2px solid #EAF4F9;
+	    margin-top: 1px;
+	    padding: 2px;
+	}
+	.filter-target-head{
+	    padding: 5px 1px 3px 0 !important;
+	}
+	.filter-target-head  #listssearch {
+	    height: 30px;
+	    margin-top: 4px;
+	}
+	.filter-target-head  .search  {
+	    float: left !important;
+	}
+	
+	.sub-date-container  .list {
+	    background: url("../img/listchecked.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+	}
+	.sub-date-container  .list:hover {
+	    background: url("../img/listchecked-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+	}
+	.filtercheck {
+	   border-radius: 0 2px 2px 0;
+	    min-height: 64px;
+	    min-width: 41px;
+	}
+	#__list_grid tr.selected td:last-child div:after {
+	    background:none !important;
+	}
+	#send-template-preview:hover {
+	    background-color:#80C000;
+	}
+	#__list_grid tr td:first-child{
+	    padding-bottom: 1px;
+	    padding-left: 1px;
+	    padding-top: 1px;
+	}
+	.filter-supress-row td {
+	    opacity: 0.4 !important;
+	}
+	.filter-supress-row .action a {
+	    display : none !important;
+	}
+	#filter_list_grid tr.selected td:last-child div:after {
+	    height: 63px !important;
+	}
+	#filter_list_grid tr td:last-child {
+	   padding: 1px 0 4px;
+	}
+	.step2-lists{
+	     position: absolute;
+	    top: 28px;
+	}
+	.step2-lists > span{
+	     left: 68px;
+	     
+	}
+	.step2-lists > span > em{
+	     z-index: 100;
+	     width:350px;
+	}
+
 /* ENDS */
 
