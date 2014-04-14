@@ -33,7 +33,8 @@
            'daterangepicker': '../shared/libs/daterangepicker.jQuery',
            'bms-dragfile': '../shared/dragfile',
            'bms-mergefields':'../shared/mergefields',
-           'datetimepicker':'../shared/libs/jquery.datetimepicker'
+           'datetimepicker':'../shared/libs/jquery.datetimepicker',
+           'jquery.fancybox':'../shared/libs/jquery.fancybox'
        },
         shim: {
                 backbone: {
@@ -105,6 +106,10 @@
                    deps: ['jquery']
                },
                'datetimepicker':{
+                   deps: ['jquery']
+               }
+               ,
+               'jquery.fancybox':{
                    deps: ['jquery']
                }
          }

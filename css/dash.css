@@ -161,6 +161,7 @@ body.login .header { padding:30px 0;}
 
 .studio { background: url("../images/studio.png") no-repeat scroll center center  !important;}
 .campaigns { background: url("../images/campaigns.png") no-repeat scroll center center;}
+.mee { background: url("../images/meeicon.png") no-repeat scroll center center;}
 .reports { background: url("../images/reports.png") no-repeat scroll center center  !important;}
 .listseg { background: url("../images/listseg.png") no-repeat scroll center center;}
 .automation { background: url("../images/automation.png") no-repeat scroll center center;}
@@ -666,13 +667,13 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
 .slidenav > ul >  li ul li i.icon.uploadcontact {background: url("../images/uploadcontact1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.form {background: url("../images/form1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.graphic {background: url("../images/graphics1.png") no-repeat scroll center center; }
-.slidenav > ul >  li ul li i.icon.campaign {background: url("../images/campaign-b.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li i.icon.campaign {background: url("../images/createcampaign.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.templates {background: url("../images/templates1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.targets {background: url("../images/targets1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.landingpgs {background: url("../images/landingpgs1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.plus {background: url("../images/plus1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.socialsharing {background: url("../images/socialsharing1.png") no-repeat scroll center center; }
-.slidenav > ul >  li ul li i.icon.createsegments {background: url("../images/createsegments1.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li i.icon.createsegments {background: url("../images/createtarget1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.crm {background: url("../images/crm1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.viewcontact {background: url("../images/viewcontact1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.accessreports {background: url("../images/accessreports1.png") no-repeat scroll center center; }
@@ -680,19 +681,20 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
 .slidenav > ul >  li ul li i.icon.creports {background: url("../images/creports1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.emarketing {background: url("../images/emarketing1.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li i.icon.website {background: url("../images/website1.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li i.icon.mee {background: url("../images/meeicon2.png") no-repeat scroll center center; }
 
 
 
 .slidenav > ul >  li ul li:hover i.icon.uploadcontact {background: url("../images/uploadcontact.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.form {background: url("../images/form.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.graphic {background: url("../images/graphics.png") no-repeat scroll center center; }
-.slidenav > ul >  li ul li:hover i.icon.campaign {background: url("../images/campaign.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li:hover i.icon.campaign {background: url("../images/createcampaign2.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.templates {background: url("../images/templates.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.targets {background: url("../images/targets.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.landingpgs {background: url("../images/landingpgs.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.plus {background: url("../images/plus.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.socialsharing {background: url("../images/socialsharing.png") no-repeat scroll center center; }
-.slidenav > ul >  li ul li:hover i.icon.createsegments {background: url("../images/createsegments.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li:hover i.icon.createsegments {background: url("../images/createtarget.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.crm {background: url("../images/crm.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.viewcontact {background: url("../images/viewcontact.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.accessreports {background: url("../images/accessreports.png") no-repeat scroll center center; }
@@ -700,6 +702,7 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
 .slidenav > ul >  li ul li:hover i.icon.creports {background: url("../images/creports.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.emarketing {background: url("../images/emarketing.png") no-repeat scroll center center; }
 .slidenav > ul >  li ul li:hover i.icon.website {background: url("../images/website.png") no-repeat scroll center center; }
+.slidenav > ul >  li ul li:hover i.icon.mee {background: url("../images/meeicon.png") no-repeat scroll center center; }
 
 
 
@@ -1453,13 +1456,13 @@ margin: 10px 0 0;
 .uploadcontact {background: url("../images/uploadcontact.png") no-repeat scroll center center; }
 .form {background: url("../images/form.png") no-repeat scroll center center; }
 .graphic {background: url("../images/graphics.png") no-repeat scroll center center; }
-.campaign {background: url("../images/campaign.png") no-repeat scroll center center; }
+.campaign {background: url("../images/createcampaign2.png") no-repeat scroll center center; }
 .templates {background: url("../images/templates.png") no-repeat scroll center center; }
 .targets {background: url("../images/targets.png") no-repeat scroll center center; }
 .landingpgs {background: url("../images/landingpgs.png") no-repeat scroll center center; }
 .plus {background: url("../images/plus.png") no-repeat scroll center center; }
 .socialsharing {background: url("../images/socialsharing.png") no-repeat scroll center center; }
-.createsegments {background: url("../images/createsegments.png") no-repeat scroll center center; }
+.createsegments {background: url("../images/createtarget.png") no-repeat scroll center center; }
 .crm {background: url("../images/crm.png") no-repeat scroll center center; }
 .viewcontact {background: url("../images/viewcontact.png") no-repeat scroll center center; }
 .accessreports {background: url("../images/accessreports.png") no-repeat scroll center center; }

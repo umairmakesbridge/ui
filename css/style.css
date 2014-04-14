@@ -1182,7 +1182,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	font-weight: 400;
 	left: 0;
 	margin: 0;
-	position: fixed;
+	position: relative;
 	width: 100%;
 }
 #footer p {

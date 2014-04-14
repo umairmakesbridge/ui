@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker'*/
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.fancybox'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -83,6 +83,7 @@ define([
                                 
                                 //attaching main container in body                                
                                 $('body').append(this.mainContainer.$el);
+                                $('body').append(this.mainContainer.footer.$el);
                                 this.mainContainer.dashBoardScripts();
                                 this.initScript();                                
 				//call the callback
@@ -107,7 +108,9 @@ define([
                         if(app.mainContainer.$(".icon-menu").hasClass("active")){
                             app.mainContainer.$(".icon-menu").removeClass( "active" );
                             app.mainContainer.$(".slideoverlay").fadeOut("slow");
-                            app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500 );
+                            app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500, _.bind(function(){
+                                this.mainContainer.$(".slidenav").hide();
+                            },app));
                         }
                         
                     });
@@ -139,6 +142,17 @@ define([
                    });
                    //Cache Clear time set
                    this.clearCache();
+                   this.mainContainer.$('.fancybox-media').attr('rel', 'media-gallery')
+				.fancybox({
+					openEffect : 'none',
+					closeEffect : 'none',
+					prevEffect : 'none',
+					nextEffect : 'none',
+					arrows : false,
+					helpers : {
+						media : {}
+					}
+				});                        
                  
              },
              getUser:function(){

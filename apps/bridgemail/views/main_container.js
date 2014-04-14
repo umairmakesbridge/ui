@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/common/news', 'views/workspace'],
+define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/common/news', 'views/workspace','jquery.fancybox'],
         function($, Backbone, app, HeaderView, LandingPage, FooterView, NewsView, WorkSpace) {
             "use strict";
 
@@ -81,7 +81,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     // Render header, main container, footer and news panel          
                     //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
                     this.app = this.options.app;
-                    this.$el.append(this.header.$el, LandingPage, this.footer.$el);
+                    this.$el.append(this.header.$el, LandingPage);                    
 
                 },
                 allowWorkspace:function(options){                                    
@@ -279,12 +279,16 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if (li.hasClass("active")) {
                             li.removeClass("active");
                             this.$(".slideoverlay").fadeOut("slow");
-                            this.$(".slidenav").animate({left: "-300px"}, 500);
+                            this.$(".slidenav").animate({left: "-300px"}, 500,_.bind(function(){
+                                this.$(".slidenav").hide();
+                            },this));
                         }
                         else {
                             li.addClass("active");
                             this.$(".slideoverlay").fadeIn("slow");
-                            this.$(".slidenav").animate({left: "0"}, 500);
+                            this.$(".slidenav").animate({left: "0"}, 500,_.bind(function(){
+                                this.$(".slidenav").show();
+                            },this));
                         }
                         event.stopPropagation();
                     }, this));
@@ -384,13 +388,13 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });                 
                 },
                 highriseCrm:function(){
-                    this.addWorkSpace({ 
+                    /*this.addWorkSpace({ 
                         type:'',
                         title:'Highrise',
                         url:'crm/highrise/highrise',
                         tab_icon:'highrise',
                         sub_title:'Connection With Apps'
-                    });
+                    });*/
                 }
 
             });
