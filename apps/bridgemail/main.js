@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:300,
-       urlArgs: "bust=1.17" ,
+       urlArgs: "bust=1.18" ,
        paths:{
            jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
@@ -34,7 +34,7 @@
            'bms-dragfile': '../shared/dragfile',
            'bms-mergefields':'../shared/mergefields',
            'datetimepicker':'../shared/libs/jquery.datetimepicker',
-           'jquery.fancybox':'../shared/libs/jquery.fancybox'
+           'jquery.isotope':'../shared/libs/jquery.isotope'
        },
         shim: {
                 backbone: {
@@ -109,7 +109,7 @@
                    deps: ['jquery']
                }
                ,
-               'jquery.fancybox':{
+               'jquery.isotope':{
                    deps: ['jquery']
                }
          }

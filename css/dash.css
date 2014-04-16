@@ -913,23 +913,6 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
     display: none;
 }
 
-#tiles .box {
-    border-radius: 2px;
-    float: left;
-    height: 170px;
-    margin: 5px;
-	display:block
-    position: relative;
-    width: 200px;
-	-webkit-transition: width 1s ease-in-out;
-    -moz-transition: width 1s ease-in-out;
-    -o-transition: width 1s ease-in-out;
-    transition: width 1s ease-in-out;
-	-webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
 #tiles .box > div.title {
     color: #FFFFFF;
     display: block;
@@ -994,10 +977,10 @@ background: url("../images/arrowbottom.png") no-repeat scroll center center rgba
 	opacity:0;
     position: absolute;
      width: 123px;
-	 -webkit-transition: opacity .6s ease-in;
-    -moz-transition: opacity .6s ease-in;
-    -o-transition: opacity .6s ease-in;
-    transition: opacity .6s ease-in;
+	 -webkit-transition: opacity .2s ease-in;
+    -moz-transition: opacity .2s ease-in;
+    -o-transition: opacity .2s ease-in;
+    transition: opacity .2s ease-in;
     display: none;
 }
 #tiles  .green .schelpvid{    background-color:  #67b24d;}

@@ -300,6 +300,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             require(["newcampaign"],function(newcampPage){                                     
                                              var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog});
                                              dialog.getBody().html(mPage.$el);
+                                             mPage.$("input").focus();
                                              dialog.saveCallBack(_.bind(mPage.createCampaign,mPage));
                             });
 			},

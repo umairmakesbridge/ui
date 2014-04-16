@@ -41,7 +41,8 @@ if(userInfo == null) {
     
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
     <link href="css/icons.css" rel="stylesheet" type="text/css" >
-    <link href="css/style.css" rel="stylesheet" type="text/css" >    
+    <link href="css/style.css" rel="stylesheet" type="text/css" >  
+    <link rel="stylesheet" href="css/isotope.css" rel="stylesheet" />    
     <link href="css/bmsgrid.css" rel="stylesheet" type="text/css" >
     <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" >
     <link href="css/calendar.css" rel="stylesheet" type="text/css" >
@@ -53,8 +54,7 @@ if(userInfo == null) {
     <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
     <link rel="stylesheet" href="css/animate.css" type="text/css" />
     <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/jquery.fancybox.css" type="text/css" />
+    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />        
     
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">

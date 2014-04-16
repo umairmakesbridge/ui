@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/common/news', 'views/workspace','jquery.fancybox'],
+define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/common/news', 'views/workspace','jquery.isotope'],
         function($, Backbone, app, HeaderView, LandingPage, FooterView, NewsView, WorkSpace) {
             "use strict";
 
@@ -53,6 +53,20 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     ,
                     'click #wp_li_0': function() {
                         this.addWorkSpace({type: ''});
+                    },
+                    'click .videobar': function(e) {
+                        var _a  = $.getObj(e,"div").find("a");
+                        if (_a.length){
+                                var video_id = _a.attr("rel");
+                                var dialog_title = "Help Video";
+                                var dialog = this.app.showDialog({title: dialog_title,
+                                    css: {"width": "720px", "margin-left": "-360px"},
+                                    bodyCss: {"min-height": "410px"}
+                                });
+                                dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+                        }
+                        e.stopPropagation();
+                        e.preventDefault();
                     },
                     'click .new-campaign': 'createCampaign',
                     'click .new-template': 'createTemplate',
@@ -299,20 +313,23 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         event.stopPropagation();
                     });
 
-                    //Tiles Event Handling        
-                    this.$('#tiles .box').click(function() {
-                        if ($(this).hasClass("expanded")) {
-                            $(".tile-shortcuts").fadeOut();
-                            setTimeout(function() {
-                                $('#tiles .box ').removeClass("expanded");
-                            }, 500);
-                        }
-                        else {
-                            $(this).addClass("expanded");
-                            $(".tile-shortcuts", this).delay('slow').fadeIn();
-                        }
+                    var $tiles = this.$('#tiles');                                       
+                    $tiles.isotope({
+                      itemSelector: '.box',
+                      masonry : {
+                        columnWidth : 105,
+                        gutter: 0
+                      }
                     });
+                    // change size of clicked box
+                    $tiles.delegate( '.box', 'click', function(){                               
+                      $(this).toggleClass('expanded');
+                      $tiles.isotope('reLayout');
+                    });
+                    
                     this.$(".popup").click(_.bind(this.showPopup, this));
+                    
+                   
                 },
                 showPopup: function(e) {
 

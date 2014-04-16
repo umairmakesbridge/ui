@@ -299,7 +299,7 @@ div.tags-div:before {
     top: -12px;
 }
 .c-name{
-    width:640px;
+    width:80%;
 }
 
 
@@ -2233,3 +2233,6 @@ i.contact-name-prev {
         }
 /* ENDS */
 
+.videobar{
+    cursor: pointer;
+}

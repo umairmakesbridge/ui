@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.fancybox'*/
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -141,18 +141,7 @@ define([
                         console.log(event + "\n-Jxhr Object=" + jqxhr + "\n-Setttings=" + settings + -"\n-Exception="+exception);
                    });
                    //Cache Clear time set
-                   this.clearCache();
-                   this.mainContainer.$('.fancybox-media').attr('rel', 'media-gallery')
-				.fancybox({
-					openEffect : 'none',
-					closeEffect : 'none',
-					prevEffect : 'none',
-					nextEffect : 'none',
-					arrows : false,
-					helpers : {
-						media : {}
-					}
-				});                        
+                   this.clearCache();                   
                  
              },
              getUser:function(){
