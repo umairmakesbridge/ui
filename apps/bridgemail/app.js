@@ -141,7 +141,8 @@ define([
                         console.log(event + "\n-Jxhr Object=" + jqxhr + "\n-Setttings=" + settings + -"\n-Exception="+exception);
                    });
                    //Cache Clear time set
-                   this.clearCache();                   
+                   this.clearCache();  
+                   this.mainContainer.$el.css("min-height",$(document.documentElement).height()-35);
                  
              },
              getUser:function(){

@@ -55,7 +55,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         this.addWorkSpace({type: ''});
                     },
                     'click .videobar': function(e) {
-                        var _a  = $.getObj(e,"div").find("a");
+                        var _a  = $.getObj(e,"div");
+                        _a = _a.length>1? $(_a[0]) : _a;
+                        _a = _a.find("a");
                         if (_a.length){
                                 var video_id = _a.attr("rel");
                                 var dialog_title = "Help Video";
@@ -355,6 +357,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     require(["newcampaign"], function(newcampPage) {
                         var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
                         dialog.getBody().html(mPage.$el);
+                        dialog.$("input").focus();
                         dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
                     });
                 },
