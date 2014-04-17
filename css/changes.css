@@ -1312,6 +1312,12 @@ ul.tabs-btns li.active a{
 .wtab-netsuite{
     background:url("../img/ns-icon30.png") no-repeat scroll center center;
 }
+.wtab-nuturelisting{
+    background:url("../img/nurturelisting.png") no-repeat scroll center center;
+}
+.wtab-nuturetrack{
+    background:url("../img/nurturetrack.png") no-repeat scroll center center;
+}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);

@@ -8951,6 +8951,9 @@ position:relative; z-index:9;
 .timestop.now:before  {border-bottom:1px dashed #72c14c; }
 .timestop.now span { background:#72c14c; color:#fff;}
 
+.icon.play {
+    background: url("../img/play.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 
 
 /*---------------------------*/
@@ -9302,6 +9305,16 @@ ul.ftipg li span {
 ul.c-current-status {
     float: left;
     margin: 0 0 0 40px;
+}
+ul.c-current-status li a { color:#fff;}
+ul.c-current-status li a:hover {opacity:0.7;}
+.playingicon {
+    background: url("../img/play.png") no-repeat scroll 0 0 / cover rgba(0, 0, 0, 0);
+    display: block;
+    float: left;
+    height: 18px;
+    margin: -1px 2px 0 0;
+    width: 18px;
 }
 
 ul.c-current-status li {
