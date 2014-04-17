@@ -69,8 +69,9 @@
       var filter_html = '<div class="btn-group"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
           filter_html +='</select></div>' 
           if(this.options.filterFor==="H"){
-              matchValue = (params && params[1])?params[1] :""
-          }else{
+              matchValue = (params && params[1])?params[1] :"";
+               filter_html += '<div class="btn-group rules-container" style="margin-top:6px;"><button  class="btn" style="padding:1px 12px">equal to</button></div>';
+           }else{
             filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
             filter_html +='</select></div>'                              
           }
@@ -244,7 +245,7 @@
       var self = this
       var selected_field = ""
       if(this.fields.length===0){
-          URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=importFields";
+          URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=filterFields";
           jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){                        
                      var fields_json = jQuery.parseJSON(xhr.responseText);                                
@@ -349,7 +350,6 @@
                 var value = self.options.app.decodeHTML(value);
                 var split = value.split("=");
                 self.addBasicFilter(false,false,split)  
-                console.log(split);
             });
         }
         return;

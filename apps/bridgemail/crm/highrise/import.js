@@ -3,8 +3,8 @@ function (template) {
         'use strict';
         return Backbone.View.extend({                                                
                 className:'netsuite_campaigns',
-                events: {
-                   
+                events:{
+                    'click .ui-accordion-header':function(){ return false;}
                 },
                 initialize: function () {                    			                 
                     this.template = _.template(template);	
@@ -19,10 +19,14 @@ function (template) {
                     this.$el.html(this.template({}));      	                                       
                     this.initControl();
                     this.showHighriseFitler();
-                    this.$(".ui-accordion").accordion({ header: "h3", collapsible: true, active: false});
-                    this.$('#panel_1').css("height",'auto!important');
+                    this.$(".ui-accordion").accordion({ header: "h3", collapsible: false, active: true});
+                    this.$(".tags-accordion").accordion({ collapsible: false, active: true});
+                    
+                    
                     //this.$el.find(".rules-container").remove();
                 },
+                
+                 
                 initControl:function(){
                     var highrise_setting = this.app.getAppData("highrise");
                    
@@ -34,6 +38,8 @@ function (template) {
                       // this.$("#ns_accordion h3.ui-accordion-header").unbind("keydown");
                        this.$(".filterbtn .managefilter").click(_.bind(this.showHighriseFitler,this));
                        this.$(".filterbtn .selectall").click(_.bind(this.selectAllHighriseFilter,this));
+                       if(typeof this.parent.options.page !="undefined")
+                       this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.parent.options.page.peopleCount+"</strong></div>");
                        this.$('input.radiopanel').iCheck({
                             radioClass: 'radiopanelinput',
                             insert: '<div class="icheck_radio-icon" style="margin:12px 0px 0px 12px"></div>'
@@ -41,13 +47,26 @@ function (template) {
                        var camp_obj = this;  
                        this.$('input.radiopanel').on('ifChecked', function(event){ 
                            camp_obj.$(".accordion-body").slideUp();
+                           $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body').slideDown(); 
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
-                              $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body').slideDown(); 
+                           camp_obj.parent.isFilterChange = false;
+                             
                         });
+                        
+                        this.$("#highrise-group-search").searchcontrol({
+                            id:'highrise-group-search',
+                            width:'300px',
+                            height:'27px',
+                            placeholder: 'Search Highrise Tags',
+                            gridcontainer: 'nsgroup_list_grid',
+                            showicon: 'yes',
+                            iconsource: 'campaigns'
+                        });
+                        this.$(".search-control").css('height','27px');
                         this.$el.find('#txtdatefield').datetimepicker()
-                                .datetimepicker({value:'2015/04/15 05:03',step:10
+                                .datetimepicker({step:10
                         });
-
+                        this.$('#panel_1').css("height",'auto!important');    
                         
                                       
                 },               
@@ -80,12 +99,12 @@ function (template) {
                     var self = this;                   
                     this.app.showLoading("Loading Data...",this.$("#hrTagsList"));
                     this.$el.find('#hrTagsList').parent().css("min-height","340px");
-                    this.$el.find('.template-container').parent().css("min-height","45px")
+                    this.$el.find('.templates-container').parent().css("min-height","90px");
                    
                     
                     URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=hrTagList";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        self.app.showLoading(false,self.$(".template-container"));
+                        self.app.showLoading(false,self.$(".templates-container"));
                         var highrise_groups = jQuery.parseJSON(xhr.responseText);
                         if(self.app.checkError(highrise_groups)){
                             return false;
@@ -96,23 +115,22 @@ function (template) {
                                  var group_html = '<table cellpadding="0" cellspacing="0" width="100%" id="nsgroup_list_grid"><tbody>';
                                 $.each(highrise_groups.groupList[0], function(index, val) {                                              
                                    group_html += '<tr id="row_'+val[0].id+'">';
-                                   var checkbox = "<input type='checkbox' value='"+val[0].id+"' name='tags' data-id='"+val[0].id+"' id='no"+val[0].id+"' class='checkpanel contact-row-check' />";
-                                   group_html += '<td width="3%" style="height:15px; padding:2px;line-height:15px;">'+checkbox+'</td><td width="97%" style="height:15px;padding:2px;line-height:15px;"><div class="name-type"><h3>'+val[0].name+'</h3> </td>';                  
+                                  // var checkbox = "<input type='checkbox' value='"+val[0].id+"' name='tags' data-id='"+val[0].id+"' id='no"+val[0].id+"' class='checkpanel contact-row-check' />";
+                                   group_html += '<td width="97%" style="height:15px;padding:2px;line-height:15px;"><div class="name-type"><h3>'+val[0].name+'</h3> </td>';                  
                                    var total_count = val[0].count;
+                                   group_html += '<td><div id="'+val[0].id+'" class="action"><a class="btn-green use"><span>Use</span><i class="icon next"></i></a></div></td>';                        
                                    group_html += '</tr>';
                                });
                                group_html += '</tbody></table>';                                       
-
                                //Setting netsuite group listing grid
                                self.$("#hrTagsList").html(group_html);   
-                                
                                self.$el.find("#nsgroup_list_grid").bmsgrid({
                                        useRp : false,
                                        resizable:false,
                                        colresize:false,
                                        height:300,
                                        usepager : false,
-                                       colWidth : ['3%','97%']
+                                       colWidth : ['97%','3%']
                                });
                                
                                self.setHighriseData();
@@ -121,10 +139,13 @@ function (template) {
                         else{
                           self.app.showAlert(highrise_groups[1],$("body"),{fixed:true});  
                         }
-                     self.$el.find('input.contact-row-check').iCheck({
-                        checkboxClass: 'checkpanelinput',
-                        insert: '<div class="icheck_line-icon" style="margin:12px 0px 0px 12px"></div>'
-                    });
+                     self.$("#nsgroup_list_grid .action .use").click(function(){
+                                   self.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
+                                   self.$("input[name='options_ns']").eq(3).iCheck('check');
+                                     self.$(":radio[value=tags]").parents('h3').click();
+                                        self.$(":radio[value=tags]").iCheck('check');                               
+                                   $(this).parents("tr").addClass("selected");
+                     });   
                     }).fail(function() { console.log( "error net suite group listing" ); });
                    
                    
@@ -132,17 +153,13 @@ function (template) {
                setHighriseData:function(){
                  
                  if(this.parent.editImport){
-                     console.log(recipient_obj);
-                    var parent_accordion =null; 
+                      
                     this.$("input[name='options_hr']").eq(0).iCheck('uncheck');
                     var recipient_obj = this.parent.editImport; 
-                       
                    if(recipient_obj.filterType==="tag"){
                        this.$(":radio[value=tags]").parents('h3').click();
                        this.$(":radio[value=tags]").iCheck('check');
-                       console.log("tr[id=row_"+recipient_obj.filterQuery+"]");
-                       this.$("#hrTagsList tr[id=row_"+recipient_obj.filterQuery+"] :checkbox").iCheck('check')
-                       this.$("#hrTagsList tr[id=row_"+recipient_obj.filterQuery+"]").scrollintoview();
+                       this.$("#nsgroup_list_grid tr[id='row_"+recipient_obj.filterQuery+"']").addClass("selected");    
                        
                        
                    }
@@ -170,10 +187,8 @@ function (template) {
                    
                 }
                 else{
-                    this.$("input[name='options_hr']").eq(0).iCheck('check');
-                   
-                    
-                }  
+                 this.$(":radio[value=importall]").iCheck('check'); 
+                   }  
                 this.app.showLoading(false,this.$("#hrTagsList"));
                },
                 saveFilter:function(flag,goToNext){
@@ -195,7 +210,7 @@ function (template) {
                         }
                     },this))
                     .fail(_.bind(function( jqxhr, textStatus, error ) {
-                         $("#customer_accordion .customer-count").html("0").show();
+                         $("highrise-sample-data .customer-count").html("0").show();
                         this.app.showLoading(false,this.parent.$el);
                         var err = textStatus + ", " + error;
                         console.log( "Request Failed: " + err );
@@ -205,19 +220,12 @@ function (template) {
                     var post_data = {};
                       
                     var highrise_val = this.$("input[name='options_hr']:checked").val();    
-                    console.log(highrise_val);
                     if(highrise_val=="tags"){
-                      var tag;
-                       this.$el.find("input[type=checkbox]").each(function(){
-                            if($(this).parents(".checkpanelinput").hasClass('checked')){
-                                tag = $(this).data('id');
-                            }
-                       })
-                       if(tag){
-                            post_data['tagId']= tag;
-                            post_data['filterType']= "tag";//Required fields:  tagId  [22]
-                       }
-                       else{
+                       var selected_tag = this.$("#nsgroup_list_grid tr.selected")
+                       if(selected_tag.length===1){
+                          post_data['tagId']= selected_tag.attr("id").split("_")[1];
+                            post_data['filterType']= "tag";//Required fields:  tagId  [22]                            
+                       }else{
                            this.app.showAlert('Please select a highrise tags to proceed.',$("body"),{fixed:true});
                            return false;
                        }
@@ -282,17 +290,19 @@ function (template) {
                     },this));
                 },
                 drawSampleData:function(data){
-                    $(".highrise-sample-data").children().remove();
+                    this.parent.$(".highrise-sample-data").children().remove();
+                   
                     this.$el.find(".managefilter .badge").hide();
                     var table_html = '<table cellspacing="0" cellpadding="0" border="0"><thead></thead><tbody></tbody></table>';                     
                     var total = 0;
-                    if(data.sampleCount) total = data.sampleCount; 
-                    $("#customer_accordion .highrise-count").html(total).show();
+                    if(data.sampleCount)
+                        total = data.sampleCount; 
+                      
+                     this.parent.$("#customer_accordion .highrise-count").html(total).show();
                      var tableObj = null;
                      var table_row = "",table_head="";
                      if(data.recordList){
                         _.each(data.recordList[0],function(val,key){   
-                                console.log(val + key);
                                 if(parseInt(key.substring(key.length-1))==1){
                                     tableObj = $(table_html);
                                     table_head = "<tr>";

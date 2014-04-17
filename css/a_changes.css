@@ -1009,7 +1009,9 @@ ul.spusb li a:hover { background: #009fda;}
 .campaign-summary  .link24   {
 	 background: url("../img/maillink24.png") no-repeat center center;
 }
- 
+#dialog-title .link24{
+	 background: url("../img/maillink24.png") no-repeat center center;
+} 
 .campaign-summary  .cstats {  padding:15px; z-index: 9;
 height: 340px;
 position: relative;
@@ -1526,15 +1528,25 @@ position:relative;
     min-height: inherit;
 }
 #btnTestLogin.saving{
-background: url('../img/greenloader.gif') no-repeat scroll 24px center #08C;
+    background: url('../img/greenloader.gif') no-repeat scroll 24px center #08C;
     display: block;
     float: right;
-        right: auto;
-        top: auto;
-        width: auto;
-        height: auto;
+    right: auto;
+    top: auto;
+    width: auto;
+    height: auto;
     position: relative;
     min-width: inherit;
     min-height: inherit;
+}
+.netsuite_campaigns .single-row .bmsgrid tr.selected td:last-child div:after{    
+    top: -20px;
+    height: 61px;
+    right: 0px;
+}
+#pn .single-row .bmsgrid tr.selected td:last-child div:after{    
+   top: -30px;
+height: 62px;
+right: -13px;
 }
 

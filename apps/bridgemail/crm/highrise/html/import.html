@@ -1,6 +1,6 @@
  
 <div class="ui-accordion">
-    <h3 class="ui-accordion-header" role="tab">
+    <h3 class="ui-accordion-header" role="tab" id="hImportAll">
          <input type="radio" class="radiopanel " value="importall" name="options_hr">
         <span class="left">Import All </span> 
          
@@ -30,7 +30,7 @@
        
     </h3>
     <div class="accordion-body" id="panel_2">
-            <div class="filter-row filter-menu template-container fields single-row">
+            <div class="filter-row filter-menu templates-container fields single-row">
                 <span style="font-size:13px; font-weight:bold" class="left">Search</span>   <input style="width:250px;" value="" id="txtsearchbyfield" class="matchValue" type="text">
              </div>
     </div>
@@ -41,18 +41,19 @@
         <span class="left"> Search By Date </span> 
     </h3>
     <div class="accordion-body" id="panel_3">
-               <div class="filter-row filter-menu template-container fields single-row" >
+               <div class="filter-row filter-menu templates-container fields single-row" >
                         <span style="font-size:13px; font-weight:bold" class="left">Date </span>   
                         <input style="width:250px;" value="" id="txtdatefield" class="matchValue" type="text">
                      </div>
     </div>
 </div>   
 
-<div  class="ui-accordion accordion-group">
+<div  class="accordion-group tags-accordion">
     <h3 class="ui-accordion-header" aria-controls="pn" style="padding:2px;"> 
+        
         <input type="radio" class="radiopanel " value="tags" name="options_hr" id="">
         <span class="left">Highrise Tags </span> 
-        
+        <div id="highrise-group-search" class="input-append search" style="margin:2px 0px 0px 0px;">   
         
     </h3>
     

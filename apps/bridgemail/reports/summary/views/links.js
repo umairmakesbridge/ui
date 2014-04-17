@@ -54,7 +54,7 @@ function (Links,viewLinks,template) {
                                     title:'Top Links',
                                     css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                     headerEditable:false,
-                                    headerIcon : 'link2',
+                                    headerIcon : 'link24',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                          var that =this;
