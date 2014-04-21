@@ -1,0 +1,195 @@
+<div class="btns" style="margin:0;">
+    <a  class="btn-blue left"><span>Pause</span><i class="icon pause"></i></a>
+    <a  class="btn-green left"><span>Save</span><i class="icon save"></i></a>
+</div>
+
+<div class="clearfix"></div>
+
+
+
+<div style="" id="nurturetargets" class="nurture_targets  clearfix">
+
+
+    <div class="accordion-group blue">
+
+
+        <div class="accordion-heading">
+            <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle">
+                <i class="icon subscribersiconw"></i>
+                <span>Recipients</span>
+            </a>
+        </div>
+        <div class="accordion-body collapse in" id="collapseOne">
+            <div class="accordion-inner">
+
+                <div class="dottedpanel">
+
+                    <a class="btn-green" style="display: block;  margin: 22px auto;    width: 145px;" ><span>Add Targets</span><i class="icon targetw"></i></a>
+
+
+
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- nurturetargets  -->
+
+<div class="accordion nurturw_wizard" id="accordion2">
+    <div class="accordion-group">
+        <div class="topHandlers">
+            <ul>
+                <li class="myHandle"><i class="icon move"></i></li>
+                <li class="myHandlerCopy"><i class="icon copy"></i></li>
+                <li class="myHandlerDelete"><i class="icon delete"></i></li>
+            </ul>
+        </div> <!-- topHandlers -->
+
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                <i class="icon email"></i>
+                <span class="title">Message 1</span>
+                <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
+                <i class="icon preview"></i>
+                <b class="caret"></b>
+            </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse in">
+            <div class="accordion-inner msg">
+
+
+                <div class="col1">
+                    <div class="row"><label>Subject</label><span class="text">Subject of the campaign</span></div>
+                    <div class="row"><label>From Email</label><span class="text">demo@bridgemailsystem.com
+                            <em>Default Value: <i>{{SALESREP}}</i></em>
+                        </span></div>
+                    <div class="row"><label>From Name</label><span class="text">MakesBridge Technology
+                            <em>Default Value:<i>{{BMS_SALESREP.CompanyName}}</i></em>
+                        </span></div>
+                    <div class="row"><label>Reply To</label><span class="text">babar@makesbridge.com
+                            <em>Default Value:<i>{{SALESREP}}</i></em>
+                        </span></div>
+                </div><!-- col1 -->
+
+
+                <div class="col2" style="height:180px">
+
+
+                    <div class="btn-group">
+                        <button class="btn ">Instantly</button>
+                        <button class="btn active">Time of Day</button>
+                    </div>
+
+
+
+                    <div class="set-time">
+                        <div class="timebox hour">
+                            <input type="text" name="" value="14">
+                            <a  class="ui-spinner-button ui-spinner-up"><span></span></a>
+                            <a  class="ui-spinner-button ui-spinner-down"><span></span></a>
+                        </div>
+                        <span class="colon">:</span>
+                        <div class="timebox min">
+                            <input type="text" name="" value="35">
+                        </div>
+                        <div class="btn-group all-any" data-toggle="buttons-radio">
+                            <button class="btn active" rule="A">AM</button>
+                            <button class="btn" rule="1">PM</button>
+                        </div>
+                    </div>
+
+                </div> <!-- col2 -->
+
+                <div class="clearfix"></div>
+
+                <div class="btns">
+                    <a class="btn-blue left" ><span class="right">Edit Message</span><i class="icon edit left"></i></a>
+                    <a  class="btn-green left"><span>Save</span><i class="icon save"></i></a>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div> <!-- accordiont -->
+
+    <div class="placeholder">
+        <div class="wait-add hover">
+            <div>
+                <a class="btn-yellow left" ><span class="">Add Wait</span><i class="icon wait left"></i></a>
+                <a  class="btn-green left"><span>Add Message</span><i class="icon mail"></i></a>
+            </div>
+        </div>
+
+    </div><!-- placeholder -->
+
+    <div class="accordion-group yellow">
+        <div class="topHandlers">
+            <ul>
+                <li class="myHandle"><i class="icon move"></i></li>
+                <li class="myHandlerEdit"><i class="icon edit"></i></li>
+                <li class="myHandlerDelete"><i class="icon delete"></i></li>
+            </ul>
+        </div>
+
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                <span>Wait</span>
+                <b class="caret"></b>
+            </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse in">
+            <div class="accordion-inner">
+
+                <div class="btn-group" style="margin-right:10px;">
+                    <button class="btn active">Days</button>
+                    <button class="btn">Date</button>
+                </div>
+
+                <select id="sf_campaigns_combo" class="chosen-select" data-placeholder="Select Days" style=" width:100px">
+                    <option value=""></option>
+                    <option value="">2 Days</option>
+                    <option selected="selected" value="">3 Days</option>
+                </select>
+
+
+
+            </div>
+        </div>
+    </div> <!-- accordiont -->
+
+    <div class="placeholder">
+        <div class="wait-add hover green">
+            <div>
+                <a  class="btn-green left"><span>Add Message</span><i class="icon mail"></i></a>
+            </div>
+        </div>
+
+    </div><!-- placeholder -->
+
+    
+
+    <div class="wait-add">
+        <div>
+            <a  class="btn-yellow left"><span class="">Add Wait</span><i class="icon wait left"></i></a>
+            <a class="btn-green left" ><span>Add Message</span><i class="icon mail"></i></a>
+        </div>
+    </div>
+
+
+    <div class="clearfix"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
