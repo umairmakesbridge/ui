@@ -104,6 +104,12 @@ function (template,contactsView,icheck,chosen) {
                    else{
                        this.html='N';
                    }
+                   /* Check if Text is N or Y*/
+                   if(this.options.isText=='N'){
+                      this.html='Y'; 
+                   }else{
+                      this.html='N';
+                   }
                   var frame = this.options.frameSrc+"&html="+this.html+"&original="+this.original;
                   /*Check if Contact is selected or not*/
                    if(this.subNum !== null){

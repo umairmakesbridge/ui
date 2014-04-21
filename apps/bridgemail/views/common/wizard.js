@@ -96,6 +96,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
 
                             if(step == this.total_steps){
                                 this.$el.find("a.nextbtn").hide();
+                                this.$el.find("a.backbtn").append('<span>Back</span>');
                             }
                             this.active_step = parseInt(step);
                         },
@@ -103,9 +104,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             this.$el.find(".wizard-steps").hide();
                             this.$el.find(".step"+this.active_step).show();
                             var _steps = this.$el.find(".progressbar li");
-                            //_steps.removeClass("active");
-                             //this.$el.find(".progressbar li:first-child").addClass("active");
-                            if(this.options.step_text && this.options.step_text.length){
+                           // _steps.removeClass("active");
+                            
+                                if(this.options.step_text && this.options.step_text.length){
                                 var step_text = this.options.step_text;
                                 var step_tooltip = this.options.step_tooltip;
                                 _steps.each(function(i,step){                                    
@@ -122,6 +123,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                             this.$(".progressbar li").tooltip({'placement':'bottom',delay: { show: 500, hide:10 }});
                             //Hides the back button on first step
                             this.$el.find("a.backbtn").hide();
+                            if(this.active_step > 1){
+                                   // this.$el.find(".progressbar li").eq(parseInt(this.active_step)-1).addClass("active");
+                                    this.gotoStep(this.active_step);
+                                }
                             this.$el.addClass("total-steps-"+this.total_steps);
                             if(this.cssClass){
                                 this.$(".progressbar").addClass(this.cssClass)

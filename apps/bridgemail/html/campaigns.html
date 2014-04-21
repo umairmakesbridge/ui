@@ -4,11 +4,11 @@
         <div style=" " class="srt-div">
           <div class="template-filter">
             <ul id="template_search_menu" class="breadcrumb">
-            <li class="showtooltip active" data-original-title="All Campaigns"><a search="A" class="stattype" tabindex="-1">All</a></li>
-              <li class="showtooltip" data-original-title="Filter by: Sent"><a search="C" class="stattype sent" tabindex="-1">Sent</a></li>
-              <li class="showtooltip" data-original-title="Filter by: Pending"><a search="P" class="stattype pending" tabindex="-1">Pending</a></li>
-              <li class="showtooltip" data-original-title="Filter by: Scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
-              <li class="showtooltip" data-original-title="Filter by: Draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
+            <li class="showtooltip active" data-original-title="Show all campaigns"><a search="A" class="stattype" tabindex="-1">All</a></li>
+              <li class="showtooltip" data-original-title="Click to view sent"><a search="C" class="stattype sent" tabindex="-1">Sent</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="P" class="stattype pending" tabindex="-1">Pending</a></li>
+              <li class="showtooltip" data-original-title="Click to view scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
             </ul>
           </div>
           <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
@@ -16,12 +16,23 @@
             <a style="" id="clearcal" class="close-icon"></a>
           </div>
           <!-- since - date range  -->    
-          <div id="campslistsearch" class="input-append search"> </div>    
+          <div id="campslistsearch" class="input-append search"></div>    
           <!--  search  --> 
         </div>
     </div>
     <div class="template-container">
-      <div id="target-camps" class="target-listing copy_camp camp_listing"> </div>
+      <div id="target-camps" class="target-listing copy_camp camp_listing">
+            <div class="bmsgrid">
+          <div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div>
+          <div style="height: " class="bDiv">
+              <table cellpadding="0" cellspacing="0" width="100%" id="camps_grid">
+                  <tbody></tbody>
+              </table>
+              <div style="display: none;" class="iDiv"></div>
+          </div>
+      </div>
+
+      </div><!-- End of target-camps -->
     </div>
 </div>
 <div class="campaign_stats cstats" style="display:none">

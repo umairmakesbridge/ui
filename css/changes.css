@@ -2234,9 +2234,14 @@ i.contact-name-prev {
 	     z-index: 100;
 	     width:350px;
 	}
+
 .filter_list_grid{
-            padding-right: 5px;
-        }
+    padding-right: 5px;
+}
+.since{
+   line-height: 35px !important;
+}
+        
 /* ENDS */
 
 .videobar{

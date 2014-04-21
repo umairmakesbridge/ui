@@ -1,4 +1,4 @@
-define(['text!contacts/html/subscriber_row.html','jquery.highlight'],
+define(['text!contacts/html/campaign_row.html','jquery.highlight'],
 function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

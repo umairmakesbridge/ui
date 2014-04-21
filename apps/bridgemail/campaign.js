@@ -51,7 +51,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.camp_id = 0;
                     this.tags_common =[];                        
                     this.mergeTags = {};
-                    this.allMergeTags = [];                        
+                    this.allMergeTags = [];    
+                    this.camp_istext = null;
                     this.wp_id = this.options.params.wp_id;
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,sfCampaignID:'',hasResultToSalesCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
@@ -294,6 +295,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          }
                          
                      })
+                     this.initStepCall('step_'+this.wizard.active_step); // Abdullah InitStepCall Check
                 },
                 initTemplateListing:function(){
                     this.$el.find("#camp_list_grid").bmsgrid({
@@ -327,6 +329,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(camp_obj.app.checkError(camp_json)){
                             return false;
                         }
+                        camp_obj.camp_istext = camp_json.isTextOnly;
                         camp_obj.checksum = camp_json['campNum.checksum'];
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
@@ -372,6 +375,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.states.step2.htmlText = camp_json.htmlText;
                         camp_obj.states.step2.plainText = camp_json.plainText;
                         
+                        
                         camp_obj.states.step3.recipientType = camp_json.recipientType;
                         if(camp_json.defaultSenderName != '')
                         {
@@ -391,7 +395,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{
                              camp_obj.$("#campaign_reply_to_default").hide();
                         }
-
+                        
                         camp_obj.$("#campaign_socail_networks").prop("checked",camp_json.isShareIcons=="N"?false:true);
                         camp_obj.$("#campaign_fb").prop("checked",camp_json.facebook=="N"?false:true);                        
                         camp_obj.$("#campaign_twitter").prop("checked",camp_json.twitter=="N"?false:true);                        
@@ -468,6 +472,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         
                         camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                         
+                        
                     });  
                 }
                 ,
@@ -518,10 +523,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   headerEditable:false,
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"}
-                        });                        
+                        });
+                        
                         var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id;  
                         require(["common/templatePreview"],_.bind(function(templatePreview){
-                            var tmPr =  new templatePreview({frameSrc:preview_url,app:camp_obj.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_obj.camp_id});
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:camp_obj.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_obj.camp_id,isText:camp_obj.camp_istext});
                              dialog.getBody().html(tmPr.$el);
                              tmPr.init();
                          },this));             
@@ -595,10 +601,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 getcampaigns: function () {
                         var camp_obj = this;				                               				
-                        this.app.getData({
+                        /*this.app.getData({
                                 "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
                                 "key":"campaigns"
-                        });
+                        });*/
+                        this.refreshCampaignList();
                         var appMsgs = camp_obj.app.messages[0];
                         camp_obj.app.showMessge(appMsgs.CAMP_copy_success_msg);
                 },
@@ -885,6 +892,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 refreshCampaignList:function(){
                   var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
                   if(campaign_listing.length){
+                       campaign_listing.data("viewObj").total_fetch = 0;
                     campaign_listing.data("viewObj").getallcampaigns();
                   }
                 },
@@ -3181,7 +3189,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{                                  
                             camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
-                   }); 
+                   });
+                   camp_obj.getallcampaigns();
+                   var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
+                   campaign_listing.data("viewObj").headBadge();
                },
                addZero:function(val){
                    val = val.toString().length==1?"0"+val:val;
@@ -3210,6 +3221,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                },
                scheduleCamp:function(){
                    this.scheduledCampaign('S',"Scheduling Campaign...");
+                   
                },
                setDraftCampaign:function(obj){
                     var button = $.getObj(obj,"a")
@@ -3263,7 +3275,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });                        
                         var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+this.camp_id;  
                         require(["common/templatePreview"],_.bind(function(templatePreview){
-                            var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:this.camp_id});
+                            var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:this.camp_id,isText:this.camp_istext});
                              dialog.getBody().html(tmPr.$el);
                              tmPr.init();
                          },this));             
