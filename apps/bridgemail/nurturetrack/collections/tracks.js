@@ -5,7 +5,7 @@ define([
 	return Backbone.Collection.extend({
 		model: Subscriber,
 		url: function () {
-                    return '/pms/io/trigger/getNurtureData/?BMS_REQ_TK=' + app.get('bms_token') + '&type=list';
+                    return '/pms/io/trigger/getNurtureData/?BMS_REQ_TK=' + app.get('bms_token');
 		},
                 parse: function(response,sent) {
                     var result = []

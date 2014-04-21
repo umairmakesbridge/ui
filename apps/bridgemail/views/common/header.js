@@ -13,7 +13,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                  app.mainContainer.addWorkSpace({type:'',title:'Campaigns',sub_title:'Listing',url:'campaigns',workspace_id: 'campaigns','addAction':true,tab_icon:'campaignlisting'});
                             },                            
                             'click .naturetrack-li':function(obj){
-                                app.mainContainer.addWorkSpace({type:'',title:'Nurture Tracks',sub_title:'Listing',url : 'nurturetrack/nurturetrack',workspace_id: 'nuture','addAction':true,tab_icon:'nuturelisting'});
+                                app.mainContainer.addWorkSpace({type:'',title:'Nurture Tracks',sub_title:'Listing',url : 'nurturetrack/nurturetracks',workspace_id: 'nuture','addAction':true,tab_icon:'nuturelisting'});
                             },                            
                             'click .contacts-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:'Contacts',sub_title:'Listing',url : 'contacts',workspace_id: 'contacts','addAction':true,tab_icon:'contactlisting'});

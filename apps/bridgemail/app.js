@@ -129,7 +129,7 @@ define([
                            if(result[0]=="err" && result[1]=="SESSION_EXPIRED"){
                             var messageObj = {};
                             messageObj["heading"] = "Session Expired" 
-                            messageObj["detail"] = "1. Your login session has expired.<br/>2. You are trying to access the page without logging-in.<br/>3. You did not follow the provided link to access this page and are trying to reach here by invalid means.";
+                            messageObj["detail"] = "Your session has expired due to an extended period of inactivity. You will need to login again to access the requested information.";
                             _app.showLoginExpireAlert(messageObj,$("body"));							
                             return false;
                            }

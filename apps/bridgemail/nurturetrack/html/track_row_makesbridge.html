@@ -1,0 +1,27 @@
+<td width="100%"><div>
+        <div class="name-type">
+            <h3>
+                <a><%- model.get('name')%></a> 
+            </h3>
+            <div class="tags tagscont">
+                <% if(model.get('tags')){  
+                    _.each(model.get('tags').split(","),function(t){ %>  
+                    <li><a class="tag"><%- t %></a> </li>
+                    <% }                        
+                        )
+                    }
+                %>  
+            </div>
+        </div>
+    </div>
+</td>
+<td width="90px"><div>
+        <div class="mail show">
+            <strong><span><em>Messages</em><%- model.get('msgCount')%></span></strong>
+        </div>
+        <div class="action" id="">
+            <a class="btn-gray"><span>View</span><i class="icon preview3"></i></a>
+            <a class="btn-green"><span>Use</span><i class="icon next"></i></a>
+        </div>
+    </div>
+</td>

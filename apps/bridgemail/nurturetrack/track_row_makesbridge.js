@@ -1,8 +1,8 @@
-define(['text!nurturetrack/html/track_row.html','jquery.highlight'],
+define(['text!nurturetrack/html/track_row_makesbridge.html','jquery.highlight'],
 function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
-        // Nurture track View to show on listing page
+        // Nurture track Makesbridge View to show on listing page
         //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
@@ -44,11 +44,7 @@ function (template,highlighter) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-                
-            },
-            tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).html());
-                return false;
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             }
             
         });

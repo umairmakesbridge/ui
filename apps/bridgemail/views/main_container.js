@@ -265,6 +265,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             , {'iconCls': 'segments', 'text': 'Edit Segments', 'url': ''}, {'iconCls': 'reports', 'text': 'Reports', 'url': ''}
                         ]
                     });
+                },
+                openNurtureTrack: function(track_id,checkSum) {
+                    var track_id = track_id ? track_id : 0;
+                    var track_checksum = checkSum ? checkSum : 0;
+                    this.addWorkSpace({type: '',
+                        title: "Loading...",
+                        sub_title:'Nuture Track Details',
+                        tab_icon: 'nuturetrack',
+                        workspace_id: 'nurturetrack_' + track_checksum,
+                        url: 'nurturetrack/nurturetrack',
+                        params: {track_id: track_id}
+                        
+                    });
                 }
 
                 //Handling Dashboard Scripts for animation stuff.      
