@@ -2228,6 +2228,9 @@ i.contact-name-prev {
 	     z-index: 100;
 	     width:350px;
 	}
-
+        .since{
+           line-height: 35px !important;
+        }
+        
 /* ENDS */
 

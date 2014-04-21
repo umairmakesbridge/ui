@@ -218,15 +218,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_id+" .subheading").html(params.subheading);
                     }                    
                 },
-                openCampaign: function(camp_id) {
+                openCampaign: function(camp_id,camp_wsid,schFlag) {
                     var camp_id = camp_id ? camp_id : 0;
+                    var active_step = 1;
+                    if(schFlag){
+                     active_step = schFlag;   // Active Step if Schedule is called
+                    }
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
-                        workspace_id: 'campaign_' + camp_id,
+                        workspace_id: 'campaign_' + camp_wsid,
                         url: 'campaign',
                         tab_icon: 'campaign',
                         params: {camp_id: camp_id},
-                        wizard: {cssClass:'campaign_progress',steps: 4, active_step: 1, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        wizard: {cssClass:'campaign_progress',steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
                             , {'iconCls': 'add-list', 'text': 'Add List', 'url': ''}, {'iconCls': 'forms', 'text': 'Create Form', 'url': ''}
