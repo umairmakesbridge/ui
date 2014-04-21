@@ -9,13 +9,19 @@ function (template) {
                 initialize: function () {                    			                 
                     this.template = _.template(template);	
                     this.hrObject = null;
-                    this.recipientDetial = null;
+                     
+                        this.recipientDetial = null;
+                    
                     this.render();
                     this.countLoaded =false;
                 },
                   render: function () {
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
+                    console.log(this.options);
+                    if(typeof this.options.edit !="undefined"){
+                            this.recipientDetial = this.options.edit; 
+                    }
                     this.$el.html(this.template({}));      	                                       
                     this.initControl();
                     this.showHighriseFitler();
@@ -47,6 +53,8 @@ function (template) {
                        var camp_obj = this;  
                        this.$('input.radiopanel').on('ifChecked', function(event){ 
                            camp_obj.$(".accordion-body").slideUp();
+                          if(typeof camp_obj.parent.options.page =="undefined")
+                               camp_obj.parent.step3Change();
                            $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body').slideDown(); 
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
                            camp_obj.parent.isFilterChange = false;
@@ -85,8 +93,10 @@ function (template) {
                showHighriseFitler:function(){
                     var that = this;
                     this.app.showLoading("Loading Filters...", that.$el.find(".filters"));
-                    require(["crm/highrise/after_filter"],function(afterFilter){                                                
-                        var recipient_obj = that.recipientDetial?that.recipientDetial:that.parent.editImport;
+                    require(["crm/highrise/after_filter"],function(afterFilter){
+                        
+                       var recipient_obj = that.recipientDetial?that.recipientDetial:that.parent.editImport;
+                       
                         var afilter = new afterFilter({camp:that,savedObject:recipient_obj,type:"basic"});
                         afilter.$el.css("margin","10px 0px");
                         that.$el.find(".filter-by-field").html(afilter.$el);
@@ -151,11 +161,18 @@ function (template) {
                    
                },
                setHighriseData:function(){
-                 
-                 if(this.parent.editImport){
+                 console.log(this.parent.Import_page.options.edit);
+                 console.log(this.parent.Import_page);
+                 if(this.parent.editImport || this.parent.Import_page.options.edit){
                       
                     this.$("input[name='options_hr']").eq(0).iCheck('uncheck');
-                    var recipient_obj = this.parent.editImport; 
+                    var recipient_obj ;
+                    if(this.parent.editImport){
+                       recipient_obj = this.parent.editImport;
+                    }else{
+                       recipient_obj = this.parent.Import_page.options.edit;
+                    }
+                  
                    if(recipient_obj.filterType==="tag"){
                        this.$(":radio[value=tags]").parents('h3').click();
                        this.$(":radio[value=tags]").iCheck('check');
