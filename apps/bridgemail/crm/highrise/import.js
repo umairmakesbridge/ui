@@ -58,6 +58,9 @@ function (template) {
                                camp_obj.parent.step3Change();
                            $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body:not("#pn")').slideDown(); 
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
+                           self.$("#hsgroup_list_grid tr.selected").removeClass("selected");
+                           self.$('#txtdatefield').val('');
+                            self.$("#txtsearchbyfield").val('');
                            camp_obj.parent.isFilterChange = false;
                              
                         });

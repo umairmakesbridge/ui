@@ -3356,31 +3356,27 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });
                         }
                         else{
-                            camp_obj.getPeopleCountHighrise();
+                            camp_obj.getPeopleCountHighrise(this);
                         }
                 },
                  /**
                 * This function is called from showhighrise.
                 * @ Import Highrise 2nd step code is required here.
                 */
-                showHighriseArea:function(){
-                     
-                     var active_ws = this.$el.parents(".ws-content");
-                     var that = this;
-                  
-                    
+                showHighriseArea:function(that){
+                    var active_ws = this.$el.parents(".ws-content");
                     if(typeof this.isHighriseRequire !="undefined"){
                         if(this.isHighriseRequire){
                             return;
                         }
                     } 
-                       
-                       
-                      
+                     
                        // this.app.showLoading(false,this.$(".step3").find('.highrise-import-setting')); 
-                            
+                        var that = this;      
                        require(["crm/highrise/import"],_.bind(function(page){  
+                             
                              if(that.states.step3.recipientType.toLowerCase()=="highrise" && that.camp_id){
+                                 that.app.showLoading("Loading Imports...",that.$("#highrise_setup"));
                                     var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){                               
@@ -3394,13 +3390,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                  highriseCount:that.peopleCount,
                                                 edit:that.states.step3.recipientDetial
                                             })
-                                          active_ws.find("#highrise_import_container").html(that.Import_page.$el); 
+                                          active_ws.find("#highrise_import_container").html(that.Import_page.$el);
+                                           that.app.showLoading(false,that.$("#highrise_setup"));
                                        }else{
                                            
                                        }
                                    });
                                  
-                                    
+                                     
                                   
                                }else{
                                  that.Import_page = new page({
@@ -3409,10 +3406,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   })
                                   active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
                              }    
-                            
+                           
                                             
                         },this));
-                       
+                      
                            
                      //// Mapping 
                      this.$("#hs_setting_menu li").click(_.bind(function(obj){
@@ -3451,7 +3448,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 this.app.showLoading(false,dialog.getBody());
                             }
                         },this))
-                      this.app.showLoading(false,this.$(".step3"));      
+                      
                 },
                 /**
                 * When you press next or save, this function is just checking and collection data
@@ -3518,10 +3515,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
                         that.peopleCount = _count.peopleCount;
-                         that.app.showLoading("Loading Import...",that.$(".step3")); 
-                        that.showHighriseArea();
-                        that.app.showLoading(false,that.$(".step3"));
+                        that.showHighriseArea(that); 
                     }));
+                    that.app.showLoading(false,that.$(".step3"));
                 }
         });
 });
