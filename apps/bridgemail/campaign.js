@@ -3509,6 +3509,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     return post_data;
                 },
                 getPeopleCountHighrise:function(){
+                     if(typeof this.isHighriseRequire !="undefined"){
+                        if(this.isHighriseRequire){
+                            return;
+                        }
+                    } 
                     var that = this;
                     this.app.showLoading("Loading Highrise Count...",this.$(".step3")); 
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
