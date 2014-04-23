@@ -4,30 +4,30 @@ function (template) {
         return Backbone.View.extend({                                                
                 className:'netsuite_campaigns',
                 events:{
-                    'click .ui-accordion-header':function(){ return false;}
+                    'click .ui-accordion-header':function(){ return false;},
+                    'click .calendericon':function(){$("#txtdatefield").focus()}
                 },
                 initialize: function () {                    			                 
                     this.template = _.template(template);	
                     this.hrObject = null;
-                     
-                        this.recipientDetial = null;
-                    
+                    this.recipientDetial = null;
                     this.render();
                     this.countLoaded =false;
                 },
                   render: function () {
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
-                    console.log(this.options);
+                     
                     if(typeof this.options.edit !="undefined"){
-                            this.recipientDetial = this.options.edit; 
+                       this.recipientDetial = this.options.edit; 
                     }
                     this.$el.html(this.template({}));      	                                       
+                    this.app.showLoading("Loading Data...",this.$el);
                     this.initControl();
                     this.showHighriseFitler();
                     this.$(".ui-accordion").accordion({ header: "h3", collapsible: false, active: true});
-                    this.$(".tags-accordion").accordion({ collapsible: false, active: true});
-                    
+                   this.$(".tags-accordion").accordion({ collapsible: false, active: true});
+                   
                     
                     //this.$el.find(".rules-container").remove();
                 },
@@ -35,7 +35,7 @@ function (template) {
                  
                 initControl:function(){
                     var highrise_setting = this.app.getAppData("highrise");
-                   
+                  
                    // this.$("#ns_accordion").accordion({ active: 0, collapsible: false});   
                     if(highrise_setting && highrise_setting.isHighriseUser=="Y"){                        
                          this.loadHighriseTags();
@@ -44,29 +44,29 @@ function (template) {
                       // this.$("#ns_accordion h3.ui-accordion-header").unbind("keydown");
                        this.$(".filterbtn .managefilter").click(_.bind(this.showHighriseFitler,this));
                        this.$(".filterbtn .selectall").click(_.bind(this.selectAllHighriseFilter,this));
-                       if(typeof this.parent.options.page !="undefined")
-                       this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.parent.options.page.peopleCount+"</strong></div>");
-                       this.$('input.radiopanel').iCheck({
-                            radioClass: 'radiopanelinput',
-                            insert: '<div class="icheck_radio-icon" style="margin:12px 0px 0px 12px"></div>'
-                       });
+                       if(typeof this.parent.options.page !="undefined") 
+                          this.highriseCount = this.parent.options.page.peopleCount;
+                        //this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.parent.options.page.peopleCount+"</strong></div>");
+                        this.$('input.radiopanel').iCheck({
+                             radioClass: 'radiopanelinput',
+                             insert: '<div class="icheck_radio-icon"></div>'
+                        });
                        var camp_obj = this;  
                        this.$('input.radiopanel').on('ifChecked', function(event){ 
-                           camp_obj.$(".accordion-body").slideUp();
+                           camp_obj.$('.accordion-body:not("#pn")').slideUp();
                           if(typeof camp_obj.parent.options.page =="undefined")
                                camp_obj.parent.step3Change();
-                           $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body').slideDown(); 
+                           $(this).parents(".radiopanelinput").parents('h3').next('.accordion-body:not("#pn")').slideDown(); 
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
                            camp_obj.parent.isFilterChange = false;
                              
                         });
-                        
                         this.$("#highrise-group-search").searchcontrol({
                             id:'highrise-group-search',
                             width:'300px',
-                            height:'27px',
+                            height:'28px',
                             placeholder: 'Search Highrise Tags',
-                            gridcontainer: 'nsgroup_list_grid',
+                            gridcontainer: 'hsgroup_list_grid',
                             showicon: 'yes',
                             iconsource: 'campaigns'
                         });
@@ -107,7 +107,7 @@ function (template) {
                loadHighriseTags:function(){
                     
                     var self = this;                   
-                    this.app.showLoading("Loading Data...",this.$("#hrTagsList"));
+                    this.app.showLoading("Loading Tags...",this.$("#hrTagsList"));
                     this.$el.find('#hrTagsList').parent().css("min-height","340px");
                     this.$el.find('.templates-container').parent().css("min-height","90px");
                    
@@ -122,7 +122,7 @@ function (template) {
                         if(highrise_groups[0]!=="err"){
                             if(highrise_groups.count!="0"){
                                 this.highrise_groups = highrise_groups;
-                                 var group_html = '<table cellpadding="0" cellspacing="0" width="100%" id="nsgroup_list_grid"><tbody>';
+                                 var group_html = '<table cellpadding="0" cellspacing="0" width="100%" id="hsgroup_list_grid"><tbody>';
                                 $.each(highrise_groups.groupList[0], function(index, val) {                                              
                                    group_html += '<tr id="row_'+val[0].id+'">';
                                   // var checkbox = "<input type='checkbox' value='"+val[0].id+"' name='tags' data-id='"+val[0].id+"' id='no"+val[0].id+"' class='checkpanel contact-row-check' />";
@@ -134,7 +134,7 @@ function (template) {
                                group_html += '</tbody></table>';                                       
                                //Setting netsuite group listing grid
                                self.$("#hrTagsList").html(group_html);   
-                               self.$el.find("#nsgroup_list_grid").bmsgrid({
+                               self.$el.find("#hsgroup_list_grid").bmsgrid({
                                        useRp : false,
                                        resizable:false,
                                        colresize:false,
@@ -149,20 +149,20 @@ function (template) {
                         else{
                           self.app.showAlert(highrise_groups[1],$("body"),{fixed:true});  
                         }
-                     self.$("#nsgroup_list_grid .action .use").click(function(){
-                                   self.$("#nsgroup_list_grid tr.selected").removeClass("selected");    
-                                   self.$("input[name='options_ns']").eq(3).iCheck('check');
-                                     self.$(":radio[value=tags]").parents('h3').click();
+                     self.$("#hsgroup_list_grid .action .use").click(function(){
+                                   self.$("#hsgroup_list_grid tr.selected").removeClass("selected");    
+                                    self.$("input[name='options_ns']").eq(3).iCheck('check');
+                                     //self.$(":radio[value=tags]").parents('h3').click();
                                         self.$(":radio[value=tags]").iCheck('check');                               
                                    $(this).parents("tr").addClass("selected");
                      });   
                     }).fail(function() { console.log( "error net suite group listing" ); });
                    
-                   
+                   this.app.showLoading(false,this.$("#hrTagsList"));
                },
                setHighriseData:function(){
-                 console.log(this.parent.Import_page.options.edit);
-                 console.log(this.parent.Import_page);
+                   if(typeof this.parent.Import_page.options.highriseCount !="undefined")
+                        this.highriseCount = this.parent.Import_page.options.highriseCount  
                  if(this.parent.editImport || this.parent.Import_page.options.edit){
                       
                     this.$("input[name='options_hr']").eq(0).iCheck('uncheck');
@@ -171,12 +171,15 @@ function (template) {
                        recipient_obj = this.parent.editImport;
                     }else{
                        recipient_obj = this.parent.Import_page.options.edit;
+                      
+                            
+                        
                     }
                   
                    if(recipient_obj.filterType==="tag"){
                        this.$(":radio[value=tags]").parents('h3').click();
                        this.$(":radio[value=tags]").iCheck('check');
-                       this.$("#nsgroup_list_grid tr[id='row_"+recipient_obj.filterQuery+"']").addClass("selected");    
+                       this.$("#hsgroup_list_grid tr[id='row_"+recipient_obj.filterQuery+"']").addClass("selected");    
                        
                        
                    }
@@ -205,8 +208,9 @@ function (template) {
                 }
                 else{
                  this.$(":radio[value=importall]").iCheck('check'); 
-                   }  
-                this.app.showLoading(false,this.$("#hrTagsList"));
+                   }
+                   this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.highriseCount+"</strong></div>");
+               this.app.showLoading(false,this.$el);
                },
                 saveFilter:function(flag,goToNext){
                      
@@ -238,7 +242,7 @@ function (template) {
                       
                     var highrise_val = this.$("input[name='options_hr']:checked").val();    
                     if(highrise_val=="tags"){
-                       var selected_tag = this.$("#nsgroup_list_grid tr.selected")
+                       var selected_tag = this.$("#hsgroup_list_grid tr.selected")
                        if(selected_tag.length===1){
                           post_data['tagId']= selected_tag.attr("id").split("_")[1];
                             post_data['filterType']= "tag";//Required fields:  tagId  [22]                            
@@ -315,11 +319,13 @@ function (template) {
                     if(data.sampleCount)
                         total = data.sampleCount; 
                       
-                     this.parent.$("#customer_accordion .highrise-count").html(total).show();
+                     //this.parent.$("#customer_accordion .highrise-count").html(total).show();
                      var tableObj = null;
                      var table_row = "",table_head="";
                      if(data.recordList){
+                         var found = false;
                         _.each(data.recordList[0],function(val,key){   
+                            
                                 if(parseInt(key.substring(key.length-1))==1){
                                     tableObj = $(table_html);
                                     table_head = "<tr>";
@@ -334,14 +340,17 @@ function (template) {
                                     table_row = "<tr>";
                                         _.each(val[0],function(val,key){
                                             table_row +="<td>"+val+"</td>";
+                                            found = true;
                                           });
                                     table_row += "</tr>"
                                     tableObj.find("tbody").append(table_row);
                                 }
-                                                                                                
-                                
                         },this);
-                     }
+                        if(found == false){
+                            tableObj.find("tbody").append("<tr> <td style='text-align:center' colspan='20' align='center'>No Records found</td></tr>");                                                               
+                        }
+                     
+                    }
                 }
         });
 });

@@ -249,7 +249,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$("#"+input_obj.attr("id")+"_default").hide();
                     }  
                 },
-                fromEmailDefaultFieldHide:function(){
+                fromEmailDefaultFieldHide:function(e){
                     var fromEmail = $.getObj(e,"input").val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     if($.trim(fromEmail)=="" || !merge_field_patt.test(fromEmail) || this.app.validateEmail(fromEmail)){
@@ -2271,6 +2271,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     camp_obj.checkCSVUploaded();
                     switch(target_li.attr("id")){
                         case 'create_target':
+                            camp_obj.$('#highrise_setup').hide();
                             if(!this.$("#c_c_target").data("filters")){
                                 this.$("#c_c_target").filters({app:this.app});
                             }
@@ -2288,6 +2289,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 if(this.checkRecipientsSaved("target")){
                                     return false;
                                 }
+                                camp_obj.$('#highrise_setup').hide();
                                 if(!this.app.getAppData("targets")){                                    
                                     camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
                                      this.app.getData({
@@ -2299,12 +2301,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 else{
                                     this.createTargetsTable();
                                 }
-
+                                    
                                 break;
                         case 'choose_lists':						   
                                 if(this.checkRecipientsSaved("list")){
                                     return false;
-                                }                                
+                                }                
+                                camp_obj.$('#highrise_setup').hide();
                                 if(!this.app.getAppData("lists")){
                                     this.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));                                    
                                     this.app.getData({
@@ -2318,6 +2321,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                 break;
                         case 'upload_csv':
+                            camp_obj.$('#highrise_setup').hide();
                             camp_obj.app.showLoading("Loading CSV upload...",camp_obj.$el.find('#area_upload_csv'));
                             require(["listupload/csvupload"],function(csvuploadPage){                                        
                                     var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});								
@@ -2325,10 +2329,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.states.step3.csvupload = lPage;
                             })
                            break;
-                        case 'salesforce_import':                                                        
+                        case 'salesforce_import':  
+                            camp_obj.$('#highrise_setup').hide();
                             this.checkSalesForceStatus();							
                         	break;
-                        case 'netsuite_import':                                                      							
+                        case 'netsuite_import':         
+                            camp_obj.$('#highrise_setup').hide();
                             this.checkNetSuiteStatus();							
                         	break;
                         case 'highrise_import':                                                      							
@@ -2338,6 +2344,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             if(this.checkRecipientsSaved("tags")){
                                     return false;
                             }
+                            camp_obj.$('#highrise_setup').hide();
                             camp_obj.app.showLoading("Loading Tags...",camp_obj.$el.find('#area_choose_tags'));  
                             require(["tags"],function(tagsPage){  								                                    
                                     var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});								
@@ -2475,12 +2482,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var dialog = this.app.showDialog({title:'Salesforce Login Setup',
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"360px"}
+                        bodyCss:{"min-height":"370px"}
                     });
                     this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                     require(["crm/salesforce/login"],function(loginPage){                                        
                         var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
                         dialog.getBody().html(lPage.$el);
+                        dialog.getBody().find('#btnTestLogin').css('float','left');
+                        dialog.getBody().find('.login-saving').css('width','auto');
                     })
                     this.$("#salesforce_welcome").hide();
                     this.$("#salesforce_mapping").hide();
@@ -2753,12 +2762,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var dialog = this.app.showDialog({title:'NetSuite Login Setup',
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"360px"}
+                        bodyCss:{"min-height":"425px"}
                     });
                     this.app.showLoading("Loading Login...",dialog.getBody());
                     require(["crm/netsuite/login"],function(loginPage){                                        
                         var lPage = new loginPage({camp:camp_obj,app:camp_obj.app,dialog:dialog});
                         dialog.getBody().html(lPage.$el);
+                        dialog.getBody().find('#btnTestLogin').css('float','left');
+                        dialog.getBody().find('.login-saving').css('width','auto');
                     })
                     this.$("#netsuite_welcome").hide();
                     this.$("#netsuite_mapping").hide();
@@ -2858,12 +2869,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 
                                 var dialog = this.app.showDialog({title:'NetSuite Login Setup',
                                                                   css:{"width":"650px","margin-left":"-325px"},
-                                                                  bodyCss:{"min-height":"360px"}
+                                                                  bodyCss:{"min-height":"425px"}
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/netsuite/login"],function(loginPage){                                        
                                     var lPage = new loginPage({camp:self,app:camp_obj.app,dialog:dialog});
                                     dialog.getBody().html(lPage.$el);
+                                   dialog.getBody().find('#btnTestLogin').css('float','left');
+                                    dialog.getBody().find('.login-saving').css('width','auto');
                                 })
                                 
                             }
@@ -3322,21 +3335,28 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @further call.showHighriseArea
                 */
                 showHighrise: function(){
-                      
+                    this.$("#area_netsuite_import").hide();
+                    this.$("#netsuite_welcome").hide();
+                    this.$("#netsuite_mapping").hide();
+                    this.$("#netsuite_login").show();
+                    this.$("#netsuite_setup").hide();
+                    this.$('#highrise_setup').hide();
+                    this.$('#highrise_setup').show();
                         var camp_obj = this;	
                         var highrise_setting = this.app.getAppData("highrise");
                        
                         if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
                         {
-                                camp_obj.app.showLoading("Getting Highrise Status...",camp_obj.$el.find('#highrise_setup'));                                
+                              this.app.showLoading("Loading Highrise...",camp_obj.$(".step3")); 
+                                 //this.app.showLoading("Checking Status...",this.$(".step3").find('.highrise-import-setting'));         
                                 this.app.getData({
                                     "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"highrise",
-                                    "callback":_.bind(this.showHighriseArea,this)
+                                    "callback":_.bind(camp_obj.getPeopleCountHighrise,this)
                                 });
                         }
                         else{
-                            this.showHighriseArea();
+                            camp_obj.getPeopleCountHighrise();
                         }
                 },
                  /**
@@ -3344,30 +3364,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @ Import Highrise 2nd step code is required here.
                 */
                 showHighriseArea:function(){
-                    
+                     
                      var active_ws = this.$el.parents(".ws-content");
                      var that = this;
-                     ;
-                    this.$("#area_netsuite_import").hide();
-                    this.$("#netsuite_welcome").hide();
-                    this.$("#netsuite_mapping").hide();
-                    this.$("#netsuite_login").show();
-                    this.$("#netsuite_setup").hide();
-                    this.$('#highrise_setup').hide();
-                    this.$el.find('#highrise_setup').show();
-              
+                  
+                    
                     if(typeof this.isHighriseRequire !="undefined"){
                         if(this.isHighriseRequire){
-                             
                             return;
                         }
-                    }  
-                        
-                                
-                      this.app.showLoading("Loading Import...",this.$(".step2"));
+                    } 
+                       
+                       
                       
-                        require(["crm/highrise/import"],_.bind(function(page){  
-                              
+                       // this.app.showLoading(false,this.$(".step3").find('.highrise-import-setting')); 
+                            
+                       require(["crm/highrise/import"],_.bind(function(page){  
                              if(that.states.step3.recipientType.toLowerCase()=="highrise" && that.camp_id){
                                     var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -3379,9 +3391,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                            that.states.step3.recipientDetial = rec_josn;
                                            that.Import_page = new page({
                                                  page:that,
+                                                 highriseCount:that.peopleCount,
                                                 edit:that.states.step3.recipientDetial
                                             })
-                                        active_ws.find("#highrise_import_container").html(that.Import_page.$el); 
+                                          active_ws.find("#highrise_import_container").html(that.Import_page.$el); 
+                                       }else{
+                                           
                                        }
                                    });
                                  
@@ -3389,23 +3404,25 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   
                                }else{
                                  that.Import_page = new page({
-                                    page:that 
+                                    page:that ,
+                                    highriseCount:that.peopleCount
                                   })
                                   active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
                              }    
                             
                                             
                         },this));
-                        this.app.showLoading(false,that.$el.find('#highrise_setup'));                       
+                       
+                           
                      //// Mapping 
                      this.$("#hs_setting_menu li").click(_.bind(function(obj){
-                            var target_obj = $.getObj(obj,"li");
+                             var target_obj = $.getObj(obj,"li");
                              var dialog_width = $(document.documentElement).width()-60;
                              var dialog_height = $(document.documentElement).height()-220;
                             if(target_obj.attr("id")=="hs_mapping"){
                                  var dialog = this.app.showDialog({title:' Specify Import',
-                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px"},
-                                    bodyCss:{"min-height":dialog_height+"px"},
+                                    css:{"width":"1200px","margin-left":"-600px"},
+                                    bodyCss:{"min-height":"443px"},
                                     buttons: {saveBtn:{text:'Save Mapping'} }
                                 });                              
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
@@ -3413,16 +3430,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                      var mPage = new mappingPage({camp:that,app:that.app,dialog:dialog});
                                      dialog.getBody().html(mPage.$el);
                                      dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
-                                     dialog.getBody().find('.bDiv').css('height','300px');
+                                     dialog.getBody().find('.bDiv').css('height','320px');
                                      
                                 });
-                                
+                                 this.app.showLoading(false,dialog.getBody());        
                             }
                             else if(target_obj.attr("id")=="hs_user_setting"){                                
                                 
                                 var dialog = this.app.showDialog({title:'Highrise Login Setup',
                                                                   css:{"width":"650px","margin-left":"-325px"},
-                                                                  bodyCss:{"min-height":"360px"}
+                                                                  bodyCss:{"min-height":"390px"}
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/highrise/login"],function(loginPage){                                        
@@ -3431,10 +3448,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     dialog.getBody().find('#btnTestLogin').css('float','left');
                                     dialog.getBody().find('.login-saving').css('width','auto');
                                 })
-                                
+                                this.app.showLoading(false,dialog.getBody());
                             }
                         },this))
-                     
+                      this.app.showLoading(false,this.$(".step3"));      
                 },
                 /**
                 * When you press next or save, this function is just checking and collection data
@@ -3445,7 +3462,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       
                     var highrise_val = this.$("input[name='options_hr']:checked").val();    
                     if(highrise_val=="tags"){
-                       var selected_tag = this.$("#nsgroup_list_grid tr.selected")
+                       var selected_tag = this.$("#hsgroup_list_grid tr.selected")
                        if(selected_tag.length===1){
                           post_data['tagId']= selected_tag.attr("id").split("_")[1];
                           post_data['filterType']= "tag";//Required fields:  tagId  [22]                            
@@ -3493,6 +3510,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     } 
 
                     return post_data;
+                },
+                getPeopleCountHighrise:function(){
+                    var that = this;
+                    this.app.showLoading("Loading Highrise Count...",this.$(".step3")); 
+                    var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
+                        jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
+                        var _count = jQuery.parseJSON(xhr.responseText);
+                        that.peopleCount = _count.peopleCount;
+                         that.app.showLoading("Loading Import...",that.$(".step3")); 
+                        that.showHighriseArea();
+                        that.app.showLoading(false,that.$(".step3"));
+                    }));
                 }
         });
 });
