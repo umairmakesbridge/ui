@@ -180,34 +180,37 @@ function (template) {
                        this.$(":radio[value=tags]").parents('h3').click();
                        this.$(":radio[value=tags]").iCheck('check');
                        this.$("#hsgroup_list_grid tr[id='row_"+recipient_obj.filterQuery+"']").addClass("selected");    
-                       
+                       this.$('#pn').slideDown();
                        
                    }
                   else if(recipient_obj.filterType==="since"){
                            this.$(":radio[value=date]").parents('h3').click();
                            this.$(":radio[value=date]").iCheck('check');   
                            var since = recipient_obj.filterQuery;
-                            
+                           this.$('#pn').slideDown();
                            var since = since.substring(0, 4) + '/' +  since.substring(4,6)+ '/'+since.substring(6,8)+ '  '+ since.substring(8,10)+ ':'+since.substring(10)
                             this.$("#txtdatefield").val(since);
                    }
                    else if(recipient_obj.filterType==="criteria"){
                           this.$(":radio[value=filterbyfield]").parents('h3').click();
                            this.$(":radio[value=filterbyfield]").iCheck('check'); 
-                            
+                           this.$('#pn').slideDown();
                    }
                    else if(recipient_obj.filterType==="term"){
                         this.$(":radio[value=search]").parents('h3').click();
                            this.$(":radio[value=search]").iCheck('check'); 
                            this.$("#txtsearchbyfield").val(recipient_obj.filterQuery);
+                          this.$('#pn').slideDown();
                    }
                    else if(recipient_obj.filterType==="all" || recipient_obj.filterType===""){
-                            this.$(":radio[value=importall]").iCheck('check');   
+                            this.$(":radio[value=importall]").iCheck('check');  
+                            this.$('#pn').slideDown();
                    }
                    
                 }
                 else{
                  this.$(":radio[value=importall]").iCheck('check'); 
+                 this.$('#pn').slideDown();
                    }
                    this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.highriseCount+"</strong></div>");
                this.app.showLoading(false,this.$el);
