@@ -137,6 +137,7 @@ function (template) {
                                group_html += '</tbody></table>';                                       
                                //Setting netsuite group listing grid
                                self.$("#hrTagsList").html(group_html);   
+                               self.setHighriseData();
                                self.$el.find("#hsgroup_list_grid").bmsgrid({
                                        useRp : false,
                                        resizable:false,
@@ -145,8 +146,6 @@ function (template) {
                                        usepager : false,
                                        colWidth : ['97%','3%']
                                });
-                               
-                               self.setHighriseData();
                             }
                         }
                         else{
@@ -159,7 +158,7 @@ function (template) {
                                         self.$(":radio[value=tags]").iCheck('check');                               
                                    $(this).parents("tr").addClass("selected");
                      });   
-                    }).fail(function() { console.log( "error net suite group listing" ); });
+                    }).fail(function() { console.log( "error net highrise group listing" ); });
                    
                    this.app.showLoading(false,this.$("#hrTagsList"));
                },
