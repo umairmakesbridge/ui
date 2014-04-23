@@ -3338,7 +3338,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#area_netsuite_import").hide();
                     this.$("#netsuite_welcome").hide();
                     this.$("#netsuite_mapping").hide();
-                    this.$("#netsuite_login").show();
+                    //this.$("#netsuite_login").show();
                     this.$("#netsuite_setup").hide();
                     this.$('#highrise_setup').hide();
                     this.$('#highrise_setup').show();
@@ -3347,8 +3347,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        
                         if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
                         {
-                              this.app.showLoading("Loading Highrise...",camp_obj.$(".step3")); 
-                                 //this.app.showLoading("Checking Status...",this.$(".step3").find('.highrise-import-setting'));         
+                             
+                                 this.app.showLoading("Checking Status...",this.$("#highrise_setup").find('#highrise_import_container'));         
                                 this.app.getData({
                                     "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"highrise",
@@ -3370,13 +3370,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             return;
                         }
                     } 
-                     
-                       // this.app.showLoading(false,this.$(".step3").find('.highrise-import-setting')); 
                         var that = this;      
                        require(["crm/highrise/import"],_.bind(function(page){  
-                             
                              if(that.states.step3.recipientType.toLowerCase()=="highrise" && that.camp_id){
-                                 that.app.showLoading("Loading Imports...",that.$("#highrise_setup"));
                                     var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){                               
@@ -3391,14 +3387,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                 edit:that.states.step3.recipientDetial
                                             })
                                           active_ws.find("#highrise_import_container").html(that.Import_page.$el);
-                                           that.app.showLoading(false,that.$("#highrise_setup"));
-                                       }else{
+                                        }else{
                                            
                                        }
                                    });
-                                 
-                                     
-                                  
                                }else{
                                  that.Import_page = new page({
                                     page:that ,
@@ -3406,11 +3398,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   })
                                   active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
                              }    
-                           
-                                            
                         },this));
-                      
-                           
                      //// Mapping 
                      this.$("#hs_setting_menu li").click(_.bind(function(obj){
                              var target_obj = $.getObj(obj,"li");
@@ -3510,14 +3498,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 getPeopleCountHighrise:function(){
                     var that = this;
-                    this.app.showLoading("Loading Highrise Count...",this.$(".step3")); 
+                    this.app.showLoading("Loading Counts...",this.$("#highrise_setup").find('#highrise_import_container'));         
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 
                     }));
-                    that.app.showLoading(false,that.$(".step3"));
+                    that.app.showLoading(false,that.$("#highrise_setup"));
                 }
         });
 });
