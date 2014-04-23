@@ -1424,7 +1424,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   this.states.editor_change = true;  
                 },
                 step3Change:function(){
-                  console.log('Step 3 Changes, around the clock');
+                 
                   this.states.step3.change=true;  
                 },
                 showSalesForceArea:function(){                    
