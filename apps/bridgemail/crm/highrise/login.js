@@ -204,7 +204,7 @@ define(['text!crm/highrise/html/login.html'],
                         control:el.find(".uid-container")
                         });
                 }
-                console.log(isValid);
+                
                 var highrise_setting = this.app.getAppData("highrise");
                 var highriseLoggedIn = highrise_setting && highrise_setting[0] !== "err" && highrise_setting.isHighriseUser=="Y";
                

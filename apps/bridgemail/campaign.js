@@ -1712,7 +1712,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      var that = this;
                     this.$el.find(".report").click(function(){
                           var camp_id=$(this).parents("tr").attr("id").split("_")[1];
-                          console.log(camp_id);
+                        
                           that.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
                       })      
                 }

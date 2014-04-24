@@ -457,7 +457,7 @@ function (Wizard,template,moment) {
                         this.tId = data.tId;
                         this.count = data.sampleCount;
                         this.editImport=data;
-                        console.log(data.listNumber);
+                       
                         this.$("#import-list-grid tr").removeClass("selected");
                         this.$("#import-list-grid tr[checksum='"+data.checkSum+"']").addClass("selected");
                         this.$("#import-list-grid tr[checksum='"+data.checkSum+"']").scrollintoview(); 
