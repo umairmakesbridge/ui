@@ -15,7 +15,7 @@ function (template,highlighter) {
             */
             events: {
                'click .btn-copy':'copyCampaign',
-               //'click .btn-gray':'openCampaign',
+               'click  a.campname':'previewCampaign',
                'click .taglink':'tagClick',
                'click .report':'reportShow',
             },
@@ -112,11 +112,26 @@ function (template,highlighter) {
                     this.$(".taglink").highlight($.trim(this.parent.tagTxt));
                 }    
             },
-            openCampaign:function(){
-               var camp_id = this.model.get('campNum.encode');
-               var camp_wsid = this.model.get('campNum.checksum');
-               this.app.mainContainer.openCampaign(camp_id,camp_wsid);
-            },
+             previewCampaign:function(){
+                                var camp_id = this.model.get('campNum.encode');
+                                var camp_obj = this.parent;
+				//var appMsgs = this.app.messages[0];				
+				var dialog_width = $(document.documentElement).width()-60;
+				var dialog_height = $(document.documentElement).height()-182;
+				var dialog = this.app.showDialog({title:'Campaign Preview of &quot;' + this.model.get('name') + '&quot;' ,
+						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+						  headerEditable:false,
+						  headerIcon : 'dlgpreview',
+						  bodyCss:{"min-height":dialog_height+"px"}
+				});	
+				this.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
+                                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                                require(["common/templatePreview"],_.bind(function(templatePreview){
+                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                                 dialog.getBody().html(tmPr.$el);
+                                 tmPr.init();
+                               },this));
+                    },
             copyCampaign: function()
 			{
                           
