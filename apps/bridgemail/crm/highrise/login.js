@@ -79,8 +79,8 @@ define(['text!crm/highrise/html/login.html'],
                     that.$el.find('#hrAccount,#hrEmail,#hrApiToken').removeAttr('readonly');
                    that.$el.find('#btnTestLogin').removeClass('saving');
                     var creds = jQuery.parseJSON(data);                            
-                    if(creds.err)							
-                        app.showAlert(creds.err.replace('&#58;',':'),this.$el);
+                    if(creds[0] == "err")							
+                        app.showAlert(creds[1].replace('&#58;',':'),this.$el);
                     else
                         app.showMessge(creds.success,that.$el);
                 });
@@ -157,9 +157,10 @@ define(['text!crm/highrise/html/login.html'],
                     var creds = jQuery.parseJSON(data);     
                     el.find('#hrAccount,#hrApiToken').removeAttr('readonly');                                                
                     el.find('.btnSaveLogin').removeClass('saving');
-                    if(creds.err)
+                    
+                    if(creds[0] == "err")
                     {							
-                        app.showAlert(creds.err.replace('&#58;',':'),that.$el);							
+                        app.showAlert(creds[1].replace('&#58;',':'),that.$el);							
                     }
                     else
                     {

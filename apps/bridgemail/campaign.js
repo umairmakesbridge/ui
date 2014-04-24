@@ -3368,7 +3368,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 this.app.getData({
                                     "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"highrise",
-                                    "callback":_.bind(camp_obj.getPeopleCountHighrise,this)
+                                    "callback":_.bind(camp_obj.getPeopleCountHighrise,this),
+                                    "errorCallback":_.bind(camp_obj.highriseErrorCallBack,this),
                                 });
                         }
                         else{
@@ -3396,11 +3397,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){                               
-                                           var rec_josn = jQuery.parseJSON(xhr.responseText);                                   
-                                           if(that.app.checkError(rec_josn)){
+                                           var rec_json = jQuery.parseJSON(xhr.responseText); 
+                                          
+                                           if(that.app.checkError(rec_json)){
                                                 return false;
                                            }
-                                           that.states.step3.recipientDetial = rec_josn;
+                                           that.states.step3.recipientDetial = rec_json;
                                            that.Import_page = new page({
                                                  page:that,
                                                  highriseCount:that.peopleCount,
@@ -3425,46 +3427,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            
                                             
                         },this));
-                      
+                      that.highriseBindEvents();
                            
                      //// Mapping 
-                     this.$("#hs_setting_menu li").click(_.bind(function(obj){
-                             var target_obj = $.getObj(obj,"li");
-                             var dialog_width = $(document.documentElement).width()-60;
-                             var dialog_height = $(document.documentElement).height()-220;
-                            if(target_obj.attr("id")=="hs_mapping"){
-                                 var dialog = this.app.showDialog({title:' Specify Import',
-                                    css:{"width":"1400px","margin-left":"-700px"},
-                                    bodyCss:{"min-height":"410px"},
-                                    buttons: {saveBtn:{text:'Save Mapping'} }
-                                });                              
-                                this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
-                                require(["crm/highrise/mapping"],function(mappingPage){                                     
-                                     var mPage = new mappingPage({camp:that,app:that.app,dialog:dialog});
-                                     dialog.getBody().html(mPage.$el);
-                                     dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
-                                     dialog.getBody().find('.bDiv').css('height','320px');
-                                     
-                                });
-                                 this.app.showLoading(false,dialog.getBody());        
-                            }
-                            else if(target_obj.attr("id")=="hs_user_setting"){                                
-                                
-                                var dialog = this.app.showDialog({title:'Highrise Login Setup',
-                                                                  css:{"width":"650px","margin-left":"-325px"},
-                                                                  bodyCss:{"min-height":"390px"}
-                                    });
-                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
-                                require(["crm/highrise/login"],function(loginPage){                                        
-                                    var lPage = new loginPage({camp:that,app:that.app,dialog:dialog});
-                                    dialog.getBody().html(lPage.$el);
-                                    dialog.getBody().find('#btnTestLogin').css('float','left');
-                                    dialog.getBody().find('.login-saving').css('width','auto');
-                                })
-                                this.app.showLoading(false,dialog.getBody());
-                            }
-                        },this))
-                      
+                     
                 },
                 /**
                 * When you press next or save, this function is just checking and collection data
@@ -3539,6 +3505,55 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         that.showHighriseArea(that); 
                     }));
                     that.app.showLoading(false,that.$(".step3"));
-                }
+                },
+                highriseErrorCallBack:function(){
+                     
+                    var that = this;
+                    that.app.showAlert("Connection to highrise failed, Please try again later.",that.$el);
+                    that.app.showLoading(false,that.$(".step3"));  
+                    var active_ws = this.$el.parents(".ws-content");
+                    that.highriseBindEvents();
+                        
+                },
+               highriseBindEvents:function(){
+                   var that = this;
+                   this.$("#hs_setting_menu li").click(_.bind(function(obj){
+                             var target_obj = $.getObj(obj,"li");
+                             var dialog_width = $(document.documentElement).width()-60;
+                             var dialog_height = $(document.documentElement).height()-220;
+                            if(target_obj.attr("id")=="hs_mapping"){
+                                 var dialog = this.app.showDialog({title:' Specify Import',
+                                    css:{"width":"1400px","margin-left":"-700px"},
+                                    bodyCss:{"min-height":"410px"},
+                                    buttons: {saveBtn:{text:'Save Mapping'} }
+                                });                              
+                                this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
+                                require(["crm/highrise/mapping"],function(mappingPage){                                     
+                                     var mPage = new mappingPage({camp:that,app:that.app,dialog:dialog});
+                                     dialog.getBody().html(mPage.$el);
+                                     dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
+                                     dialog.getBody().find('.bDiv').css('height','320px');
+                                     
+                                });
+                                 this.app.showLoading(false,dialog.getBody());        
+                            }
+                            else if(target_obj.attr("id")=="hs_user_setting"){                                
+                                
+                                var dialog = this.app.showDialog({title:'Highrise Login Setup',
+                                                                  css:{"width":"650px","margin-left":"-325px"},
+                                                                  bodyCss:{"min-height":"390px"}
+                                    });
+                                this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
+                                require(["crm/highrise/login"],function(loginPage){                                        
+                                    var lPage = new loginPage({camp:that,app:that.app,dialog:dialog});
+                                    dialog.getBody().html(lPage.$el);
+                                    dialog.getBody().find('#btnTestLogin').css('float','left');
+                                    dialog.getBody().find('.login-saving').css('width','auto');
+                                })
+                                this.app.showLoading(false,dialog.getBody());
+                            }
+                        },this))
+                      
+               }
         });
 });
