@@ -16,7 +16,7 @@ function (template,MyImports,moment) {
                     this.app = this.options.page.app;                                                 
                     this.parent = this.options.page;
                     this.$el.html(this.template({}));                    
-                    this.$myImportsContainer = this.$(".myimports-table");
+                    this.$myImportsContainer = this.$(".sfmyimports-table");
                     this.initControl();                                                              
                     
                 },
@@ -25,7 +25,7 @@ function (template,MyImports,moment) {
                             id:'myimports-search',
                             width:'300px',
                             height:'22px',
-                            gridcontainer: 'myimports_list_grid',
+                            gridcontainer:'myimports_list_grid_salesforce',
                             placeholder: 'Search my imports',                     
                             showicon: 'yes',
                             iconsource: 'campaigns'
@@ -39,7 +39,7 @@ function (template,MyImports,moment) {
                     this._request = this.myImportsRequest.fetch({
                       success: _.bind(function (collection, response) {                                                        
                            if(collection.length){                               
-                            var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
+                            var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid_salesforce"><tbody>';                                
                            _.each(collection.models,function(val,key){
                               myimports_html += '<tr id="row_'+val.get("tId")+'">';    
                                 var import_name = val.get("name")?val.get("name"):val.get("listName");
@@ -59,7 +59,7 @@ function (template,MyImports,moment) {
                           },this);
                             myimports_html +="</tbody></table>";
                             this.$myImportsContainer.html(myimports_html);
-                            this.$("#myimports_list_grid").bmsgrid({
+                            this.$("#myimports_list_grid_salesforce").bmsgrid({
                                     useRp : false,
                                     resizable:false,
                                     colresize:false,
@@ -67,9 +67,9 @@ function (template,MyImports,moment) {
                                     usepager : false,
                                     colWidth : ['100%','20px','60px']
                             });
-                            this.$("#myimports_list_grid tr td:nth-child(1)").attr("width","100%");
-                            this.$("#myimports_list_grid tr td:nth-child(2)").attr("width","20px");
-                            this.$("#myimports_list_grid tr td:nth-child(3)").attr("width","60px");
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(1)").attr("width","100%");
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(2)").attr("width","20px");
+                            this.$("#myimports_list_grid_salesforce tr td:nth-child(3)").attr("width","60px");
                             this.$myImportsContainer.find(".deactivate-import").click(_.bind(this.deactivateImport,this)); 
                              this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
                             
