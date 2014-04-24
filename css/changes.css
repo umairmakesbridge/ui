@@ -2195,7 +2195,7 @@ i.contact-name-prev {
 	    background: url("../img/listchecked-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 	}
 	.filtercheck {
-	   border-radius: 0 2px 2px 0;
+	    border-radius: 0 2px 2px 0;
 	    min-height: 64px;
 	    min-width: 41px;
 	}
@@ -2241,7 +2241,9 @@ i.contact-name-prev {
 .since{
    line-height: 35px !important;
 }
-        
+#copy_camps_grid{
+    overflow: hidden;
+}/*later must be checked*/
 /* ENDS */
 
 .videobar{

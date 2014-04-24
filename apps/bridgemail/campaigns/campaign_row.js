@@ -33,6 +33,7 @@ function (template,highlighter) {
                     this.template = _.template(template);				
                     this.sub = this.options.sub
                     this.app = this.sub.app;
+                    this.tagTxt = '';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
             },
@@ -161,7 +162,9 @@ function (template,highlighter) {
             initControls:function(){
                 if(this.sub.searchTxt){
                     this.$(".show-detail").highlight($.trim(this.sub.searchTxt));
-                    this.$(".tag").highlight($.trim(this.sub.searchTxt));
+                    this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                }else{
+                    this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                 }
                 
             },
@@ -295,13 +298,12 @@ function (template,highlighter) {
 			},
                         tagClick:function(obj){
                             this.sub.taglinkVal = true;
+                            this.tagTxt = obj.currentTarget.text;
                              this.app.initSearch(obj,this.sub.$el.find("#list-search"));
                         },
                         reportShow:function(){
-                             
                                         var camp_id=this.model.get('campNum.encode');
                                         this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
-                                   
                         },
                         draftBtnClick: function(){
                              var camp_obj = this.sub;
@@ -350,6 +352,10 @@ function (template,highlighter) {
                                 } 
                            camp_obj.status = camp_status;
                            camp_obj.total_fetch = 0;
+                           camp_obj.searchTxt='';
+                           camp_obj.$el.find('#list-search').val('');
+                           camp_obj.$el.find('#clearsearch').hide();
+                           camp_obj.type = 'listNormalCampaigns';
                            camp_obj.getallcampaigns();
                         },
                         schOpenCampaign:function(ev){

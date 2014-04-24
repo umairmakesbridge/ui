@@ -82,16 +82,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.camp_id = this.options.params.camp_id;
                     }
                     this.loadDataAjax(); // Load intial Calls
-                    this.$el.find('div#copycampsearch').searchcontrol({
-                            id:'copy-camp-search',
-                            width:'300px',
-                            height:'22px',
-                            placeholder: 'Search Campaigns',
-                            gridcontainer: 'camp_list_grid',
-                            showicon: 'yes',
-                            iconsource: 'campaigns',
-                            countcontainer: 'copy_no_of_camps'
-                     });
+                    
                      this.$el.find('div#listssearch').searchcontrol({
                             id:'list-search',
                             width:'300px',
@@ -334,6 +325,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.checksum = camp_json['campNum.checksum'];
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
+        
                         //Setting tab details
                         var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
                         camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
@@ -898,7 +890,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
                   if(campaign_listing.length){
                        campaign_listing.data("viewObj").total_fetch = 0;
-                    campaign_listing.data("viewObj").getallcampaigns();
+                       campaign_listing.data("viewObj").getallcampaigns();
+                       campaign_listing.data("viewObj").headBadge();
                   }
                 },
                 saveCampaign:function(obj){                                      
@@ -2195,12 +2188,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
                          break;
                          case 'copy_campaign':
-                            this.getallcampaigns();                                 
+                               this.getcampaignscopy();
+                              // this.getallcampaigns();                                 
                          break;
                          default:
                          break;
                     }
                     
+                },
+                getcampaignscopy:function(){
+                    // Abdullah 
+                    
+                    this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
+                    require(["campaigns/copy_campaign_listing"],_.bind(function(templatePreview){                                     
+                        var mPage = new templatePreview({app:this.app,sub:this,checksum:this.checksum});
+                        this.$("#area_copy_campaign").html(mPage.$el);
+                    },this));
                 },
                 getallcampaigns: function () {
                     var camp_obj = this;
@@ -3250,9 +3253,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
                    });
-                   camp_obj.getallcampaigns();
-                   var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
-                   campaign_listing.data("viewObj").headBadge();
+                   //camp_obj.getallcampaigns();
+                   camp_obj.refreshCampaignList();
+                   //var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
+                   
                },
                addZero:function(val){
                    val = val.toString().length==1?"0"+val:val;
