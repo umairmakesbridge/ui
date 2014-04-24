@@ -388,7 +388,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         type:'',
                         title:'Highrise',
                         url:'crm/highrise/highrise',
-                        tab_icon:'highrise',
+                        workspace_id: 'crm_highrise',
+                        tab_icon:'highrises',
                         sub_title:'Connection With Apps'
                     });
                 }

@@ -111,7 +111,7 @@ function (template) {
                     
                     var self = this;                   
                     this.app.showLoading("Loading Tags...",this.$("#hrTagsList"));
-                    this.$el.find('#hrTagsList').parent().css("min-height","340px");
+                    this.$el.find('#hrTagsList').parent().css("min-height","305px");
                     this.$el.find('.templates-container').parent().css("min-height","90px");
                    
                     

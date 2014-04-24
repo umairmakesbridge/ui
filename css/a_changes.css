@@ -1202,9 +1202,7 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center ;}
 //// End Campaign Summary /////
 
-.wtab-highrise{
-    background:url("../img/hr-icon30.png") no-repeat scroll center center;
-}
+
 .highrise-login .colico.sfr > strong {
     background: url('../img/hrricon.png') no-repeat scroll 8px 23px transparent;
 }
@@ -1642,6 +1640,8 @@ ul.dd-menu li.active  a:after {
        height: 31px;
     top: 2px;
 }
+.wtab-highrises{
+    background:url("../img/hr-icon30.png") no-repeat scroll center center;
 }
 /* --------------------------------- */
 
