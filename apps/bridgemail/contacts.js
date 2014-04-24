@@ -17,7 +17,13 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     if(target.attr("id")){
                        this.app.mainContainer.openSubscriber(target.attr("id"));
                     }
-                }
+                },
+                "click .searchbtn":function(){
+                        this.searchTxt=this.$("#contact-search").val();
+                        if(this.searchTxt){
+                            this.search()
+                        }
+                    }
             },
             /**
              * Initialize view - backbone .
@@ -229,15 +235,17 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.tagTxt = '';
                 this.searchTxt = txt;                                
                 if(o.keyCode==13 && this.searchTxt){
-                    if(this.searchTxt.indexOf("Tag: ")>-1){
-                       var tagName = this.searchTxt.split(": ");
-                       this.searchByTag(tagName[1]);
-                    }
-                    else{
-                        this.fetchContacts();
-                    }
-                   
+                    this.search();
                 }                
+            },
+            search:function(){
+                if(this.searchTxt.indexOf("Tag: ")>-1){
+                    var tagName = this.searchTxt.split(": ");
+                    this.searchByTag(tagName[1]);
+                 }
+                 else{
+                     this.fetchContacts();
+                 }  
             },
              /**
             * Clear Search Results

@@ -11,7 +11,10 @@ function (template,highlight) {
              * Attach events on elements in view.
             */            
             events: {				
-                'click .create-tempalte':'createTemplate'
+                'click .create-tempalte':'createTemplate',
+                'click .searchbtn':function(){
+                     this.$("#search-template-input").keyup();
+                } 
             },
             /**
              * Initialize view - backbone .
@@ -163,7 +166,7 @@ function (template,highlight) {
                     var _input = $.getObj(obj,"input");
                     var val = $.trim(_input.val());
                     
-                    if(obj.keyCode==13){                       
+                    if(obj.keyCode==13 || typeof(obj.keyCode)=="undefined"){                       
                         this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
                         this.getTemplateCall.abort();
                         if(val!==""){
