@@ -226,6 +226,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));
                             this.$el.find('#camps_grid tbody').html('');           
                             this.$(".notfound").remove();
+
                             }
                             else{
                                 this.offset = parseInt(this.offset) + this.offsetLength;

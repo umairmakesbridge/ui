@@ -53,7 +53,7 @@ function (template,Mapping) {
                                        useRp : false,
                                        resizable:false,
                                        colresize:false,
-                                       height:300,
+                                       height:320,
                                        usepager : false,
                                        colWidth : ['100%','90px']
                                });

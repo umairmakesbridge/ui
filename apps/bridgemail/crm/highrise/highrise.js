@@ -19,6 +19,7 @@ define(['text!crm/highrise/html/highrise.html'],
                     newimport:false,
                     newexport:false
                 };
+                this.peopleCount = 0;
                 this.render();
 
             },
@@ -85,10 +86,11 @@ define(['text!crm/highrise/html/highrise.html'],
                 </div>');
                 this.current_ws.find(".camp_header .tagscont").remove();                
                 this.current_ws.find(".camp_header .edited").append(header_part);                
-                
+                var that = this;
                 var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                 jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                     var _count = jQuery.parseJSON(xhr.responseText);
+                    that.peopleCount = _count.peopleCount;
                     if(_count.synchCount!=="0"){
                         this.current_ws.find(" .camp_header .syncing").html('<span class="syncingicon"></span> <span class="sync_count">'+_count.synchCount+'</span> synchs running');
                     }                                        

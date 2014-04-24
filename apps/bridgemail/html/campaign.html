@@ -397,7 +397,7 @@ width: 244px;" ></div>
 
 </div>
 <div class="wizard-steps step3">  
-    <div class="selection-boxes" style="width: 840px;"> <!--<a class="prev"><span></span></a>-->
+    <div class="selection-boxes" style="width: 980px;"> <!--<a class="prev"><span></span></a>-->
         <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recipients</strong>"  options from  below.</p></div>
         <ul id="choose_soruce">
             <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
@@ -406,6 +406,7 @@ width: 244px;" ></div>
             <li id="upload_csv"><a><img alt="" src="img/csv.png"><span>Upload CSV</span></a></li>
             <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span>Import from Salesforce</span></a></li>
             <li id="netsuite_import"><a><img alt="" src="img/netsuite.png"><span>Import from Netsuite</span></a></li>
+            <li id="highrise_import"><a><img alt="" src="img/highrisewizard.png"><span>Import from Highrise</span></a></li>
         </ul>
         <!--<a class="next"><span></span></a>-->
         <div class="clearfix"></div>
@@ -479,16 +480,15 @@ width: 244px;" ></div>
 
             <div class="heading">
                 <strong class="left">Salesforce</strong>
+                
                 <div class="iconpointy">
-                    <a class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
-                    <!--<a class="icon setting"></a>-->
-                    <div class="pointy">
-                        <ul id="sf_setting_menu">
-                            <li id="sf_mapping"><a><span>Change Fields Mapping</span></a></li>
-                            <li id="sf_user_setting"><a><span>Edit Login Settings</span></a></li>
-                        </ul>
-                    </div>
-                </div>       
+                   <a  class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
+                   <ul  class="dd-menu" id="sf_setting_menu">
+                        <li  id="sf_mapping"><a>Change Fields Mapping </a></li>
+                        <li id="sf_user_setting"><a>Edit Login Settings</a></li>
+                   </ul>
+                </div>
+              
             </div>
             <div class="clearfix"></div>
             <div class="salesforce_campaigns" style="display: block">                           
@@ -544,6 +544,28 @@ width: 244px;" ></div>
             </div>                            
         </div>
     </div>
+    
+     <div id="highrise_setup" style="display:none">
+            <div class="heading">
+                <strong class="left">Highrise</strong>
+                
+                <div class="iconpointy" style="left:9px; top:3px">
+                   <a  class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
+                   <ul  class="dd-menu" id="hs_setting_menu">
+                        <li  id="hs_mapping"><a>Change Fields Mapping </a></li>
+                        <li id="hs_user_setting"><a>Edit Login Settings</a></li>
+                   </ul>
+                </div>
+                
+               
+          </div>
+         <div id="highrise_import_container" class="highrise-import-setting">
+          
+          </div>
+     </div>
+    
+    
+   
     <!-- Saelsforce import section Ends -->
     <!-- Netsuite import section starts -->
     <div id="area_netsuite_import" class="content-inner soruces clearfix" style="display: none">
@@ -559,19 +581,13 @@ width: 244px;" ></div>
             <div class="heading">
                 <strong class="left">Netsuite</strong>
                 <div class="iconpointy">
-                    <a class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
-                    <!--<a class="icon setting"></a>-->
-                    <div class="pointy">
-                        <ul id="ns_setting_menu">
-                            <li id="ns_mapping"><a><span>Change Fields Mapping</span></a></li>
-                            <li id="ns_user_setting"><a><span>Edit Login Settings</span></a></li>
-                        </ul>
-                    </div>
-                </div> 
-
-
-
-            </div>
+                   <a  class="btn-green"><i class="icon setting left"></i><b class="caret"></b></a>
+                   <ul  class="dd-menu" id="ns_setting_menu">
+                        <li  id="ns_mapping"><a>Change Fields Mapping </a></li>
+                        <li id="ns_user_setting"><a>Edit Login Settings</a></li>
+                   </ul>
+                </div>
+                </div>
 
             <div class="clearfix"></div>
             <div class="netsuite_groups" style="display: block">                           

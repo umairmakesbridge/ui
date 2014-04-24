@@ -22,17 +22,7 @@ define(['text!crm/highrise/html/login.html'],
                             this.saveCredentials();
                     }
                 },
-                "click .setEmail":function(obj){
-                   if($(obj.target).hasClass('saving'))
-                        return false;
-                    else
-                    {
-                        var el = this.$el;                        
-                        var isValid = this.validateEmail();
-                        if(isValid)
-                            this.saveEmail();
-                    }
-                } 
+                "click .setEmail": 'checkEmptyEmail'
             },
             initialize: function () {
                 this.template = _.template(template);				
@@ -80,7 +70,7 @@ define(['text!crm/highrise/html/login.html'],
                 that.$el.find('#hrAccount,#hrEmail,#hrApiToken').attr('readonly','readonly');
                 var highrise_setting = this.app.getAppData("highrise");
                 that.$el.find('#btnTestLogin').addClass('saving');
-                console.log(highrise_setting);
+               
                 var highriseLoggedIn = highrise_setting && highrise_setting[0] !== "err" && highrise_setting.isHighriseUser=="Y";
                    
                 var URL = "/pms/io/highrise/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=testCred";
@@ -96,7 +86,31 @@ define(['text!crm/highrise/html/login.html'],
                 });
                 app.showLoading(false,that.$el);
             },
-            saveEmail: function() {
+            checkEmptyEmail:function(obj){
+                var that = this;                        
+                var app = this.app; 
+                var el = this.$el;
+              if($(obj.target).hasClass('saving')){
+                        return false;
+                    }else{
+                        var el = this.$el;                        
+                        var isValid = this.validateEmail();
+                        // check email if its empty
+                         if(!el.find('#hrEmail').val()) {						
+                                 that.app.showError({
+                                 control:el.find('.email-container'),
+                                message:"Email can't be empty"
+                                });
+                            isValid = false;
+                         }
+                        
+                        if(isValid)
+                            this.saveEmail();
+                    }
+                 
+            },
+            
+            saveEmail:function() {
                 var that = this;                        
                 var app = this.app; 
                 var el = this.$el;
@@ -130,7 +144,7 @@ define(['text!crm/highrise/html/login.html'],
                 var logindialog = this.dialog;
                 var app = this.app;
                 var el = this.$el;
-                el.find('#hrAccount,#hrEmail,#hrApiToken').attr('readonly','readonly');
+                el.find('#hrAccount,#hrApiToken').attr('readonly','readonly');
                 el.find('.btnSaveLogin').addClass('saving');
                 app.showLoading(true,that.$el);
                 var URL = "/pms/io/highrise/setup/?BMS_REQ_TK="+app.get('bms_token')+"&type=setCred";				
@@ -141,7 +155,7 @@ define(['text!crm/highrise/html/login.html'],
                     })
                 .done(function(data) { 
                     var creds = jQuery.parseJSON(data);     
-                    el.find('#hrAccount,#hrApiToken,#hrEmail').removeAttr('readonly');                                                
+                    el.find('#hrAccount,#hrApiToken').removeAttr('readonly');                                                
                     el.find('.btnSaveLogin').removeClass('saving');
                     if(creds.err)
                     {							
@@ -183,13 +197,6 @@ define(['text!crm/highrise/html/login.html'],
                         message:"Api Token can't be empty"
                     });
                     isValid = false;
-                }else if(!el.find('#hrEmail').val())
-                {						
-                    app.showError({
-                        control:el.find('.email-container'),
-                        message:"Email can't be empty"
-                    });
-                    isValid = false;
                 }
                 else
                 {						
@@ -197,7 +204,7 @@ define(['text!crm/highrise/html/login.html'],
                         control:el.find(".uid-container")
                         });
                 }
-                console.log(isValid);
+                
                 var highrise_setting = this.app.getAppData("highrise");
                 var highriseLoggedIn = highrise_setting && highrise_setting[0] !== "err" && highrise_setting.isHighriseUser=="Y";
                

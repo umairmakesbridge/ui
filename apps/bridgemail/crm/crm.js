@@ -69,7 +69,8 @@ define(['text!crm/html/crm.html','app'],
                     type:'',
                     title:'Highrise',
                     url:'crm/highrise/highrise',
-                    tab_icon:'highrise',
+                    workspace_id: 'crm_highrise',
+                    tab_icon:'highrises',
                     sub_title:'Connection With Apps'
                 });
             },

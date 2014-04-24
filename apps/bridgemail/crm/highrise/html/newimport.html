@@ -24,36 +24,31 @@
 </div>
 <div class="wizard-steps step3">
     <h3 class="center_h"> Import Records </h3>
-    <div class=" clearfix template-container " id="" style=" margin:20px 0 0; ">
+    <div class="clearfix template-container" style=" margin:20px 0 0; ">
         <div class="col1" style="">
-            <div id="customer_accordion" class="summary-accordion" style="margin-top:0px!important">
-                <h3>                   
-                    <span class="left"><span class="highrise-count">0</span><i> of Records being transfered </i></span>
-                    <b class="caret"></b>
-                </h3>
-                <div class="accordion-inner" style="max-height:381px">
-                    <h4>Records Import Sample</h4>
+         <div id="accordion1" class="ui-accordion ui-widget ui-helper-reset" role="tablist" style="margin-top:0px;">
+                <h3 class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons" role="tab" id="ui-accordion-accordion1-header-0" aria-controls="ui-accordion-accordion1-panel-0" aria-selected="false" tabindex="0"><span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+                    <span class="left">Lead Record Import Sample </span> </h3>
+                    <div aria-hidden="false" aria-expanded="true" role="tabpanel" aria-labelledby="ui-accordion-accordion-header-0" id="ui-accordion-accordion-panel-0" style="display: block;  height: 371px;" class="accordion-inner ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active">
                     <div class="template-container">
                         <div class="target-listing copy_camp" id="copy-camp-listing">
                             <div class="bmsgrid">
                                 <div class="hDiv">
                                     <div class="hDivBox">
-                                        <table cellspacing="0" cellpadding="0">
+                                        <table cellpadding="0" cellspacing="0">
                                         </table>
                                     </div>
                                 </div>
                                 <div class="bDiv highrise-sample-data">
-                                    
-                                    
+                                <div style="display: none;" class="iDiv"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
-            </div>    
-            
-     
-        </div>                             
+            </div>
+    </div>
         <div class="col2">  
             <div class="c-frequency">                
                 <div>
@@ -63,12 +58,12 @@
                       <span class="left">Schedule Import </span>                                             
                     </h3>
                   </div> 
-                  <div class="control-area" style="margin-top:15px;position: relative">   
+                  <div class="control-area" style="margin-top:15px;position: relative; margin-bottom:105px">   
                     <div class="row">
                         <label>Frequency</label>
 
                         <select class="nosearch frequency-type">
-                            <option value="O">Weekly</option>
+                            <option value="O">Days of week</option>
                             <option value="T">Once every two Weeks</option>
                             <option value="M">Once per month</option>
                             <option value="">Once Only </option>

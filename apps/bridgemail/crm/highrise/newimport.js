@@ -11,6 +11,7 @@ function (Wizard,template,moment) {
                     this.template = _.template(template);	
                     this.improtLoaded = false;
                     this.tId = null;       
+                    this.count = 0;
                     this.editImport = null;
                     this.newList = null;
                     this.isFilterChange = false;
@@ -129,7 +130,8 @@ function (Wizard,template,moment) {
                 initStep3:function(){
                     var _this = this;
                     this.dialog.$(".modal-footer .btn-save").show();
-                    this.$(".step3 .summary-accordion").accordion({ active: 1, collapsible: false});   
+                    this.$(".step3 .summary-accordion").accordion({ active: 1, collapsible: false});  
+                    this.$('.summary-accordion h3').trigger('click');
                      this.$('.step3 input.radiopanel').iCheck({ 
                         radioClass: 'radiopanelinput',
                         insert: '<div class="icheck_radio-icon"></div>'
@@ -228,13 +230,15 @@ function (Wizard,template,moment) {
                 saveStep2:function(){
                   var proceed =-1;
                   var valid = this.Import_page.getImportData();
-                  if(valid==0){
+                   
+                  if(valid == 0){
                       return 0;
                   }
-                  if(valid !==0 && this.isFilterChange==false){
+                  if(valid !==0 && this.isFilterChange == false){
                         this.Import_page.saveFilter('highrise',true);
                         proceed = 0;
                     }
+                    
                   return proceed;
                 },
                 createListTable:function(xhr){                
@@ -251,15 +255,16 @@ function (Wizard,template,moment) {
                     list_html += '</tbody></table>';										
 					
                     this.$(".bms-lists").html(list_html);
-                   
+                   var listgridHeight = parseInt(this.dialog.options.bodyCss["min-height"])-228;
+                        listgridHeight = listgridHeight>300?listgridHeight:300;
                     this.$el.find("#import-list-grid").bmsgrid({
                         useRp : false,
                         resizable:false,
                         colresize:false,
-                        height:300,							
+                        height:listgridHeight,       
                         usepager : false,
                         colWidth : ['100%','90px']
-                    });				
+                    });		
                     this.$(".bms-lists .select-list").click(_.bind(this.markSelectList,this));
                     this.loadData(this.editImport);
                     if(this.newList){
@@ -360,7 +365,6 @@ function (Wizard,template,moment) {
                     .done(_.bind(function(data) {  
                         that.app.showLoading(false,this.$el);     
                         var _json = jQuery.parseJSON(data); 
-                        console.log(_json);
                         if(_json[0]!=="err"){
                              
                                 if(that.tId){
@@ -450,11 +454,11 @@ function (Wizard,template,moment) {
                             this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);  
                 },
                 loadData:function(data){
-                    console.log(data);
                      if(data){
                         this.tId = data.tId;
+                        this.count = data.sampleCount;
                         this.editImport=data;
-                        console.log(data.listNumber);
+                       
                         this.$("#import-list-grid tr").removeClass("selected");
                         this.$("#import-list-grid tr[checksum='"+data.checkSum+"']").addClass("selected");
                         this.$("#import-list-grid tr[checksum='"+data.checkSum+"']").scrollintoview(); 

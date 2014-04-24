@@ -16,7 +16,7 @@ function (template,MyImports,moment) {
                     this.app = this.options.page.app;                                                 
                     this.parent = this.options.page;
                     this.$el.html(this.template({}));                    
-                    this.$myImportsContainer = this.$el.find(".myimports-table");
+                    this.$myImportsContainer = this.$el.find(".myimports-table-hs");
                     this.initControl();                                                              
                 },
                 initControl:function(){
@@ -24,7 +24,7 @@ function (template,MyImports,moment) {
                             id:'myimports-search',
                             width:'300px',
                             height:'22px',
-                            gridcontainer: 'myimports_list_grid',
+                            gridcontainer: 'hsmyimports_list_grid',
                             placeholder: 'Search my imports',                     
                             showicon: 'yes',
                             iconsource: 'campaigns'
@@ -38,7 +38,7 @@ function (template,MyImports,moment) {
                     this._request = this.myImportsRequest.fetch({
                       success: _.bind(function (collection, response) {                                                        
                            if(collection.length){                               
-                            var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
+                            var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="hsmyimports_list_grid"><tbody>';                                
                            _.each(collection.models,function(val,key){
                                
                               myimports_html += '<tr id="row_'+val.get("tId")+'">';                                
@@ -62,7 +62,7 @@ function (template,MyImports,moment) {
                           },this);
                             myimports_html +="</tbody></table>";
                             this.$myImportsContainer.html(myimports_html);
-                            this.$("#myimports_list_grid").bmsgrid({
+                            this.$("#hsmyimports_list_grid").bmsgrid({
                                     useRp : false,
                                     resizable:false,
                                     colresize:false,
@@ -70,9 +70,9 @@ function (template,MyImports,moment) {
                                     usepager : false,
                                     colWidth : ['84%','2%','12%']
                             });
-                            this.$("#myimports_list_grid tr td:nth-child(1)").attr("width","84%");
-                                    this.$("#myimports_list_grid tr td:nth-child(2)").attr("width","2%");
-                                    this.$("#myimports_list_grid tr td:nth-child(3)").attr("width","12%");
+                            this.$("#hsmyimports_list_grid tr td:nth-child(1)").attr("width","84%");
+                                    this.$("#hsmyimports_list_grid tr td:nth-child(2)").attr("width","2%");
+                                    this.$("#hsmyimports_list_grid tr td:nth-child(3)").attr("width","12%");
                             this.$myImportsContainer.find(".deactivate-import").click(_.bind(this.deactivateImport,this)); 
                              this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
                             
