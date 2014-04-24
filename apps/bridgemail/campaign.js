@@ -1,4 +1,4 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
+ define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
         'use strict';
         return Backbone.View.extend({
@@ -2493,7 +2493,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var dialog = this.app.showDialog({title:'Salesforce Login Setup',
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"370px"}
+                        bodyCss:{"min-height":"400px"}
                     });
                     this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                     require(["crm/salesforce/login"],function(loginPage){                                        
@@ -2589,7 +2589,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 
                                 var dialog = this.app.showDialog({title:'Salesforce Login Setup',
                                                                   css:{"width":"650px","margin-left":"-325px"},
-                                                                  bodyCss:{"min-height":"360px"}
+                                                                  bodyCss:{"min-height":"400px"}
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/salesforce/login"],function(loginPage){                                        
@@ -3434,8 +3434,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              var dialog_height = $(document.documentElement).height()-220;
                             if(target_obj.attr("id")=="hs_mapping"){
                                  var dialog = this.app.showDialog({title:' Specify Import',
-                                    css:{"width":"1200px","margin-left":"-600px"},
-                                    bodyCss:{"min-height":"443px"},
+                                    css:{"width":"1400px","margin-left":"-700px"},
+                                    bodyCss:{"min-height":"410px"},
                                     buttons: {saveBtn:{text:'Save Mapping'} }
                                 });                              
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
