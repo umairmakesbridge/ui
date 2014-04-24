@@ -68,7 +68,7 @@
 					grid.removeHighlight();
 					if($("#"+options.countcontainer))
                                             $("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
-					grid.parent().find('.notfound').hide();
+					grid.parent().find('.notfound').remove();
 				  }
                                   function keydown_func(obj){
                                       search_val= $.trim($(obj.target).val());
@@ -108,7 +108,7 @@
 					  var movElement = options.movingElement? options.movingElement : 'tr';
 					  var searchterm = $(obj.target).val();					  
                                           var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
-					  grid.parent().find('.notfound').hide();
+					  grid.parent().find(".notfound").remove();  
 					  if(searchterm.length > 0)
 					  {
 					  	$(this).parent().find("#clearsearch").show();
@@ -149,7 +149,7 @@
 						  }
 						  if($("#"+options.countcontainer))
 							$("#"+options.countcontainer).html(count + ' ' + options.placeholder.replace('Search ','') +' found <b>for &lsquo;' + searchterm + '&rsquo;</b>');
-									
+                                                  
 						  if(count == 0)
 						  {
 							  grid.parent().append('<p class="notfound">No '+ options.placeholder.replace('Search ','') +' found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  

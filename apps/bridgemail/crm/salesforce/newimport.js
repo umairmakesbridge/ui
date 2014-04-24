@@ -254,12 +254,14 @@ function (Wizard,template,moment) {
                     list_html += '</tbody></table>';										
 					
                     this.$(".bms-lists").html(list_html);
-                   
+                    
+                    var listgridHeight = parseInt(this.dialog.options.bodyCss["min-height"])-228;
+                        listgridHeight = listgridHeight>300?listgridHeight:300;
                     this.$el.find("#import-list-grid").bmsgrid({
                         useRp : false,
                         resizable:false,
                         colresize:false,
-                        height:300,							
+                        height:listgridHeight,							
                         usepager : false,
                         colWidth : ['100%','90px']
                     });				

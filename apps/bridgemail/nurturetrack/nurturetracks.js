@@ -81,9 +81,8 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                      id:'nuture-search',
                      width:'320px',
                      height:'22px',
-                     searchFunc:_.bind(this.searchContacts,this),
-                     clearFunc:_.bind(this.clearSearchContacts,this),
-                     placeholder: 'Search nuture tracks',                     
+                     gridcontainer: this.$('#nurturetrack_grid'),
+                     placeholder: 'Search nurture tracks',                     
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });
@@ -101,7 +100,8 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                      id:'bms-nurture-search',
                      width:'320px',
                      height:'22px',
-                     placeholder: 'Search makesbridge nuture tracks',                     
+                     gridcontainer: this.$('#bms_nurturetrack_grid'),
+                     placeholder: 'Search makesbridge nurture tracks',                     
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });

@@ -76,6 +76,7 @@ function (template,highlighter) {
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
+                            this.app.showMessge("Nurture track deleted.");
                             this.parent.fetchTracks();   
                             this.parent.addCountHeader();
                        }

@@ -180,7 +180,7 @@ define([
                 this.set("wp_height",(body_size-100));				
                
                 //$('#campaign_from_email_chosen').width(parseInt(subj_w-40));
-               // this.fixEmailFrom();
+                this.fixEmailFrom();
              },
              fixEmailFrom:function(){
                 

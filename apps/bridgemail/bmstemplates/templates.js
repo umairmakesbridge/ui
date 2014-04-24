@@ -489,10 +489,17 @@ function (template,highlight) {
                     }
                     
                     if(this.searchString.indexOf("=nameTag")>-1){
-                        this.$(".thumbnails .caption").highlight($.trim(this.$("#search-template-input").val()));
+                        var searchVal = $.trim(this.$("#search-template-input").val());
+                        this.$(".thumbnails .caption h3 a").highlight(searchVal);
+                        this.$(".thumbnails .caption p a").each(function(){
+                           $(this).highlight(searchVal)
+                       });
                     }    
                     else if(this.searchString.indexOf("=tag")>-1){
-                        this.$(".thumbnails .caption p").highlight(vars["searchText"]);
+                        this.$(".thumbnails .caption p a").each(function(){
+                           $(this).highlight(vars["searchText"])
+                       });
+                        
                     }
                     else if(this.searchString.indexOf("=category")>-1){
                         this.$(".thumbnails .caption .cat").highlight(vars["categoryId"]);
