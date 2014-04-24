@@ -7,8 +7,8 @@ define(['text!crm/html/crm.html','app'],
             */  
             events: {
                 'click .salesforce-tile': 'loadSalesForceCRM',
-                'click .netsuite-tile': 'loadNetSuiteCRM'
-                //'click .highrise-tile':'loadHighRiseCRM'
+                'click .netsuite-tile': 'loadNetSuiteCRM',
+                'click .highrise-tile':'loadHighRiseCRM'
                     
             },	
             /**
@@ -20,7 +20,7 @@ define(['text!crm/html/crm.html','app'],
                 this.render();              
                 this.checkSalesForceStatus();
                 this.checkNetSuiteStatus();
-               // this.checkHighriseStatus();
+                this.checkHighriseStatus();
             },
             /**
              * Render view .
