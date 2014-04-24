@@ -19,10 +19,10 @@ function (app,template,fileuploader,chosen,addbox) {
 			   	this.showSelectedfile(files);
 			},
 			'mouseover #file_control':function(obj){
-				this.$("#list_file_upload").css({'background' : '#7996a8', 'color' : '#ffffff'});
+				this.$("#list_file_upload").css({'background' : '#00A1DD', 'color' : '#ffffff'});
 			},
 			'mouseout #file_control':function(obj){
-				this.$("#list_file_upload").css({'background' : '#91ABBC', 'color' : '#ffffff'});
+				this.$("#list_file_upload").css({'background' : '#01AEEE', 'color' : '#ffffff'});
 			},
 			'drop #drop-files': function(e) {
 				if(this.$("#dropped-files .image").length!==0) return false;

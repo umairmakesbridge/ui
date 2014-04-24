@@ -20,6 +20,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     var camp_obj = this;
                                     var appMsgs = this.app.messages[0];
                                     var target = $.getObj(obj,"a");
+                                    var prevStatus = this.searchTxt;
                                     if(target.parent().hasClass('active')){
                                         return false;
                                     }
@@ -47,10 +48,17 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                             dateURL = true;
                                     }
                                     //camp_obj.$el.find("#target-camps .bmsgrid").remove();
+                                    
                                     camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
                                     this.status = type;
                                     this.fromDate = fromDate;
                                     this.toDate = toDate;
+                                    if(this.status !== prevStatus){
+                                            this.$el.find('#list-search').val('');
+                                            this.$el.find('#clearsearch').hide();
+                                            this.type = 'listNormalCampaigns';
+                                            this.searchTxt = '';
+                                        }
                                     //var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
                                     //console.log(URL);
                                     
@@ -93,6 +101,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 				var camp_obj = this;
 				var appMsgs = this.app.messages[0];
 				var target = $.getObj(obj,"a");
+                                var prevStatus = this.status;
 				if(target.html() != 'Date Range')
 				{
                                     if(target.prevObject && target.prevObject[0].localName == 'span')
@@ -150,17 +159,25 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                                             $(this).addClass('active');							
                                             });
                                     }
-                                    //camp_obj.$el.find("#target-camps .bmsgrid").remove();
+                                 
                                     camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
                                     if(schDates != ''){
                                             this.toDate = toDate;
                                             this.fromDate = fromDate;
-                                        }      // var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&fromDate="+fromDate+"&toDate="+toDate;
+                                        }      
                                     else{
-                                           this.toDate = toDate;
+                                            this.toDate = toDate;
                                             this.fromDate = fromDate;
+                                        
+                                    }
+                                    if(this.status !== prevStatus){
+                                            this.$el.find('#list-search').val('');
+                                            this.$el.find('#clearsearch').hide();
+                                            this.type = 'listNormalCampaigns';
+                                            this.searchTxt = '';
                                         }
                                     this.total_fetch = 0;
+                                   
                                     this.getallcampaigns();
                             }
 			},
@@ -264,7 +281,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                 }
                                 this.offsetLength = data1.length;
                                 this.total_fetch = this.total_fetch + data1.length;
-                                console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
+                                //console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
                               
                                 this.app.showLoading(false, this.$("#target-camps"));
                                 //this.showTotalCount(response.totalCount);
@@ -388,7 +405,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                     } else {
                         var keyCode = this.keyvalid(o);
                         if(keyCode){
-                            if (this.searchTxt.length > 2) {
+                            if ($.trim(this.searchTxt).length > 0) {
 
                                 this.timeout = setTimeout(_.bind(function() {
                                     clearTimeout(this.timeout);
