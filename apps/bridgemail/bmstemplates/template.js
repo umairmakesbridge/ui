@@ -320,7 +320,7 @@ function (template,icheck,bmstags) {
                             /*ed.onChange.add(function(ed, l) {
                                     editor.page.states.editor_change = true;                                               
                             });*/
-                            ed.onLoad.add(function(ed, l) {
+                            ed.onInit.add(function(ed, l) {
                                   var _height = _this.$("#area_create_template").parents(".modal-body").height();  
                                   var editor_heigt = _height-350;
                                   if(editor_heigt<600){

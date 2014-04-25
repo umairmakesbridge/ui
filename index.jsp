@@ -71,7 +71,7 @@ if(userInfo == null) {
     <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce/tiny_mce.js"></script>
+    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce_old/tiny_mce.js"></script>
 </head>
 <body>
     
