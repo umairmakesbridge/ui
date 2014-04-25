@@ -27,7 +27,7 @@ function (template) {
                     this.showHighriseFitler();
                     this.$(".ui-accordion").accordion({ header: "h3", collapsible: false, active: true});
                    this.$(".tags-accordion").accordion({ collapsible: false, active: true});
-                   
+                   this.app.showLoading(false,this.$el);
                     
                     //this.$el.find(".rules-container").remove();
                 },
@@ -71,7 +71,7 @@ function (template) {
                             placeholder: 'Search Highrise Tags',
                             gridcontainer: 'hsgroup_list_grid',
                             showicon: 'yes',
-                            iconsource: 'campaigns'
+                            iconsource: 'tags'
                         });
                         this.$(".search-control").css('height','27px');
                         this.$el.find('#txtdatefield').datetimepicker()

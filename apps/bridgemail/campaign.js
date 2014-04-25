@@ -3357,7 +3357,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @further call.showHighriseArea
                 */
                 showHighrise: function(){
-                    console.log('show highrise');
+                   
                     this.$("#area_netsuite_import").hide();
                     this.$("#netsuite_welcome").hide();
                     this.$("#highrise_welcome").hide();
@@ -3408,8 +3408,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         if(xhr && xhr.responseText){                               
                                            var rec_json = jQuery.parseJSON(xhr.responseText); 
                                            if(rec_json[0] == "err"){
-                                               that.app.showLoading(false,that.$("#highrise_setup"));
-                                               that.highriseErrorCallBack();
+                                               if(rec_json[1].indexOf("Unauthorized") > -1){
+                                                that.app.showLoading(false,that.$("#highrise_setup"));
+                                                 that.highriseErrorCallBack();
+                                                 return;
+                                              }else{
+                                                  that.app.showAlert(rec_json[1],that.$el.parents(".ws-content.active"));
+                                                  that.app.showLoading(false,that.$("#highrise_setup"));
+                                                  that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
+                                                  
+                                              }
                                            }
                                            if(that.app.checkError(rec_json)){
                                                 return false;
@@ -3514,9 +3522,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
                         if(_count[0] == "err"){
-                            that.app.showLoading(false,that.$("#highrise_setup"));
-                            that.highriseErrorCallBack();
-                            return ;
+                            if(_count[1].indexOf("Unauthorized") > -1){
+                                that.app.showLoading(false,that.$("#highrise_setup"));
+                                that.highriseErrorCallBack();
+                                  return ;
+                                }else{
+                                that.app.showAlert(_count[1],that.$el.parents(".ws-content.active"));
+                                that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+_count[1]+"</div>");
+                                return; 
+                             }
                         }
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 

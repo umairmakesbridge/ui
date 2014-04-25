@@ -31,7 +31,7 @@ function (template,Mapping) {
                         }
                          if(import_fields[0]!=="err"){
                             if(import_fields.count!="0"){
-                                var fields_html = '<table cellpadding="0" cellspacing="0" width="100%" id="customer_mapping_list_grid"><tbody>';
+                                var fields_html = '<table cellpadding="0" cellspacing="0" width="100%" class="highrise-mapping-table" id="customer_mapping_list_grid"><tbody>';
                                 var system_flag = "";
                                 $.each(import_fields.fldList[0], function(index, val) {                                              
                                    system_flag = val[0].defaultSetup=="Y"?"system":""; 
@@ -39,7 +39,7 @@ function (template,Mapping) {
                                                                    
                                      var mapping_field = val[0].bmsMappingField;
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
-                                     fields_html += '<td><div class="name-type colico hr"> <strong><span><em>Highrise Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     fields_html += '<td><div class="name-type colico"> <strong id="higrise-icon-mapping"><span><em>Highrise Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
                                      fields_html += '<td><div class="type colico mbr show" style="width:174px"> <strong><span><em>Makesbridge Field</em>'+mapping_field+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      fields_html += '</tr>';
                                      

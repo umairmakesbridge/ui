@@ -1200,12 +1200,144 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 .icon.report{background: url("../img/report_gray.png") no-repeat scroll center center ;}
 
 .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center ;}
-//// End Campaign Summary /////
+
+.login-saving .saving{
+    display: block;
+    float: right;
+        right: auto;
+        top: auto;
+        width: auto;
+        height: auto;
+    position: relative;
+    min-width: inherit;
+    min-height: inherit;
+}
+#btnTestLogin.saving{
+    background: url('../img/greenloader.gif') no-repeat scroll 24px center #08C;
+    display: block;
+    float: right;
+    right: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+    position: relative;
+    min-width: inherit;
+    min-height: inherit;
+}
+.netsuite_campaigns .single-row .bmsgrid tr.selected td:last-child div:after{    
+    top: -20px;
+    height: 61px;
+    right: 0px;
+}
+#pn .single-row .bmsgrid tr.selected td:last-child div:after{
+   top: -31px;
+height: 62px;
+right: -13px;
+}
+#ns_accordion .single-row .bmsgrid tr.selected td:last-child div:after{    
+height: 64px;
+right: -13px;
+top: -23px;
+}
+#sf_accordion .single-row .bmsgrid tr.selected td:last-child div:after{
+height: 62px;
+right: -13px;
+top: -19px;
+}
+/* ---------------------------Highrise mapping and login menu in campaign wizard for all netsuite, saleforce etc------------- */
+
+ul.dd-menu {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 2px solid #BADAEC;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
+    top:35px; 
+    position: absolute;
+    padding:3px;
+    width: 220px;
+    display:none;
+    line-height: 18px;
+    z-index: 9999;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius:  2px;
+}
+
+.iconpointy:hover  .dd-menu { display:block;} 
+.dd-menu:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    left: 21px;
+    position: absolute;
+    top:-12px;
+}
 
 
-.highrise-login .customers .bmsgrid .colico.sfr > strong {
+
+ul.dd-menu li {
+    display: block;
+	position:relative;
+	overflow: hidden;
+   
+    margin: 2px 0 0;
+}
+ul.dd-menu li:first-child { margin:0;} 
+
+ul.dd-menu li a {
+    background: none repeat scroll 0 0 #EFF7FB;
+    color: #5A5A5A;
+    display: block;
+    float: none;
+    font-family: 'PT Sans',sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    line-height: 20px;
+     padding: 8px 10px;
+    text-shadow: none; 
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:  2px;
+}
+
+
+ul.dd-menu li a:hover {background:#DCF3FE;}
+
+ul.dd-menu li.active a{ font-weight: bold; }
+
+ul.dd-menu li.active  a:after {
+    background: url("../img/check.png") no-repeat scroll center center #97D61D;
+    border-radius: 0 2px 2px 0;
+    content: "";
+    display: block;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 36px;
+    }
+#wizard .radiopanelinput.checked .icheck_radio-icon {
+  width: 35px;
+  margin:15px 0px 0px 14px;
+}
+.netsuite_campaigns .radiopanelinput.checked .icheck_radio-icon {
+  width: 35px;
+  margin:15px 0px 0px 14px;
+}
+#highrise-group-search .icon.campaigns{
+       height: 31px;
+    top: 2px;
+}
+.wtab-highrises{
+    background:url("../img/hr-icon30.png") no-repeat scroll center center;
+}
+#higrise-icon-mapping {
     background: url('../img/hrricon.png') no-repeat scroll 8px 23px transparent;
 }
+
 .xdsoft_datetimepicker{
 	box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.506);
 	background: #FFFFFF;
@@ -1509,139 +1641,6 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 }
 .xdsoft_scroller_box{
 position:relative;
-}
-.login-saving .saving{
-    display: block;
-    float: right;
-        right: auto;
-        top: auto;
-        width: auto;
-        height: auto;
-    position: relative;
-    min-width: inherit;
-    min-height: inherit;
-}
-#btnTestLogin.saving{
-    background: url('../img/greenloader.gif') no-repeat scroll 24px center #08C;
-    display: block;
-    float: right;
-    right: auto;
-    top: auto;
-    width: auto;
-    height: auto;
-    position: relative;
-    min-width: inherit;
-    min-height: inherit;
-}
-.netsuite_campaigns .single-row .bmsgrid tr.selected td:last-child div:after{    
-    top: -20px;
-    height: 61px;
-    right: 0px;
-}
-#pn .single-row .bmsgrid tr.selected td:last-child div:after{
-   top: -31px;
-height: 62px;
-right: -13px;
-}
-#ns_accordion .single-row .bmsgrid tr.selected td:last-child div:after{    
-height: 64px;
-right: -13px;
-top: -23px;
-}
-#sf_accordion .single-row .bmsgrid tr.selected td:last-child div:after{
-height: 62px;
-right: -13px;
-top: -19px;
-}
-/* ---------------------------Highrise mapping and login menu in campaign wizard for all netsuite, saleforce etc------------- */
-
-ul.dd-menu {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 2px solid #BADAEC;
-    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.15);
-    top:35px; 
-    position: absolute;
-    padding:3px;
-    width: 220px;
-    display:none;
-    line-height: 18px;
-    z-index: 9999;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius:  2px;
-}
-
-.iconpointy:hover  .dd-menu { display:block;} 
-.dd-menu:before {
-    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;
-    border-style: solid;
-    border-width: 6px;
-    bottom: auto;
-    content: "";
-    display: inline-block;
-    left: 21px;
-    position: absolute;
-    top:-12px;
-}
-
-
-
-ul.dd-menu li {
-    display: block;
-	position:relative;
-	overflow: hidden;
-   
-    margin: 2px 0 0;
-}
-ul.dd-menu li:first-child { margin:0;} 
-
-ul.dd-menu li a {
-    background: none repeat scroll 0 0 #EFF7FB;
-    color: #5A5A5A;
-    display: block;
-    float: none;
-    font-family: 'PT Sans',sans-serif;
-    font-size: 13px;
-    font-weight: normal;
-    letter-spacing: 0.5px;
-    line-height: 20px;
-     padding: 8px 10px;
-    text-shadow: none; 
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius:  2px;
-}
-
-
-ul.dd-menu li a:hover {background:#DCF3FE;}
-
-ul.dd-menu li.active a{ font-weight: bold; }
-
-ul.dd-menu li.active  a:after {
-    background: url("../img/check.png") no-repeat scroll center center #97D61D;
-    border-radius: 0 2px 2px 0;
-    content: "";
-    display: block;
-    height: 100%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 36px;
-    }
-#wizard .radiopanelinput.checked .icheck_radio-icon {
-  width: 35px;
-  margin:15px 0px 0px 14px;
-}
-.netsuite_campaigns .radiopanelinput.checked .icheck_radio-icon {
-  width: 35px;
-  margin:15px 0px 0px 14px;
-}
-#highrise-group-search .icon.campaigns{
-       height: 31px;
-    top: 2px;
-}
-.wtab-highrises{
-    background:url("../img/hr-icon30.png") no-repeat scroll center center;
 }
 /* --------------------------------- */
 

@@ -6,11 +6,22 @@ define(['text!crm/highrise/html/highrise.html'],
              * Attach events on elements in view.
             */ 
             events: {
-                'click #choose_soruce li':'chooseTile'
+                'click #choose_soruce li':'chooseTile',
+                'mouseover #choose_soruce li':'chooseTileHover'
             },
             /**
              * Initialize view - backbone .
             */
+           chooseTileHover:function(obj){
+                var li = $.getObj(obj,"li");
+                if(li.hasClass('netsuite-imports')){
+                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }else{
+                    this.$(".messagebox p").html("Create, view and edit your existing imports.");
+                }
+                
+                        
+           },
             initialize: function () {                    
                 this.template = _.template(template);	
                 this.states = {
