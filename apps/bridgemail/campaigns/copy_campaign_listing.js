@@ -108,13 +108,14 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                                 this.offsetLength = data1.length;
                                 this.total_fetch = this.total_fetch + data1.length;
                                 //console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
-                              
                                 this.app.showLoading(false, this.$("#copy-camp-listing"));
-                                
-                                this.sub.$el.find("#copy_no_of_camps .badge").html(collection.totalCount);
-                               
-                                this.showTotalCount(collection.totalCount);
-                                 var modelCheckSum = null;
+                                if(parseInt(collection.totalCount)>0){
+                                    this.sub.$el.find("#copy_no_of_camps .badge").html(parseInt(collection.totalCount)-1);
+                                    this.showTotalCount(parseInt(collection.totalCount)-1);
+                                }else{
+                                    this.sub.$el.find("#copy_no_of_camps .badge").html(collection.totalCount);
+                                    this.showTotalCount(collection.totalCount);
+                                }
                                  _.each(data1.models, _.bind(function(model){
                                      if(this.options.checksum !== model.get('campNum.checksum')){
                                         this.$copyCampaignContainer.append(new campaignRowView({model:model,sub:this.sub,parent:this,checksum:this.options.checksum}).el);

@@ -744,6 +744,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 }                
                 ,
                 initStep4:function(){
+                    
                     if(this.states.step4.init===false){                        
                         this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
                         this.$("#accordion_recipients").accordion({ collapsible: false}); 
@@ -804,9 +805,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         settings_html += '</div>';
                     }
                     var camp_obj =this;
-                    recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div>'
+                    recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div><div class="recipient-details"></div>'
                     //console.log(this.states.step3.recipientDetial.listNumbers.length);
                     this.$(".recipients-inner").html(recipients_html);
+                    this.recipientDetails();
+                     
                     this.$(".settings-inner").html(settings_html+"<div class='clearfix'></div>");
 					var i = 0;
                     this.$(".step1 .socialbtns li").each(function(){
@@ -1252,6 +1255,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                       
                        if(step3_json[0]!=="err"){                           
                            camp_obj.states.step3.recipientType = post_data['recipientType'];
+                           if(post_data['recipientType']=="Target"){
+                               camp_obj.states.step3.recipientList = post_data['filterNumber'];
+                           }else if (post_data['recipientType']=="List"){
+                                camp_obj.states.step3.recipientList = post_data['listNum'];
+                                camp_obj.states.step3.csvFlag  = post_data['csvflag'];
+                            }else{
+                                camp_obj.states.step3.recipientList = post_data['tags'];
+                            }
                            camp_obj.states.step3.change= false;
                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
                            if(camp_obj.states.step3.recipientType=="Salesforce"){
@@ -1622,7 +1633,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         tr_copy.appendTo(camp_obj.$el.find(".col1 .leftcol tbody"));
                     });
-                },
+                },   
                 createCampaignListTable:function(){                    
                     var camp_obj=this;
                     this.app.showLoading(false,this.$("#copy-camp-listing"));
@@ -2198,25 +2209,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 getcampaignscopy:function(){
                     // Abdullah 
-                    
+                    if(!this.states.step2.copyCampaigns){
                     this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
                     require(["campaigns/copy_campaign_listing"],_.bind(function(templatePreview){                                     
                         var mPage = new templatePreview({app:this.app,sub:this,checksum:this.checksum});
                         this.$("#area_copy_campaign").html(mPage.$el);
                     },this));
-                },
-                getallcampaigns: function () {
-                    var camp_obj = this;
-                    camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#copy-camp-listing"));  
-                    if(!camp_obj.app.getAppData("campaigns")){                                                                       
-                          camp_obj.app.getData({
-                                  "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
-                                  "key":"campaigns",
-                                  "callback":_.bind(camp_obj.createCampaignListTable,this)
-                          });
-                    }
-                    else{                                    
-                        window.setTimeout(_.bind(camp_obj.createCampaignListTable,this),500);
+                    this.states.step2.copyCampaigns = true;
                     }
                 },
                 loadTemplatesView:function(){
@@ -3539,6 +3538,181 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         that.showHighriseArea(that); 
                     }));
                     that.app.showLoading(false,that.$(".step3"));
+                },
+                recipientList : function(lists,flag){
+                   var returnList = [];  
+                    lists = lists.split(','); 
+                     var listValue = null;
+                    if(flag){
+                       var toggleBtn = this.$('.map-toggle').find('.active').text();
+                       if(toggleBtn==="Existing"){
+                             listValue =  $('#existing_lists option:selected').text();
+                        }else{
+                             listValue = $('#newlist').val();
+                        }
+                        this.$(".recipient-details").append('<label>'+listValue+'</label>');
+                    }else{
+                        var  totalRecipientList = this.app.getAppData("lists");
+                        _.each(lists,function(values,k){
+                            _.each(totalRecipientList.lists[0],function(val){
+                                if(val[0]["listNumber.encode"]===values){
+                                returnList.push(val[0]["listNumber.checksum"]);
+                                }
+                            });
+                    });
+                    return returnList;
+                    }
+                    
+                },
+                recipientDetails: function(){
+                    
+                    /*List Values Abdullah */
+                    var recipientLists = this.states.step3.recipientList;
+                    var type = this.states.step3.recipientType;
+
+                    var recipientChecksum = null;
+                    if (recipientLists) {
+                        if (type === "Target") {
+                            recipientChecksum = this.recipientTarget(recipientLists);
+                        }
+                        else if (type === "List") {
+                            var csvflag = this.states.step3.csvFlag;
+                            recipientChecksum = this.recipientList(recipientLists, csvflag);
+                        }
+                        else {
+                            recipientChecksum = this.recipientTags(recipientLists);
+                        }
+                        if(recipientChecksum!=false){
+                             _.each(recipientChecksum, function(val) {
+                            this.$(".recipient-details").append('<label>' + $("[checksum='" + val + "']").find('h3').text() + ', </label>');
+                        }, this);
+                        // Making Comma Separated String
+                        var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        }
+                       
+                    }
+                    else {
+                        if (type === "Target" || type === "List") {
+                            var recipientDetailsVal = this.$("#recipients tr");
+                            _.each(recipientDetailsVal,function(val) {
+                                var checksum = $(val).attr('checksum');
+                                this.$(".recipient-details").append('<label>' + $("[checksum='" + checksum + "']").find('h3').text() + ', </label>');
+                            },this);
+                            // Making Comma Separated String
+                            var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        } 
+                        else if (type === "Tags") {
+                            var recipientDetailsVal = this.$("#tagsrecpslist ul li");
+                           _.each(recipientDetailsVal,function(val) {
+                               var tag= $(val).attr('checksum');
+                                this.$(".recipient-details").append('<label>' + $("[checksum='" + tag + "'] a:first-child").find('span').text() + ', </label>');
+                            },this);
+                      // Making Comma Separated String
+                           var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        }
+                        else if (type === "Salesforce") {
+                            if (this.states.step3.sfObject) {
+                                this.sfRecipient(this.states.step3.sfObject);
+                            }
+                            else {
+                                var sfRecipientVal = this.$("input[name=options_sf]:checked").val();
+                                 
+                                if (sfRecipientVal === "campaign") {
+                                    var salesforce_val = this.$('#sfcamp_list_grid .selected').find('h3').text(); 
+                                    
+                                    this.$(".recipient-details").append('<label>' + this.$('#sfcamp_list_grid .selected').find('h3').text() + '</label>');    
+                                    
+                                } else {
+                                    if (sfRecipientVal == "both") {
+                                        this.$(".recipient-details").append('<label>Leads & Contacts</label>');
+                                    }
+                                    if (sfRecipientVal == "lead") {
+                                        this.$(".recipient-details").append('<label>Leads</label>');
+                                    }
+                                    if (sfRecipientVal == "contact") {
+                                        this.$(".recipient-details").append('<label>Contacts</label>');
+                                    }
+                                }
+                            }
+                        }else{
+                            if (this.states.step3.nsObject) {
+                                this.nsRecipient(this.states.step3.nsObject);
+                            }else{
+                                var nsRecipientVal = this.$("input[name=options_ns]:checked").val();
+                                if (nsRecipientVal === "group") {
+                                    this.$(".recipient-details").append('<label>' + this.$('#nsgroup_list_grid .selected').find('h3').text() + '</label>');
+                                } else {
+                                    if (nsRecipientVal == "contact") {
+                                        this.$(".recipient-details").append('<label>Contact</label>');
+                                    }
+                                    else if (nsRecipientVal == "partner") {
+                                        this.$(".recipient-details").append('<label>Partner</label>');
+                                    }
+                                    else{
+                                        this.$(".recipient-details").append('<label>Customer</label>');
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                   /* Recipient Listing Ends */
+                    
+                },
+                recipientTarget : function(lists){
+                    
+                     var  totalRecipientTarget = this.app.getAppData("targets");
+                   var returnList = [];  
+                    lists = lists.split(','); 
+                        _.each(lists,function(values,k){
+                            _.each(totalRecipientTarget.filters[0],function(val){
+                                if(val[0]["filterNumber.encode"]===values){
+                                returnList.push(val[0]["filterNumber.checksum"]);
+                                }
+                            })
+                    });
+                    return returnList;
+                },
+                recipientTags : function(lists){
+                    lists = lists.split(','); 
+                    _.each(lists,function(val){
+                        this.$(".recipient-details").append('<label>'+val+', </label>');
+                    },this);
+                    // Making Comma Separated String
+                        var textstring = this.$('.recipient-details label').text();
+                            this.$('.recipient-details').html(textstring.substring(0,textstring.length-2));
+                        return false;
+                },
+                sfRecipient:function(sfObject){
+                   if(sfObject=="both"){
+                               this.$(".recipient-details").append('<label>Leads & Contacts</label>');
+                           }
+                  if(sfObject=="lead"){
+                               this.$(".recipient-details").append('<label>Leads</label>');
+                           }
+                   if(sfObject=="contact"){
+                       this.$(".recipient-details").append('<label>Contacts</label>');
+                   }
+                   if(sfObject=="campaign"){
+                       this.$(".recipient-details").append('<label>'+this.$('#sfcamp_list_grid .selected').find('h3').text()+'</label>');
+                   }
+                },
+                nsRecipient:function(nsObject){
+                   if(nsObject=="contact"){
+                               this.$(".recipient-details").append('<label>Contact</label>');
+                           }
+                  if(nsObject=="partner"){
+                               this.$(".recipient-details").append('<label>Partner</label>');
+                           }
+                   if(nsObject=="customer"){
+                       this.$(".recipient-details").append('<label>Customer</label>');
+                   }
+                   if(nsObject=="group"){
+                       this.$(".recipient-details").append('<label>'+this.$('#nsgroup_list_grid .selected').find('h3').text()+'</label>');
+                   }
                 }
         });
 });
