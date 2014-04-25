@@ -163,6 +163,7 @@ function (app,template,fileuploader,chosen,addbox) {
                     var campview = this.camp_obj;
                     this.app.showLoading(false,campview.$el.find('.step3 #area_upload_csv'));
                    }
+                   this.$('#file_control').attr('title','');
 		},
 		render: function () {
 			this.$el.html(this.template({}));

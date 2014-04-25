@@ -2099,7 +2099,7 @@ i.contact-name-prev {
     background: url("../img/graphics.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 .search .close-icon {
-    top: 13px !important;
+    top: 11px !important;
 }
 @media (min-width: 1920px) {
     .adv_dd {
@@ -2244,6 +2244,14 @@ i.contact-name-prev {
 #copy_camps_grid{
     overflow: hidden;
 }/*later must be checked*/
+input[type='file'] {
+    width:400px;
+    height:25px;
+    opacity:0 !important;
+}
+.close-icon {
+    background: url("../img/closebtn-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 /* ENDS */
 
 .videobar{

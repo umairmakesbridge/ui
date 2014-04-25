@@ -234,17 +234,29 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             searchContacts:function(o,txt){
                 this.tagTxt = '';
                 this.searchTxt = txt;                                
-                if(o.keyCode==13 && this.searchTxt){
-                    this.search();
-                }                
+                    this.search(o);                
             },
-            search:function(){
+            search:function(o){
                 if(this.searchTxt.indexOf("Tag: ")>-1){
                     var tagName = this.searchTxt.split(": ");
                     this.searchByTag(tagName[1]);
                  }
                  else{
-                     this.fetchContacts();
+                     var keyCode = this.keyvalid(o);
+                        if(keyCode){
+                            if ($.trim(this.searchTxt).length > 0) {
+                                this.timeout = setTimeout(_.bind(function() {
+                                    clearTimeout(this.timeout);
+                                    this.fetchContacts();
+                                }, this), 500);
+                            }
+                            this.$('#contact-search').keydown(_.bind(function() {
+                                clearTimeout(this.timeout);
+                            }, this));
+                        }else{
+                            return false;
+                        }
+                     
                  }  
             },
              /**
@@ -306,6 +318,20 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                    this.$("#total_templates").show();
                    this.$("#total_selected").hide();
                }
-            }
+            },
+            keyvalid:function(event){
+                        var regex = new RegExp("^[A-Z,a-z,0-9]+$");
+                        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                         if (event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 37 || event.keyCode == 39) {
+                            return true;
+                        }
+                        else if (regex.test(str)) {
+                            return true;
+                        }
+                       else{
+                            return false;
+                        }
+                        event.preventDefault();
+                   }
         });
 });

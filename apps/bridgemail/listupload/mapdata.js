@@ -394,7 +394,9 @@ function (template,chosen,addbox) {
 			var elemId = obj.attr('id');
 			curview.$el.find('.mapfields.'+elemId).val(val);
 			curview.$el.find('.mapfields').trigger("chosen:updated");
-		},
+                        return true;
+                    //curview.$el.find('.btn-close').click();
+            },
 		mapCombo: function(num) {
 			var campview = this.options.camp;						
 			var csvupload = campview?campview.states.step3.csvupload:this.csv;
