@@ -5,7 +5,7 @@ function (template) {
                 className:'netsuite_campaigns',
                 events:{
                     'click .ui-accordion-header':function(){ return false;},
-                    'click .calendericon':function(){$("#txtdatefield").focus()}
+                    'click .calendericon':function(){this.$("#txtdatefield").focus()}
                 },
                 initialize: function () {                    			                 
                     this.template = _.template(template);	
@@ -60,7 +60,7 @@ function (template) {
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
                            self.$("#hsgroup_list_grid tr.selected").removeClass("selected");
                            self.$('#txtdatefield').val('');
-                            self.$("#txtsearchbyfield").val('');
+                           self.$("#txtsearchbyfield").val('');
                            camp_obj.parent.isFilterChange = false;
                              
                         });
