@@ -26,10 +26,8 @@ function (template) {
                     this.initControl();
                     this.showHighriseFitler();
                     this.$(".ui-accordion").accordion({ header: "h3", collapsible: false, active: true});
-                   this.$(".tags-accordion").accordion({ collapsible: false, active: true});
-                   this.app.showLoading(false,this.$el);
-                    
-                    //this.$el.find(".rules-container").remove();
+                    this.$(".tags-accordion").accordion({ collapsible: false, active: true});
+                   //this.$el.find(".rules-container").remove();
                 },
                 
                  

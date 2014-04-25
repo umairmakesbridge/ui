@@ -15,9 +15,9 @@ define(['text!crm/highrise/html/highrise.html'],
            chooseTileHover:function(obj){
                 var li = $.getObj(obj,"li");
                 if(li.hasClass('netsuite-imports')){
-                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
                 }else{
-                    this.$(".messagebox p").html("Create, view and edit your existing imports.");
+                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
                 }
                 
                         

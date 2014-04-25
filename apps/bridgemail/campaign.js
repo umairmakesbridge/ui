@@ -3098,7 +3098,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.isHighriseRequire = true; // this will not load who view, when press back
                             camp_obj.fetchFilters("Highrise");
                         }else{                                  
-                            camp_obj.app.showAlert(data1,$("body"),{fixed:true});
+                            camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
                    }); 
                },
