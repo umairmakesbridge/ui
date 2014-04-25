@@ -3415,6 +3415,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                               }else{
                                                   that.app.showAlert(rec_json[1],that.$el.parents(".ws-content.active"));
                                                   that.app.showLoading(false,that.$("#highrise_setup"));
+                                                  that.highriseBindEvents();
                                                   that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
                                                   
                                               }
@@ -3528,6 +3529,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   return ;
                                 }else{
                                 that.app.showAlert(_count[1],that.$el.parents(".ws-content.active"));
+                                that.highriseBindEvents();
                                 that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+_count[1]+"</div>");
                                 return; 
                              }
