@@ -80,7 +80,7 @@ define(['text!crm/highrise/html/login.html'],
                    that.$el.find('#btnTestLogin').removeClass('saving');
                     var creds = jQuery.parseJSON(data);                            
                     if(creds[0] == "err")							
-                        app.showAlert(creds[1].replace('&#58;',':'),this.$el);
+                        app.showAlert(creds[1].replace('&#58;',':'),that.$el);
                     else
                         app.showMessge(creds.success,that.$el);
                 });
@@ -131,8 +131,8 @@ define(['text!crm/highrise/html/login.html'],
                         var creds = jQuery.parseJSON(data);                            
                         that.$el.find('#hrEmail').removeAttr('readonly')
                         that.$el.find('.setEmail').removeClass('saving');
-                        if(creds.err)							
-                            app.showAlert(creds.err.replace('&#58;',':'),that.$el);
+                        if(creds[0] == "err")							
+                            app.showAlert(creds[1].replace('&#58;',':'),that.$el);
                         else						
                            app.showMessge(creds.success,$("body"),{fixed:true});						
                 });
@@ -160,7 +160,14 @@ define(['text!crm/highrise/html/login.html'],
                     
                     if(creds[0] == "err")
                     {							
-                        app.showAlert(creds[1].replace('&#58;',':'),that.$el);							
+                        app.showAlert(creds[1].replace('&#58;',':'),that.$el);
+                        if(that.parent){
+                            
+                        }
+                        else{
+                            //logindialog.hide();						
+                            that.options.camp.showHighrise();
+                        }
                     }
                     else
                     {
@@ -170,7 +177,7 @@ define(['text!crm/highrise/html/login.html'],
                         }
                         else{
                             logindialog.hide();						
-                            that.options.camp.checkHighriseStatus();
+                            that.options.camp.showHighrise();
                         }
                     }
                                                 

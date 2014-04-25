@@ -5,7 +5,7 @@ function (template) {
                 className:'netsuite_campaigns',
                 events:{
                     'click .ui-accordion-header':function(){ return false;},
-                    'click .calendericon':function(){$("#txtdatefield").focus()}
+                    'click .calendericon':function(){this.$("#txtdatefield").focus()}
                 },
                 initialize: function () {                    			                 
                     this.template = _.template(template);	
@@ -27,7 +27,7 @@ function (template) {
                     this.showHighriseFitler();
                     this.$(".ui-accordion").accordion({ header: "h3", collapsible: false, active: true});
                    this.$(".tags-accordion").accordion({ collapsible: false, active: true});
-                   
+                   this.app.showLoading(false,this.$el);
                     
                     //this.$el.find(".rules-container").remove();
                 },
@@ -60,7 +60,7 @@ function (template) {
                            camp_obj.$("#hrTagsList .checkpanelinput").removeClass('checked');
                            self.$("#hsgroup_list_grid tr.selected").removeClass("selected");
                            self.$('#txtdatefield').val('');
-                            self.$("#txtsearchbyfield").val('');
+                           self.$("#txtsearchbyfield").val('');
                            camp_obj.parent.isFilterChange = false;
                              
                         });
@@ -71,7 +71,7 @@ function (template) {
                             placeholder: 'Search Highrise Tags',
                             gridcontainer: 'hsgroup_list_grid',
                             showicon: 'yes',
-                            iconsource: 'campaigns'
+                            iconsource: 'tags'
                         });
                         this.$(".search-control").css('height','27px');
                         this.$el.find('#txtdatefield').datetimepicker()

@@ -23,9 +23,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .step3 #addnew_target':'createTarget',
                       'change .step3 select':'step3Change',
                       'keydown .step3 input':'step3Change',
-                      'click .step3 #highrise_import':'showHighrise',
+                     // 'click .step3 #highrise_import':'showHighrise',
                       'click .step3 a':'step3Change',
                       'click #btnSFLogin':'loginSalesForce',
+                      'click #btnHSLogin':'loginHighrise',
                       'click #btnNSLogin':'loginNetSuite',
                       'click .scheduled-campaign': 'scheduleCamp',
                       'click .draft-campaign':'setDraftCampaign',
@@ -2348,8 +2349,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.checkNetSuiteStatus();							
                         	break;
                         case 'highrise_import':                                                      							
-                            //this.checkHighriseStatus();							
-                           // break;
+                            this.showHighrise();							
+                              break;
                         case 'choose_tags':
                             if(this.checkRecipientsSaved("tags")){
                                     return false;
@@ -2481,7 +2482,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.app.getData({
                             "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                             "key":"salesfocre",
-                            "callback":_.bind(this.setSalesForceWiz,this)
+                            "callback":_.bind(this.setSalesForceWiz,this),
+                             "errorCallback":_.bind(this.setSalesForceWiz,this),
                         });
                     }
                     else{
@@ -2501,7 +2503,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         dialog.getBody().find('#btnTestLogin').css('float','left');
                         dialog.getBody().find('.login-saving').css('width','auto');
                     })
-                    this.$("#salesforce_welcome").hide();
+                    //this.$("#salesforce_welcome").hide();
                     this.$("#salesforce_mapping").hide();
                     this.$("#salesforce_login").show();
                     this.$("#salesforce_setup").hide();
@@ -2521,7 +2523,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else{
                         this.$("#salesforce_welcome").show();
-                        this.$("#salesforce_setup").hide();                        
+                        this.$("#salesforce_setup").hide();  
+                        return;
                     }
                     if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
                         this.setRecipients();
@@ -2781,7 +2784,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         dialog.getBody().find('#btnTestLogin').css('float','left');
                         dialog.getBody().find('.login-saving').css('width','auto');
                     })
-                    this.$("#netsuite_welcome").hide();
+                   // this.$("#netsuite_welcome").hide();
                     this.$("#netsuite_mapping").hide();
                     this.$("#netsuite_login").show();
                     this.$("#netsuite_setup").hide();
@@ -2799,7 +2802,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 this.app.getData({
                                     "URL":"/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"netsuite",
-                                    "callback":_.bind(this.setNetSuiteeWiz,this)
+                                    "callback":_.bind(this.setNetSuiteeWiz,this),
+                                     "errorCallback":_.bind(this.setNetSuiteeWiz,this),
                                 });
                         }
                         else{
@@ -2812,13 +2816,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    var camp_obj = this;
                    camp_obj.app.showLoading(false,camp_obj.$el.find('#area_netsuite_import'));
                    var netsuite_setting = this.app.getAppData("netsuite");
+                   
                    if(netsuite_setting && netsuite_setting.isNetsuiteUser=="Y"){                        
                         this.$("#netsuite_login,#netsuite_welcome").hide();                        
                         this.$("#netsuite_setup").show();                                              
                     }
                     else{
                        this.$("#netsuite_login,#netsuite_setup").hide();
-                        this.$("#netsuite_welcome").show();                         
+                        this.$("#netsuite_welcome").show(); 
+                        return;
                    }
                    if(this.states.step3.recipientType.toLowerCase()=="netsuite"){
                         this.setRecipients();
@@ -3350,9 +3356,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @further call.showHighriseArea
                 */
                 showHighrise: function(){
+                   
                     this.$("#area_netsuite_import").hide();
                     this.$("#netsuite_welcome").hide();
+                    this.$("#highrise_welcome").hide();
                     this.$("#netsuite_mapping").hide();
+                    this.$('#highrise_setup .heading').show();
                     this.$("#netsuite_login").show();
                     this.$("#netsuite_setup").hide();
                     this.$('#highrise_setup').hide();
@@ -3397,7 +3406,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){                               
                                            var rec_json = jQuery.parseJSON(xhr.responseText); 
-                                          
+                                           if(rec_json[0] == "err"){
+                                               if(rec_json[1].indexOf("Unauthorized") > -1){
+                                                that.app.showLoading(false,that.$("#highrise_setup"));
+                                                 that.highriseErrorCallBack();
+                                                 return;
+                                              }else{
+                                                  that.app.showAlert(rec_json[1],that.$el.parents(".ws-content.active"));
+                                                  that.app.showLoading(false,that.$("#highrise_setup"));
+                                                  that.highriseBindEvents();
+                                                  that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
+                                                  
+                                              }
+                                           }
                                            if(that.app.checkError(rec_json)){
                                                 return false;
                                            }
@@ -3500,26 +3521,42 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
+                        if(_count[0] == "err"){
+                            if(_count[1].indexOf("Unauthorized") > -1){
+                                that.app.showLoading(false,that.$("#highrise_setup"));
+                                that.highriseErrorCallBack();
+                                  return ;
+                                }else{
+                                that.app.showAlert(_count[1],that.$el.parents(".ws-content.active"));
+                                that.highriseBindEvents();
+                                that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+_count[1]+"</div>");
+                                return; 
+                             }
+                        }
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 
                     }));
                     that.app.showLoading(false,that.$(".step3"));
                 },
                 highriseErrorCallBack:function(){
-                     
                     var that = this;
-                    that.app.showAlert("Connection to highrise failed, Please try again later.",that.$el);
                     that.app.showLoading(false,that.$(".step3"));  
                     var active_ws = this.$el.parents(".ws-content");
+                    active_ws.find('#highrise_welcome').show();
+                    this.$('#highrise_setup .heading').hide();
+                    active_ws.find("#highrise_import_container").html('');
                     that.highriseBindEvents();
                         
                 },
+                loginHighrise:function(){
+                    this.$("#hs_setting_menu #hs_user_setting").click();
+                },
                highriseBindEvents:function(){
                    var that = this;
+                   this.$("#hs_setting_menu li").unbind();
                    this.$("#hs_setting_menu li").click(_.bind(function(obj){
                              var target_obj = $.getObj(obj,"li");
-                             var dialog_width = $(document.documentElement).width()-60;
-                             var dialog_height = $(document.documentElement).height()-220;
+                             
                             if(target_obj.attr("id")=="hs_mapping"){
                                  var dialog = this.app.showDialog({title:' Specify Import',
                                     css:{"width":"1400px","margin-left":"-700px"},
@@ -3536,6 +3573,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });
                                  this.app.showLoading(false,dialog.getBody());        
                             }
+                            
                             else if(target_obj.attr("id")=="hs_user_setting"){                                
                                 
                                 var dialog = this.app.showDialog({title:'Highrise Login Setup',
