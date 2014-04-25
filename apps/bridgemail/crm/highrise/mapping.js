@@ -39,7 +39,7 @@ function (template,Mapping) {
                                                                    
                                      var mapping_field = val[0].bmsMappingField;
                                      fields_html += '<tr id="row_'+val[0].name+'">';                                                                                               
-                                     fields_html += '<td><div class="name-type colico sfr"> <strong><span><em>Highrise Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
+                                     fields_html += '<td><div class="name-type colico hr"> <strong><span><em>Highrise Field</em><a><b>'+val[0].label+'</b></a></span></strong> </div></td>';                                                                             
                                      fields_html += '<td><div class="type colico mbr show" style="width:174px"> <strong><span><em>Makesbridge Field</em>'+mapping_field+'</span></strong> </div><div id="'+val[0].name+'" class="action"><a class="btn-green use move-row '+system_flag+'"><span>Add</span><i class="icon next"></i></a></div></td>';                                                             
                                      fields_html += '</tr>';
                                      

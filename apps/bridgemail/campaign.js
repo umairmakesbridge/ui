@@ -23,7 +23,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .step3 #addnew_target':'createTarget',
                       'change .step3 select':'step3Change',
                       'keydown .step3 input':'step3Change',
-                      'click .step3 #highrise_import':'showHighrise',
+                     // 'click .step3 #highrise_import':'showHighrise',
                       'click .step3 a':'step3Change',
                       'click #btnSFLogin':'loginSalesForce',
                       'click #btnHSLogin':'loginHighrise',
@@ -2350,8 +2350,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.checkNetSuiteStatus();							
                         	break;
                         case 'highrise_import':                                                      							
-                            //this.checkHighriseStatus();							
-                           // break;
+                            this.showHighrise();							
+                              break;
                         case 'choose_tags':
                             if(this.checkRecipientsSaved("tags")){
                                     return false;
@@ -2504,7 +2504,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         dialog.getBody().find('#btnTestLogin').css('float','left');
                         dialog.getBody().find('.login-saving').css('width','auto');
                     })
-                    this.$("#salesforce_welcome").hide();
+                    //this.$("#salesforce_welcome").hide();
                     this.$("#salesforce_mapping").hide();
                     this.$("#salesforce_login").show();
                     this.$("#salesforce_setup").hide();
@@ -2785,7 +2785,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         dialog.getBody().find('#btnTestLogin').css('float','left');
                         dialog.getBody().find('.login-saving').css('width','auto');
                     })
-                    this.$("#netsuite_welcome").hide();
+                   // this.$("#netsuite_welcome").hide();
                     this.$("#netsuite_mapping").hide();
                     this.$("#netsuite_login").show();
                     this.$("#netsuite_setup").hide();
@@ -3357,6 +3357,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @further call.showHighriseArea
                 */
                 showHighrise: function(){
+                    console.log('show highrise');
                     this.$("#area_netsuite_import").hide();
                     this.$("#netsuite_welcome").hide();
                     this.$("#highrise_welcome").hide();
@@ -3512,6 +3513,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
+                        if(_count[0] == "err"){
+                            that.app.showLoading(false,that.$("#highrise_setup"));
+                            that.highriseErrorCallBack();
+                            return ;
+                        }
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 
                     }));
@@ -3532,10 +3538,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                highriseBindEvents:function(){
                    var that = this;
+                   this.$("#hs_setting_menu li").unbind();
                    this.$("#hs_setting_menu li").click(_.bind(function(obj){
                              var target_obj = $.getObj(obj,"li");
-                             var dialog_width = $(document.documentElement).width()-60;
-                             var dialog_height = $(document.documentElement).height()-220;
+                             
                             if(target_obj.attr("id")=="hs_mapping"){
                                  var dialog = this.app.showDialog({title:' Specify Import',
                                     css:{"width":"1400px","margin-left":"-700px"},
@@ -3552,6 +3558,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });
                                  this.app.showLoading(false,dialog.getBody());        
                             }
+                            
                             else if(target_obj.attr("id")=="hs_user_setting"){                                
                                 
                                 var dialog = this.app.showDialog({title:'Highrise Login Setup',
