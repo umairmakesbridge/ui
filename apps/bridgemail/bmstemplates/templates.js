@@ -14,7 +14,8 @@ function (template,highlight) {
                 'click .create-tempalte':'createTemplate',
                 'click .searchbtn':function(){
                      this.$("#search-template-input").keyup();
-                } 
+                },
+                'click #clearsearch':'searchTemplateNameTag'
             },
             /**
              * Initialize view - backbone .
@@ -165,17 +166,32 @@ function (template,highlight) {
                 searchTemplateNameTag:function(obj){
                     var _input = $.getObj(obj,"input");
                     var val = $.trim(_input.val());
-                    
-                    if(obj.keyCode==13 || typeof(obj.keyCode)=="undefined"){                       
-                        this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
-                        this.getTemplateCall.abort();
-                        if(val!==""){
-                            this.loadTemplates('search','nameTag',{text:val});
-                        }
-                        else{
-                            this.$("#template_search_menu li:first-child").click();
-                        }                        
-                    }
+                        this.$('#clearsearch').hide();            
+                    this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
+                    this.getTemplateCall.abort();
+                    var keyCode = this.keyvalid(obj);
+                    if(keyCode){
+                            if(val!==""){
+                                this.$('#clearsearch').show();
+                                this.timeout = setTimeout(_.bind(function() {
+                                        clearTimeout(this.timeout);
+                                        this.loadTemplates('search','nameTag',{text:val});
+                                    }, this), 500);
+                                this.$('#search-template-input').keydown(_.bind(function() {
+                                    clearTimeout(this.timeout);
+                                }, this));
+                            }
+                            else{
+                                this.$("#template_search_menu li:first-child").click();
+                            }
+                      }
+                      else
+                      {
+                          if(val!==""){
+                            this.$('#clearsearch').show();
+                            }
+                      }
+                   
                     if(val==""){
                         if(this.searchValue!=val){
                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                                          
@@ -223,6 +239,7 @@ function (template,highlight) {
                     var li = $.getObj(obj,"li");
                     if(!li.hasClass("active")){
                         this.$("#search-template-input").val('');
+                        this.$('#clearsearch').hide();
                         this.$("#template_search_menu li,#template_layout_menu li").removeClass("active");
                         var searchType = li.find("a").attr("search");                        
                         li.addClass("active");
@@ -255,7 +272,8 @@ function (template,highlight) {
                                 searchString +="&userType="+options.user_type;
                             }
                             else if(options && options.category_id){
-                                searchString +="&categoryId="+options.category_id;
+                                this.categoryName = options.category_id;
+                                searchString +="&categoryId="+ encodeURIComponent(options.category_id);
                             }                            
                             if(searchType=="featured"){
                                 searchString +="&isFeatured=Y"                                
@@ -327,6 +345,18 @@ function (template,highlight) {
                     else if(this.searchString.indexOf("=tag")>-1){                        
                         
                         this.$("#total_templates").html("<strong class='badge'>"+this.totalcount+"</strong> templates found <b>for tag '"+vars["searchText"]+"'</b>");                         
+                    }
+                    else if(this.searchString.indexOf("=category") > -1){
+                        this.$("#total_templates").html("<strong class='badge'>"+this.totalcount+"</strong> templates found <b>for category '"+ this.categoryName+"'</b>");                         
+                        
+                    }else if(this.searchString.indexOf("=mobile") > -1){
+                        this.$("#total_templates").html("<strong class='badge'>"+this.totalcount+"</strong><b>Mobile</b> enabled templates found");                             
+                    }
+                    else if(this.searchString.indexOf("=admin") > -1){
+                        this.$("#total_templates").html("<strong class='badge'>"+this.totalcount+"</strong><b>Makesbridge</b> templates found"); 
+                    }
+                    else if(this.searchString.indexOf("=returnpath") > -1){
+                        this.$("#total_templates").html("<strong class='badge'>"+this.totalcount+"</strong><b>Return Path</b> enabled templates found"); 
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+this.totalcount +"</strong> templates");
@@ -421,27 +451,37 @@ function (template,highlight) {
                         
                         template_html.find(".caption p a").click(_.bind(function(obj){
                              var tag = $.getObj(obj,"a");
-                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                              this.$('#search-template-input').val('');
+                            this.$('#clearsearch').hide();
                              this.loadTemplates('search','tag',{text:tag.text()});  
                         },this));
                         
                         template_html.find(".mobile").click(_.bind(function(obj){                             
-                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
+                              this.$('#search-template-input').val('');
+                            this.$('#clearsearch').hide();
                              this.loadTemplates('search','mobile');  
                         },this));
                         /*Search return Path by abdullah*/
                         template_html.find(".rpath").click(_.bind(function(obj){ 
                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                            this.$('#search-template-input').val('');
+                            this.$('#clearsearch').hide();
                              this.loadTemplates('search','returnpath');
                         },this));
                         template_html.find(".cat").click(_.bind(function(obj){     
                              var cat = $.getObj(obj,"a");
-                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                              this.$('#search-template-input').val('');
+                                this.$('#clearsearch').hide();
                              this.loadTemplates('search','category',{category_id:cat.attr("cat_id")});  
                         },this));
                         
                         template_html.find(".builtin").click(_.bind(function(obj){                             
-                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");                                                  
+                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                              this.$('#search-template-input').val('');
+                            this.$('#clearsearch').hide();
                              this.loadTemplates('search','admin',{user_type:'A'});  
                         },this));
                         
@@ -658,6 +698,20 @@ function (template,highlight) {
                                _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
                            }
                    });
-                }
+                },
+                 keyvalid:function(event){
+                        var regex = new RegExp("^[A-Z,a-z,0-9]+$");
+                        var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                         if (event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 37 || event.keyCode == 39) {
+                            return true;
+                        }
+                        else if (regex.test(str)) {
+                            return true;
+                        }
+                       else{
+                            return false;
+                        }
+                        event.preventDefault();
+                   }
         });
 });
