@@ -64,7 +64,7 @@ function (template,highlighter) {
             },
             editNurtureTrack:function(){
                 if(this.model.get("status")=="D"){
-                    this.app.mainContainer.openNurtureTrack(this.model.get("trackId.encode"),this.model.get("trackId.checksum"));
+                    this.app.mainContainer.openNurtureTrack({"id":this.model.get("trackId.encode"),"checksum":this.model.get("trackId.checksum"),"parent":this.parent});
                 }
                 
             },

@@ -2938,7 +2938,7 @@ a.tw-toggle.wsicon i {
 .tagscont {
 	float: left;
 	height: 20px;
-	margin: 0 0 0 32px;
+	margin: 0 0 0 42px;
 	min-height: 20px;
 	padding: 0;
 	position: relative;
@@ -10824,4 +10824,23 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
     background-position: -23px -39px;
     background-repeat: no-repeat;
 }
+.c-name h2 strong.cstatus {
+    cursor: default;
+    letter-spacing: 0.5px;
+    line-height: 16px;
+    margin: 7px 5px 0 0;
+    padding: 0 10px;
+}
+
+.c-name h2 strong.cstatus .icon {
+    background-size: cover;
+    height: 16px;
+    margin: 0 4px 0 -7px !important;
+    width: 16px;
+
+}
+.icon.play16 {   background: url("../img/play16.png") no-repeat scroll center center ;}
+.icon.pause16 {   background: url("../img/pause16.png") no-repeat scroll center center ;}
+.icon.play24 {   background: url("../img/play24.png") no-repeat scroll center center ;}
+.icon.pause24 {   background: url("../img/pause24.png") no-repeat scroll center center ;}
 /* ----------------------- End of nurture track  --------------------- */

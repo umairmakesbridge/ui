@@ -4,9 +4,6 @@
 </div>
 
 <div class="clearfix"></div>
-
-
-
 <div style="" id="nurturetargets" class="nurture_targets  clearfix">
 
 
@@ -14,44 +11,28 @@
 
 
         <div class="accordion-heading">
-            <a href="#collapseOne" data-parent="#accordion2" data-toggle="collapse" class="accordion-toggle">
+            <a class="accordion-toggle">
                 <i class="icon subscribersiconw"></i>
                 <span>Recipients</span>
             </a>
         </div>
         <div class="accordion-body collapse in" id="collapseOne">
             <div class="accordion-inner">
-
                 <div class="dottedpanel">
 
                     <a class="btn-green" style="display: block;  margin: 22px auto;    width: 145px;" ><span>Add Targets</span><i class="icon targetw"></i></a>
-
-
-
                 </div>
-
-
-
-
-
             </div>
         </div>
     </div>
 </div>
 <!-- nurturetargets  -->
-
 <div class="accordion nurturw_wizard" id="accordion2">
+    <div class="message-wait-container">
     <div class="accordion-group">
-        <div class="topHandlers">
-            <ul>
-                <li class="myHandle"><i class="icon move"></i></li>
-                <li class="myHandlerCopy"><i class="icon copy"></i></li>
-                <li class="myHandlerDelete"><i class="icon delete"></i></li>
-            </ul>
-        </div> <!-- topHandlers -->
-
+       
         <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+            <a class="accordion-toggle" >
                 <i class="icon email"></i>
                 <span class="title">Message 1</span>
                 <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
@@ -59,7 +40,7 @@
                 <b class="caret"></b>
             </a>
         </div>
-        <div id="collapseOne" class="accordion-body collapse in">
+        <div  class="accordion-body collapse in">
             <div class="accordion-inner msg">
 
 
@@ -109,6 +90,7 @@
 
                 <div class="btns">
                     <a class="btn-blue left" ><span class="right">Edit Message</span><i class="icon edit left"></i></a>
+                    <a class="btn-red left" ><span class="right">Delete</span><i class="icon delete left"></i></a>
                     <a  class="btn-green left"><span>Save</span><i class="icon save"></i></a>
                 </div>
 
@@ -128,13 +110,7 @@
     </div><!-- placeholder -->
 
     <div class="accordion-group yellow">
-        <div class="topHandlers">
-            <ul>
-                <li class="myHandle"><i class="icon move"></i></li>
-                <li class="myHandlerEdit"><i class="icon edit"></i></li>
-                <li class="myHandlerDelete"><i class="icon delete"></i></li>
-            </ul>
-        </div>
+        
 
         <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
@@ -155,7 +131,10 @@
                     <option value="">2 Days</option>
                     <option selected="selected" value="">3 Days</option>
                 </select>
-
+                
+                <div class="btns">
+                    <a class="btn-red left" ><span class="right">Delete</span><i class="icon delete left"></i></a>                    
+                </div>
 
 
             </div>
@@ -170,9 +149,7 @@
         </div>
 
     </div><!-- placeholder -->
-
-    
-
+    </div>
     <div class="wait-add">
         <div>
             <a  class="btn-yellow left"><span class="">Add Wait</span><i class="icon wait left"></i></a>
