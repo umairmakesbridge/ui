@@ -70,7 +70,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 app.mainContainer.addWorkSpace({type:'',title:"My Account"});
                             },
                             'click .sc-links span.ddicon':'scDropdown',
-                            'click .new-campaign': 'createCampaign',
+                            //'click .new-campaign': 'createNewCampaign',
                             'click .csv-upload': 'csvUpload',
                             'click .new-nurturetrack':'addNurtureTrack'
                          },
@@ -100,23 +100,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             }
                             event.stopPropagation();
                         },
-                         createCampaign: function() {
-                            var camp_obj = this;
-                            var dialog_title = "New Campaign";
-                            var dialog = app.showDialog({title: dialog_title,
-                                css: {"width": "650px", "margin-left": "-325px"},
-                                bodyCss: {"min-height": "100px"},
-                                headerIcon: 'new_headicon',
-                                buttons: {saveBtn: {text: 'Create Campaign'}}
-                            });
-                            app.showLoading("Loading...", dialog.getBody());
-                            require(["newcampaign"], function(newcampPage) {
-                                var mPage = new newcampPage({camp: camp_obj, app: app, newcampdialog: dialog});
-                                dialog.getBody().html(mPage.$el);
-                                dialog.$("input").focus();
-                                dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
-                            });
-                },
+                         
                         csvUpload: function() {
                             this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                         },
