@@ -62,7 +62,7 @@ function (template) {
             addCountHeader:function(){
                this.ws_header = this.current_ws.find(".camp_header .edited");   
                var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li><span class="badge pclr18 tcount showtooltip" data-original-title="View All Templates">'+this.total_count+'</span>Total Templates</li>';             
+                 count_header += '<li><span class="badge pclr18 tcount showtooltip temp-count" search="all" data-original-title="View All Templates">'+this.total_count+'</span>Total Templates</li>';             
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader); 

@@ -8,28 +8,25 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 classNmae: 'container',
                 wp_counter: 0,
                 events: {
-                    'click .tw-toggle button': function(obj) {
-                        if (!$(obj.target).find("span").hasClass("workspace")) {
-                            if (!$(obj.target).hasClass("active")) {
-                                $(".tw-toggle button").removeClass("active");
-                                $(obj.target).addClass("active");
+                    'click .tw-toggle': function(obj) {
+                        var $a =$.getObj(obj,"a"); 
+                        if (!$a.hasClass("active")) {
+                                $a.addClass("active");
                                 $("#tiles").show();
                                 $('#workspace').animate({left: '150%'}, function() {
                                     $(this).hide();
                                 });
-                            }
+                           
                         }
                         else {
-                            if (!$(obj.target).hasClass("active")) {
                                 if (this.$el.find("#wstabs li").length > 1) {
-                                    $(".tw-toggle button").removeClass("active");
-                                    $(obj.target).addClass("active");
+                                    $a.addClass("active");
                                     $("#tiles").hide();
                                     $('#workspace').show();
                                     $('#workspace').animate({left: '0px'});
 
                                 }
-                            }
+                            
                         }
 
                     }

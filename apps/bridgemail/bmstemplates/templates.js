@@ -15,7 +15,8 @@ function (template,highlight) {
                 'click .searchbtn':function(){
                      this.$("#search-template-input").keyup();
                 },
-                'click #clearsearch':'searchTemplateNameTag'
+                'click #clearsearch':'searchTemplateNameTag',
+                //'click .temp-count':'searchTemplate'
             },
             /**
              * Initialize view - backbone .
@@ -272,7 +273,7 @@ function (template,highlight) {
                                 searchString +="&userType="+options.user_type;
                             }
                             else if(options && options.category_id){
-                                this.categoryName = options.category_id;
+                                this.categoryName = this.app.encodeHTML(options.category_id);
                                 searchString +="&categoryId="+ encodeURIComponent(options.category_id);
                             }                            
                             if(searchType=="featured"){
@@ -316,6 +317,9 @@ function (template,highlight) {
                             if(camp_obj.page.total_count==0){
                                 camp_obj.page.total_count=templates_json.totalCount;
                                 camp_obj.trigger('updatecount');
+                                camp_obj.options.page.current_ws.find('.temp-count').click(_.bind(function(event){
+                                    camp_obj.$('#template_search_menu li:nth-child(2)').click();
+                                },camp_obj));
                             }
                             camp_obj.drawTemplates();
                             camp_obj.offset = camp_obj.offset + parseInt(templates_json.count); 
