@@ -20,7 +20,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                         else {
                                 if (this.$el.find("#wstabs li").length > 1) {
-                                    $a.addClass("active");
+                                    $a.removeClass("active");                                    
                                     $("#tiles").hide();
                                     $('#workspace').show();
                                     $('#workspace').animate({left: '0px'});
