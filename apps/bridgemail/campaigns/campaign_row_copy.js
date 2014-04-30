@@ -16,8 +16,11 @@ function (template,highlighter) {
             events: {
                'click .btn-copy':'copyCampaign',
                'click  a.campname':'previewCampaign',
+               "click .btn-preview":'previewCampaign',
                'click .taglink':'tagClick',
+               'click .btn-red':'deleteCampaginDialoge',
                'click .report':'reportShow',
+               
             },
             /**
              * Initialize view - backbone
@@ -98,7 +101,11 @@ function (template,highlighter) {
              * Draw Buttons 
             */
             drawButtons:function(){  
-				var btns = '<a  class="btn-green btn-copy"><span>Copy</span><i class="icon copy"></i></a>';
+                                var btns = '';
+                            	
+				btns += '<a class="btn-red"><i class="icon delete"></i></a>';
+				btns += '<a  class="btn-green btn-copy"><span>Copy</span><i class="icon copy"></i></a>';
+				btns += '<a class="btn-blue btn-preview"><span>Preview</span><i class="icon preview3"></i></a>';
 				return btns;
             },
             /**
@@ -179,7 +186,25 @@ function (template,highlighter) {
                         reportShow:function(){
                                         var camp_id=this.model.get('campNum.encode');
                                         this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
-                        }
+                        },
+                        deleteCampaginDialoge:function(){
+                                var camp_obj = this.sub;
+                                var appMsgs = camp_obj.app.messages[0];
+                                var camp_id = this.model.get('campNum.encode')
+                                if(camp_id){
+                                        this.app.showAlertDetail({heading:'Confirm Deletion',
+                                        detail:appMsgs.CAMPS_delete_confirm_error,                                                
+                                        callback: _.bind(function(){
+                                                camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
+                                                this.deleteCampaign();
+                                        },this)},
+                                        camp_obj.$el.parents(".ws-content.active"));
+                                            /*$(".overlay .btn-ok").click(function(){
+                                                    $(".overlay").remove();
+                                               camp_obj.deleteCampaign(target.attr("id"));
+                                            });*/
+                                }
+            },
             
         });
 });

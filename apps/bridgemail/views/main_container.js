@@ -8,28 +8,25 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 classNmae: 'container',
                 wp_counter: 0,
                 events: {
-                    'click .tw-toggle button': function(obj) {
-                        if (!$(obj.target).find("span").hasClass("workspace")) {
-                            if (!$(obj.target).hasClass("active")) {
-                                $(".tw-toggle button").removeClass("active");
-                                $(obj.target).addClass("active");
+                    'click .tw-toggle': function(obj) {
+                        var $a =$.getObj(obj,"a"); 
+                        if (!$a.hasClass("active")) {
+                                $a.addClass("active");
                                 $("#tiles").show();
                                 $('#workspace').animate({left: '150%'}, function() {
                                     $(this).hide();
                                 });
-                            }
+                           
                         }
                         else {
-                            if (!$(obj.target).hasClass("active")) {
                                 if (this.$el.find("#wstabs li").length > 1) {
-                                    $(".tw-toggle button").removeClass("active");
-                                    $(obj.target).addClass("active");
+                                    $a.addClass("active");
                                     $("#tiles").hide();
                                     $('#workspace').show();
                                     $('#workspace').animate({left: '0px'});
 
                                 }
-                            }
+                            
                         }
 
                     }
@@ -311,20 +308,27 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var li = $.getObj(event, "li");
                         if (li.hasClass("active")) {
                             li.removeClass("active");
-                            this.$(".slideoverlay").fadeOut("slow");
-                            this.$(".slidenav").animate({left: "-300px"}, 500,_.bind(function(){
-                                this.$(".slidenav").hide();
-                            },this));
+                            //this.$(".slideoverlay").fadeOut("slow");
+                            this.$(".slidenav-dd").hide();
+                            
                         }
-                        else {
+                       else {
                             li.addClass("active");
-                            this.$(".slideoverlay").fadeIn("slow");
-                            this.$(".slidenav").animate({left: "0"}, 500,_.bind(function(){
-                                this.$(".slidenav").show();
-                            },this));
+                            //this.$(".slideoverlay").fadeIn("slow");
+                            this.$(".slidenav-dd").show();
+                            
                         }
                         event.stopPropagation();
                     }, this));
+                    this.$('.icon-menu').mouseenter(_.bind(function(event){
+                        $('.dropdown-nav').hide();
+                        $('.dropdown-nav').removeClass('open');
+                        var li = $.getObj(event, "li");
+                        li.addClass("active");
+                        li.show();
+                        this.$(".slidenav-dd").show();
+                        event.stopPropagation();
+                    },this));
                     // Slide Nav Handling Event 
                     this.$('.slidenav > ul > li.dd > a').click(function(event) {
                         $('.slidenav > ul > li').find('ul').hide();

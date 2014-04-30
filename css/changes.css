@@ -2099,7 +2099,7 @@ i.contact-name-prev {
     background: url("../img/graphics.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 .search .close-icon {
-    top: 13px !important;
+    top: 11px !important;
 }
 @media (min-width: 1920px) {
     .adv_dd {
@@ -2244,6 +2244,397 @@ i.contact-name-prev {
 #copy_camps_grid{
     overflow: hidden;
 }/*later must be checked*/
+input[type='file'] {
+    width:400px;
+    height:25px;
+    opacity:0 !important;
+}
+.close-icon {
+    background: url("../img/closeiconurl.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+/* New Dash board Menu*/
+
+.sc-links {
+    float: left;
+    position: relative;
+}
+
+
+.ddlist-btn {
+    border-radius: 2px;
+    display: block;
+    float: left;
+    height: 34px;
+    margin: 9px 5px 0 0;
+    position: relative;
+}
+
+.ddlist-btn a:after {
+    color: #FFFFFF;
+    content: "+";
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    height: 16px;
+    left: 2px;
+    line-height: 16px;
+    position: absolute;
+    text-align: center;
+    top: 8px;
+    width: 16px;
+}
+.ddlist-btn a {
+    display: block;
+    float: left;
+    height: 24px;
+    padding: 5px 15px;
+}
+.sc-links .campaignicon {
+    background: url("../img/campaignicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.sc-links .icon {
+    display: block;
+    height: 24px;
+    margin: 0 !important;
+    width: 24px;
+}
+.ddlist-btn.active {
+    background: none repeat scroll 0 0 #294957;
+}
+.ddlist-btn .ddicon:hover, .ddlist-btn.active .ddicon, #dashnav:hover .ddlist-btn .ddicon {
+    background-color: #335261;
+}
+.ddlist-btn .ddicon {
+    background: none repeat scroll 0 0 #294957;
+    border-radius: 2px;
+    color: #FFFFFF;
+    cursor: pointer;
+    float: left;
+    height: 34px;
+    width: 16px;
+}
+ul.ddlist {
+    background: none repeat scroll 0 0 #314E5B;
+    border-radius: 0 0 2px 2px;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+    display: none;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 50px;
+    width: 170px;
+}
+ul.ddlist li:first-child {
+    border-top: 1px solid rgba(0, 0, 0, 0);
+}
+ul.ddlist li {
+    border-top: 1px solid #1D3C49;
+    line-height: 36px;
+    position: relative;
+}
+ul.ddlist li a {
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-size: 13px;
+    line-height: 36px;
+    padding: 0 10px;
+}
+ul.ddlist li i.icon {
+    cursor: pointer;
+    float: left;
+    height: 36px;
+    width: 36px;
+}
+.sc-links .campaignicon {
+    background: url("../img/campaignicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.ddlist li span {
+    line-height: 36px;
+    padding: 0 10px;
+}
+.sc-links > a {
+    border-radius: 2px;
+    display: block;
+    float: left;
+    height: 24px;
+    margin: 9px 5px 0 0;
+    padding: 5px 10px;
+}
+
+.ddlist-btn .ddicon:hover, .ddlist-btn.active .ddicon, #dashnav:hover .ddlist-btn .ddicon {
+    background-color: #335261;
+}
+
+.ddlist-btn .ddicon:hover em, .ddlist-btn.active .ddicon em {
+    background-position: 0 bottom;
+    opacity: 1;
+}
+.ddlist-btn .ddicon em {
+    background: url("../img/darrow.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    height: 10px;
+    margin: 13px auto 0;
+    opacity: 0.6;
+    width: 10px;
+}
+.sc-links .workflowicon {
+    background: url("../img/workflowicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.sc-links .autotriggericon {
+    background: url("../img/autotriggericon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.sc-links .nurturetrackicon {
+    background: url("../img/nurturetrackicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+ul.ddlist li:hover:after {
+    color: #FFFFFF;
+    content: "+";
+    cursor: pointer;
+    display: block;
+    font-size: 18px;
+    height: 36px;
+    left: 6px;
+    position: absolute;
+    top: 0;
+    width: 40px;
+}
+.sc-links .contactsicon:before{
+    color: #FFFFFF;
+    content: "+";
+    display: block;
+    font-size: 18px;
+    height: 36px;
+    left: 79px;
+    position: absolute;
+    top: 12px;
+    width: 40px;
+}
+.sc-links .contactsicon:hover:before{
+    color: #01AEEE;
+}
+.sc-links .contactsicon {
+    background: url("../img/contactsicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.sc-links .announcementicon {
+    background: url("../img/announcementicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.sc-links > a:hover {background: none repeat scroll 0 0 #294957; }
+.sc-links  .contactsicon:hover {background: url("../img/contactsicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.sc-links  .announcementicon:hover {background: url("../img/announcementicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.ddlist-btn a:hover:after { color: #01AEEE;}
+.ddlist-btn a:hover .campaignicon {background: url("../img/campaignicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+#dashnav:hover .ddlist-btn { background: #294957;  }
+
+
+/* ----------- --------------------------     Slide Nav Drop Down ------------------------- ----------- */	
+
+
+
+.slidenav-dd {
+    background: none repeat scroll 0 0 #FFFFFF;
+    left: 0;
+	display:none;
+    padding: 5px 6px;
+    position: absolute;
+    top: 50px;
+    width: 630px;
+	overflow:hidden;
+    z-index: 100;
+	-webkit-border-radius: 2px 2px;
+	-moz-border-radius:  2px 2px;
+	border-radius: 2px 2px;
+	
+	 box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+	
+}
+ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
+
+
+.slidenav-dd ul { }
+
+.slidenav-dd > ul > li {
+    display: inline-block;
+    float: left;
+    padding: 5px;
+}
+.slidenav-dd > ul >  li h4 { font-size:14px; font-weight:600; color:#4590b5;  line-height:32px;}
+.slidenav-dd > ul > li h4 i.icon {
+    background-size: contain !important;
+    float: left;
+    height: 20px;
+    margin: 5px !important;
+    width: 20px;
+}
+.slidenav-dd > ul >  li h4 span { float:left;  padding: 0 5px; }
+
+
+.slidenav-dd > ul >  li.open { background-color:#f4fbff; }
+
+
+
+
+.slidenav-dd > ul >  li a {
+    color: #01AEEE;
+	font-size:17px;
+    display: block;
+    height: 50px;
+}
+.slidenav-dd > ul >  li i.icon { float:left; width:50px; height:50px;  }
+.slidenav-dd > ul >  li span { display:block;  padding: 0 10px; }
+
+
+
+.slidenav-dd > ul >  li:hover ul { display:block;}
+
+.slidenav-dd > ul > li ul {
+    margin: 0;
+    overflow: hidden;
+    width: 200px;
+}
+.slidenav-dd > ul > li ul li {
+    background-color: #fbfcff;
+    border-bottom: 0 none;
+    height: 30px;
+    line-height: 30px;
+	margin-top:2px;
+	-webkit-border-radius: 2px 2px;
+	-moz-border-radius:  2px 2px;
+	border-radius: 2px 2px;
+}
+.slidenav-dd > ul >  li ul li a {
+    color: #83b5ce;
+    font-size: 13px;
+    height: 30px;
+}
+
+ .slidenav-dd > ul > li ul li i.icon {
+    background-size: cover !important;
+    border-right: 0 none;
+    float: left;
+    height: 20px;
+	display:none;
+    margin: 5px !important;
+    width: 20px;
+}
+
+.slidenav-dd > ul >  li ul li:hover { background:#4590B5; }
+.slidenav-dd > ul >  li ul li:hover a { color:#fff; }
+
+.slidenav > ul >  li ul li span { float:left;  padding: 0 5px; }
+
+
+
+.slidenav-dd > ul >  li ul li:hover   {}
+
+.slidenav-dd > ul >  li ul li:hover i.icon.customrepots { background: url("../img/customrepots-w.png") no-repeat scroll center center;}
+.slidenav-dd > ul >  li ul li:hover i.icon.csummery { background: url("../img/csummery-w.png") no-repeat scroll center center;}
+.slidenav-dd > ul >  li ul li:hover i.icon.performance { background: url("../img/performance-w.png") no-repeat scroll center center;}
+.slidenav-dd > ul >  li ul li:hover i.icon.bounced { background: url("../img/bounced-w.png") no-repeat scroll center center;}
+.slidenav-dd > ul >  li ul li:hover i.icon.subscribers { background: url("../img/subscribers-w.png") no-repeat scroll center center;}
+
+
+
+.slidenav-dd > ul >  li ul li i.icon.uploadcontact {background: url("../img/uploadcontact1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.form {background: url("../img/form1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.graphic {background: url("../img/graphics1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.campaign {background: url("../img/campaign-b.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.templates {background: url("../img/templates1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.targets {background: url("../img/targets1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.landingpgs {background: url("../img/landingpgs1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.plus {background: url("../img/plus1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.socialsharing {background: url("../img/socialsharing1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.createsegments {background: url("../img/createsegments1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.crm {background: url("../img/crm1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.viewcontact {background: url("../img/viewcontact1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.csvuploadicon {background: url("../img/csvupload1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.accessreports {background: url("../img/accessreports1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.campaignlist {background: url("../img/campaignlist1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.creports {background: url("../img/creports1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.emarketing {background: url("../img/emarketing1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.website {background: url("../img/website1.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.createtemplates {  background: url("../img/createtemplate1.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
+.slidenav-dd > ul >  li ul li i.icon.mee {   background: url("../img/meeicon1.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+
+.slidenav-dd > ul >  li ul li:hover i.icon.uploadcontact {background: url("../img/uploadcontact.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.form {background: url("../img/form.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.graphic {background: url("../img/graphics.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.campaign {background: url("../img/campaign.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.templates {background: url("../img/templates.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.targets {background: url("../img/targets.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.landingpgs {background: url("../img/landingpgs.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.plus {background: url("../img/plus.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.socialsharing {background: url("../img/socialsharing.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.createsegments {background: url("../img/createsegments.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.crm {background: url("../img/crm.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.viewcontact {background: url("../img/viewcontact.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.csvuploadicon {background: url("../img/csvupload.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.accessreports {background: url("../img/accessreports.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.campaignlist {background: url("../img/campaignlist.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.creports {background: url("../img/creports.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.emarketing {background: url("../img/emarketing.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.website {background: url("../img/website.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li:hover i.icon.createtemplates {  background: url("../img/createtemplate.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
+.slidenav-dd > ul >  li ul li:hover i.icon.mee {   background: url("../img/meeicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+
+
+
+
+
+
+.slidenav-dd .supporthelp {
+    background: none repeat scroll 0 0 #EFF5F9;
+    height: 40px;
+    line-height: 40px;
+    margin: 10px -6px -5px;
+    text-align: center;
+}
+.slidenav-dd  .supporthelp a { color:#4590b5; font-size:14px; font-weight:600; }
+.slidenav-dd  .supporthelp a:hover { color:#01AEEE; }
+ul.leftnav > li.icon-menu {
+    transition: background-color 100ms ease 0.1s !important;
+}
+/* ------------------------------------------------------------------------------------- */
+
+a.tw-toggle {
+	left: 10px;
+	position: absolute;
+	padding:4px;
+	top: 60px;
+	border: 0px solid #FFFFFF;
+	background:#495B67;
+	z-index: 99;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:2px;
+	-webkit-box-shadow:  0 1px 2px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	box-shadow:  0 1px 2px rgba(0, 0, 0, 0.2);
+	
+}
+a.tw-toggle.tiles i {
+    background: url("../img/tile-icon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+    width: 30px;
+	opacity:1;
+	-webkit-transition: opacity .3s ease-out;
+    -moz-transition: opacity .3s ease-out;
+    -o-transition: opacity .3s ease-out;
+    transition: opacity .3s ease-out;
+}
+a.tw-toggle.tiles:hover i {opacity:0.7; }
+
+a.tw-toggle.wsicon i {
+    background: url("../img/ws-icon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+    width: 30px;
+    opacity:1;
+}
+a.tw-toggle.tiles.active:hover i { opacity:0.7;}
+
+/*---------------------------------------------------------------------------- */
 /* ENDS */
 
 .videobar{

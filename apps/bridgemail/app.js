@@ -107,12 +107,12 @@ define([
                         }
                         if(app.mainContainer.$(".icon-menu").hasClass("active")){
                             app.mainContainer.$(".icon-menu").removeClass( "active" );
-                            app.mainContainer.$(".slideoverlay").fadeOut("slow");
-                            app.mainContainer.$( ".slidenav" ).animate({left: "-300px"}, 500, _.bind(function(){
-                                this.mainContainer.$(".slidenav").hide();
-                            },app));
+                            app.mainContainer.$(".slidenav-dd").hide();
                         }
-                        
+                       if(app.mainContainer.$('.sc-links ul').hasClass('open')){
+                           app.mainContainer.$('.sc-links ul').removeClass('open');
+                           app.mainContainer.$('.sc-links ul').hide();
+                       }
                     });
                     
                    var self = this;                                                                         

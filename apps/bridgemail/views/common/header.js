@@ -11,7 +11,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             'click .campaigns-li':function(obj){
                                 //app.mainContainer.openCampaign();
                                  app.mainContainer.addWorkSpace({type:'',title:'Campaigns',sub_title:'Listing',url:'campaigns',workspace_id: 'campaigns','addAction':true,tab_icon:'campaignlisting'});
-                            },                            
+                            }, 
+                            
                             'click .naturetrack-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:'Nurture Tracks',sub_title:'Listing',url : 'nurturetrack/nurturetracks',workspace_id: 'nuture','addAction':true,tab_icon:'nuturelisting'});
                             },                            
@@ -67,7 +68,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             ,
                             'click .account-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:"My Account"});
-                            }
+                            },
+                            'click .sc-links span.ddicon':'scDropdown',
+                            'click .new-campaign': 'createCampaign',
+                            'click .csv-upload': 'csvUpload',
+                            'click .new-nurturetrack':'addNurtureTrack'
                          },
 
 			initialize: function () {
@@ -82,7 +87,53 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         getTitle:function(obj){
                            var title =  $(obj.target).parent("li").find("a").text();
                            return title;
-                        }
-                        
+                        },
+                        scDropdown:function(event){
+                            
+                            $('.dropdown-nav').hide();
+                            $('.icon-menu').removeClass('active');
+                            if(this.$('.sc-links ul').hasClass('open')){
+                                this.$('.sc-links ul').removeClass('open');
+                                this.$('.sc-links ul').hide();
+                            }else{
+                                this.$('.ddlist').addClass('open').show();
+                            }
+                            event.stopPropagation();
+                        },
+                         createCampaign: function() {
+                            var camp_obj = this;
+                            var dialog_title = "New Campaign";
+                            var dialog = app.showDialog({title: dialog_title,
+                                css: {"width": "650px", "margin-left": "-325px"},
+                                bodyCss: {"min-height": "100px"},
+                                headerIcon: 'new_headicon',
+                                buttons: {saveBtn: {text: 'Create Campaign'}}
+                            });
+                            app.showLoading("Loading...", dialog.getBody());
+                            require(["newcampaign"], function(newcampPage) {
+                                var mPage = new newcampPage({camp: camp_obj, app: app, newcampdialog: dialog});
+                                dialog.getBody().html(mPage.$el);
+                                dialog.$("input").focus();
+                                dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
+                            });
+                },
+                        csvUpload: function() {
+                            this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
+                        },
+                        addNurtureTrack: function() {
+                    var dialog = app.showDialog({title: 'New Nurture Track',
+                        css: {"width": "650px", "margin-left": "-325px"},
+                        bodyCss: {"min-height": "100px"},
+                        headerIcon: 'new_headicon',
+                        buttons: {saveBtn: {text: 'Create Nurture Track'}}
+                    });
+                    app.showLoading("Loading...", dialog.getBody());
+                    require(["nurturetrack/newnurturetrack"], _.bind(function(trackPage) {
+                        var mPage = new trackPage({page: this, newdialog: dialog});
+                        dialog.getBody().html(mPage.$el);
+                        mPage.$("input").focus();
+                        dialog.saveCallBack(_.bind(mPage.createNurtureTrack, mPage));
+                    }, this));
+                }     
 		});
 	});

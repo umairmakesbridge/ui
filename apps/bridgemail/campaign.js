@@ -1,4 +1,4 @@
- define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
         'use strict';
         return Backbone.View.extend({
@@ -2673,6 +2673,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var select_sCamp = this.$("#salesforce_setup .salesforce_campaigns #sfcamp_list_grid tr.selected")
                        if(select_sCamp.length===1){
                             post_data['filterType']= "campaign";
+                            this.states.step3.sfObject = post_data['filterType'];
                             post_data['sfCampaignId']= select_sCamp.attr("id").split("_")[1];                            
                        }
                        else{
@@ -3028,7 +3029,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var select_sCamp = this.$("#netsuite_setup .netsuite_groups #nsgroup_list_grid tr.selected")
                        if(select_sCamp.length===1){
                             post_data['filterType']= "group";
-                            post_data['nsGroupId']= select_sCamp.attr("id").split("_")[1];                            
+                            post_data['nsGroupId']= select_sCamp.attr("id").split("_")[1]; 
+                            this.states.step3.nsObject = post_data['filterType'];
                        }
                        else{
                            this.app.showAlert('Please select a netsuite group to proceed.',$("body"),{fixed:true});
@@ -3464,15 +3466,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        var selected_tag = this.$("#hsgroup_list_grid tr.selected")
                        if(selected_tag.length===1){
                           post_data['tagId']= selected_tag.attr("id").split("_")[1];
-                          post_data['filterType']= "tag";//Required fields:  tagId  [22]                            
+                          post_data['filterType']= "tag";//Required fields:  tagId  [22] 
+                          this.states.step3.hsObject = post_data['filterType']; // Set an object for highrise by Abdullah
                        }else{
                           return 'Please select a highrise tags to proceed';
                            
                        }
                     }else if(highrise_val == "importall"){                       
                         post_data['filterType']= "all";
+                        this.states.step3.hsObject = post_data['filterType'];
                     }else if(highrise_val == "filterbyfield"){
                         post_data['filterType']= "criteria";
+                        this.states.step3.hsObject = post_data['filterType'];
                             var filter_data = this.$el.find(".customer-filter").data("crmfilters").saveFilters('people');
                             var criteria = "";
                             _.each(filter_data,function(key,value){
@@ -3488,6 +3493,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             //Required fields:  criteria [firstName=babar,lastName=virk]
                     }else if(highrise_val == "search"){
                         post_data['filterType']= "term";
+                        this.states.step3.hsObject = post_data['filterType'];
                         post_data['term'] = this.$el.find('#txtsearchbyfield').val();
                          if(!this.$el.find('#txtsearchbyfield').val()){
                                  return 'Please enter search text to proceed.';
@@ -3496,6 +3502,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //Required fields:  term    [makesbridge]
                     }else if(highrise_val == "date"){
                          post_data['filterType']= "since";
+                         this.states.step3.hsObject = post_data['filterType'];
                          var date = this.$el.find('#txtdatefield').val();
                          date = date.replace(/\//g, '');
                          var date = date.replace(":","");
@@ -3504,6 +3511,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          if(!date){
                                  return 'Please select date to proceed.';
                              }
+                         
                           //Case (filterType = since) 
                         //Required fields:  since [date format yyyyMMddHHmmss]
                     } 
@@ -3622,7 +3630,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     /*List Values Abdullah */
                     var recipientLists = this.states.step3.recipientList;
                     var type = this.states.step3.recipientType;
-
+                    console.log(type);
                     var recipientChecksum = null;
                     if (recipientLists) {
                         if (type === "Target") {
@@ -3690,7 +3698,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     }
                                 }
                             }
-                        }else{
+                        }else if(type === "Netsuite"){
+                            
                             if (this.states.step3.nsObject) {
                                 this.nsRecipient(this.states.step3.nsObject);
                             }else{
@@ -3708,6 +3717,31 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         this.$(".recipient-details").append('<label>Customer</label>');
                                     }
                                 }
+                            }
+                        }
+                        else if(type === "Highrise"){
+                            
+                            if (this.states.step3.hsObject) {
+                                this.hsRecipient(this.states.step3.hsObject);
+                            }else{
+                                var hsRecipientVal = this.$("input[name=options_ns]:checked").val();
+            
+                                if (hsRecipientVal === "all") {
+                                    this.$(".recipient-details").append('<label>Import all my records</label>');
+                                } 
+                                 else if (hsRecipientVal == "criteria") {
+                                       this.$(".recipient-details").append('<label>Filter</label>');
+                                    }
+                                    else if (hsRecipientVal == "since") {
+                                        this.$(".recipient-details").append('<label>'+this.$('#txtdatefield').val()+'</label>');
+                                    }
+                                    else if (hsRecipientVal == "term"){
+                                         this.$(".recipient-details").append('<label>'+this.$('#txtsearchbyfield').val()+'</label>');
+                                    }
+                                    else if (hsRecipientVal == "tag"){
+                                        this.$(".recipient-details").append('<label>'+this.$('#hsgroup_list_grid .selected').find('h3').text()+'</label>');
+                                    }
+                                
                             }
                         }
 
@@ -3765,6 +3799,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    }
                    if(nsObject=="group"){
                        this.$(".recipient-details").append('<label>'+this.$('#nsgroup_list_grid .selected').find('h3').text()+'</label>');
+                   }
+                },
+                hsRecipient:function(hsObject){
+                   if(hsObject=="all"){
+                               this.$(".recipient-details").append('<label>Import all my records</label>');
+                           }
+                  if(hsObject=="criteria"){
+                               this.$(".recipient-details").append('<label>Filter</label>');
+                           }
+                   if(hsObject=="since"){
+                       this.$(".recipient-details").append('<label>'+this.$('#txtdatefield').val()+'</label>');
+                   }
+                   if(hsObject=="term"){
+                       this.$(".recipient-details").append('<label>'+this.$('#txtsearchbyfield').val()+'</label>');
+                   }
+                   if(hsObject=="tag"){
+                       this.$(".recipient-details").append('<label>'+this.$('#hsgroup_list_grid .selected').find('h3').text()+'</label>');
                    }
                 }
 

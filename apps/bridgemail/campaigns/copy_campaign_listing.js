@@ -109,18 +109,16 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                                 this.total_fetch = this.total_fetch + data1.length;
                                 //console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
                                 this.app.showLoading(false, this.$("#copy-camp-listing"));
-                                if(parseInt(collection.totalCount)>0){
-                                    this.sub.$el.find("#copy_no_of_camps .badge").html(parseInt(collection.totalCount)-1);
-                                    this.showTotalCount(parseInt(collection.totalCount)-1);
-                                }else{
+                                
                                     this.sub.$el.find("#copy_no_of_camps .badge").html(collection.totalCount);
                                     this.showTotalCount(collection.totalCount);
-                                }
+                                
                                  _.each(data1.models, _.bind(function(model){
                                      if(this.options.checksum !== model.get('campNum.checksum')){
                                         this.$copyCampaignContainer.append(new campaignRowView({model:model,sub:this.sub,parent:this,checksum:this.options.checksum}).el);
                                      }else{
                                          if(this.offsetLength == 1){
+                                             this.sub.$el.find("#copy_no_of_camps .badge").html(parseInt(collection.totalCount)-1);
                                              this.$copyCampaignContainer.before('<p class="notfound">Same Campaign is searched</p>');
                                          }
                                      }
@@ -179,7 +177,6 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                         var keyCode = this.keyvalid(o);
                         if(keyCode){
                             if ($.trim(this.searchTxt).length > 0) {
-
                                 this.timeout = setTimeout(_.bind(function() {
                                     clearTimeout(this.timeout);
                                     this.fetchCampaigns();
