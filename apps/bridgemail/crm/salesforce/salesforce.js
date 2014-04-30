@@ -53,7 +53,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                 if(li.hasClass("salesforce-imports")){
                    this.$(".messagebox p").html("Create, view and edit your existing imports.");  
                 }else if(li.hasClass("salesforce-setup")){
-                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
                 }else{
                     this.$(".messagebox p").html("Export your existing imports.");
                 }
