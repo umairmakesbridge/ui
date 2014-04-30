@@ -105,19 +105,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                         },
                         addNurtureTrack: function() {
-                    var dialog = app.showDialog({title: 'New Nurture Track',
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'new_headicon',
-                        buttons: {saveBtn: {text: 'Create Nurture Track'}}
-                    });
-                    app.showLoading("Loading...", dialog.getBody());
-                    require(["nurturetrack/newnurturetrack"], _.bind(function(trackPage) {
-                        var mPage = new trackPage({page: this, newdialog: dialog});
-                        dialog.getBody().html(mPage.$el);
-                        mPage.$("input").focus();
-                        dialog.saveCallBack(_.bind(mPage.createNurtureTrack, mPage));
-                    }, this));
-                }     
+                    
+                        }     
 		});
 	});
