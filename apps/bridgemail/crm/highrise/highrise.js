@@ -14,13 +14,14 @@ define(['text!crm/highrise/html/highrise.html'],
             */
            chooseTileHover:function(obj){
                 var li = $.getObj(obj,"li");
-                if(li.hasClass('netsuite-imports')){
-                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
-                }else{
-                    this.$(".messagebox p").html("Create, view and edit your existing imports.");
-                }
                 
-                        
+                if(li.hasClass('netsuite-imports')){
+                   this.$(".messagebox").css({"width":"260px", "margin-left":"46px","padding-right":"0"})
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
+                }else{
+                   this.$(".messagebox").css({"width":"365px", "margin-left":"-10px","padding-right":"0"})
+                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }
            },
             initialize: function () {                    
                 this.template = _.template(template);	

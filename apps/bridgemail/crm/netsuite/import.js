@@ -260,6 +260,13 @@ function (template) {
 
                      }
                     return post_data;
+                },moveSampleRecord:function (table, from, to) {
+                    var rows = table.find("tr");
+                    var cols;
+                    rows.each(function() {
+                        cols = $(this).children('th, td');
+                        cols.eq(from).detach().insertBefore(cols.eq(to));
+                    });
                 },
                 getCount:function(){
                      var URL = '/pms/io/netsuite/getData/?BMS_REQ_TK='+this.app.get('bms_token');
@@ -290,7 +297,7 @@ function (template) {
                     this.parent.$("#"+data.nsObject+"_accordion").show().addClass("top-margin-zero");
                     this.parent.$("."+data.nsObject+"-count").html(data.totalCount);
                     this.$(".managefilter .ns_"+data.nsObject+"_count").show().html(data.totalCount);
-                         
+                      var that = this;
                      var tableObj = null;
                      var table_row = "",table_head="";
                      if(data.recordList){
@@ -306,17 +313,67 @@ function (template) {
                                         this.parent.$("."+data.nsObject+"-sample-data").append(tableObj);                                    
                                 }
                                 else{
+                                    
                                     table_row = "<tr>";
                                         _.each(val[0],function(val,key){
                                             table_row +="<td>"+val+"</td>";
                                           });
                                     table_row += "</tr>"
+                                  
                                     tableObj.find("tbody").append(table_row);
                                 }
                                                                                                 
                                 
                         },this);
+                        that.moveRecordSetTable(tableObj);
                      }
-                }
+                } ,moveRecordSetTable:function(tableObj){
+                         
+                        var that = this;
+                        $.extend($.expr[":"], {
+                        "containsIN": function(elem, i, match, array) {
+                        return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+                        }
+                        });
+                        var zip = tableObj.find("tr  th:containsIN('zip')").index();
+                         
+                        if(zip !="-1"){
+                        that.moveSampleRecord(tableObj, zip, 0);
+                        }
+                        var state = tableObj.find("tr  th:containsIN('state')").index();
+                        if(state !="-1"){
+                        that.moveSampleRecord(tableObj, state, 0);
+                        }
+                        var city = tableObj.find("tr  th:containsIN('city')").index();
+                        if(city !="-1"){
+                        that.moveSampleRecord(tableObj, city, 0);
+                        }
+                        var phone = tableObj.find("tr  th:containsIN('phone')").index();
+                        if(phone !="-1"){
+                        that.moveSampleRecord(tableObj, phone, 0);
+                        }
+                        var company = tableObj.find("tr  th:containsIN('company')").index();
+                        if(company !="-1"){
+                        that.moveSampleRecord(tableObj, company, 0);
+                        }
+                        var last = tableObj.find("tr  th:containsIN('last')").index();
+                        if(last !="-1"){
+                        that.moveSampleRecord(tableObj, last, 0);
+                        }
+                        var first = tableObj.find("tr  th:containsIN('first')").index();
+                        if(first !="-1"){
+                        that.moveSampleRecord(tableObj, first, 0);
+                        }
+                        var add = tableObj.find("tr  th:containsIN('add')").index();
+                        if(add !="-1"){
+                        that.moveSampleRecord(tableObj, add, 0);
+                        }
+                        var email = tableObj.find("tr  th").filter(function() {
+                            return $(this).html().toLowerCase() === "email";
+                        }).index();
+                            if(email !="-1"){
+                                that.moveSampleRecord(tableObj, email, 0);
+                            }               
+               }
         });
 });

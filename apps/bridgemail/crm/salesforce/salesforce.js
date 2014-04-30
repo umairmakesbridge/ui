@@ -6,7 +6,8 @@ define(['text!crm/salesforce/html/salesforce.html'],
              * Attach events on elements in view.
             */ 
             events: {
-                'click #choose_soruce li':'chooseTile'
+                'click #choose_soruce li':'chooseTile',
+                'mouseover #choose_soruce li':'chooseTileHover'
             },
             /**
              * Initialize view - backbone .
@@ -45,6 +46,17 @@ define(['text!crm/salesforce/html/salesforce.html'],
             init:function(){
                 this.current_ws = this.$el.parents(".ws-content");                
                 this.checkSalesforceStatus();
+            },
+            // showing hover, change text of tooltip
+            chooseTileHover:function(obj){
+                var li = $.getObj(obj,"li");
+                if(li.hasClass("salesforce-imports")){
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
+                }else if(li.hasClass("salesforce-setup")){
+                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }else{
+                    this.$(".messagebox p").html("Export your existing imports.");
+                }
             },
             checkSalesforceStatus:function(){
               var salesforce_setting = this.app.getAppData("salesfocre");  

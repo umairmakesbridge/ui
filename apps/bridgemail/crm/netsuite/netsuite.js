@@ -6,7 +6,8 @@ define(['text!crm/netsuite/html/netsuite.html'],
              * Attach events on elements in view.
             */ 
             events: {
-                'click #choose_soruce li':'chooseTile'
+                'click #choose_soruce li':'chooseTile',
+                'mouseover #choose_soruce li':'chooseTileHover'
             },
             /**
              * Initialize view - backbone .
@@ -21,6 +22,16 @@ define(['text!crm/netsuite/html/netsuite.html'],
                 };
                 this.render();
 
+            },
+             chooseTileHover:function(obj){
+                var li = $.getObj(obj,"li");
+                if(li.hasClass("netsuite-imports")){
+                   this.$(".messagebox p").html("Create, view and edit your existing imports.");  
+                }else if(li.hasClass("netsuite-setup")){
+                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                }else{
+                    this.$(".messagebox p").html("Export your existing imports.");
+                }
             },
             /**
              * Initialize view .

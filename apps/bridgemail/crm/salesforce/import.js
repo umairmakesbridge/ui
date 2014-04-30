@@ -237,6 +237,15 @@ function (template) {
                         console.log( "Request Failed: " + err );
                     },this));
                 },
+                 moveSampleRecord:function (table, from, to) {
+                   
+                    var rows = table.find("tr");
+                    var cols;
+                    rows.each(function() {
+                        cols = $(this).children('th, td');
+                        cols.eq(from).detach().insertBefore(cols.eq(to));
+                    });
+                },
                 getImportData:function(){
                     var post_data = {};
                     var camp_obj = this;  
@@ -292,7 +301,9 @@ function (template) {
                          this.$(".managefilter .sf_"+data.sfObject+"_count").show().html(data[data.sfObject+"Count"]);
                      }    
                      var tableObj = null;
+                     var that = this;
                      var table_row = "",table_head="";
+                     var isLead = false;
                      if(data.recordList){
                         _.each(data.recordList[0],function(val,key){                                
                                 if(parseInt(key.substring(key.length-1))==1){
@@ -304,11 +315,12 @@ function (template) {
                                         table_head += "</tr>"
                                         tableObj.find("thead").append(table_head);                                        
                                         
-                                    if(key.indexOf("lead")>-1){    
-                                        this.parent.$(".lead-sample-data").append(tableObj);
+                                    if(key.indexOf("lead")>-1){
+                                        isLead = true;
+                                        that.parent.$(".lead-sample-data").append(tableObj);
                                     }
                                     else{
-                                        this.parent.$(".contact-sample-data").append(tableObj);
+                                        that.parent.$(".contact-sample-data").append(tableObj);
                                     }
                                 }
                                 else{
@@ -318,12 +330,66 @@ function (template) {
                                           });
                                     table_row += "</tr>"
                                     tableObj.find("tbody").append(table_row);
-                                }
-                                                                                                
-                                
+                                       
+                               } 
                         },this);
+                          if(isLead){    
+                                      that.moveRecordSetTable(that.parent.$(".lead-sample-data"));
+                                   
+                                  }
+                                  
+                        that.moveRecordSetTable( that.parent.$(".contact-sample-data"));
                      }
                      
-                }
+                },
+               moveRecordSetTable:function(container){
+                        
+                        var tableObj = container.find('table');
+                        var that = this;
+                        $.extend($.expr[":"], {
+                        "containsIN": function(elem, i, match, array) {
+                        return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+                        }
+                        });
+                        var zip = tableObj.find("tr  th:containsIN('zip')").index();
+                        
+                        if(zip !="-1"){
+                        that.moveSampleRecord(tableObj, zip, 0);
+                        }
+                        var state = tableObj.find("tr  th:containsIN('state')").index();
+                        if(state !="-1"){
+                        that.moveSampleRecord(tableObj, state, 0);
+                        }
+                        var city = tableObj.find("tr  th:containsIN('city')").index();
+                        if(city !="-1"){
+                        that.moveSampleRecord(tableObj, city, 0);
+                        }
+                        var phone = tableObj.find("tr  th:containsIN('phone')").index();
+                        if(phone !="-1"){
+                        that.moveSampleRecord(tableObj, phone, 0);
+                        }
+                        var company = tableObj.find("tr  th:containsIN('company')").index();
+                        if(company !="-1"){
+                        that.moveSampleRecord(tableObj, company, 0);
+                        }
+                        var last = tableObj.find("tr  th:containsIN('last')").index();
+                        if(last !="-1"){
+                        that.moveSampleRecord(tableObj, last, 0);
+                        }
+                        var first = tableObj.find("tr  th:containsIN('first')").index();
+                        if(first !="-1"){
+                        that.moveSampleRecord(tableObj, first, 0);
+                        }
+                        var add = tableObj.find("tr  th:containsIN('add')").index();
+                        if(add !="-1"){
+                        that.moveSampleRecord(tableObj, add, 0);
+                        }
+                        var email = tableObj.find("tr  th").filter(function() {
+                            return $(this).html().toLowerCase() === "email";
+                        }).index();
+                            if(email !="-1"){
+                                that.moveSampleRecord(tableObj, email, 0);
+                            }               
+               }
         });
 });

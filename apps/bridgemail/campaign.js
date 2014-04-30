@@ -2348,7 +2348,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$('#highrise_setup').hide();
                             this.checkNetSuiteStatus();							
                         	break;
-                        case 'highrise_import':                                                      							
+                        case 'highrise_import':  
+                            camp_obj.app.showLoading("Loading Highrise...",camp_obj.$el.find('#highrise_setup'));  
                             this.showHighrise();							
                               break;
                         case 'choose_tags':
@@ -3100,7 +3101,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.isHighriseRequire = true; // this will not load who view, when press back
                             camp_obj.fetchFilters("Highrise");
                         }else{                                  
-                            camp_obj.app.showAlert(data1,$("body"),{fixed:true});
+                            camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
                         }                        
                    }); 
                },
@@ -3370,10 +3371,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$('#highrise_setup').show();
                         var camp_obj = this;	
                         var highrise_setting = this.app.getAppData("highrise");
-                       
                         if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
                         {
-                              this.app.showLoading("Loading Highrise...",camp_obj.$(".step3")); 
+                              //this.app.showLoading("Loading Highrise...",camp_obj.$(".step3")); 
                                  //this.app.showLoading("Checking Status...",this.$(".step3").find('.highrise-import-setting'));         
                                 this.app.getData({
                                     "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
@@ -3399,11 +3399,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     } 
                      
                        // this.app.showLoading(false,this.$(".step3").find('.highrise-import-setting')); 
-                        var that = this;      
+                        var that = this;   
                        require(["crm/highrise/import"],_.bind(function(page){  
                              
                              if(that.states.step3.recipientType.toLowerCase()=="highrise" && that.camp_id){
-                                 that.app.showLoading("Loading Imports...",that.$("#highrise_setup"));
+                                
                                     var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
                                         if(xhr && xhr.responseText){                               
@@ -3415,13 +3415,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                  return;
                                               }else{
                                                   that.app.showAlert(rec_json[1],that.$el.parents(".ws-content.active"));
-                                                  that.app.showLoading(false,that.$("#highrise_setup"));
-                                                  that.highriseBindEvents();
-                                                  that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
+                                                        that.Import_page = new page({
+                                                            page:that ,
+                                                            highriseCount:that.peopleCount
+                                                        })
+                                                        active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
+                                                        that.app.showLoading(false,that.$("#highrise_setup"));
+                                                        that.highriseBindEvents();
+                                                        return;
+                                                  //that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
                                                   
                                               }
                                            }
                                            if(that.app.checkError(rec_json)){
+                                               that.app.showLoading(false,that.$("#highrise_setup"));
                                                 return false;
                                            }
                                            that.states.step3.recipientDetial = rec_json;
@@ -3431,7 +3438,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                 edit:that.states.step3.recipientDetial
                                             })
                                           active_ws.find("#highrise_import_container").html(that.Import_page.$el);
-                                           that.app.showLoading(false,that.$("#highrise_setup"));
                                        }else{
                                            
                                        }
@@ -3447,10 +3453,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
                              }    
                            
-                                            
+                                          
                         },this));
                       that.highriseBindEvents();
-                           
+                        
                      //// Mapping 
                      
                 },
@@ -3525,7 +3531,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     } 
                     var that = this;
-                    this.app.showLoading("Loading Highrise Count...",this.$(".step3")); 
+                   
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
@@ -3536,6 +3542,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   return ;
                                 }else{
                                 that.app.showAlert(_count[1],that.$el.parents(".ws-content.active"));
+                                that.app.showLoading(false,that.$("#highrise_setup"));
                                 that.highriseBindEvents();
                                 that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+_count[1]+"</div>");
                                 return; 
@@ -3543,17 +3550,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 
+                        that.app.showLoading(false,that.$(".step3"));
                     }));
-                    that.app.showLoading(false,that.$(".step3"));
+                    that.app.showLoading(false,that.$("#highrise_setup"));
                 },
                 highriseErrorCallBack:function(){
                     var that = this;
-                    that.app.showLoading(false,that.$(".step3"));  
+                    that.app.showLoading(false,that.$("#highrise_setup"));  
                     var active_ws = this.$el.parents(".ws-content");
                     active_ws.find('#highrise_welcome').show();
                     this.$('#highrise_setup .heading').hide();
                     active_ws.find("#highrise_import_container").html('');
                     that.highriseBindEvents();
+                    
                         
                 },
                 loginHighrise:function(){
@@ -3562,7 +3571,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                highriseBindEvents:function(){
                    var that = this;
                    this.$("#hs_setting_menu li").unbind();
-                   this.$("#hs_setting_menu li").click(_.bind(function(obj){
+                     this.$("#hs_setting_menu li").click(_.bind(function(obj){
                              var target_obj = $.getObj(obj,"li");
                              
                             if(target_obj.attr("id")=="hs_mapping"){
@@ -3598,7 +3607,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 this.app.showLoading(false,dialog.getBody());
                             }
                         },this))
-                      
+                  that.app.showLoading(false,that.$("#highrise_setup")); 
                },
                 recipientList : function(lists,flag){
                    var returnList = [];  
