@@ -183,7 +183,7 @@ function (template,MyImports,moment) {
                         new_import +='<div class="row campname-container">';
                         new_import +='<label style="width:10%;">Name:</label>';
                         new_import +='<div class="inputcont" style="text-align:right;">';
-                        new_import +='<input type="text" name="_import" id="import_name" placeholder="Enter salesforce import name" style="width:83%;" />';
+                        new_import +='<input type="text" name="_import" id="import_name" placeholder="Enter Salesforce import name" style="width:83%;" />';
                         new_import +='</div></div></div></div>';
                         new_import = $(new_import);                                
                         dialog.getBody().html(new_import);

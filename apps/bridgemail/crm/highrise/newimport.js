@@ -248,7 +248,7 @@ function (Wizard,template,moment) {
                     $.each(camp_list_json.lists[0], _.bind(function(index, val) {     
                         list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div></td>';                        
-                        list_html += '<td><div class="subscribers show" style="min-width:70px;"><strong><span><em>Subscribers</em>'+val[0].subscriberCount+'</span></strong></div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add select-list"><span>Select</span><i class="icon next"></i></a></div></td>';                        
+                        list_html += '<td><div class="subscribers show" style="min-width:70px;"><strong><span><em>Contacts</em>'+val[0].subscriberCount+'</span></strong></div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add select-list"><span>Select</span><i class="icon next"></i></a></div></td>';                        
 						
                         list_html += '</tr>';
                     },this));

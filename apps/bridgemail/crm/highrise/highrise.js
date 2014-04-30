@@ -19,8 +19,6 @@ define(['text!crm/highrise/html/highrise.html'],
                 }else{
                    this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
                 }
-                
-                        
            },
             initialize: function () {                    
                 this.template = _.template(template);	
