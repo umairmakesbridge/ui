@@ -152,13 +152,14 @@
                 return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
     },
     uploadInProgressHTML:function(id){
-        var li = "<li id=templi_"+id+" class='span3 li-progress li-mew-images' style='display:none;'><div class='thumbnail graphics'>\n\
+        if($("#templi_"+id).find('.'+this.name.name).length > 0) return;
+        var li = "<li id=templi_"+id+"  class='span3 li-progress li-mew-images ' style='display:none;'><div class='thumbnail graphics'>\n\
                      <div id='progress' style='position:absolute; top:50%; z-index:1001; opacity:100;height: 10px; width: 238px;margin-left:1px;'><div style='background:#97D61D'></div></div>\n\
                      <div class='img' style='opacity:0.6; line-height: 230px; '>\n\
                              <img src='img/graphicimg.png'>\n\
                      </div>\n\
                      <div class='caption' style='opacity:0.6; height:83px;'>\n\
-                         <h3 class='graphics-name'>\n\
+                         <h3 class='graphics-name "+this.name.name+"'>\n\
                          <a><span>"+this.name.name+"</span></a>\n\
                          </h3>\n\
                       <p>\n\

@@ -47,7 +47,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     },                    
 
                 initialize: function () {
-                    this.template = _.template(template);				                        
+                    this.template = _.template(template);                               
                     this.tags =  '';
                     this.tag_limit = 5;
                     this.camp_id = 0;
@@ -76,7 +76,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
                 },
                 render: function () {
-                    this.$el.html(this.template({}));				                        
+                    this.$el.html(this.template({}));                               
                     this.app = this.options.app;
                     this.wizard = this.options.wizard;    
                     if(this.options.params && this.options.params.camp_id){
@@ -165,7 +165,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var csvupload = camp_obj.states.step3.csvupload
                     if(csvupload && csvupload.fileuploaded == true)
-                    {					
+                    {         
                         csvupload.removeFile();
                         csvupload.$el.hide();
                         camp_obj.$el.find('#upload_csv').removeClass('selected');
@@ -308,7 +308,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    var bms_token =this.app.get('bms_token');
                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+bms_token+"&campNum="+camp_id+"&type=basic";
                    var camp_obj = this;
-				
+        
                     //remove previous data 
                     camp_obj.$(".step1 input").val("");
                     camp_obj.$(".step1 input[type='checkbox']").prop("checked",false);
@@ -332,7 +332,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
                         
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
-			var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");			                        
+      var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             
                         if(camp_json.fromEmail != '')
                         {
                             if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
@@ -355,7 +355,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah Check
                         var fegb_w = camp_obj.$el.find('#fecol3').width();
                         //camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
-			if(camp_json.senderName != ''){
+      if(camp_json.senderName != ''){
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         }
                         else{
@@ -410,7 +410,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //Load tags
                         camp_obj.tags = camp_obj.app.encodeHTML(camp_json.tags);
                         camp_obj.initCampaignTag(camp_obj.tags);     
-						
+            
                         if(camp_json.addToSFStatus=='Y'){                             
                              camp_obj.states.step1.hasResultToSalesCampaign = true;                             
                              camp_obj.$("#campaign_add_to_salesforce").prop("checked",true);                             
@@ -443,7 +443,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  }
                                  camp_obj.setConversionPage();           
                                  if(conversation_filter.ruleCount > 0){                                            
-                                     var r = conversation_filter.rules[0].rule1[0];									 
+                                     var r = conversation_filter.rules[0].rule1[0];                  
                                      camp_obj.$("select#con_filter_combo").val(camp_obj.app.decodeHTML(r.rule));
                                      camp_obj.$("#con_filter_field").val(camp_obj.app.decodeHTML(r.matchValue));
                                      camp_obj.setConversionPage();
@@ -495,7 +495,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      }
                   });
                   var camp_obj = this;
-		  var appMsgs = camp_obj.app.messages[0];
+      var appMsgs = camp_obj.app.messages[0];
                    
                     copyIconCampaign.click(function(e){
                            camp_obj.copyCamp();
@@ -509,7 +509,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   });                  
                   previewIconCampaign.click(function(e){
                        //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
-                      	var camp_name = active_ws.find("#workspace-header").html();                                                
+                        var camp_name = active_ws.find("#workspace-header").html();                                                
                         var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = camp_obj.app.showDialog({title:'Campaign Preview of &quot;'+ camp_name +'&quot;',
@@ -553,7 +553,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             headerIcon : 'copycamp',
                             bodyCss:{"min-height":dialog_height+"px"},
                             buttons: {saveBtn:{text:'Send',btnicon:'copycamp'} }
-                    });	
+                    }); 
                     var email_preview ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-template-container">';
                         email_preview +='<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
                         email_preview +='<div class="row campname-container">';
@@ -594,7 +594,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    }
                 },
                 getcampaigns: function () {
-                        var camp_obj = this;				                               				
+                        var camp_obj = this;                                              
                         /*this.app.getData({
                                 "URL":"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=listNormalCampaigns&offset=0",
                                 "key":"campaigns"
@@ -609,7 +609,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var dialog_title = "Copy Campaign";
                         var dialog = this.app.showDialog({title:dialog_title,
                                           css:{"width":"600px","margin-left":"-300px"},
-                                          bodyCss:{"min-height":"260px"},							   
+                                          bodyCss:{"min-height":"260px"},                
                                           headerIcon : 'copycamp',
                                           buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
                         });
@@ -639,7 +639,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                    }
                                    camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));
                    });
-				},
+        },
                 initStepCall:function(stepNo){
                     if(this.camp_id!==0){
                         switch (stepNo){                                                            
@@ -683,7 +683,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else if(this.states.step3.recipientType.toLowerCase()=="target"){
                             source_li = "choose_targets";
                         }
-			else if(this.states.step3.recipientType.toLowerCase()=="tags"){
+      else if(this.states.step3.recipientType.toLowerCase()=="tags"){
                             source_li = "choose_tags";
                         }
                         else if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
@@ -766,7 +766,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$(".gotostep1").click(_.bind(function(){
                             this.wizard.back();
                             this.wizard.back();
-                            this.wizard.back();							
+                            this.wizard.back();             
                         },this))
                         this.states.step4.init = true;
                     }
@@ -812,12 +812,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.recipientDetails();
                      
                     this.$(".settings-inner").html(settings_html+"<div class='clearfix'></div>");
-					var i = 0;
+          var i = 0;
                     this.$(".step1 .socialbtns li").each(function(){
                         var checked = $(this).find("input").prop("checked");
                         if(checked){
                             camp_obj.$(".step4 .socialbtns li."+ $(this)[0].className).show();
-							i++;
+              i++;
                         }
                         else{
                             camp_obj.$(".step4 .socialbtns li."+ $(this)[0].className).hide();
@@ -836,7 +836,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     if(this.$("#conversion_filter").prop("checked")){
                         this.$(".conversion-page-info").show();
-						var filter = this.$("#con_filter_combo").val() == 'ct' ? 'Contains' : 'Equal to';
+            var filter = this.$("#con_filter_combo").val() == 'ct' ? 'Contains' : 'Equal to';
                         this.$(".conversion-page-info .text").html('Text in URL <strong>'+ filter + ' ' + this.$("#con_filter_field").val()+'</strong>');   
                     }
                     else{
@@ -961,7 +961,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var app = camp_obj.app;
                     var proceed = -1;                   
-                    var errorHTML = "";                    					
+                    var errorHTML = "";                             
                     var isValid = true;
                     var el = camp_obj.$el;
                     var defaultSenderName = "",defaultReplyToEmail="";
@@ -972,7 +972,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(el.find('#campaign_subject').val() == '')
-                    {					   
+                    {            
                         app.showError({
                                 control:el.find('.subject-container'),
                                 message:camp_obj.app.messages[0].CAMP_subject_empty_error
@@ -980,7 +980,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else if(el.find('#campaign_subject').val().length > 100)
-                    {						
+                    {           
                         app.showError({
                                 control:el.find('.subject-container'),
                                 message:camp_obj.app.messages[0].CAMP_subject_empty_error
@@ -988,11 +988,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                          app.hideError({control:el.find(".subject-container")});
                     }
                     if(el.find('#campaign_from_name').val() == '')
-                    {						
+                    {           
                         app.showError({
                             control:el.find('.fname-container'),
                             message:camp_obj.app.messages[0].CAMP_fromname_empty_error
@@ -1000,11 +1000,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                             app.hideError({control:el.find(".fname-container")});
                     }
                     if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val()=="")
-                    {						
+                    {           
                         app.showError({
                             control:el.find('.fnamedefault-container'),
                             message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
@@ -1012,12 +1012,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                         app.hideError({control:el.find(".fnamedefault-container")});
                     }
                     
                     if(fromEmail === '' || (!merge_field_patt.test(fromEmail) && !app.validateEmail(fromEmail)))
-                    {						
+                    {           
                         app.showError({
                             control:el.find('.fromeEmail-container'),
                             message:camp_obj.app.messages[0].CAMP_fromemail_format_error
@@ -1025,12 +1025,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                         app.hideError({control:el.find(".fromeEmail-container")});
                     }
                     
                     if(this.$(".femail-default-container").css('display')=="block" && (fromEmailDefault === '' || !app.validateEmail(fromEmailDefault)))
-                    {						
+                    {           
                         app.showError({
                             control:el.find('.femail-default-container'),
                             message:camp_obj.app.messages[0].CAMP_fromemail_default_format_error
@@ -1038,13 +1038,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                         app.hideError({control:el.find(".femail-default-container")});
                     }
                     merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
-                    {						
+                    {           
                         app.showError({
                                 control:el.find('.replyto-container'),
                                 message:camp_obj.app.messages[0].CAMP_replyto_format_error
@@ -1052,11 +1052,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                         app.hideError({control:el.find(".replyto-container")});
                     }
                     if(el.find('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
-                    {						
+                    {           
                         app.showError({
                                 control:el.find('.replyemail-container'),
                                 message:camp_obj.app.messages[0].CAMP_defaultreplyto_empty_error
@@ -1064,7 +1064,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else if(el.find('#campaign_reply_to_default').css('display') == 'block' && !app.validateEmail(email_addr))
-                    {						
+                    {           
                         app.showError({
                             control:el.find('.replyemail-container'),
                             message:camp_obj.app.messages[0].CAMP_defaultreplyto_format_error
@@ -1072,14 +1072,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         isValid = false;
                     }
                     else
-                    {						
+                    {           
                         app.hideError({control:el.find(".replyemail-container")});
-                    }	
+                    } 
 
-						
+            
                     if(!isValid)
-                    {                            											
-                    	proceed = 0;
+                    {                                                 
+                      proceed = 0;
                     }
                     else
                     {   
@@ -1089,7 +1089,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val())?this.$("#campaign_default_reply_to").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         var fromEmail = this.$('#campaign_from_email_input').val();
-			var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
+      var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
                         if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
                                 this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
@@ -1226,12 +1226,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                        this.step3SaveCall({'recipientType':'Salesforce'});
                   }
                   else if(source=="netsuite_import"){
-                        
                       this.step3SaveCall({'recipientType':'Netsuite'});
-                      this.$("#highrise_setup").hide();
                   }else if(source=="highrise_import"){
                       this.step3SaveCall({'recipientType':'Highrise'});
-                       
                   }  
                   else{
                       this.app.showAlert('We are not currently supporting Tags',$("body"));                      
@@ -1347,7 +1344,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 camp_obj.$("#campaign_custom_footer_text").val(camp_obj.app.decodeHTML(defaults_json.customFooter,true));
                             }
                         }
-                    }).fail(function() { console.log( "error in detauls" ); });                    										
+                    }).fail(function() { console.log( "error in detauls" ); });                                       
                                         
                     this.app.getData({
                         "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
@@ -1358,7 +1355,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText)
-						{
+            {
                             var mergeFields_json = jQuery.parseJSON(xhr.responseText);                            
                             if(camp_obj.app.checkError(mergeFields_json)){
                                 return false;
@@ -1374,7 +1371,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 else if(val[2]=="C"){
                                     camp_obj.mergeTags['custom'].push(val);
                                 }
-				else if(val[2]=="S"){
+        else if(val[2]=="S"){
                                     camp_obj.mergeTags['salesRep'].push(val);
                                 }
                                 else if(val[2]=="U"){
@@ -1441,7 +1438,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   this.states.step3.change=true;  
                 },
                 showSalesForceArea:function(){                    
-                    var salesforce_setting = this.app.getAppData("salesfocre");					
+                    var salesforce_setting = this.app.getAppData("salesfocre");         
                     if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
                         this.$("#add_result_salesforce").show();                        
                     }
@@ -1458,43 +1455,43 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     camp_obj.$el.find('#area_choose_lists #target-lists .bmsgrid').remove();
                     camp_obj.$el.find("#area_choose_lists .col2 .bmsgrid").remove();
                     camp_obj.$el.find("#area_choose_lists").removeData("mapping");
-					
+          
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="list_grid"><tbody>';
                     camp_obj.$el.find(".list-count").html("Displaying <b>"+camp_list_json.count+"</b> lists");
                     $.each(camp_list_json.lists[0], function(index, val) {     
                         list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show" style="min-width:70px;"><strong><span><em>Subscribers</em>'+val[0].subscriberCount+'</span></strong></div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add move-row"><span>Use</span><i class="icon next"></i></a></div></td>';                        
-						
+            
                         list_html += '</tr>';
                     });
-                    list_html += '</tbody></table>';										
-					
+                    list_html += '</tbody></table>';                    
+          
                     this.$el.find("#target-lists").html(list_html);
                    
                     this.$el.find("#list_grid").bmsgrid({
                         useRp : false,
                         resizable:false,
                         colresize:false,
-                        height:this.app.get('wp_height')-122,							
+                        height:this.app.get('wp_height')-122,             
                         usepager : false,
                         colWidth : ['100%','90px']
-                    });					                    
+                    });                             
                     this.$("#list_grid tr td:first-child").attr("width","100%");
-                    this.$("#list_grid tr td:last-child").attr("width","90px");	
-                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);										
+                    this.$("#list_grid tr td:last-child").attr("width","90px"); 
+                    this.$("#recipients-list").css("height",this.app.get('wp_height')-122);                   
                                             
                     this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,this.$el.find("#list-search"));
                     },this));
-								
+                
                     this.$el.find("#area_choose_lists").mapping({
                             gridHeight:this.app.get('wp_height')-122,
                             sumColumn: 'subscribers',
                             sumTarget: 'recpcount span',
                             loadTarget: ''
                     });
-                    this.app.showLoading(false,camp_obj.$el.find('#area_choose_lists .leftcol'));		    	
+                    this.app.showLoading(false,camp_obj.$el.find('#area_choose_lists .leftcol'));         
                     if(this.states.step3.recipientType.toLowerCase()=="list"){
                         this.setRecipients();
                     }
@@ -1505,10 +1502,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
                     if(this.states.saleforce_campaigns ===null)
                         this.showSalesForceCampaigns();
-                    this.$( "#accordion" ).accordion({ active: 0 });				
+                    this.$( "#accordion" ).accordion({ active: 0 });        
                   }
                   else{
-                      this.removeResultFromSF();	
+                      this.removeResultFromSF();  
                       this.states.step1.sf_checkbox = false;
                       this.$("#campaign_add_to_salesforce").prop("checked",this.states.step1.sf_checkbox);
                       this.$( "#accordion" ).accordion({ active: false });                              
@@ -1534,7 +1531,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj=this;
                     this.$el.find("#trecpcount span").text('0');
                     this.$el.find("#targets").children().remove();
-                    var targets_list_json = this.app.getAppData("targets");                   		
+                    var targets_list_json = this.app.getAppData("targets");                       
                     camp_obj.$el.find('#area_choose_targets #targets .bmsgrid').remove();
                     camp_obj.$el.find("#area_choose_targets .col2 .bmsgrid").remove();
                     camp_obj.$el.find("#area_choose_targets").removeData("mapping");
@@ -1542,7 +1539,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                         var target_html = '<table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody>';
                        
-                        $.each(targets_list_json.filters[0], function(index, val) {					
+                        $.each(targets_list_json.filters[0], function(index, val) {         
                             target_html += '<tr id="row_'+val[0]["filterNumber.encode"]+'" checksum="'+val[0]["filterNumber.checksum"]+'">';                        
                             target_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ camp_obj.app.showTags(val[0].tags) +'</div></div></td>';
                             var upd_date = moment(val[0].updationDate,'YYYY-M-D');
@@ -1551,22 +1548,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             target_html += '</tr>';
                         });
                         target_html += '</tbody></table>';
-								
+                
                    }
-                    this.$el.find("#targets").html(target_html);					
+                    this.$el.find("#targets").html(target_html);          
                     this.$el.find("#targets").bmsgrid({
                             useRp : false,
                             resizable:false,
                             colresize:false,
-                            height:this.app.get('wp_height')-122,							
+                            height:this.app.get('wp_height')-122,             
                             usepager : false,
                             colWidth : ['100%','100']
                     });
-					
+          
                     this.$("#targets tr td:first-child").attr("width","100%");
-                    this.$("#targets tr td:last-child").attr("width","100px");										
-                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);										
-								
+                    this.$("#targets tr td:last-child").attr("width","100px");                    
+                    this.$("#target-recipients-list").css("height",this.app.get('wp_height')-122);                    
+                
                     this.$el.find("#area_choose_targets").mapping({
                             gridHeight:this.app.get('wp_height')-122,
                             sumColumn: 'subscribers',
@@ -1579,19 +1576,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             }
                     });
                     this.addToCol2();
-					
+          
                     this.$el.find(".taglink").click(_.bind(function(obj){
                          camp_obj.app.initSearch(obj,camp_obj.$el.find("#target-search"));
                     },camp_obj));
-						
+            
                     this.$el.find("#recipients .taglink").click(_.bind(function(obj){
                          camp_obj.app.initSearch(obj,camp_obj.$el.find("#target-recps-search"));
                     },camp_obj));
-						
+            
                     this.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
                     if(this.states.step3.recipientType.toLowerCase()=="target"){
                         this.setRecipients();
-                    }					
+                    }         
                 },
                 addToCol2:function(obj){
                     var camp_obj=this;
@@ -1604,11 +1601,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 $(this).remove();
                                 tr_copy.find(".action").children().hide();
                                 tr_copy.find(".move-row").removeClass("btn-green").addClass("btn-red").html('<i class="icon back left"></i><span>Remove</span>');
-                                tr_copy.find(".move-row").show();	
+                                tr_copy.find(".move-row").show(); 
                                 tr_copy.find(".move-row").click(_.bind(camp_obj.removeFromCol2,camp_obj)); 
                                 tr_copy.appendTo(camp_obj.$(".col2 .rightcol tbody"));
                             }
-                         });						
+                         });            
                     }
                 },
                 removeFromCol2:function(obj){
@@ -1670,7 +1667,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
                             }
                             else{
-                                dateFormat = '';					
+                                dateFormat = '';          
                              }
                             var flag_class = ''; 
                             if(val[0].status == 'D')
@@ -1698,9 +1695,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             list_html += '</tr>';
                         }
                     });
-                    list_html += '</tbody></table>';										
+                    list_html += '</tbody></table>';                    
 
-                    this.$el.find("#copy-camp-listing").html(list_html);                                                                                                    					
+                    this.$el.find("#copy-camp-listing").html(list_html);                                                                                                              
                     this.$el.find("#camp_list_grid").bmsgrid({
                             useRp : false,
                             resizable:false,
@@ -1717,8 +1714,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(camp_list_json.offset && parseInt(camp_list_json.count)==parseInt(camp_list_json.totalCount)){
                             this.$("#camp_list_grid tr:last-child").removeAttr("data-load");
                     }
-					
-                    this.$("#copy-camp-listing .action").click(_.bind(this.copyCampaign,this));                   	
+          
+                    this.$("#copy-camp-listing .action").click(_.bind(this.copyCampaign,this));                     
                             this.$el.find(".taglink").click(_.bind(function(obj){
                             camp_obj.app.initSearch(obj,this.$el.find("#copy-camp-search"));
                     },this));
@@ -1748,7 +1745,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                          camp_obj.$("#copy-camp-listing .footer-loading").remove();
                                          camp_list_json.offset = new_offset;
                                          $.each(campaigns.campaigns[0], function(index, val) {
-                                            list_html = $(camp_obj.makecamprows(val,true));					                                            
+                                            list_html = $(camp_obj.makecamprows(val,true));                                                     
                                             if(row_no==50 && camp_list_json.offset+parseInt(campaigns.count)<parseInt(campaigns.totalCount)){
                                                     list_html.attr("data-load","true")
                                             }
@@ -1769,7 +1766,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                 },              
                 showSalesForceCampaigns:function(){
-                    var camp_obj =this;					
+                    var camp_obj =this;         
                     camp_obj.app.showLoading("Loading Salesforce Campaigns...",camp_obj.$el.find('#salesforce_setup .salesforce_campaigns .template-container'));
                     var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=sfCampaignList"; 
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -1822,7 +1819,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!',width: "280px"});
                             camp_obj.setSalesForceCombo(); 
                             camp_obj.setSalesForceData()
-                					                            
+                                                      
                         }
                     }).fail(function() { console.log( "error fetch sales force campaign" ); });  
                 },
@@ -1907,10 +1904,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 saveConversionPage:function(){
                     var camp_obj =this;
                     var camp_id= this.camp_id;
-					
+          
                     if(this.validateConverionPage()){
                         var URL = "/pms/io/filters/saveLinkIDFilter/?BMS_REQ_TK="+this.app.get('bms_token');                        
-                        this.$("#save_conversion_filter").addClass("saving");						
+                        this.$("#save_conversion_filter").addClass("saving");           
                         $.post(URL, { campNum: camp_id , 
                                rule:this.$("select#con_filter_combo").val(),
                                matchValue:this.$("#con_filter_field").val(),
@@ -1955,7 +1952,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else{
                         $(".mergefields .browsefields").show();
-			$(".mergefields .browsefields #mergefields_links").hide();
+      $(".mergefields .browsefields #mergefields_links").hide();
                         m_fields_box.removeClass("hide-selected");     
                          _.each($(".mergefields .browsefields #salesRep li"),function(ele,index){                                
                              $(ele).removeClass("group1");                                
@@ -2037,7 +2034,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     $month = this.$( '#custom-month' ).html( cal.getMonthName() +" "+ cal.getYear() ),
                     $year = this.$( '#custom-year' ).html("");
                     
-                    function updateMonthYear() {				
+                    function updateMonthYear() {        
                             $month.html( cal.getMonthName() +" "+cal.getYear());
                             $year.html("");
                     }
@@ -2104,7 +2101,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                            var input_field = $(this).parents(".mergefields").attr("input-source");
                            if(input_field!=="campaign_subject"){
                                 if(input_field == 'campaign_from_email')
-                                {	
+                                { 
                                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                                     $.each(active_ws.find("#"+input_field+" option"),function(){
                                         if(merge_field_patt.test($(this).val())){
@@ -2117,8 +2114,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     //active_ws.find("#"+input_field).change();
                                 }
                                 else
-                            	active_ws.find("#"+input_field).val(merge_field);
-                           }						   
+                              active_ws.find("#"+input_field).val(merge_field);
+                           }               
                            else{
                                var caretPos = active_ws.find("#"+input_field)[0].selectionStart;
                                var textAreaTxt = active_ws.find("#"+input_field).val();
@@ -2156,7 +2153,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         $(".mergefields .searchfields .searchlist li div").removeHighlight().highlight(searchterm);
                         if(count == 0)
                          {
-                             $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
+                             $(".mergefields .searchfields .searchlist").append('<p class="notfound">No merge field found containing &lsquo;'+ searchterm +'&rsquo;</p>');                
                          }
                     }
                     else{
@@ -2223,8 +2220,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(!this.states.step2.templates){
                         this.app.showLoading("Loading Templates...",this.$('#area_use_template'));  
                         var _this = this;
-                        require(["bmstemplates/templates"],function(templatesPage){  								                                    
-                            var page = new templatesPage({page:_this,app:_this.app,selectCallback:_.bind(_this.selectTemplate,_this)});								
+                        require(["bmstemplates/templates"],function(templatesPage){                                                     
+                            var page = new templatesPage({page:_this,app:_this.app,selectCallback:_.bind(_this.selectTemplate,_this)});               
                             _this.$('#area_use_template').html(page.$el);                            
                             page.init();
                         })
@@ -2273,7 +2270,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    this.$(".step3 #choose_soruce li").removeClass("selected");
                    this.$(".step3 .soruces").hide();                           
                    this.$(".step3 #area_"+target_li.attr("id")).fadeIn("fast");                                                      
-                   target_li.addClass("selected");						   						   
+                   target_li.addClass("selected");                             
                    this.step3SlectSource(target_li);  
                 },
                 step3SlectSource:function(target_li){
@@ -2282,7 +2279,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     camp_obj.checkCSVUploaded();
                     switch(target_li.attr("id")){
                         case 'create_target':
-                            camp_obj.$('#highrise_setup').hide();
                             if(!this.$("#c_c_target").data("filters")){
                                 this.$("#c_c_target").filters({app:this.app});
                             }
@@ -2295,12 +2291,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     url:'/pms/io/filters/saveTargetInfo/?BMS_REQ_TK='+this.app.get('bms_token'),
                                     params:{type:'tags',filterNumber:'',tags:''}
                                 });                            
-                        	break;
+                          break;
                         case 'choose_targets':                                                                
                                 if(this.checkRecipientsSaved("target")){
                                     return false;
                                 }
-                                camp_obj.$('#highrise_setup').hide();
                                 if(!this.app.getAppData("targets")){                                    
                                     camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
                                      this.app.getData({
@@ -2314,11 +2309,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                     
                                 break;
-                        case 'choose_lists':						   
+                        case 'choose_lists':               
                                 if(this.checkRecipientsSaved("list")){
                                     return false;
                                 }                
-                                camp_obj.$('#highrise_setup').hide();
                                 if(!this.app.getAppData("lists")){
                                     this.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));                                    
                                     this.app.getData({
@@ -2332,34 +2326,29 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                 break;
                         case 'upload_csv':
-                            camp_obj.$('#highrise_setup').hide();
                             camp_obj.app.showLoading("Loading CSV upload...",camp_obj.$el.find('#area_upload_csv'));
                             require(["listupload/csvupload"],function(csvuploadPage){                                        
-                                    var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});								
+                                    var lPage = new csvuploadPage({camp:camp_obj,app:camp_obj.app});                
                                     camp_obj.$el.find('.step3 #area_upload_csv').html(lPage.$el);
                                     camp_obj.states.step3.csvupload = lPage;
                             })
                            break;
                         case 'salesforce_import':  
-                            camp_obj.$('#highrise_setup').hide();
-                            this.checkSalesForceStatus();							
-                        	break;
+                            this.checkSalesForceStatus();             
+                          break;
                         case 'netsuite_import':         
-                            camp_obj.$('#highrise_setup').hide();
-                            this.checkNetSuiteStatus();							
-                        	break;
+                            this.checkNetSuiteStatus();             
+                          break;
                         case 'highrise_import':  
-                            camp_obj.app.showLoading("Loading Highrise...",camp_obj.$el.find('#highrise_setup'));  
-                            this.showHighrise();							
+                            this.showHighrise();              
                               break;
                         case 'choose_tags':
                             if(this.checkRecipientsSaved("tags")){
                                     return false;
                             }
-                            camp_obj.$('#highrise_setup').hide();
                             camp_obj.app.showLoading("Loading Tags...",camp_obj.$el.find('#area_choose_tags'));  
-                            require(["tags"],function(tagsPage){  								                                    
-                                    var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});								
+                            require(["tags"],function(tagsPage){                                                      
+                                    var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});               
                                     camp_obj.$el.find('.step3 #area_choose_tags').html(lPage.$el);
                                     camp_obj.states.step3.tags = lPage;
                             })
@@ -2379,7 +2368,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                checkCSVUploaded:function()
                 {
                     var camp_obj = this;
-					var appMsgs = this.app.messages[0];
+          var appMsgs = this.app.messages[0];
                     var csvupload = camp_obj.states.step3.csvupload;
                     var mapdataview = camp_obj.states.step3.mapdataview;
                     if(csvupload && csvupload.fileuploaded == true)
@@ -2387,7 +2376,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var cancelURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
                         $.post(cancelURL, { stepType: "cancel" })
                         .done(function(data) {
-                                var list_json = jQuery.parseJSON(data);						   
+                                var list_json = jQuery.parseJSON(data);              
                                 if(list_json[0] == 'success')
                                 {                                               
                                        camp_obj.app.showAlert(appMsgs.CSVUpload_cancel_msg,camp_obj.$el,{type:'caution'});
@@ -2404,13 +2393,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                     }
                 },
-		createTarget: function(){
+    createTarget: function(){
                     var camp_obj = this;
                     var dialog_title = "New Target";
                     var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},							   
-						headerIcon : 'new_headicon',
+                        bodyCss:{"min-height":"100px"},                
+            headerIcon : 'new_headicon',
                         buttons: {saveBtn:{text:'Create Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
@@ -2432,7 +2421,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                               bodyCss:{"min-height":dialog_height+"px"},
                               headerIcon : 'target_headicon',
                               buttons: {saveBtn:{text:'Save Target'} }                                                                           
-                        });					
+                        });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
@@ -2449,7 +2438,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":"650px","margin-left":"-325px"},
                               bodyCss:{"min-height":"100px"},
-							  headerIcon : 'copycamp',
+                headerIcon : 'copycamp',
                               buttons: {saveBtn:{text:'Copy Target'} }                                                                           
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
@@ -2457,7 +2446,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              var mPage = new copytargetPage({camp:camp_obj,app:camp_obj.app,target_id:target_id,copydialog:dialog});
                              dialog.getBody().html(mPage.$el);
                              dialog.saveCallBack(_.bind(mPage.copyTarget,mPage));
-                    });					
+                    });         
                },
                loadTarget:function(obj){
                    var target_obj = $.getObj(obj,"div");
@@ -2510,7 +2499,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#salesforce_setup").hide();
                     return false;  
                },
-               setSalesForceWiz:function(){				   	
+               setSalesForceWiz:function(){           
                     var camp_obj = this;
                     camp_obj.app.showLoading(false,camp_obj.$el.find('#area_salesforce_import'));
                     var salesforce_setting = this.app.getAppData("salesfocre");
@@ -2573,7 +2562,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                         this.states.step3.salesforce=true;
                         this.$("#sf_setting_menu li").click(_.bind(function(obj){
-                            var target_obj = $.getObj(obj,"li");							
+                            var target_obj = $.getObj(obj,"li");              
                             if(target_obj.attr("id")=="sf_mapping"){
                                 var dialog = this.app.showDialog({title:' Specify Leads or/and Contacts to Import',
                                     css:{"width":"1200px","margin-left":"-600px"},
@@ -2630,7 +2619,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      var dialog_height = $(document.documentElement).height()-219; 
                      var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                              bodyCss:{"min-height":dialog_height+"px"},							   
+                              bodyCss:{"min-height":dialog_height+"px"},                 
                               buttons: {saveBtn:{text:'Save Filter'} }                                                                           
                     });                    
                     
@@ -2795,7 +2784,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                },
                 checkNetSuiteStatus: function(){
                       
-                        var camp_obj = this;	
+                        var camp_obj = this;  
                          this.$("#highrise_setup").hide();
                         var netsuite_setting = this.app.getAppData("netsuite");
                         if(!netsuite_setting || netsuite_setting[0] == "err" || netsuite_setting.isNetsuiteUser=="N")
@@ -2930,7 +2919,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      var dialog_height = $(document.documentElement).height()-219; 
                      var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                              bodyCss:{"min-height":dialog_height+"px"},							   
+                              bodyCss:{"min-height":dialog_height+"px"},                 
                               buttons: {saveBtn:{text:'Save Filter'} }                                                                           
                     });                    
                     
@@ -3157,7 +3146,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else if(source_type=="netsuite"){
                         URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";
                     }else if(source_type=="highrise"){
-                        URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";	
+                        URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";  
                     }else{
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=recipientType";
                     }
@@ -3179,7 +3168,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                          })
                                         }
                                         else
-                                        {											
+                                        {                     
                                            camp_obj.$el.find(".step3 #area_choose_lists .rightcol tbody").append('<div style="padding: 20px;" class="recp_empty_info"> <div style="width:auto;" class="messagebox info"><p>Don\'t worry about duplicates. only one message is sent to each email address</p></div></div>');
                                         }
                                     }
@@ -3199,7 +3188,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                         for(var i=0;i<tags.length;i++) { 
                                            camp_obj.$(".step3 #area_choose_tags .col1 li[checksum='"+tags[i]+"'] .move-row").click();
                                                                                             }                                        
-                                        }									
+                                        }                 
                                 }
                                 else{
                                     if(source_type=="salesforce"){
@@ -3359,22 +3348,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @further call.showHighriseArea
                 */
                 showHighrise: function(){
-                   
-                    this.$("#area_netsuite_import").hide();
-                    this.$("#netsuite_welcome").hide();
-                    this.$("#highrise_welcome").hide();
-                    this.$("#netsuite_mapping").hide();
+                    this.$("#highrise_setup").show();
+                    this.$('#highrise_welcome').hide();
                     this.$('#highrise_setup .heading').show();
-                    this.$("#netsuite_login").show();
-                    this.$("#netsuite_setup").hide();
-                    this.$('#highrise_setup').hide();
-                    this.$('#highrise_setup').show();
-                        var camp_obj = this;	
+                        var camp_obj = this;  
                         var highrise_setting = this.app.getAppData("highrise");
+                        this.app.showLoading("Checking Status...",this.$("#area_highrise_import"));  
                         if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
                         {
-                              //this.app.showLoading("Loading Highrise...",camp_obj.$(".step3")); 
-                                 //this.app.showLoading("Checking Status...",this.$(".step3").find('.highrise-import-setting'));         
                                 this.app.getData({
                                     "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"highrise",
@@ -3391,26 +3372,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 * @ Import Highrise 2nd step code is required here.
                 */
                 showHighriseArea:function(that){
+                   
                     var active_ws = this.$el.parents(".ws-content");
                     if(typeof this.isHighriseRequire !="undefined"){
                         if(this.isHighriseRequire){
                             return;
                         }
                     } 
-                     
-                       // this.app.showLoading(false,this.$(".step3").find('.highrise-import-setting')); 
-                        var that = this;   
+                     var that = this;   
+                     this.app.showLoading("Now Loading Import...",this.$("#area_highrise_import"));  
                        require(["crm/highrise/import"],_.bind(function(page){  
-                             
                              if(that.states.step3.recipientType.toLowerCase()=="highrise" && that.camp_id){
-                                
-                                    var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import";	
+                                    var  URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+that.app.get('bms_token')+"&campNum="+that.camp_id+"&type=import"; 
                                       jQuery.getJSON(URL,  function(tsv, state, xhr){
-                                        if(xhr && xhr.responseText){                               
+                                        if(xhr && xhr.responseText){
+                                            that.app.showLoading(false,that.$("#area_highrise_import"));   
                                            var rec_json = jQuery.parseJSON(xhr.responseText); 
                                            if(rec_json[0] == "err"){
                                                if(rec_json[1].indexOf("Unauthorized") > -1){
-                                                that.app.showLoading(false,that.$("#highrise_setup"));
                                                  that.highriseErrorCallBack();
                                                  return;
                                               }else{
@@ -3420,15 +3399,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                             highriseCount:that.peopleCount
                                                         })
                                                         active_ws.find("#highrise_import_container").html(that.Import_page.$el);  
-                                                        that.app.showLoading(false,that.$("#highrise_setup"));
                                                         that.highriseBindEvents();
                                                         return;
-                                                  //that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+rec_json[1]+"</div>");
-                                                  
                                               }
                                            }
                                            if(that.app.checkError(rec_json)){
-                                               that.app.showLoading(false,that.$("#highrise_setup"));
                                                 return false;
                                            }
                                            that.states.step3.recipientDetial = rec_json;
@@ -3437,6 +3412,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                                  highriseCount:that.peopleCount,
                                                 edit:that.states.step3.recipientDetial
                                             })
+                                            
                                           active_ws.find("#highrise_import_container").html(that.Import_page.$el);
                                        }else{
                                            
@@ -3446,6 +3422,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                      
                                   
                                }else{
+                                   that.app.showLoading(false,that.$("#area_highrise_import"));   
                                  that.Import_page = new page({
                                     page:that ,
                                     highriseCount:that.peopleCount
@@ -3531,18 +3508,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     } 
                     var that = this;
-                   
                     var URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                         jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                         var _count = jQuery.parseJSON(xhr.responseText);
                         if(_count[0] == "err"){
                             if(_count[1].indexOf("Unauthorized") > -1){
-                                that.app.showLoading(false,that.$("#highrise_setup"));
                                 that.highriseErrorCallBack();
                                   return ;
                                 }else{
                                 that.app.showAlert(_count[1],that.$el.parents(".ws-content.active"));
-                                that.app.showLoading(false,that.$("#highrise_setup"));
                                 that.highriseBindEvents();
                                 that.$("#highrise_import_container").html("<div class='tag_msg1'><span class='caution'></span>"+_count[1]+"</div>");
                                 return; 
@@ -3550,13 +3524,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         that.peopleCount = _count.peopleCount;
                         that.showHighriseArea(that); 
-                        that.app.showLoading(false,that.$(".step3"));
+                             
                     }));
-                    that.app.showLoading(false,that.$("#highrise_setup"));
                 },
                 highriseErrorCallBack:function(){
                     var that = this;
-                    that.app.showLoading(false,that.$("#highrise_setup"));  
+                    that.app.showLoading(false,that.$("#area_highrise_import")); 
                     var active_ws = this.$el.parents(".ws-content");
                     active_ws.find('#highrise_welcome').show();
                     this.$('#highrise_setup .heading').hide();
@@ -3606,8 +3579,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 })
                                 this.app.showLoading(false,dialog.getBody());
                             }
-                        },this))
-                  that.app.showLoading(false,that.$("#highrise_setup")); 
+                        },this))  
+                        that.app.showLoading(false,that.$("#area_highrise_import")); 
                },
                 recipientList : function(lists,flag){
                    var returnList = [];  
