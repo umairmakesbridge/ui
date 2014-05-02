@@ -32,9 +32,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             ,
                             'click .studio_add-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
-                            },
-                            
-                            
+                            },                                                       
                             'click .analytics_reports-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:this.getTitle(obj)});
                             },

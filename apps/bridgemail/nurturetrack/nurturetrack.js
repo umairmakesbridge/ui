@@ -11,7 +11,7 @@ define(['text!nurturetrack/html/nurturetrack.html','bms-tags'],
                  * Attach events on elements in view.
                  */
                 events: {
-                    
+                    'click .add-targets':'selectTargets'
                 },
                 /**
                  * Initialize view - backbone
@@ -217,6 +217,22 @@ define(['text!nurturetrack/html/nurturetrack.html','bms-tags'],
                                this.app.showAlert(_json[0],$("body"),{fixed:true}); 
                            }
                    },this));
+                },
+                selectTargets:function(){
+                     var dialog = this.app.showDialog({title:'Select Targets',
+                        css:{"width":"1200px","margin-left":"-600px"},
+                        bodyCss:{"min-height":"443px"},
+                        headerIcon : 'targetw',
+                        buttons: {saveBtn:{text:'Done'} }  
+                      });
+
+                    this.app.showLoading("Loading Targets...",dialog.getBody());                                  
+                    require(["target/selecttarget"],function(page){                                     
+                         var targetsPage = new page({page:this});
+                         dialog.getBody().html(targetsPage.$el);
+                         targetsPage.init();                         
+                         dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
+                    });
                 }
                 
 

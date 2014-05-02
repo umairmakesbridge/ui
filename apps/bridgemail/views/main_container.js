@@ -78,7 +78,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .connect-crm': 'connectCrm', 
                     'click .crm-salesforce': 'salesforceCrm', 
                     'click .crm-netsuite': 'netsuiteCrm',
-                    'click .crm-highrise':'highriseCrm' 
+                    'click .crm-highrise':'highriseCrm' ,
+                    'click .create-target':'createTarget'
                     
 
                 },
@@ -437,6 +438,44 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         tab_icon:'highrises',
                         sub_title:'Connection With Apps'
                     });
+                },
+                createTarget: function(){                    
+                    var dialog_title = "New Target";
+                    var dialog = this.app.showDialog({title:dialog_title,
+                        css:{"width":"650px","margin-left":"-325px"},
+                        bodyCss:{"min-height":"100px"},							   
+                        headerIcon : 'new_headicon',
+                        buttons: {saveBtn:{text:'Create Target'} }                                                                           
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["target/newtarget"],_.bind(function(newtargetPage){                                     
+                        var mPage = new newtargetPage({camp:this,app:this.app,newtardialog:dialog});
+                        dialog.getBody().html(mPage.$el);
+                        dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
+                    },this));
+                },
+                initCreateEditTarget:function(target_id){
+                    var self = this;
+                    var t_id = target_id?target_id:"";
+                    var dialog_title = target_id ? "Edit Target" : "";
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-219;
+                    var dialog = this.app.showDialog({title:dialog_title,
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:true,
+                              bodyCss:{"min-height":dialog_height+"px"},
+                              headerIcon : 'target_headicon',
+                              buttons: {saveBtn:{text:'Save Target'} }                                                                           
+                        });					
+                    this.app.showLoading("Loading...",dialog.getBody());                                  
+                      require(["target/target"],function(targetPage){                                     
+                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
+                           if(self.states){
+                            self.states.step3.targetDialog =  mPage;
+                           }
+                           dialog.getBody().html(mPage.$el);
+                           dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                      });
                 }
 
             });
