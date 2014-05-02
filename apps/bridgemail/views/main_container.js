@@ -24,7 +24,6 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                     $("#tiles").hide();
                                     $('#workspace').show();
                                     $('#workspace').animate({left: '0px'});
-
                                 }
                             
                         }
@@ -321,15 +320,33 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                         event.stopPropagation();
                     }, this));
+                    // show Main Menu 
                     this.$('.icon-menu').mouseenter(_.bind(function(event){
                         $('.dropdown-nav').hide();
                         $('.dropdown-nav').removeClass('open');
+                        $('.dropdown-nav-addcampaign i').removeClass('activeB')
                         var li = $.getObj(event, "li");
                         li.addClass("active");
                         li.show();
                         this.$(".slidenav-dd").show();
                         event.stopPropagation();
                     },this));
+                    /*Show & Hide the Main menu via jquery*/
+                     this.$('#slidenav-newdd').on('mouseover', _.bind(function(e){
+                        this.$('#slidenav-newdd').css('display','block');
+                        this.$('.icon-menu').addClass('active');
+                      },this));
+                      this.$('#slidenav-newdd').on('mouseout', _.bind(function(e){
+                        var e = e.toElement || e.relatedTarget;
+                        if(e){
+                          if (e.parentNode == this || e.parentNode.parentNode == this || e.parentNode.parentNode.parentNode == this || e == this) {
+                          return;
+                             }
+                         }
+                       this.$('#slidenav-newdd').css('display','none');
+                        this.$('.icon-menu').removeClass('active');
+                        //console.log(e.nodeName)
+                      },this));
                     // Slide Nav Handling Event 
                     this.$('.slidenav > ul > li.dd > a').click(function(event) {
                         $('.slidenav > ul > li').find('ul').hide();

@@ -64,10 +64,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 
                             }
                             ,
+                            
                             'click .account-li':function(obj){
                                 app.mainContainer.addWorkSpace({type:'',title:"My Account"});
                             },
-                            'click .sc-links span.ddicon':'scDropdown',
+                            //'click .sc-links span.ddicon':'scDropdown',
                             //'click .new-campaign': 'createNewCampaign',
                             'click .csv-upload': 'csvUpload',
                             'click .new-nurturetrack':'addNurtureTrack'
@@ -80,30 +81,47 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
 
 			render: function () {
 				this.$el.html(this.template({}));
-				this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
+				this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                                  
+                             this.$('.sc-links span.ddicon').mouseenter(_.bind(function(event){
+                                    $('.dropdown-nav').hide();
+                                 $('.icon-menu').removeClass('active');
+                                 if(this.$('.sc-links ul').hasClass('open')){
+                                     this.$('.sc-links ul').removeClass('open');
+                                     this.$('.sc-links ul').hide();
+                                 }else{
+                                     this.$('.ddlist').addClass('open').show();
+                                 }
+                                 event.stopPropagation();
+                            },this));
+                            /*Show & Hide the Main menu via jquery*/
+                            this.$('#add-menu').on('mouseover', _.bind(function(e){
+                                $('.icon-menu').removeClass('active');
+                                $('#slidenav-newdd').hide();
+                               this.$('#add-menu').css('display','block');
+                               //this.$('.dropdown-nav-addcampaign i').addClass('activeB');
+                             },this));
+                             this.$('#add-menu').on('mouseout', _.bind(function(e){
+                               var e = e.toElement || e.relatedTarget;
+                               if(e){
+                               if (e.parentNode == this || e.parentNode.parentNode == this || e.parentNode.parentNode.parentNode == this || e == this) {
+                                 return;
+                                     }
+                                }
+                              this.$('#add-menu').css('display','none');
+                              //this.$('.dropdown-nav-addcampaign i').removeClass('activeB');
+                               //console.log(e.nodeName)
+                             },this));
+                                
 			},
                         getTitle:function(obj){
                            var title =  $(obj.target).parent("li").find("a").text();
                            return title;
                         },
-                        scDropdown:function(event){
-                            
-                            $('.dropdown-nav').hide();
-                            $('.icon-menu').removeClass('active');
-                            if(this.$('.sc-links ul').hasClass('open')){
-                                this.$('.sc-links ul').removeClass('open');
-                                this.$('.sc-links ul').hide();
-                            }else{
-                                this.$('.ddlist').addClass('open').show();
-                            }
-                            event.stopPropagation();
-                        },
-                         
+                       
                         csvUpload: function() {
                             this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
-                        },
-                        addNurtureTrack: function() {
-                    
-                        }     
+                        }
+                        
 		});
 	});
