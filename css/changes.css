@@ -2301,9 +2301,7 @@ input[type='file'] {
 .ddlist-btn.active {
     background: none repeat scroll 0 0 #294957;
 }
-.ddlist-btn .ddicon:hover, .ddlist-btn.active .ddicon, #dashnav:hover .ddlist-btn .ddicon {
-    background-color: #335261;
-}
+
 .ddlist-btn .ddicon {
     background: none repeat scroll 0 0 #294957;
     border-radius: 2px;
@@ -2362,7 +2360,7 @@ ul.ddlist li span {
     padding: 5px 10px;
 }
 
-.ddlist-btn .ddicon:hover, .ddlist-btn.active .ddicon, #dashnav:hover .ddlist-btn .ddicon {
+.ddlist-btn .ddicon:hover {
     background-color: #335261;
 }
 
@@ -2424,8 +2422,8 @@ ul.ddlist li:hover:after {
 .sc-links  .announcementicon:hover {background: url("../img/announcementicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .ddlist-btn a:hover:after { color: #01AEEE;}
 .ddlist-btn a:hover .campaignicon {background: url("../img/campaignicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-#dashnav:hover .ddlist-btn { background: #294957;  }
-
+.ddlist-btn:hover { background: #294957;  }
+.activeB {background: url("../img/campaignicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0) !important; color: #01AEEE;}
 
 /* ----------- --------------------------     Slide Nav Drop Down ------------------------- ----------- */	
 
@@ -2594,7 +2592,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd  .supporthelp a { color:#4590b5; font-size:14px; font-weight:600; }
 .slidenav-dd  .supporthelp a:hover { color:#01AEEE; }
 ul.leftnav > li.icon-menu {
-    transition: background-color 100ms ease 0.1s !important;
+    transition: none !important;
 }
 /* ------------------------------------------------------------------------------------- */
 
