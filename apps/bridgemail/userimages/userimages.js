@@ -246,7 +246,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         var parents = this.$el.parents(".ws-content");
                     }
              parents.find(".thumbnails").prepend(that.thumbnailHTML(that));
-                that.$(".droppanel").dragfile({
+                that.$(".template-container").dragfile({
                     post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+that.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=230',
                     callBack : _.bind(that.processUpload,that),
                     app:that.app,
@@ -268,7 +268,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 }
                 this.changecount = false;
                 this.$el.find('#total_graphics .badge').text(this.total);
-                this.dropPanel = this.$(".droppanel");
+                this.dropPanel = this.$(".template-container");
            },
              headerSettingDialog:function(total){
                 if(total)
@@ -288,7 +288,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 }
                 this.changecount = false;
                 this.$el.find('#total_graphics .badge').text(this.total);
-                this.dropPanel = this.$(".droppanel");
+                this.dropPanel = this.$(".template-container");
            },
            //Search By Tag function called from multiple trigger events. 
            searchTag:function(text){
