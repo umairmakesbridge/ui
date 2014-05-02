@@ -10094,7 +10094,7 @@ border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;}
 
-#recipients-list.dottedpanel { border:2px dashed #dee5e9; background:#fff; padding:5px 6px; 
+.rightcol .dottedpanel { border:2px dashed #dee5e9 !important; background:#fff; padding:5px 6px; 
 border-radius: 2px;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;}

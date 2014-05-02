@@ -207,7 +207,7 @@
   $.fn.mapping.Constructor = Mapping
 
   $.fn.mapping.defaults = { 
-   template:'<div class="bmsgrid"><div class="bDiv"><table id="recipients" cellspacing="0" cellpadding="0" border="0" style="display: table;"><tbody></tbody></table></div></div>',   
+   template:'<div class="bmsgrid"><div class="bDiv dottedpanel"><table id="recipients" cellspacing="0" cellpadding="0" border="0" style="display: table;"><tbody></tbody></table></div></div>',   
    app:null,
    gridHeight:290,
    sumColumn: '',
