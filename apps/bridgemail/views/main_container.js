@@ -79,7 +79,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-salesforce': 'salesforceCrm', 
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise':'highriseCrm' ,
-                    'click .create-target':'createTarget'
+                    'click .create-target':'createTarget',
+                     'click .test-recipients':'testRecipients'
                     
 
                 },
@@ -409,6 +410,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      return;
                   
                 },
+                 testRecipients:function(){
+                     this.addWorkSpace({type:'',title:'Recipients',sub_title:'Recipients',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'graphiclisting'});
+                     return;
+                  
+                },
+                
                 salesforceCrm:function(){
                     this.addWorkSpace({
                         type:'',
