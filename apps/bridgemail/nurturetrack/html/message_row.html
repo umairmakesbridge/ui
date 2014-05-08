@@ -1,0 +1,63 @@
+<div class="accordion-heading">
+    <a class="accordion-toggle" >        
+        <div class="ntmessageno"><%-no %>: </div><span class="title"><%-title %></span>
+        <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
+        <i class="icon preview"></i>
+        <b class="caret"></b>
+    </a>
+</div>
+<div  class="accordion-body collapse in">
+    <div class="accordion-inner msg">
+
+
+        <div class="col1">
+            <div class="row"><label>Subject</label><span class="text">Subject of the campaign</span></div>
+            <div class="row"><label>From Email</label><span class="text">demo@bridgemailsystem.com
+                    <em>Default Value: <i>{{SALESREP}}</i></em>
+                </span></div>
+            <div class="row"><label>From Name</label><span class="text">MakesBridge Technology
+                    <em>Default Value:<i>{{BMS_SALESREP.CompanyName}}</i></em>
+                </span></div>
+            <div class="row"><label>Reply To</label><span class="text">babar@makesbridge.com
+                    <em>Default Value:<i>{{SALESREP}}</i></em>
+                </span></div>
+        </div>
+
+
+        <div class="col2" style="height:180px">
+
+
+            <div class="btn-group" data-toggle="buttons-radio">
+                <button class="btn active" rel="i">Instantly</button>
+                <button class="btn" rel="tod">Time of Day</button>
+            </div>
+
+
+
+            <div class="set-time" style="display: none">
+                <div class="timebox hour">
+                    <input type="text" name="" value="11" class="timebox-hour" readonly="readonly">                                        
+                </div>
+                <span class="colon">:</span>
+                <div class="timebox min">
+                    <input type="text" name="" value="30" class="timebox-min" readonly="readonly">
+                </div>
+                <div class="btn-group all-any" data-toggle="buttons-radio">
+                    <button class="btn active" rule="A">AM</button>
+                    <button class="btn" rule="1">PM</button>
+                </div>
+            </div>
+
+        </div> 
+
+        <div class="clearfix"></div>
+
+        <div class="btns">
+            <a class="btn-blue left edit-message" ><span class="right">Edit Message</span><i class="icon edit left"></i></a>
+            <a class="btn-red left delete-row" ><span class="right">Delete</span><i class="icon delete left"></i></a>            
+            <a class="btn-green left"><span>Save</span><i class="icon save"></i></a>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+</div>

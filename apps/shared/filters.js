@@ -298,9 +298,10 @@
             filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
-                  $.each(campaigns_array.campaigns[0], function(index, val) {
+                  filter_html +='<option value=""></option>'
+                  /*$.each(campaigns_array.campaigns[0], function(index, val) {
                       filter_html +='<option value="'+val[0].campNum+'">'+val[0].name+'</option>'
-                  })
+                  })*/
                   
             filter_html +='</select></div>'
             filter_html += '<a  class="icon view showtooltip" title="Preview Campaign" ></a></div>'
@@ -418,6 +419,9 @@
           if(params.isFrequency=="true"){
               filter.find(".emailFreq").val(params.frequency).trigger("chosen:updated")
           }
+      }
+      else{
+        filter.find(".campaign-source").change()
       }
     },
     loadLists:function(){

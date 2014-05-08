@@ -2209,8 +2209,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     // Abdullah 
                     if(!this.states.step2.copyCampaigns){
                     this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
-                    require(["campaigns/copy_campaign_listing"],_.bind(function(templatePreview){                                     
-                        var mPage = new templatePreview({app:this.app,sub:this,checksum:this.checksum});
+                    require(["campaigns/copy_campaign_listing"],_.bind(function(copyCampaigns){                                     
+                        var mPage = new copyCampaigns({app:this.app,sub:this,checksum:this.checksum});
                         this.$("#area_copy_campaign").html(mPage.$el);
                     },this));
                     this.states.step2.copyCampaigns = true;

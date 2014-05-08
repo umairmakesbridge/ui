@@ -1784,7 +1784,20 @@ ol.campaign_progress li.s2:before {content:""; background-image: url("../img/ico
 ol.campaign_progress li.s3:before {content:""; background-image: url("../img/icon-s3.png"); }
 ol.campaign_progress li.s4:before {content:""; background-image: url("../img/icon-s4.png");background-position:2.7px 2.7px !important; }
 .campaign-content ol.campaign_progress + .btns {    margin-top: -60px ;}
-
+.add-targets-nt{
+    display: block;  margin: 22px auto;    width: 145px;
+}
+.target-added{
+    margin:5px;
+}
+.ntmessageno {
+    float:left;
+    color: #04502E !important;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 26px;
+    margin-top:1px;
+}
 /*----------
     Abdullah Changes 
  -----------*/	
@@ -1969,7 +1982,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     margin: -10px auto 10px;
     padding: 0;
     position: relative;
-    width: 560px;
+    width: 700px;
 }
 #choose_soruce {
     overflow: hidden;

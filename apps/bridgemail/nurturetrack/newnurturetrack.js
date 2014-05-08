@@ -42,7 +42,7 @@ function (template) {
                               var _json = jQuery.parseJSON(data);                              
                               if(_json[0]!=="err"){                                                                  
                                  this.dialog.hide();
-                                 this.app.mainContainer.openNurtureTrack(_json[1],_json[2]);
+                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this.parent});
                                  this.parent.addCountHeader();
                                  this.parent.fetchTracks();
                               }

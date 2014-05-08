@@ -373,7 +373,7 @@ label:hover .fieldinfo { display:block;}
 	padding: 8px 15px;
 }
 /* BUTTONS ///////////////////////////////////////////////////  */
-.btn-gray, .btn-blue, .btn-green, .btn-red, .btn-yellow {
+.btn-gray, .btn-blue, .btn-green, .btn-red, .btn-yellow,.btn-wait  {
 	border-radius: 2px;
 	color: #FFFFFF;
 	display:inline-block;
@@ -391,18 +391,18 @@ label:hover .fieldinfo { display:block;}
 	
 	
 }
-.btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i, .tagscont ul li > a i {
+.btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i,.btn-wait i, .tagscont ul li > a i {
 	-webkit-border-radius:  2px 2px;
 	-moz-border-radius: 2px 2px ;
 	border-radius:  2px 2px;
 }
-.btn-gray span, .btn-blue span, .btn-green span, .btn-red span, .btn-yellow span, .tagscont ul li > a span {
+.btn-gray span, .btn-blue span, .btn-green span, .btn-red span, .btn-yellow span,.btn-wait span, .tagscont ul li > a span {
 	display: inline-block;
 	padding: 0 15px;
 	float:left;
 	color:#fff;
 }
-.btn-gray:hover, .btn-blue:hover, .btn-green:hover, .btn-red:hover, .btn-yellow:hover {
+.btn-gray:hover, .btn-blue:hover, .btn-green:hover, .btn-red:hover, .btn-yellow:hover,.btn-wait:hover {
 	color:#fff;
 }
 .btn-gray {
@@ -10329,9 +10329,9 @@ background:#F1F9FD;
 .nurturw_wizard .accordion-group.yellow:before { background:#F2B2A8 ;}
 
 .nurturw_wizard .accordion-group:after {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("../img/emailicong.png") no-repeat scroll 9px 10px;
     color: #04502E ;
-    content: "1";
+    content: "";
     display: block;
     font-size: 16px;
     font-weight: bold;
@@ -10838,6 +10838,17 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
     margin: 0 4px 0 -7px !important;
     width: 16px;
 
+}
+.btn-wait {
+	background: none repeat scroll 0 0 #F2B2A8;
+}
+.btn-wait i {
+	background-color: #e7a095 !important;
+}
+.btn-wait i:hover {background-color: #e1998d !important;}
+
+.btn-wait:hover {
+	background:#e7a095;
 }
 .icon.play16 {   background: url("../img/play16.png") no-repeat scroll center center ;}
 .icon.pause16 {   background: url("../img/pause16.png") no-repeat scroll center center ;}

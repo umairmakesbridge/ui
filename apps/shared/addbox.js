@@ -24,6 +24,9 @@
           if(this.options.placeholder_text){
                this.dialog.find(".input-field").attr("placeholder",this.options.placeholder_text)
           }
+          if(this.options.addBtnText){
+               this.dialog.find(".btn-add span").html(this.options.addBtnText)
+          }
           this.$element.on("click",$.proxy(this.showBox,this))          
       }
     }
@@ -50,6 +53,9 @@
           }
       },this))
       this.dialog.find("input.input-field").focus();
+      if(this.options.showCallBack){
+           this.options.showCallBack(this.dialog.find("input.input-field"))
+       }
       if(obj && obj.stopPropagation){
         obj.stopPropagation()
       }
@@ -97,7 +103,9 @@
    template:'<div class="tagbox tagbox-addbox" style=" display: block;"><input type="text" class="left input-field" placeholder="Enter Field name here"> <a class="btn-green btn-add left"><span>Add</span><i class="icon save"></i></a><a class="btn-gray btn-close right"><span>Close</span><i class="icon cross"></i></a></div>',      
    app:null,
    addCallBack:null,
-   placeholder_text:''
+   showCallBack:null,
+   placeholder_text:'',
+   addBtnText:'Add'
   }
 
 }(window.jQuery);
