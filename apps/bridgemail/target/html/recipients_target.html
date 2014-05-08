@@ -1,0 +1,41 @@
+<td width="100%" style="overflow:auto;">
+    <div>
+    <div class="name-type">
+        <h3><a href=""><%=name%></a>
+            <div class="percent_stats">
+                <a class="icon percent" data-list="<%=this.model.get('filterNumber.encode')%>" style="margin:0px!important;"></a>
+            </div>    
+          <!-- percent_stats  -->
+      </h3>
+    </div>
+    <div class="tags tagscont">
+        <span class="tagicon gray"></span>
+      <ul>
+        <% _.each(this.model.get('tags').split(","),function(t){ %>  
+            <li><a  class="tag"><%- t %></a> </li>
+        <% })%> 
+
+      </ul>
+    </div>
+</div>
+</td>
+      <td width="90px">
+          <div>
+              <div class="subscribers ">
+                      <strong><span><em>Subscribers</em><a href=""><%=filtersCount%></a></span></strong>
+              </div> 
+              <div class="slide-btns three" style="width:;min-height:66px; margin-top:-8px; margin-right:-14px;">
+              <span data-icon="h" class="icon setting"></span>
+              <div>
+                    <!--<a  data-icon="a" class="icon" title="schedule"></a>
+                    <a  data-icon="b" class="icon" title="use"></a>
+                    <a  data-icon="e" class="icon" title="draft"></a>
+                    <a  data-icon="g" class="icon" title="preview"></a>
+                    <a data-icon="c" class="icon" title="copy"></a>-->
+
+                    <a data-icon="f" data-id="<%=this.model.get('filterNumber.encode')%>"  class="icon edit-list" title="edit"></a>
+                    <a data-icon="d" data-id="<%=this.model.get('filterNumber.encode')%>"  class="icon delete-list" title="delete"></a>
+                  </div>
+              </div> <!-- slide-btns two  -->
+          </div>
+      </td>
