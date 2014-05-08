@@ -23,28 +23,48 @@ function (template,app) {
             initialize: function () {
                 this.template = _.template(template);
                 this.app = app;
+                this.active = 0;
                 this.render();
             },
             render: function (search) {
                 this.$el.html(this.template({}));
-                this.showListGrid();
+                this.showListGrid(false);
             },
-            showListGrid:function(){
-                this.app.showLoading('Loading Lists...', this.el);
+            showListGrid:function(ev){
+                if(ev){
+                    if(this.active == 1) return;
+                     $(ev.target).parents('div').find('ul li').removeClass('selected');
+                     $(ev.target).addClass('selected');
+                 }
+                this.active = 1;
+                this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['listupload/recipients_list'],function(viewLists){
                     var objViewLists = new viewLists();
                    that.$el.find(".template-container").html(objViewLists.el);
-                   that.app.showLoading(false, that.el);
+                   that.app.showLoading(false, that.$el.find(".template-container"));
                 });
                
                 
             },
-            showTargetsGrid:function(){
-                
+            showTargetsGrid:function(ev){
+                if(this.active == 2)return;
+                $(ev.target).parents('div').find('ul li').removeClass('selected');
+                $(ev.target).addClass('selected');
+                this.active = 2;
+                this.app.showLoading('Loading Targets...', this.$el.find(".template-container"));
+                var that = this; // assign this to that, so there will be no scope issue.
+                require(['target/recipients_targets'],function(viewTargets){
+                    var objViewTargets = new viewTargets();
+                   that.$el.find(".template-container").html(objViewTargets.el);
+                   that.app.showLoading(false, that.$el.find(".template-container"));
+                });
             },
-            showTagsGrid:function(){
-                
+            showTagsGrid:function(ev){
+                if(this.active == 3) return;
+                $(ev.target).parents('div').find('ul li').removeClass('selected');
+                $(ev.target).addClass('selected');
+                this.active = 3;
             }
             
         });    

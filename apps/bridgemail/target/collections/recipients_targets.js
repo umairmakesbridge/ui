@@ -6,25 +6,25 @@
  * Dependency: link model
  */
 
-define(['listupload/models/recipient','app','backbone'], function (ModelRecipient,app,Backbone) {
+define(['target/models/recipients_target','app','backbone'], function (ModelTarget,app,Backbone) {
 	'use strict';
 	return Backbone.Collection.extend({
-	   urlRoot: '/pms/io/list/getListData/',
+	   urlRoot: '/pms/io/filters/getTargetInfo/',
            initialize: function(models,options) {
                 options || (options = {});
                 if (options.total) {
                     this.total = options.count;
                 };
             },
-            model:ModelRecipient,
+            model:ModelTarget,
             url: function () {
-                return '/pms/io/list/getListData/?BMS_REQ_TK=' + app.get('bms_token');
+                return '/pms/io/filters/getTargetInfo/?BMS_REQ_TK=' + app.get('bms_token');
             },
             parse: function(response,res) {
                 var result = [];
                 if(!app.checkError(response) && response.totalCount!=="0"){
-                    _.each(response.lists[0],function(val,key){
-                        val[0]._id = val[0]['listNumber.encode'];
+                    _.each(response.filters[0],function(val,key){
+                        val[0]._id = val[0]['filterNumber.encode'];
                         result.push(val[0]);
                     })                    
                 }

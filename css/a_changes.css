@@ -1806,7 +1806,7 @@ position:relative;
 
 .slide-btns.one:hover { width:74px;}
 .slide-btns.two:hover { width:130px;}
-.slide-btns.three:hover { width:186px;}
+.slide-btns.three:hover { width:131px;}
 .slide-btns.four:hover { width:242px;}
 .slide-btns.five:hover { width:298px;}
 .slide-btns.six:hover { width:354px;}
@@ -1838,7 +1838,7 @@ position:relative;
     font-size: 22px;
     height: 100%;
 	border-left:1px solid #4E6B7E;
-    line-height: 55px;
+    line-height: 73px;
 	 margin: 0 0px !important;
     text-align: center;
     width: 55px;
@@ -1865,7 +1865,7 @@ position:relative;
     height: 26px;
 	display:block;
     line-height: 31px;
-    margin: 12px 5px 0 -13px !important;
+    margin: 21px 5px 0 -13px !important;
     padding: 0  0 0;
     width: 26px;
 }

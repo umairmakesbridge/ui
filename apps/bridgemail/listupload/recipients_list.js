@@ -6,8 +6,8 @@
  * 
  **/
 
-define(['text!listupload/html/recipients_list.html','listupload/collections/recipients','listupload/views/recipient','app','bms-addbox'],
-function (template,recipientsCollection,recipientView,app,addBox) {
+define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app','bms-addbox'],
+function (template,recipientsCollection,recipientView,listModel,app,addBox) {
         'use strict';
         return Backbone.View.extend({
             className: 'recipients_lists',
@@ -21,7 +21,7 @@ function (template,recipientsCollection,recipientView,app,addBox) {
                 this.app = app;
                 this.render();
             },
-            render: function (search) {
+            render:function (search) {
                 this.$el.html(this.template({}));
                 this.loadLists();
                 this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
@@ -108,6 +108,7 @@ function (template,recipientsCollection,recipientView,app,addBox) {
            },
             checkListName:function(listName){
                 var isListExists = false;
+                var that = this;
                 var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&name="+listName+"&type=exists";
                 jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
@@ -137,7 +138,17 @@ function (template,recipientsCollection,recipientView,app,addBox) {
                         if(_json[0]!=="err"){
                             app.removeCache("lists");
                             //this.getLists();
-                            this.newList = _json[2];
+                            this.newList = _json[1];
+                            var newModel = new listModel({
+                                campaignSentCount:0,
+                                "listNumber.encode": that.newList,
+                                name:listName,
+                                subscriberCount:0,
+                                tags:''});
+                            that.objRecipients.add(newModel);
+                             var last_model = that.objRecipients.last();
+                            that.$el.find('#list_grid tbody').prepend(new recipientView({model:last_model,app:app}).el);
+                            that.$el.find("#list_grid tbody tr:first").slideDown("slow");
                         }
                         else{
                             that.app.showAlert(_json[1],$("body"),{fixed:true}); 

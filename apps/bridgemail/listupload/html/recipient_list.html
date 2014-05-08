@@ -22,9 +22,9 @@
       <td width="90px">
           <div>
               <div class="subscribers ">
-                      <strong><span><em>Subscribers</em><a href=""><%=subscriberCount%></a></span></strong>
+                      <strong><span><em>Subscribers</em><a><%=subscriberCount%></a></span></strong>
               </div> 
-              <div class="slide-btns three" style="width:;">
+              <div class="slide-btns three" style="width:;min-height:66px; margin-top:-8px; margin-right:-14px;">
               <span data-icon="h" class="icon setting"></span>
               <div>
                     <!--<a  data-icon="a" class="icon" title="schedule"></a>
@@ -33,8 +33,8 @@
                     <a  data-icon="g" class="icon" title="preview"></a>
                     <a data-icon="c" class="icon" title="copy"></a>-->
 
-                    <a data-icon="f" data-id="<%=this.model.get('listNumber.encode')%>"  class="icon edit-list" title="edit"></a>
-                    <a data-icon="d" data-id="<%=this.model.get('listNumber.encode')%>"  class="icon delete-list" title="delete"></a>
+                    <a data-icon="f" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"  class="icon edit-list showtooltip" data-original-title="edit"></a>
+                    <a data-icon="d"  data-id="<%=this.model.get('listNumber.encode')%>"  class="icon delete-list showtooltip" data-original-title="delete"></a>
                   </div>
               </div> <!-- slide-btns two  -->
           </div>

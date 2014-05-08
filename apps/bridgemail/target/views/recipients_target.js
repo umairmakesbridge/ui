@@ -5,7 +5,7 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!listupload/html/recipient.html'],
+define(['text!target/html/recipients_target.html'],
 function (template) {
         'use strict';
         return Backbone.View.extend({
