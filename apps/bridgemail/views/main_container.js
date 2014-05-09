@@ -214,9 +214,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var workspace_id = obj.attr("id").split("_")[2];
                         this.lastActiveWorkSpace = "wp_li_" + workspace_id;
                         $("#workspace #workspace_" + workspace_id).show().addClass("active");
+                        
                         if (obj.attr("workspace_id")) {
                             var objAttr = obj.attr("workspace_id").split('_');
                             if (objAttr[0] === 'campaign') {
+                                this.app.fixEmailFrom();
                                 //this.app.fixCampaignInputStepOne();
                             }
                         }

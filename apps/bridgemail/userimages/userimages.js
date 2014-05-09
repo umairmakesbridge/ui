@@ -19,7 +19,8 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                "click #clearsearch":"clearSearch",
                "click .search-graphics-div ._graphics":"TryDialog",
                "click .tip-dialogue .closebtn":"hideURL",
-               "click .ScrollToTop":"scrollToTop"
+               "click .ScrollToTop":"scrollToTop",
+               
                ///"click .try":"showDialog"
             },
             initialize: function () {
@@ -41,6 +42,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                    this.search_tags = '';
                    this.order_by = 'updationDate';
                    this.container = "";
+                   this.$('#file_control').attr('title','');
                    this.render();
                   
                                      
@@ -246,6 +248,13 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         var parents = this.$el.parents(".ws-content");
                     }
              parents.find(".thumbnails").prepend(that.thumbnailHTML(that));
+             /* Providing Hover effect on Browse Buttons*/
+              this.$('#file_control').on('mouseover',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#00A1DD', 'color' : '#ffffff'});
+			},this));
+               this.$('#file_control').on('mouseout',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#01AEEE', 'color' : '#ffffff'});
+			},this));
                 that.$(".template-container").dragfile({
                     post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+that.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=230',
                     callBack : _.bind(that.processUpload,that),
@@ -412,7 +421,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                                    +"<label style='width:154px;' class='cabinet'>"
                                    +"<input id='file_control' name='file' class='file' type='file'>"
                                    +"</label>"
-                                   +"<a  class='btn-blue g-btn'><span style='padding: 0px 36px;'>Browse & upload</span><i class='icon update' style='padding-top:15px'></i></a>"
+                                   +"<a  class='btn-blue g-btn' id='list_file_upload'><span style='padding: 0px 36px;'>Browse & upload</span><i class='icon update' style='padding-top:15px'></i></a>"
                                 +"</div>"
                                 +"</div>"
                             +"</div>"

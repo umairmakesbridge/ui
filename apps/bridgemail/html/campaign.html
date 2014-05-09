@@ -10,12 +10,14 @@
             <div class="cont step1col1">
                 <div class="row">
                     <label id="lblSubject">Subject</label>
-                    <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options subject-container" >
+                    <div class="campaign-fields-right-wrapper" style="" >
+                        <!--<div ></div>-->
+                        <div class="input-append adv_dd sort-options subject-container" id="campaign_subject-wrap">
                             <div class="inputcont" style="float:right;width:100%;">              	
                                 <input type="text" style="width:100%" placeholder="Enter subject" id="campaign_subject" class="header-info campaign-headerinfo-input">
                                 <div class="btn-group subject-group">
                                     <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                                    
                                 </div>
                             </div>
                             <!--<span id="subject_erroricon" class="erroricon"></span>-->
@@ -24,23 +26,18 @@
                 </div>
                 <div class="row">
                     <label id="lblFromemail">From Email</label>
-                    <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options fromeEmail-container" style="width:90.5%">
-                            <!--<div id="fetable">
-                            <div style="display:table-row">-->
-                        
-                                        <!--<div id="fecol1" class="fecols">-->
+                    <div class="campaign-fields-right-wrapper" style="" id="campaign_from_email-wrap">
+                        <div class="input-append adv_dd sort-options fromeEmail-container"  style="width:90.5%">
+                          <div style="position: absolute; right: 0px; background-color: rgb(234, 244, 249); height: 39px; width: 61px;"></div>
                                         <div class="inputcont">                              
                                             <select id="campaign_from_email" class="nosearch fromemail-group">                                
                                             </select>            
                                             <input value="" name="from_email_input" id="campaign_from_email_input" placeholder="Enter from email" type="text" class="no-shadow flyinput header-info"  />  
                                         </div>
-                                        <!--</div>-->
-                                                 
-                                        <!--<div id="fecol3" class="fecols">-->
-                                        <div class="btn-group fromemail-group">
+                                        
+<!--                                        <div class="btn-group fromemail-group">
                                             <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-                                        </div>
+                                        </div>-->
                                         <!--</div>
                                     </div>
                                 </div>-->
@@ -62,7 +59,7 @@
                 <div class="row">
                     <label id="lblFromname">From Name</label>
                     <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options fname-container">
+                        <div class="input-append adv_dd sort-options fname-container" id="campaign_from_name-wrap">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter from name" style="width:100%;" id="campaign_from_name" class="header-info campaign-headerinfo-input" />
                                 <div class="btn-group fromname-group">
@@ -84,7 +81,7 @@
                 <div class="row">
                     <label id="lblReplyto">Reply To</label>
                     <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options replyto-container">
+                        <div class="input-append adv_dd sort-options replyto-container" id="campaign_reply_to-wrap">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter reply to" id="campaign_reply_to" style="width:100%" class="header-info campaign-headerinfo-input" />                
                                 <div class="btn-group replyto-group">
@@ -105,6 +102,7 @@
                 </div>
             </div>
         </div>
+       
 
         <div class="span6 settings">
             <h2 class="clearfix"><span class="icon settings2"></span>Settings </h2>
@@ -329,7 +327,7 @@ width: 244px;" ></div>
             </div>
         </div>
         
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px; ">
+        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px; " id="merge_field_plugin-wrap">
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-editor" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box showtooltip" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -358,7 +356,7 @@ width: 244px;" ></div>
     <!-- content-inner   -->
     <div class="content-inner soruces"  id="area_html_code" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="input-append adv_dd sort-options right step2-mergefields" id="merge_field_plugin-wrap-hand" style="width:325px">
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-hand" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
@@ -373,7 +371,7 @@ width: 244px;" ></div>
 
     <div class="content-inner soruces"  id="area_plain_text" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save</span></a>
-        <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px">
+        <div class="input-append adv_dd sort-options right step2-mergefields" id="merge_field_plugin-wrap-plain" style="width:325px">
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-plain" placeholder="Merge Tags" ></div>
             <div class="btn-group">
                 <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle open mergefields-box"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>

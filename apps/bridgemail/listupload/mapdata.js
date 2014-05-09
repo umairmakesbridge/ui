@@ -54,7 +54,21 @@ function (template,chosen,addbox) {
                             else{                        
                                 this.app.showAlert('Please supply csv file to upload',this.$el.parents(".ws-content"));                        
                             }
+                        },
+                        'click .videobar': function(e) {
+                        var _a  = $.getObj(e,"a");
+                        if (_a.length){
+                                var video_id = _a.attr("rel");
+                                var dialog_title = "Help Video";
+                                var dialog = this.app.showDialog({title: dialog_title,
+                                    css: {"width": "720px", "margin-left": "-360px"},
+                                    bodyCss: {"min-height": "410px"}
+                                });
+                                dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
                         }
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
 		},	
 		mapAndImport: function(){
 		   var campview = this.camp_obj;
@@ -211,8 +225,13 @@ function (template,chosen,addbox) {
                                            else{
                                                app.showLoading(false,curview.$el);
                                                mapview.$el.hide();
-                                               mapview.$el.parents(".ws-content").find(".camp_header .close-wp").click();
-                                               app.showMessge("Your contacts in CSV file updated successfully");
+                                               mapview.$el.parents(".ws-content").find("#drop-files .middle").show();
+                                               mapview.$el.parents(".ws-content").find("#drop-files .middle #list_file_upload").parent().show();
+                                               mapview.$el.parents(".ws-content").find("#drop-files").show();
+                                               mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                               mapview.$el.parents(".ws-content").find("#progress").remove();
+                                               mapview.csv.fileuploaded = false;
+                                               app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
                                            }
 					  
 				   }

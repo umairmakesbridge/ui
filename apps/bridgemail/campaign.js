@@ -1,4 +1,4 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment'],
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment','bms-mergefields'],
 function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
         'use strict';
         return Backbone.View.extend({
@@ -9,7 +9,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'keyup .header-info':'defaultFieldHide',                                            
                       'click #save_conversion_filter':'saveConversionPage',                      
                       'click #save_results_sf':'saveResultToSF',
-                      'click .mergefields-box' :'showMergeFieldDialog',
+                      //'click .mergefields-box' :'showMergeFieldDialog',
                       'click #drop4' : function(obj){
                           this.$('.mergefields-box').click();
                       },
@@ -74,6 +74,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
                     this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
                     this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
+                    /*Campaign Merge Fields*/
+                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace'}});
+                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_reply_to'});
+                    this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'workspace'},elementID:'campaign_from_name'});
+                    this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email'});
+                    this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-editor'});
+                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand'});
+                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain'});
                 },
                 render: function () {
                     this.$el.html(this.template({}));                               
@@ -215,6 +223,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.fromNameSelectBoxChange(this)
                         camp_obj.$("#campaign_from_email_input").val($(this).val());
                     });
+                    this.$("#campaign_from_email_input").keydown(_.bind(function(event){
+                        if(event.keyCode === 40){
+                            this.$("#campaign_from_email").trigger('chosen:open');
+                        }
+                    },this));
                     this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});                    
                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                     
                      this.$("#fromemail_default").chosen().change(function(){                       
@@ -693,7 +706,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             source_li = "netsuite_import";
                         }else if(this.states.step3.recipientType.toLowerCase()=="highrise"){
                             source_li = "highrise_import";
-                         
                         }
                         
                         this.$(".step3 #"+source_li).click();
@@ -1421,9 +1433,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }).fail(function() { console.log( "error merge fields json" ); });
                                                            
                                                                                                                         
-                    $(".mergefields").click(function(e){
+                    /*$(".mergefields").click(function(e){
                         e.stopPropagation();
-                    });
+                    });*/
                     var wp_length = $(".ws-tabs li").length-1;                    
                                        
                 },

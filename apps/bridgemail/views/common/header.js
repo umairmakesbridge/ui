@@ -83,7 +83,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
 				this.$el.html(this.template({}));
 				this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                                   
-                             this.$('.sc-links span.ddicon').mouseenter(_.bind(function(event){
+                             this.$('.sc-links .ddicon').mouseenter(_.bind(function(event){
                                     $('.dropdown-nav').hide();
                                  $('.icon-menu').removeClass('active');
                                  if(this.$('.sc-links ul').hasClass('open')){
@@ -109,10 +109,14 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                      }
                                 }
                               this.$('#add-menu').css('display','none');
-                              //this.$('.dropdown-nav-addcampaign i').removeClass('activeB');
-                               //console.log(e.nodeName)
                              },this));
-                                
+                             // Hide all dropdown
+                             this.$('.add-new-header').on('mouseover',_.bind(function(){
+                                 this.$('.sc-links ul').removeClass('open');
+                                 $('.icon-menu').removeClass('active');
+                                 $('#slidenav-newdd').hide();
+                                 this.$('#add-menu').css('display','none');
+                             },this))   
 			},
                         getTitle:function(obj){
                            var title =  $(obj.target).parent("li").find("a").text();

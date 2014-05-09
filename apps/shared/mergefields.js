@@ -20,6 +20,7 @@
             this.allMergeTags = [];
             this.options = this.getOptions(options);
             this.configs = this.options.config;
+            this.app = this.options.app;
             this.$mergefieldWrap = $(this.options.dialog); // Dialog Box
             this.$topScroll = null; 
             //this.mappingInit()     
@@ -32,15 +33,18 @@
             }
         },
         showMergeField: function(options) {
+            
             var id = this.options.elementID;
             if(id==="campaign_from_email"){
-                this.template.find('#input-wrap-plugin').attr( "style", "" );;
-                this.template.find('input').hide();
-                this.$element.find('button').parent().remove();
+                this.template.find('#input-wrap-plugin').attr( "style", "" );
+                this.template.find('input').remove();
+                this.$element.css('width','74%');
+                if(this.configs.state==='workspace'){
+                //this.$element.parents('.ws-content.active').find('button').parent().remove();
                 this.template.find('button').parent().addClass('fromemail-group');
                 var cloneBtn = this.template.find('button').parent().clone();
-                 this.template.find('button').parent().addClass('fromemail-group').remove();
                 this.$element.find('.fromeEmail-container').append(cloneBtn);
+                }
             }else{
                 this.$element.html('');
             }
@@ -49,16 +53,20 @@
                 this.template.find('input').attr({'style': ''});
             }
             if (id == "campaign_from_name" || id == "campaign_reply_to") {
+                this.$element.css('width','100%');
                 this.template.find('input').addClass('header-info-plugin');
             }
             /*Class to the container for error*/
               if(id=="campaign_subject"){
+                  this.$element.css('width','100%');
                   this.template.first().addClass('subject-container');
               }else if(id=="campaign_from_name"){
                    this.template.first().addClass('fname-container');
               }
+            if(id !=="campaign_from_email"){
             this.template.find('input').attr('id', id);
             this.$element.append(this.template);
+            }
             //options.app.fixCampaignInputStepOne();
             
             if (!options.app.getAppData("mergetags")) {                             
@@ -113,7 +121,6 @@
                     return 0;
                 return a1 > b1 ? 1 : -1;
             });
-
             this.createMergeTagField();
 
         },
@@ -127,7 +134,6 @@
             fields_html += "</ul>";
             this.$mergefieldWrap.find("#plugin-search-fields .plugin-search-list").html(fields_html);
             /*Binding Events*/
-             
             if(this.options.elementID==="campaign_from_email")
             {
                 this.$element.find("#plugin-merge-dropdown").on("click", $.proxy(this.showMergeDialogBox, this));
@@ -136,7 +142,7 @@
                 this.template.find("#plugin-merge-dropdown").on("click", $.proxy(this.showMergeDialogBox, this));
                 this.template.find("#plugin-merge-dropdown").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false})
             }
-            
+               
                 return;
         },
         showMergeDialogBox: function(obj) {
@@ -174,7 +180,13 @@
                 $this.css({"top": top + "px", "left": left + "px", "z-index": "9999","display":"block"});
                 $("body").append($this);
                 this.bindingEvents();
-                var input_container = this.template.find("input[type='text']").attr("id");
+                var input_container = "";
+                if(this.options.elementID==="campaign_from_email")
+                {
+                    input_container = "campaign_from_email";
+                }else{
+                    input_container = this.template.find("input[type='text']").attr("id");
+                }
                 $this.attr("input-source", input_container);
               
                 if ($thisSalesForce === true)
@@ -268,7 +280,7 @@
             this.$mergefieldWrap.find(".append-merge-field-plugin").on("click",$.proxy(this.mergeInsert,this));
             this.$mergefieldWrap.find(".merge-feilds-plugin-type li").on("click", $.proxy(this.showMergeFields, this));
             this.$mergefieldWrap.keyup($.proxy(this.searchMergeFields, this));
-            this.$mergefieldWrap.find(".search-merge-insert").on("click",$.proxy(this.searchMergeInsert, this));
+            this.$mergefieldWrap.find(".search-merge-insert").on("click",$.proxy(this.mergeInsert, this));
             var _$this = this.$mergefieldWrap;
             $(window).scroll(function(){
                 if (_$this.css('display') === 'block') {
@@ -289,26 +301,11 @@
                 event.stopPropagation();
             });
         },
-        /*Insertion of Merge Tag on Search*/
-        searchMergeInsert:function(obj){
-           var $thisDialog = this.$element;
-           var a = $.getObj(obj, "a"); 
-          var merge_field = a.parents("li").attr("mergeval");
-                var input_field = a.parents("#merge-field-plug-wrap").attr("input-source");
-                if (input_field !== "campaign_subject") {
-                    $thisDialog.find("#" + input_field).val(merge_field);
-                }
-                else {
-                    var caretPos = $thisDialog.find("#" + input_field)[0].selectionStart;
-                    var textAreaTxt = $thisDialog.find("#" + input_field).val();
-                    $thisDialog.find("#" + input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos));
-                }
-                $("#merge-field-plug-wrap").hide(); 
-        },
         /*Insertion of Merge Field on click of browse state*/
         mergeInsert:function(obj){
                 var $thisDialog = this.$element;
                 var $this = this.$mergefieldWrap;
+                var $state = this.configs.state;
                 var a = $.getObj(obj, "a"); 
                  var merge_field = a.parents("li").attr("mergeval");
                     var input_field = a.parents(".mergefields").attr("input-source");
@@ -331,29 +328,47 @@
                         var textAreaTxt = $thisDialog.find("#" + input_field).val();
                         $thisDialog.find("#" + input_field).val(textAreaTxt.substring(0, caretPos) + merge_field + textAreaTxt.substring(caretPos));
                     }
-
-                    $("#" + input_field + "_default").fadeIn("fast");
+                    /*Check for open Workspace or Dialog*/
+                    var active_workspace = '';
+                    if($state==='workspace'){
+                    active_workspace = $(".ws-content.active");
+                    }else{
+                        active_workspace = this.$element;
+                    }
+                    active_workspace.find("#" + input_field + "_default").fadeIn("fast");
                     $this.hide();
             
         },
         /*Remove Child Inputs from Campaing*/
         defaultFieldHide: function(obj) {
             var input_obj = $(obj.target);
+            var active_workspace = '';
+            if(this.configs.state == 'workspace'){
+              active_workspace = $(".ws-content.active");
+            }else{
+                active_workspace = this.$element;
+            }
             if (input_obj.val().indexOf("{{") == -1 && input_obj.val().indexOf("}}") == -1) {
-                $("#" + input_obj.attr("id") + "_default").hide();
+                active_workspace.find("#" + input_obj.attr("id") + "_default").hide();
             }
         },
         /*Remove Child Inputs from Email*/
         fromEmailDefaultFieldHide:function(obj){
                     
                     var fromEmail = $.getObj(obj,"input").val();
+                    var active_workspace = '';
+                    if(this.configs.state==='workspace'){
+                        active_workspace = $(".ws-content.active");
+                    }else{
+                        active_workspace = this.$element;
+                    }
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
                     if($.trim(fromEmail)=="" || !merge_field_patt.test(fromEmail) || this.options.app.validateEmail(fromEmail)){
-                        this.$element.parents(".ws-content.active").find("#campaign_from_email_default").hide();
+                        active_workspace.find("#campaign_from_email_default").hide();
                     }
                     else{
-                       this.$element.parents(".ws-content.active").find("#campaign_from_email_default").show();
+                       active_workspace.find("#campaign_from_email_default").show();
                     }
                 },
         getOptions: function(options) {
