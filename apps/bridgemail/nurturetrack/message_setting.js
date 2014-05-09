@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/message_setting.html','jquery-ui'],
+define(['text!nurturetrack/html/message_setting.html','jquery-ui','bms-mergefields'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -25,7 +25,7 @@ function (template) {
                     this.plainText = "";
                     this.htmlText = "";
                     this.settingchange = true;
-                    this.camp_id = this.camp_obj['campNum.encode'];                    
+                    this.camp_id = this.camp_obj['campNum.encode'];                                        
                     this.app = this.parent.app;                            
                     this.render();                    
             },
@@ -54,9 +54,15 @@ function (template) {
                     camp_obj.fromNameSelectBoxChange(this)
                     camp_obj.$("#campaign_from_email_input").val($(this).val());
                 });
-                this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});                                        
+                this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "62%",disable_search: "true"});                                        
                 this.$("#campaign_from_email_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$("#fromemail_default_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
+                this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'dialog'},placeholder_text:'Enter subject'});
+                this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
+                this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'dialog'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
+                this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});
+                
                 this.loadCampaign();
                 
             },
@@ -182,9 +188,9 @@ function (template) {
                this.app.showLoading("Loading...",this.$bodyInner);
                require(["campaigns/campaign_body"],_.bind(function(page){    
                     this.app.showLoading(false,this.$bodyInner);                    
-                    var messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj})                       
-                    this.$bodyInner.append(messagebody_page.$el);         
-                    messagebody_page.init();
+                    this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj})                       
+                    this.$bodyInner.append(this.messagebody_page.$el);         
+                    this.messagebody_page.init();
                 },this));
            },
            saveStep1:function(){            
@@ -254,7 +260,7 @@ function (template) {
                         this.app.hideError({control:this.$(".fromeEmail-container")});
                     }
                     
-                    if(this.$(".femail-default-container").css('display')=="block" && (fromEmailDefault === '' || !app.validateEmail(fromEmailDefault)))
+                    if(this.$(".femail-default-container").css('display')=="block" && (fromEmailDefault === '' || !this.app.validateEmail(fromEmailDefault)))
                     {           
                         this.app.showError({
                             control:this.$('.femail-default-container'),
@@ -264,11 +270,11 @@ function (template) {
                     }
                     else
                     {           
-                        this.app.hideError({control:el.find(".femail-default-container")});
+                        this.app.hideError({control:this.$(".femail-default-container")});
                     }
                     merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
-                    if(replyto !== '' && !merge_field_patt.test(replyto) && !app.validateEmail(replyto))
+                    if(replyto !== '' && !merge_field_patt.test(replyto) && !this.app.validateEmail(replyto))
                     {           
                         this.app.showError({
                                 control:this.$('.replyto-container'),
@@ -327,12 +333,12 @@ function (template) {
                                     var step1_json = jQuery.parseJSON(data);
                                     this.app.showLoading(false,this.$el);
                                     if(step1_json[0]!=="err"){                                            
-                                            this.app.showMessge("Step 1 saved successfully!");                                     
+                                            this.saveStep2();
                                             //camp_obj.states.step1.change=false;
                                                                                        
                                     }
                                     else{
-                                           this.app.showMessge(step1_json[0]); 
+                                           this.app.showAlert(step1_json[1],this.$el); 
                                     }
                                 },this));
                                 
@@ -340,61 +346,52 @@ function (template) {
                     }
                     
                 },
-                saveStep2:function(gotoNext){                 
-                 var camp_obj = this; 
-                 var proceed = -1;
+                saveStep2:function(){                                                   
                  var html = "",plain="";                  
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
-                 var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
+                 var selected_li = this.$("#choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
                         html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():tinyMCE.get('bmseditor_'+this.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
-                        post_data['plainText'] = plain;
-                        //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
+                        post_data['plainText'] = plain;                        
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
-                        post_data['htmlCode'] = html;
-                        //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
+                        post_data['htmlCode'] = html;                        
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
-                        post_data['isCampaignText'] = 'Y';
-                        //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
+                        post_data['isCampaignText'] = 'Y';                        
                      }                 
                         
-                 if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
-                    if(typeof(gotoNext)==="undefined"){
-                       this.app.showLoading("Saving Step 2...",this.$el.parents(".ws-content"));
-                    }                   
+                 if(this.messagebody_page.states.editor_change ===true ){
+                   this.app.showLoading("Saving settings...",this.$el); 
                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                    $.post(URL,post_data )
-                        .done(function(data) {                                 
+                        .done(_.bind(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
-                            camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
-                            camp_obj.$(".save-step2").removeClass("saving");
+                            this.app.showLoading(false,this.$el);
+                            this.$(".save-step2").removeClass("saving");
                             if(step1_json[0]!=="err"){
-                                camp_obj.app.showMessge("Step 2 saved successfully!");
+                                this.app.showMessge("Step 2 saved successfully!");
                                 if(selected_li=="plain_text"){
-                                    camp_obj.states.step2.plainText = plain;                                    
-                                    camp_obj.states.step2.htmlText = "";
+                                    this.plainText = plain;                                    
+                                    this.htmlText = "";
                                 }
                                 else{
-                                    camp_obj.states.step2.htmlText = html;
-                                    camp_obj.states.step2.plainText = plain;                                    
+                                    this.htmlText = html;
+                                    this.plainText = plain;                                    
                                 }
-                                camp_obj.states.editor_change = false;
-                                if(typeof(gotoNext)=="undefined"){
-                                    camp_obj.wizard.next();
-                                }
+                                this.messagebody_page.states.editor_change = false;
+                                
                             }
                             else{
-                               camp_obj.app.showMessge(step1_json[0]); 
+                               this.app.showAlert(step1_json[1],this.$el); 
                             }
-                   });
-                   proceed = 1
+                   },this));
+                   
                  }  
-                return proceed;  
+                
                 },
                 saveCall:function(){
                     this.saveStep1();

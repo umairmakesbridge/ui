@@ -25,10 +25,7 @@
             this.$topScroll = null; 
             //this.mappingInit()     
             if (this.$element) {
-                this.template = $(this.options.template)   // Input Template       
-                if (this.options.placeholder_text) {
-                    this.template.find(".input-field").attr("placeholder", this.options.placeholder_text)
-                }
+                this.template = $(this.options.template)   // Input Template                       
                 this.showMergeField(this.options);
             }
         },
@@ -39,12 +36,12 @@
                 this.template.find('#input-wrap-plugin').attr( "style", "" );
                 this.template.find('input').remove();
                 this.$element.css('width','74%');
-                if(this.configs.state==='workspace'){
+                
                 //this.$element.parents('.ws-content.active').find('button').parent().remove();
                 this.template.find('button').parent().addClass('fromemail-group');
                 var cloneBtn = this.template.find('button').parent().clone();
                 this.$element.find('.fromeEmail-container').append(cloneBtn);
-                }
+                
             }else{
                 this.$element.html('');
             }
@@ -78,6 +75,9 @@
             }
             else {
                 this.generateMergeTag();
+            }
+            if (this.options.placeholder_text) {
+               this.template.find("input").attr("placeholder", this.options.placeholder_text)
             }
 
         },
@@ -332,8 +332,8 @@
                     var active_workspace = '';
                     if($state==='workspace'){
                     active_workspace = $(".ws-content.active");
-                    }else{
-                        active_workspace = this.$element;
+                    }else if($state==='dialog'){
+                        active_workspace = $(".modal-body");
                     }
                     active_workspace.find("#" + input_field + "_default").fadeIn("fast");
                     $this.hide();
@@ -345,8 +345,8 @@
             var active_workspace = '';
             if(this.configs.state == 'workspace'){
               active_workspace = $(".ws-content.active");
-            }else{
-                active_workspace = this.$element;
+            }else if(this.configs.state==='dialog'){
+                active_workspace = $(".modal-body");
             }
             if (input_obj.val().indexOf("{{") == -1 && input_obj.val().indexOf("}}") == -1) {
                 active_workspace.find("#" + input_obj.attr("id") + "_default").hide();
@@ -359,8 +359,8 @@
                     var active_workspace = '';
                     if(this.configs.state==='workspace'){
                         active_workspace = $(".ws-content.active");
-                    }else{
-                        active_workspace = this.$element;
+                    }else if(this.configs.state==='dialog'){
+                         active_workspace = $(".modal-body");
                     }
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
@@ -398,7 +398,7 @@
     $.fn.mergefields.Constructor = MergeFields
 
     $.fn.mergefields.defaults = {
-        template: '<div class="input-append adv_dd sort-options right step2-mergefields" id="addv_dd_merge_pulgin"><div class="inputcont" style="float:right;width:100%;" id="input-wrap-plugin"><input type="text"  style="width:100%" class="bms-input-tags" id="merge_field_plugin" placeholder="Merge Tags" ></div><div class="btn-group"><button tabindex="-1" data-toggle="dropdown" id="plugin-merge-dropdown" title="Use Merge Tags" class="btn dropdown-toggle open mergefields-box plugin-merge-dropdown btn-border-merge-plugin"> <span class="icon mergeicon"></span> <span class="caret"></span> </button></div></div>',
+        template: '<div class="input-append adv_dd sort-options right step2-mergefields" id="addv_dd_merge_pulgin"><div class="inputcont" style="float:right;width:100%;" id="input-wrap-plugin"><input type="text"  style="width:100%" class="bms-input-tags" id="merge_field_plugin" placeholder="" ></div><div class="btn-group"><button tabindex="-1" data-toggle="dropdown" id="plugin-merge-dropdown" title="Use Merge Tags" class="btn dropdown-toggle open mergefields-box plugin-merge-dropdown btn-border-merge-plugin"> <span class="icon mergeicon"></span> <span class="caret"></span> </button></div></div>',
         app: null,
         addCallBack: null,
         placeholder_text: '',

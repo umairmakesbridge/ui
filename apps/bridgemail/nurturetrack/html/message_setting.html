@@ -6,50 +6,56 @@
                 <div style="width:60%">
                 <div class="row">
                     <label id="lblSubject">Subject</label>
-                    <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options subject-container" >
+                    <div class="campaign-fields-right-wrapper" style="" >
+                        <!--<div ></div>-->
+                        <div class="input-append adv_dd sort-options subject-container" id="campaign_subject-wrap">
                             <div class="inputcont" style="float:right;width:100%;">              	
                                 <input type="text" style="width:100%" placeholder="Enter subject" id="campaign_subject" class="header-info campaign-headerinfo-input">
                                 <div class="btn-group subject-group">
                                     <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                                    
                                 </div>
-                            </div>                           
+                            </div>
+                            <!--<span id="subject_erroricon" class="erroricon"></span>-->
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <label id="lblFromemail">From Email</label>
-                    <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options fromeEmail-container" style="width:90.5%">
-                            <div style="position: absolute; right: 0px; background-color: rgb(234, 244, 249); height: 39px; width: 61px;"></div>                         
-                                <div class="inputcont">                              
-                                    <select id="campaign_from_email" class="nosearch fromemail-group">                                
-                                    </select>            
-                                    <input value="" name="from_email_input" id="campaign_from_email_input" placeholder="Enter from email" type="text" class="no-shadow flyinput header-info"  />  
-                                </div>                                      
-                                <div class="btn-group fromemail-group"  style="right:4px">
-                                    <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags" > <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-                                </div>
+                    <div class="campaign-fields-right-wrapper" style="" id="campaign_from_email-wrap">
+                        <div class="input-append adv_dd sort-options fromeEmail-container"  style="width:90.5%">
+                          <div style="position: absolute; right: 0px; background-color: rgb(234, 244, 249); height: 39px; width: 61px;"></div>
+                                        <div class="inputcont">                              
+                                            <select id="campaign_from_email" class="nosearch fromemail-group">                                
+                                            </select>            
+                                            <input value="" name="from_email_input" id="campaign_from_email_input" placeholder="Enter from email" type="text" class="no-shadow flyinput header-info"  />  
+                                        </div>
                                         
+<!--                                        <div class="btn-group fromemail-group">
+                                            <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                                        </div>-->
+                                        <!--</div>
+                                    </div>
+                                </div>-->
                         </div>
                     </div>
                 </div>
                 <div class="row addrow femail-default-container" id="campaign_from_email_default" style="display:none">
                     <label>&nbsp;</label>
                     <div class="">
-                    <span class="directarrow"></span>
+                    <span class="directarrow" style="left:36%"></span>
                     <div class="inputcont" style="text-align:right;">          	                                
                         <select id="fromemail_default" class="nosearch" style="float:right;">                  
                         </select>
                         <input value="" name="fromemail_default_input" id="fromemail_default_input" placeholder="Enter from email default value" type="text" class="no-shadow flyinput" />  
                     </div>
                     </div>
-                    
+                    <!--<span id="fromemaildefault_erroricon" class="erroricon"></span>-->
                 </div>
                 <div class="row">
                     <label id="lblFromname">From Name</label>
                     <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options fname-container">
+                        <div class="input-append adv_dd sort-options fname-container" id="campaign_from_name-wrap">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter from name" style="width:100%;" id="campaign_from_name" class="header-info campaign-headerinfo-input" />
                                 <div class="btn-group fromname-group">
@@ -62,16 +68,16 @@
                 </div>
                 <div class="row addrow fnamedefault-container" id="campaign_from_name_default" style="display:none">
                     <label>&nbsp;</label>
-                    <span class="directarrow"></span>            
+                    <span class="directarrow" style="left:36%"></span>            
                     <div class="inputcont" style="text-align:right;">            	
-                        <input id="campaign_default_from_name" type="text" placeholder="Enter from name default value">
+                        <input id="campaign_default_from_name" type="text" placeholder="Enter from name default value" style="width:59.5%">
                     </div>
-                   
+                    <!--<span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>-->
                 </div>
                 <div class="row">
                     <label id="lblReplyto">Reply To</label>
                     <div class="campaign-fields-right-wrapper" style="">
-                        <div class="input-append adv_dd sort-options replyto-container">
+                        <div class="input-append adv_dd sort-options replyto-container" id="campaign_reply_to-wrap">
                             <div class="inputcont" style="width:100%;float:right;">              	
                                 <input type="text" placeholder="Enter reply to" id="campaign_reply_to" style="width:100%" class="header-info campaign-headerinfo-input" />                
                                 <div class="btn-group replyto-group">
@@ -84,10 +90,10 @@
                 </div>
                 <div class="row addrow replyemail-container" id="campaign_reply_to_default" style="display:none">
                     <label>&nbsp;</label>
-                    <span class="directarrow"></span>
+                    <span class="directarrow" style="left:36%"></span>
                     <div class="inputcont">              	
-                        <input id="campaign_default_reply_to" type="text" placeholder="Enter reply to default value">
-                       
+                        <input id="campaign_default_reply_to" type="text" placeholder="Enter reply to default value" style="width:59.5%">
+                        <!--<span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
                     </div>
                 </div>
                </div>     
