@@ -30,12 +30,13 @@
     </div>
 </td>
 <td width="90px"><div>
-        <div class="mail show">
+        <div class="mail">
             <strong><span><em>Messages</em><%- model.get('msgCount')%></span></strong>
         </div>
     </div></td>
-<td width="132px"><div>
-        <div style="width:105px" class="time show">
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
             <strong><span>
                    
                     <% if(model.get('status')==='D'){  %>
@@ -47,20 +48,25 @@
                     %>    
                 </span></strong>
         </div>
-        <div class="action">
-             <% if(model.get('status')==='D'){  %>
-            <a class="btn-red delete-track"><i class="icon delete"></i></a>            
-            <a class="btn-green copy-track"><span>Copy</span><i class="icon copy"></i></a>
-            <a class="btn-gray edit-track"><span>Edit</span><i class="icon edit"></i></a>
-            <a class="btn-green play-track"><span>Play</span><i class="icon play"></i></a>
-             <% } else {
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('four') } else { print('three') }%>" style="min-height:66px; margin-top:-8px; margin-right:-14px;">
+              <span data-icon="h" class="icon setting"></span>
+              <div>                    
+                     <% if(model.get('status')==='D'){  %>
+                     
+                    <a  class="icon play play-track showtooltip" title="Play" ></a>  
+                    <a data-icon="c" class="icon copy-track showtooltip" title="Copy" ></a> 
+                    <a data-icon="f" class="icon edit-track showtooltip" title="Edit" ></a>
+                    <a data-icon="d" class="icon delete-track showtooltip" title="Delete" ></a>
+                    
+                    <% } else {
                     %>
-                            <a class="btn-gray"><span>View</span><i class="icon preview3"></i></a>
-                            <a class="btn-green copy-track"><span>Copy</span><i class="icon copy"></i></a>
-                            <a class="btn-blue pause-track"><span>Pause</span><i class="icon pause"></i></a>
+                        <a class="icon pause pause-track showtooltip" title="Pause"></a>  
+                        <a data-icon="c" class="icon copy-track showtooltip" title="Copy"></a> 
+                        <a  data-icon="g" class="icon showtooltip" title="Preview"></a>
                     <%}
                     %>    
-        </div>
-
+                  </div>
+        </div> 
+        
     </div>
 </td>

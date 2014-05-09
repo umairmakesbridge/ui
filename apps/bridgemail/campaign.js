@@ -355,7 +355,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah Check
                         var fegb_w = camp_obj.$el.find('#fecol3').width();
                         //camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
-      if(camp_json.senderName != ''){
+                        if(camp_json.senderName != ''){
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         }
                         else{

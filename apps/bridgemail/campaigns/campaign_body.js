@@ -21,12 +21,13 @@ function (template,editorView) {
             initialize: function () {
                     this.template = _.template(template);				
                     this.parent = this.options.page
+                    this.camp_obj = this.options.camp_obj;                    
                     this.app = this.parent.app;   
                     this.templates = false;
-                    this.editor_change = false;
+                    this.states = {}
+                    this.states.editor_change = false;
                     this.copyCampaigns = false;
-                    this.plainText = "";
-                    this.htmlText = "";
+                    this.scrollElement = this.options.scrollElement;                    
                     this.wp_id = "NT_MESSAGE";
                     this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});  
                     this.render();                    
@@ -43,7 +44,7 @@ function (template,editorView) {
                
             },
             initControls:function(){
-                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
             },
             init:function(){
               this.$("#editorhtml").append(this.bmseditor.$el);
@@ -78,7 +79,7 @@ function (template,editorView) {
                         break;
                      case 'html_editor':
                         this.setEditor();
-                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.htmlText,true));                                 
+                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));                                 
                      break;
                      case 'copy_campaign':
                            this.getcampaignscopy();
@@ -94,7 +95,7 @@ function (template,editorView) {
                     this.app.showLoading("Loading Templates...",this.$('#area_use_template'));  
                     var _this = this;
                     require(["bmstemplates/templates"],function(templatesPage){                                                     
-                        var page = new templatesPage({page:_this,app:_this.app,selectCallback:_.bind(_this.selectTemplate,_this)});               
+                        var page = new templatesPage({page:_this,app:_this.app,selectCallback:_.bind(_this.selectTemplate,_this),scrollElement:_this.scrollElement});               
                         _this.$('#area_use_template').html(page.$el);                            
                         page.init();
                     })
@@ -107,7 +108,7 @@ function (template,editorView) {
                 var target = $.getObj(obj,"a");
                 var bms_token =this.app.get('bms_token');
                 this.app.showLoading('Loading HTML...',this.$el);
-                this.editor_change = true;
+                this.states.editor_change = true;
                 var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                 jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
                 this.$("#html_editor").click();
@@ -118,7 +119,7 @@ function (template,editorView) {
                 if(!this.copyCampaigns){
                 this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
                 require(["campaigns/copy_campaign_listing"],_.bind(function(copyCampaigns){                                     
-                    var mPage = new copyCampaigns({app:this.app,sub:this,checksum:this.checksum});
+                    var mPage = new copyCampaigns({app:this.app,sub:this,scrollElement:this.scrollElement,checksum:this.camp_obj['campNum.checksum']});
                     this.$("#area_copy_campaign").html(mPage.$el);
                 },this));
                 this.copyCampaigns = true;
@@ -127,7 +128,7 @@ function (template,editorView) {
             setEditor:function(){
               this.bmseditor.showEditor(this.wp_id);                                       
               tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
-              this.$("#bmstexteditor").val(this.plainText);
+              this.$("#bmstexteditor").val(this.parent.plainText);
               this.$(".textdiv").hide();
             },
             setEditorHTML:function(tsv, state, xhr){
@@ -136,7 +137,6 @@ function (template,editorView) {
                 if(html_json.htmlText){
                     tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
                 }
-
             }
             
         });

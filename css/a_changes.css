@@ -395,7 +395,7 @@ z-index: 99999;
 .ScrollToTop:hover {
 opacity: 0.9;
 }
-//// Campaign Summary //////////
+/* Campaign Summary /////////*/
 
 
 
@@ -1794,10 +1794,10 @@ position:relative;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	
-	-webkit-transition: width 1s ease-in-out, visibility 1s linear;
-    -moz-transition: width 1s ease-in-out, visibility 1s linear;
-    -o-transition: width 1s ease-in-out, visibility 1s linear;
-    transition: width 1s ease-in-out, visibility 1s linear;
+	-webkit-transition: width 0.5s ease-in-out, visibility 0.5s linear;
+    -moz-transition: width 0.5s ease-in-out, visibility 0.5s linear;
+    -o-transition: width 0.5s ease-in-out, visibility 0.5s linear;
+    transition: width 0.5s ease-in-out, visibility 0.5s linear;
 	
 		
 }
@@ -1805,9 +1805,9 @@ position:relative;
 .slide-btns:hover  {width:403px;}
 
 .slide-btns.one:hover { width:74px;}
-.slide-btns.two:hover { width:130px;}
-.slide-btns.three:hover { width:131px;}
-.slide-btns.four:hover { width:242px;}
+.slide-btns.two:hover { width:152px;}
+.slide-btns.three:hover { width:186px;}
+.slide-btns.four:hover { width:286px;}
 .slide-btns.five:hover { width:298px;}
 .slide-btns.six:hover { width:354px;}
 .slide-btns.seven:hover { width:410px;}
@@ -1841,7 +1841,7 @@ position:relative;
     line-height: 73px;
 	 margin: 0 0px !important;
     text-align: center;
-    width: 55px;
+    width: 66px;
 }
 .slide-btns a.icon { 
 	opacity: 0;
@@ -1870,6 +1870,18 @@ position:relative;
     width: 26px;
 }
 .slide-btns:hover .icon.setting  { color:#4E6B7E;}
+/*Changes placed by Umair*/
+.slide-btns .icon.play{
+    background-image: url("../img/play.png");
+    background-position: center center;
+    background-repeat: no-repeat;    
+}
+.slide-btns .icon.pause{
+    background-image: url("../img/pause.png");
+    background-position: center center;
+    background-repeat: no-repeat;    
+}
+/*Changes placed by Umair*/
 
 /* ---------------------------------------- */
 

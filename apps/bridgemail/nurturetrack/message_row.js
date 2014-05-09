@@ -123,10 +123,11 @@ function (template) {
                         bodyCss:{"min-height":dialog_height+"px"},
                         buttons: {saveBtn:{text:'Save'} }
                 });                        
-
+                this.app.showLoading("Loading Settings...",dialog.getBody());
                 require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                    var sPage = new settingPage({page:this});    
+                    var sPage = new settingPage({page:this,dialog:dialog});    
                     dialog.getBody().html(sPage.$el);
+                    dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                     sPage.init();
                 },this));      
             }

@@ -24,6 +24,7 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                     this.offset = 0;
                     this.offsetLength = 0;
                     this.total_fetch = 0;
+                    this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
                     this.taglinkVal = false;
                     this.type = 'listNormalCampaigns';
                     this.searchTxt = '';
@@ -63,10 +64,10 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                     height:'100%',
                     usepager : false
                 });
-                this.$copyCampaignContainer = this.$("#copy_camps_grid tbody");
-                $(window).scroll(_.bind(this.liveLoading,this));
-               $(window).resize(_.bind(this.liveLoading,this));
-               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+               this.$copyCampaignContainer = this.$("#copy_camps_grid tbody");
+               this.scrollElement.scroll(_.bind(this.liveLoading,this));
+               this.scrollElement.resize(_.bind(this.liveLoading,this));
+               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el,scrollElement:this.scrollElement});
             },
             /**
              * Fetching contacts list from server.

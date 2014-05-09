@@ -28,6 +28,7 @@ function (template,highlight) {
                this.searchValue = "";
                this.searchString = "";
                this.templates = null;               
+               this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
                this.getTemplateCall = null;
                //              
                this.render();
@@ -107,8 +108,8 @@ function (template,highlight) {
                          camp_obj.$("#popular_template_tags li").show();  
                     })
 
-                    $(window).scroll(_.bind(this.liveLoading,this));
-                    $(window).resize(_.bind(this.liveLoading,this));
+                    this.scrollElement.scroll(_.bind(this.liveLoading,this));
+                    this.scrollElement.resize(_.bind(this.liveLoading,this));
                     
                 },
                 liveLoading:function(){
@@ -425,7 +426,7 @@ function (template,highlight) {
                             }
                             templates_html +='</div></div> </div></li>';                      
                         });
-                       this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+                       this.app.scrollingTop({scrollDiv:'window',appendto:this.$el,scrollElement:this.scrollElement});
                     }
                     
                     if(templates_html==="" && this.offset==0){                        

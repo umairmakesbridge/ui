@@ -498,14 +498,20 @@ define([
              scrollingTop:function(scrollObj){
                 var scrolltoDiv = scrollObj.scrollDiv;
                 var appendtoDiv = scrollObj.appendto;
+                var scrollBar = scrollObj.scrollElement?scrollObj.scrollElement:$(window);
                 if(typeof(scrolltoDiv) === "string" &&  scrolltoDiv === 'window'){
                    var top_button = $('<button class="ScrollToTop scroll-summary" type="button" style="display: none"></button>');
                    $(appendtoDiv).append(top_button);
                      top_button.click(_.bind(function(){
-                         $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");
+                         if(scrollObj.scrollElement){
+                             scrollBar.animate({scrollTop:0},600);
+                         }
+                         else{
+                            $("html,body").css('height','100%').animate({scrollTop:0},600).css("height","");
+                         }
                      },this));
-                    $(window).scroll(_.bind(function(){
-                        if ($(window).scrollTop() > 50) {
+                    scrollBar.scroll(_.bind(function(){
+                        if (scrollBar.scrollTop() > 50) {
                             top_button.fadeIn('slow');
                         } else {
                             top_button.fadeOut('slow');
