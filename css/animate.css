@@ -174,7 +174,55 @@
   -webkit-animation-name: rotateOut;
   animation-name: rotateOut;
 }*/
+@-webkit-keyframes bounceLoop {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceLoop {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.dropdiv  .dropcircle {
+ -webkit-animation: bounceLoop 1s 20 ease;
+-moz-animation: bounceLoop 1s 20 ease;
+-o-animation: bounceLoop 1s 20 ease;
+}
 
 
 

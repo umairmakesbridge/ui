@@ -43,6 +43,7 @@ function (template,icheck,bmstags) {
                var self = this;
                this.modal = this.$el.parents(".modal");
                this.tagDiv = this.modal.find(".tagscont");
+               this.$('#file_control').attr('title','');
                this.head_action_bar = this.modal.find(".modal-header .edited  h2");
                var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;;  
                this.head_action_bar.find(".edit").hide();
@@ -58,16 +59,24 @@ function (template,icheck,bmstags) {
                this.$(".droppanel").dragfile({
                         post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
                         callBack : _.bind(this.processUpload,this),
-                        app:this.app
+                        app:this.app,
+                        module:'template',
+                        progressElement: this.$('.droppanel')
                     });
-               
+                this.$('#file_control').on('mouseover',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#00A1DD', 'color' : '#ffffff'});
+			},this));
+               this.$('#file_control').on('mouseout',_.bind(function(obj){
+				this.$("#list_file_upload").css({'background' : '#01AEEE', 'color' : '#ffffff'});
+			},this));
+  
                	this.$(".add-cat").addbox({app:this.app,
                     addCallBack:_.bind(this.addCategory,this),
                     placeholder_text:'Please enter category'
                 });
                 
                 // Merge Field Abdullah 
-                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true},elementID:'merge_field_plugin'});
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin'});
                 copyIconTemplate.click(_.bind(function(e){                                     
                      this.page.copyTemplate(self);
                },this));  
@@ -200,6 +209,8 @@ function (template,icheck,bmstags) {
             processUpload:function(data){
                 var _image= jQuery.parseJSON(data);
                 if(_image.success){
+                     this.$('.droppanel #progress').remove();
+                     this.$('.csv-opcbg').hide();
                     _.each(_image.images[0],function(val){
                         this.iThumbnail.remove("file-border");
                         this.imageCheckSum = val[0]['imageId.encode'];
