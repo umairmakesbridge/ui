@@ -986,7 +986,7 @@ ul.spusb li a:hover { background: #009fda;}
 }
 .icon.link2 {background: url("../img/link2.png") no-repeat center center ;}
 
-.campaign-clickers a.closebtn {
+.recipients_list a.closebtn, .campaign-clickers a.closebtn {
     background: url("../img/closebtn-blue.png") no-repeat scroll center center;
 	display: block;
     height: 22px;
@@ -1000,10 +1000,10 @@ ul.spusb li a:hover { background: #009fda;}
 	-moz-border-radius:2px;
 	border-radius: 2px;
 }
-.campaign-clickers a.closebtn {
+.recipients_list a.closebtn, .campaign-clickers a.closebtn {
     opacity: 1;
 }
-.campaign-clickers a.closebtn:hover {
+.recipients_list a.closebtn:hover,.campaign-clickers a.closebtn:hover {
     opacity: 0.7;
 }
 .campaign-summary  .link24   {
@@ -1781,11 +1781,11 @@ position:relative;
     cursor: pointer;
     display: block;
     height: 100%;
-	width:15px;
+	width:25px;
     margin: 0;
     position: absolute;
 	padding:0 0 0;
-    right: -1px;
+    right: 0;
 	opacity:0;
     top: 0;
 	visibility:hidden;
@@ -1802,22 +1802,22 @@ position:relative;
 		
 }
  
-.slide-btns:hover  {width:403px;}
+.slide-btns:hover  {width:554px;}
 
-.slide-btns.one:hover { width:74px;}
-.slide-btns.two:hover { width:130px;}
-.slide-btns.three:hover { width:131px;}
-.slide-btns.four:hover { width:242px;}
-.slide-btns.five:hover { width:298px;}
-.slide-btns.six:hover { width:354px;}
-.slide-btns.seven:hover { width:410px;}
+.slide-btns.one:hover { width:85px;}
+.slide-btns.two:hover { width:155px;}
+.slide-btns.three:hover { width:219px;}
+.slide-btns.four:hover { width:286px;}
+.slide-btns.five:hover { width:353px;}
+.slide-btns.six:hover { width:420px;}
+.slide-btns.seven:hover { width:487px;}
 
 
 
 .slide-btns div { 
  
 	min-height: 100% !important;
-	height:60px;
+	height:50px;
 	overflow:hidden;
 	
 	opacity:0;
@@ -1838,7 +1838,7 @@ position:relative;
     font-size: 22px;
     height: 100%;
 	border-left:1px solid #4E6B7E;
-    line-height: 73px;
+    line-height: 66px;
 	 margin: 0 0px !important;
     text-align: center;
     width: 55px;
@@ -1853,7 +1853,6 @@ position:relative;
 
 .bmsgrid  .slide-btns a.icon:last-child { margin:0 !important; border-radius:0 2px 2px 0; }
 
-
 .slide-btns .icon:hover  {background: #01AEEE;}
 
 .slide-btns .icon.setting {
@@ -1865,11 +1864,104 @@ position:relative;
     height: 26px;
 	display:block;
     line-height: 31px;
-    margin: 21px 5px 0 -13px !important;
+    margin: 20px 5px 0 -13px !important;
     padding: 0  0 0;
     width: 26px;
 }
 .slide-btns:hover .icon.setting  { color:#4E6B7E;}
+
+
+.slide-btns .icon.refresh { background-image: url("../img/subscriber-refresh48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.calender { background-image: url("../img/calender48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.copy { background-image: url("../img/copy48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.draft { background-image: url("../img/draft48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.preview { background-image: url("../img/preview48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.edit { background-image: url("../img/edit48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.delete { background-image: url("../img/delete48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.play { background-image: url("../img/play48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.pause { background-image: url("../img/pause48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.setting { background-image: url("../img/setting-g.png"); background-position:center center; background-repeat:no-repeat; }
+
+.slide-btns {
+	margin-right: -14px;
+    margin-top: -8px;
+    min-height: 66px !important;
+	}
+.slide-btns .icon { width:67px; }
+.sortoption {
+    background-color: #F8FDFF;
+    display: block;
+    float: left;
+    line-height: 40px;
+    padding: 0 15px;
+}
+.sortoption .caret {
+    border-top: 4px solid #637F95;
+    margin: 18px 0 0 8px;
+}
+.temp-filters .srt-div > div {
+    float: left !important;
+    margin-left: 10px;
+    position: relative;
+}
+ul#template_search_menu {
+    border-radius: 0 2px 2px 0;
+    line-height: 18px;
+    padding: 5px;
+    width: 180px;
+}
+.template_search_menu {
+    background: none repeat scroll 0 0 #F4FBFF;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    padding: 0 1px 1px 0;
+    position: absolute;
+    right: 0;
+    top: 44px;
+    width: 280px;
+    z-index: 9999;
+}
+.template_search_menu:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #F4FBFF;
+    border-style: solid;
+    border-width: 6px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    right: 12px;
+    top: -12px;
+}
+ul#template_search_menu li {
+    display: block;
+    margin: 2px 0 0;
+}
+ul#template_search_menu li a {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 2px;
+    color: #5A5A5A;
+    display: block;
+    float: none;
+    font-family: 'PT Sans',sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+    line-height: 20px;
+    padding: 3px 15px 5px;
+    text-shadow: none;
+}
+.bmsgrid div.bDiv td.td-campaigns-pageviews{
+    background:#fff;
+}
+.bmsgrid div.bDiv td.td-campaigns-pageviews:hover{
+    background:#fff;
+}
+.bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title { padding-top:10px; height:35px; display:block; clear:both;}
+.bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title .icon.campaigns { background:url('../img/icon-map.png') no-repeat scroll -26px -417px transparent; margin-top:2px!important; }
+
+.bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title a { float:left;  padding-right:25px;}
+.bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title a:hover {  background: url("../img/preview2.png") no-repeat scroll right center rgba(0, 0, 0, 0);  }
 
 /* ---------------------------------------- */
 

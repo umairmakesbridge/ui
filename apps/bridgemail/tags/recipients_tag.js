@@ -1,19 +1,22 @@
-/* Name: Link View
+ 
+            
+       /* Name: Link View
  * Date: 15 March 2014
  * Author: Pir Abdul Wakeel
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!listupload/html/recipient_list.html'],
+define(['text!tags/html/recipients_tag.html'],
 function (template) {
         'use strict';
         return Backbone.View.extend({
-            tagName:'tr',
+           tagName:"li",
+            className:"action",
             events: {
                 'click .percent':'showPercentDiv',
                 'click .edit-list':'editList',
                 'click .delete-list':'deleteList',
-                'click .pageview':'showPageViews'
+                'click .badge':'showPageViews'
             },
             initialize: function () {
                 this.app = this.options.app;
@@ -22,55 +25,7 @@ function (template) {
             },
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
-                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-            },
-            editList:function(ev){
-                var that = this;
-                var target = $(ev.target);
-                var listNumber = target.data('id');
-                var listName = target.data('name');
-                
-                var dialog_title = "Edit List";
-                var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},                
-                    headerIcon : 'new_headicon',
-                        buttons: {saveBtn:{text:'Update'} }                                                                           
-                });
-                require(["text!listupload/html/editlist.html"],function(list){
-                    dialog.getBody().html(list);
-                    dialog.$el.find('#list_name').val(listName);
-                   
-                });
-                dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));
-             //    dialog.saveCallBack(_.bind(this.sendTestCampaign,this,dialog,camp_id));
-                
-            },
-            finishEditList:function(dialog,listNum,listNam,target){
-                var that = this;
-                var listName = dialog.$el.find("#list_name").val();
-                if(listName==listNam){
-                    dialog.hide();
-                    return;
-                }
-                that.app.showLoading("Updating...",dialog.getBody());    
-                var bms_token =that.app.get('bms_token');
-                var listNum = listNum;
-                var URL = "/pms/io/list/saveListData/?BMS_REQ_TK="+bms_token+"&type=newName&listName="+listName+"&listNum="+listNum;
-                $.post(URL)
-                        .done(function(data) {  
-                               var _json = jQuery.parseJSON(data);                         
-                               if(_json[0]!=="err"){
-                                   that.app.showMessge("List renamed successfully!");
-                                   target.data('name',listName);
-                                   target.parents('tr').find('.name-type h3 a:first').html(listName);
-                                   dialog.hide();
-                               }
-                               else{
-                                   that.app.showAlert(_json[1],$("body"),{fixed:true}); 
-                               }
-                       });
-                       that.app.showLoading(false,dialog.getBody());    
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             deleteList:function(ev){
                 
@@ -105,24 +60,25 @@ function (template) {
              } ,
             showPercentDiv:function(ev){
                    var target = $(ev.target);
-                   var listNumber = target.data('list');
-                   if($('.pstats').length > 0) $('.pstats').remove();
+                   var tag = target.data('name');
+                   if($('.percent_stats').length > 0) $('.percent_stats').remove();
                    var that = this;
                    that.showLoadingWheel(true,target);
                    
                    var bms_token =that.app.get('bms_token');
-                   var URL = "/pms/io/list/getListPopulation/?BMS_REQ_TK="+bms_token+"&listNum="+listNumber+"&type=stats";
+                   
+                   var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK="+bms_token+"&tag="+tag+"&type=stats";
                    
                    jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         if(that.app.checkError(data)){
                             return false;
                         }
-                        var percentDiv ="<div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
+                        var percentDiv ="<div class='percent_stats'><div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
                          percentDiv =percentDiv + "<li class='clickers'><strong>"+that.options.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
-                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
+                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div></div>";
                          that.showLoadingWheel(false,target);
-                     target.parents('.percent_stats').append(percentDiv);
+                     target.parents('li').append(percentDiv);
                                            	
                     });
                     that.app.showLoading(false, that.$el);
@@ -135,22 +91,27 @@ function (template) {
                     ele.remove();
                 }
            },
+           getTagName:function(){
+               return  this.options.app.decodeHTML(this.model.get('tag'));
+           }, 
+           getSubCount:function(){
+               return this.model.get('subCount');
+           },
            showPageViews:function(ev){
                 var that = this;
                 var offset = $(ev.target).offset();
-                var listNum = $(ev.target).data('id');
+                var tag = $(ev.target).data('tag');
                 $('#div_pageviews').show();
                 $('#div_pageviews').empty();
                 $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
                 $('#div_pageviews').css({top:offset.top-325});
-                $('#div_pageviews').css({left:offset.top-325});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                   var objContacts = new Contacts({app:that.app,listNum:listNum});
+                   var objContacts = new Contacts({app:that.app,listNum:tag,type:'tag'});
                     $('#div_pageviews').css('padding-top','0');
                     $('#div_pageviews').html(objContacts.$el);
                 });
            }
                 
         });    
-});
+}); 

@@ -6,13 +6,13 @@
  * 
  **/
 
-define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app','bms-addbox'],
-function (template,recipientsCollection,recipientView,listModel,app,addBox) {
+define(['text!tags/html/recipients_tags.html','tags/collections/recipients_tags','tags/recipients_tag','tags/models/recipients_tag','app','bms-addbox'],
+function (template,tagsCollection,tagView,tagModel,app,addBox) {
         'use strict';
         return Backbone.View.extend({
-            className: 'recipients_lists',
+            className: 'div',
             events: {
-               "keyup #lists_search":"search",
+               "keyup #tags_search":"search",
                "click  #clearsearch":"clearSearch",
                "click .closebtn":"closeContactsListing"
             },
@@ -21,67 +21,36 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 this.request = null;
                 this.app = app;
                 this.active_ws = "";
-                this.total_fetch  = 0;
-                this.total = 0;
-                this.offsetLength = 0;
                 this.render();
             },
             render:function (search) {
                 this.$el.html(this.template({}));
-                this.loadLists();
-                this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
-                this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.loadTags();
+               this.$(".add-tag").addbox({app:this.app,placeholder_text:'Enter new tag name',addCallBack:_.bind(this.addTags,this)});                     
+                 this.$(".add-tag").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.active_ws = this.$el.parents(".ws-content");
-                $(window).scroll(_.bind(this.liveLoading,this));
-                $(window).resize(_.bind(this.liveLoading,this));
             },
-            loadLists:function(fcount){
+            loadTags:function(){
+                console.log('in load tags function');
                     var _data = {};
-                    
-                     if(!fcount){
-                        this.offset = 0;
-                        this.$el.find('#list_grid tbody').empty();
-                    }
-                    else{
-                      this.offset = this.offset + this.offsetLength;
-                  }
-                  if(this.request)
-                    this.request.abort();
+                  
                    var that = this;
-                  _data['offset'] = this.offset;
+                 // _data['offset'] = this.offset;
                     if(this.searchText){
                       _data['searchText'] = this.searchText;
                        that.showSearchFilters(this.searchText);
-                       
                     }
-                    
                  var that = this; // internal access
-                 this.$el.find('#list_grid tbody .load-tr').remove();
-                 this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No lists founds!</div><div class='loading-list' style='margin-top:45px'></div></td></tr>");
-                 this.app.showLoading("&nbsp;",this.$el.find('#list_grid tbody').find('.loading-list'));
-                
-                _data['type'] = 'batches';
-                this.objRecipients = new recipientsCollection();
-                
-                this.request = this.objRecipients.fetch({data:_data,success:function(data){
+                _data['type'] = 'subscriberTagCountList';
+                this.objTags = new tagsCollection();
+             
+                this.app.showLoading('Loading Tags...', this.el);
+                console.log('show inside load tags');
+                this.request = this.objTags.fetch({data:_data,success:function(data){
                     _.each(data.models, function(model){
-                        that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app}).el);
+                        that.$el.find('#tagslist ul').append(new tagView({model:model,app:app}).el);
                      });
-                     that.$("#total_lists .badge").html(that.objRecipients.total);
-                     that.offsetLength = data.length;
-                     that.total_fetch = that.total_fetch + data.length;                         
-                         
-                    if(data.models.length == 0) {
-                       that.$el.find('.no-contacts').show();
-                       that.$el.find('#list_grid tbody').find('.loading-contacts').remove();
-                    }else{
-                       $('#list_grid tbody').find('.loading-contacts').remove();
-                        that.$el.find('#list_grid tbody #loading-tr').remove();
-                     }
-                 
-                    if(that.total_fetch < parseInt(that.objRecipients.total)){
-                             that.$el.find("#list_grid tbody tr:last").attr("data-load","true");
-                    } 
+                     that.$("#tagslist .badge").html(that.objTags.total);
                      that.app.showLoading(false, that.el);
                 }});
              },
@@ -104,13 +73,13 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                  that.$el.find('#clearsearch').show();
                 
                  this.searchText = text;
-                 that.loadLists();
+                 that.loadTags();
                }else if(code == 8 || code == 46){
                     
                    if(!text){
                     that.$el.find('#clearsearch').hide();
                     this.searchText = text;
-                    that.loadLists();
+                    that.loadTags();
                    }
                }else{ 
                      that.$el.find('#clearsearch').show();
@@ -119,7 +88,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                      that.timer = setTimeout(function() { // assign timer a new timeout 
                          if (text.length < 2) return;
                          that.searchText = text;
-                         that.loadLists();
+                         that.loadTags();
                     }, 500); // 2000ms delay, tweak for faster/slower
                }
             }, clearSearch:function(ev){
@@ -129,11 +98,11 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$("#total_lists .badge").html("lists found");
-                   this.loadLists();
+                   this.$("#total_lists .badge").html("tags found");
+                   this.loadTags();
            },
            showSearchFilters:function(text){
-              this.$("#total_lists .badge").html("lists found for \""+text+"\" ");
+              this.$("#total_lists .badge").html("tags found for \""+text+"\" ");
                
            },
             checkListName:function(listName){
@@ -149,7 +118,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                     });
                     return isListExists;
                 },
-            addlist:function(listName,ele){                    
+            addTags:function(listName,ele){                    
                     if(this.checkListName(listName)){
                         this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
                         return false;
@@ -190,27 +159,6 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 
                  $("#div_pageviews").empty('');
                  $("#div_pageviews").hide();
-            },
-              liveLoading:function(where){
-                var $w = $(window);
-                var th = 200;
-                    if ($(window).scrollTop()>70) {
-                          this.$el.find(".stats-scroll").fadeIn('slow');
-                       } else {
-                          this.$el.find(".stats-scroll").fadeOut('slow');
-                    }
-                var inview =this.$el.find('table tbody tr:last').filter(function() {
-                    var $e = $(this),
-                        wt = $w.scrollTop(),
-                        wb = wt + $w.height(),
-                        et = $e.offset().top,
-                        eb = et + $e.height();
-                    return eb >= wt - th && et <= wb + th;
-                  });
-                if(inview.length && inview.attr("data-load") && this.$el.height()>0){
-                   inview.removeAttr("data-load");
-                    this.loadLists(this.offsetLength);
-                }  
             }
             
         });    

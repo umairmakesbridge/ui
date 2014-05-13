@@ -86,28 +86,4 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-.icon-calender:before {
-  content: "a";
-}
-.icon-check:before {
-  content: "b";
-}
-.icon-copy:before {
-  content: "c";
-}
-.icon-delete:before {
-  content: "d";
-}
-.icon-draft:before {
-  content: "e";
-}
-.icon-edit:before {
-  content: "f";
-}
-.icon-preview:before {
-  content: "g";
-}
-.icon-setting:before {
-  content: "h";
-}
+ 

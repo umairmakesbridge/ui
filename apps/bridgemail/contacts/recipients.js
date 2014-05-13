@@ -36,35 +36,52 @@ function (template,app) {
                      $(ev.target).parents('div').find('ul li').removeClass('selected');
                      $(ev.target).addClass('selected');
                  }
+                this.$el.find(".template-container").empty();
                 this.active = 1;
                 this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['listupload/recipients_list'],function(viewLists){
                     var objViewLists = new viewLists();
                    that.$el.find(".template-container").html(objViewLists.el);
+                   
                    that.app.showLoading(false, that.$el.find(".template-container"));
+                   console.log('I am here at list');
                 });
-               
                 
             },
             showTargetsGrid:function(ev){
                 if(this.active == 2)return;
-                $(ev.target).parents('div').find('ul li').removeClass('selected');
-                $(ev.target).addClass('selected');
+                    $(ev.target).parents('div').find('ul li').removeClass('selected');
+                    $(ev.target).addClass('selected');
                 this.active = 2;
+                this.$el.find(".template-container").empty();
                 this.app.showLoading('Loading Targets...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['target/recipients_targets'],function(viewTargets){
                     var objViewTargets = new viewTargets();
+                    console.log('I am here at grid');
                    that.$el.find(".template-container").html(objViewTargets.el);
                    that.app.showLoading(false, that.$el.find(".template-container"));
                 });
+
+                
             },
             showTagsGrid:function(ev){
                 if(this.active == 3) return;
                 $(ev.target).parents('div').find('ul li').removeClass('selected');
                 $(ev.target).addClass('selected');
+                this.$el.find(".template-container").empty();
                 this.active = 3;
+                this.app.showLoading('Loading Tags...', this.$el.find(".template-container"));
+                var that = this; // assign this to that, so there will be no scope issue.
+                require(['tags/recipients_tags'],function(viewTags){
+                    var objViewTags = new viewTags();
+                   console.log(objViewTags);
+                   console.log('222222222');
+                   that.$el.find(".template-container").html(objViewTags.el);
+                   that.app.showLoading(false, that.$el.find(".template-container"));
+                });
+
             }
             
         });    

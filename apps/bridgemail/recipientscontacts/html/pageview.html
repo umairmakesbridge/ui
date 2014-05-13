@@ -1,0 +1,28 @@
+   
+        
+                                <td width="">
+                                    <div>
+                                    <div class="colico link"> <strong><span><em>Page View</em><a  class="showtooltip" data-original-title="<%=this.model.get('pageURL')%>" href="<%=this.model.get('pageURL')%>" target='_blank'><%=this.truncateURL(this.checkTitle(this.model.get('pageTitle')))%></a></span></strong> </div>
+                                    </div>
+                                </td>
+                            <td width="90px">
+                                <div>
+                                    <div class="colico ptype"> <strong><span><em>Page Type</em>&nbsp;<%=this.model.get('pageType')%></span></strong> </div>
+                                </div>
+                            </td>
+                            <td width="100px">
+                                <div>
+                                    <div class="colico score"> <strong><span style="color: <%=this.scoreColor()%>"><em>Score Change</em><%=this.getScoreChange()%></span></strong> </div>
+                                </div>
+                            </td>
+                            <td width="100px">
+                                <div>
+                                    <div class="colico duration"> <strong><span><em>Duration</em><%=this.model.get('visitDurationInSec')%></span></strong> </div>
+                                </div>
+                            </td>
+                            <td width="190px">
+                                <div>
+                                    <div class="time show showtooltip" data-original-title="<%=this.options.app.dateSetting(this.model.get('logTime'),'/')%>"> <strong><span><em>Visited </em><%=this.getLogTime()%> <b>on</b> <%=this.options.app.dateSetting(this.model.get('logTime'),"/")%></span></strong> </div>
+                                </div>
+                            </td>
+  

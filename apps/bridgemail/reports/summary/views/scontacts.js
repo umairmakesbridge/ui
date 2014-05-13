@@ -109,7 +109,7 @@ function (template,Contacts,viewContact) {
                                 if(data1.models.length != 0)
                                     that.$el.find(".stats_listing").css({"height":"357px", "overflow-y":"auto"});
                              if(height > 375){
-                                    that.$el.find(".stats_listing").find('.stats-scroll').remove();
+                              that.$el.find(".stats_listing").find('.stats-scroll').remove();
                               that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>") ;
                              
                              }

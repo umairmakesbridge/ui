@@ -428,7 +428,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                   
                 },
                  testRecipients:function(){
-                     this.addWorkSpace({type:'',title:'Recipients',sub_title:'Recipients',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'graphiclisting'});
+                     this.addWorkSpace({type:'',title:'Recipients',sub_title:'Manage lists, targets and tags',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers subscribers',single_row:true});
                      return;
                   
                 },
