@@ -195,6 +195,7 @@ function (template,highlighter) {
                         previewCampaign:function(){
                                 var camp_id = this.model.get('campNum.encode');
                                 var camp_obj = this.sub;
+                                var isTextOnly = this.model.get('isTextOnly');
 				//var appMsgs = this.app.messages[0];				
 				var dialog_width = $(document.documentElement).width()-60;
 				var dialog_height = $(document.documentElement).height()-182;
@@ -207,7 +208,7 @@ function (template,highlighter) {
 				this.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
                                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                                 require(["common/templatePreview"],_.bind(function(templatePreview){
-                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:isTextOnly}); // isText to Dynamic
                                  dialog.getBody().html(tmPr.$el);
                                  tmPr.init();
                                },this));

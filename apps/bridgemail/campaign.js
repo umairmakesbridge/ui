@@ -80,9 +80,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'workspace'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
                     this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});
                     
-                    this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-editor'});
-                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand'});
-                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain'});
+                    this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-editor',placeholder_text:'Merge Tags'});
+                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand',placeholder_text:'Merge Tags'});
+                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge Tags'});
                 },
                 render: function () {
                     this.$el.html(this.template({}));                               
@@ -303,6 +303,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          
                      })
                      this.initStepCall('step_'+this.wizard.active_step); // Abdullah InitStepCall Check
+                     
                 },
                 initTemplateListing:function(){
                     this.$el.find("#camp_list_grid").bmsgrid({
@@ -819,6 +820,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         settings_html += '</div>';
                     }
                     var camp_obj =this;
+                    //var recipientsListsSch = this.getRecipientsListsRequest(this.states.step3.recipientType);
+                    
                     recipients_html = '<div  class="row fluidlabel"><label class="checked">Selected Recipient Type is "'+this.states.step3.recipientType+'"</label></div><div class="recipient-details"></div>'
                     //console.log(this.states.step3.recipientDetial.listNumbers.length);
                     this.$(".recipients-inner").html(recipients_html);
@@ -876,6 +879,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(this.states.step4.camp_status!=='D'){
                         this.$(".draft-campaign").show();
                         this.$(".scheduled-campaign").show();
+                    }
+                    else if(this.wizard.options.rescheduled){
+                        this.$(".draft-campaign").show();
+                        this.$el.parents('.ws-content.active').find('.backbtn').hide();
+                        this.$el.parents('.ws-content.active').find('.addtag').hide();
                     }
                     else{
                         this.$(".draft-campaign").hide();
@@ -3625,7 +3633,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     /*List Values Abdullah */
                     var recipientLists = this.states.step3.recipientList;
                     var type = this.states.step3.recipientType;
-                    console.log(type);
+                    
                     var recipientChecksum = null;
                     if (recipientLists) {
                         if (type === "Target") {
@@ -3812,6 +3820,34 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    if(hsObject=="tag"){
                        this.$(".recipient-details").append('<label>'+this.$('#hsgroup_list_grid .selected').find('h3').text()+'</label>');
                    }
+                },
+                getRecipientsListsRequest:function(source_type){
+                    var camp_obj = this;
+                    var URL = "";
+                    if(source_type=="salesforce"){
+                        URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";
+                    }
+                    else if(source_type=="netsuite"){
+                        URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";
+                    }else if(source_type=="highrise"){
+                        URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";  
+                    }else{
+                        URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=recipientType";
+                    }
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                             camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));                              
+                             if(xhr && xhr.responseText){                               
+                                var rec_json = jQuery.parseJSON(xhr.responseText);                                   
+                                   if(rec_json.type){
+                                        if(rec_json.count!=="0"){
+                                         _.each(rec_json.listNumbers[0], function(val) { 
+                                           console.log(val[0].checksum);
+                                         });
+                                        }
+                                    } 
+                                   
+                             }
+                     }).fail(function() { console.log( "Receipts data load failed" ); });
                 }
 
         });

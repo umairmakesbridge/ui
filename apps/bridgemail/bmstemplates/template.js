@@ -76,7 +76,7 @@ function (template,icheck,bmstags) {
                 });
                 
                 // Merge Field Abdullah 
-                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin'});
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin',placeholder_text:'Merge Tags'});
                 copyIconTemplate.click(_.bind(function(e){                                     
                      this.page.copyTemplate(self);
                },this));  

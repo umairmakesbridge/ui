@@ -2,9 +2,14 @@
 <td width="100%">
     <div>
          <div class="name-type">
-             <h3>
-                 <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
-                 <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+              
+                <h3>
+                    <% if(this.getCampStatus().status == "Scheduled"){ %>
+                         <a class="btn-schedule show-detail showtooltip <%= this.getFlagClass().editClass %>" title="Click to recheduled"> <%= this.model.get('name')%> </a>
+                    <% }else{ %>
+                    <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
+                    <% } %>
+                    <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
                  <div class="tags tagscont">
                      <%= this.app.showTags(this.model.get('tags')) %>
                  </div>

@@ -237,8 +237,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 openCampaign: function(camp_id,camp_wsid,schFlag) {
                     var camp_id = camp_id ? camp_id : 0;
                     var active_step = 1;
+                    var rescheduled = false;
                     if(schFlag){
                      active_step = schFlag;   // Active Step if Schedule is called
+                     rescheduled = true;
                     }
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
@@ -246,16 +248,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url: 'campaign',
                         tab_icon: 'campaign',
                         params: {camp_id: camp_id},
-                        wizard: {cssClass:'campaign_progress',steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        wizard: {cssClass:'campaign_progress',rescheduled:rescheduled,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
                             , {'iconCls': 'add-list', 'text': 'Add List', 'url': ''}, {'iconCls': 'forms', 'text': 'Create Form', 'url': ''}
                             , {'iconCls': 'segments', 'text': 'Edit Segments', 'url': ''}, {'iconCls': 'reports', 'text': 'Reports', 'url': ''}
                         ]
                     });
-                }
-
-                ,
+                },
                 openSubscriber: function(sub_id) {
                     var sub_id = sub_id ? sub_id : 0;
                     this.addWorkSpace({type: '',
@@ -289,14 +289,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 dashBoardScripts: function() {
 
                     this.$('ul.rightnav > li.logout > a').click(_.bind(function() {
-                        this.$(".lo-confirm").animate({right: "0"}, 500);
-                        this.$("ul.rightnav > li.logout span").css({display: "block"}, 500);
+                        this.$(".lo-confirm").animate({right: "0"}, 120);
+                        this.$("ul.rightnav > li.logout span").css({display: "block"}, 120);
                         this.$("ul.rightnav > li.logout i.logout").addClass("active");
                     }, this));
 
                     this.$('a.lo-no').click(_.bind(function() {
-                        this.$(".lo-confirm").animate({right: "-250px"}, 500);
-                        this.$("ul.rightnav > li.logout span").css({display: "none"}, 500);
+                        this.$(".lo-confirm").animate({right: "-250px"}, 120);
+                        this.$("ul.rightnav > li.logout span").css({display: "none"}, 120);
                         this.$("ul.rightnav > li.logout i.logout").removeClass("active");
                     }, this));
 
