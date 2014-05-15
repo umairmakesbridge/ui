@@ -57,7 +57,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                 this.tracksRequest.fetch({data:{type:'counts'},
                     success: _.bind(function (collection, response) {  
                         var header_part = $('<ul class="c-current-status">\n\
-                        <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Makesbridge Nurture Tracks</a></li>\n\
+                        <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Nurture Track Templates</a></li>\n\
                         <li class="usertrackcount" style="display:none"><a ><span class="badge pclr20">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
                         <div class="savedmsg" style="margin:2px 0 0;"> <span class="playingicon"></span> '+response.playCount+' Playing </div>');
@@ -188,7 +188,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                     remove_cache = true;
                     this.offset = 0;
                     this.$tracksBmsContainer.children().remove();
-                    this.app.showLoading("Loading makesbridge nurture tracks...",this.$tracksArea);             
+                    this.app.showLoading("Loading nurture track templates...",this.$tracksArea);             
                     this.$(".bms_tracks .notfound").remove();
                 }
                 else{
@@ -226,7 +226,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                               search_message +=" containing '"+this.searchTxt+"'" ;
                             }
                             if(this.$(".bms_tracks .notfound").length==0){
-                                this.$(".bms_tracks .bDiv").append('<p class="notfound">No makesbridge nurture tracks found'+search_message+'</p>');
+                                this.$(".bms_tracks .bDiv").append('<p class="notfound">No nurture track templates found'+search_message+'</p>');
                             }
                             else{
                                 this.$(".bms_tracks .notfound").show();
@@ -317,7 +317,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
             showBmsTotalCount:function(count){                
                 this.$("#total_bms_tracks").show();
                 this.$(".total-bms-count").html(this.app.addCommas(count));                                       
-                var _text = count=="1"?"Makesbridge Nurture Tracks":"Makesbridge Nurture Tracks";                
+                var _text = count=="1"?"Nurture Track Template":"Nurture Track Templates";                
                 this.$(".total-bms-text").html(_text)
                                      
             },

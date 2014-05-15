@@ -20,6 +20,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                  */
                 initialize: function() {                    
                     this.template = _.template(template);
+                    this.messages = [];
                     this.render();
                 },
                 /**
@@ -297,16 +298,22 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                            }
                    },this));
                 },
-                addMessage:function(){                                         
+                addMessage:function(t_Order,insertOption){                                         
                     this.app.showLoading("Creating Message...",this.$el);
-                    var tOrder = this.getTriggerOrder();
+                    var tOrder = typeof(t_Order)=="number"?t_Order:this.getTriggerOrder()+1;
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'createMessage',trackId:this.track_id,triggerOrder:tOrder,label:'Message'})
                     .done(_.bind(function(data) {                  
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-                             this._message(tOrder)                               
+                             var model = [{"campNum.encode":_json[1],"campNum.checksum":_json[2],"label":"Message"}];                               
+                             if(typeof(t_Order)!=="number"){                                
+                                this._message(tOrder,model)                               
+                             }
+                             else{                                 
+                                 this.createRowMessage(tOrder,model,insertOption)
+                             }
                            }
                            else{
                                this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -315,50 +322,110 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 },
                 _message:function(tOrder,model){
                     var bView = null;
-                    if(this.$(".message-wait-container").children().length){
-                        var buttonsView = new ButtonsView({page:this,showWait:true});
-                        this.$messageWaitContainer.append(buttonsView.$el); 
-                        bView = buttonsView.$el
-                    }                     
-
-                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model});                        
+                    
+                    var buttonsView = new ButtonsView({page:this,showWait:true});
+                    this.$messageWaitContainer.append(buttonsView.$el); 
+                    bView = buttonsView.$el
+                                    
+                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model});  
+                    this.messages.push(messageView);
                     this.$messageWaitContainer.append(messageView.$el);                                          
-                    var message_count = 1;
-                    _.each(this.$(".message-nurturetrack"),function(val){
-                        $(val).find("").html(message_count);
-                        message_count = message_count + 1;
-                    },this);
+                    
+                    if(model && model[0] && model[0].dispatchType){
+                        if(model[0].dispatchType!=="L"){
+                            messageView.waitView = this._wait(tOrder,model);
+                            messageView.isWait=true;
+                        }
+                    }
                 }
                 ,
-                addWait:function(){   
-                    this.app.showLoading("Creating Wait...",this.$el);
-                    var tOrder = this.getTriggerOrder()-1;
+                addWait:function(t_order){   
+                    var tOrder = typeof(t_order)=="number"?t_order:this.getTriggerOrder();                    
+                    if(this.messages[tOrder-1].isWait){
+                        this.app.showAlert('Wait is already added for message.',$("body"),{fixed:true});
+                        return false;
+                    }
+                    this.app.showLoading("Creating Wait...",this.$el);                    
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');                    
-                    $.post(URL, {type:'waitMessage',trackId:this.track_id,triggerOrder:tOrder,timeOfDay:-1})
+                    $.post(URL, {type:'waitMessage',trackId:this.track_id,triggerOrder:tOrder,dispatchType:'D',dayLapse:'3'})
                     .done(_.bind(function(data) {                  
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-                                this._wait(tOrder);
+                                this.messages[tOrder-1].waitView = this._wait(tOrder);
+                                this.messages[tOrder-1].isWait = true;
                            }
                            else{
                                this.app.showAlert(_json[0],$("body"),{fixed:true}); 
                            }
                    },this));
                 },
-                _wait:function(tOrder){
-                    var bView = null;
-                    if(this.$(".message-wait-container").children().length){
-                        var buttonsView = new ButtonsView({page:this,showWait:false});
-                        this.$messageWaitContainer.append(buttonsView.$el); 
-                        bView = buttonsView.$el
-                    }                                          
-                    var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder });                           
-                    this.$messageWaitContainer.append(waitView.$el);                                               
+                _wait:function(tOrder,model,isAfter){
+                    var bView = null;                    
+                    var buttonsView = new ButtonsView({page:this,showWait:false});                        
+                    bView = buttonsView.$el;                                                              
+                    var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder,model:model });                             
+                    this.$("[t_order='"+tOrder+"']").before(waitView.$el);                                               
+                    return waitView;
+                    //waitView.$el.after(buttonsView.$el); 
                 },
                 getTriggerOrder:function(){
-                    return this.$(".message-wait-container .message-nurturetrack").length + 1
+                    return this.messages.length
+                },
+                refreshMessages:function(torder){
+                    if(torder){
+                        this.messages.splice(torder-1,1);
+                    }
+                    _.each(this.messages,function(val,key){
+                        val.updateTriggerOrder(key+1);
+                    },this)
+                },
+                addRowMessage:function(rowObject){
+                    var triggerOrder = parseInt(rowObject.prev().attr("t_order"));
+                    var isAfter = false;                  
+                    if(!triggerOrder){
+                        triggerOrder = 1;                        
+                    }
+                    else{
+                        triggerOrder = triggerOrder + 1;                        
+                    }
+                    var insertOption = {row:rowObject,isAfter:isAfter};
+                    this.addMessage(triggerOrder,insertOption);
+                },
+                createRowMessage:function(tOrder,model,option){
+                    var bView = null;
+                    var referenceObj = option.row;
+                    if(this.messages.length){
+                        var buttonsView = new ButtonsView({page:this,showWait:true});
+                        if(option.isAfter){
+                            referenceObj.after(buttonsView.$el); 
+                        }
+                        else{
+                            referenceObj.before(buttonsView.$el); 
+                        }
+                        bView = buttonsView.$el
+                    }                     
+                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model});  
+                    this.messages.splice(tOrder-1,0,messageView);
+                    if(option.isAfter){
+                        referenceObj.after(messageView.$el); 
+                    }
+                    else{
+                        referenceObj.before(messageView.$el); 
+                    }                                                      
+                    this.refreshMessages();
+                    
+                },
+                addRowWait:function(rowObject){
+                    var triggerOrder = parseInt(rowObject.next().attr("t_order"));
+                    if(triggerOrder){
+                        this.addWait(triggerOrder);
+                    }
+                    else{
+                        this.app.showAlert('Wait is already added',$("body"),{fixed:true}); 
+                    }
                 }
+                
                 
 
             });

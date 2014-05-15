@@ -346,7 +346,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
                         
                         camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
-      var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             
+                        var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             
                         if(camp_json.fromEmail != '')
                         {
                             if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
@@ -1138,7 +1138,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                             camp_obj.wizard.next();                                            
                                     }
                                     else{
-                                           camp_obj.app.showMessge(step1_json[0]); 
+                                           camp_obj.app.showAlert(step1_json[1],$("body")); 
                                     }
                                 });
                                 proceed = 1;
@@ -1194,8 +1194,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.wizard.next();
                                 }
                             }
-                            else{
-                               camp_obj.app.showMessge(step1_json[0]); 
+                            else{                               
+                               camp_obj.app.showAlert(step1_json[1],$("body"));
                             }
                    });
                    proceed = 1
@@ -1289,8 +1289,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 camp_obj.app.showMessge("Step 3 saved successfully!");                                                          
                            }
                        }
-                       else{
-                           camp_obj.app.showMessge(step3_json[0]); 
+                       else{                           
+                           camp_obj.app.showAlert(step3_json[1],$("body"));
                        }
                   })
                 },

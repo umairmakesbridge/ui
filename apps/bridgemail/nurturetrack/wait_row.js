@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/wait_row.html','jquery.chosen','datetimepicker'],
-function (template,highlighter) {
+define(['text!nurturetrack/html/wait_row.html','moment','jquery.chosen','datetimepicker'],
+function (template,moment) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Target li view for nurture track 
@@ -14,8 +14,9 @@ function (template,highlighter) {
             */
             events: {
                 'click .delete-row':'deleteRow',
-                'click .btn-group button':'showWait',
-                'click .calendericon':function(){this.$("#waitdatetime").focus()}
+                'click .schedule-group button':'showWait',
+                'click .calendericon':function(){this.$("#waitdatetime").focus()},
+                'click .save-wait': 'saveWait'
             },
             /**
              * Initialize view - backbone
@@ -25,6 +26,7 @@ function (template,highlighter) {
                     this.parent = this.options.page;
                     this.triggerOrder = this.options.triggerOrder;
                     this.btnRow = this.options.buttonRow;
+                    this.object = this.options.model;
                     this.app = this.parent.app;                            
                     this.render();                    
             },
@@ -38,7 +40,25 @@ function (template,highlighter) {
                 
                 this.$(".chosen-select").chosen({no_results_text:'Oops, nothing found!', width: "130px",disable_search: "true"});
                 this.$(".btn-group").t_button();   
-                this.$("#waitdatetime").datetimepicker();                                
+                this.$("#waitdatetime").datetimepicker({format:'d-m-Y',timepicker:false,closeOnDateSelect:true});                                
+                
+                if(this.object && this.object[0].dispatchType){
+                    var _json = this.object[0];
+                    if(_json.dispatchType=="D"){
+                        if(_json.dayLapse!=="3"){
+                            this.$(".chosen-select").val(_json.dayLapse).trigger("chosen:updated");
+                        }
+                    }
+                    else{
+                        var _date = moment(_json.scheduleDate,'MM-DD-YY');                                                        
+                        this.$("#waitdatetime").val(_date.format("DD-MM-YYYY"));
+                        this.$(".btn-group button:first-child").removeClass("active");
+                        this.$(".btn-group button:last-child").addClass("active");
+                        this.$(".wait-select").hide();
+                        this.$(".date-select").css("display","inline-block");
+                    }
+                }
+                
             },
             /**
              * Render Row view on page.
@@ -53,12 +73,12 @@ function (template,highlighter) {
                 }
                 if(this.triggerOrder){
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-                        $.post(URL, {type:'deleteMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder})
+                        $.post(URL, {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder,dispatchType:'L'})
                         .done(_.bind(function(data) {                                             
                                var _json = jQuery.parseJSON(data);        
                                if(_json[0]!=='err'){
-
-
+                                   this.app.showMessge("Message wait deleted Successfully!"); 
+                                   this.parent.messages[this.triggerOrder-1].isWait = false;
                                }
                                else{
                                    this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -70,6 +90,34 @@ function (template,highlighter) {
                 var btn = $.getObj(e,"button");
                 this.$(".wait-select").hide();
                 this.$("."+btn.attr("rel")+"-select").css("display","inline-block");
+            },
+            saveWait:function(){
+                if(this.triggerOrder){
+                    var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
+                        var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
+                        if(this.$(".schedule-group button:first-child").hasClass("active")){
+                            post_data['dispatchType'] = 'D';
+                            post_data['dayLapse'] = this.$(".chosen-select").val();
+                        }
+                        else{
+                            post_data['dispatchType'] = 'S';
+                            var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY');                            
+                            post_data['scheduleDate'] = _date.format("MM-DD-YY");
+                        }
+                        this.$(".save-wait").addClass("saving");
+                        $.post(URL, post_data)
+                        .done(_.bind(function(data) {                                             
+                               var _json = jQuery.parseJSON(data);        
+                               this.$(".save-wait").removeClass("saving");
+                               if(_json[0]!=='err'){
+                                   this.app.showMessge("Message wait saved Successfully!"); 
+                                   this.parent.messages[this.triggerOrder-1].isWait = true;
+                               }
+                               else{
+                                   this.app.showAlert(_json[0],$("body"),{fixed:true}); 
+                               }
+                       },this));
+                }
             }
             
             

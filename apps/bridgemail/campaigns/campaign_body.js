@@ -1,4 +1,4 @@
-define(['text!campaigns/html/campaign_body.html','editor/editor'],
+define(['text!campaigns/html/campaign_body.html','editor/editor','bms-mergefields'],
 function (template,editorView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -13,7 +13,18 @@ function (template,editorView) {
              * Attach events on elements in view.
             */
             events: {
-               'click #choose_soruce li':'step2TileClick'
+               'click #choose_soruce li':'step2TileClick',
+               'click #btn_image_url':"TryDialog",
+               'change #handcodedhtml':'editorChange',
+               'change #plain-text':'editorChange',
+               'change #htmlarea':'editorChange',
+               'click .save-step2': function(obj){
+                    var button = $.getObj(obj,"a");
+                    if(!button.hasClass("saving")){
+                        this.parent.saveStep2(false);
+                        button.addClass("saving");
+                    }                                                                
+                }
             },
             /**
              * Initialize view - backbone
@@ -45,6 +56,19 @@ function (template,editorView) {
             },
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-editor',placeholder_text:'Merge tags'});
+                this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand',placeholder_text:'Merge tags'});
+                this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge tags'});
+            },
+            populateBody:function(){
+              if(this.parent.htmlText){
+                    this.$("#html_editor").click();
+                    this.$("#plain-text").val(this.parent.plainText);
+                }
+                else if(this.parent.plainText){
+                    this.$("#plain_text").click();
+                    this.$("#plain-text").val(this.parent.plainText);
+                }  
             },
             init:function(){
               this.$("#editorhtml").append(this.bmseditor.$el);
@@ -79,16 +103,23 @@ function (template,editorView) {
                         break;
                      case 'html_editor':
                         this.setEditor();
-                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));                                 
+                        this.setContents();                                
                      break;
                      case 'copy_campaign':
-                           this.getcampaignscopy();
-                          // this.getallcampaigns();                                 
+                           this.getcampaignscopy();                                                      
                      break;
                      default:
                      break;
                 }
 
+            },
+            setContents:function(){
+              if(tinyMCE.get('bmseditor_'+this.wp_id)){
+                tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));   
+              }
+              else{
+                  setTimeout(_.bind(this.setContents,this),200);
+              }
             },
             loadTemplatesView:function(){
                 if(!this.templates){
@@ -126,10 +157,15 @@ function (template,editorView) {
                 }
             },
             setEditor:function(){
-              this.bmseditor.showEditor(this.wp_id);                                       
-              tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
-              this.$("#bmstexteditor").val(this.parent.plainText);
-              this.$(".textdiv").hide();
+              if(tinyMCE && tinyMCE.get('bmseditor_'+this.wp_id))  {
+                this.bmseditor.showEditor(this.wp_id);                                       
+                tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                this.$("#bmstexteditor").val(this.parent.plainText);
+                this.$(".textdiv").hide();
+              }
+              else{
+                  setTimeout(_.bind(this.setEditor,this),200);
+              }
             },
             setEditorHTML:function(tsv, state, xhr){
                 this.app.showLoading(false,this.$el);
@@ -137,7 +173,32 @@ function (template,editorView) {
                 if(html_json.htmlText){
                     tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
                 }
-            }
+            },
+            TryDialog:function(){
+                 var that = this;
+                 var app = this.app;
+                 var dialog_width = $(document.documentElement).width()-60;
+                     var dialog_height = $(document.documentElement).height()-162;
+                     var dialog = this.app.showDialog({title:'Images',
+                                 css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                 headerEditable:true,
+                                 headerIcon : '_graphics',
+                                 bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                      });
+                      //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
+                  this.app.showLoading("Loading...",dialog.getBody());
+                  require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
+                      var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                      dialog.getBody().html(mPage.$el);                    
+                  });
+
+             },
+                useImage:function(url){
+                    this.$el.find("#image_url").val(url);
+                },
+             editorChange:function(){
+                 this.states.editor_change = true;
+             }   
             
         });
 });

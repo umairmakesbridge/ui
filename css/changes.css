@@ -11,12 +11,7 @@
 .set-time .timebox{
     margin-right: 5px;
 }
-.ui-spinner a.ui-spinner-up {
-    background:url("../img/arrow-up.png") no-repeat scroll center center #6C8B9F;
-}
-.ui-spinner a.ui-spinner-down {
-    background:url("../img/arrow-down.png") no-repeat scroll center center #6C8B9F;
-}
+
 .schedule-box .sch-btn{
     width: 220px;
 }
@@ -1800,6 +1795,15 @@ ol.campaign_progress li.s4:before {content:""; background-image: url("../img/ico
 }
 .nt_listing .bmsgrid .bDiv{
     overflow:hidden !important;
+}
+.ui-icon-triangle-1-n, .ui-icon-triangle-1-s{
+    display: none !important;
+}
+.ui-spinner a.ui-spinner-button{
+    border:0px transparent solid !important;
+}
+.ui-spinner .ui-button-text-only .ui-button-text{
+    padding:0px;
 }
 
 /*----------

@@ -1,8 +1,8 @@
- <div class="wait-add hover">
+ <div class="wait-add hover <% if(showWait) {print('yellow')} else {print('green')} %>">
     <div>
         <% if(showWait) {%>
-            <a class="btn-wait left" ><span class="">Add Wait</span><i class="icon wait left"></i></a>
+            <a class="btn-wait left add-wait-r" ><span class="">Add Wait</span><i class="icon wait left"></i></a>
         <%}%>
-        <a  class="btn-green left"><span>Add Message</span><i class="icon mail"></i></a>
+        <a  class="btn-green left add-message-r"><span>Add Message</span><i class="icon mail"></i></a>
     </div>
 </div>

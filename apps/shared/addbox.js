@@ -56,6 +56,7 @@
       if(this.options.showCallBack){
            this.options.showCallBack(this.dialog.find("input.input-field"))
        }
+       $(".tooltip").remove();
       if(obj && obj.stopPropagation){
         obj.stopPropagation()
       }
@@ -84,7 +85,7 @@
     }
   }
 
- /* FILTER PLUGIN DEFINITION
+ /* ADDBOX PLUGIN DEFINITION
   * ========================= */
 
   $.fn.addbox = function ( option ) {

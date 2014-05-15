@@ -1,8 +1,8 @@
 <div class="accordion-heading">
     <a class="accordion-toggle" >        
-        <div class="ntmessageno"><%-no %>: </div><span class="title"><%-title %></span>
+        <div class="ntmessageno"><%-no %>: </div><span class="title showtooltip" title="Click to edit"><%-title %></span>
         <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
-        <i class="icon preview"></i>
+        <i class="icon preview showtooltip" title="Preview"></i>
         <b class="caret"></b>
     </a>
 </div>
@@ -11,15 +11,16 @@
 
 
         <div class="col1">
-            <div class="row"><label>Subject</label><span class="text">Subject of the campaign</span></div>
-            <div class="row"><label>From Email</label><span class="text">bms@bridgemailsystem.com
-                    <em style="display:none">Default Value: <i>&nbsp;</i></em>
+            <div class="row"><label>Subject</label><span class="text camp-subject">Subject of the campaign</span></div>
+            <div class="row"><label>From Email</label><span class="text camp-fromemail">bms@bridgemailsystem.com
+                    
+                </span>
+            </div>
+            <div class="row"><label>From Name</label><span class="text camp-fromname">MakesBridge Technology
+                    
                 </span></div>
-            <div class="row"><label>From Name</label><span class="text">MakesBridge Technology
-                    <em style="display:none">Default Value:<i>&nbsp;</i></em>
-                </span></div>
-            <div class="row"><label>Reply To</label><span class="text">demo@makesbridge.com
-                    <em style="display:none">Default Value:<i>&nbsp;</i></em>
+            <div class="row"><label>Reply To</label><span class="text  camp-replyto">demo@makesbridge.com
+                    
                 </span></div>
         </div>
 
@@ -27,7 +28,7 @@
         <div class="col2" style="height:180px">
 
 
-            <div class="btn-group" data-toggle="buttons-radio">
+            <div class="btn-group timer-group" data-toggle="buttons-radio">
                 <button class="btn active" rel="i">Instantly</button>
                 <button class="btn" rel="tod">Time of Day</button>
             </div>
@@ -40,9 +41,9 @@
                 <div class="timebox min">
                     <input type="text" name="" value="00" class="timebox-min" readonly="readonly">
                 </div>
-                <div class="btn-group all-any" data-toggle="buttons-radio">
-                    <button class="btn active" rule="A">AM</button>
-                    <button class="btn" rule="1">PM</button>
+                <div class="btn-group timebox-hours all-any" data-toggle="buttons-radio">
+                    <button class="btn active am" rule="A">AM</button>
+                    <button class="btn pm" rule="1">PM</button>
                 </div>
             </div>
 
@@ -53,7 +54,7 @@
         <div class="btns">
             <a class="btn-blue left edit-message" ><span class="right">Edit Message</span><i class="icon edit left"></i></a>
             <a class="btn-red left delete-row" ><span class="right">Delete</span><i class="icon delete left"></i></a>            
-            <a class="btn-green left"><span>Save</span><i class="icon save"></i></a>
+            <a class="btn-green left save-message"><span>Save</span><i class="icon save"></i></a>
         </div>
 
         <div class="clearfix"></div>

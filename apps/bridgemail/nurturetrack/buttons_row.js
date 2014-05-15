@@ -13,7 +13,8 @@ function (template,highlighter) {
              * Attach events on elements in view.
             */
             events: {
-             
+                'click .add-wait-r':'addWait',
+                'click .add-message-r':'addMessage'
             },
             /**
              * Initialize view - backbone
@@ -40,6 +41,12 @@ function (template,highlighter) {
             */
             renderRow:function(){
                 
+            },
+            addWait:function(){                
+                this.parent.addRowWait(this.$el);
+            },
+            addMessage:function(){
+                this.parent.addRowMessage(this.$el);
             }
             
             
