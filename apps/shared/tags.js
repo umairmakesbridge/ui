@@ -90,6 +90,8 @@
       }
       if(tags_ul.children().length==0){
            this.ele.find(".tags-contents").hide();
+        }else if(this.options.module == "recipients"){
+            tags_ul.css("overflow","initial");
         }else{
             this.ele.find(".tags-contents").css("display","inline-block");           
             tags_ul.css("width","auto");
@@ -196,7 +198,7 @@
                     if(tag_json[0]=="success"){
                         self.options.tags = temp_tags;
                         self.showTags();
-                        if(self.options.module == "Image")
+                        if(self.options.module == "Image" || self.options.module == "recipients")
                             self.options.callBack(temp_tags);
                     }
                     

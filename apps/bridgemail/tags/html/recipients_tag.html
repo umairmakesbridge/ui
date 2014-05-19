@@ -1,8 +1,8 @@
  
                        	<a class="tag"><span><%=this.getTagName()%> </span>
-                            <i  class="icon percent" data-name="<%=this.getTagName()%>"></i>
-                            <strong class="badge" data-tag="<%=this.getTagName()%>"> 
-                               <%=this.getSubCount()%>
+                             <i  class="icon percent showtooltip" data-name="<%=this.getTagName()%>"  data-original-title="Click to view responder's percentage" ></i>
+                             <strong class="badge showtooltip" data-original-title="Click to view population detail" data-tag="<%=this.getTagName()%>"> 
+                               <%=this.options.app.addCommas(this.getSubCount())%>
                             </strong> 
                         </a> 
                       	<!--<a class="btn-red move-row deletebtn"><i class="icon delete"></i></a>-->

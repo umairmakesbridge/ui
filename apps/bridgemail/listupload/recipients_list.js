@@ -40,6 +40,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                     
                      if(!fcount){
                         this.offset = 0;
+                        this.total_fetch = 0;
                         this.$el.find('#list_grid tbody').empty();
                     }
                     else{
@@ -51,13 +52,13 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                   _data['offset'] = this.offset;
                     if(this.searchText){
                       _data['searchText'] = this.searchText;
-                       that.showSearchFilters(this.searchText);
+                       //that.showSearchFilters(this.searchText);
                        
                     }
                     
                  var that = this; // internal access
                  this.$el.find('#list_grid tbody .load-tr').remove();
-                 this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No lists founds!</div><div class='loading-list' style='margin-top:45px'></div></td></tr>");
+                 this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No lists founds!</div><div class='loading-list' style='margin-top:50px'></div></td></tr>");
                  this.app.showLoading("&nbsp;",this.$el.find('#list_grid tbody').find('.loading-list'));
                 
                 _data['type'] = 'batches';
@@ -67,21 +68,35 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                     _.each(data.models, function(model){
                         that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app}).el);
                      });
-                     that.$("#total_lists .badge").html(that.objRecipients.total);
+                      if(that.searchText){
+                       that.showSearchFilters(that.searchText,that.objRecipients.total);
+                      }else{
+                          that.$("#total_lists span").html("List(s) found");
+                          that.$("#total_lists .badge").html(that.objRecipients.total);
+                      }
+                     
                      that.offsetLength = data.length;
                      that.total_fetch = that.total_fetch + data.length;                         
                          
                     if(data.models.length == 0) {
                        that.$el.find('.no-contacts').show();
-                       that.$el.find('#list_grid tbody').find('.loading-contacts').remove();
+                       that.$el.find('#list_grid tbody').find('.loading-list').remove();
                     }else{
-                       $('#list_grid tbody').find('.loading-contacts').remove();
+                       $('#list_grid tbody').find('.loading-list').remove();
                         that.$el.find('#list_grid tbody #loading-tr').remove();
                      }
                  
                     if(that.total_fetch < parseInt(that.objRecipients.total)){
                              that.$el.find("#list_grid tbody tr:last").attr("data-load","true");
                     } 
+                     that.$el.find('#list_grid tbody').find('.tag').on('click',function(){
+                        var html = $(this).html();
+                        that.searchText = $.trim(html);
+                        that.$el.find("#lists_search").val(that.searchText); 
+                        that.$el.find('#clearsearch').show();
+ 
+                        that.loadLists();
+                    });
                      that.app.showLoading(false, that.el);
                 }});
              },
@@ -96,7 +111,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
               }
               if($.inArray(code, nonKey)!==-1) return;
                var text = $(ev.target).val();
-               text = text.replace('Sale Status:', '');
+             
                text = text.replace('Tag:', '');
                 
                    
@@ -129,12 +144,12 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$("#total_lists .badge").html("lists found");
+                   this.$("#total_lists span").html("List(s) found");
                    this.loadLists();
            },
-           showSearchFilters:function(text){
-              this.$("#total_lists .badge").html("lists found for \""+text+"\" ");
-               
+           showSearchFilters:function(text,total){
+              this.$("#total_lists .badge").html(total);
+               this.$("#total_lists span").html(" List(s) found for <b>\""+text+"\"</b> ");
            },
             checkListName:function(listName){
                 var isListExists = false;
@@ -190,15 +205,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 
                  $("#div_pageviews").empty('');
                  $("#div_pageviews").hide();
-            },
-              liveLoading:function(where){
+            } ,liveLoading:function(where){
                 var $w = $(window);
                 var th = 200;
-                    if ($(window).scrollTop()>70) {
-                          this.$el.find(".stats-scroll").fadeIn('slow');
-                       } else {
-                          this.$el.find(".stats-scroll").fadeOut('slow');
-                    }
+                 
                 var inview =this.$el.find('table tbody tr:last').filter(function() {
                     var $e = $(this),
                         wt = $w.scrollTop(),

@@ -12,7 +12,7 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
             return Backbone.View.extend({
                 className: 'div',
                 events: {
-                    "keyup #tags_search": "search",
+                    //"keyup #tags_search": "search",
                     "click  #clearsearch": "clearSearch",
                     "click .closebtn": "closeContactsListing"
                 },
@@ -29,15 +29,28 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                     this.$(".add-tag").addbox({app: this.app, placeholder_text: 'Enter new tag name', addCallBack: _.bind(this.addTags, this)});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.active_ws = this.$el.parents(".ws-content");
-                      
+                     this.$el.find('.input-append').searchcontrol({
+                            id:'tags_search',
+                            width:'300px',
+                            height:'22px',
+                            placeholder: this.$el,
+                            gridcontainer: 'tagslist',
+                            showicon: 'yes',
+                            iconsource: 'list'
+                     });
                 },
                 loadTags: function() {
                     var _data = {};
                     var that = this;
                     // _data['offset'] = this.offset;
+                    if (this.searchText) {
+                        _data['searchText'] = this.searchText;
+                        that.showSearchFilters(this.searchText);
+                    }
                     var that = this; // internal access
                     _data['type'] = 'subscriberTagCountList';
                     this.objTags = new tagsCollection();
+
                     this.app.showLoading('Loading Tags...', this.el);
                     this.request = this.objTags.fetch({data: _data, success: function(data) {
                             _.each(data.models, function(model) {
@@ -48,31 +61,53 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                         }});
                 },
                 search: function(ev) {
-                    
-                    if ($(ev.target).val().length > 0) {
-                         this.$el.find('#clearsearch').show();
-                        this.$el.find(".action").show().filter(function () {
-                          return $(this).find('.tag span').text().toLowerCase().indexOf($(ev.target).val().toLowerCase()) == -1;
-                        }).hide();
+                    this.searchText = '';
+                    this.searchTags = '';
+                    var that = this;
+                    var code = ev.keyCode ? ev.keyCode : ev.which;
+                    var nonKey = [17, 40, 38, 37, 39, 16];
+                    if ((ev.ctrlKey == true) && (code == '65' || code == '97')) {
+                        return;
                     }
-                    else {
-                        this.$el.find('#clearsearch').hide();
-                        this.$el.find(".action").show();
+                    if ($.inArray(code, nonKey) !== -1)
+                        return;
+                    var text = $(ev.target).val();
+                    text = text.replace('Sale Status:', '');
+                    text = text.replace('Tag:', '');
+
+
+                    if (code == 13 || code == 8) {
+                        that.$el.find('#clearsearch').show();
+
+                        this.searchText = text;
+                        that.loadTags();
+                    } else if (code == 8 || code == 46) {
+
+                        if (!text) {
+                            that.$el.find('#clearsearch').hide();
+                            this.searchText = text;
+                            that.loadTags();
+                        }
+                    } else {
+                        that.$el.find('#clearsearch').show();
+
+                        clearTimeout(that.timer); // Clear the timer so we don't end up with dupes.
+                        that.timer = setTimeout(function() { // assign timer a new timeout 
+                            if (text.length < 2)
+                                return;
+                            that.searchText = text;
+                            that.loadTags();
+                        }, 500); // 2000ms delay, tweak for faster/slower
                     }
-                    var total = $('#tagslist ul li:visible').size()
-                    var searchText = $(ev.target).val();
-                    if(searchText){
-                        this.$("#total_tags span").html("Tag(s) found for <b> \""+searchText+"\"</b>"); 
-                    }else{
-                        this.$("#total_tags span").html("Tag(s) found"); 
-                    }
-                    this.$("#total_tags .badge").html(total);
-                }, 
-                clearSearch: function(ev) {
-                    this.$("#total_tags .badge").html(this.objTags.total);
-                    this.$("#total_tags span").html("Tag(s) found");
-                    this.$el.find('#tags_search').val('');
-                    this.$el.find(".action").show();
+                }, clearSearch: function(ev) {
+                    $(ev.target).hide();
+                    $(".search-control").val('');
+                    this.total = 0;
+                    this.searchText = '';
+                    this.searchTags = '';
+                    this.total_fetch = 0;
+                    this.$("#total_lists .badge").html("tags found");
+                    this.loadTags();
                 },
                 addTags: function(data) {
                     var that = this;

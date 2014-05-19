@@ -32,6 +32,7 @@ function (template,PageView,ViewsCollection) {
                      that.options.app.mainContainer.openSubscriber(that.options.encode);
                      that.$el.parents('.modal').find('.close').click();
                 });
+               
                 this.$el.find(".salestatus").html(this.capitalizeLetter());
                 if(this.options.url){
                     var arr = this.options.url.split('|-.-|');
@@ -41,7 +42,7 @@ function (template,PageView,ViewsCollection) {
                          return;
                     }
                     this.$el.find("#contact_url").attr('href',this.options.app.decodeHTML(arr[1])).html(arr[0]).attr('data-original-title',this.options.app.decodeHTML(arr[1]));
-                    this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    
                 }else{
                     this.$el.find("#link_page").remove();
                 }                                                           
@@ -78,7 +79,7 @@ function (template,PageView,ViewsCollection) {
                                          if(name == "Manual Visit"){
                                              that.$el.find(".pageviews-listing table tbody").append("<tr><td class='td-campaigns-pageviews' colspan='10'><h3 class='camp_title'> <b>"+ name +"<b></h3></td></tr>");
                                          }else{
-                                             that.$el.find(".pageviews-listing table tbody").append("<tr><td class='td-campaigns-pageviews' colspan='10'><h3 class='camp_title'><i class='icon campaigns left'></i> <a data-name='"+data_id+"' data-encode='"+data_encode+"' id='view_campaign'>"+ name +"<a></h3></td></tr>");
+                                             that.$el.find(".pageviews-listing table tbody").append("<tr><td class='td-campaigns-pageviews' colspan='10'><h3 class='camp_title'><i class='icon campaigns left'></i> <a data-name='"+data_id+"' class='showtooltip' data-original-title='Click to view campaign preview' data-encode='"+data_encode+"' id='view_campaign'>"+ name +"<a></h3></td></tr>");
                                          }
                                           
                                       }
@@ -88,6 +89,7 @@ function (template,PageView,ViewsCollection) {
                                      if(that.total_fetch < parseInt(data.total)){
                                          that.$el.find(".pageviews-listing table tbody tr:last").attr("data-load","true");
                                     } 
+                                     that.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                               that.$el.find('.pageviews-listing table  #loading-tr').remove();       
                            }});
                
@@ -132,7 +134,7 @@ function (template,PageView,ViewsCollection) {
 						  bodyCss:{"min-height":dialog_height+"px"}
 				});	
 				this.options.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
-                                var preview_url = "https://"+this.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                                var preview_url = "https://"+this.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?snum="+this.options.encode+"&cnum="+camp_id;  
                                 require(["common/templatePreview"],_.bind(function(templatePreview){
                                 var tmPr =  new templatePreview({frameSrc:preview_url,app:this.options.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
                                  dialog.getBody().html(tmPr.$el);

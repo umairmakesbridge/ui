@@ -24,11 +24,12 @@ define(['target/models/recipients_target','app','backbone'], function (ModelTarg
                 var result = [];
                 if(!app.checkError(response) && response.totalCount!=="0"){
                     _.each(response.filters[0],function(val,key){
+                        
                         val[0]._id = val[0]['filterNumber.encode'];
                         result.push(val[0]);
                     })                    
                 }
-                this.total = response.count;
+                this.total = response.totalCount;
                 return result;
             }
              

@@ -11,7 +11,9 @@ function (template,rContact,rContacts) {
             events: {
                 "keyup #contacts_search":"search",
                 "click  #clearsearchcontact":"clearSearch",
-                'click .stats-scroll':'scrollToTop'
+                'click .stats-scroll':'scrollToTop',
+                'click .sortoption':'openSortDiv',
+                "click #template_search_menu":"changeSortBy"
             },
             initialize: function () {
                 this.app = this.options.app;
@@ -55,39 +57,44 @@ function (template,rContact,rContacts) {
                 if(this.options.type == "tag"){
                    _data['tag'] = this.listNum; 
                    this.objRContacts.url =    '/pms/io/user/getTagPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                }else if(this.options.type=="target"){
+                    _data['filterNumber'] = this.listNum;
+                    this.objRContacts.url =    '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
                 }else{
                     _data['listNum'] = this.listNum;
                     _data['status'] = this.status;
-                }
-               
+                } 
                 _data['searchText'] = this.searchText;
                 _data['offset'] = this.offset;
                  this.$el.find('#table_pageviews tbody .load-tr').remove();
-                 this.$el.find('#table_pageviews tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
+                 this.$el.find('#table_pageviews tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:20px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                  this.options.app.showLoading("&nbsp;",this.$el.find('#table_pageviews tbody').find('.loading-contacts'));
                  this.objRContacts.fetch({data:_data,success:function(contacts){
-                    that.$el.find('#total_contacts .badge').text(that.options.app.addCommas(that.objRContacts.total));  
                     that.offsetLength = contacts.length;
                     that.total_fetch = that.total_fetch + contacts.length;                         
                         _.each(contacts.models, function(model){
-                      
-                            that.$el.find('#table_pageviews tbody').append(new rContact({model:model,app:that.options.app,listNum:that.options.listNum}).el);
+                            that.$el.find('#table_pageviews tbody').append(new rContact({model:model,app:that.options.app,listNum:that.options.listNum,type:that.options.type}).el);
                          });
-                    if(contacts.models.length == 0) {
+                    if(that.searchText !=''){
+                       that.showSearchFilters(that.searchText,that.options.app.addCommas(that.objRContacts.total),that.searchText);
+                      }else{
+                          that.$("#total_contacts span").html("Contact(s) found");
+                          that.$("#total_contacts .badge").html(that.options.app.addCommas(that.objRContacts.total));
+                      }
+                   if(contacts.models.length == 0) {
                        that.$el.find('.no-contacts').show();
                        that.$el.find('#table_pageviews tbody').find('.loading-contacts').remove();
                     }else{
                        $('#table_pageviews tbody').find('.loading-contacts').remove();
                         that.$el.find('#table_pageviews tbody #loading-tr').remove();
                      }
-                    console.log(that.total_fetch);
                     if(that.total_fetch < parseInt(that.objRContacts.total)){
                              that.$el.find("#table_pageviews tbody tr:last").attr("data-load","true");
                     } 
                            
                     var height = that.$el.find(".stats_listing").outerHeight(true) ;
                     if(height < 360){
-                      that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
+                      that.$el.find(".stats_listing").css({"height":"300px", "overflow-y":"auto"});
                     }else{
                             if(that.objRContacts.models.length != 0)
                                 that.$el.find(".stats_listing").css({"height":"357px", "overflow-y":"auto"});
@@ -101,24 +108,21 @@ function (template,rContact,rContacts) {
                         that.searchText = $.trim(html);
                         that.$el.find(".search-control").val("Tag: "+ that.searchText); 
                         that.$el.find('#clearsearchcontact').show();
-
-                            that.showSearchFilters(html);
-
-                        that.loadRContacts();
+                       that.loadRContacts();
                     });
                     that.$el.find('#table_pageviews tbody').find('.salestatus').on('click',function(){
                         var html = $(this).html();
                         that.searchText = $.trim(html);
                         that.$el.find(".search-control").val("Sale Status: "+ that.searchText);
                         that.$el.find('#clearsearchcontact').show();
-                        that.showSearchFilters(html);
                         that.loadRContacts();
                     });
                 }})
                 
             }, 
-            showSearchFilters:function(text){
-              this.$el.find("#total_contacts span").html("contacts found for \""+text+"\" ");
+            showSearchFilters:function(text, total){
+              this.$el.find("#total_contacts .badge").html(total);
+              this.$el.find("#total_contacts span").html("Contact(s) found for <b>\""+text+"\" </b> ");
             },
              showLoadingWheel:function(isShow,target){
                if(isShow)
@@ -129,7 +133,6 @@ function (template,rContact,rContacts) {
                }
              },
               search:function(ev){
-                console.log('Wow then ');
                 this.searchText = '';
                 this.searchTags = '';
                 var that = this;
@@ -169,7 +172,6 @@ function (template,rContact,rContacts) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
-                   this.$el.find("#total_contacts span").html("contacts found");
                    this.loadRContacts();
            },badgeText:function(margin_left){
                var search = "<div class='temp-filters clearfix' style='display:inline-block;padding:4px 0px;"+margin_left+"'>";
@@ -199,6 +201,13 @@ function (template,rContact,rContacts) {
                    inview.removeAttr("data-load");
                     this.loadRContacts(this.offsetLength);
                 }  
+            },
+            openSortDiv:function(){
+                this.$el.find("#template_search_menu").slideToggle('');
+            },
+            changeSortBy:function(ev){
+                this.$el.find("#template_search_menu").slideUp();
+                this.$el.find(".sortoption span").html($(ev.target).html());
             }
          
         });    

@@ -4,8 +4,8 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!listupload/html/recipient_list.html'],
-function (template) {
+define(['text!listupload/html/recipient_list.html','bms-tags'],
+function (template,tags) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -18,6 +18,7 @@ function (template) {
             initialize: function () {
                 this.app = this.options.app;
                 this.template = _.template(template);	
+                this.model.bind("change", this.render, this);
                 this.render();
             },
             render: function () {
@@ -33,18 +34,42 @@ function (template) {
                 var dialog_title = "Edit List";
                 var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},                
-                    headerIcon : 'new_headicon',
+                        bodyCss:{"min-height":"250px"},                
+                    headerIcon : 'list2',
                         buttons: {saveBtn:{text:'Update'} }                                                                           
                 });
                 require(["text!listupload/html/editlist.html"],function(list){
                     dialog.getBody().html(list);
                     dialog.$el.find('#list_name').val(listName);
+                    dialog.$el.addClass('gray-panel');
+                    that.showTags(dialog);
+                     
                    
                 });
                 dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));
              //    dialog.saveCallBack(_.bind(this.sendTestCampaign,this,dialog,camp_id));
                 
+            },
+               showTags:function(dialog){
+                var that = this;
+                var listId = this.model.get('listNumber.encode');
+                  dialog.$el.find("#tags").tags({app:this.options.app,
+                        url:"/pms/io/list/saveListData/?BMS_REQ_TK="+this.options.app.get('bms_token'),
+                        tags:this.model.get('tags'),
+                        showAddButton:(listId=="0")?false:true,
+                         callBack:_.bind(that.tagUpdated,that),
+                         module:"recipients",
+                         params:{type:'tags',listNum:listId,tags:''},
+                         typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allCampaignTags"
+                    });
+                    dialog.$el.find('#tags').find('.tagicon').removeClass('gray').addClass('blue');
+                    
+                  
+            },
+            tagUpdated:function(data){
+                this.model.set('tags',data);
+                this.render();
+               // this.showTags();
             },
             finishEditList:function(dialog,listNum,listNam,target){
                 var that = this;
@@ -61,7 +86,7 @@ function (template) {
                         .done(function(data) {  
                                var _json = jQuery.parseJSON(data);                         
                                if(_json[0]!=="err"){
-                                   that.app.showMessge("List renamed successfully!");
+                                   that.app.showMessge("List updated successfully!");
                                    target.data('name',listName);
                                    target.parents('tr').find('.name-type h3 a:first').html(listName);
                                    dialog.hide();
@@ -118,7 +143,7 @@ function (template) {
                         if(that.app.checkError(data)){
                             return false;
                         }
-                        var percentDiv ="<div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
+                        var percentDiv ="<div class='pstats left-side' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
                          percentDiv =percentDiv + "<li class='clickers'><strong>"+that.options.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
                          percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
                          that.showLoadingWheel(false,target);
@@ -129,7 +154,7 @@ function (template) {
                 },
               showLoadingWheel:function(isShow,target){
                if(isShow)
-                target.append("<div class='pstats' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div>")
+                target.append("<div class='pstats left-side' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div>")
                else{
                 var ele = target.find(".loading-wheel") ;      
                     ele.remove();
@@ -143,8 +168,7 @@ function (template) {
                 $('#div_pageviews').empty();
                 $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
-                $('#div_pageviews').css({top:offset.top-325});
-                $('#div_pageviews').css({left:offset.top-325});
+                $('#div_pageviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum});
                     $('#div_pageviews').css('padding-top','0');

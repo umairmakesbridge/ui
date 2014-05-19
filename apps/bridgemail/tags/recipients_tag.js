@@ -25,7 +25,9 @@ function (template) {
             },
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
+                this.$el.find(".bmsgrid div.hDiv th, .bmsgrid div.bDiv td").css('overflow','');
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
             },
             deleteList:function(ev){
                 
@@ -60,39 +62,53 @@ function (template) {
              } ,
             showPercentDiv:function(ev){
                    var target = $(ev.target);
+                   
                    var tag = target.data('name');
-                   if($('.percent_stats').length > 0) $('.percent_stats').remove();
+                   if($('.percent_stats').length > 0) $('.pstats').remove();
                    var that = this;
-                   that.showLoadingWheel(true,target);
+                     var offset = target.offset();
+                     if((offset.left + 350) > $(window).width()){
+                         $('#tags_container').find('.pstats').addClass('right-side')
+                         $('#tags_container').find('.percent_stats').css({left:offset.left - 380, top:offset.top - 315});
+                     }else{
+                         $('#tags_container').find('.pstats').addClass('left-side')
+                         $('#tags_container').find('.percent_stats').css({left:offset.left - 80, top:offset.top - 315});
+                     }
+                   
+                   
+                   that.showLoadingWheel(true,$('#tags_container').find('.percent_stats'));
                    
                    var bms_token =that.app.get('bms_token');
-                   
-                   var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK="+bms_token+"&tag="+tag+"&type=stats";
+                 var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK="+bms_token+"&tag="+tag+"&type=stats";
                    
                    jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         if(that.app.checkError(data)){
                             return false;
                         }
-                        var percentDiv ="<div class='percent_stats'><div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
+                        var percentDiv =" <div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
                          percentDiv =percentDiv + "<li class='clickers'><strong>"+that.options.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
-                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div></div>";
+                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
                          that.showLoadingWheel(false,target);
-                     target.parents('li').append(percentDiv);
-                                           	
+                         $('#tags_container').find('.percent_stats').append(percentDiv);
+                         if((offset.left + 350) > $(window).width()){
+                            $('#tags_container').find('.pstats').addClass('right-side')
+                         }else{
+                             $('#tags_container').find('.pstats').addClass('left-side')
+                         }                     	
                     });
-                    that.app.showLoading(false, that.$el);
+                    that.app.showLoading(false, $('#tags_container').find('.percent_stats'));
                 },
-              showLoadingWheel:function(isShow,target){
+               showLoadingWheel:function(isShow,target){
                if(isShow)
-                target.append("<div class='pstats' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div>")
+                target.append("<div class='pstats' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div></div>")
                else{
                 var ele = target.find(".loading-wheel") ;      
                     ele.remove();
                 }
-           },
+            },
            getTagName:function(){
-               return  this.options.app.decodeHTML(this.model.get('tag'));
+               return  this.options.app.encodeHTML(this.model.get('tag'));
            }, 
            getSubCount:function(){
                return this.model.get('subCount');
@@ -104,8 +120,8 @@ function (template) {
                 $('#div_pageviews').show();
                 $('#div_pageviews').empty();
                 $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
-                
-                $('#div_pageviews').css({top:offset.top-325});
+                $('#div_pageviews').css({top:offset.top-280});
+                document.styleSheets[0].insertRule('.dddiv:before { left: '+ offset.left+'; }', 0);
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:tag,type:'tag'});
                     $('#div_pageviews').css('padding-top','0');

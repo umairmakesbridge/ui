@@ -20,6 +20,7 @@ function (template) {
             },
             render: function () {
               this.$el.html(this.template(this.model.toJSON())); 
+              this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             }   ,
             getFullName:function(){
                 if(this.model.get('firstName') || this.model.get('lastName'))
@@ -33,8 +34,7 @@ function (template) {
             },
             showPageView:function(ev){
                     var subNum = $(ev.target).data('id'); // encode id for list subscriber.
-                    console.log($(ev.target));
-                    console.log(subNum);
+                     var encode = this.model.get('subNum.encode');
                      var dialog_width = 80;
                      var that = this;
                      var url = "";
@@ -57,7 +57,7 @@ function (template) {
                         }
                                  
                         require(["recipientscontacts/pageviews",],function(Views){
-                                var mPage = new Views({subNum:subNum,app:that.options.app,email:name,salestatus:that.model.get('salesStatus'),url:url});
+                                var mPage = new Views({encode:encode,subNum:subNum,app:that.options.app,email:name,salestatus:that.model.get('salesStatus'),url:url});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           

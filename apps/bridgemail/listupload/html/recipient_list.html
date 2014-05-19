@@ -1,9 +1,12 @@
-<td width="100%" style="overflow:auto;">
+<td width="100%" style="overflow:visible!important;">
     <div>
     <div class="name-type">
-        <h3><a href=""><%=name%></a>
+        <h3><a class="edit-list" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"><%=name%></a>
             <div class="percent_stats">
-                <a class="icon percent" data-list="<%=this.model.get('listNumber.encode')%>" style="margin:0px!important;"></a>
+                <a class="icon percent showtooltip" data-original-title="Click to view responder's percentage" 
+                   data-list="<%=this.model.get('listNumber.encode')%>"
+                   style="margin:0px!important;">
+                </a>
             </div>    
           <!-- percent_stats  -->
       </h3>
@@ -12,7 +15,7 @@
         <span class="tagicon gray"></span>
       <ul>
         <% _.each(this.model.get('tags').split(","),function(t){ %>  
-            <li><a  class="tag"><%- t %></a> </li>
+            <li><a  class="tag showtooltip" data-original-title="Click to view lists with same tag" ><%- t %></a> </li>
         <% })%> 
 
       </ul>
@@ -22,17 +25,22 @@
       <td width="90px">
           <div>
               <div class="subscribers ">
-                  <strong><span><em>Contacts</em><%if(this.model.get('subscriberCount') !="0"){%><a class="pageview" data-id="<%=this.model.get('listNumber.encode')%>"><%=subscriberCount%></a><%}else{%><b><%=subscriberCount%></b><%}%></span></strong>
+                  <strong><span><em>Contacts</em><%if(this.model.get('subscriberCount') !="0"){%><a class="pageview showtooltip" data-original-title="Click to view population detail"  data-id="<%=this.model.get('listNumber.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriberCount'))%></a><%}else{%><%=subscriberCount%><%}%></span></strong>
               </div> 
-              
+               
+                                           
               <div class="slide-btns two" style="width:;">
-                                      		
-                                            <span class="icon setting"></span>
-                                            <div>
-                                                  <a class="icon edit  edit-list showtooltip" data-original-title="edit" title="edit" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"></a>
-                                                  <a class="icon delete  delete-list showtooltip" data-original-title="delete" title="delete"  data-id="<%=this.model.get('listNumber.encode')%>" > </a>
-                                            </div>
-                  </div>
+
+                  <span  class="icon setting"></span>
+                  <div>
+                      <a class="icon edit edit-list" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
+                      <a class="icon delete delete-list" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Delete</span></a>
+                  </div> <!-- slide-btns two  -->
+
+              </div>                 
+                                            
+                                            
+                  
              
           </div>
       </td>
