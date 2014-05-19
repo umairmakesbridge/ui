@@ -10784,7 +10784,7 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
     width: 20px;
 	margin:0 0 0 5px;
 }
-.nurture_msgslist .icon.report:hover {background: url("../img/report2.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.nurture_msgslist .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 
 .nurture_msgslist .icon.edit2 {

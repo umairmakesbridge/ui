@@ -1,0 +1,25 @@
+<td width="100%"><div>
+<div class="name-type">
+  <h3><a><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
+  <a class="icon report"></a>
+  <a class="icon edit2"></a>
+  </h3>
+</div>
+</div>
+</td>
+<td width="90px"><div>
+<div class="subscribers" style="min-width:90px">
+    <strong><span><em>Sent</em><a><%- this.app.addCommas(model.get('sentCount'))%></a></span></strong>
+</div>
+</div></td>
+<td width="90px"><div>
+<div class="subscribers " style="min-width:90px">
+    <strong><span><em>Pending</em><a><%- this.app.addCommas(model.get('pendingCount'))%></a></span></strong>
+</div>
+</div></td>
+<td width="90px"><div>
+<div class="colico pgview" style="min-width:90px">
+    <strong><span><em>Page Views</em><%- this.app.addCommas(model.get('pageViewCount'))%></span></strong>
+</div>
+</div>
+</td>
