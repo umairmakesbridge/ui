@@ -98,7 +98,7 @@ define([
                     $("body").click(function(ev){
                        $(".custom_popup").hide(); 
                        if(!($(ev.target).hasClass('percent'))){
-                           $(".percent_stats").remove(); 
+                         //  $(".percent_stats").remove(); 
                            $(".pstats").remove(); 
                        }
                         
