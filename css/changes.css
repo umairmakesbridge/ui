@@ -397,6 +397,9 @@ div.tags-div:before {
    /* width:110px;*/
     width: 150px;
 }
+.accordion-inner .inputlabel label{
+    width: auto;
+}
 .accordion-inner .texturl input{
     widt:275px;
 }
@@ -1353,16 +1356,15 @@ ul.tabs-btns li.active a{
     width: 100%;
 }
 
-.thumbnail .img > div a {
-    height: 48px;
+.thumbnail .img > div a {    
     width: 25%;
 }
 .thumbnail .img > div a span {
     background: url("../img/icon-map.png") repeat scroll center 0 rgba(0, 0, 0, 0);
     display: block;
-    height: 37px;
+    height: 35px;
     margin: 2px auto;
-    width: 37px;
+    width: 35px;
 }
 
 .thumbnail .img > div a.selectbtn span {
@@ -1374,11 +1376,15 @@ ul.tabs-btns li.active a{
     width: 130px;
 }
 
-
+.thumbnail .img > div a.playbtn span {
+    background: url("../img/play48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
+.thumbnail .img > div a.pausebtn span {
+    background: url("../img/pause48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+}
 .thumbnail .img > div a.previewbtn span {
     background: url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
 }
-
 
 .thumbnail .img > div a.editbtn span {
     background: url("../img/edit48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
@@ -1392,13 +1398,13 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
 }
-
 .thumbnail .img > div a.deletebtn span {
     background: url("../img/delete48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
 }
 .thumbnail .img > div a.selectbtn.createcamp span{
     background: url("../img/create48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
 }
+
 .profileinfo{
     overflow-y: auto;
 }
@@ -2701,9 +2707,27 @@ a.tw-toggle.tiles.active:hover i { opacity:0.7;}
     overflow: hidden;
     position: absolute;
     top: 0;
-    width: 100%;
-    display: none;
+    width: 100%;    
 }
+.progress-bar{
+    position:absolute;
+    top:50%;
+    background: none repeat scroll 0 0 #FFFFFF; 
+    z-index:1001;
+    opacity:100;
+    height: 6px;
+    width: 97%;
+    border: 1px solid #FFFFFF;
+    margin-left:1px;
+    border-radius:9px;
+}
+.progress-bar-slider{
+    background:#97D61D;
+    height:6px;
+    border-radius: 9px;
+    width:0%;
+}
+
 /* ------------------Drpop Div--------------- */
 
 

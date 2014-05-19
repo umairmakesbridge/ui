@@ -33,6 +33,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                    this.total = 0;
                    this.offsetLength = 0;
                    this._select_dialog =this.options._select_dialog;
+                   this.callBack = this.options.callBack;
                    this.type = "list";
                    this.total_fetch = 0;
                    this.objUserImages = new collectionUserImages();                              
@@ -205,7 +206,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         success:function(data){
                            
                          _.each(data.models, function(model){
-                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page});
+                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page,callBack:that.callBack});
                            that.$el.find('.thumbnails').append(viewImage.el);
                            that.listenTo(viewImage, 'tagclick', that.searchTag);
                          });

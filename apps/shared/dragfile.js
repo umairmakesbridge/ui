@@ -28,12 +28,13 @@
       this.app = this.options.app;
       this.errMessage = 0;
       this.fileName = '';
-      this.baloon = true;
+      this.baloon = false;
      //Click on add tag button      
      //this.ele.find(".addtag").on("click",$.proxy(this.showTagsDialog,this))
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
      this.$element.on("dragover",$.proxy(this._dragover,this))
      this.$element.on("drop",$.proxy(this._drop,this))      
+     this.$element.on('dragleave',$.proxy(this._dragleave,this))
      
      var _this = this;
      $(document).on('dragenter', function (e)
@@ -46,14 +47,23 @@
         e.stopPropagation();
         e.preventDefault();
         _this.$element.append(_this.UploadInstantBaloon());
-        _this.$element.addClass('file-border');
-        _this.baloon = false;
+        //_this.$element.addClass('file-border');
+        
       });
      $(document).on('drop', function (e)
       {
-        _this.$element.removeClass('file-border');
+        //_this.$element.removeClass('file-border');
         _this.$element.find('.dropdiv').remove();
         _this.baloon = true;
+        e.stopPropagation();
+        e.preventDefault();
+      });
+      
+      $(document).on('dragleave', function ( e )
+      {
+        //_this.$element.removeClass('file-border');
+        _this.$element.find('.dropdiv').remove();
+        _this.baloon = false;
         e.stopPropagation();
         e.preventDefault();
       });
@@ -62,16 +72,22 @@
   _dragenter:function(e){
     e.stopPropagation();
     e.preventDefault();
-    this.$element.addClass('file-border');
-    this.$element.append(this.UploadInstantBaloon());
-    this.baloon = false;
+    //this.$element.addClass('file-border');
+    this.$element.append(this.UploadInstantBaloon());    
   },
   _dragover:function(e){
      e.stopPropagation();
      e.preventDefault();
   },
+  _dragleave:function(e){
+    // this.$element.removeClass('file-border');
+     this.$element.find('.dropdiv').remove();
+     this.baloon = false;
+     e.preventDefault();
+     e.stopPropagation();
+  },
   _drop:function(e){
-     this.$element.removeClass('file-border');
+     //this.$element.removeClass('file-border');
      this.$element.find('.dropdiv').remove();
      this.baloon = true;
      e.preventDefault();
@@ -119,9 +135,9 @@
          else
             $(".images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
          $('#templi_'+data_id).fadeIn();
-        }else if(this.module == "csv" || this.module=="template"){
-            this.progressElement.find('.csv-opcbg').show();
-            this.progressElement.append("<div id='progress' style='position:absolute; top:50%;background: none repeat scroll 0 0 #FFFFFF; z-index:1001; opacity:100;height: 6px; width: 97%;border: 1px solid #FFFFFF;margin-left:1px;border-radius:9px;'><div style='background:#97D61D;height:6px;border-radius: 9px;'></div></div>")
+        }else if(this.module == "csv" || this.module=="template"){            
+            this.progressElement.append('<div class="csv-opcbg"></div>')
+            this.progressElement.append("<div id='progress' class='progress-bar'><div class='progress-bar-slider'></div></div>");            
         }
        //if(this.module !=="Image" || this.module !== "csv")this.app.showLoading("Uploading...",this.$element);
        var jqXHR=$.ajax({
@@ -153,6 +169,8 @@
             success: function(data){
                 _this.app.showLoading(false,_this.$element);
                  $('#templi_'+data_id).remove();
+                 _this.progressElement.find("#progress").remove();
+                 _this.progressElement.find(".csv-opcbg").remove();
                 _this.options.callBack(data,{fileName:_this.fileName});  
             }
             ,
@@ -200,34 +218,33 @@
                   </li>";
         return li;
      },
-     UploadInstantBaloon: function(){
-         console.log(this.module);
+     UploadInstantBaloon: function(){         
          var value = '',
           image = 'graphicimg',
           top = '50%',
           position ='absolute',
           addClass = '',
-          background = '#97D61D';
-         if(this.baloon){
-         if(this.module=='Image'){
-             top = '70%;';
-             position = 'fixed';
-             value = "Drop images here to instantly upload";
-         }else if(this.module=='csv'){
-             background = '#45C4F3';
-             image = 'csvimg';
-             value = "Drop .csv file here to instantly upload";
-         }else if (this.module == 'template'){
-             addClass = 'dropdiv-template';
-             value = "Drop images here to instantly upload";
-         }
-         var div = '<div class="dropdiv">\
-                    	<div class="dropcircle bounceIn '+addClass+'" style="position:'+position+';background:'+background+';top:'+top+'">\
-                        	<img src="img/'+image+'.png" alt=""/>\
-                        	<h5>'+value+'</h5>\
-                        </div>\
-                    </div>';
-         return div;
+          background = '#45C4F3';
+         if(this.baloon===false){
+            if(this.module=='Image'){
+                top = '70%;';
+                position = 'fixed';
+                value = "Drop images here to instantly upload";
+            }else if(this.module=='csv'){             
+                image = 'csvimg';
+                value = "Drop .csv file here to instantly upload";
+            }else if (this.module == 'template'){
+                addClass = 'dropdiv-template';
+                value = "Drop images here to instantly upload";
+            }
+            var div = '<div class="dropdiv">\
+                           <div class="dropcircle bounceIn '+addClass+'" style="position:'+position+';background:'+background+';top:'+top+'">\
+                                   <img src="img/'+image+'.png" alt=""/>\
+                                   <h5>'+value+'</h5>\
+                           </div>\
+                       </div>';             
+            this.baloon = true;    
+            return div;
          }else{
              return false;
          };

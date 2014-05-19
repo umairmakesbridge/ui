@@ -1,0 +1,63 @@
+<div class="thumbnail">
+<div data-original-title="Stock Template" class="template-type builticon showtooltip" title=""></div>
+  <div class="img">
+      
+      <% if(model.get('status')==='D'){  %>    
+      <div>
+        <a class="playbtn play-track"><span></span></a>
+        <a class="copybtn copy-track"><span></span></a>
+        <a class="editbtn edit-track"><span></span></a>
+        <a class="deletebtn delete-track"><span></span></a>
+      </div>
+       <% } else {
+                    %>
+                    
+      <div class="two">
+                              
+        <a class="pausebtn pause-track"><span></span></a>
+        <a class="copybtn copy-track" id=""><span></span></a>
+
+        </div>              
+                    
+      <%}
+      %>      
+      
+      <% if(model.get('thumbURL')){  %> 
+      <span>
+       <img src="<%- this.app.decodeHTML(model.get('thumbURL'))%>" data-src="holder.js" alt="">
+       </span>
+     <% } else {
+       %>  
+       <img src="img/nurtureimg.png" data-src="holder.js" alt="">       
+       
+      <%}
+      
+      %>      
+  </div>
+  <div class="caption">
+      <h3><a title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="edit-track showtooltip"><%- model.get('name')%></a></h3>
+    <% if(model.get('status')==='D'){  %>
+    <a class="cstatus pclr1">Paused </a> 
+    <% } else {
+                %>
+      <a class="cstatus pclr18">Playing </a>                
+     <%}
+                %>                 
+                                <div class="t-scroll">
+    <p>
+         <% if(model.get('tags')){  
+                    _.each(model.get('tags').split(","),function(t){ %>  
+                    <a><%- t %></a>
+                    <% }                        
+                        )
+                    }
+                    %>  
+        <!--<i class="ellipsis">...</i>--></p></div>
+    <div class="btm-bar">
+        <span><span class="icon report showtooltip" title="Click to view campaign details"></span></span>
+        <span><span class="icon mail"></span><em><%- model.get('msgCount')%></em> </span>
+
+        <span><span class="icon time"></span><em><%- ntDate %></em></span>
+    </div>
+  </div>
+</div>

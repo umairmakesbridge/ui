@@ -1,6 +1,6 @@
 <div class="accordion-heading">
     <a class="accordion-toggle" >        
-        <div class="ntmessageno"><%-no %>: </div><span class="title showtooltip" title="Click to edit"><%-title %></span>
+        <div class="ntmessageno"><%-no %>: </div><span class="title"><%-title %></span>
         <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
         <i class="icon preview showtooltip" title="Preview"></i>
         <b class="caret"></b>
@@ -10,22 +10,36 @@
     <div class="accordion-inner msg">
 
 
-        <div class="col1">
-            <div class="row"><label>Subject</label><span class="text camp-subject">Subject of the campaign</span></div>
-            <div class="row"><label>From Email</label><span class="text camp-fromemail">bms@bridgemailsystem.com
-                    
-                </span>
+        <div class="col1" style="width:64%">
+            <div class="dropareamessage" style="width:150px;">
+                <div class="nurtureimg" style="width:150px;position: relative">
+                    <div class="no-image">
+                        <div class="droppanel" style="height: 132px"><h4><img alt="" src="img/droparrow.png" width="30">
+                        <br class="clearfix">Drag and drop<br/>an image</h4></div>  
+                    </div>
+                    <div style="display: none;height:150px;overflow: hidden" id="message-image" >
+                        <img  width="150" height="170" alt="" src="">
+                    </div>
+                    <a class="btn-blue message-image" style="margin-top:5px;"><span style="padding:;">Browse</span><i style="padding-top:" class="icon update"></i></a>                       
+                </div>
+           </div>     
+            <div class="sumry">
+                <div class="row"><label>Subject</label><span class="text camp-subject">Subject of the campaign</span></div>
+                <div class="row"><label>From Email</label><span class="text camp-fromemail">bms@bridgemailsystem.com
+
+                    </span>
+                </div>
+                <div class="row"><label>From Name</label><span class="text camp-fromname">MakesBridge Technology
+
+                    </span></div>
+                <div class="row"><label>Reply To</label><span class="text  camp-replyto">demo@makesbridge.com
+
+                    </span></div>
             </div>
-            <div class="row"><label>From Name</label><span class="text camp-fromname">MakesBridge Technology
-                    
-                </span></div>
-            <div class="row"><label>Reply To</label><span class="text  camp-replyto">demo@makesbridge.com
-                    
-                </span></div>
         </div>
 
 
-        <div class="col2" style="height:180px">
+        <div class="col2" style="height:180px;width:31%">
 
 
             <div class="btn-group timer-group" data-toggle="buttons-radio">

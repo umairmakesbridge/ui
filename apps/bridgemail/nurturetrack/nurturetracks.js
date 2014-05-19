@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_makesbridge','jquery.bmsgrid','jquery.searchcontrol'],
-function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
+define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','jquery.bmsgrid','jquery.searchcontrol'],
+function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nutrue Track listing view, depends on search control, chosen control, icheck control
@@ -12,7 +12,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
              * Attach events on elements in view.
             */            
             events: {				
-                
+                'click .tile-list button' : 'toggleView'
             },
             /**
              * Initialize view - backbone .
@@ -35,7 +35,8 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
             */
             render: function () {
                this.$el.html(this.template({}));                                       
-               this.$tracksArea = this.$(".template-container");                                              
+               this.$tracksArea = this.$(".template-container");     
+               this.$trackTileArea =  this.$("ul.thumbnails");
                this.initControls();               
                this.fetchTracks();               
             }
@@ -125,6 +126,7 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                     remove_cache = true;
                     this.offset = 0;
                     this.$tracksContainer.children().remove();
+                    this.$trackTileArea.children().remove();
                     this.app.showLoading("Loading Nurture Tracks...",this.$tracksArea);             
                     this.$(".user_tracks .notfound").remove();
                 }
@@ -151,6 +153,9 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                         for(var s=this.offset;s<collection.length;s++){
                             var trackView = new trackRow({ model: collection.at(s),sub:this });                                                            
                             this.$tracksContainer.append(trackView.$el);
+                            
+                            var trackViewTile = new trackRowTile({ model: collection.at(s),sub:this });                                                            
+                            this.$trackTileArea.append(trackViewTile.$el);
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -360,8 +365,9 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
             showBmsTracks:function(){
                 this.$(".user_tracks").hide();
                 this.$(".bms_tracks").fadeIn();
+                this.$(".nurturelisting").show();
                 this.ws_header.find(".bmstrackcount").hide();
-                this.ws_header.find(".usertrackcount").show();
+                this.ws_header.find(".usertrackcount").show();                
                 if(this.makesbridge_tracks ===false){
                     this.fetchBmsTracks();
                 }
@@ -371,6 +377,21 @@ function (template,tracksCollection,trackRow,trackRowMakesbrdige) {
                 this.$(".user_tracks").fadeIn();                                
                 this.ws_header.find(".bmstrackcount").show();
                 this.ws_header.find(".usertrackcount").hide();
+            },
+            toggleView:function(e){
+                var obj = $.getObj(e,"button");
+                if(!obj.hasClass("active")){
+                    this.$(".tile-list button").removeClass("active");
+                    obj.addClass("active");
+                    if(obj.hasClass("btn-listing")){
+                        this.$(".nt_listing").show();
+                        this.$(".tileview").hide();
+                    }
+                    else{
+                        this.$(".nt_listing").hide();
+                        this.$(".tileview").show();
+                    }
+                }
             }
         });
 });

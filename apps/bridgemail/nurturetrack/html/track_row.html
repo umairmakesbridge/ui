@@ -48,24 +48,24 @@
                     %>    
                 </span></strong>
         </div>
-        <div class="slide-btns <% if(model.get('status')==='D'){ print('four') } else { print('three') }%>" style="min-height:66px; margin-top:-8px; margin-right:-14px;">
-              <span data-icon="h" class="icon setting"></span>
-              <div>                    
-                     <% if(model.get('status')==='D'){  %>
-                     
-                    <a  class="icon play play-track showtooltip" title="Play" ></a>  
-                    <a data-icon="c" class="icon copy-track showtooltip" title="Copy" ></a> 
-                    <a data-icon="f" class="icon edit-track showtooltip" title="Edit" ></a>
-                    <a data-icon="d" class="icon delete-track showtooltip" title="Delete" ></a>
-                    
-                    <% } else {
-                    %>
-                        <a class="icon pause pause-track showtooltip" title="Pause"></a>  
-                        <a data-icon="c" class="icon copy-track showtooltip" title="Copy"></a> 
-                        <a  data-icon="g" class="icon showtooltip" title="Preview"></a>
-                    <%}
-                    %>    
-                  </div>
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('four') } else { print('three') }%>">
+              <span class="icon setting"></span>
+              <div>                 
+                <% if(model.get('status')==='D'){  %>
+
+                <a  class="icon play play-track" ><span>Play</span></a>  
+               <a class="icon copy-track copy" ><span>Copy</span></a> 
+               <a class="icon edit-track edit" ><span>Edit</span></a>
+               <a class="icon delete-track delete" ><span>Delete</span></a>
+
+               <% } else {
+               %>
+                   <a class="icon pause pause-track"><span>Play</span></a>  
+                   <a class="icon copy-track copy"><span>Copy</span></a> 
+                   <a class="icon preview"><span>Preview</span></a>
+               <%}
+               %>    
+               </div>   
         </div> 
         
     </div>

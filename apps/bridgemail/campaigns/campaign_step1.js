@@ -1,53 +1,47 @@
-define(['text!nurturetrack/html/message_setting.html','jquery-ui','bms-mergefields'],
+define(['text!campaigns/html/campaign_step1.html','bms-mergefields','jquery.chosen','jquery.icheck'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
-        // Setting Dialog View for page 
+        // Campaign step1 view
         //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
-        return Backbone.View.extend({            
-            tagName: 'div',
+        return Backbone.View.extend({
+            className: '',            
+            
             /**
              * Attach events on elements in view.
             */
             events: {
-                'click .mergefields-box' :'showMergeFieldDialog'
+              
             },
             /**
              * Initialize view - backbone
             */
             initialize: function () {
                     this.template = _.template(template);				
-                    this.parent = this.options.page;    
-                    this.dialog = this.options.dialog;
-                    this.camp_obj = this.parent.object ? this.parent.object[0]:null;
-                    this.camp_json = this.parent.camp_json;
-                    this.plainText = "";
-                    this.htmlText = "";
+                    this.parent = this.options.page
+                    this.camp_obj = this.options.camp_obj;                    
+                    this.app = this.parent.app;     
                     this.settingchange = true;
-                    this.camp_id = this.camp_obj['campNum.encode'];                                        
-                    this.app = this.parent.app;                            
                     this.render();                    
             },
-            /**
+              /**
              * Render view on page.
             */
-            render: function () {                  
-                this.$el.html(this.template({
-                    model: this.model
-                }));         
-                this.$bodyInner = this.$(".accordion_messagebody-inner"); 
-                this.initControl();
-                this.loadMessageBody();                
-            }
-            ,
-            initControl:function(){
-                this.$("#accordion_setting").accordion({heightStyle: "fill",collapsible: true});                    
-                this.$("#accordion_messagebody").accordion({heightStyle: "fill",collapsible: true,active:1});
+            render: function () {                    
                 
-                this.$(".accordion_login-inner").css({"height":"auto","overflow":"inherit"});
-                this.$(".accordion_messagebody-inner").css({"height":"auto","overflow":"inherit"});
+               this.$el.html(this.template({
+                    model: this.model
+                }));                               
+                this.initControls();  
+               
+            },
+            init:function(){
+              this.setFromNameField();  
+              this.loadData();  
+            },
+            initControls:function(){                
                 
                 this.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: "true"});
                 var camp_obj = this;
@@ -66,22 +60,57 @@ function (template) {
                 this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                 this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'dialog'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
                 this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 
-                                
                 
+                this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
+                this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){                    
+                    $(this).trigger("chosen:updated");
+                },this));                    
+                
+               
+                                
             },
-            init:function(){
-              this.setFromNameField();  
-              this.loadData();
+            initCheckbox:function(){
+                 this.$('input').iCheck({
+                    checkboxClass: 'checkinput'
+                });
+                this.$('input.checkpanel').iCheck({
+                    checkboxClass: 'checkpanelinput',
+                    insert: '<div class="icheck_line-icon"></div>'
+                });
+                var camp = this;
+                this.$(".iCheck-helper").click(function(){
+                    var icheck = $(this).parent().find("input");
+                    if(icheck.attr("type")=="checkbox"){
+                       var icheck_id = icheck.attr("id");
+                       if(icheck_id=="campaign_isFooterText"){
+                          camp.setFooterArea();
+                       }                       
+                       else if(icheck_id=="campaign_useCustomFooter"){
+                           camp.setCustomFooterArea();
+                       }
+
+                    }                    
+
+                })
             },
-            fromNameSelectBoxChange:function(obj){
-                var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
-                if(merge_field_patt.test($(obj).val())){
-                   this.$("#campaign_from_email_default").show();      
-                }
-                else{
-                  this.$("#campaign_from_email_default").hide();  
-                }    
-           },
+            setFooterArea:function(){
+                this.$("#campaign_footer_text").prop("disabled",!this.$("#campaign_isFooterText")[0].checked)                                            
+            },
+            setCustomFooterArea:function(){
+                this.$("#campaign_custom_footer_text").prop("disabled",!this.$("#campaign_useCustomFooter")[0].checked)                                            
+            },            
+            setFromNameField:function(){
+               var active_workspace = this.$el;
+               var subj_w = this.$('#campaign_subject').width(); // Abdullah Check
+               active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+22)+"px","padding-right":"61px"});   // Abdullah Try
+                if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
+                   active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
+                   active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");
+                 }
+                 if(active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()){
+                   active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()-6+"px");   // Abdullah Check
+                 } 
+            },
            loadCampaign:function(camp_json){              
                 this.$("#campaign_subject").val(this.app.decodeHTML(camp_json.subject));
                 var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -103,10 +132,17 @@ function (template) {
                          this.$("#campaign_from_email_default").hide();                            
                      }
                  }
+                 this.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
                  if(camp_json.senderName != ''){
                      this.$("#campaign_from_name").val(this.app.decodeHTML(camp_json.senderName));                        
                  }                    
                  this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.replyTo));       
+                 this.$("#campaign_profileUpdate").prop("checked",camp_json.profileUpdate=="N"?false:true);
+                 this.$("#campaign_useCustomFooter").prop("checked",camp_json.useCustomFooter=="N"?false:true);
+                 this.$("#campaign_isFooterText").prop("checked",camp_json.isFooterText=="N"?false:true);
+                 this.$("#campaign_tellAFriend").prop("checked",camp_json.tellAFriend=="N" ? false:true );                
+                 this.$("#campaign_isWebVersion").prop("checked",camp_json.isWebVersionLink=="N"?false:true);
+                 
                  this.htmlText = camp_json.htmlText;
                  this.plainText = camp_json.plainText;                    
                  if(camp_json.defaultSenderName != '')
@@ -127,30 +163,23 @@ function (template) {
                  else{
                       this.$("#campaign_reply_to_default").hide();
                  }
-                 this.loadMessageHTML();              
-            },
-           loadMessageHTML:function(){
-               if(this.messagebody_page){
-                   if(this.htmlText || this.plainText){
-                    this.$("#accordion_messagebody").accordion( "option", "active", 0 );
-                    this.messagebody_page.populateBody();
-                   }
-               }
-               else{
-                  setTimeout(_.bind(this.loadMessageHTML,this),200); 
-               }
+                 this.$("#campaign_fb").prop("checked",camp_json.facebook=="N"?false:true);                        
+                 this.$("#campaign_twitter").prop("checked",camp_json.twitter=="N"?false:true);                        
+                 this.$("#campaign_linkedin").prop("checked",camp_json.linkedin=="N"?false:true);                        
+                 this.$("#campaign_pintrest").prop("checked",camp_json.pinterest=="N"?false:true);                        
+                 this.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
+                 
+                 this.initCheckbox();
+                 this.parent.loadMessageHTML();              
            },
-           setFromNameField:function(){
-               var active_workspace = this.$el;
-                var subj_w = this.$('#campaign_subject').width(); // Abdullah Check
-                active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+22)+"px","padding-right":"61px"});   // Abdullah Try
-                 if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
-                    active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
-                    active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");
-                  }
-                  if(active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()){
-                    active_workspace.find("#fromemail_default_input").css("width",active_workspace.find("#fromemail_default_input").prev().find(".chosen-single span").width()-6+"px");   // Abdullah Check
-                  } 
+            fromNameSelectBoxChange:function(obj){
+                var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                if(merge_field_patt.test($(obj).val())){
+                   this.$("#campaign_from_email_default").show();      
+                }
+                else{
+                  this.$("#campaign_from_email_default").hide();  
+                }    
            },
            loadData:function(){
                this.app.showLoading("Loading Campaign...",this.$el);  
@@ -162,6 +191,7 @@ function (template) {
                             if(this.app.checkError(defaults_json)){
                                 return false;
                             }                            
+                            this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
                             this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
                             this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
                             var fromEmails = defaults_json.fromEmail;
@@ -188,36 +218,24 @@ function (template) {
                             
                             var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
                             this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
+                            
+                            if(defaults_json.customFooter==""){
+                                this.$("#campaign_useCustomFooter_div").hide();                                
+                            }
+                            else{
+                                this.$("#campaign_useCustomFooter_div").show();
+                                this.$(".step1col1").css("min-height","427px");
+                                this.$("#campaign_custom_footer_text").val(this.app.decodeHTML(defaults_json.customFooter,true));
+                            }
                             if(this.camp_json){
                                 this.loadCampaign(this.camp_json);
                             }
                             else{
-                               this.loadCallCampaign(); 
+                               this.parent.loadCallCampaign(); 
                             }
                             
                         }
                     },this)).fail(function() { console.log( "error in detauls" ); });      
-           },
-           loadCallCampaign:function(){
-              var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_obj['campNum.encode']+"&type=basic";
-              this.app.showLoading("Loading Campaign...",this.$el);
-              jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
-                  this.app.showLoading(false,this.$el);  
-                  var camp_json = jQuery.parseJSON(xhr.responseText);
-                  this.camp_json = camp_json;
-                  this.loadCampaign(this.camp_json);
-                  
-              },this));    
-             
-           },
-           loadMessageBody:function(){
-               this.app.showLoading("Loading...",this.$bodyInner);
-               require(["campaigns/campaign_body"],_.bind(function(page){    
-                    this.app.showLoading(false,this.$bodyInner);                    
-                    this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj})                       
-                    this.$bodyInner.append(this.messagebody_page.$el);         
-                    this.messagebody_page.init();
-                },this));
            },
            saveStep1:function(){            
                     var isValid = true;
@@ -343,10 +361,10 @@ function (template) {
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         var fromEmail = this.$('#campaign_from_email_input').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
-                        if( this.settingchange || this.camp_id==0){
-                                this.app.showLoading("Saving settings...",this.$el);
+                        if( this.settingchange || this.parent.camp_id==0){
+                                this.app.showLoading("Saving settings...",this.parent.dialog.$el);
                                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                                $.post(URL, { type: "saveStep1",campNum:this.camp_id,
+                                $.post(URL, { type: "saveStep1",campNum:this.parent.camp_id,
                                         subject : this.$("#campaign_subject").val(),
                                         senderName :this.$("#campaign_from_name").val(),
                                         fromEmail : fromEmail,
@@ -354,14 +372,28 @@ function (template) {
                                         defaultSenderName :defaultSenderName,
                                         replyTo :this.$("#campaign_reply_to").val(),
                                         defaultReplyToEmail :defaultReplyToEmail,                                        
+                                        tellAFriend :this.$("#campaign_tellAFriend")[0].checked?'Y':'N',
+                                        subInfoUpdate :this.$("#campaign_profileUpdate")[0].checked?'Y':'N',
+                                        unsubscribe :this.$("#campaign_unSubscribeType").val(),
+                                        provideWebVersionLink :this.$("#campaign_isWebVersion")[0].checked?'Y':'N',
+                                        isFooterText : this.$("#campaign_isFooterText")[0].checked?'Y':'N',
+                                        footerText :this.$("#campaign_footer_text").val(),
+                                        facebookShareIcon :this.$("#campaign_fb")[0].checked?'Y':'N',
+                                        twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
+                                        linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
+                                        googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
+                                        pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
                                   })
                                  .done(_.bind(function(data) {                                 
                                     var step1_json = jQuery.parseJSON(data);
-                                    this.app.showLoading(false,this.$el);
+                                    this.app.showLoading(false,this.parent.dialog.$el);
                                     if(step1_json[0]!=="err"){   
-                                            this.parent.loadCampaign();
-                                            if(this.messagebody_page.states.editor_change ===true ){
-                                                this.saveStep2();                                                
+                                            this.parent.parent.loadCampaign();
+                                            if(this.parent.dialog){
+                                                this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
+                                            }
+                                            if(this.parent.messagebody_page.states.editor_change ===true ){
+                                                this.parent.saveStep2();                                                
                                             }
                                             else{
                                                 this.app.showMessge("Message settings saved successfully!");
@@ -377,60 +409,7 @@ function (template) {
                         }
                     }
                     
-                },
-                saveStep2:function(showLoading){                                                   
-                 var html = "",plain="";                  
-                 var post_data = {type: "saveStep2",campNum:this.camp_id}
-                 var selected_li = this.$("#choose_soruce li.selected").attr("id");
-                     if(selected_li=="html_editor"){
-                        html= (this.messagebody_page.$(".textdiv").css("display")=="block")?this.messagebody_page.$("#htmlarea").val():tinyMCE.get('bmseditor_'+this.messagebody_page.wp_id).getContent();
-                        plain = this.$("#bmstexteditor").val();
-                        post_data['htmlCode'] = html; 
-                        post_data['plainText'] = plain;                        
-                     }else if(selected_li=="html_code"){
-                        html = this.$("textarea#handcodedhtml").val();                     
-                        post_data['htmlCode'] = html;                        
-                     }else if(selected_li=="plain_text"){
-                        plain = this.$("textarea#plain-text").val();      
-                        post_data['plainText'] = plain;
-                        post_data['isCampaignText'] = 'Y';                        
-                     }                 
-                        
-                 if(this.messagebody_page.states.editor_change ===true || typeof(showLoading)!=="undefined"){
-                   if(typeof(showLoading)=="undefined"){  
-                    this.app.showLoading("Saving settings...",this.$el); 
-                   }
-                   var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                   $.post(URL,post_data )
-                        .done(_.bind(function(data) {                                 
-                            var step1_json = jQuery.parseJSON(data);
-                            this.app.showLoading(false,this.$el);
-                            this.$(".save-step2").removeClass("saving");
-                            if(step1_json[0]!=="err"){
-                                this.app.showMessge("Message settings saved successfully!");
-                                if(selected_li=="plain_text"){
-                                    this.plainText = plain;                                    
-                                    this.htmlText = "";
-                                }
-                                else{
-                                    this.htmlText = html;
-                                    this.plainText = plain;                                    
-                                }
-                                this.messagebody_page.states.editor_change = false;
-                                
-                            }
-                            else{
-                               this.app.showAlert(step1_json[1],this.$el); 
-                            }
-                   },this));
-                   
-                 }  
-                
-                },
-                saveCall:function(){
-                    this.saveStep1();
                 }
-            
             
         });
 });

@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/message_row.html','jquery-ui','bms-addbox'],
+define(['text!nurturetrack/html/message_row.html','jquery-ui','bms-addbox','bms-dragfile'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -17,7 +17,8 @@ function (template) {
              'click .timer-group button':'showTimer',
              'click .edit-message ':'editMessage',
              'click .preview': 'previewCampaign',
-             'click .save-message': 'saveMessage'
+             'click .save-message': 'saveMessage',
+             'click .message-image':'imageDialog'
             },
             /**
              * Initialize view - backbone
@@ -30,9 +31,12 @@ function (template) {
                     this.waitView = null;
                     if(this.object){
                         this.messageLabel = this.object[0]["label"];
+                        if(!this.messageLabel){
+                             this.messageLabel = '&lt;subject line&gt;';
+                        }
                     }
                     else{
-                        this.messageLabel = 'Message Label';
+                        this.messageLabel = '&lt;subject line&gt;';
                     }
                     this.camp_json = null;
                     this.triggerOrder = this.options.triggerOrder;                    
@@ -79,15 +83,25 @@ function (template) {
                     this.$(".timebox-hour").val("09");
                     this.$(".timebox-min").val("00");
                 }
-                this.$(".title").addbox({app:this.app,addBtnText:'Save',placeholder_text:'Write Message Name here',
+               /* this.$(".title").addbox({app:this.app,addBtnText:'Save',placeholder_text:'Write Message Name here',
                                         addCallBack:_.bind(this.renameLabel,this)
                                         ,showCallBack:_.bind(this.showLabel,this)
-                                        });
+                                        });*/
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                if(this.object){
                     this.loadCampaign();                    
                }
                this.$el.attr("t_order",this.triggerOrder);
+               this.$(".dropareamessage").dragfile({
+                    post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
+                    callBack : _.bind(this.showSelectedImage,this),
+                    app:this.app,
+                    module:'template',
+                    progressElement:this.$('.nurtureimg')
+                });
+                if(this.object[0] && this.object[0].thumbURL){
+                    this.showImage(this.app.decodeHTML(this.object[0].thumbURL));
+                }
             },
             deleteRow:function(){                
                 if(this.isWait){
@@ -190,6 +204,13 @@ function (template) {
                   var camp_json = jQuery.parseJSON(xhr.responseText);
                   this.camp_json = camp_json;
                   this.$(".camp-subject").html(this.app.encodeHTML(camp_json.subject));
+                  if(camp_json.subject){
+                    this.$(".title").html(this.app.encodeHTML(camp_json.subject));
+                  }
+                  else{
+                      this.messageLabel = '&lt;subject line&gt;';
+                      this.$(".title").html('&lt;subject line&gt;');
+                  }
                   this.$(".camp-fromemail").html(this.app.encodeHTML(camp_json.fromEmail));
                   var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             
                   if( merge_field_patt.test(this.app.decodeHTML(camp_json.fromEmail)) && camp_json.defaultFromEmail){                    
@@ -264,7 +285,58 @@ function (template) {
                        str  = "0" + str;
                    }
                    return str;
-               }
+            },
+            showSelectedImage:function(data){
+                     var _image= jQuery.parseJSON(data);
+                    if(_image.success){
+                        var img_obj = _image.images[0].image1[0];
+                        var img_thmbnail = this.app.decodeHTML(img_obj.thumbURL);
+                        this.showImage(img_thmbnail)
+                        this.saveImage(img_obj['imageId.encode']);
+                        
+                    }
+                },
+                saveImage:function(imageId){
+                    var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');                   
+                    $.post(URL, { type: "messageThumb",imageId:imageId,trackId:this.parent.track_id,triggerOrder:this.triggerOrder })
+                    .done(_.bind(function(data) {                  
+                           this.app.showLoading(false,this.$el);   
+                           var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){                               
+                               this.app.showMessge("Message image set Successfully!");                                  
+                           }
+                           else{
+                               this.app.showAlert(_json[0],$("body"),{fixed:true}); 
+                           }
+                   },this));  
+                },
+                showImage:function(img_thmbnail){
+                    this.$(".no-image").hide();
+                    this.$("#message-image").show();
+                    this.$("#message-image img").attr("src",img_thmbnail);
+                },
+                imageDialog:function(){                    
+                    var app = this.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });                        
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                                              
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
+                         dialog.getBody().html(mPage.$el);
+                        
+                     },this));
+                     
+                },
+                insertImage:function(obj){
+                   this.showImage(obj.imgurl);
+                   this.saveImage(obj.imgencode);
+                }
             
         });
 });

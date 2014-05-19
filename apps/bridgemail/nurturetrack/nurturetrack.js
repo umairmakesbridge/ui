@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','bms-tags'],
+define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','bms-tags','bms-dragfile'],
         function(template,TargetLiView,MessageView,WaitView,ButtonsView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
@@ -7,13 +7,15 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             'use strict';
             return Backbone.View.extend({               
+                id:'nurturetargets',
                 /**
                  * Attach events on elements in view.
                  */
                 events: {
                     'click .add-targets':'selectTargets',
                     'click .add-message':'addMessage',
-                    'click .add-wait':'addWait'
+                    'click .add-wait':'addWait',
+                    'click .browse-button-nt':"imageDialog"
                 },
                 /**
                  * Initialize view - backbone
@@ -79,6 +81,14 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     },this));
                     playIcon.click(_.bind(this.playNurtureTrack,this));
                     pauseIcon.click(_.bind(this.pauseNurtureTrack,this));
+                    
+                    this.$(".nurtureimg").dragfile({
+                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
+                        callBack : _.bind(this.showSelectedImage,this),
+                        app:this.app,
+                        module:'template',
+                        progressElement:this.$('.nurtureimg')
+                    });
                    
                    this.loadData();
                   
@@ -108,6 +118,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         this.initTag(tags); 
                         var workspace_id = this.current_ws.attr("id");
                         this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:_json.name,subheading:"Nurture Track Detail"});
+                        if(_json.thumbURL){
+                            this.showImage(this.app.decodeHTML(_json.thumbURL));
+                        }
                         if(_json.targets){
                             this.targets = _json.targets[0];
                             this.loadTargets();
@@ -307,7 +320,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-                             var model = [{"campNum.encode":_json[1],"campNum.checksum":_json[2],"label":"Message"}];                               
+                             var model = [{"campNum.encode":_json[1],"campNum.checksum":_json[2],"label":""}];                               
                              if(typeof(t_Order)!=="number"){                                
                                 this._message(tOrder,model)                               
                              }
@@ -424,8 +437,59 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     else{
                         this.app.showAlert('Wait is already added',$("body"),{fixed:true}); 
                     }
+                },
+                showSelectedImage:function(data){
+                     var _image= jQuery.parseJSON(data);
+                    if(_image.success){
+                        var img_obj = _image.images[0].image1[0];
+                        var img_thmbnail = this.app.decodeHTML(img_obj.thumbURL);
+                        this.showImage(img_thmbnail)
+                        this.saveImage(img_obj['imageId.encode']);
+                        
+                    }
+                },
+                saveImage:function(imageId){
+                    var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');                   
+                    $.post(URL, { type: "trackThumb",imageId:imageId,trackId:this.track_id })
+                    .done(_.bind(function(data) {                  
+                           this.app.showLoading(false,this.$el);   
+                           var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){
+                               this.parentWS.fetchTracks();   
+                               this.app.showMessge("Nurture Track image set Successfully!");                                  
+                           }
+                           else{
+                               this.app.showAlert(_json[0],$("body"),{fixed:true}); 
+                           }
+                   },this));  
+                },
+                showImage:function(img_thmbnail){
+                    this.$(".no-image").hide();
+                    this.$("#nt-image").show();
+                    this.$("#nt-image img").attr("src",img_thmbnail);
+                },
+                imageDialog:function(){                    
+                    var app = this.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });                        
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                                              
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
+                         dialog.getBody().html(mPage.$el);
+                        
+                     },this));
+                     
+                },
+                insertImage:function(obj){
+                   this.showImage(obj.imgurl);
+                   this.saveImage(obj.imgencode);
                 }
-                
                 
 
             });

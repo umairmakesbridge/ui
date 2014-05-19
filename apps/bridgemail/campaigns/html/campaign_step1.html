@@ -1,0 +1,204 @@
+<div class="row-fluid show-grid">
+    <div class="span6 settings">
+        <h2 class="clearfix"><span class="icon h-info2 "></span>Header Information </h2>
+        <div class="cont step1col1">
+            <div class="row">
+                <label id="lblSubject">Subject</label>
+                <div class="campaign-fields-right-wrapper" style="" >
+                    <!--<div ></div>-->
+                    <div class="input-append adv_dd sort-options subject-container" id="campaign_subject-wrap">
+                        <div class="inputcont" style="float:right;width:100%;">              	
+                            <input type="text" style="width:100%" placeholder="Enter subject" id="campaign_subject" class="header-info campaign-headerinfo-input">
+                            <div class="btn-group subject-group">
+                                <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+
+                            </div>
+                        </div>
+                        <!--<span id="subject_erroricon" class="erroricon"></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label id="lblFromemail">From Email</label>
+                <div class="campaign-fields-right-wrapper" style="" id="campaign_from_email-wrap">
+                    <div class="input-append adv_dd sort-options fromeEmail-container"  style="width:90.5%">
+                        <div style="position: absolute; right: 0px; background-color: rgb(234, 244, 249); height: 39px; width: 61px;"></div>
+                        <div class="inputcont">                              
+                            <select id="campaign_from_email" class="nosearch fromemail-group">                                
+                            </select>            
+                            <input value="" name="from_email_input" id="campaign_from_email_input" placeholder="Enter from email" type="text" class="no-shadow flyinput header-info"  />  
+                        </div>
+
+                        <!--                                        <div class="btn-group fromemail-group">
+                                                                    <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                                                                </div>-->
+                        <!--</div>
+                    </div>
+                </div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row addrow femail-default-container" id="campaign_from_email_default" style="display:none">
+                <label>&nbsp;</label>
+                <div class="">
+                    <span class="directarrow"></span>
+                    <div class="inputcont" style="text-align:right;">          	                                
+                        <select id="fromemail_default" class="nosearch" style="float:right;">                  
+                        </select>
+                        <input value="" name="fromemail_default_input" id="fromemail_default_input" placeholder="Enter from email default value" type="text" class="no-shadow flyinput" />  
+                    </div>
+                </div>
+                <!--<span id="fromemaildefault_erroricon" class="erroricon"></span>-->
+            </div>
+            <div class="row">
+                <label id="lblFromname">From Name</label>
+                <div class="campaign-fields-right-wrapper" style="">
+                    <div class="input-append adv_dd sort-options fname-container" id="campaign_from_name-wrap">
+                        <div class="inputcont" style="width:100%;float:right;">              	
+                            <input type="text" placeholder="Enter from name" style="width:100%;" id="campaign_from_name" class="header-info campaign-headerinfo-input" />
+                            <div class="btn-group fromname-group">
+                                <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                            </div>
+                        </div>
+                        <!--<span id="fromname_erroricon" class="erroricon"></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row addrow fnamedefault-container" id="campaign_from_name_default" style="display:none">
+                <label>&nbsp;</label>
+                <span class="directarrow"></span>            
+                <div class="inputcont" style="text-align:right;">            	
+                    <input id="campaign_default_from_name" type="text" placeholder="Enter from name default value">
+                </div>
+                <!--<span id="defaultfromname_erroricon" class="erroricon" data-original-title="Default From Name cann\'t be empty"></span>-->
+            </div>
+            <div class="row">
+                <label id="lblReplyto">Reply To</label>
+                <div class="campaign-fields-right-wrapper" style="">
+                    <div class="input-append adv_dd sort-options replyto-container" id="campaign_reply_to-wrap">
+                        <div class="inputcont" style="width:100%;float:right;">              	
+                            <input type="text" placeholder="Enter reply to" id="campaign_reply_to" style="width:100%" class="header-info campaign-headerinfo-input" />                
+                            <div class="btn-group replyto-group">
+                                <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon" ></span> <span class="caret"></span> </button>
+                            </div>
+                        </div>
+                        <!--<span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="row addrow replyemail-container" id="campaign_reply_to_default" style="display:none">
+                <label>&nbsp;</label>
+                <span class="directarrow"></span>
+                <div class="inputcont">              	
+                    <input id="campaign_default_reply_to" type="text" placeholder="Enter reply to default value">
+                    <!--<span id="email_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="span6 settings">
+        <h2 class="clearfix"><span class="icon settings2"></span>Settings </h2>
+        <div class="cont">
+            <div class="row-fluid">
+                <div class="">
+                    <div id="unsubscribe" class="btn-group subs-dd">
+                        <select id="campaign_unSubscribeType" class="nosearch">
+                            <option value="S" >Simple Unsubscribe </option>
+                            <option value="U">Universal Subscriber Management</option>
+                        </select>
+                    </div>
+
+                    <!--span6  -->
+                    <div class="step1-settings">
+                        <div class="inputlabel" style="margin-top:10px; display:none;">
+                            <input type="checkbox" id="campaign_profileUpdate" value="" >
+                            <label for="campaign_profileUpdate">Subscriber Information Update <a style="display:none">Choose  fields</a> </label>
+                        </div>                
+                        <div class="inputlabel" >
+                            <input type="checkbox"  id="campaign_tellAFriend" class="checkinput"  value="">
+                            <label for="campaign_tellAFriend">Tell A Friend </label>
+                        </div>
+                        <div class="inputlabel" style="display:none">
+                            <input type="checkbox" id="campaign_isTextOnly" class="checkinput"  value="">
+                            <label for="campaign_isTextOnly">Send Text version only </label>
+                        </div>
+                        <div class="inputlabel" >
+                            <input type="checkbox" id="campaign_isWebVersion" class="checkinput"  value="">
+                            <label for="campaign_isWebVersion">Show web version on my email </label>
+                        </div>
+                        <div class="inputlabel">
+                            <input type="checkbox" id="campaign_isFooterText" class="checkinput">
+                            <label for="campaign_isFooterText">Place Company and Physical Address in my email footer</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- span6  --> 
+
+            </div>
+            <div class="row-fluid">
+                <div class="">
+                    <textarea disabled="" class="pspa-text" id="campaign_footer_text"></textarea>
+                </div>
+                <!-- span12  --> 
+            </div>
+            <!-- row-fluid  --> 
+            <div id="campaign_useCustomFooter_div" style="display:none;">
+                <div class="row-fluid" style="margin-top:10px" >
+                    <div class="span6">
+                        <div class="fluidlabel" >
+                            <input type="checkbox"  id="campaign_useCustomFooter" value="">
+                            <label>Use Custom Footer </label>
+                        </div>
+                    </div>
+                    <!-- span6  --> 
+                </div>
+                <!-- row-fluid  -->
+
+                <div class="row-fluid">
+                    <div class="">
+                        <textarea disabled="" class="pspa-text" id="campaign_custom_footer_text" readonly="readonly" style="height:100px"></textarea>
+                    </div>
+                    <!-- span12  --> 
+                </div>
+                <!-- row-fluid  --> 
+            </div>
+        </div>
+        <!-- Cont -->
+    </div>          
+</div>
+
+<div class="row-fluid show-grid">
+    <div class="span12 settings social">
+        <div class="cont" style="">
+            <h2 class="clearfix"><span class="icon social2"></span>Social </h2>
+            <div class="row-fluid" id="campaign_socail_share" >
+                <ul class="socialbtns">
+                    <li class="facebook">
+                        <input type="checkbox" id="campaign_fb" class="checkpanel" value=""/>
+                        <label for="campaign_fb" class="showtooltip" data-original-title="Share at Facebook"><span class="social-icon fb"></span><strong>Facebook</strong></label>
+                    </li>
+                    <li class="twitter">
+                        <input type="checkbox" id="campaign_twitter"  class="checkpanel" value=""/>
+                        <label for="campaign_twitter" class="showtooltip" data-original-title="Share at Twitter"><span class="social-icon tw"></span><strong>Twitter</strong></label>
+                    </li>
+                    <li class="linkedin">
+                        <input type="checkbox" id="campaign_linkedin"  class="checkpanel" value=""/>
+                        <label for="campaign_linkedin" class="showtooltip" data-original-title="Share at Linkedin"><span class="social-icon in"></span><strong>Linkedin</strong></label>
+                    </li>
+                    <li class="pinterest">
+                        <input type="checkbox" id="campaign_pintrest"  class="checkpanel" value=""/>
+                        <label for="campaign_pintrest" class="showtooltip" data-original-title="Share at Pinterest"><span class="social-icon pi"></span><strong>Pinterest</strong></label>
+                    </li>
+                    <li class="googleplus">
+                        <input type="checkbox" id="campaign_gplus"  class="checkpanel" value=""/>
+                        <label for="campaign_gplus" class="showtooltip" data-original-title="Share at Google Plus"><span class="social-icon gp"></span><strong>Google Plus</strong></label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--settings  --> 
+</div>
+<div class="clearfix"></div>
