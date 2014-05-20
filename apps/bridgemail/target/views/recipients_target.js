@@ -103,6 +103,7 @@ function (template) {
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
                            dialog.getBody().html(mPage.$el);
+                            dialog.$el.find('#target_name').focus();
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                       });
                 },

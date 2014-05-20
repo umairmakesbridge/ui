@@ -40,10 +40,11 @@ function (template,tags) {
                 });
                 require(["text!listupload/html/editlist.html"],function(list){
                     dialog.getBody().html(list);
-                    dialog.$el.find('#list_name').val(listName);
+                    
                     dialog.$el.addClass('gray-panel');
+                     dialog.$el.find('#list_name').focus();
                     that.showTags(dialog);
-                     
+                     dialog.$el.find('#list_name').val(listName);
                    
                 });
                 dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));

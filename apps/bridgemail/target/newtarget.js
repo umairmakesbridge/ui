@@ -21,6 +21,7 @@ define(['text!target/html/newtarget.html'],
                     this.app = this.options.app;
                     this.curview = this;
                     this.$el.html(this.template({}));
+                    this.$el.find('#target_name').focus();
                 },
                 createTarget: function() {
                     var curview = this;

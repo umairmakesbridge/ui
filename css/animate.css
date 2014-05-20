@@ -84,28 +84,6 @@
  
 } 
 /*------------------------------------------------------------*/
-
-
-@-webkit-keyframes rotateIn {
-  0% {
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
-    -webkit-transform: rotate(0deg) scale(1);
-    transform: rotate(0deg) scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    -webkit-transform-origin: center center;
-    transform-origin: center center;
-    -webkit-transform: rotate(45deg) scale(2);
-    transform: rotate(45deg) scale(2);
-    opacity: 1;
-  }
-}
-
-
-
 @keyframes rotateIn {
   0% {
     -webkit-transform-origin: center center;
@@ -145,35 +123,14 @@
     opacity: 1;
   }
 }
-@keyframes rotateOut {
-  0% {
-    -webkit-transform-origin: center center;
-    -ms-transform-origin: center center;
-    transform-origin: center center;
-    -webkit-transform:  rotate(45deg) scale(2);
-    -ms-transform:  rotate(45deg) scale(2);
-    transform:  rotate(45deg) scale(2);
-    opacity: 1;
-  }
-
-  100% {
-    -webkit-transform-origin: center center;
-    -ms-transform-origin: center center;
-    transform-origin: center center;
-    -webkit-transform:  rotate(0deg) scale(1);
-    -ms-transform:  rotate(0deg) scale(1);
-    transform:  rotate(0deg) scale(1);
-    opacity: 1;
-  }
-}
-/*.rotateIn, .selection-boxes li:hover img {
+.rotateIn, .selection-boxes li:hover img {
   -webkit-animation-name: rotateIn;
   animation-name: rotateIn;
 }
 .rotateIn, .selection-boxes li img {
   -webkit-animation-name: rotateOut;
   animation-name: rotateOut;
-}*/
+}
 @-webkit-keyframes bounceLoop {
   0% {
     opacity: 1;
@@ -225,12 +182,6 @@
 }
 
 /*-------------------------SETTING ROTATE --------------------------------- */
-
-
-
-
-
-
 
 
 
@@ -322,11 +273,12 @@
 .rotate-Out, .slide-btns .icon.setting {
   -webkit-animation-name: rotate-Out;
   animation-name: rotate-Out;
-  -webkit-animation-duration: 0.5s;
-  animation-duration: 0.5s;
+
+ -webkit-animation-duration: 2s;
+  animation-duration: 2s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-}
+  }
 
 
 

@@ -1944,7 +1944,22 @@ position:relative;
 .slide-btns a:nth-child(8) {
     background: none repeat scroll 0 0 #177FC7;
 }
-
+.slide-btns a.clr8 { background-color: #2FA4F6; }
+.slide-btns a.clr7 { background-color: #2A9EEF; }
+.slide-btns a.clr6 { background-color: #2699E9; }
+.slide-btns a.clr5 { background-color: #1F94E5; }
+.slide-btns a.clr4 { background-color: #1D8FDE; }
+.slide-btns a.clr3 { background-color: #1E8BD7; }
+.slide-btns a.clr2 { background-color: #1985D0; }
+.slide-btns a.clr1 { background-color: #177FC7; }
+.s-clr8 { background-color: #2FA4F6; }
+.s-clr7 { background-color: #2A9EEF; }
+.s-clr6 { background-color: #2699E9; }
+.s-clr5 { background-color: #1F94E5; }
+.s-clr4 { background-color: #1D8FDE; }
+.s-clr3 { background-color: #1E8BD7; }
+.s-clr2 { background-color: #1985D0; }
+.s-clr1 { background-color: #177FC7; }
 .slide-btns .icon.refresh { background-image: url("../img/subscriber-refresh48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.calender { background-image: url("../img/calender48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }

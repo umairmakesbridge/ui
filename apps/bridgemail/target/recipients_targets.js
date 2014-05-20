@@ -207,6 +207,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                         var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
+                        dialog.$el.find('#target_name').focus();
                     });
                 },
                 initCreateEditTarget:function(target_id){
