@@ -44,7 +44,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
             },
             addGraphs:function(self){
-                self.$el.find('.col-cstats').prepend(new ViewGraphs({clicks:this.stats.get('clickCount'),model:self.stats,tags:self.objSummary.get('tags'),status:self.objSummary.get('status'),app:self.options.app,campNum:self.campNum}).el);  
+                self.$el.find('.col-cstats').prepend(new ViewGraphs({campaignType:self.objSummary.get('status'),clicks:this.stats.get('clickCount'),model:self.stats,tags:self.objSummary.get('tags'),status:self.objSummary.get('status'),app:self.options.app,campNum:self.campNum}).el);  
                 this.options.app.showLoading(false,this.$el.find('.col-cstats'));
             },
             fetchStats:function(){
@@ -207,7 +207,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 
                 this.active_ws.find(".sentat").remove();
                 this.active_ws.find("#campaign_tags").html('');
-                var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
+                if(this.objSummary.get('campaignType') == "T")
+                    var c_name = this.options.app.encodeHTML(this.objSummary.get('subject'));
+                else
+                    var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
                 var name = this.truncateHeader(c_name);
                 this.active_ws.find("#workspace-header").addClass('showtooltip').attr('data-original-title',c_name).html(name);
                 //Setting tab details for workspace. 
