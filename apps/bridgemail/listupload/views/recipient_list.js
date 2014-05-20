@@ -1,23 +1,24 @@
-/* 
- * Name: Link View
+/* Name: Link View
  * Date: 15 March 2014
  * Author: Pir Abdul Wakeel
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!listupload/html/recipient_list.html'],
-function (template) {
+define(['text!listupload/html/recipient_list.html','bms-tags'],
+function (template,tags) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
             events: {
                 'click .percent':'showPercentDiv',
                 'click .edit-list':'editList',
-                'click .delete-list':'deleteList'
+                'click .delete-list':'deleteList',
+                'click .pageview':'showPageViews'
             },
             initialize: function () {
                 this.app = this.options.app;
                 this.template = _.template(template);	
+                this.model.bind("change", this.render, this);
                 this.render();
             },
             render: function () {
@@ -28,47 +29,73 @@ function (template) {
                 var that = this;
                 var target = $(ev.target);
                 var listNumber = target.data('id');
-                var bms_token =that.app.get('bms_token');
                 var listName = target.data('name');
-                console.log(listName);
+                
                 var dialog_title = "Edit List";
                 var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},                
-                    headerIcon : 'new_headicon',
+                        bodyCss:{"min-height":"250px"},                
+                    headerIcon : 'list2',
                         buttons: {saveBtn:{text:'Update'} }                                                                           
                 });
-                this.app.showLoading("Loading...",dialog.getBody());
                 require(["text!listupload/html/editlist.html"],function(list){
                     dialog.getBody().html(list);
                     dialog.$el.find('#list_name').val(listName);
-                    dialog.saveCallBack(_.bind(that.finishEditList(dialog,listNumber,listName), that));
+                    dialog.$el.addClass('gray-panel');
+                    that.showTags(dialog);
+                     
+                   
                 });
+                dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));
+             //    dialog.saveCallBack(_.bind(this.sendTestCampaign,this,dialog,camp_id));
                 
-                
-               
             },
-            finishEditList:function(dialog,listNum,listNam){
+               showTags:function(dialog){
                 var that = this;
-                var listName = dialog.$el.find("#list_name");
+                var listId = this.model.get('listNumber.encode');
+                  dialog.$el.find("#tags").tags({app:this.options.app,
+                        url:"/pms/io/list/saveListData/?BMS_REQ_TK="+this.options.app.get('bms_token'),
+                        tags:this.model.get('tags'),
+                        showAddButton:(listId=="0")?false:true,
+                         callBack:_.bind(that.tagUpdated,that),
+                         module:"recipients",
+                         params:{type:'tags',listNum:listId,tags:''},
+                         typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allCampaignTags"
+                    });
+                    dialog.$el.find('#tags').find('.tagicon').removeClass('gray').addClass('blue');
+                    
+                  
+            },
+            tagUpdated:function(data){
+                this.model.set('tags',data);
+                this.render();
+               // this.showTags();
+            },
+            finishEditList:function(dialog,listNum,listNam,target){
+                var that = this;
+                var listName = dialog.$el.find("#list_name").val();
                 if(listName==listNam){
                     dialog.hide();
                     return;
                 }
+                that.app.showLoading("Updating...",dialog.getBody());    
+                var bms_token =that.app.get('bms_token');
                 var listNum = listNum;
-                that.app.showLoading("Editing List...",that.$el);          
-                var URL = "/pms/io/list/saveListData/?BMS_REQ_TK="+bms_token;
-                $.post(URL, {type:'newName',listName:listName,listNum:listNumber})
-                        .done(function(data) {                                 
+                var URL = "/pms/io/list/saveListData/?BMS_REQ_TK="+bms_token+"&type=newName&listName="+listName+"&listNum="+listNum;
+                $.post(URL)
+                        .done(function(data) {  
                                var _json = jQuery.parseJSON(data);                         
-                               that.app.showLoading(false,that.$el);          
                                if(_json[0]!=="err"){
-                                   that.app.showMessge("List renamed successfully!");  
+                                   that.app.showMessge("List updated successfully!");
+                                   target.data('name',listName);
+                                   target.parents('tr').find('.name-type h3 a:first').html(listName);
+                                   dialog.hide();
                                }
                                else{
                                    that.app.showAlert(_json[1],$("body"),{fixed:true}); 
                                }
                        });
+                       that.app.showLoading(false,dialog.getBody());    
             },
             deleteList:function(ev){
                 
@@ -106,31 +133,48 @@ function (template) {
                    var listNumber = target.data('list');
                    if($('.pstats').length > 0) $('.pstats').remove();
                    var that = this;
+                   that.showLoadingWheel(true,target);
+                   
                    var bms_token =that.app.get('bms_token');
                    var URL = "/pms/io/list/getListPopulation/?BMS_REQ_TK="+bms_token+"&listNum="+listNumber+"&type=stats";
-                   that.showLoadingWheel(true);
+                   
                    jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         if(that.app.checkError(data)){
                             return false;
                         }
-                        var percentDiv ="<div class='pstats' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
+                        var percentDiv ="<div class='pstats left-side' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
                          percentDiv =percentDiv + "<li class='clickers'><strong>"+that.options.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
                          percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
-                         that.showLoadingWheel(false);
+                         that.showLoadingWheel(false,target);
                      target.parents('.percent_stats').append(percentDiv);
                                            	
                     });
                     that.app.showLoading(false, that.$el);
                 },
-              showLoadingWheel:function(isShow){
+              showLoadingWheel:function(isShow,target){
                if(isShow)
-                ele.append("<div class='pstats' style='display:block'><div class='loading-wheel right' style='margin-left:-10px;margin-top: 4px;position: inherit!important;'></div></div>")
+                target.append("<div class='pstats left-side' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div>")
                else{
-                var ele = $('.pstats').find(".loading-wheel") ;      
+                var ele = target.find(".loading-wheel") ;      
                     ele.remove();
                 }
            },
+           showPageViews:function(ev){
+                var that = this;
+                var offset = $(ev.target).offset();
+                var listNum = $(ev.target).data('id');
+                $('#div_pageviews').show();
+                $('#div_pageviews').empty();
+                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                
+                $('#div_pageviews').css({top:offset.top-290});
+                require(["recipientscontacts/rcontacts"],function(Contacts){
+                   var objContacts = new Contacts({app:that.app,listNum:listNum});
+                    $('#div_pageviews').css('padding-top','0');
+                    $('#div_pageviews').html(objContacts.$el);
+                });
+           }
                 
         });    
 });

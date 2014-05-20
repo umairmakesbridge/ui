@@ -95,8 +95,14 @@ define([
                     this.autoLoadImages();      
                     this.setInfo();
                     var app = this;
-                    $("body").click(function(){
+                    $("body").click(function(ev){
                        $(".custom_popup").hide(); 
+                       if(!($(ev.target).hasClass('percent'))){
+                         //  $(".percent_stats").remove(); 
+                           $(".pstats").remove(); 
+                       }
+                        
+                    
                        $(".tagbox-addbox").remove(); 
                        $("#camp_tags").removeClass("active");
                        $(".tooltip-inner").parents(".tooltip").remove();

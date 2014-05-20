@@ -322,12 +322,11 @@
 .rotate-Out, .slide-btns .icon.setting {
   -webkit-animation-name: rotate-Out;
   animation-name: rotate-Out;
-
-	 -webkit-animation-duration: 2s;
-  animation-duration: 2s;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  }
+}
 
 
 

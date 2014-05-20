@@ -6,26 +6,26 @@
  * Dependency: link model
  */
 
-define(['target/models/recipients_target','app','backbone'], function (ModelTarget,app,Backbone) {
+define(['recipientscontacts/models/rcontact','app','backbone'], function (ModelrContact,app,Backbone) {
 	'use strict';
 	return Backbone.Collection.extend({
-	   urlRoot: '/pms/io/filters/getTargetInfo/',
+	   urlRoot: '/pms/io/list/getListPopulation/',
            initialize: function(models,options) {
+               console.log(this.options);
                 options || (options = {});
                 if (options.total) {
                     this.total = options.count;
                 };
             },
-            model:ModelTarget,
+            model:ModelrContact,
             url: function () {
-                return '/pms/io/filters/getTargetInfo/?BMS_REQ_TK=' + app.get('bms_token');
+                return '/pms/io/list/getListPopulation/?BMS_REQ_TK=' + app.get('bms_token');
             },
             parse: function(response,res) {
                 var result = [];
                 if(!app.checkError(response) && response.totalCount!=="0"){
-                    _.each(response.filters[0],function(val,key){
-                        
-                        val[0]._id = val[0]['filterNumber.encode'];
+                    _.each(response.subscribers[0],function(val,key){
+                        val[0]._id = val[0]['subNum.encode'];
                         result.push(val[0]);
                     })                    
                 }

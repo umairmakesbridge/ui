@@ -1,9 +1,14 @@
-<td width="100%" style="overflow:auto;">
+<td width="95%" style="overflow:visible!important;">
     <div>
     <div class="name-type">
-        <h3><a href=""><%=name%></a>
+        <h3><%if(this.model.get('status') =="P" || this.model.get('status') =="S"){%> 
+                <a  class=" showtooltip edit-target" data-original-title="Click to preview" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
+            <%}else{%>
+                <a  class=" showtooltip edit-target" data-original-title="Click to edit" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
+            <%}%>
             <div class="percent_stats">
-                <a class="icon percent" data-list="<%=this.model.get('filterNumber.encode')%>" style="margin:0px!important;"></a>
+                <a class="icon percent showtooltip" data-original-title="Click to view responder's percentage"  data-filter="<%=this.model.get('filterNumber.encode')%>" 
+                   style="margin:0px!important;"></a>
             </div>    
           <!-- percent_stats  -->
       </h3>
@@ -12,30 +17,73 @@
         <span class="tagicon gray"></span>
       <ul>
         <% _.each(this.model.get('tags').split(","),function(t){ %>  
-            <li><a  class="tag"><%- t %></a> </li>
+            <li><a  class="tag showtooltip" data-original-title="Click to view targets with same tag"><%- t %></a> </li>
         <% })%> 
 
       </ul>
     </div>
 </div>
 </td>
+      <%if(this.model.get('status') =="D" && this.model.get('scheduleDate') !=""){%> 
+       <td width="132px">
+            <div>
+                <div style="width:145px" class="time" >
+                     <strong><span><em>Last calculated on</em><%=this.options.app.dateSetting(this.model.get('scheduleDate'),"-")%></span></strong> 
+                </div>
+            </div>
+        </td>
+        
+     <%}else{%>
+      <td width="160px" style="text-align:right">
+            <div class=" showtooltip" data-original-title="<%=this.getTooltipForStatus()%>">
+                
+                <div style="width:105px;" class="time" >
+                     <%if(this.model.get('status') =="P" || this.model.get('status') =="S"){%> 
+                  <img src="img/recurring2.gif"   class="recurring2img" alt=""/>
+                    <%}%>
+                </div>
+            </div>
+        </td>
+      <%}%>
       <td width="90px">
           <div>
-              <div class="subscribers ">
-                      <strong><span><em>Subscribers</em><a href=""><%=filtersCount%></a></span></strong>
-              </div> 
-              <div class="slide-btns three" style="width:;min-height:66px; margin-top:-8px; margin-right:-14px;">
-              <span data-icon="h" class="icon setting"></span>
-              <div>
-                    <!--<a  data-icon="a" class="icon" title="schedule"></a>
-                    <a  data-icon="b" class="icon" title="use"></a>
-                    <a  data-icon="e" class="icon" title="draft"></a>
-                    <a  data-icon="g" class="icon" title="preview"></a>
-                    <a data-icon="c" class="icon" title="copy"></a>-->
+              <%if(this.model.get('status') !="D"){%> 
+              <div class="subscribers showtooltip" data-original-title="<%=this.getTooltipForStatus()%>">
+                  <%}else{%>
+                  <div class="subscribers">
+                  <%}%>
+                      <strong><span><em>Contacts</em><%if(this.model.get('populationCount') !="0" && this.model.get('status') =="D"){%><a class="pageview showtooltip" data-original-title="Click to view population detail" data-id="<%=this.model.get('filterNumber.encode')%>"><%=populationCount%></a><%}else{%><%=this.options.app.addCommas(this.model.get('populationCount'))%><%}%></span></strong>
+                        <%if(this.model.get('status') !="D"){%> 
+                            <div class="prgressbar">    
+                                <span style="width:<%=this.getProgressBar()%>" class="prgrss"> </span>
+                            </div>
+                        <%}%>
+                                                         
+              </div>  <%if(this.model.get('status') =="D"){%> 
+                    <div class="slide-btns three " style="width:;">
 
-                    <a data-icon="f" data-id="<%=this.model.get('filterNumber.encode')%>"  class="icon edit-list" title="edit"></a>
-                    <a data-icon="d" data-id="<%=this.model.get('filterNumber.encode')%>"  class="icon delete-list" title="delete"></a>
-                  </div>
-              </div> <!-- slide-btns two  -->
-          </div>
-      </td>
+                        <span  class="icon setting"></span>
+                        <div>
+                           
+                                <a class="icon refresh" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Refresh</span></a>
+                                <a class="icon edit edit-target" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Edit</span></a>
+                                <a class="icon delete delete-target" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Delete</span></a>
+                       
+                          
+                        </div> <!-- slide-btns two  -->
+
+                    </div>
+              </div> <%}else{%>
+                <div class="slide-btns one " style="width:;">
+
+                        <span  class="icon setting"></span>
+                        <div>
+                           
+                                <a class="icon preview preview-target" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
+                       
+                          
+                        </div> <!-- slide-btns two  -->
+
+                    </div>
+              <%}%>
+      </td> 
