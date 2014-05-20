@@ -12,7 +12,7 @@ function (template) {
              * Attach events on elements in view.
             */
             events: {
-             
+             'click .report':'reportShow'
             },
             /**
              * Initialize view - backbone
@@ -45,6 +45,10 @@ function (template) {
             */
             initControls:function(){
                
+            },
+            reportShow:function(){
+                var camp_id=this.model.get('campNum.encode');
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
             }
             
         });
