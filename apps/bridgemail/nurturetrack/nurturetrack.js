@@ -15,7 +15,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .add-targets':'selectTargets',
                     'click .add-message':'addMessage',
                     'click .add-wait':'addWait',
-                    'click .browse-button-nt':"imageDialog"
+                    'click .browse-button-nt':"imageDialog",
+                    'click .save-all-nt':'saveAllMessages'
                 },
                 /**
                  * Initialize view - backbone
@@ -23,6 +24,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 initialize: function() {                    
                     this.template = _.template(template);
                     this.messages = [];
+                    this.saveAllCall = 0;
                     this.render();
                 },
                 /**
@@ -489,6 +491,21 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 insertImage:function(obj){
                    this.showImage(obj.imgurl);
                    this.saveImage(obj.imgencode);
+                },
+                saveAllMessages:function(obj){
+                    var button = $.getObj(obj,"a");
+                    if(!button.hasClass("saving")){
+                        for(var i=0;i<this.messages.length;i++){
+                            var _message =  this.messages[i];
+                            this.saveAllCall++;
+                            _message.saveMessage();
+                            if(_message.waitView){
+                                this.saveAllCall++;
+                                _message.waitView.saveWait();
+                            }
+                        }
+                        this.$(".save-all-nt").addClass("saving");
+                    }
                 }
                 
 

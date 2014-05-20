@@ -1008,7 +1008,7 @@ ul.spusb li a:hover { background: #009fda;}
 }
 .icon.link2 {background: url("../img/link2.png") no-repeat center center ;}
 
-.recipients_list a.closebtn, .campaign-clickers a.closebtn {
+.recipients_list a.closebtn, .campaign-clickers a.closebtn,a.closebtn {
     background: url("../img/closebtn-blue.png") no-repeat scroll center center;
 	display: block;
     height: 22px;
@@ -1022,10 +1022,10 @@ ul.spusb li a:hover { background: #009fda;}
 	-moz-border-radius:2px;
 	border-radius: 2px;
 }
-.recipients_list a.closebtn, .campaign-clickers a.closebtn {
+.recipients_list a.closebtn, .campaign-clickers a.closebtn,a.closebtn {
     opacity: 1;
 }
-.recipients_list a.closebtn:hover,.campaign-clickers a.closebtn:hover {
+.recipients_list a.closebtn:hover,.campaign-clickers a.closebtn:hover,a.closebtn:hover {
     opacity: 0.7;
 }
 .campaign-summary  .link24   {
@@ -1966,19 +1966,6 @@ position:relative;
     min-height: 66px !important;
 }
 .slide-btns .icon { width:70px; }
-
-/*Changes placed by Umair*/
-.slide-btns .icon.play{
-    background-image: url("../img/play48.png");
-    background-position: center center;
-    background-repeat: no-repeat;    
-}
-.slide-btns .icon.pause{
-    background-image: url("../img/pause38.png");
-    background-position: center center;
-    background-repeat: no-repeat;    
-}
-/*Changes placed by Umair*/
 .sortoption {
     background-color: #F8FDFF;
     display: block;

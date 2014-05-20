@@ -135,23 +135,7 @@ function (template,highlighter) {
                },this));
             },
             reportNT:function(obj){
-                var _ele = $.getObj(obj,"div");
-                var _stateDiv = this.parent.$(".nurture_msgslist");
-                var left_minus = 92;
-                var ele_offset = _ele.offset();                    
-                var ele_height =  _ele.height();
-                var top = ele_offset.top + ele_height - 134;
-                var left = ele_offset.left-left_minus;      
-                this.app.showLoading("Loading states...",_stateDiv.find(".states-area"));         
-                require(["nurturetrack/report"],_.bind(function(report){                                    
-                    var report_table = new report({page:this,stateDiv:_stateDiv});
-                    _stateDiv.find(".states-area").html(report_table.$el);                    
-                    report_table.init();
-                    
-                },this));                                   
-                _stateDiv.css({"left":left+"px","top":top+"px"}).show();
-                obj.stopPropagation();
-                return false;
+                this.parent.showStates(obj,this.model);
             }
             
         });

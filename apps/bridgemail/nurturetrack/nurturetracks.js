@@ -12,7 +12,9 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
              * Attach events on elements in view.
             */            
             events: {				
-                'click .tile-list button' : 'toggleView'
+                'click .tile-list button' : 'toggleView',
+                'click #report_close':'closeReport'
+                
             },
             /**
              * Initialize view - backbone .
@@ -106,6 +108,16 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });
+              this.$(".message-search").searchcontrol({
+                     id:'message-search',
+                     width:'190px',
+                     height:'22px',
+                     gridcontainer: 'nt_report_table',
+                     placeholder: 'Search messages',                     
+                     showicon: 'yes',
+                     iconsource: 'campaigns'
+              });
+              
               this.$("#bms_nurturetrack_grid").bmsgrid({
                     useRp : false,
                     resizable:false,
@@ -392,6 +404,29 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                         this.$(".tileview").show();
                     }
                 }
+            },
+            showStates:function(obj,model){
+                var _ele = $.getObj(obj,"div");
+                var _stateDiv = this.$(".nurture_msgslist");
+                var left_minus = 92;
+                var ele_offset = _ele.offset();                    
+                var ele_height =  _ele.height();
+                var top = ele_offset.top + ele_height - 134;
+                var left = ele_offset.left-left_minus;      
+                this.app.showLoading("Loading states...",_stateDiv.find(".states-area"));         
+                require(["nurturetrack/report"],_.bind(function(report){                                    
+                    var report_table = new report({page:this,stateDiv:_stateDiv,model:model});
+                    _stateDiv.find(".states-area").html(report_table.$el);                    
+                    report_table.init();
+                    
+                },this));                                   
+                _stateDiv.find(".search-control").val('');
+                _stateDiv.find("#clearsearch").hide();
+                _stateDiv.css({"left":left+"px","top":top+"px"}).show();                
+                return false;
+            },
+            closeReport:function(){
+                this.$(".nurture_msgslist").hide();
             }
         });
 });

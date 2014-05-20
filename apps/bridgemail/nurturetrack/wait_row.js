@@ -91,7 +91,7 @@ function (template,moment) {
                 this.$(".wait-select").hide();
                 this.$("."+btn.attr("rel")+"-select").css("display","inline-block");
             },
-            saveWait:function(){
+            saveWait:function(obj){
                 if(this.triggerOrder){
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
@@ -110,7 +110,16 @@ function (template,moment) {
                                var _json = jQuery.parseJSON(data);        
                                this.$(".save-wait").removeClass("saving");
                                if(_json[0]!=='err'){
-                                   this.app.showMessge("Message wait saved Successfully!"); 
+                                   if(obj){
+                                    this.app.showMessge("Message wait saved Successfully!"); 
+                                   }
+                                   else{
+                                       this.parent.saveAllCall--;
+                                       if(this.parent.saveAllCall==0){
+                                          this.app.showMessge("Nurture track saved Successfully!"); 
+                                          this.parent.$(".save-all-nt").removeClass("saving");
+                                       } 
+                                   }
                                    this.parent.messages[this.triggerOrder-1].isWait = true;
                                }
                                else{

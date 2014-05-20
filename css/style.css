@@ -3790,31 +3790,66 @@ ul.setting-options li img {
 	left:0;
 }
 .thumbnail .img > div {
-	background: url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0);	
+	background: url("../img/trans_white.png") repeat scroll center 0 rgba(0, 0, 0, 0);
 	padding: 5px 0 0;
 	width: 100%;
 }
 .thumbnail .img > div a {
-	background-color: #7B929F;
+	background: #7B929F;
 	color: #FFFFFF;
 	display: block;
 	float: left;
-	height: 90px;
-	padding: 10px 0;
+	height: 55px;
+        width: 25%;
 	text-align: center;
-	width: 50%;
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	
+	-webkit-transition: background-position  .3s linear;
+     -moz-transition: background-position  .3s linear;
+     -o-transition: background-position  .3s linear;
+     -ms-transition: background-position  .3s linear;
+     transition: background-position  .3s linear;	
 }
 
 .thumbnail .img > div a:hover {
 	color:#fff;
 }
+.thumbnail .img > div a:hover { background-position:center 5px !important; }
+.thumbnail .img > div a:hover span { opacity:1; }
 .thumbnail .img > div a span {
-	background: url("../img/previewselect.png") repeat scroll center 0 transparent;
-	width:50px;
-	height:50px;
-	display:block;
-	margin:10px auto;
+	width:100%;
+	display:block; 
+	
+    font-size: 12px;
+    line-height: 16px;
+	height:16px;
+     margin: 35px auto 0;
+	 letter-spacing:0;
+    opacity: 0;
+ 	
+	display: block; 
+	text-align:center; 
+ 	-webkit-transition: opacity .3s ease-out;
+    -moz-transition: opacity .3s ease-out;
+    -o-transition: opacity .3s ease-out;
+    transition: opacity .3s ease-out;
+	}
+.thumbnail .img > div a.main-action span {
+    display: block;
+    font-size: 16px; 
+    height: 55px;
+    line-height: 55px;
+    opacity: 1;
+	margin:0 auto;
+    padding: 0 0 0 45px;
+    width: 120px;
+	background: url("../img/campaign48.png") no-repeat scroll left center;
 }
+        
+
+
 .thumbnail .img > div a.previewbtn:hover {
 	background-color:#01aeee;
 }

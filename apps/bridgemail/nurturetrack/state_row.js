@@ -44,11 +44,12 @@ function (template) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-               
+               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             reportShow:function(){
+                this.parent.parent.closeReport();
                 var camp_id=this.model.get('campNum.encode');
-                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});                
             }
             
         });

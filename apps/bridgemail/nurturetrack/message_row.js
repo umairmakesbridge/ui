@@ -241,7 +241,7 @@ function (template) {
                 this.$(".ntmessageno").html(order+": ");
                 this.$el.attr("t_order",this.triggerOrder);
             },
-            saveMessage:function(){
+            saveMessage:function(obj){
                 if(this.triggerOrder){
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
@@ -258,7 +258,16 @@ function (template) {
                                var _json = jQuery.parseJSON(data);        
                                this.$(".save-message").removeClass("saving");
                                if(_json[0]!=='err'){
-                                   this.app.showMessge("Message saved Successfully!");                                    
+                                   if(obj){
+                                    this.app.showMessge("Message saved Successfully!");                                    
+                                   }
+                                   else{
+                                       this.parent.saveAllCall--;
+                                       if(this.parent.saveAllCall==0){
+                                          this.app.showMessge("Nurture track saved Successfully!"); 
+                                          this.parent.$(".save-all-nt").removeClass("saving");
+                                       }
+                                   }
                                }
                                else{
                                    this.app.showAlert(_json[0],$("body"),{fixed:true}); 

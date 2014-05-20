@@ -1341,32 +1341,6 @@ ul.tabs-btns li.active a{
     -moz-border-radius: 0 0 2px 2px;
     border-radius: 0 0 2px 2px;
 }
-.thumbnail .img > div a{
-    height:35px;
-    width:33.3%;    
-}
-
-
-
-
-.thumbnail .img > div a.main-action {
-    float: left;
-    height: 48px;
-    padding: 10px 0;
-    text-align: center;
-    width: 100%;
-}
-
-.thumbnail .img > div a {    
-    width: 25%;
-}
-.thumbnail .img > div a span {
-    background: url("../img/icon-map.png") repeat scroll center 0 rgba(0, 0, 0, 0);
-    display: block;
-    height: 35px;
-    margin: 2px auto;
-    width: 35px;
-}
 
 .thumbnail .img > div a.selectbtn span {
     background: url("../img/select48.png") no-repeat scroll left center rgba(0, 0, 0, 0);   
@@ -1377,33 +1351,54 @@ ul.tabs-btns li.active a{
     width: 130px;
 }
 
-.thumbnail .img > div a.playbtn span {
-    background: url("../img/play48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+.thumbnail .img > div a.playbtn {
+    background: url("../img/play48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.pausebtn span {
-    background: url("../img/pause48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+.thumbnail .img > div a.pausebtn {
+    background: url("../img/pause48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.previewbtn span {
-    background: url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+.thumbnail .img > div a.previewbtn {
+    background: url("../img/preview48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.editbtn {
+    background: url("../img/edit48.png") no-repeat scroll center center  #7B929F;
+}
+.thumbnail .img > div a.copybtn {
+    background: url("../img/copy48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.downloadbtn  {
+    background: url("../img/download48.png") no-repeat scroll center center  #7B929F;
+}
+.thumbnail .img > div a.playbtn {
+    background: url("../img/play48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.pausebtn {
+    background: url("../img/pause48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.previewbtn  {
+    background: url("../img/preview48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.editbtn {
+    background: url("../img/edit48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.copybtn {
+    background: url("../img/copy48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.deletebtn {
+    background: url("../img/delete48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.selectbtn {
+    background: url("../img/select48.png") no-repeat scroll left center  #7B929F;
+}
+.thumbnail .img > div a.selectbtn.createcamp {
+    background: url("../img/create48.png") no-repeat scroll left center  #7B929F;
 }
 
-.thumbnail .img > div a.editbtn span {
-    background: url("../img/edit48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
-}
-.thumbnail .img > div a.copybtn span {
-    background: url("../img/copy48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
-}
 .thumbnail .img > div a.copybtn:hover {
    background-color: #98D028;
 }
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
-}
-.thumbnail .img > div a.deletebtn span {
-    background: url("../img/delete48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
-}
-.thumbnail .img > div a.selectbtn.createcamp span{
-    background: url("../img/create48.png") no-repeat scroll left center rgba(0, 0, 0, 0);
 }
 
 .profileinfo{

@@ -22,6 +22,7 @@ function (template,NTStates,stateView) {
                     this.template = _.template(template);				
                     this.parent = this.options.page;                    
                     this.app = this.parent.app;      
+                    this.model = this.options.model;
                     this.statDiv = this.options.stateDiv;
                     this.offset = 0;
                     this.render();                    
@@ -50,7 +51,7 @@ function (template,NTStates,stateView) {
             loadStates:function(){
                 this.offset = 0;
                 this.app.showLoading('Loading states...',this.$el); 
-                var _data = {offset:this.offset,type:'stats',trackId:this.parent.model.get("trackId.encode")};
+                var _data = {offset:this.offset,type:'stats',trackId:this.model.get("trackId.encode")};
                 this.tracks_request = this.statesRequest.fetch({data:_data,remove:true,
                     success: _.bind(function (collection, response) {                                
                         // Display items
@@ -68,8 +69,8 @@ function (template,NTStates,stateView) {
                             sentCount = sentCount + parseInt(_model.get("sentCount"));
                             pendingCount = pendingCount + parseInt(_model.get("pendingCount"));
                         }                                                                        
-                        this.statDiv.find(".sent-count").html(this.app.addCommas(sentCount.toString()));
-                        this.statDiv.find(".pending-count").html(this.app.addCommas(pendingCount.toString()));                        
+                       // this.statDiv.find(".sent-count").html(this.app.addCommas(sentCount.toString()));
+                       // this.statDiv.find(".pending-count").html(this.app.addCommas(pendingCount.toString()));                        
                     }, this),
                     error: function (collection, resp) {
                             

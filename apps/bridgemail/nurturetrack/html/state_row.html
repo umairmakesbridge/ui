@@ -1,6 +1,6 @@
 <td width="100%"><div>
 <div class="name-type">
-  <h3><a><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
+    <h3 <% if(model.get('subject').length>27){print('class="showtooltip" title="'+model.get('subject')+'"') }%>><a style="overflow: hidden;text-overflow:ellipsis;max-width: 210px;"><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
   <a class="icon report"></a>
   <!--<a class="icon edit2"></a>-->
   </h3>
@@ -9,12 +9,12 @@
 </td>
 <td width="90px"><div>
 <div class="subscribers" style="min-width:90px">
-    <strong><span><em>Sent</em><a><%- this.app.addCommas(model.get('sentCount'))%></a></span></strong>
+    <strong><span><em>Sent</em><% if(model.get('sentCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('sentCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
 <div class="subscribers " style="min-width:90px">
-    <strong><span><em>Pending</em><a><%- this.app.addCommas(model.get('pendingCount'))%></a></span></strong>
+    <strong><span><em>Pending</em><% if(model.get('sentCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('pendingCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>

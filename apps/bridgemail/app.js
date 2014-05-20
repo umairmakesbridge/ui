@@ -105,8 +105,7 @@ define([
                     
                        $(".tagbox-addbox").remove(); 
                        $("#camp_tags").removeClass("active");
-                       $(".tooltip-inner").parents(".tooltip").remove();
-                       $(".nurture_msgslist").hide();
+                       $(".tooltip-inner").parents(".tooltip").remove();                       
                        var getCmpField = $(".ws-content.active #header_wp_field");
                        if(getCmpField.attr("process-id")){
                             $(".ws-content.active").find(".camp_header .c-name .edited").hide();                        
