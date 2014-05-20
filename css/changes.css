@@ -1317,6 +1317,7 @@ ul.tabs-btns li.active a{
 .wtab-nuturetrack{
     background:url("../img/nurturetrack.png") no-repeat scroll center center;
 }
+.wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
