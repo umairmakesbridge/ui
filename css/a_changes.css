@@ -657,8 +657,33 @@ ul.chartstatdetail li.active { background:#97D61D;}
     margin-top: 2px;
 }
 
+.tagsdddiv {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 2px solid #BADAEC;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: 0;
+    min-height: 50px;
+    min-width: 500px;
+    position: absolute;
+    top: 135px;
+    width: 580px;
+	  padding: 0 2px;
+    z-index: 993;
+	-webkit-border-radius: 2px;
+	-moz-border-radius:2px;
+	border-radius: 2px;
+}
+.tagsdddiv .stats_listing { margin:0; }
 
 
+.tagsdddiv .stats_listing .bmsgrid .tagscont { width:250px; }
+
+.tagsdddiv .search {
+    float: left;
+    margin-left: 0;
+    margin-top: 2px;
+}
 
 .conversionlink {
     background: none repeat scroll 0 0 #F8FAFB;
@@ -2023,7 +2048,7 @@ position:relative;
 	border-radius: 2px;
 }
 
-.bmsgrid .prgressbar { position:absolute; left:4px; bottom:1px; min-height:4px !important; height:4px; width:65px; display:block;
+.bmsgrid .prgressbar { position:absolute; left:-5px; bottom:1px; min-height:4px !important; height:4px; width:80px; display:block;
 	background:#fff;
 	overflow:hidden;
 	-webkit-border-radius: 2px;

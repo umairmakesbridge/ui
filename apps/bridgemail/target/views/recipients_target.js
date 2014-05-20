@@ -57,6 +57,10 @@ function (template) {
                 
                 },
                 refreshTarget:function(ev){
+                    if(this.model.get('filtersCount') == "0" || this.model.get('filtersCount') == ""){
+                        this.options.app.showAlert("This target can't be refresh, please edit target and add filters to refresh.",$("body"),{fixed:true}); 
+                        return ;
+                    }
                     var that = this;
                     var target_id = $(ev.target).data('id');
                      var bms_token =that.app.get('bms_token');

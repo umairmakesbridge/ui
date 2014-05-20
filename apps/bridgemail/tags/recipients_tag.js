@@ -119,13 +119,23 @@ function (template) {
                 var tag = $(ev.target).data('tag');
                 $('#div_pageviews').show();
                 $('#div_pageviews').empty();
+                
                 $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
-                $('#div_pageviews').css({top:offset.top-280});
-                document.styleSheets[0].insertRule('.dddiv:before { left: '+ offset.left+'; }', 0);
+                if((offset.left + 500) > $(window).width()){
+                         $('#div_pageviews').css('left','');
+                         $('#div_pageviews').css({right:30, top:offset.top - 280});
+                     }else{
+                         $('#div_pageviews').css('right','');
+                         $('#div_pageviews').css({left:30, top:offset.top - 280});
+                 }
+               
+                $('#div_pageviews #imgCorner').css({left:offset.left-112});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:tag,type:'tag'});
                     $('#div_pageviews').css('padding-top','0');
                     $('#div_pageviews').html(objContacts.$el);
+                    $('#div_pageviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
+                    $('#div_pageviews .temp-filters #imgCorner').css({left:offset.left-242});
                 });
            }
                 

@@ -135,7 +135,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                             that.app.showLoading(false, that.el);
                             setInterval(function(){
                                 that.updateRunningModels();
-                            },10000);
+                            },30000);
                         }});
                 },
                 search: function(ev) {
