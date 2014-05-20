@@ -69,7 +69,9 @@ function (template,chart,contactsView,jsPDF) {
                   active_ws.find(".campaign-clickers").html(new contactsView({type:type,app:this.options.app,campNum:this.campNum}).el);
             },
             getStatus:function(){
-                if(this.options.campaignType == "T") return "";
+                if(this.options.campaignType == "T") 
+                     return "";
+                 
                 var status = this.options.app.getCampStatus(this.options.status);
                 if(status == "Sent"){
                     return "<span class='pclr18' style='width:auto;'>Sent <strong>"+this.options.app.addCommas(this.model.get('sentCount'))+"</strong></span>";
