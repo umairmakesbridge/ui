@@ -352,7 +352,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     css:{"width":"650px","margin-left":"-325px"},
                     bodyCss:{"min-height":"100px"},							   
                     headerIcon : 'new_headicon',
-                    buttons: {saveBtn:{text:'Create Nurture Track'} }                                                                           
+                    buttons: {saveBtn:{text:'Create'} }                                                                           
                 });
                 this.app.showLoading("Loading...",dialog.getBody());
                 require(["nurturetrack/newnurturetrack"],_.bind(function(trackPage){                                     
