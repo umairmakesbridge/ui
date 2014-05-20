@@ -79,7 +79,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise':'highriseCrm' ,
                     'click .create-target':'createTarget',
-                     'click .test-recipients':'testRecipients'
+                    'click .test-recipients':'testRecipients',
+                    'click .nurture-tracks' : 'nurtureTracks'
                     
 
                 },
@@ -433,6 +434,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      this.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true});
                      return;
                   
+                },
+                nurtureTracks:function(){
+                    this.addWorkSpace({type:'',title:'Nurture Tracks',sub_title:'Listing',url : 'nurturetrack/nurturetracks',workspace_id: 'nuture','addAction':true,tab_icon:'nuturelisting'});
                 },
                 
                 salesforceCrm:function(){
