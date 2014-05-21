@@ -8,9 +8,15 @@
                            <% } %>    
     <div class="img">
         <div>
+            <% if(this.selectTextClass){ %>
             <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp">
                 <span>Create Campaign</span>
             </a>
+            <% } else { %>
+                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action">
+                        <span>Select Campaign</span>
+                    </a>
+            <% } %>
              <%= this.showCPCEDButtons() %>
         </div>
         <% if(this.app.decodeHTML(this.model.get("thumbURL"))){ %>
@@ -36,7 +42,7 @@
                 <em><%= this.model.get('viewCount') %></em> 
                 <span class="icon view showtooltip" data-original-title="Click to View Most Viewed Templates"></span>
             </span>
-            <span>
+            <span class="left">
                 <em><%= this.model.get('usageCount') %></em>
                 <span class="icon mail showtooltip" data-original-title="Used Count"></span>
             </span>

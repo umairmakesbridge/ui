@@ -37,6 +37,8 @@ function (template,highlighter) {
                     this.app = this.sub.app;
                     this.tempNum = '';
                     this.tagTxt = '';
+                    this.selectCallback = this.options.selectCallback;
+                    this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
             },
@@ -100,19 +102,19 @@ function (template,highlighter) {
                  if(adminTemplate === "admin-template"){
                                 this.$('.thumbnail').addClass(adminTemplate);
                                 if(this.app.get("isAdmin") === "Y"){
-                                    templates_html +='<a class="previewbtn showtooltip"  id="preview_'+this.tempNum+'" title="Preview Template"><span ></span></a>';
-                                    templates_html +='<a class="copybtn showtooltip"  id="copy_'+this.tempNum+'" title="Copy Template"><span ></span></a>';
-                                    templates_html +='<a class="editbtn showtooltip" id="edit_'+this.tempNum+'" title="Edit Template"><span ></span></a>';
-                                    templates_html +='<a class="deletebtn showtooltip" id="delete_'+this.tempNum+'" title="Delete Template"><span ></span></a>';
+                                    templates_html +='<a class="previewbtn"  id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
+                                    templates_html +='<a class="copybtn"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
+                                    templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'" ><span >Edit</span></a>';
+                                    templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                                 }else{
-                                    templates_html +='<a class="previewbtn showtooltip"  style="width:50%" id="preview_'+this.tempNum+'" title="Preview Template" ><span ></span></a>';
-                                    templates_html +='<a class="copybtn showtooltip"  style="width:50%" id="copy_'+this.tempNum+'" title="Copy Template"><span ></span></a>'; 
+                                    templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
+                                    templates_html +='<a class="copybtn"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
                                 }
                   }else{
-                                templates_html +='<a class="previewbtn showtooltip" id="preview_'+this.tempNum+'" title="Preview Template" ><span ></span></a>';
-                                templates_html +='<a class="copybtn showtooltip" id="copy_'+this.tempNum+'" title="Copy Template" ><span ></span></a>';
-                                templates_html +='<a class="editbtn showtooltip" id="edit_'+this.tempNum+'" title="Edit Template"><span ></span></a>';
-                                templates_html +='<a class="deletebtn showtooltip" id="delete_'+this.tempNum+'" title="Delete Template"><span ></span></a>';
+                                templates_html +='<a class="previewbtn" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
+                                templates_html +='<a class="copybtn" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
+                                templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
+                                templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                             }
                             return templates_html;
              },
@@ -199,16 +201,16 @@ function (template,highlighter) {
                    },this));
                 },
             createCampaign : function(obj){
-                if(this.options.selectCallback){                            
-                          this.options.selectCallback(obj);
+                if(this.selectCallback){                            
+                          this.selectCallback(obj);
                         }
             },
             /*Search on Different icon*/
            searchByCategory : function(obj){
                              var cat = $.getObj(obj,"a");
-                             this.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                             this.$('#search-template-input').val('');
-                             this.$('#clearsearch').hide();
+                             this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                             this.sub.$('#search-template-input').val('');
+                             this.sub.$('#clearsearch').hide();
                              this.sub.loadTemplates('search','category',{category_id:this.model.get('categoryID')});  
                       },
           featureClick : function(){
