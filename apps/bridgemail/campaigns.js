@@ -273,6 +273,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             }
                             _data['status'] = this.status;
                             _data['bucket'] = 20;
+                            
                             this.campaigns_request = this.campaignCollection.fetch({data: _data,
                                 success: _.bind(function(data1,collection) {
                                 // Display items

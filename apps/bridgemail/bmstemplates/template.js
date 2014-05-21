@@ -12,7 +12,8 @@ function (template,icheck,bmstags) {
             */            
             events:{				
                'change #file_control':'uploadImage',
-               'click #btn_image_url':"TryDialog"
+               'click #btn_image_url':"TryDialog",
+               'click .btn-opengallery':"TryDialog"
             },
             /**
              * Initialize view - backbone .
@@ -43,6 +44,7 @@ function (template,icheck,bmstags) {
                var self = this;
                this.modal = this.$el.parents(".modal");
                this.tagDiv = this.modal.find(".tagscont");
+               this.imageval = null;
                this.$('#file_control').attr('title','');
                this.head_action_bar = this.modal.find(".modal-header .edited  h2");
                var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;;  
@@ -76,7 +78,7 @@ function (template,icheck,bmstags) {
                 });
                 
                 // Merge Field Abdullah 
-                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin'});
+                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin',placeholder_text:'Merge Tags'});
                 copyIconTemplate.click(_.bind(function(e){                                     
                      this.page.copyTemplate(self);
                },this));  
@@ -208,9 +210,10 @@ function (template,icheck,bmstags) {
             },
             processUpload:function(data){
                 var _image= jQuery.parseJSON(data);
+                this.$('.droppanel #progress').remove();
+                this.$('.csv-opcbg').hide();
                 if(_image.success){
-                     this.$('.droppanel #progress').remove();
-                     this.$('.csv-opcbg').hide();
+                     
                     _.each(_image.images[0],function(val){
                         this.iThumbnail.remove("file-border");
                         this.imageCheckSum = val[0]['imageId.encode'];
@@ -382,8 +385,7 @@ function (template,icheck,bmstags) {
                     this.dialog.$(".tagscont").show();
                 }
             },
-             updateTemplate:function(){                                   
-                               
+             updateTemplate:function(){                                           
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = this.app.showDialog({title:'Loading ...',
@@ -416,9 +418,11 @@ function (template,icheck,bmstags) {
                    });
                     
                 },
-                 TryDialog:function(){
+                 TryDialog:function(obj){
+                    this.image_obj = $.getObj(obj,"a");
                     var that = this;
                     var app = this.app;
+                    this.$el.parents('body').find('#merge-field-plug-wrap').hide();
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-162;
                         var dialog = this.app.showDialog({title:'Images',
@@ -429,17 +433,44 @@ function (template,icheck,bmstags) {
                          });
                          //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
                      this.app.showLoading("Loading...",dialog.getBody());
-                     require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
-                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                     require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                     
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
                          dialog.getBody().html(mPage.$el);
                         // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
                        // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
                          //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
-                     });
+                     },this));
                      
                 },
-                useImage:function(url){
-                    this.$el.find("#image_url").val(url);
+                insertImage : function(data){
+                    if(this.image_obj.hasClass('btn-opengallery')){
+                        this.iThumbnail.remove("file-border");
+                        this.imageCheckSum = data.imgencode;
+                        this.iThumbnail.find("h4").hide();
+                        this.iThumbnail.find("img").attr("src",data.imgurl).show();
+                        this.saveUserImage();
+                    }else{
+                        this.$el.find("#image_url").val(data);
+                    }
+                    //console.log();
+                },
+                saveUserImage : function(){
+                       var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                       $.post(URL, {type:'thumbnail',templateNumber:this.template_id,
+                            imageId:this.imageCheckSum
+                        })
+                        .done(_.bind(function(data) { 
+                            var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){
+                                 this.app.showMessge("Thumbnail Saved Successfully");
+                                }else{
+                                   this.app.showAlert(_json[1],$("body"),{fixed:true});  
+                                }
+                         },this));
                 }
+                /*useImage:function(url){
+                    
+                    
+                }*/
         });
 });

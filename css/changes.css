@@ -2605,7 +2605,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li:hover i.icon.website {background: url("../img/website.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li:hover i.icon.createtemplates {  background: url("../img/createtemplate.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover i.icon.mee {   background: url("../img/meeicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-.slidenav-dd > ul >  li ul li:hover i.icon.subscribers {   background: url("../img/subscribers.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.slidenav-dd > ul >  li ul li:hover i.icon.subscribers {   background: url("../img/subscribers2.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 
 
@@ -2643,7 +2643,6 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 
 .slidenav-dd >  ul.quicklinks > li ul li a span{ color: #01aeee; }
 .slidenav-dd >  ul.quicklinks > li ul li:hover a  span { color: #fff; }
-
 
 
 /* ------------------------------------------------------------------------------------- */

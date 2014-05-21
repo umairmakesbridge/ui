@@ -64,7 +64,7 @@ function (template,chosen,addbox) {
                                     css: {"width": "720px", "margin-left": "-360px"},
                                     bodyCss: {"min-height": "410px"}
                                 });
-                                dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
+                                dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> ');
                         }
                         e.stopPropagation();
                         e.preventDefault();

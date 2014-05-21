@@ -29,6 +29,7 @@
       this.errMessage = 0;
       this.fileName = '';
       this.baloon = false;
+
      //Click on add tag button      
      //this.ele.find(".addtag").on("click",$.proxy(this.showTagsDialog,this))
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
@@ -36,6 +37,7 @@
      this.$element.on("drop",$.proxy(this._drop,this))      
      this.$element.on('dragleave',$.proxy(this._dragleave,this))
      
+
      var _this = this;
      $(document).on('dragenter', function (e)
      {
@@ -74,6 +76,7 @@
     e.preventDefault();
     //this.$element.addClass('file-border');
     this.$element.append(this.UploadInstantBaloon());    
+
   },
   _dragover:function(e){
      e.stopPropagation();
@@ -95,6 +98,7 @@
      //We need to send dropped files to Server
      this.handleFileUpload(files,e);
   },
+  
   validate:function(file){
       var returnVal = true;
       if(!this.module){

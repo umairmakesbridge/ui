@@ -223,6 +223,7 @@ function (template,bmstags) {
            // Update header count when delete called inside success for deletion.
            updateCount:function(){
                var parents = 0;
+               
                if(this.options.fromDialog){
                    parents = this.$el.parents(".modal");
                }else{
