@@ -69,6 +69,7 @@ function (template,NTStates,stateView) {
                             sentCount = sentCount + parseInt(_model.get("sentCount"));
                             pendingCount = pendingCount + parseInt(_model.get("pendingCount"));
                         }                                                                        
+                       this.statDiv.find(".message-count").html(this.app.addCommas(response.msgCount)); 
                        // this.statDiv.find(".sent-count").html(this.app.addCommas(sentCount.toString()));
                        // this.statDiv.find(".pending-count").html(this.app.addCommas(pendingCount.toString()));                        
                     }, this),

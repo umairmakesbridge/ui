@@ -5,7 +5,7 @@
     width:58px;
     cursor: default !important;
 }
-.set-time{
+.set-time{.thumbnail .img > div a.selectbtn
     width: 213px;
 }
 .set-time .timebox{
@@ -1387,11 +1387,13 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.deletebtn {
     background: url("../img/delete48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.selectbtn {
-    background: url("../img/select48.png") no-repeat scroll left center  #7B929F;
-}
-.thumbnail .img > div a.selectbtn.createcamp {
-    background: url("../img/create48.png") no-repeat scroll left center  #7B929F;
+.thumbnail .img > div a.selectbtn.createcamp span{
+    background: url("../img/campaign48.png") no-repeat scroll left center rgba(0, 0, 0, 0);   
+    font-size: 16px;
+    line-height: 48px;
+    margin: 0 auto;
+    padding-left: 48px;
+    width: 130px;
 }
 
 .thumbnail .img > div a.copybtn:hover {

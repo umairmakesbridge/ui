@@ -381,7 +381,7 @@ div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
    margin:7px 4px 4px 15px;
    border-radius:0;
 }
-.temp-filters > h2 {
+.temp-filters > h2,.h2-count {
     color: #748592;
     float: left;
     font-size: 13px;

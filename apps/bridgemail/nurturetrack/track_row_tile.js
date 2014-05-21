@@ -17,7 +17,8 @@ function (template,moment,highlighter) {
               'click .edit-track':'editNurtureTrack',
               'click .copy-track':'copyNurtureTrack',
               'click .play-track':'playNurtureTrack',
-              'click .pause-track':'pauseNurtureTrack'
+              'click .pause-track':'pauseNurtureTrack',
+              'click .message-view':'viewNurtureTrack'
             },
             /**
              * Initialize view - backbone
@@ -67,6 +68,9 @@ function (template,moment,highlighter) {
             editNurtureTrack:function(){
                 if(this.model.get("status")=="D"){
                     this.app.mainContainer.openNurtureTrack({"id":this.model.get("trackId.encode"),"checksum":this.model.get("trackId.checksum"),"parent":this.parent});
+                }
+                else{
+                    this.viewNurtureTrack();
                 }
                 
             },
@@ -142,6 +146,15 @@ function (template,moment,highlighter) {
             },
             reportNT:function(obj){
                 this.parent.showStates(obj,this.model);
+            },
+            viewNurtureTrack:function(){
+                this.app.showLoading("Loading...",this.parent.$el);
+                require(["nurturetrack/track_view"],_.bind(function(page){    
+                     this.app.showLoading(false,this.parent.$el);                    
+                     var view_page = new page({page:this});                       
+                     $("body").append(view_page.$el);        
+                     view_page.init();
+                 },this));
             }
             
         });

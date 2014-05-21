@@ -17,17 +17,18 @@ function (template) {
             /**
              * Initialize view - backbone
             */
-            initialize: function () {
-                    this.template = _.template(template);				
-                    this.parent = this.options.page;    
-                    this.dialog = this.options.dialog;
-                    this.camp_obj = this.parent.object ? this.parent.object[0]:null;
-                    this.camp_json = this.parent.camp_json;
-                    this.plainText = "";
-                    this.htmlText = "";                    
-                    this.camp_id = this.camp_obj['campNum.encode'];                                        
-                    this.app = this.parent.app;                            
-                    this.render();                    
+            initialize: function () 
+            {
+                this.template = _.template(template);				
+                this.parent = this.options.page;    
+                this.dialog = this.options.dialog;
+                this.camp_obj = this.parent.object ? this.parent.object[0]:null;
+                this.camp_json = this.parent.camp_json;
+                this.plainText = "";
+                this.htmlText = "";                    
+                this.camp_id = this.camp_obj['campNum.encode'];                                        
+                this.app = this.parent.app;                                                
+                this.render();                    
             },
             /**
              * Render view on page.
@@ -44,8 +45,10 @@ function (template) {
             }
             ,
             initControls:function(){
-                
-                this.$("#accordion_setting").accordion({heightStyle: "fill",collapsible: true});                    
+                var that = this;
+                this.$("#accordion_setting").accordion({heightStyle: "fill",collapsible: true,active:1,activate: function( event, ui ) {
+                        that.resizeStep1();
+                }});                    
                 this.$("#accordion_messagebody").accordion({heightStyle: "fill",collapsible: true});
                 
                 this.$bodyInner.css({"height":"auto","overflow":"inherit"});
@@ -148,6 +151,9 @@ function (template) {
                 },
                 saveCall:function(){
                     this.step1_page.saveStep1();
+                },
+                resizeStep1:function(){
+                    this.step1_page.setFromNameField();
                 }
             
             

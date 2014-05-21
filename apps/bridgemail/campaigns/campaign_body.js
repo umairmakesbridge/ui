@@ -78,6 +78,9 @@ function (template,editorView) {
               var _width = this.parent.$el.width()-48;
               this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
               this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
+              if(!this.parent.htmlText){
+                this.openEditor();
+              }
             },
             step2TileClick:function(obj){
                 var camp_obj = this;
@@ -198,7 +201,10 @@ function (template,editorView) {
                 },
              editorChange:function(){
                  this.states.editor_change = true;
-             }   
+             },
+             openEditor:function(){
+                 this.$("#html_editor").click()
+             }
             
         });
 });

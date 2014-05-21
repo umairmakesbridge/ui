@@ -3794,6 +3794,8 @@ ul.setting-options li img {
 	padding: 5px 0 0;
 	width: 100%;
 }
+
+
 .thumbnail .img > div a {
 	background: #7B929F;
 	color: #FFFFFF;
@@ -3816,7 +3818,7 @@ ul.setting-options li img {
 .thumbnail .img > div a:hover {
 	color:#fff;
 }
-.thumbnail .img > div a:hover { background-position:center 5px !important; }
+.thumbnail .img > div a:hover { background-position:center 2px !important; }
 .thumbnail .img > div a:hover span { opacity:1; }
 .thumbnail .img > div a span {
 	width:100%;
@@ -3836,16 +3838,27 @@ ul.setting-options li img {
     -o-transition: opacity .3s ease-out;
     transition: opacity .3s ease-out;
 	}
+.thumbnail .img > div a.main-action {
+    border-bottom: 2px solid #FFFFFF;
+    display: block;
+    float: left;
+    height: 55px;
+    opacity: 1;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}        
+        
 .thumbnail .img > div a.main-action span {
     display: block;
     font-size: 16px; 
     height: 55px;
     line-height: 55px;
     opacity: 1;
-	margin:0 auto;
+    margin:0 auto;
     padding: 0 0 0 45px;
-    width: 120px;
-	background: url("../img/campaign48.png") no-repeat scroll left center;
+    width: 120px;   
+    background: url("../img/campaign48.png") no-repeat scroll left center;
 }
         
 
@@ -3867,7 +3880,7 @@ ul.setting-options li img {
 .thumbnail .img > div a.deletebtn:hover {	background-color:#D90E0E }
 .thumbnail .img > div a.deletebtn span {	background-position:-100px 0}
 
-.thumbnail .img > div a.playbtn:hover {
+.thumbnail .img > div a.playbtn:hover, .thumbnail .img > div a.main-action:hover {
 	background-color:#98d028;
 }.thumbnail .img > div a.pausebtn:hover {
 	background-color:#01aeee;
@@ -3991,30 +4004,34 @@ ul.setting-options li img {
  max-width: 240px;
 }
 .btm-bar {
-	background: none repeat scroll 0 0 #eff7fb;
-	border-top: 0 solid #EAF4F9;
+	background: none repeat scroll 0 0 #F8FDFF;
+        border-top: 1px solid #EAF4F9;
 	color: #8A8A8A;
 	font-size: 12px;
-	height: 24px;
-	margin: 0 -10px -10px;
-	padding: 5px 10px;
+	height: 30px;
+	margin: 0 -10px 0px;
+	padding: 0 10px 0 5px;
+        width: 223px;
+	position:absolute;
+	bottom:0;
 }
 .btm-bar span {
-	float: left;
-	margin-right: 5px;
-	margin-top: 2px;
+    float: left;
+    height: 30px;
+    margin-right: 5px;
 }
 .btm-bar span em {
 	float:left;
+	line-height:30px;
 	font-style:normal;
 }
 .btm-bar span .icon {
 	float: left;
-	margin: -7px 0 0 -2px;
+	margin: 0px 0 0 -2px;
 }
 .btm-bar a.icon {
 	float: right;
-	margin: -3px -7px -5px 5px;
+	margin: -1px -7px -5px 5px;
 }
 .btm-bar .view {
 	background-position: -330px -300px;

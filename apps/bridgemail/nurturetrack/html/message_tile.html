@@ -1,0 +1,14 @@
+<div class="thumbnail">
+    <div class="img">
+        <img src="img/templateimg.png" data-src="holder.js" alt="">
+    </div>
+    <div class="caption">
+
+        <h3><a><% if(model.get('label')!==''){print(model.get('label'))}else{print('&lt;subject line&gt;')} %></a></h3>
+        <div class="btm-bar">
+            <a class="cstatus pclr22">Message <strong><%-model.get('triggerOrder')%></strong> </a>
+            <a class="icon preview showtooltip" title="Preview"></a>
+        </div>
+
+    </div>
+</div>

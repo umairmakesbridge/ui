@@ -190,7 +190,7 @@ function (template) {
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"}
                 });	
-                this.app.showLoading("Loading Campaign HTML...",dialog.getBody());									
+                this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(templatePreview){
                 var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic

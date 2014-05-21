@@ -420,6 +420,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     report_table.init();
                     
                 },this));                                   
+                _stateDiv.find(".message-count").html('Loading...');
                 _stateDiv.find(".search-control").val('');
                 _stateDiv.find("#clearsearch").hide();
                 _stateDiv.css({"left":left+"px","top":top+"px"}).show();                
