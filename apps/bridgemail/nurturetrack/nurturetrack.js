@@ -101,7 +101,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         url:"/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token'),
                         tags:tags,
                         showAddButton:(this.camp_id=="0")?false:true,
-                        params:{type:'tags',trackId:this.track_id,tags:''}
+                        params:{type:'tags',trackId:this.track_id,tags:''},
+                        module:'Nurture Track'
                     });
                   
                 },

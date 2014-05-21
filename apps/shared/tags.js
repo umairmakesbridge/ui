@@ -134,11 +134,7 @@
                 this.options.app.showAlert('Tag already exists with same name.',$("body"),{fixed:true});
                 isValid = false;
             }
-        }                    
-        else if(edit_id===null && tags_arr.length>=this.options.tag_limit){                        
-            this.options.app.showAlert('You can enter '+this.options.tag_limit+' tags for '+this.options.module+'.',$("body"),{fixed:true});
-            isValid = false;
-        }
+        }                            
         if(isValid===false){
             $(".custom_popup").hide(); 
         }
@@ -194,6 +190,9 @@
                     if(self.options.app.checkError(tag_json)){
                         return false;
                      }
+                    if(self.options.callBack){
+                       self.options.callBack(temp_tags);
+                    }  
                     self.dialog.find("#add_tag_btn").removeClass("saving") 
                     if(tag_json[0]=="success"){
                         self.options.tags = temp_tags;
@@ -443,13 +442,14 @@
     toolbar:'<div class="tooltip tags-div custom_popup" style="display:none"><a class="right"><span class="icon delete"></span></a><a class="left"><span class="icon edit"></span></a></div>',
     tags:'',
     tempOpt:false,
-    tag_limit: 5,
+    tag_limit: 50,
     showAddButton:false,
     url:'',
     module:"Campaign",
     params:{},
-    typeAheadURL:''
-  , app:null
+    typeAheadURL:'',
+    callBack:null
+    , app:null
   }
 
 }(window.jQuery);
