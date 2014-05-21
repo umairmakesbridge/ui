@@ -4034,17 +4034,17 @@ ul.setting-options li img {
 	margin: -1px -7px -5px 5px;
 }
 .btm-bar .view {
-	background-position: -330px -300px;
+	background-position: -330px -301px;
 }
 .btm-bar .view:hover {
-	background-position: -360px -300px;
+	background-position: -360px -301px;
 }
 .btm-bar .mail {
 	background:	url("../img/icon-map.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-	background-position: -330px -359px;
+	background-position: -330px -361px;
 }
 .btm-bar .mail:hover {
-	background-position: -360px -359px;
+	background-position: -360px -361px;
 }
 /*---------------------------------------------------------------------*/
 

@@ -316,7 +316,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     this.app.showLoading(false,this.$(".template-container"));
                                                       
                                                 _.each(collection.models, _.bind(function(model){
-                                                       this.$el.find('.thumbnails').append(new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback}).el);
+                                                       this.$el.find('.thumbnails').append(new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass}).el);
                                                    },this));
                                                    newCount = this.totalCount - this.offset;
                                                    //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
@@ -539,27 +539,7 @@ function (template,highlight,templateCollection,templateRowView) {
                        });
                     }
                 }
-                ,
-         
-             
-                copyTemplate: function(self){
-                        var _this = this;
-                        var dialog_title = "Copy Template";
-                        var __dialog = this.app.showDialog({title:dialog_title,
-                                          css:{"width":"600px","margin-left":"-300px"},
-                                          bodyCss:{"min-height":"260px"},							   
-                                          headerIcon : 'copy',
-                                          overlay:true,
-                                          buttons: {saveBtn:{text:'Create Template'} }                                                                           
-                        });
-                        this.app.showLoading("Loading...",__dialog.getBody());
-                        require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
-                                var mPage = new copyTemplatePage({templ:self,template_id:_this.template_id,_current:_this,app:_this.app,templatesDialog:__dialog});
-                                __dialog.getBody().html(mPage.$el);
-                                __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
-                        });
-                },
-                
+                ,       
                  keyvalid:function(event){
                         var regex = new RegExp("^[A-Z,a-z,0-9]+$");
                         var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -581,7 +561,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>"+text+"</b> templates found");                         
                     }
-                    else if(this.searchString.searchText && this.searchString.searchType !=="tag"){
+                    else if(this.searchString.searchText && this.searchString.searchType ==="nameTag"){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
                     }    
                     else if(this.searchString.searchType==='tag'){                        
