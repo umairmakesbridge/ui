@@ -79,7 +79,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise':'highriseCrm' ,
                     'click .create-target':'createTarget',
-                    'click .test-recipients':'testRecipients',
+                    'click .view-lists':'viewLists',
+                    'click .view-tags':'viewTags',
+                    'click .view-targets':'viewTargets',
                     'click .nurture-tracks' : 'nurtureTracks'
                     
 
@@ -113,8 +115,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 addWorkSpace: function(options) {
                    if(this.allowWorkspace(options)){
-                    
+                       
                     var workspace_li = $("#wstabs li[workspace_id='" + options.workspace_id + "']");
+                    
                     if (workspace_li.length === 0) {
                         this.wp_counter = this.wp_counter + 1;
                         var obj = $(".tw-toggle button").eq(1);
@@ -125,9 +128,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             $('#workspace').show();
                             $('#workspace').css({left: '0%'});
                         }
-
                         var wp_count = this.wp_counter;
-                        if (options && options["params"]) {
+                        if (options && options["params"]){
                             options["params"]["wp_id"] = wp_count;
                         }
                         var wp_view = new WorkSpace(options);
@@ -194,6 +196,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                           })
                     }
                     else {
+                        this.toggleScreenMode(options);
                         if (!this.$(".tw-toggle button:last-child").hasClass("active")) {
                             this.$(".tw-toggle button:last-child").click();
                         }
@@ -204,6 +207,27 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     }
 
                    }
+                },
+                toggleScreenMode:function(options){
+                        if ($(".ws-content").length < 1) {
+                                $("#tiles").show();
+                                $('#workspace').animate({left: '150%'}, function() {
+                                    $(this).hide();
+                                });
+                        }else{
+                            if (this.$el.find("#wstabs li").length > 1) {
+                                $("#tiles").hide();
+                                $('#workspace').show();
+                                $('#workspace').animate({left: '0px'});
+                            }
+                        }
+                        // for example workspace_id is recipients and the view is recipients_lists
+                        // options type is lists, targets, and tags
+                        // the choose_lists is id so I use classes like .r-choose-lists, r-choose-targets, and r-choose-tags.
+                        // if any one  want to use this. then they can make it more generalize. 
+                        if($(".ws-content ."+options.workspace_id+"_list").length > 0){
+                            $(".ws-content ."+options.workspace_id+"_list").find(".r-choose-"+options.params.type).click();
+                        }
                 },
                 activeWorkSpace: function(obj) {
 
@@ -430,8 +454,18 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      return;
                   
                 },
-                 testRecipients:function(){
-                     this.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true});
+                viewLists:function(){
+                     this.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true,params: {type: 'lists'}});
+                     return;
+                  
+                },
+                viewTags:function(){
+                     this.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true,params: {type: 'tags'}});
+                     return;
+                  
+                },
+                viewTargets:function(){
+                     this.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true,params: {type: 'targets'}});
                      return;
                   
                 },

@@ -16,32 +16,38 @@ function (template,app) {
         return Backbone.View.extend({
             className: 'recipients_list',
             events: {
-                'click #choose_lists':'showListGrid',
-                'click #choose_targets':'showTargetsGrid',
+                'click .r-choose-lists':'showListGrid',
+                'click .r-choose-targets':'showTargetsGrid',
                 "click .scroll-recipients":"scrollToTop",
-                'click #choose_tags':'showTagsGrid'
+                'click .r-choose-tags':'showTagsGrid'
             },
             initialize: function () {
                 this.template = _.template(template);
                 this.app = app;
+                this.type = this.options.params.type;
                 this.active = 0;
                 this.render();
             },
             render: function (search) {
                 this.$el.html(this.template({}));
-                this.showListGrid(false);
-                 $(window).scroll(_.bind(this.scrollTop,this));
+                if(this.type == "lists"){this.showListGrid(false);
+                }else if(this.type=="tags"){ this.showTagsGrid(false);
+                }else{this.showTargetsGrid(false);}
+                $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
             },
             showListGrid:function(ev){
                 if(ev){
-                  var target = $(ev.target);
-                    if(target.attr('id') !="choose_lists")
-                        target = target.parents('li'); 
-                        if(this.active == 1) {target.addClass('selected'); return};
-                         target.siblings().removeClass('selected');
-                         target.addClass('selected');
-                     }
+                    if(this.active == 1) {
+                        this.$el.find(".r-choose-lists").siblings().removeClass('selected');
+                        this.$el.find(".r-choose-lists").addClass('selected'); 
+                        return;
+                    }
+                        this.$el.find(".r-choose-lists").siblings().removeClass('selected');
+                        this.$el.find(".r-choose-lists").addClass('selected');
+                }else{
+                    this.$el.find(".r-choose-lists").addClass('selected');
+                }
                 this.$el.find(".template-container").empty();
                 this.active = 1;
                 this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
@@ -55,15 +61,19 @@ function (template,app) {
                 this.$el.find(".template-container").css('background','transparent');
             },
             showTargetsGrid:function(ev){
-                  var target = $(ev.target);
-                if(target.attr('id') !="choose_targets")
-                    target = target.parents('li'); 
-                if(this.active == 2){target.addClass('selected'); return};
-                    target.siblings().removeClass('selected');
-                   
+                if(ev){
+                    if(this.active == 2){
+                        this.$el.find(".r-choose-targets").siblings().removeClass('selected');
+                        this.$el.find(".r-choose-targets").addClass('selected');
+                        return
+                     }
+                    this.$el.find(".r-choose-targets").siblings().removeClass('selected');
+                    this.$el.find(".r-choose-targets").addClass('selected');   
+                }else{
+                    this.$el.find(".r-choose-targets").addClass('selected');
+                }
                 this.active = 2;
                 this.$el.find(".template-container").empty();
-                target.addClass('selected');
                 this.app.showLoading('Loading Targets...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['target/recipients_targets'],function(viewTargets){
@@ -75,12 +85,17 @@ function (template,app) {
                 
             },
             showTagsGrid:function(ev){
-                var target = $(ev.target);
-                if(target.attr('id') !="choose_tags")
-                    target = target.parents('li'); 
-                if(this.active == 3) {target.addClass('selected'); return};
-                 target.siblings().removeClass('selected');
-                target.addClass('selected');
+                if(ev){
+                    if(this.active == 3) {
+                        this.$el.find(".r-choose-tags").siblings().removeClass('selected');
+                        this.$el.find(".r-choose-tags").addClass('selected');
+                        return;
+                    }
+                    this.$el.find(".r-choose-tags").siblings().removeClass('selected');
+                    this.$el.find(".r-choose-tags").addClass('selected');
+                }else{
+                    this.$el.find(".r-choose-tags").addClass('selected');
+                }
                 this.$el.find(".template-container").empty();
                 this.active = 3;
                 this.app.showLoading('Loading Tags...', this.$el.find(".template-container"));

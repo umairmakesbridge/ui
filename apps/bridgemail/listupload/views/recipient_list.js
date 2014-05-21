@@ -1,8 +1,8 @@
-/* Name: Link View
- * Date: 15 March 2014
+/* Name: List Upload
+ * Date: 21 May 2014
  * Author: Pir Abdul Wakeel
- * Description: Single Link view to display on main page.
- * Dependency: LINK HTML, SContacts
+ * Description: List Grid.
+ * Dependency: List Grid Single Grid View
  */
 define(['text!listupload/html/recipient_list.html','bms-tags'],
 function (template,tags) {

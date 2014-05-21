@@ -2582,7 +2582,6 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li i.icon.createtemplates {  background: url("../img/createtemplate1.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li i.icon.mee {   background: url("../img/meeicon1.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li i.icon.subscribers {   background: url("../img/subscribers1.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-
 .slidenav-dd > ul >  li ul li:hover i.icon.uploadcontact {background: url("../img/uploadcontact.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li:hover i.icon.form {background: url("../img/form.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li:hover i.icon.graphic {background: url("../img/graphics.png") no-repeat scroll center center; }
@@ -2604,8 +2603,6 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li:hover i.icon.createtemplates {  background: url("../img/createtemplate.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover i.icon.mee {   background: url("../img/meeicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover i.icon.subscribers {   background: url("../img/subscribers.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-
-
 
 
 

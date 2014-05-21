@@ -118,7 +118,7 @@ border-radius: 3px;
 	background-color: #11ACF3;
 }
 .graphics .img > div a {
-   height: 40px;
+   height: 55px;
 width: 50%; 
 }
 .graphics .img{
@@ -1824,10 +1824,10 @@ position:relative;
     -moz-border-radius: 2px;
     border-radius: 2px; 
 
-    -webkit-transition: width 1s ease-in-out, visibility 1s linear;
-    -moz-transition: width 1s ease-in-out, visibility 1s linear;
-    -o-transition: width 1s ease-in-out, visibility 1s linear;
-    transition: width 1s ease-in-out, visibility 1s linear;
+    -webkit-transition: width .4s ease-in-out, visibility .5s linear;
+    -moz-transition: width .4s ease-in-out, visibility .5s linear;
+    -o-transition: width .4s ease-in-out, visibility .5s linear;
+    transition: width .4s ease-in-out, visibility .5s linear;
 
 
 }
@@ -2138,7 +2138,6 @@ position:relative;
 .bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title a:hover {  background: url("../img/preview2.png") no-repeat scroll right center rgba(0, 0, 0, 0);  }
 .icon.list2 {   background: url("../img/list2.png") no-repeat center center ;}
 /* ---------------------------------------- */
-
 
 
 

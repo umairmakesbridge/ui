@@ -1,10 +1,8 @@
- 
-            
-       /* Name: Link View
- * Date: 15 March 2014
+ /* Name: Tag
+ * Date: 21 May 2014
  * Author: Pir Abdul Wakeel
- * Description: Single Link view to display on main page.
- * Dependency: LINK HTML, SContacts
+ * Description: Tag Single
+ * Dependency: 
  */
 define(['text!tags/html/recipients_tag.html'],
 function (template) {
