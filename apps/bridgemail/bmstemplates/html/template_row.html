@@ -1,0 +1,52 @@
+
+<div class="thumbnail">
+     <% if(this.model.get('isFeatured')==='Y'){ %>
+                    <div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>
+                           <% } %>                               
+     <% if(this.model.get('isReturnPath')==='Y'){ %>
+                    <div class="rpath showtooltip" title="Click To View All Return Path Tested Templates"></div>
+                           <% } %>    
+    <div class="img">
+        <div>
+            <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp">
+                <span>Create Campaign</span>
+            </a>
+             <%= this.showCPCEDButtons() %>
+        </div>
+        <% if(this.app.decodeHTML(this.model.get("thumbURL"))){ %>
+        <span><img src='<%= this.app.decodeHTML(this.model.get("thumbURL")) %>'></span>
+            <% } else { %>
+            <img  src="img/templateimg.png" />
+            <% } %>
+    </div>
+    <div class="caption">
+        <h3 class="template-name single-template" id="editfromname_<%= this.model.get('templateNumber.encode') %>">
+            <a><%= this.model.get('name') %></a>
+        </h3>
+         <% if(this.model.get('categoryID')) { %>
+        <a cat_id="<%= this.model.get('categoryID') %>" class="cat showtooltip" data-original-title="Click to View All Templates In This Category"><%= this.model.get('categoryID') %></a>
+        <% }else{ %>
+        <a class="cat" style="visibility:hidden">&nbsp;</a>
+        <% } %>
+        <p>
+            <%= this.showTagsTemplate() %>
+        </p>
+        <div class="btm-bar">
+            <span>
+                <em><%= this.model.get('viewCount') %></em> 
+                <span class="icon view showtooltip" data-original-title="Click to View Most Viewed Templates"></span>
+            </span>
+            <span>
+                <em><%= this.model.get('usageCount') %></em>
+                <span class="icon mail showtooltip" data-original-title="Used Count"></span>
+            </span>
+            <% if(this.model.get('isAdmin')==='Y'){ %>
+                        <a class="icon builtin right showtooltip" title="Click to View All Makesbridge Templates"></a>                                                                                                 
+                          <%  } %>  
+            <% if(this.model.get('isMobile')==='Y'){ %>
+                        <a class="icon mobile right showtooltip" title="Click to View All Mobile Enabled Templates"></a>                                                                 
+                         <%  } %>
+        </div>
+    </div>
+</div>
+

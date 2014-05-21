@@ -28,13 +28,12 @@
       this.app = this.options.app;
       this.errMessage = 0;
       this.fileName = '';
-      this.baloon = true;
+     // this.baloon = true;
      //Click on add tag button      
      //this.ele.find(".addtag").on("click",$.proxy(this.showTagsDialog,this))
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
      this.$element.on("dragover",$.proxy(this._dragover,this))
      this.$element.on("drop",$.proxy(this._drop,this))      
-     this.$element.on('dragleave',$.proxy(this._dragend,this));
      var _this = this;
      $(document).on('dragenter', function (e)
      {
@@ -45,23 +44,12 @@
       {
         e.stopPropagation();
         e.preventDefault();
-       // _this.$element.append(_this.UploadInstantBaloon());
+       
         _this.$element.addClass('file-border');
-        //_this.baloon = false;
       });
      $(document).on('drop', function (e)
       {
         _this.$element.removeClass('file-border');
-        //_this.$element.find('.dropdiv').remove();
-        //_this.baloon = true;
-        e.stopPropagation();
-        e.preventDefault();
-      });
-      $(document).on('dragleave', function (e)
-      {
-        _this.$element.removeClass('file-border');
-        //_this.$element.find('.dropdiv').remove();
-      //  _this.baloon = true;
         e.stopPropagation();
         e.preventDefault();
       });
@@ -86,13 +74,7 @@
      //We need to send dropped files to Server
      this.handleFileUpload(files,e);
   },
-  _dragend:function(e){
-     this.$element.removeClass('file-border');
-    //this.$element.find('.dropdiv').remove();
-    // this.baloon = true;
-     e.preventDefault();
-     e.stopPropagation();
-  },
+  
   validate:function(file){
       var returnVal = true;
       if(!this.module){

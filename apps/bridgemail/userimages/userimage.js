@@ -210,13 +210,20 @@ function (template,bmstags) {
                     _this.$el);      
            },
            useImage:function(ev){
-               this.options._select_page.useImage($(ev.target).data('url'));
+               if(this.options.callBack){
+                   
+                   this.options.callBack({imgurl:$(ev.target).data('url'),imgencode:this.model.get('imageId.encode')});
+               }
+               else{    
+                   this.options._select_page.useImage($(ev.target).data('url'));
+               }
                $('.modal-open .custom_popup').remove();
                this._dialog.hide();
            },
            // Update header count when delete called inside success for deletion.
            updateCount:function(){
                var parents = 0;
+               
                if(this.options.fromDialog){
                    parents = this.$el.parents(".modal");
                }else{

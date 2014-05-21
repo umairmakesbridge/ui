@@ -361,12 +361,18 @@ function (template,highlighter) {
                         },
                         schOpenCampaign:function(ev){
                             var schFlag = false;
-                            if(this.$(ev.currentTarget).hasClass('btn-reschedule') || this.$(ev.currentTarget).hasClass('btn-schedule')){
+                            var reschedule = false;
+                            var hidecalender = false;
+                            if(this.$(ev.currentTarget).hasClass('btn-reschedule')){
+                                schFlag = 4;
+                                reschedule = true;
+                                hidecalender = true;
+                            }else if(this.$(ev.currentTarget).hasClass('btn-schedule')){
                                 schFlag = 4;
                             }
                             var camp_id = this.model.get('campNum.encode');
                             var camp_wsid = this.model.get('campNum.checksum');
-                            this.app.mainContainer.openCampaign(camp_id,camp_wsid,schFlag);  
+                            this.app.mainContainer.openCampaign(camp_id,camp_wsid,schFlag,reschedule,hidecalender);  
                         }
             
         });

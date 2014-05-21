@@ -503,7 +503,7 @@ define([
                    var top_button = $('<button class="ScrollToTop scroll-summary" type="button" style="display: none"></button>');
                    $(appendtoDiv).append(top_button);
                      top_button.click(_.bind(function(){
-                         if(scrollObj.scrollElement){
+                         if(scrollObj.scrollElement && scrollBar[0] !== window){
                              scrollBar.animate({scrollTop:0},600);
                          }
                          else{

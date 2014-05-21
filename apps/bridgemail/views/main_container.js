@@ -234,13 +234,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_id+" .subheading").html(params.subheading);
                     }                    
                 },
-                openCampaign: function(camp_id,camp_wsid,schFlag) {
+                openCampaign: function(camp_id,camp_wsid,schFlag,reschedule,hidecalender) {
                     var camp_id = camp_id ? camp_id : 0;
                     var active_step = 1;
-                    var rescheduled = false;
                     if(schFlag){
                      active_step = schFlag;   // Active Step if Schedule is called
-                     rescheduled = true;
                     }
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
@@ -248,7 +246,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url: 'campaign',
                         tab_icon: 'campaign',
                         params: {camp_id: camp_id},
-                        wizard: {cssClass:'campaign_progress',rescheduled:rescheduled,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        wizard: {cssClass:'campaign_progress',rescheduled:reschedule,hidecalender:hidecalender,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
                             , {'iconCls': 'add-list', 'text': 'Add List', 'url': ''}, {'iconCls': 'forms', 'text': 'Create Form', 'url': ''}
