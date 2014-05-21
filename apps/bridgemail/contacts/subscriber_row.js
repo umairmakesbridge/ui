@@ -52,7 +52,7 @@ function (template,highlighter) {
              * Render Row view on page.
             */
             renderRow:function(){
-                
+              
             },
             /**
              * Initializing all controls here which need to show in view.

@@ -28,6 +28,7 @@ function (template,icheck,bmstags) {
             render: function () {
                this.$el.html(this.template({}));
                this.page = this.options.template;
+               this.modelTemplate = this.options.rowtemplate;
                this.dialog = this.options.dialog;
                this.template_id = this.page.template_id;
                this.app = this.options.template.app;                                             
@@ -57,6 +58,7 @@ function (template,icheck,bmstags) {
                this.tagDiv.addClass("template-tag");
                this.loadTemplate();
                this.iThumbnail = this.$(".droppanel");
+               this.iThumbImage = null;
                this.$("textarea").css("height",(this.$("#area_create_template").height()-270)+"px");                              
                this.$(".droppanel").dragfile({
                         post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
@@ -232,21 +234,22 @@ function (template,icheck,bmstags) {
                 var isReturnPath = this.$(".return-path").prop("checked")?'Y':'N';
                 var isFeatured = this.$(".featured").prop("checked")?'Y':'N';
                 var isMobile = this.$(".mobile-comp").prop("checked")?'Y':'N';
+                 this.dataObj = {type:'update',templateNumber:this.template_id,
+                                 imageId:this.imageCheckSum,
+                                 isFeatured:isFeatured,
+                                 isReturnPath:isReturnPath,
+                                 isMobile:isMobile,
+                                 categoryID:this.$(".cat").text(),
+                                 templateHtml:tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
+                        };
                 _this.app.showLoading("Updating Template...",this.$el);   
-                $.post(URL, {type:'update',templateNumber:this.template_id,
-                            imageId:this.imageCheckSum,
-                            isFeatured:isFeatured,
-                            isReturnPath:isReturnPath,
-                            isMobile:isMobile,
-                            categoryID:this.$(".cat").text(),
-                            templateHtml:tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
-                        })
+                $.post(URL,this.dataObj )
                 .done(function(data) {                  
                       _this.app.showLoading(false,_this.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
                            _this.app.showMessge("Template Updated Successfully!");                                     
-                           _this.page.$("#template_search_menu li:first-child").removeClass("active").click();
+                           _this.modelSave();
                        }
                        else{
                            _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
@@ -363,7 +366,8 @@ function (template,icheck,bmstags) {
                          dailog_head.$("#dialog-title span").html(_this.app.encodeHTML(template_name_input.val()));                                                                                                 
                          _this.showHideTargetTitle();
                          _this.app.showMessge("Templated Renamed");    
-                          _this.page.$("#template_search_menu li:first-child").removeClass("active").click();
+                          //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
+                         _this.modelTemplate.model.set("name",template_name_input.val());
                       }
                       else{                                  
                           _this.app.showAlert(_json[1],_this.$el);
@@ -447,6 +451,7 @@ function (template,icheck,bmstags) {
                         this.iThumbnail.remove("file-border");
                         this.imageCheckSum = data.imgencode;
                         this.iThumbnail.find("h4").hide();
+                        this.iThumbImage = data.imgurl;
                         this.iThumbnail.find("img").attr("src",data.imgurl).show();
                         this.saveUserImage();
                     }else{
@@ -463,14 +468,18 @@ function (template,icheck,bmstags) {
                             var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
                                  this.app.showMessge("Thumbnail Saved Successfully");
+                                 this.modelTemplate.model.set("thumbURL",this.iThumbImage);
                                 }else{
                                    this.app.showAlert(_json[1],$("body"),{fixed:true});  
                                 }
                          },this));
+                },
+                modelSave:function(){
+                    this.modelTemplate.model.set("isFeatured",this.dataObj.isFeatured);
+                    this.modelTemplate.model.set("isReturnPath",this.dataObj.isReturnPath);
+                    this.modelTemplate.model.set("isMobile",this.dataObj.isMobile);
+                    this.modelTemplate.model.set("categoryID",this.dataObj.categoryID);
+                    
                 }
-                /*useImage:function(url){
-                    
-                    
-                }*/
         });
 });

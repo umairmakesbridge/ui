@@ -40,7 +40,7 @@ function (template,highlighter) {
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.render();
-                    //this.model.on('change',this.renderRow,this);
+                    this.model.on('change',this.renderRow,this);
             },
               /**
              * Render view on page.
@@ -55,16 +55,19 @@ function (template,highlighter) {
                 this.initControls();  
                
             },
+            /*
+             * 
+             * Template Render on Change
+             */
+            renderRow : function(){
+                console.log('Model Changed');
+                this.render();
+            },
+            
             /**
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-               /* if(this.sub.searchTxt){
-                    this.$(".show-detail").highlight($.trim(this.sub.searchTxt));
-                    this.$(".taglink").highlight($.trim(this.sub.searchTxt));
-                }else{
-                this.$(".taglink").highlight($.trim(this.sub.tagTxt));
-                }*/
                 if(this.sub.searchString.searchType==="nameTag"){
                         var searchVal = $.trim(this.sub.$("#search-template-input").val());
                         this.$(".thumbnail .caption h3 a").highlight(searchVal);
@@ -156,6 +159,7 @@ function (template,highlighter) {
                 },
                 updateTemplate:function(){                                   
                    var _this = this.sub;
+                   var self = this;
                    _this.template_id = this.model.get('templateNumber.encode');
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
@@ -168,7 +172,7 @@ function (template,highlighter) {
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["bmstemplates/template"],function(templatePage){
-                    var mPage = new templatePage({template:_this,dialog:dialog});
+                    var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self});
                     dialog.getBody().html(mPage.$el);
                     mPage.init();
                     dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
