@@ -11,7 +11,7 @@
                 <%}
                 %>                    
                 <div class="percent_stats">
-                    <a class="icon percent campaign_stats showtooltip" style="margin:0px!important;" title="Click to view messages details"> </a>
+                    <a class="icon percent campaign_stats showtooltip" style="margin:0px!important;" title="Click to view stats"> </a>
                 </div>
 
             </h3>
@@ -34,7 +34,7 @@
             <% if(model.get('msgCount')=="0") { %>
                 <strong><span><em>Messages</em><%- model.get('msgCount')%></span></strong>            
             <% } else { %>
-                <strong><span><em>Messages</em><a class="message-view"><%- model.get('msgCount')%></a></span></strong>
+                <strong><span><em>Messages</em><a class="message-view showtooltip" title="Click to view messages"><%- model.get('msgCount')%></a></span></strong>
             <%}%>
         </div>
     </div></td>
@@ -66,7 +66,7 @@
                %>
                    <a class="icon pause pause-track"><span>Pause</span></a>  
                    <a class="icon copy-track copy"><span>Copy</span></a> 
-                   <a class="icon message-view"><span>Preview</span></a>
+                   <a class="icon preview message-view"><span>Preview</span></a>
                <%}
                %>    
                </div>   

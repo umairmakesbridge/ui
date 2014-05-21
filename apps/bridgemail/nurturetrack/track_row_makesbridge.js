@@ -11,8 +11,9 @@ function (template,highlighter) {
             /**
              * Attach events on elements in view.
             */
-            events: {
-              
+            events: {              
+              'click .use-track':'copyNurtureTrack',
+              'click .preview':'viewNurtureTrack'
             },
             /**
              * Initialize view - backbone
@@ -45,6 +46,30 @@ function (template,highlighter) {
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+            } ,
+            viewNurtureTrack:function(){
+                this.app.showLoading("Loading...",this.parent.$el);
+                require(["nurturetrack/track_view"],_.bind(function(page){    
+                     this.app.showLoading(false,this.parent.$el);                    
+                     var view_page = new page({page:this});                       
+                     $("body").append(view_page.$el);        
+                     view_page.init();
+                 },this));
+            },
+            copyNurtureTrack:function(){                                 
+                var dialog = this.app.showDialog({title:'Use Nurture Track Template',
+                    css:{"width":"600px","margin-left":"-300px"},
+                    bodyCss:{"min-height":"260px"},							   
+                    headerIcon : 'copycamp',
+                    buttons: {saveBtn:{text:'Use'} }                                                                           
+                });
+                this.app.showLoading("Loading...",dialog.getBody());
+                require(["nurturetrack/copynurturetrack"],_.bind(function(copyTrackPage){                                     
+                    var mPage = new copyTrackPage({page:this,copydialog:dialog});
+                    dialog.getBody().html(mPage.$el);
+                    mPage.init();
+                    dialog.saveCallBack(_.bind(mPage.copyTrack,mPage));
+                },this));
             }
             
         });

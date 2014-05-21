@@ -18,7 +18,8 @@ function (template,moment,highlighter) {
               'click .copy-track':'copyNurtureTrack',
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
-              'click .message-view':'viewNurtureTrack'
+              'click .message-view':'viewNurtureTrack',
+              'click .report':'reportNT'
             },
             /**
              * Initialize view - backbone

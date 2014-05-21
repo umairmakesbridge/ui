@@ -73,6 +73,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
 
                   }
               });
+              this.$(".bms_tracks").hide();
+              this.$(".user_tracks").fadeIn();  
                                             
             },
             /**
