@@ -69,7 +69,8 @@ function (template,NTStates,stateView) {
                             sentCount = sentCount + parseInt(_model.get("sentCount"));
                             pendingCount = pendingCount + parseInt(_model.get("pendingCount"));
                         }                                                                        
-                       this.statDiv.find(".message-count").html(this.app.addCommas(response.msgCount)); 
+                        var message_text = response.msgCount=="1"?"Message":"Messages"
+                        this.statDiv.find(".message-count").html('<strong class="badge ">'+this.app.addCommas(response.msgCount)+'</strong><span> '+message_text+'</span>'); 
                        // this.statDiv.find(".sent-count").html(this.app.addCommas(sentCount.toString()));
                        // this.statDiv.find(".pending-count").html(this.app.addCommas(pendingCount.toString()));                        
                     }, this),

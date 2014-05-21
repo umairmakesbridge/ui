@@ -55,12 +55,14 @@ function (template,messagesCollection,messageView) {
                             return false;
                         }
                         this.app.showLoading(false,this.$el);                                                                         
-                                                
+                        var camp_array = [];    
                         for(var s=this.offset;s<collection.length;s++){
                             var _model = collection.at(s);
                             var _view = new messageView({ model: _model,page:this });                                                            
                             this.$(".thumbnails").append(_view.$el);                                                                               
-                        }                                                                        
+                            camp_array.push(_model.get("campNum.encode"));
+                        }           
+                        this.showMessageSubject(camp_array.join())
                                    
                     }, this),
                     error: function (collection, resp) {
@@ -71,6 +73,23 @@ function (template,messagesCollection,messageView) {
             setSize:function(){
                 var _height = $(document.documentElement).height()-75;
                 this.$(".message-container").css("height",_height+"px");
+            },
+            showMessageSubject:function(campagins){
+                    var bms_token = this.app.get('bms_token');                    
+                    //this.app.showLoading("Loading Nurture Track Details...", this.$el);
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + bms_token + "&campNum_csv=" + campagins + "&type=list_csv";
+                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                        //this.app.showLoading(false, this.$el);
+                        var _json = jQuery.parseJSON(xhr.responseText);
+                        if (this.app.checkError(_json)) {
+                            return false;
+                        }
+                        _.each(_json.campaigns[0],function(val){
+                            var subject = val[0]['subject']?val[0]['subject']:'&lt;subject line&gt;';
+                            this.$("#"+val[0]["campNum.checksum"]).html(subject);
+                        },this)
+                        
+                    },this))  
             }
             
         });

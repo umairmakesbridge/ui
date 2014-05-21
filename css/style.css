@@ -3911,6 +3911,9 @@ ul.setting-options li img {
     font-weight: bold;
     line-height: 1.6;
     margin: 0 0 3px;
+    height: 29px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
  .thumbnail .caption h3 a {
 	color: #02AFEF;

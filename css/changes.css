@@ -622,10 +622,10 @@ input[type="text"].search-template{
 }
 
 .thumbnail .caption h3 a {
-    display: block;
+    display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    width: 100%;
+    width: auto;
 }
 
 

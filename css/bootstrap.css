@@ -5290,7 +5290,7 @@ input[type="submit"].btn.btn-mini {
 
 .tooltip {
   position: absolute;
-  z-index: 1030;
+  z-index: 10300;
   display: block;
   font-size: 11px;
   line-height: 1.4;
