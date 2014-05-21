@@ -2411,7 +2411,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     return false;
                             }
                             camp_obj.app.showLoading("Loading Tags...",camp_obj.$el.find('#area_choose_tags'));  
-                            require(["tags"],function(tagsPage){                                                      
+                            require(["tags\tags"],function(tagsPage){                                                      
                                     var lPage = new tagsPage({camp:camp_obj,app:camp_obj.app});               
                                     camp_obj.$el.find('.step3 #area_choose_tags').html(lPage.$el);
                                     camp_obj.states.step3.tags = lPage;

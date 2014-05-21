@@ -1,9 +1,8 @@
 /* 
- * Module Name : Recipients Lists
- * Author: Pir Abdul Wakeel
- * Date Created: 05 May 2014
- * Description: this view is called from contacts/recipients, so changing this may cause problem in recipients list.
- * 
+ * Module Name: Recipients Lists
+ * Author:Pir Abdul Wakeel
+ * Date Created:05 May 2014
+ * Description:this view is called from contacts/recipients, so changing this may cause problem in recipients list.
  **/
 
 define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app','bms-addbox'],

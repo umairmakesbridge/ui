@@ -15,10 +15,9 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
             return Backbone.View.extend({
                 events: {
                     "keyup #grids_search": "search",
-                    "click  #clearsearch": "clearSearch",
+                    "click #clearsearch": "clearSearch",
                     'click #newTarget': "createTarget",
                     "click .closebtn": "closeContactsListing"
-                    
                 },
                 initialize: function() {
                     this.template = _.template(template);

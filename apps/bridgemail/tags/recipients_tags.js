@@ -1,8 +1,8 @@
 /* 
- * Module Name : Recipients Lists
+ * Module Name : Recipients Tags
  * Author: Pir Abdul Wakeel
  * Date Created: 05 May 2014
- * Description: this view is called from contacts/recipients, so changing this may cause problem in recipients list.
+ * Description: Recipients Tags
  * 
  **/
 
