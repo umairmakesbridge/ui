@@ -134,11 +134,13 @@
          var index = $('.li-mew-images').size();
          var id =  index + 1;
             data_id = id;
-         if(this.from)
+         if(this.from_dialog)
             $(".modal .images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
          else
             $(".images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
-         $('#templi_'+data_id).fadeIn();
+        
+            $('#templi_'+data_id).fadeIn();
+         
         }else if(this.module == "csv" || this.module=="template"){            
             this.progressElement.append('<div class="csv-opcbg"></div>')
             this.progressElement.append("<div id='progress' class='progress-bar'><div class='progress-bar-slider'></div></div>");            

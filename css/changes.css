@@ -1395,7 +1395,13 @@ ul.tabs-btns li.active a{
     padding-left: 48px;
     width: 130px;
 }
-
+.thumbnail .img > div a.download_img  {
+    background: url("../img/download48.png") no-repeat scroll center center #7B929F;
+     
+} 
+.thumbnail .img > div a.download_img:hover {
+   background-color: #98D028;
+}
 .thumbnail .img > div a.copybtn:hover {
    background-color: #98D028;
 }
