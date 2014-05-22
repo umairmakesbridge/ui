@@ -57,7 +57,7 @@ function (template,moment) {
                         this.$(".wait-select").hide();
                         this.$(".date-select").css("display","inline-block");
                     }
-                }
+                }                
                 
             },
             /**
@@ -67,6 +67,11 @@ function (template,moment) {
                 
             },
             deleteRow:function(){
+                var buttonPlaceHolder = this.$el.prev();
+                if(buttonPlaceHolder && buttonPlaceHolder.hasClass("placeholder")){
+                    buttonPlaceHolder.find(".add-wait-r").show();
+                    buttonPlaceHolder.find(".wait-add").addClass("yellow").removeClass("green")
+                }
                 this.$el.remove();
                 if(this.btnRow){
                     this.btnRow.remove();                    

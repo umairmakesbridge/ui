@@ -381,7 +381,12 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     var buttonsView = new ButtonsView({page:this,showWait:false});                        
                     bView = buttonsView.$el;                                                              
                     var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder,model:model });                             
-                    this.$("[t_order='"+tOrder+"']").before(waitView.$el);                                               
+                    this.$("[t_order='"+tOrder+"']").before(waitView.$el);      
+                    var buttonPlaceHolder = waitView.$el.prev()
+                    if(buttonPlaceHolder && buttonPlaceHolder.length){
+                        buttonPlaceHolder.find(".add-wait-r").hide();
+                        buttonPlaceHolder.find(".wait-add").addClass("green").removeClass("yellow");
+                    }
                     return waitView;
                     //waitView.$el.after(buttonsView.$el); 
                 },

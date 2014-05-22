@@ -1223,6 +1223,9 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
 
 .icon.report:hover {background: url("../img/report_blue.png") no-repeat scroll center center ;}
 
+.icon.report-bar{background: url("../img/percent.png") no-repeat scroll center center ;}
+.icon.report-bar:hover {background: url("../img/percent2.png") no-repeat scroll center center ;}
+
 .login-saving .saving{
     display: block;
     float: right;

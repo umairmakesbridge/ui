@@ -629,7 +629,7 @@ input[type="text"].search-template{
 }
 
 
-.btm-bar .mail,.btm-bar .view{
+.btm-bar .mail,.btm-bar .view,.btm-bar .report,.btm-bar .report-bar{
     cursor: pointer;
 }
 .template-container .scroll-content{
