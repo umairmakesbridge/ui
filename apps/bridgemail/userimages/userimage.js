@@ -19,14 +19,30 @@ function (template,bmstags) {
                 "click #preview":"preview",
                 "click .select-image":"useImage",
                 "click .link":"showURL",
-                "click .fav":"markFavourite"
+                "click .fav":"markFavourite",
+                "mouseover .graphics":"showDownload" 
             },
             initialize:function(options){
                this.template = _.template(template);
                this._dialog = this.options._dialog;
                 this.render();
-               
-               
+            },
+            showDownload:function(ev){
+                var that = this;
+                if($('.graphics .download').length > 0)
+                     $('.graphics .download').remove();
+                this.$el.find(".graphics").append("<span class='download' style='cursor: pointer; position:absolute; top:0; right:1px'>Download</span>");
+                this.$el.find(".graphics .download").on('click',function(){
+                  var url=that.model.get('originalURL');    
+                  url = that.options.app.decodeHTML(url);
+                  window.open(url,'Download');  
+              });  
+              
+            },
+           
+            disableWobbling:function(ev){
+                ev.preventDefault();
+                return false;
             },
             markFavourite:function(ev){
                 var obj = $(ev.target);
