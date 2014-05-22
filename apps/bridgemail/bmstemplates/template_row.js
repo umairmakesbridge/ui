@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template_row.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.nicescroll'],
+function (template,highlighter,nicescroll) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page

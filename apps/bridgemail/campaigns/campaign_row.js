@@ -14,15 +14,15 @@ function (template,highlighter) {
              * Attach events on elements in view.
             */
             events: {
-               'click .btn-copy':'copyCampaign',
-               'click .btn-gray':'openCampaign',
-               "click .btn-preview":'previewCampaign',
+               'click .copy-camp':'copyCampaign',
+               'click .edit-camp':'openCampaign',
+               "click .preview-camp":'previewCampaign',
                'click  a.campname': 'campaignStateOpen',
-               "click .btn-schedule, .btn-reschedule":'schOpenCampaign',
-               'click .btn-red':'deleteCampaginDialoge',
+               "click .schedule-camp, .reschedule-camp":'schOpenCampaign',
+               'click .delete-camp':'deleteCampaginDialoge',
                'click .taglink':'tagClick',
                'click .report':'reportShow',
-               'click .btn-draft':'draftBtnClick',
+               'click .draft-camp':'draftBtnClick',
                'click .cflag':'classFlagClick'
                /*'click .tag':'tagSearch'*/
             },
@@ -115,47 +115,6 @@ function (template,highlighter) {
                                      }
                        return {dtHead:dtHead,dateTime:dateFormat}
             },          
-            /**
-             * Draw Buttons 
-            */
-            drawButtons:function(){  
-                                
-				var buttons = '';
-				switch(this.model.get('status'))
-				{					
-					case 'D':
-						buttons = 'DL,P,C,S,E';
-						break;					
-					case 'S':
-						buttons += 'DL,P,C,R,DR';
-						break;
-					case 'C':
-						buttons += 'DL,P,C';
-						break;
-					case 'P':
-						buttons += 'P,C';
-						break;
-                                            default:
-                                                buttons = 'DL,P,C,S,E';
-                                                break;
-				} 
-                                var btnsArray = [];
-                            	btnsArray["DL"] = '<a class="btn-red"><i class="icon delete"></i></a>';
-				btnsArray["P"] = '<a class="btn-blue btn-preview"><span>Preview</span><i class="icon preview3"></i></a>';
-				btnsArray["C"] = '<a  class="btn-green btn-copy"><span>Copy</span><i class="icon copy"></i></a>';
-				btnsArray["S"] = '<a class="btn-green btn-schedule"><span>Schedule</span><i class="icon time2"></i></a>';
-				btnsArray["E"] = '<a class="btn-gray btn-edit"><span>Edit</span><i class="icon edit"></i></a>';
-				btnsArray["R"] = '<a  class="btn-green btn-reschedule"><span>Reschedule</span><i class="icon time2"></i></a>';
-				btnsArray["DR"] = '<a class="btn-blue btn-draft"><span>Draft</span><i class="icon time2"></i></a>';
-				
-				buttons = buttons.split(',');
-				var btns = '';
-				for(var i=0; i<buttons.length; i++)
-				{
-					btns += btnsArray[buttons[i]];
-				}
-				return btns;
-            },
             /**
              * Initializing all controls here which need to show in view.
             */
@@ -363,11 +322,11 @@ function (template,highlighter) {
                             var schFlag = false;
                             var reschedule = false;
                             var hidecalender = false;
-                            if(this.$(ev.currentTarget).hasClass('btn-reschedule')){
+                            if(this.$(ev.currentTarget).hasClass('reschedule-camp')){
                                 schFlag = 4;
                                 reschedule = true;
                                 hidecalender = true;
-                            }else if(this.$(ev.currentTarget).hasClass('btn-schedule')){
+                            }else if(this.$(ev.currentTarget).hasClass('schedule-camp')){
                                 schFlag = 4;
                             }
                             var camp_id = this.model.get('campNum.encode');

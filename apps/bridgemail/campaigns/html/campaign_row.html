@@ -19,19 +19,55 @@
 <td width="90px">
    <% if(this.model.get('status')!== 'D'){ %>
    <div>
-       <div class="subscribers show" style="min-width:60px"><strong><span><em>Sent</em><%= this.model.get('sentCount') %></span></strong></div>
-       <% }%>
-       
+       <div class="subscribers">
+           <strong><span><em>Sent</em><%= this.model.get('sentCount') %></span></strong>
+       </div>
+       <% }%>     
    </div>
 </td>
 
-<td width="140px">
+<td width="132px">
     <div>
-        <div style="width:105px" class="time show">
+        <div style="width:105px" class="time">
             <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
         </div>
-        <div class="action" id="<%= this.model.get('campNum.encode') %>">
-           <%= this.drawButtons() %>
-        </div>
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('five s-clr6') } else if(model.get('status')==='S'){ print('five s-clr6 slidebtn-sp') } else if(model.get('status')==='C') { print('three s-clr4') } else if(model.get('status')==='P') { print('two s-clr3 slidebtn-sp') } else { print('five s-clr6') }%>">
+              <span class="icon setting"></span>
+              <div>                 
+                <% if(model.get('status')==='D'){  %>
+
+               <a class="icon edit-camp edit clr5"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr4"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+               <a class="icon preview-camp preview clr2"><span>Preview</span></a>
+               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+
+               <% } else if(model.get('status')==='S') {
+               %>
+                   <a class="icon draft-camp draft" title="draft"><span>Draft</span></a>
+                   <a class="icon reschedule-camp calender"><span>Reschedule</span></a>
+                   <a class="icon copy-camp copy"><span>Copy</span></a> 
+                   <a class="icon preview-camp preview"><span>Preview</span></a>
+                   <a class="icon delete-camp delete"><span>Delete</span></a>                                 	
+               <%} else if(model.get('status')==='P') {
+               %>
+                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                   <a class="icon preview-camp preview clr1"><span>Preview</span></a>                                 	
+               <%} else if(model.get('status')==='C') {
+               %>
+                   <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
+               <%} else {%>
+               <a class="icon edit-camp edit clr5"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr4"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+               <a class="icon preview-camp preview clr2"><span>Preview</span></a>
+               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
+               <% } %>
+               </div>   
+        </div> 
+        
     </div>
 </td>
+
