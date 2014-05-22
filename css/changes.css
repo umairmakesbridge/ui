@@ -2772,7 +2772,19 @@ text-align:center;
     margin: -10px 0 0;
 }
 
-/*-------------------------*/
+/*------------Tiles of Gallery-------------*/
+.thumbnail .caption .cstatus {
+    border-radius: 20px;
+    float: left;
+    font-size: 11px !important;
+    font-weight: normal;
+    line-height: 16px;
+    margin: 2px 0 0 10px;
+    opacity: 1;
+    padding: 0 8px;
+}
+
+/*-------------*/
 .fromemail-group{
     right:4px !important;
 }

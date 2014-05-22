@@ -39,6 +39,8 @@ function (template,highlighter) {
                     this.tagTxt = '';
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
+                    this.isAdmin = this.app.get("isAdmin");
+                    //this.isAdmin = 'Y';
                     this.render();
                     this.model.on('change',this.renderRow,this);
             },
@@ -60,7 +62,7 @@ function (template,highlighter) {
              * Template Render on Change
              */
             renderRow : function(){
-                console.log('Model Changed');
+                //console.log('Model Changed');
                 this.render();
             },
             
@@ -104,7 +106,7 @@ function (template,highlighter) {
                  var adminTemplate = this.model.get('isAdmin')==='Y'?"admin-template":"";
                  if(adminTemplate === "admin-template"){
                                 this.$('.thumbnail').addClass(adminTemplate);
-                                if(this.app.get("isAdmin") === "Y"){
+                                if(this.isAdmin === "Y"){
                                     templates_html +='<a class="previewbtn"  id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
                                     templates_html +='<a class="copybtn"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                     templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'" ><span >Edit</span></a>';
@@ -113,7 +115,7 @@ function (template,highlighter) {
                                     templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
                                     templates_html +='<a class="copybtn"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
                                 }
-                  }else{
+                            }else{
                                 templates_html +='<a class="previewbtn" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
                                 templates_html +='<a class="copybtn" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                 templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
@@ -140,7 +142,6 @@ function (template,highlighter) {
                           },this));                              
                 },
                 copyTemplate: function(){
-                        var _this = this;
                         var dialog_title = "Copy Template";
                         var self;
                         var __dialog = this.app.showDialog({title:dialog_title,
@@ -151,11 +152,11 @@ function (template,highlighter) {
                                           buttons: {saveBtn:{text:'Create Template'} }                                                                           
                         });
                         this.app.showLoading("Loading...",__dialog.getBody());
-                        require(["bmstemplates/copytemplate"],function(copyTemplatePage){                                     
-                                var mPage = new copyTemplatePage({templ:self,template_id:_this.model.get('templateNumber.encode'),_current:_this,app:_this.app,templatesDialog:__dialog});
+                        require(["bmstemplates/copytemplate"],_.bind(function(copyTemplatePage){                                     
+                                var mPage = new copyTemplatePage({templ:self,template_id:this.model.get('templateNumber.encode'),_current:this,app:this.app,templatesDialog:__dialog});
                                 __dialog.getBody().html(mPage.$el);
                                 __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
-                        });
+                        },this));
                 },
                 updateTemplate:function(){                                   
                    var _this = this.sub;

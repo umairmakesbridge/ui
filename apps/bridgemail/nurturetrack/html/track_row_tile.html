@@ -43,7 +43,7 @@
       <a class="cstatus pclr18">Playing </a>                
      <%}
                 %>                 
-                                <div class="t-scroll">
+                                
     <p>
          <% if(model.get('tags')){  
                     _.each(model.get('tags').split(","),function(t){ %>  
@@ -52,7 +52,7 @@
                         )
                     }
                     %>  
-        <!--<i class="ellipsis">...</i>--></p></div>
+        <!--<i class="ellipsis">...</i>--></p>
     <div class="btm-bar">
         <span><span class="icon report-bar showtooltip" title="Click to view stats"></span></span>
         <span ><span class="icon mail message-view showtooltip" title="Click to view messages"></span><em><%- model.get('msgCount')%></em> </span>
