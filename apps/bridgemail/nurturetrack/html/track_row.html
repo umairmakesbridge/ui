@@ -52,21 +52,21 @@
                     %>    
                 </span></strong>
         </div>
-        <div class="slide-btns <% if(model.get('status')==='D'){ print('four') } else { print('three') }%>">
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('four s-clr5') } else { print('three s-clr4') }%>">
               <span class="icon setting"></span>
               <div>                 
                 <% if(model.get('status')==='D'){  %>
 
-                <a  class="icon play play-track" ><span>Play</span></a>  
-               <a class="icon copy-track copy" ><span>Copy</span></a> 
-               <a class="icon edit-track edit" ><span>Edit</span></a>
-               <a class="icon delete-track delete" ><span>Delete</span></a>
+                <a  class="icon play play-track clr4" ><span>Play</span></a>  
+               <a class="icon copy-track copy clr3" ><span>Copy</span></a> 
+               <a class="icon edit-track edit clr2" ><span>Edit</span></a>
+               <a class="icon delete-track delete clr1" ><span>Delete</span></a>
 
                <% } else {
                %>
-                   <a class="icon pause pause-track"><span>Pause</span></a>  
-                   <a class="icon copy-track copy"><span>Copy</span></a> 
-                   <a class="icon preview message-view"><span>Preview</span></a>
+                   <a class="icon pause pause-track clr3"><span>Pause</span></a>  
+                   <a class="icon copy-track copy clr2"><span>Copy</span></a> 
+                   <a class="icon preview message-view clr1"><span>Preview</span></a>
                <%}
                %>    
                </div>   

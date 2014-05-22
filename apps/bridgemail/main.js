@@ -19,7 +19,7 @@
            'jquery.icheck': '../shared/libs/jquery.icheck',
            'jquery.chosen': '../shared/libs/chosen.jquery',
            'jquery.highlight': '../shared/libs/jquery.highlight',           
-           'jquery.searchcontrol': '../shared/libs/jquery.searchcontrol',
+           'jquery.searchcontrol': '../shared/searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
            'fileuploader': '../shared/libs/jquery.form',
            'bms-filters': '../shared/filters',
