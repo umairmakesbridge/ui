@@ -173,8 +173,10 @@
             success: function(data){
                 _this.app.showLoading(false,_this.$element);
                  $('#templi_'+data_id).remove();
-                 _this.progressElement.find("#progress").remove();
-                 _this.progressElement.find(".csv-opcbg").remove();
+                 if(_this.module !='Image'){
+                    _this.progressElement.find("#progress").remove();
+                   _this.progressElement.find(".csv-opcbg").remove();
+               }  
                 _this.options.callBack(data,{fileName:_this.fileName});  
             }
             ,
@@ -202,10 +204,10 @@
         if($("#templi_"+id).find('.'+this.name.name).length > 0) return;
         var li = "<li id=templi_"+id+"  class='span3 li-progress li-mew-images ' style='display:none;'><div class='thumbnail graphics'>\n\
                      <div id='progress' style='position:absolute; top:50%;background: none repeat scroll 0 0 #FFFFFF; z-index:1001; opacity:100;height: 6px; width: 97%;border: 1px solid #FFFFFF;margin-left:1px;border-radius:9px;'><div style='background:#97D61D;height:6px;border-radius: 9px;'></div></div>\n\
-                     <div class='img' style='opacity:0.6; line-height: 230px; '>\n\
-                             <img src='img/graphicimg.png'>\n\
-                     </div>\n\
-                     <div class='caption' style='opacity:0.6; height:83px;'>\n\
+                        <div class='img' style='opacity:0.6; line-height: 230px; '>\n\
+                                <img src='img/graphicimg.png'>\n\
+                        </div>\n\
+                     <div class='caption' style='opacity:0.6; height:115px;'>\n\
                          <h3 class='graphics-name "+this.name.name+"'>\n\
                          <a><span>"+this.name.name+"</span></a>\n\
                          </h3>\n\

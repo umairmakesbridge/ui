@@ -56,12 +56,10 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               this.$el.html(this.template({}));
               
               this.fetchImages();
-              console.log(this.objUserImages);
               if(this.fromDialog){
                 $(".modal-body").scroll(_.bind(this.liveLoading,this));
                 $(".modal-body").resize(_.bind(this.liveLoading,this));
-                
-                ///workspace.;
+               
               }else{
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));
