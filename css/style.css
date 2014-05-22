@@ -3941,11 +3941,11 @@ ul.setting-options li img {
 
 .thumbnail .caption p {
     clear: both;
-    height: 55px;
+    height: 50px;
     line-height: 1.2;
     margin: 0;
     overflow: hidden;
-    padding: 5px 0;
+    padding: 10px 0 5px;
 }
 
 .thumbnail .caption p > a {
@@ -4009,14 +4009,11 @@ ul.setting-options li img {
 .btm-bar {
 	background: none repeat scroll 0 0 #F8FDFF;
         border-top: 1px solid #EAF4F9;
-	color: #8A8A8A;
-	font-size: 12px;
-	height: 30px;
-	margin: 0 -10px 0px;
-	padding: 0 10px 0 5px;
-        width: 223px;
-	position:absolute;
-	bottom:0;
+        color: #8A8A8A;
+        font-size: 12px;
+        height: 30px;
+        margin: 0 -10px -10px;
+        padding: 0 10px;
 }
 .btm-bar span {
     float: left;
@@ -10990,7 +10987,7 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 
 .tileview  .thumbnails > li { margin:10px;}
 
-.tileview .thumbnail { border:2px solid #fff;;}
+.tileview .thumbnail { border:2px solid #fff;}
 
 
 .tileview .thumbnail .caption h3 + .cstatus { margin-left:0;}

@@ -212,7 +212,7 @@ function (template,bmstags) {
            useImage:function(ev){
                if(this.options.callBack){
                    
-                   this.options.callBack({imgurl:$(ev.target).data('url'),imgencode:this.model.get('imageId.encode')});
+                   this.options.callBack({imgurl:$(ev.target).data('url'),imgencode:this.model.get('imageId.encode'),imgthumb:$(ev.target).data('thumb')});
                }
                else{    
                    this.options._select_page.useImage($(ev.target).data('url'));

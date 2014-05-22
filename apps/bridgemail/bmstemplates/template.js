@@ -188,7 +188,8 @@ function (template,icheck,bmstags) {
                             url:'/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK='+_this.app.get('bms_token'),
                             params:{type:'tags',templateNumber:_this.template_id,tags:''}
                             ,showAddButton:true,                            
-                            tags:template_json.tags
+                            tags:template_json.tags,
+                            callBack:_.bind(_this.newTags,_this)
                          });
                    }
                  }).fail(function() { console.log( "error in loading template" ); }); 
@@ -209,6 +210,9 @@ function (template,icheck,bmstags) {
                 if(this.iThumbnail.data("dragfile")){
                     this.iThumbnail.data("dragfile").handleFileUpload(files);
                 }
+            },
+            newTags: function(data){
+              this.modelTemplate.model.set("tags",data);
             },
             processUpload:function(data){
                 var _image= jQuery.parseJSON(data);
@@ -451,8 +455,8 @@ function (template,icheck,bmstags) {
                         this.iThumbnail.remove("file-border");
                         this.imageCheckSum = data.imgencode;
                         this.iThumbnail.find("h4").hide();
-                        this.iThumbImage = data.imgurl;
-                        this.iThumbnail.find("img").attr("src",data.imgurl).show();
+                        this.iThumbImage = data.imgthumb;
+                        this.iThumbnail.find("img").attr("src", this.iThumbImage).show();
                         this.saveUserImage();
                     }else{
                         this.$el.find("#image_url").val(data);

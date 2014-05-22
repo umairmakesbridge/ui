@@ -26,9 +26,21 @@
             <% } %>
     </div>
     <div class="caption">
-        <h3 class="template-name single-template" id="editfromname_<%= this.model.get('templateNumber.encode') %>">
-            <a><%= this.model.get('name') %></a>
+        <% if(this.isAdmin === 'Y'){%>
+                <h3 class="template-name single-template" id="editfromname_<%= this.model.get('templateNumber.encode') %>" >
+                    <a class="showtooltip" data-original-title="Click to edit"><%= this.model.get('name') %></a>
+                </h3>
+        <% }else if(this.model.get('isAdmin')==='Y'){ %>
+        <h3 class="template-name previewbtn" id="editfromname_<%= this.model.get('templateNumber.encode') %>">
+            <a  class="showtooltip" data-original-title="Click to view"><%= this.model.get('name') %></a>
         </h3>
+        <% }else{ %>
+        <h3 class="template-name single-template" id="editfromname_<%= this.model.get('templateNumber.encode') %>" >
+            <a class="showtooltip" data-original-title="Click to edit"><%= this.model.get('name') %></a>
+        </h3>
+        <% } %>
+        
+        
          <% if(this.model.get('categoryID')) { %>
         <a cat_id="<%= this.model.get('categoryID') %>" class="cat showtooltip" data-original-title="Click to View All Templates In This Category"><%= this.model.get('categoryID') %></a>
         <% }else{ %>
