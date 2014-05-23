@@ -13,7 +13,7 @@
                 <span>Create Campaign</span>
             </a>
             <% } else { %>
-                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action">
+                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action selecttemp">
                         <span>Select Campaign</span>
                     </a>
             <% } %>
@@ -46,9 +46,11 @@
         <% }else{ %>
         <a class="cat" style="visibility:hidden">&nbsp;</a>
         <% } %>
+        <div class="t-scroll">
         <p>
             <%= this.showTagsTemplate() %>
         </p>
+        </div>
         <div class="btm-bar">
             <span>
                 <em><%= this.model.get('viewCount') %></em> 

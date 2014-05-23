@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.nicescroll'],
-function (template,highlighter,nicescroll) {
+define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.customScroll'],
+function (template,highlighter,customscroll) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page
@@ -26,7 +26,8 @@ function (template,highlighter,nicescroll) {
                'click .mobile':'mobileClick',
                'click .builtin':'mksBridge',
                'click .mail':'mailIconClick',
-               'click .view':'viewIconClick'
+               'click .view':'viewIconClick',
+               'click .selecttemp':'selectTemplate'
             },
             /**
              * Initialize view - backbone
@@ -40,6 +41,7 @@ function (template,highlighter,nicescroll) {
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.isAdmin = this.app.get("isAdmin");
+                    this.tagCount = 0;
                     //this.isAdmin = 'Y';
                     this.render();
                     this.model.on('change',this.renderRow,this);
@@ -92,12 +94,18 @@ function (template,highlighter,nicescroll) {
             showTagsTemplate:function(){
                    var tags = this.model.get('tags');
                    var tag_array = tags.split(",");
+                 
                    var tag_html ="";
                     $.each(tag_array,function(key,val){
-                        tag_html +="<a class='showtooltip' title='Click to View Templates With Same Tag'>"+val+"</a>";
-                        /*if(key<tag_array.length-1){
-                            tag_html +=", ";
-                        }*/
+                        if(tag_array.length > 8 && key > 7){
+                            tag_html +='<i class="ellipsis">...</i>';
+                        }
+                        if(val.length > 12 ){
+                          tag_html +="<a class='showtooltip trim-text' title='Click to View Templates With Same <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
+                        }else{
+                        tag_html +="<a class='showtooltip tag' title='Click to View Templates With Same Tag'>"+val+"</a>";
+                        }
+                        
                     });
                     return tag_html; 
                 },
@@ -207,6 +215,11 @@ function (template,highlighter,nicescroll) {
                 },
             createCampaign : function(obj){
                 if(this.selectCallback){                            
+                          this.selectCallback(obj);
+                        }
+            },
+            selectTemplate : function(obj){
+               if(this.selectCallback){                            
                           this.selectCallback(obj);
                         }
             },

@@ -33,7 +33,7 @@
            'daterangepicker': '../shared/libs/daterangepicker.jQuery',
            'bms-dragfile': '../shared/dragfile',
            'bms-mergefields':'../shared/mergefields',
-           'jquery.nicescroll':'../shared/libs/jquery.mCustomScrollbar.concat.min',
+           'jquery.customScroll':'../shared/libs/jquery.mCustomScrollbar.concat.min',
            'datetimepicker':'../shared/libs/jquery.datetimepicker',
            'jquery.isotope':'../shared/libs/jquery.isotope'
        },
@@ -111,6 +111,9 @@
                }
                ,
                'jquery.isotope':{
+                   deps: ['jquery']
+               },
+               'jquery.customScroll':{
                    deps: ['jquery']
                }
          }
