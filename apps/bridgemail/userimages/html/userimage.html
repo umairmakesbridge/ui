@@ -5,6 +5,9 @@
                 <span style="margin: 5px auto;" data-url="<%=originalURL%>" data-thumb="<%=thumbURL%>">Use Image</span></a>
             <a class="previewbtn" id="preview" data-id="<%=this.getId('imageId.encode')%>"><span>Preview</span></a>
            
+            <a class="download_img" id="download"  href="" download="<%=originalURL%>">
+                <span>Download</span>
+            </a>
             <a class="deletebtn" id="delete" rel="delete__<%=this.getId('imageId.encode')%>">
                 <span rel="delete__<%=this.getId('imageId.encode')%>">Delete</span>
             </a>

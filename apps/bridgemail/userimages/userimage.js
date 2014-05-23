@@ -20,25 +20,26 @@ function (template,bmstags) {
                 "click .select-image":"useImage",
                 "click .link":"showURL",
                 "click .fav":"markFavourite",
-                "mouseover .graphics":"showDownload" 
+               /// "click .download_img":'downloadImage'
             },
             initialize:function(options){
                this.template = _.template(template);
                this._dialog = this.options._dialog;
                 this.render();
             },
-            showDownload:function(ev){
-                var that = this;
-                if($('.graphics .download').length > 0)
-                     $('.graphics .download').remove();
-                this.$el.find(".graphics").append("<span class='download' style='cursor: pointer; position:absolute; top:0; right:1px'>Download</span>");
-                this.$el.find(".graphics .download").on('click',function(){
-                  var url=that.model.get('originalURL');    
-                  url = that.options.app.decodeHTML(url);
-                  window.open(url,'Download');  
-              });  
-              
-            },
+            downloadImage:function(ev){
+                  var url=this.model.get('originalURL');    
+                  url = this.options.app.decodeHTML(url);
+                   var hiddenIFrameID = 'hiddenDownloader',
+                   iframe = document.getElementById(hiddenIFrameID);
+                    if (iframe === null) {
+                        iframe = document.createElement('iframe');
+                        iframe.id = hiddenIFrameID;
+                        iframe.style.display = 'none';
+                        document.body.appendChild(iframe);
+                    }
+                iframe.src = url;
+             },
            
             disableWobbling:function(ev){
                 ev.preventDefault();
