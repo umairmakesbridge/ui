@@ -14,11 +14,11 @@ function (template,highlighter) {
              * Attach events on elements in view.
             */
             events: {
-               'click .btn-copy':'copyCampaign',
+               'click .copy-camp':'copyCampaign',
                'click  a.campname':'previewCampaign',
-               "click .btn-preview":'previewCampaign',
+               "click .preview-camp":'previewCampaign',
                'click .taglink':'tagClick',
-               'click .btn-red':'deleteCampaginDialoge',
+               'click .delete-camp':'deleteCampaginDialoge',
                'click .report':'reportShow',
                
             },
