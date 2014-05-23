@@ -225,6 +225,8 @@ function (template,icheck,bmstags) {
                         this.imageCheckSum = val[0]['imageId.encode'];
                         this.iThumbnail.find("h4").hide();
                         this.iThumbnail.find("img").attr("src",this.app.decodeHTML(val[0]['thumbURL'])).show();
+                        this.iThumbImage = this.app.decodeHTML(val[0]['thumbURL']);
+                        this.saveUserImage();
                         
                     },this)
                 }
