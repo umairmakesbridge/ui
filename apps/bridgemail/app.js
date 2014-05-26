@@ -85,6 +85,7 @@ define([
                                 $('body').append(this.mainContainer.$el);
                                 $('body').append(this.mainContainer.footer.$el);
                                 this.mainContainer.dashBoardScripts();
+                                
                                 this.initScript();                                
 				//call the callback
 				(callback || $.noop)();
@@ -158,7 +159,13 @@ define([
                     if(this.checkError(_json)){
                           return false;
                     }
-                    this.set("user",_json)
+                    this.set("user",_json);
+                    if(this.get("user").userId=="jayadams" || this.get("user").userId=="admin"){
+                        this.mainContainer.$(".nt-li,.naturetrack-li").show();
+                      }
+                      else{
+                          this.mainContainer.$(".nt-li,.naturetrack-li").hide();
+                      }
                 
                 },this));
             },
