@@ -57,6 +57,7 @@ define([
 			this.set(_.extend({
 				env: 'developement',
 				bms_token: $.getUrlVar(false,'BMS_REQ_TK'),
+                                isNurtureTrack: $.getUrlVar(false,'enableNT'),
                                 preview_domain : previewDomain,
                                 images_CDN : imagesCDN,
                                 static_CDN : staticCDN,
@@ -160,7 +161,7 @@ define([
                           return false;
                     }
                     this.set("user",_json);
-                    if(this.get("user").userId=="jayadams" || this.get("user").userId=="admin"){
+                    if(this.get("user").userId=="jayadams" || this.get("user").userId=="admin" || this.get("isNurtureTrack")){
                         this.mainContainer.$(".nt-li,.naturetrack-li").show();
                       }
                       else{

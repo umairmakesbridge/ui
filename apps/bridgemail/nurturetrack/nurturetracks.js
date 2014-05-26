@@ -157,6 +157,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     this.$trackTileArea.children().remove();
                     this.app.showLoading("Loading Nurture Tracks...",this.$tracksArea);             
                     this.$(".user_tracks .notfound").remove();
+                    this.$(".scroll-content .notfound").remove();
                 }
                 else{
                     this.offset = this.offset + 20;
@@ -200,9 +201,17 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                             else{
                                 this.$(".user_tracks .notfound").show();
                             }                            
+                            
+                            if(this.$("scroll-content .notfound").length==0){                               
+                                this.$(".scroll-content").append('<p class="notfound">No nurture tracks found'+search_message+'</p>');
+                            }
+                            else{                                
+                                this.$(".scroll-content .notfound").show();
+                            }
                         }    
                         else{
                             this.$(".user_tracks .notfound").hide();
+                            this.$(".scroll-content .notfound").hide();
                         }
                         
                     }, this),
@@ -259,14 +268,15 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                               search_message +=" containing '"+this.searchTxt+"'" ;
                             }
                             if(this.$(".bms_tracks .notfound").length==0){
-                                this.$(".bms_tracks .bDiv").append('<p class="notfound">No nurture track templates found'+search_message+'</p>');
+                                this.$(".bms_tracks .bDiv").append('<p class="notfound">No nurture track templates found'+search_message+'</p>');                                
                             }
                             else{
-                                this.$(".bms_tracks .notfound").show();
+                                this.$(".bms_tracks .notfound").show();                                
                             }                            
+                                                                                    
                         }    
                         else{
-                            this.$(".bms_tracks .notfound").hide();
+                            this.$(".bms_tracks .notfound").hide();                            
                         }
                         
                     }, this),

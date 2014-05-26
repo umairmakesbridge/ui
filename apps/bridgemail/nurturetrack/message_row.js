@@ -92,7 +92,7 @@ function (template) {
                     this.loadCampaign();                    
                }
                this.$el.attr("t_order",this.triggerOrder);
-               this.$(".dropareamessage").dragfile({
+               this.$(".accordion-body").dragfile({
                     post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
                     callBack : _.bind(this.showSelectedImage,this),
                     app:this.app,

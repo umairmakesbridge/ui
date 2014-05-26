@@ -35,7 +35,7 @@
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
      this.$element.on("dragover",$.proxy(this._dragover,this))
      this.$element.on("drop",$.proxy(this._drop,this))      
-     this.$element.on('dragleave',$.proxy(this._dragleave,this))
+     //this.$element.on('dragleave',$.proxy(this._dragleave,this))
      
 
      var _this = this;
@@ -48,34 +48,25 @@
       {
         e.stopPropagation();
         e.preventDefault();
-        _this.$element.append(_this.UploadInstantBaloon());
-        //_this.$element.addClass('file-border');
+        //_this.$element.append(_this.UploadInstantBaloon());
+        _this.$element.addClass('file-border');
         
       });
      $(document).on('drop', function (e)
       {
-        //_this.$element.removeClass('file-border');
-        _this.$element.find('.dropdiv').remove();
+        _this.$element.removeClass('file-border');
+        //_this.$element.find('.dropdiv').remove();
         _this.baloon = true;
         e.stopPropagation();
         e.preventDefault();
       });
-      
-      $(document).on('dragleave', function ( e )
-      {
-        //_this.$element.removeClass('file-border');
-        _this.$element.find('.dropdiv').remove();
-        _this.baloon = false;
-        e.stopPropagation();
-        e.preventDefault();
-      });
-   
+               
     },
   _dragenter:function(e){
     e.stopPropagation();
     e.preventDefault();
-    //this.$element.addClass('file-border');
-    this.$element.append(this.UploadInstantBaloon());    
+    this.$element.addClass('file-border');
+    //this.$element.append(this.UploadInstantBaloon());    
 
   },
   _dragover:function(e){
@@ -83,15 +74,15 @@
      e.preventDefault();
   },
   _dragleave:function(e){
-    // this.$element.removeClass('file-border');
-     this.$element.find('.dropdiv').remove();
+     this.$element.removeClass('file-border');
+     //this.$element.find('.dropdiv').remove();
      this.baloon = false;
      e.preventDefault();
      e.stopPropagation();
   },
   _drop:function(e){
-     //this.$element.removeClass('file-border');
-     this.$element.find('.dropdiv').remove();
+     this.$element.removeClass('file-border');
+     //this.$element.find('.dropdiv').remove();
      this.baloon = true;
      e.preventDefault();
      var files = e.originalEvent.dataTransfer.files;

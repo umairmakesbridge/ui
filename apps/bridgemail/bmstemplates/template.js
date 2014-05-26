@@ -461,7 +461,7 @@ function (template,icheck,bmstags) {
                         this.iThumbnail.find("img").attr("src", this.iThumbImage).show();
                         this.saveUserImage();
                     }else{
-                        this.$el.find("#image_url").val(data);
+                        this.$el.find("#image_url").val(data.imgurl);
                     }
                     //console.log();
                 },
