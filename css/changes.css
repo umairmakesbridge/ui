@@ -5,7 +5,7 @@
     width:58px;
     cursor: default !important;
 }
-.set-time{.thumbnail .img > div a.selectbtn
+.set-time{
     width: 213px;
 }
 .set-time .timebox{
@@ -634,6 +634,7 @@ input[type="text"].search-template{
 }
 .template-container .scroll-content{
     height: auto !important;
+    min-height: 400px;
 }
 .footer-loading{
   position: relative;  

@@ -91,6 +91,19 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });
+               this.$(".nuture-search-tile").searchcontrol({
+                     id:'nuture-search',
+                     width:'320px',
+                     height:'22px',
+                     gridcontainer: this.$('#content-1'),
+                     placeholder: 'Search nurture tracks',                     
+                     showicon: 'yes',
+                     iconsource: 'campaigns',
+                     movingElement: 'li',
+                     query:'a.edit-track',
+                     emptyMsgContainer:this.$('#content-1')
+              });
+              
               this.$("#nurturetrack_grid").bmsgrid({
                     useRp : false,
                     resizable:false,
@@ -104,12 +117,13 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                 this.$(".bms-nurture-search").searchcontrol({
                      id:'bms-nurture-search',
                      width:'320px',
-                     height:'22px',
+                     height:'22px',                     
                      gridcontainer: this.$('#bms_nurturetrack_grid'),
                      placeholder: 'Search makesbridge nurture tracks',                     
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });
+             
               this.$(".message-search").searchcontrol({
                      id:'message-search',
                      width:'190px',
@@ -284,7 +298,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                 }  
             },
              /**
-            * Search contacts function binded with search control
+            * Search nurture track tile binded with search control
             *
             * @param {o} textfield simple object.             
             * 
@@ -292,29 +306,17 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
             * 
             * @returns .
             */
-            searchContacts:function(o,txt){
-                this.tagTxt = '';
-                this.searchTxt = txt;                                
-                if(o.keyCode==13 && this.searchTxt){
-                    if(this.searchTxt.indexOf("Tag: ")>-1){
-                       var tagName = this.searchTxt.split(": ");
-                       this.searchByTag(tagName[1]);
-                    }
-                    else{
-                        this.fetchContacts();
-                    }
-                   
-                }                
+            searchNurtureTrackTile:function(o,txt){
+               
             },
              /**
             * Clear Search Results
             * 
             * @returns .
             */
-            clearSearchContacts:function(){
-                this.tagTxt = '';
-                this.searchTxt = '';                
-                this.fetchContacts();                
+            clearSearchNurtureTrackTile:function(){
+                
+                
             },
             /**
             * Sort contacts by selected sort type from selectbox
@@ -398,10 +400,14 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     this.$(".tile-list button").removeClass("active");
                     obj.addClass("active");
                     if(obj.hasClass("btn-listing")){
+                        this.$(".nuture-search-tile").hide();
+                        this.$(".nuture-search").show();
                         this.$(".nt_listing").show();
                         this.$(".tileview").hide();
                     }
                     else{
+                        this.$(".nuture-search-tile").show();
+                        this.$(".nuture-search").hide();
                         this.$(".nt_listing").hide();
                         this.$(".tileview").show();
                     }

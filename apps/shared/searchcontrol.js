@@ -15,7 +15,9 @@
             clearFunc:null,
             closeiconid: 'clearsearch',
             movingElement: 'tr',
-            countcontainer: 'no_of_camps'
+            countcontainer: 'no_of_camps',
+            query:null,
+            emptyMsgContainer : null
         }, options );
         return this.each(function() {				  
             var imageClass= ""; 
@@ -119,7 +121,17 @@
                         grid.find("li").hide();
                     searchterm = searchterm.toLowerCase();
                     var count = 0;
-                    if(movElement == 'tr')
+                    if(options.query){
+                          grid.find(movElement).filter(function() {
+                            if($(this).find(options.query).text().toLowerCase().indexOf(searchterm) > -1)
+                            {							                                 
+                                count++;					
+                                $(this).find(options.query).removeHighlight().highlight(searchterm);	
+                                return $(this);
+                            }
+                        }).show();		
+                    }
+                    else if(movElement == 'tr')
                     {
                         grid.find("tr").filter(function() {
                             if($(this).find("td:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1)
@@ -133,7 +145,7 @@
                             $(this).find("td:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							
                         });
                     }
-                    else
+                    else if(movElement == 'li')
                     {
                         grid.find("li").filter(function() {
                             if($(this).find("a:nth-child("+nthchild+")").text().toLowerCase().indexOf(searchterm) > -1)
@@ -147,12 +159,18 @@
                             $(this).find("a:nth-child("+nthchild+")").removeHighlight().highlight(searchterm);							
                         }); 
                     }
+                    
                     if($("#"+options.countcontainer))
                         $("#"+options.countcontainer).html(count + ' ' + options.placeholder.replace('Search ','') +' found <b>for &lsquo;' + searchterm + '&rsquo;</b>');
                                                   
                     if(count == 0)
                     {
-                        grid.parent().append('<p class="notfound">No '+ options.placeholder.replace('Search ','') +' found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
+                        if(!options.emptyMsgContainer){
+                            grid.parent().append('<p class="notfound">No '+ options.placeholder.replace('Search ','') +' found containing &lsquo;'+ searchterm +'&rsquo;</p>');							  
+                        }
+                        else{
+                            options.emptyMsgContainer.append('<p class="notfound">No '+ options.placeholder.replace('Search ','') +' found containing &lsquo;'+ searchterm +'&rsquo;</p>')
+                        }
                     }
                 }
                 else

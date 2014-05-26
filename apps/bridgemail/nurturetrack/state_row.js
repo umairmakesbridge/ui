@@ -21,6 +21,7 @@ function (template) {
                     this.template = _.template(template);				
                     this.parent = this.options.sub
                     this.app = this.parent.app;
+                    this.messageNo = this.options.messageNo;
                     this.render();                    
             },
             /**
@@ -49,7 +50,7 @@ function (template) {
             reportShow:function(){
                 this.parent.parent.closeReport();
                 var camp_id=this.model.get('campNum.encode');
-                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});                
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.messageNo,trackName:this.parent.model.get("name"),trackId:this.parent.model.get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});                
             }
             
         });

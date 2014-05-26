@@ -42,7 +42,7 @@ function (template,NTStates,stateView) {
                     useRp : false,
                     resizable:false,
                     colresize:false,
-                    height:266,
+                    height:350,
                     usepager : false,
                     colWidth : ['100%','90px','90px','90px']
                 });
@@ -64,7 +64,7 @@ function (template,NTStates,stateView) {
                         var sentCount=0,pendingCount =0;
                         for(var s=this.offset;s<collection.length;s++){
                             var _model = collection.at(s);
-                            var state_view = new stateView({ model: _model,sub:this });                                                            
+                            var state_view = new stateView({ model: _model,sub:this,messageNo:s+1 });                                                            
                             this.$("#nt_report_table").append(state_view.$el);                                                    
                             sentCount = sentCount + parseInt(_model.get("sentCount"));
                             pendingCount = pendingCount + parseInt(_model.get("pendingCount"));
