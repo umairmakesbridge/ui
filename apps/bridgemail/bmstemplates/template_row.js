@@ -26,7 +26,8 @@ function (template,highlighter,nicescroll) {
                'click .mobile':'mobileClick',
                'click .builtin':'mksBridge',
                'click .mail':'mailIconClick',
-               'click .view':'viewIconClick'
+               'click .view':'viewIconClick',
+               'click .selecttemp':'selectTemplate'
             },
             /**
              * Initialize view - backbone
@@ -207,6 +208,11 @@ function (template,highlighter,nicescroll) {
                 },
             createCampaign : function(obj){
                 if(this.selectCallback){                            
+                          this.selectCallback(obj);
+                        }
+            },
+            selectTemplate : function(obj){
+               if(this.selectCallback){                            
                           this.selectCallback(obj);
                         }
             },
