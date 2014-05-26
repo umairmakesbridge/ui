@@ -1,6 +1,6 @@
 <td width="100%"><div>
 <div class="name-type">
-    <h3 <% if(model.get('subject').length>23){print('class="showtooltip" title="'+model.get('subject')+'"') }%>><a style="overflow: hidden;text-overflow:ellipsis;max-width: 210px;"><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
+    <h3 ><a style="overflow: hidden;text-overflow:ellipsis;max-width: 210px;" <% if(model.get('subject').length>23){print('class="showtooltip" title="'+model.get('subject')+'"') }%>><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
   <a class="icon report showtooltip" title="Click to view message report"></a>
   <!--<a class="icon edit2"></a>-->
   </h3>

@@ -143,8 +143,8 @@ function (template) {
                  this.$("#campaign_tellAFriend").prop("checked",camp_json.tellAFriend=="N" ? false:true );                
                  this.$("#campaign_isWebVersion").prop("checked",camp_json.isWebVersionLink=="N"?false:true);
                  
-                 this.htmlText = camp_json.htmlText;
-                 this.plainText = camp_json.plainText;                    
+                 this.parent.htmlText = camp_json.htmlText;
+                 this.parent.plainText = camp_json.plainText;                    
                  if(camp_json.defaultSenderName != '')
                  {
                      if(camp_json.defaultSenderName){

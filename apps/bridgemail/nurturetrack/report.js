@@ -34,8 +34,7 @@ function (template,NTStates,stateView) {
                 this.$el.html(this.template({
                     model: this.model
                 }));                
-                          
-                          
+                                                 
             },
             init:function(){
                  this.$("#nt_report_table").bmsgrid({
