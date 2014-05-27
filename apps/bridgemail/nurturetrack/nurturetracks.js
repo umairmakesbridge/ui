@@ -423,14 +423,21 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     }
                 }
             },
-            showStates:function(obj,model){
+            showStates:function(obj,model,leftMinus){
                 var _ele = $.getObj(obj,"div");
                 var _stateDiv = this.$(".nurture_msgslist");
-                var left_minus = 92;
+                var left_minus = leftMinus? leftMinus:92;
                 var ele_offset = _ele.offset();                    
                 var ele_height =  _ele.height();
                 var top = ele_offset.top + ele_height - 134;
-                var left = ele_offset.left-left_minus;      
+                var left = ele_offset.left-left_minus;    
+                if((left + 770) > $(window).width()){
+                    left = left - 755;
+                    _stateDiv.addClass("right-corner");
+                }                
+                else{
+                    _stateDiv.removeClass("right-corner");
+                }
                 this.app.showLoading("Loading states...",_stateDiv.find(".states-area"));         
                 require(["nurturetrack/report"],_.bind(function(report){                                    
                     var report_table = new report({page:this,stateDiv:_stateDiv,model:model});

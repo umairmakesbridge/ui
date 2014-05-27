@@ -146,7 +146,7 @@ function (template,moment,highlighter) {
                 return _date.format("DD MMM YYYY")
             },
             reportNT:function(obj){
-                this.parent.showStates(obj,this.model);
+                this.parent.showStates(obj,this.model,80);
             },
             viewNurtureTrack:function(){
                 this.app.showLoading("Loading...",this.parent.$el);
