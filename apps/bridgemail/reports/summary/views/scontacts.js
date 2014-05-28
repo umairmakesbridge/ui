@@ -73,9 +73,6 @@ function (template,Contacts,viewContact) {
                  
                   var that = this;
                   _data['offset'] = this.offset;
-                  _data['responderType'] = this.responderType;
-                  _data['type'] = this.type ;
-                  _data['campNum'] = this.campNum ;
                   if(this.options.article)
                     _data['articleNum'] = this.options.article;
                   
@@ -84,7 +81,26 @@ function (template,Contacts,viewContact) {
                       _data['searchText'] = this.searchText;
                        that.showSearchFilters(this.searchText);
                     }
-                  this.contacts_request = this.objContacts.fetch({data:_data,success:function(data1){
+                    
+                        if(this.options.type=="C" || this.options.type == "P"){
+                            this.type = this.options.type;
+                           // _data['responderType'] = this.responderType;
+                            //_data['type'] = this.type ;
+                            //_data['campNum'] = this.campNum ;
+                            
+                            this.objContacts.url = "/pms/io/trigger/getNurturePopulation/?BMS_REQ_TK="+this.options.app.get('bms_token');
+                            _data['type'] = "get";
+                            _data['trackId'] = this.options.trackId;
+                            _data['triggerOrder'] = this.options.triggerOrder;
+                            _data['status'] = this.type;
+                        }else{
+                        _data['responderType'] = this.responderType;
+                        _data['type'] = this.type ;
+                        _data['campNum'] = this.campNum ;
+                     
+                        }
+                     
+                   this.contacts_request = this.objContacts.fetch({data:_data,success:function(data1){
                       that.$el.find('#total_subscriber .badge').text(that.options.app.addCommas(that.objContacts.total));  
                       that.offsetLength = data1.length;
                        that.total_fetch = that.total_fetch + data1.length;

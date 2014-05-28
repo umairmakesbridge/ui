@@ -20,11 +20,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 "click .click-views":"clickViews",
                 "click .convert-views":"convertViews",
                 "click .open-views":"openViews",
+                "click .sent-views":"sentViews",
+                "click .pending-views":"pendingViews",
                 "click .closebtn":"closeContactsListing"
             },
             initialize: function () {
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
+               this.trackId = this.options.params.trackId || null
                this.active_ws = "";
                this.type="basic";
                this.stats = new Stats();
@@ -38,14 +41,16 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
+                //console.log(this.options);
             },
             addLinks:function(){
                this.$el.find('.links-container').prepend(new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum}).el);  
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
             },
-            addGraphs:function(self){
-                self.$el.find('.col-cstats').prepend(new ViewGraphs({campaignType:self.objSummary.get('campaignType'),clicks:this.stats.get('clickCount'),model:self.stats,tags:self.objSummary.get('tags'),status:self.objSummary.get('status'),app:self.options.app,campNum:self.campNum}).el);  
-                this.options.app.showLoading(false,this.$el.find('.col-cstats'));
+            addGraphs:function(data){
+                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum}).el);  
+                
+                this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
                 var _data = {};
@@ -53,21 +58,35 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 _data['type'] =  "stats";
                 _data['isSummary'] = "Y";
                 _data['campNums'] = this.campNum;
+                if(this.trackId != null  && this.trackId){
+                     this.stats.url = "/pms/io/trigger/getNurtureData/?BMS_REQ_TK="+this.options.app.get('bms_token')
+                    _data['trackId'] = this.trackId;
+                    _data["triggerOrder"] = this.options.params.messageNo
+                    _data['type'] = "messageStats";
+                    //type=get&trackId=kzaqwKb26Dd17Mj20kbhui&triggerOrder=1&status=C&searchText=jay
+                }
                  self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
                     self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                 this.stats.fetch({data:_data,success:function(data){
-                    self.$el.html(self.template({stats:data}));
                     var _data = {};
                     _data['type'] = self.type;
                     _data['campNum'] = self.campNum;
-                    self.objSummary.fetch({data:_data,success:function(){
-                        self.addGraphs(self); 
-                        self.setHeader(self);
+                    self.objSummary.fetch({data:_data,success:function(dataS){
+                        
+                         self.$el.html(self.template({stats:data,summary:dataS}));
+                          self.addGraphs(data);
+                         self.setHeader(self);
+                        if(dataS.get('campaignType') == "T"){
+                             self.sentViews();
+                        }else{
+                             self.openViews();
+                        } 
+                         
+                        self.addLinks();
 
                     }});
                     self.active_ws = self.$el.parents(".ws-content");
-                    self.openViews();
-                    self.addLinks();
+                   
                  }});
                 self.options.app.showLoading(false,self.$el.find('.links-container'));
                 self.options.app.showLoading(false,self.$el.find('.col-cstats'));
@@ -80,6 +99,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                  case "open":
                     tab = "Opened";
                     numbers = this.stats.get('openCount');
+                    break;    
+                 case "sent":
+                    tab = "Sent";
+                    numbers = this.stats.get('sentCount');
+                    break;    
+                 case "pending":
+                    tab = "Pending";
+                    numbers = this.stats.get('pendingCount');
                     break;    
                  case "click":
                      tab = "Clicked";
@@ -116,10 +143,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             campaignSetting:function(){
                   var dialog_width = 800;
                   var that = this;
+                  var title = 'Campaign Settings';
+                  if(this.trackId != null  && this.trackId){
+                      title = "Message Settings"
+                  }
                   var dialog_height = $(document.documentElement).height()-280;
                   var dialog = this.options.app.showDialog(
                         {           
-                                    title:'Campaign Settings',
+                                    title:title,
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:false,
                                     headerIcon : 'setting2',
@@ -144,6 +175,32 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+            },
+             pendingViews:function(ev){
+                 if($(ev.target).parents('li').hasClass('active')) return;
+                 var count = $(ev.target).parents('li').data("count");
+                 if(!count){
+                  this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                     this.closeContactsListing();
+                     return;
+                }
+                this.clearHTML();  
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
+                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+            },
+             sentViews:function(ev){
+                 if(ev){ 
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                    if(!count){
+                     this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                        this.closeContactsListing();
+                        return;
+                    }
+                 }
+                this.clearHTML();  
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
             convertViews:function(ev){
@@ -209,6 +266,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.active_ws.find("#campaign_tags").html('');
                 if(this.objSummary.get('campaignType') == "T"){
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('subject'));
+                    this.$el.find(".c-settings span").html("Message Settings")
                     if(c_name == ""){
                         c_name = "&lt;subject line &gt;";
                     }
@@ -220,8 +278,11 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");
                  this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:"Campaign Summary"});
-                
-                var tags ="<ul>";
+                if(this.objSummary.get('campaignType') == "T"){
+                    this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='nurture2'></span>&nbsp;"+this.options.params.trackName+" </li></ul>");
+                    this.active_ws.find("#workspace-header").append("<strong style='font-size:13px; padding-left:10px;'>&lt;Message No "+ this.options.params.messageNo +" &gt;</strong>")
+                }else{
+                  var tags ="<ul>";
                             _.each(this.options.app.encodeHTML(this.objSummary.get('tags')).split(","),function(t){ 
                               tags =tags+ "<li><a  class='tag'><span>"+t+"</span></a> </li>";
                             }); 
@@ -230,6 +291,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+this.objSummary.get('updationDate')+"</strong> </div>";    
                 //this.$el.parents(".ws-content").find(".camp_header").find('.c-name').append(sentAt);
                 this.active_ws.find(".camp_header").find("#campaign_tags").addClass("tagscont").css("width","auto").append("<span class='tagicon gray'></span>").append(tags).append(sentAt);
+                    
+                }
                 var previewIconCampaign = $('<a class="icon preview showtooltip" data-original-title="Preview Campaign"></a>');  
                 var copyIconCampaign = $('<a class="icon copy showtooltip" data-original-title="Copy Campaign"></a>');
                 var deleteIconCampaign = $('<a class="icon delete showtooltip" data-original-title="Delete Campaign"></a>');

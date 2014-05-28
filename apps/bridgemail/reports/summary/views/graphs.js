@@ -46,8 +46,7 @@ function (template,chart,contactsView,jsPDF) {
                    ];
 
                     this.chartPage.createChart(_data);  
-                    
-                    
+                     
                     _.each(this.chart_data,function(val,key){
                         this.$("."+key).html(this.options.app.addCommas(val));
                     },this);

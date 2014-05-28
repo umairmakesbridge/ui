@@ -20,22 +20,38 @@
     <div class="clearfix"></div>
 </div> <!-- sum_top -->
 <ul class="chartstatdetail">
-    <li data-count="<%=this.stats.get('openCount')%>" class="active">
+    <% var active="active" ;%>
+    <%if(summary.get('campaignType') == "T"){ var style="width:19.5%"; active=""; %>
+      
+     <li data-count="<%=this.stats.get('sentCount')%>" class="active" style="<%=style%>">
+        <a href="#sent-listing" data-toggle="tab" class='sent-views'>
+         <%=this.getTabbedText('sent')%>
+        </a>
+    </li>
+     <li data-count="<%=this.stats.get('pendingCount')%>" style="<%=style%>">
+        <a href="#pending-listing" data-toggle="tab" class='pending-views'>
+         <%=this.getTabbedText('pending')%>
+        </a>
+    </li>
+    <%}%>
+    <li data-count="<%=this.stats.get('openCount')%>" class="<%=active%>" style="<%=style%>">
         <a href="#opened-listing" data-toggle="tab" class='open-views'>
          <%=this.getTabbedText('open')%>
         </a>
     </li>
-    <li data-count="<%=this.stats.get('clickCount')%>">
+    <li data-count="<%=this.stats.get('clickCount')%>"  style="<%=style%>">
         <a href="#clicks-listing" data-toggle="tab" class='click-views'>
           <%=this.getTabbedText('click')%>
         </a>
     </li>
-    <li data-count="<%=this.stats.get('conversionCount')%>">
+   <%if(summary.get('campaignType') != "T"){%>
+    <li data-count="<%=this.stats.get('conversionCount')%>" style="<%=style%>">
         <a href="#conversion-listing" data-toggle="tab" class="convert-views">
             <%=this.getTabbedText('convert')%>
         </a>
     </li>
-    <li  data-count="<%=this.stats.get('pageViewsCount')%>">
+    <%}%>
+    <li  data-count="<%=this.stats.get('pageViewsCount')%>" style="<%=style%>">
         <a href="#pageviews-listing" data-toggle="tab" class="page-views">
             <%=this.getTabbedText('views')%>
         </a>

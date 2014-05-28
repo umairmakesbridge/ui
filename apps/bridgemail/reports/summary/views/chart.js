@@ -82,6 +82,7 @@ function (template,googles, contactsView) {
                          
                     
                 }); 
+              console.log(data);
               this.chart.draw(data, options);
             },
              pageViews:function(ev){

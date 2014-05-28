@@ -119,7 +119,7 @@ border-radius: 3px;
 }
 .graphics .img > div a {
    height: 55px;
-width: 33.3%;
+width: 50%;
 }
 .graphics .img{
     height:230px!important;
@@ -2148,7 +2148,13 @@ position:relative;
 .bmsgrid div.bDiv td.td-campaigns-pageviews .camp_title a:hover {  background: url("../img/preview2.png") no-repeat scroll right center rgba(0, 0, 0, 0);  }
 .icon.list2 {   background: url("../img/list2.png") no-repeat center center ;}
 /* ---------------------------------------- */
-
+.camp_header .nurture2 {
+    background:url('../img/nurture2.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+   width: 24px;
+height: 16px;
+}
 
 
 
