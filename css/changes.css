@@ -2574,6 +2574,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li i.icon.form {background: url("../img/form1.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li i.icon.graphic {background: url("../img/graphics1.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li i.icon.campaign {background: url("../img/campaign-b.png") no-repeat scroll center center; }
+.slidenav-dd > ul >  li ul li i.icon.nurturetracks {background: url("../img/nurturetrackicon-b.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li i.icon.templates {background: url("../img/templates1.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li i.icon.targets {background: url("../img/targets1.png") no-repeat scroll center center; }
 .slidenav-dd > ul >  li ul li i.icon.landingpgs {background: url("../img/landingpgs1.png") no-repeat scroll center center; }
