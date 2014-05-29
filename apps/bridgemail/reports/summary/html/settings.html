@@ -14,9 +14,12 @@
             <%= (this.model.get('replyTo')) ? this.model.get('replyTo') : this.model.get('defaultReplyTo') %>
              </span></div>
 </div>
-<br><br>
-
-<h3>Campaign Setting</h3>
+<br><br>  
+<%if(this.model.get('campaignType') == "T"){%> 
+    <h3>Campaign Setting</h3>
+<%}else{%>
+    <h3>Message Setting</h3>
+<%}%>
 
 <div>
    

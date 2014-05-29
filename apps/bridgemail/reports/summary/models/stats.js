@@ -19,14 +19,21 @@ define(['backbone', 'app'], function (Backbone, app) {
 	       ,
                parse: function(response,res) {
                 var result;
-                if(!app.checkError(response) && response.count!=="0"){
-                    _.each(response.campaigns[0],function(val,key){
-                       
-                        val[0]._id =  parseInt(key.substring(4));
-                        result = val[0];
-                    })                    
+                if(response["messageId.checksum"]){
+                        //result._id =  parseInt(response["campNum.encode"]);
+                        result = response;
+                }else{
+                
+                      if(!app.checkError(response) && response.count!=="0"){
+                            _.each(response.campaigns[0],function(val,key){
+
+                                val[0]._id =  parseInt(key.substring(4));
+                                result = val[0];
+                            })                    
+                        }
                 }
                 return result;
+                
             }
              
 	});

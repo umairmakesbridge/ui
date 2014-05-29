@@ -19,10 +19,27 @@ function (template) {
             initialize: function () {
                 _.bindAll(this, 'getRightText', 'pageClicked');
                  this.template = _.template(template);	
+                 this.viewCount = 0;
+                 this.type = this.options.type;
+                 this.firstOpenDate = ""
+                 this.articleTitle = "";
+                 this.articleUrl = "";
+                 this.clickCount = 0;
+                 this.isNurtureTrack = false;
+                 this.logTime = "";
                  this.render();
             },
             render: function () {
+                 if(this.type == "C" || this.type == "P"){
+                  this.isNurtureTrack = true;
+                  this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount;  
+                  this.logTime =this.model.get('nurtureData')[0].execDate; 
+                }else{
+                  this.logTime = this.model.get('activityData')[0].logTime;
+                  this.viewCount =   this.model.get('activityData')[0].pageViewCount;
+                }
                 this.$el.html(this.template(this.model.toJSON())); 
+               
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
             openContact:function(){
@@ -43,7 +60,7 @@ function (template) {
                        break;
                     case "OP":
                         text = this.pageOpened("First opened on");
-                        break;
+                        break; 
                     case "CK":
                         if(this.options.article)
                             text = this.pageClicked("First clicked on");
@@ -52,30 +69,42 @@ function (template) {
                         break;
                     case "CT":
                       text = this.unsubscribe("Converted on");
-                       break; 
-                        
+                       break;
+                    case "C":
+                          text = this.unsubscribe("Sent on")
+                          break;
+                    case "P":
+                          text = this.unsubscribe("Pending");
+                          break;
                        
                 }
-                return text;
+                return text; 
                
             },
             unsubscribe:function(text){
-                return "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";
+                var str = "";
+                //if(this.options.type == "UN"){
+                   // str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+              //  }
+                str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+                return str;
             },
             pageViews:function(text){
-                if(this.model.get('activityData')[0].pageViewCount !="0"){
-                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+this.model.get('activityData')[0].pageViewCount+"</b></a></span></strong>";
+               
+                if(this.viewCount !="0"){
+                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+his.viewCount +"</b></a></span></strong>";
                 }else{
-                      return "<strong><span><em>"+text+"</em> <b>"+this.model.get('activityData')[0].pageViewCount+"</b> </span></strong>";
+                      return "<strong><span><em>"+text+"</em> <b>"+his.viewCount +"</b> </span></strong>";
                     }
             },
             pageOpened:function(text){
-                return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.model.get('activityData')[0].logTime,"/")+" </span></strong></div></div></td>";
+                return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
             },
             pageClicked:function(text){
-                     return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.model.get('activityData')[0].logTime, "/")+" </span></strong></div></div></td>";
+                     return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
             },
             linkTd:function(){
+                if(this.type == "C" || this.type == "P") return;
              if(this.model.get('activityData')[0].articleTitle && !this.options.article){               
                    var html ="<td width='30%'><div><div class='colico link'>";
                    html = html + "<strong><span><em>Link URL</em><a class='showtooltip' data-original-title='"+this.model.get('activityData')[0].articleURL+"' href='"+this.model.get('activityData')[0].articleURL+"' target='_blank'>"+this.truncateURL(this.model.get('activityData')[0].articleTitle)+"</a></span></strong></div></div>";
@@ -88,16 +117,17 @@ function (template) {
                 else return url;
             },
             pageViewsTd:function(){
-                if(this.model.get('activityData')[0].pageViewCount){
-                    if(this.model.get('activityData')[0].pageViewCount !="0"){
+                if(this.type == "C" || this.type == "P") return;
+                if(this.viewCount){
+                    if(this.viewCount !="0"){
                         var encode =this.model.get('subNum.encode');
                     var  html ="<td width='10%'><div><div class='colico pgview'>";
-                    html = html + "<strong><span><em>Page Views</em><a><b class='page-view' data-id='"+encode+"'>"+this.model.get('activityData')[0].pageViewCount+"</b></a></span></strong></div></div></td>";
+                    html = html + "<strong><span><em>Page Views</em><a><b class='page-view' data-id='"+encode+"'>"+this.viewCount+"</b></a></span></strong></div></div></td>";
                     return html;
                     }else{
                                             var encode =this.model.get('subNum.encode');
                   var  html ="<td width='10%'><div><div class='colico pgview'>";
-                   html = html + "<strong><span><em>Page Views</em> <b class='page-view' data-id='"+encode+"'>"+this.model.get('activityData')[0].pageViewCount+"</b> </span></strong></div></div></td>";
+                   html = html + "<strong><span><em>Page Views</em> <b class='page-view' data-id='"+encode+"'>"+this.viewCount+"</b> </span></strong></div></div></td>";
                    return html;   
                     }
                 }

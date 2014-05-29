@@ -2,8 +2,15 @@
     <td width="100%"><div>
             <div class="name-type">
                 <h3><a class='view-profile showtooltip' data-original-title="Click to view profile"><%=this.getFullName()%></a> 
+                    <%if(this.type == "C"){%>
+                       <div class="percent_stats"> 
+                           <a style="margin:0px!important;" data-list="" class="icon metericon pageview showtooltip"> </a>
+                       </div>
+                   <%}%>
                 </h3>
+               
                 <a class="statusdd color2 salestatus"><%=this.firstLetterUpperCase()%> </a>
+                
                 <div class="tags tagscont">
                     <ul>
                             <% _.each(this.model.get('tags').split(","),function(t){ %>  
