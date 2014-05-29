@@ -106,8 +106,12 @@ function (template,Contacts,viewContact) {
                        if(that.where != "page"){
                            var height = that.$el.find(".stats_listing").outerHeight(true) ;
                            if(height < 360){
+                               if(height <= 210){
+                                   that.$el.find(".stats_listing").css({"height":"200px", "overflow-y":"auto"});
+                               }
+                               else{
                              that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
-                               
+                            }
                            }else{
                                 if(data1.models.length != 0)
                                     that.$el.find(".stats_listing").css({"height":"200px", "overflow-y":"auto"});
@@ -222,7 +226,6 @@ function (template,Contacts,viewContact) {
                       this.$el.parents('.modal-body').find('.annonymous-btn').removeClass('active');
                       this.$el.parents('.modal-body').find('#camp-prev-select-contact').addClass('active');
                   }
-                console.log('Hit');
             }
         });
     

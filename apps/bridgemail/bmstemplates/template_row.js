@@ -115,7 +115,7 @@ function (template,highlighter) {
                         if(val.length > 8 ){
                           tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Templates With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
                         }else{
-                        tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Templates With Same Tag'>"+val+"</a>";
+                        tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Templates With  <strong>&#39;"+val+"&#39;</strong> Tag'>"+val+"</a>";
                         }
                         
                     });

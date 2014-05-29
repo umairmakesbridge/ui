@@ -2055,24 +2055,25 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background: none repeat scroll 0 0 #FFFFFF;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
     display: block;
-    height: 242px;
-    left: 240px;
+    height: 288px;
+    left: 10px;
     padding: 5px;
     position: absolute;
-    top: 50px;
+    top: 53px;
     width: 515px;
     z-index: 111;
+    border: 3px solid #C3C3C3;
 }
 .dddiv-prevCam:before {
-      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF;
+      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #C3C3C3;
     border-style: solid;
     border-width: 6px;
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 129px;
+    left: 28px;
     position: absolute;
-    top: -12px;
+    top: -14px;
 }
 .dddiv-prevCam .bmsgrid .tagscont {
     width: 300px;
@@ -2830,7 +2831,7 @@ text-align:center;
 .temp-tag{
     max-width: 40px;
 }
-.thumbnail{
+.temp-thumbnail{
     background: none repeat scroll 0 0 #FFFFFF;
     border: 2px solid #EAF4F9;
     border-radius: 2px;
@@ -2851,7 +2852,7 @@ text-align:center;
     width: 216px;
 }
 
-.btm-bar {
+.temp-caption,.nurture-caption .btm-bar {
     background: none repeat scroll 0 0 #F8FDFF;
     border-top: 1px solid #EAF4F9;
     bottom: 0;
@@ -2878,7 +2879,16 @@ text-align:center;
 .fromemail-group{
     right:4px !important;
 }
-
+/*------------Preview Template---------------*/
+.previewbar i.downarrow-grey {
+    background: url("../img/arrow-down-grey.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+}
+.grey-drop{
+    left: 3px;
+    position: relative;
+    top: 3px;
+}
 /* ENDS */
 
 .videobar{
