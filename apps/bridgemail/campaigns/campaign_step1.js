@@ -382,7 +382,8 @@ function (template) {
                                         twitterShareIcon :this.$("#campaign_twitter")[0].checked?'Y':'N',
                                         linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
                                         googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
-                                        pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N'
+                                        pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N',
+                                        isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N'
                                   })
                                  .done(_.bind(function(data) {                                 
                                     var step1_json = jQuery.parseJSON(data);
