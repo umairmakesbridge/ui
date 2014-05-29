@@ -11,8 +11,7 @@ function (template,contactsView,icheck,chosen) {
              * Attach events on elements in view.
             */     
             events: {				
-                //'click .sendcamp':'emailbtnToggle',  // Click event of Send email
-                //'click .btn-cancel':'emailbtnToggle',
+               
                 'click #send-template-preview':'sendTempPreview',
                 'click #camp-prev-select-contact':'loadContact',
                 'keyup #prev-email':'sendTempKey',
@@ -68,21 +67,10 @@ function (template,contactsView,icheck,chosen) {
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             attachEvents:function(){
-                /*Email Button toggle*/
-                this.emailbtnToggle();
+                
                 
             },
-            emailbtnToggle:function(){
-                if(this.$('#prevtem-sendpreview').css('display')==='none'){
-                    this.$('#prevtem-sendpreview').fadeIn('slow');
-                    this.$('#prev-email').focus();
-                    this.$('#prev-email').parent().removeClass('error');
-                    this.$('#prev-email').parent().find('span').remove();
-                }else{
-                    this.$('#prevtem-sendpreview').fadeOut('slow');
-                    this.$('#prev-email').val('');
-                }
-            },
+           
             showFrame: function(){ // Show Iframe on default load
                 if(this.options.prevFlag==='C'){
                   this. setiFrameSrc();
@@ -104,12 +92,12 @@ function (template,contactsView,icheck,chosen) {
                    else{
                        this.html='N';
                    }
-                   /* Check if Text is N or Y*/
+                   /* Check if Text is N or Y
                    if(this.options.isText=='N'){
                       this.html='Y'; 
                    }else{
                       this.html='N';
-                   }
+                   }*/
                   var frame = this.options.frameSrc+"&html="+this.html+"&original="+this.original;
                   /*Check if Contact is selected or not*/
                    if(this.subNum !== null){
@@ -119,10 +107,12 @@ function (template,contactsView,icheck,chosen) {
             },
             loadPrevTemplates: function(){
                 if(this.options.prevFlag==='T'){
-                    this.$('.previewbtns').hide();
+                    //this.$('.previewbtns').hide();
+                     this.setiFrameSrc();
                      this.$('#prev-email').focus();
                 }else if(this.options.prevFlag==='C'){
-                    this.$('.previewbtns').hide();
+                    //this.$('.previewbtns').hide();
+                     this.setiFrameSrc();
                      this.$('#prev-email').focus();
                 }
             },
@@ -146,9 +136,8 @@ function (template,contactsView,icheck,chosen) {
                                         this.$('#send-template-preview').removeClass('loading-preview');
                                         this.$('#prev-email').removeAttr('disabled');
                                         this.$('.contact-name').text('');
-                                       // this.$('#prevtem-sendpreview').hide();
-                                        //this.$('#contact-name-prev').hide();
-                                        //this.subNum = null;
+                                        this.$('#contact-name-prev').hide();
+                                        this.subNum = null;
                                     }
                                 },this));
                 }else{
@@ -172,8 +161,10 @@ function (template,contactsView,icheck,chosen) {
                      var offset = $(ev.target).offset();
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();
-                     active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'></div>"); 
+                     active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'><h3>Preview a personalized email:</h3></div>"); 
                       active_ws.find('.campaign-clickers').append(new contactsView({page:this}).el)
+                      active_ws.find('#prev-closebtn').css({'top':'54px'});
+                      
                       /*active_ws.find(".campaign-clickers .closebtn").on('click', function(){
                       that.closeContactsListing();
                       });*/
