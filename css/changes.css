@@ -2793,6 +2793,88 @@ text-align:center;
 .slidebtn-sp{
    margin-top: -5px !important;
 }
+
+.trim-text{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    max-width: 39px;
+    height:18px;
+}
+
+.thumbnail .caption p i.ellipsis {
+    background: none repeat scroll 0 0 #EFF7FB;
+    border-radius: 2px;
+    cursor: pointer;
+    float: left;
+    font-weight: bold;
+    height: 16px;
+    letter-spacing: 2px;
+    line-height: 12px;
+    margin: 2px;
+    padding: 0 3px 2px 5px;
+    position: relative;
+}
+.thumbnail .caption .t-scroll {
+    clear: both;
+    height: 45px;
+    margin: 0 0 10px;
+    overflow: hidden;
+    padding: 10px 0 0;
+    width: 220px;
+}
+.thumbnail .caption p {
+    clear: both;
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
+}
+.temp-tag{
+    max-width: 40px;
+}
+.thumbnail{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 2px solid #EAF4F9;
+    border-radius: 2px;
+    box-shadow: none;
+    height: 475px;
+    max-width: 240px;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+}
+.thumbnail .temp-caption {
+    background: none repeat scroll 0 0 #FFFFFF;
+    bottom: 0;
+    color: #555555;
+    min-height: 66px;
+    padding: 10px 10px 0;
+    position: absolute;
+    width: 216px;
+}
+
+.btm-bar {
+    background: none repeat scroll 0 0 #F8FDFF;
+    border-top: 1px solid #EAF4F9;
+    bottom: 0;
+    color: #6494AF;
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 -10px;
+    padding: 0 10px 0 5px;
+    position: absolute;
+    width: 223px;
+}
+/*====Nurture Track gallery====*/
+.thumbnail .nurture-caption{
+     background: none repeat scroll 0 0 #FFFFFF;
+    bottom: 0;
+    color: #555555;
+    min-height: 135px;
+    padding: 10px 10px 0;
+    position: absolute;
+    width: 216px;
+}
 /*-------------*/
 .fromemail-group{
     right:4px !important;

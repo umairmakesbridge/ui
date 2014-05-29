@@ -1,11 +1,13 @@
-
 <div class="thumbnail">
      <% if(this.model.get('isFeatured')==='Y'){ %>
                     <div class="feat_temp showtooltip" title="Click To View All Featured Templates"></div>
                            <% } %>                               
      <% if(this.model.get('isReturnPath')==='Y'){ %>
                     <div class="rpath showtooltip" title="Click To View All Return Path Tested Templates"></div>
-                           <% } %>    
+                           <% } %>   
+
+                          
+                       
     <div class="img">
         <div>
             <% if(this.selectTextClass){ %>
@@ -25,7 +27,7 @@
             <img  src="img/templateimg.png" />
             <% } %>
     </div>
-    <div class="caption">
+    <div class="caption temp-caption" style="height: 145px;">
         <% if(this.isAdmin === 'Y'){%>
                 <h3 class="template-name single-template" id="editfromname_<%= this.model.get('templateNumber.encode') %>" >
                     <a class="showtooltip" data-original-title="Click to edit"><%= this.model.get('name') %></a>
@@ -46,9 +48,11 @@
         <% }else{ %>
         <a class="cat" style="visibility:hidden">&nbsp;</a>
         <% } %>
+        <div class="t-scroll">
         <p>
             <%= this.showTagsTemplate() %>
         </p>
+        </div>
         <div class="btm-bar">
             <span>
                 <em><%= this.model.get('viewCount') %></em> 

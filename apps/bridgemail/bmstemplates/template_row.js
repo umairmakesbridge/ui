@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.nicescroll'],
-function (template,highlighter,nicescroll) {
+define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.customScroll'],
+function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page
@@ -27,20 +27,24 @@ function (template,highlighter,nicescroll) {
                'click .builtin':'mksBridge',
                'click .mail':'mailIconClick',
                'click .view':'viewIconClick',
-               'click .selecttemp':'selectTemplate'
+               'click .selecttemp':'selectTemplate',
+               'click .t-scroll p i.ellipsis':'expandTags',
+               'mouseleave .thumbnail':'collapseTags'
             },
             /**
              * Initialize view - backbone
             */
             initialize: function () {
                     this.template = _.template(template);				
-                    this.sub = this.options.sub
-                    this.app = this.sub.app;
+                    this.parent = this.options.sub;
+                    this.app = this.parent.app;
                     this.tempNum = '';
                     this.tagTxt = '';
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.isAdmin = this.app.get("isAdmin");
+                    this.isTrim = false;
+                    this.tagCount = 0;
                     //this.isAdmin = 'Y';
                     this.render();
                     this.model.on('change',this.renderRow,this);
@@ -55,6 +59,12 @@ function (template,highlighter,nicescroll) {
                 }));
                 this.tempNum = this.model.get('templateNumber.encode');
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                var _$this = this;
+                $( window ).scroll(function() {
+                    if(_$this.isTrim){
+                        _$this.collapseTags(window);
+                    }
+                 });
                 this.initControls();  
                
             },
@@ -71,18 +81,18 @@ function (template,highlighter,nicescroll) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-                if(this.sub.searchString.searchType==="nameTag"){
-                        var searchVal = $.trim(this.sub.$("#search-template-input").val());
+                if(this.parent.searchString.searchType==="nameTag"){
+                        var searchVal = $.trim(this.parent.$("#search-template-input").val());
                         this.$(".thumbnail .caption h3 a").highlight(searchVal);
                         this.$(".thumbnail .caption p a").each(function(){
                            $(this).highlight(searchVal);
                        });
                     }
-                 else if(this.sub.searchString.searchType ==="category"){
+                 else if(this.parent.searchString.searchType ==="category"){
                         this.$(".thumbnail .caption .cat").highlight(this.model.get('categoryID'));
                     }
-                 else if(this.sub.searchString.searchType ==="tag"){
-                        var tagText = this.sub.searchString.searchText;
+                 else if(this.parent.searchString.searchType ==="tag"){
+                        var tagText = this.parent.searchString.searchText;
                         this.$(".thumbnail .caption p a").each(function(){
                            $(this).highlight(tagText);
                        });
@@ -93,12 +103,21 @@ function (template,highlighter,nicescroll) {
             showTagsTemplate:function(){
                    var tags = this.model.get('tags');
                    var tag_array = tags.split(",");
+                   var elipsisflag = true;
                    var tag_html ="";
                     $.each(tag_array,function(key,val){
-                        tag_html +="<a class='showtooltip' title='Click to View Templates With Same Tag'>"+val+"</a>";
-                        /*if(key<tag_array.length-1){
-                            tag_html +=", ";
-                        }*/
+                        if(tag_array.length > 8 && key > 6){
+                            if(elipsisflag){
+                            tag_html +='<i class="ellipsis">...</i>';
+                            elipsisflag = false;
+                            }
+                        }
+                        if(val.length > 8 ){
+                          tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Templates With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
+                        }else{
+                        tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Templates With Same Tag'>"+val+"</a>";
+                        }
+                        
                     });
                     return tag_html; 
                 },
@@ -160,7 +179,7 @@ function (template,highlighter,nicescroll) {
                         },this));
                 },
                 updateTemplate:function(){                                   
-                   var _this = this.sub;
+                   var _this = this.parent;
                    var self = this;
                    _this.template_id = this.model.get('templateNumber.encode');
                     var dialog_width = $(document.documentElement).width()-60;
@@ -198,7 +217,7 @@ function (template,highlighter,nicescroll) {
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
 
-                              this.sub.$el.find("#template_search_menu li:first-child").removeClass("active").click();
+                              this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
 
                            }
                            else{
@@ -219,44 +238,75 @@ function (template,highlighter,nicescroll) {
             /*Search on Different icon*/
            searchByCategory : function(obj){
                              var cat = $.getObj(obj,"a");
-                             this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                             this.sub.$('#search-template-input').val('');
-                             this.sub.$('#clearsearch').hide();
-                             this.sub.loadTemplates('search','category',{category_id:this.model.get('categoryID')});  
+                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                             this.parent.$('#search-template-input').val('');
+                             this.parent.$('#clearsearch').hide();
+                             this.parent.loadTemplates('search','category',{category_id:this.model.get('categoryID')});  
                       },
           featureClick : function(){
-                            this.sub.$("#template_search_menu li:nth-child(3)").click(); 
+                            this.parent.$("#template_search_menu li:nth-child(3)").click(); 
           },
           returnPath: function(){
-                            this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                            this.sub.$('#search-template-input').val('');
-                            this.sub.$('#clearsearch').hide();
-                            this.sub.loadTemplates('search','returnpath');
+                            this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                            this.parent.$('#search-template-input').val('');
+                            this.parent.$('#clearsearch').hide();
+                            this.parent.loadTemplates('search','returnpath');
             },
           tagsClick: function(obj){
                              var tag = $.getObj(obj,"a");
-                             this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                             this.sub.$('#search-template-input').val('');
-                             this.sub.$('#clearsearch').hide();
-                             this.sub.loadTemplates('search','tag',{text:tag.text()});  
+                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                             this.parent.$('#search-template-input').val('');
+                             this.parent.$('#clearsearch').hide();
+                             this.parent.loadTemplates('search','tag',{text:tag.text()});  
           },
           mobileClick : function(){             
-                             this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
-                             this.sub.$('#search-template-input').val('');
-                             this.sub.$('#clearsearch').hide();
-                             this.sub.loadTemplates('search','mobile');  
+                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
+                             this.parent.$('#search-template-input').val('');
+                             this.parent.$('#clearsearch').hide();
+                             this.parent.loadTemplates('search','mobile');  
                 },
           mksBridge : function(){                        
-                            this.sub.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                            this.sub.$('#search-template-input').val('');
-                            this.sub.$('#clearsearch').hide();
-                            this.sub.loadTemplates('search','admin',{user_type:'A'});  
+                            this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                            this.parent.$('#search-template-input').val('');
+                            this.parent.$('#clearsearch').hide();
+                            this.parent.loadTemplates('search','admin',{user_type:'A'});  
           },
           mailIconClick: function(){
-                            this.sub.$("#template_search_menu li:first-child").click();
+                            this.parent.$("#template_search_menu li:first-child").click();
           },
           viewIconClick : function(){
-                            this.sub.$("#template_search_menu li:nth-child(4)").click();
+                            this.parent.$("#template_search_menu li:nth-child(4)").click();
+          },
+          expandTags: function(){
+              this.$('.t-scroll' ).css('height', '155px');  
+              this.$(".caption").animate({height:"250px"},250); 
+	      this.$(".caption p i.ellipsis").hide(); 
+              this.$(".caption p").css({'height':'auto','display':'block'});
+	      this.$(".btm-bar").css({"position":"absolute","bottom":"0"});
+	      this.$(".img > div").animate({bottom:"105px"});
+              this.$('.t-scroll' ).mCustomScrollbar(); 
+              this.isTrim = true;
+          },
+          collapseTags : function(e){
+              if(this.isTrim){
+                  var e;
+                  if(e !== window){
+                   e = e.toElement || e.relatedTarget;
+                  }
+                  //console.log(e.nodeName);
+                  if(e){
+                   if(e.nodeName === 'UL' || e == window){
+                        this.$(".t-scroll").mCustomScrollbar("destroy");
+                        this.isTrim = false;
+                        this.$('.t-scroll' ).removeAttr('style');
+                        this.$(".caption").animate({height:"145px"},250);
+                        this.$(".caption p i.ellipsis").show();
+                        this.$(".caption p").removeAttr('style');
+                        this.$(".btm-bar").removeAttr('style');
+                        this.$(".img > div").removeAttr('style');
+                   }
+               }
+              }
           }
          
         });

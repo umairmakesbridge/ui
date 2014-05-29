@@ -33,7 +33,7 @@
       
       %>      
   </div>
-  <div class="caption">
+  <div class="caption nurture-caption">
       <h3><a title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="edit-track showtooltip"><%- model.get('name')%></a></h3>
     <% if(model.get('status')==='D'){  %>
     <a class="cstatus pclr1">Paused </a> 
@@ -42,16 +42,18 @@
       <a class="cstatus pclr18">Playing </a>                
      <%}
                 %>                 
-                                
+   <div class="t-scroll">                         
     <p>
-         <% if(model.get('tags')){  
+<!--         <% if(model.get('tags')){  
                     _.each(model.get('tags').split(","),function(t){ %>  
                     <a><%- t %></a>
                     <% }                        
                         )
                     }
-                    %>  
+                    %>  -->
+         <%= this.showTagsTemplate() %>
         <!--<i class="ellipsis">...</i>--></p>
+    </div>    
     <div class="btm-bar">
         <span><span class="icon report-bar showtooltip" title="Click to view stats"></span></span>
         <span ><span class="icon mail message-view showtooltip" title="Click to view messages"></span><em><%- model.get('msgCount')%></em> </span>
