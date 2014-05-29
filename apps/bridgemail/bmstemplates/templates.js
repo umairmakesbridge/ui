@@ -437,7 +437,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         
                         
                         if(camp_obj.options.selectCallback){                            
-                            template_html.find(".select-template").click(camp_obj.options.selectCallback);
+                            template_html.find(".select-template").click();
                         }
                         
                         template_html.find(".editbtn").click(_.bind(function(obj){
