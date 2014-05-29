@@ -80,7 +80,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         if(dataS.get('campaignType') == "T"){
                              switch (self.clickType){
                                  case "sent":
-                                     self.sentViews()();
+                                     self.sentViews();
                                      break;
                                  case "pending":
                                      self.pendingViews()
@@ -88,6 +88,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                  case "views":
                                      self.pageViews();
                                      break;
+                                 case "open":
+                                    self.openViews();
+                                    break;
+                                 case "click":
+                                    self.clickViews();
+                                    break;
                                  default:
                                       self.sentViews();        
                              }
@@ -187,14 +193,18 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             },
             pageViews:function(ev){
                 if(ev){
-                 if($(ev.target).parents('li').hasClass('active')) return;
-                 var count = $(ev.target).parents('li').data("count");
-                 if(!count){
-                  this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
-                     this.closeContactsListing();
-                     return;
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                        var count = $(ev.target).parents('li').data("count");
+                        if(!count){
+                         this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                            this.closeContactsListing();
+                            return;
+                    }
+                }else{
+                    this.active_ws.find(".page-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".page-views").parents('li').addClass('active');
                 }
-                }
+                
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
@@ -208,7 +218,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         this.closeContactsListing();
                         return;
                    }
-                 }
+                 }else{
+                    this.active_ws.find(".pending-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".pending-views").parents('li').addClass('active');
+                }
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
@@ -222,7 +235,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         this.closeContactsListing();
                         return;
                     }
-                 }
+                 }else{
+                    this.active_ws.find(".sent-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".sent-views").parents('li').addClass('active');
+                }
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
@@ -234,25 +250,32 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
                      this.closeContactsListing();
                      return;
+                }else{
+                    this.active_ws.find(".convert-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".convert-views").parents('li').addClass('active');
                 }
                 this.clearHTML();
                this.active_ws.find(".contacts_listing").html(new contactsView({type:"CT",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
              },
             clickViews:function(ev){
-                if($(ev.target).parents('li').hasClass('active')) return;
-                var count = $(ev.target).parents('li').data("count");
-                 if(!count){
-                   this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
-                     this.closeContactsListing();
-                     return;
+                if(ev){
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                     if(!count){
+                       this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                         this.closeContactsListing();
+                         return;
+                    }
+                }else{
+                    this.active_ws.find(".click-views").parents('li').parents('ul').find('li').removeClass('active');
+                    this.active_ws.find(".click-views").parents('li').addClass('active');
                 }
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"CK",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
             openViews:function(ev){
-                
                 if(ev){ 
                     if($(ev.target).parents('li').hasClass('active')) return;
                     var count = $(ev.target).parents('li').data("count");
@@ -261,7 +284,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         this.closeContactsListing();
                         return;
                     }
-                  }
+                  }else{
+                    this.active_ws.find(".open-views").parents('li').parents('ul').find('li').removeClass('active');  
+                    this.active_ws.find(".open-views").parents('li').addClass('active');
+                }
                   this.clearHTML();
                   this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                   this.active_ws.find(".contacts_listing").find(".closebtn").remove();
