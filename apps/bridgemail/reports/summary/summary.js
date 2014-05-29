@@ -27,8 +27,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             initialize: function () {
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
-               this.trackId = this.options.params.trackId || null
+               this.trackId = this.options.params.trackId || null;
                this.active_ws = "";
+               this.clickType = this.options.params.clickType || null;
                this.type="basic";
                this.stats = new Stats();
                this.objSummary = new Summary();
@@ -48,7 +49,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
             },
             addGraphs:function(data){
-                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum}).el);  
+                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId}).el);  
                 
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
@@ -77,7 +78,19 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                           self.addGraphs(data);
                          self.setHeader(self);
                         if(dataS.get('campaignType') == "T"){
-                             self.sentViews();
+                             switch (self.clickType){
+                                 case "sent":
+                                     self.sentViews()();
+                                     break;
+                                 case "pending":
+                                     self.pendingViews()
+                                     break;
+                                 case "views":
+                                     self.pageViews();
+                                     break;
+                                 default:
+                                      self.sentViews();        
+                             }
                         }else{
                              self.openViews();
                         } 
@@ -127,7 +140,13 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     var percent =  ((numbers/sent) * 100);
                     percent = Math.ceil(percent);
                     percent = (isNaN(percent = parseInt(percent, 10)) ? 0 : percent)
-                    var span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
+                    var span = "";
+                     if(this.trackId != null  && this.trackId && (tab == "views" || tab == "sent" || tab == "pending" )){
+                          span = "<span> "+tab+" </span>"+this.options.app.addCommas(numbers)+"</strong>";
+                     }else{
+                           span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
+                     }
+                        
                     return span;
             },
             scrollTop:function(){
@@ -144,8 +163,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   var dialog_width = 800;
                   var that = this;
                   var title = 'Campaign Settings';
+                  var loading = "Loading Campaign Settings...";
                   if(this.trackId != null  && this.trackId){
                       title = "Message Settings"
+                      loading = "Loading Message Settings... ";
                   }
                   var dialog_height = $(document.documentElement).height()-280;
                   var dialog = this.options.app.showDialog(
@@ -156,7 +177,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                     headerIcon : 'setting2',
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
-                  that.options.app.showLoading('Loading Campaign Settings....',dialog.getBody());
+                  that.options.app.showLoading(loading,dialog.getBody());
                   require(["reports/summary/views/settings"],function(Settings){
                          var mPage = new Settings({model:that.objSummary});
                          dialog.getBody().html(mPage.$el);
@@ -264,12 +285,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 
                 this.active_ws.find(".sentat").remove();
                 this.active_ws.find("#campaign_tags").html('');
+                var subheading = "Campaign Summary";
                 if(this.objSummary.get('campaignType') == "T"){
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('subject'));
                     this.$el.find(".c-settings span").html("Message Settings")
                     if(c_name == ""){
                         c_name = "&lt;subject line &gt;";
                     }
+                    subheading = "Message Summary";
                 }else{
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
                 }
@@ -277,10 +300,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.active_ws.find("#workspace-header").addClass('showtooltip').attr('data-original-title',c_name).html(name);
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");
-                 this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:"Campaign Summary"});
+                 this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:subheading});
                 if(this.objSummary.get('campaignType') == "T"){
                     this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='nurture2'></span>&nbsp;"+this.options.params.trackName+" </li></ul>");
-                    this.active_ws.find("#workspace-header").append("<strong style='font-size:13px; padding-left:10px;'>&lt;Message No "+ this.options.params.messageNo +" &gt;</strong>")
+                    this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> <b>"+ this.options.params.messageNo +"</b> Message </strong>")
                 }else{
                   var tags ="<ul>";
                             _.each(this.options.app.encodeHTML(this.objSummary.get('tags')).split(","),function(t){ 

@@ -21,7 +21,7 @@
 </div> <!-- sum_top -->
 <ul class="chartstatdetail">
     <% var active="active" ;%>
-    <%if(summary.get('campaignType') == "T"){ var style="width:19.5%"; active=""; %>
+    <%if(summary.get('campaignType') == "T"){ var style="width:16.2%"; active=""; %>
       
      <li data-count="<%=this.stats.get('sentCount')%>" class="active" style="<%=style%>">
         <a href="#sent-listing" data-toggle="tab" class='sent-views'>
@@ -44,13 +44,13 @@
           <%=this.getTabbedText('click')%>
         </a>
     </li>
-   <%if(summary.get('campaignType') != "T"){%>
+    
     <li data-count="<%=this.stats.get('conversionCount')%>" style="<%=style%>">
         <a href="#conversion-listing" data-toggle="tab" class="convert-views">
             <%=this.getTabbedText('convert')%>
         </a>
     </li>
-    <%}%>
+  
     <li  data-count="<%=this.stats.get('pageViewsCount')%>" style="<%=style%>">
         <a href="#pageviews-listing" data-toggle="tab" class="page-views">
             <%=this.getTabbedText('views')%>

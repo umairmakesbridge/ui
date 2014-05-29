@@ -19,7 +19,6 @@ define(['backbone', 'app'], function (Backbone, app) {
 	       ,
                parse: function(response,res) {
                 var result;
-                console.log(response);
                 if(response["messageId.checksum"]){
                         //result._id =  parseInt(response["campNum.encode"]);
                         result = response;

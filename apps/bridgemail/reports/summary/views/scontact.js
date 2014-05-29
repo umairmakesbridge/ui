@@ -25,11 +25,13 @@ function (template) {
                  this.articleTitle = "";
                  this.articleUrl = "";
                  this.clickCount = 0;
+                 this.isNurtureTrack = false;
                  this.logTime = "";
                  this.render();
             },
             render: function () {
                  if(this.type == "C" || this.type == "P"){
+                  this.isNurtureTrack = true;
                   this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount;  
                   this.logTime =this.model.get('nurtureData')[0].execDate; 
                 }else{
@@ -58,7 +60,7 @@ function (template) {
                        break;
                     case "OP":
                         text = this.pageOpened("First opened on");
-                        break;
+                        break; 
                     case "CK":
                         if(this.options.article)
                             text = this.pageClicked("First clicked on");
@@ -67,20 +69,25 @@ function (template) {
                         break;
                     case "CT":
                       text = this.unsubscribe("Converted on");
-                       break; 
-                      case "C":
+                       break;
+                    case "C":
                           text = this.unsubscribe("Sent on")
                           break;
-                      case "P":
+                    case "P":
                           text = this.unsubscribe("Pending");
                           break;
                        
                 }
-                return text;
+                return text; 
                
             },
             unsubscribe:function(text){
-                return "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";
+                var str = "";
+                //if(this.options.type == "UN"){
+                   // str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+              //  }
+                str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+                return str;
             },
             pageViews:function(text){
                
