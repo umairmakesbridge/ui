@@ -190,7 +190,7 @@ function (template,moment,highlighter) {
             },
             expandTags: function(){
               this.$('.t-scroll' ).css('height', '155px');  
-              this.$(".caption").animate({height:"250px"}); 
+              this.$(".caption").animate({height:"250px"},250); 
 	      this.$(".caption p i.ellipsis").hide(); 
               this.$(".caption p").css({'height':'auto','display':'block'});
 	      this.$(".btm-bar").css({"position":"absolute","bottom":"0"});
@@ -210,7 +210,7 @@ function (template,moment,highlighter) {
                         this.$(".t-scroll").mCustomScrollbar("destroy");
                         this.isTrim = false;
                         this.$('.t-scroll' ).removeAttr('style');
-                        this.$(".caption").animate({height:"145px"});
+                        this.$(".caption").animate({height:"145px"},250);
                         this.$(".caption p i.ellipsis").show();
                         this.$(".caption p").removeAttr('style');
                         this.$(".btm-bar").removeAttr('style');
