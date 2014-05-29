@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope','jquery.nicescroll'
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog'/*,'jquery.bmsgrid','jquery.calendario','jquery.icheck','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope','jquery.nicescroll'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -160,15 +160,23 @@ define([
                     if(this.checkError(_json)){
                           return false;
                     }
-                    this.set("user",_json);
-                    if(this.get("user").userId=="jayadams" || this.get("user").userId=="admin" || this.get("isNurtureTrack")){
-                        this.mainContainer.$(".nt-li,.naturetrack-li").show();
-                      }
-                      else{
-                          this.mainContainer.$(".nt-li,.naturetrack-li").hide();
-                      }
+                    this.set("user",_json);   
+                    if(this.mainContainer){
+                        this.NTusers();
+                    }else{
+                        setTimeout(_.bind(this.NTusers,this),200);
+                    }
                 
                 },this));
+            },
+            NTusers:function(){
+              var allowedUser = ['admin','jayadams','erpguru','hawaiilife'];  
+              if(allowedUser.indexOf(this.get("user").userId)>-1 || this.get("isNurtureTrack")){
+                this.mainContainer.$(".nt-li,.naturetrack-li").show();
+              }
+              else{
+                  this.mainContainer.$(".nt-li,.naturetrack-li").hide();
+              }  
             },
              clearCache:function(){
                 window.setTimeout(_.bind(this.removeAllCache,this),1000*60*30);

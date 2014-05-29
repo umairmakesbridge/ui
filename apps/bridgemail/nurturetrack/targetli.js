@@ -27,10 +27,9 @@ function (template,moment) {
             /**
              * Render view on page.
             */
-            render: function () {  
-                this.getTarget();
+            render: function () {                  
                 this.$el.html(this.template({
-                    model: this.target,
+                    model: this.model,
                     countDate:this.getDate()
                 }));                
                                
@@ -39,7 +38,7 @@ function (template,moment) {
              * Render date as .
             */
             getDate:function(){
-                var _date = moment(this.app.decodeHTML(this.target.updationDate),'YYYY-M-D');
+                var _date = moment(this.app.decodeHTML(this.model.get("updationDate")),'YYYY-M-D');
                 return {date:_date.format("DD MMM, YYYY")};
                                 
             },
@@ -49,22 +48,13 @@ function (template,moment) {
             initControls:function(){
                 
             },
-            getTarget:function(){
-                
-                var targets_list_json = this.app.getAppData("targets"); 
-                _.each(targets_list_json.filters[0],function(val){
-                    if(val[0]["filterNumber.checksum"]==this.model.checksum){
-                        this.target = val[0];
-                        return {};
-                    }
-                },this);
-            },
             removeLi:function(){
                 this.$el.remove();
                 if(this.parent.targets){
                     _.each(this.parent.targets,function(val,key){
-                        if(val[0].checksum==this.target["filterNumber.checksum"]){
+                        if(val[0].checksum==this.model.get("filterNumber.checksum")){
                             delete  this.parent.targets[key];
+                            this.parent.targetsModelArray.splice(key,1);
                             return {};
                         }
                     },this);

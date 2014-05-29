@@ -1973,6 +1973,7 @@ position:relative;
 .slide-btns .icon.refresh { background-image: url("../img/subscriber-refresh48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.calender { background-image: url("../img/calender48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.remove { background-image: url("../img/remove48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.copy { background-image: url("../img/copy48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.draft { background-image: url("../img/draft48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.preview { background-image: url("../img/preview48.png"); background-position:center center; background-repeat:no-repeat; }

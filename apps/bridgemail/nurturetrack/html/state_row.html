@@ -1,6 +1,6 @@
 <td width="100%"><div>
 <div class="name-type">
-    <h3 ><a style="overflow: hidden;text-overflow:ellipsis;max-width: 210px;" <% if(model.get('subject').length>23){print('class="showtooltip" title="'+model.get('subject')+'"') }%>><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>
+    <h3 ><a class="showtooltip preview-message"  style="overflow: hidden;text-overflow:ellipsis;max-width: 210px;" <% if(model.get('subject').length>23){print('title="Click to view message \''+model.get('subject')+'\'"') } else {print('title="Click to view message"')} %>><% if(model.get('subject')){print(model.get('subject'))}else{print('&lt;subject line&gt;')}%></a>  
   <a class="icon report showtooltip" title="Click to view message report"></a>
   <!--<a class="icon edit2"></a>-->
   </h3>
@@ -8,28 +8,28 @@
 </div>
 </td>
 <td width="90px"><div>
-<div class="subscribers" style="min-width:90px">
+<div class="subscribers count-click" style="min-width:90px" click-type="sent">
     <strong><span><em>Sent</em><% if(model.get('sentCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('sentCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers " style="min-width:90px">
+<div class="subscribers count-click" style="min-width:90px" click-type="pending">
     <strong><span><em>Pending</em><% if(model.get('pendingCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('pendingCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers " style="min-width:90px">
+<div class="subscribers count-click" style="min-width:90px" click-type="open">
     <strong><span><em>Open</em><% if(model.get('openCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('openCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers " style="min-width:90px">
+<div class="subscribers count-click" style="min-width:90px" click-type="click">
     <strong><span><em>Click</em><% if(model.get('clickCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('clickCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="colico pgview" style="min-width:90px">
-    <strong><span><em>Page Views</em><%- this.app.addCommas(model.get('pageViewCount'))%></span></strong>
+<div class="colico pgview count-click" style="min-width:90px" click-type="views">
+    <strong><span><em>Page Views</em><%- this.app.addCommas(model.get('pageViewsCount'))%></span></strong>
 </div>
 </div>
 </td>

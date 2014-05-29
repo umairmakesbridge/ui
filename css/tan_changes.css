@@ -428,7 +428,6 @@ ul.c-current-status li .badge { cursor:pointer; }
 /*#salesforce-camp-search .icon,#netsuite-group-search .icon { top:5px; }*/
 #salesforce_setup .iconpointy .pointy, #netsuite_setup .iconpointy .pointy { margin-top:6px; float:right; }
 #netsuite_setup .iconpointy{ top:2px; }
-.modal-header .tagscont { margin-left:0; }
 .chosen-container .chosen-results li.group-result { background-color:#fff; }
 .messagebox.delete { padding:20px; margin-top:50px; background:#fff; width:440px; }
 .messagebox .btns {

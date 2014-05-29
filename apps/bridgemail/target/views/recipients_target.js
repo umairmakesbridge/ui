@@ -16,12 +16,17 @@ function (template) {
                 "click .edit-target":"editTarget",
                 "click .delete-target":"deleteTarget",
                 "click .refresh":"refreshTarget",
-                "click .preview":"previewTarget"
+                "click .preview":"previewTarget",
+                "click .row-move":"addRowToCol2",
+                "click .row-remove":"removeRowToCol2"
                    
             },
             initialize: function () {
                 this.app = this.options.app;
+                this.parent = this.options.page;
                 this.template = _.template(template);
+                this.showUseButton = this.options.showUse;
+                this.showRemoveButton = this.options.showRemove;
                 this.model.on('change',this.render,this);
                 this.render();
             },
@@ -194,6 +199,22 @@ function (template) {
                     progress = (isNaN(progress = parseInt(progress, 10)) ? 0 : progress)
                     progress ="Population count is in progress " + progress ;
                     if(progress.isNaN || progress.isInfinity )  return  "Total count is 0"; else return progress + "%";
+                }
+            },
+            addRowToCol2:function(){
+                if(this.showUseButton){
+                    this.$el.fadeOut("fast",_.bind(function(){                        
+                        this.parent.addToCol2(this.model);    
+                        this.$el.hide();
+                    },this));
+                }
+            },
+            removeRowToCol2:function(){
+                if(this.showRemoveButton){
+                    this.$el.fadeOut("fast",_.bind(function(){                        
+                        this.parent.adToCol1(this.model);    
+                        this.$el.remove();
+                    },this));
                 }
             }
                 

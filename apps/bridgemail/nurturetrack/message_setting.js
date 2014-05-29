@@ -46,6 +46,7 @@ function (template) {
             ,
             initControls:function(){
                 var that = this;
+                
                 this.$("#accordion_setting").accordion({heightStyle: "fill",collapsible: true,active:1,activate: function( event, ui ) {
                         that.resizeStep1();
                 }});                    
@@ -53,10 +54,34 @@ function (template) {
                 
                 this.$bodyInner.css({"height":"auto","overflow":"inherit"});
                 this.$settingInner.css({"height":"auto","overflow":"inherit"});
+                                
                 
             },
+            previewCampaign:function(){
+                var camp_id = this.camp_obj['campNum.encode'];                
+                //var appMsgs = this.app.messages[0];				
+                var dialog_width = $(document.documentElement).width()-60;
+                var dialog_height = $(document.documentElement).height()-182;
+                var dialog = this.app.showDialog({title:'Message Preview' ,
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgpreview',
+                                  bodyCss:{"min-height":dialog_height+"px"}
+                });	
+                this.app.showLoading("Loading Message HTML...",dialog.getBody());									
+                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                require(["common/templatePreview"],_.bind(function(MessagePreview){
+                var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                 dialog.getBody().html(tmPr.$el);
+                 tmPr.init();
+               },this));
+            },
             init:function(){
-              
+              this.modal = this.$el.parents(".modal");
+              this.head_action_bar = this.modal.find(".modal-header .edited  h2");
+              var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+              this.head_action_bar.append(previewIconMessage);
+              previewIconMessage.click(_.bind(this.previewCampaign,this));  
             },
            loadMessageHTML:function(){
                if(this.messagebody_page){

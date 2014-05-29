@@ -45,7 +45,7 @@ function (template,moment) {
                 if(this.object && this.object[0].dispatchType){
                     var _json = this.object[0];
                     if(_json.dispatchType=="D"){
-                        if(_json.dayLapse!=="3"){
+                        if(_json.dayLapse!=="1"){
                             this.$(".chosen-select").val(_json.dayLapse).trigger("chosen:updated");
                         }
                     }

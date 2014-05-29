@@ -22,6 +22,7 @@
            'jquery.searchcontrol': '../shared/searchcontrol',
            'jquery-ui': '../shared/libs/jquery-ui',
            'fileuploader': '../shared/libs/jquery.form',
+           'bms-shuffle': '../shared/shuffle',
            'bms-filters': '../shared/filters',
            'bms-crm_filters': '../shared/crm_filters',
            'bms-tags': '../shared/tags',
@@ -93,6 +94,9 @@
                    deps: ['jquery']
                },
                'bms-mergefields':{
+                   deps: ['jquery']
+               },
+               'bms-shuffle':{
                    deps: ['jquery']
                }
                ,

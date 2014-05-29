@@ -32,11 +32,11 @@ function (template) {
                     if(this.object){
                         this.messageLabel = this.object[0]["label"];
                         if(!this.messageLabel){
-                             this.messageLabel = '&lt;subject line&gt;';
+                             this.messageLabel = 'Subject line goes here ...';
                         }
                     }
                     else{
-                        this.messageLabel = '&lt;subject line&gt;';
+                        this.messageLabel = 'Subject line goes here ...';
                     }
                     this.camp_json = null;
                     this.triggerOrder = this.options.triggerOrder;                    
@@ -208,8 +208,9 @@ function (template) {
                     this.$(".title").html(this.app.encodeHTML(camp_json.subject));
                   }
                   else{
-                      this.messageLabel = '&lt;subject line&gt;';
-                      this.$(".title").html('&lt;subject line&gt;');
+                      this.messageLabel = 'Subject line goes here ...';
+                      this.$(".title").html('Subject line goes here ...');
+                      this.$(".camp-subject").html('Subject line goes here ...');
                   }
                   this.$(".camp-fromemail").html(this.app.encodeHTML(camp_json.fromEmail));
                   var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             

@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','bms-tags','bms-dragfile'],
-        function(template,TargetLiView,MessageView,WaitView,ButtonsView) {
+define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','target/collections/recipients_targets','bms-tags','bms-dragfile'],
+        function(template,TargetLiView,MessageView,WaitView,ButtonsView,TargetsCollection) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Nurture Track detail page view depends on 
@@ -16,7 +16,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .add-message':'addMessage',
                     'click .add-wait':'addWait',
                     'click .browse-button-nt':"imageDialog",
-                    'click .save-all-nt':'saveAllMessages'
+                    'click .save-all-nt':'saveAllMessages',
+                    'click .play-nt': 'playNurtureTrack'
                 },
                 /**
                  * Initialize view - backbone
@@ -25,6 +26,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     this.template = _.template(template);
                     this.messages = [];
                     this.saveAllCall = 0;
+                    this.targetsRequest = new TargetsCollection();
+                    this.targetsModelArray = [];
                     this.render();
                 },
                 /**
@@ -155,21 +158,30 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    
 
                 },
-                loadTargets:function(){
-                    if(!this.app.getAppData("targets")){                                    
-                        this.app.showLoading("Loading Targets...",this.$el);
-                         this.app.getData({
-                            "URL":"/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C",
-                            "key":"targets",
-                            "callback":_.bind(function(){
-                                this.app.showLoading(false,this.$el);
-                                this.createTargets();
-                            },this)
-                        });
-                    }
-                    else{
-                        this.createTargets();
-                    }  
+                loadTargets:function(){                    
+                    var remove_cache = true;
+                    var offset = 0;                            
+                    var _targetsArray = [];
+                     _.each(this.targets,function(val,key){
+                       _targetsArray.push(val[0].encode);
+                    },this); 
+                    var _data = {offset:offset,type:'list_csv',filterNumber_csv:_targetsArray.join()};
+                    this.tracks_bms_request = this.targetsRequest.fetch({data:_data,remove: remove_cache,
+                        success: _.bind(function (collection, response) {                                
+                            // Display items
+                            if(this.app.checkError(response)){
+                                return false;
+                            } 
+                          
+                            for(var s=offset;s<collection.length;s++){                                
+                                this.targetsModelArray.push(collection.at(s));
+                            }                        
+                            this.createTargets();
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    });
                 },
                 showHideTitle:function(show,isNew){
                     var current_ws = this.current_ws.find(".camp_header");
@@ -281,6 +293,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                          dialog.getBody().html(targetsPage.$el);
                          targetsPage.init();                         
                          dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
+                         targetsPage.createRecipients(this.targetsModelArray);
                     },this));
                 },
                 createTargets:function(save){
@@ -288,8 +301,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         this.$(".add-targets").removeClass("add-targets-nt").addClass("target-added");
                         this.$(".dottedpanel").addClass("targetspanel").removeClass("dottedpanel");
                         this.$(".targets-ul").children().remove();
-                        _.each(this.targets,function(val,key){
-                             var targetLiView = new TargetLiView({ model:val[0],page:this });        
+                        _.each(this.targetsModelArray,function(val,key){
+                             var targetLiView = new TargetLiView({ model:val,page:this });        
                              this.$(".targets-ul").append(targetLiView.$el);
                         },this);                        
                     }

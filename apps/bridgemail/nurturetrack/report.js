@@ -49,7 +49,7 @@ function (template,NTStates,stateView) {
             },
             loadStates:function(){
                 this.offset = 0;
-                this.app.showLoading('Loading states...',this.$el); 
+                this.app.showLoading('Loading stats...',this.$el); 
                 var _data = {offset:this.offset,type:'stats',trackId:this.model.get("trackId.encode")};
                 this.tracks_request = this.statesRequest.fetch({data:_data,remove:true,
                     success: _.bind(function (collection, response) {                                

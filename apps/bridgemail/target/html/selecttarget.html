@@ -2,15 +2,18 @@
     <div class="col1">
         <h2 class="header-list"><strong class="left">Targets</strong>
 
-            <div class="iconpointy" style="top:0px;display: none">
-                <a class="btn-green" ><i class="icon plus left"></i></a>
+            <div class="iconpointy" style="top:0px;">
+                <a class="btn-green add-target showtooltip" title="Add target" ><i class="icon plus left"></i></a>
             </div>
 
 
-           <div id="targetsearch" class="input-append search"> </div>
+            <div class="input-append search" id="targetsearch"> 
+                <span class="icon target"></span><input type="text" style="width:220px;" class="search-control show-image" placeholder="Search targets" id="target-search"><a style="display: none;" id="clearsearch" class="close-icon"></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
         </h2>
         <div class="template-container leftcol" style="margin-right:5px">
-            <div class="target-listing" id="targets"> </div>
+            <div class="target-listing" id="targets">
+                <table cellpadding="0" cellspacing="0" width="100%" id="targets_grid"><tbody></tbody></table>
+            </div>
         </div>
         <!-- template-container  --> 
     </div>
@@ -27,5 +30,8 @@
          </div>
     </div>
     <!-- col2 --> 
+
+</div>
+<div style="right: 78px;   min-height: 70px; width:70%; display:none;" class="dddiv" id="div_pageviews">
 
 </div>

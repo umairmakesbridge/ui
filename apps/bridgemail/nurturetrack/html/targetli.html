@@ -1,6 +1,6 @@
-<div class="targt"><span><%- model.name %>
+<div class="targt"><span><%- model.get("name") %>
         <a class="btn-red"><span>Remove</span><i class="icon cross"></i></a></span>
-    <strong class="badge"><%- model.filtersCount %>
+    <strong class="badge"><%- model.get("filtersCount") %>
         <div class="calctime">
             <span><em>Calculated on</em><%-countDate.date%></span>
         </div>
