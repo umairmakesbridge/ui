@@ -19,7 +19,7 @@ function (template,moment,highlighter) {
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
               'click .message-view':'viewNurtureTrack',
-              'click .report':'reportNT',
+              'click .report-bar':'reportNT',
               'click .t-scroll p i.ellipsis':'expandTags',
               'mouseleave .thumbnail':'collapseTags',
               

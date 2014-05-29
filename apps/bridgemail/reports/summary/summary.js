@@ -186,6 +186,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   
             },
             pageViews:function(ev){
+                if(ev){
                  if($(ev.target).parents('li').hasClass('active')) return;
                  var count = $(ev.target).parents('li').data("count");
                  if(!count){
@@ -193,19 +194,21 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                      this.closeContactsListing();
                      return;
                 }
-               
+                }
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
              pendingViews:function(ev){
-                 if($(ev.target).parents('li').hasClass('active')) return;
-                 var count = $(ev.target).parents('li').data("count");
-                 if(!count){
-                  this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
-                     this.closeContactsListing();
-                     return;
-                }
+                 if(ev){
+                    if($(ev.target).parents('li').hasClass('active')) return;
+                    var count = $(ev.target).parents('li').data("count");
+                    if(!count){
+                     this.active_ws.find(".stats_listing").html("<div class='erow' style='line-height:50px;background:#DCF3FE'> <div style='margin-left:45%;margin-top:20px;margin-bottom:20px;'> No contact found </div></div>");
+                        this.closeContactsListing();
+                        return;
+                   }
+                 }
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
