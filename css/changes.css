@@ -1939,7 +1939,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 0.5px;
-    line-height: 30px;
+    line-height: 33px;
 }
 .previewbar .scontct i {
     float: left;
@@ -2056,17 +2056,17 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     background: none repeat scroll 0 0 #FFFFFF;
     box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
     display: block;
-    height: 288px;
+    height: 320px;
     left: 10px;
     padding: 5px;
     position: absolute;
     top: 53px;
     width: 515px;
     z-index: 111;
-    border: 3px solid #C3C3C3;
+    border: 2px solid #BADAEC;
 }
 .dddiv-prevCam:before {
-      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #C3C3C3;
+      border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;
     border-style: solid;
     border-width: 6px;
     bottom: auto;
@@ -2833,6 +2833,7 @@ text-align:center;
 }
 .temp-tag{
     max-width: 40px;
+    white-space: nowrap;
 }
 .temp-thumbnail{
     background: none repeat scroll 0 0 #FFFFFF;

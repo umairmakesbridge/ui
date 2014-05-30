@@ -900,10 +900,10 @@ ul.spusb li a:hover { background: #009fda;}
     position: fixed;
     right: 14px;
     width: 50px;
-	-webkit-transition: opacity .3s ease-out;
-    -moz-transition: opacity .3s ease-out;
-    -o-transition: opacity .3s ease-out;
-    transition: opacity .3s ease-out;
+	-webkit-transition: opacity .1s ease-out;
+    -moz-transition: opacity .1s ease-out;
+    -o-transition: opacity .1s ease-out;
+    transition: opacity .1s ease-out;
 		 -webkit-border-radius: 2px;
 	-moz-border-radius:2px;
 	border-radius: 2px;

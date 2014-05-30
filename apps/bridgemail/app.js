@@ -537,9 +537,9 @@ define([
                      },this));
                     scrollBar.scroll(_.bind(function(){
                         if (scrollBar.scrollTop() > 50) {
-                            top_button.fadeIn('slow');
+                            top_button.fadeIn('fast');
                         } else {
-                            top_button.fadeOut('slow');
+                            top_button.fadeOut('fast');
                         }
                     },this));
                     //console.log(scrolltoDiv + '   ' + appendtoDiv);

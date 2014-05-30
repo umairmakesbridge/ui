@@ -107,7 +107,7 @@ function (template,contactsView,icheck,chosen) {
             },
             loadPrevTemplates: function(){
                 if(this.options.prevFlag==='T'){
-                    //this.$('.previewbtns').hide();
+                    this.$('.previewbtns').hide();
                      this.setiFrameSrc();
                      this.$('#prev-email').focus();
                 }else if(this.options.prevFlag==='C'){
@@ -161,9 +161,9 @@ function (template,contactsView,icheck,chosen) {
                      var offset = $(ev.target).offset();
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();
-                     active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'><h3>Preview a personalized email:</h3></div>"); 
+                     active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'></div>"); 
                       active_ws.find('.campaign-clickers').append(new contactsView({page:this}).el)
-                      active_ws.find('#prev-closebtn').css({'top':'54px'});
+                      active_ws.find('#prev-closebtn').css({'top':'18px'});
                       
                       /*active_ws.find(".campaign-clickers .closebtn").on('click', function(){
                       that.closeContactsListing();
