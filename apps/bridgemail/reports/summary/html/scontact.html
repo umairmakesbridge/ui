@@ -1,16 +1,16 @@
 
-    <td width="100%"><div>
+    <td width="100%" style="overflow:initial!important;overflow:visible!important;"><div>
             <div class="name-type">
                 <h3><a class='view-profile showtooltip' data-original-title="Click to view profile"><%=this.getFullName()%></a> 
-                    <%if(this.type == "C"){%>
-                       <div class="percent_stats"> 
-                           <a style="margin:0px!important;" data-list="" class="icon metericon pageview showtooltip"> </a>
-                       </div>
-                   <%}%>
+                    
                 </h3>
                
                 <a class="statusdd color2 salestatus"><%=this.firstLetterUpperCase()%> </a>
-                
+                <%if(this.type == "C"){%>
+                       <div class="percent_stats"> 
+                           <a style="margin:0px!important;" data-list="" data-original-title="Click to view engagement level" class="icon metericon showtooltip <%=this.getMeterIconClass()%> showtooltip"> </a>
+                       </div>
+                   <%}%>
                 <div class="tags tagscont">
                     <ul>
                             <% _.each(this.model.get('tags').split(","),function(t){ %>  

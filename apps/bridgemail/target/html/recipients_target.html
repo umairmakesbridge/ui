@@ -27,7 +27,7 @@
       <%if(this.model.get('status') =="D" && this.model.get('scheduleDate') !=""){%> 
        <td width="132px">
             <div>
-                <div style="width:145px" class="time" >
+                <div style="width:145px" class="time showtooltip" data-original-title="<%=this.options.app.dateSetting(this.model.get('scheduleDate'),"-")%>" >
                      <strong><span><em>Last calculated on</em><%=this.options.app.dateSetting(this.model.get('scheduleDate'),"-")%></span></strong> 
                 </div>
             </div>

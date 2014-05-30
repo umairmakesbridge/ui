@@ -14,17 +14,31 @@ function (template,chart,contactsView,jsPDF) {
             events: {
                 "click .bounce-class li":"openContacts",
                 'click .download':'getImgData'
+                
             },
             initialize: function () {
                  this.template = _.template(template);	
                  this.campNum = this.options.campNum;
                  this.chart_data = "";
+                 this.active_ws = "";
+                 this.trackId = this.options.trackId || 0;
                  this.data = [];
                  this.render();
             },
             render: function () {
+                var that = this;
                 this.$el.html(this.template(this.model.toJSON()));
                 this.loadChart();
+                
+                this.$el.find('.chart-pending-views').on('click',function(ev){
+                   that.pendingViews(ev);
+                   return false;
+                })
+                this.$el.find('.chart-sent-views').on('click',function(ev){
+                   that.sentViews(ev);
+                   return false;
+                })
+                
             },
             loadChart:function(){
 
@@ -71,7 +85,9 @@ function (template,chart,contactsView,jsPDF) {
                 //console.log(this.options.status);
                 var status = "";
                  if(this.options.campaignType == "T") {
-                     return "";
+                    var html = "<span class='pclr18 chart-sent-views showtooltip' style='width:auto;cursor:pointer;' data-original-title='Click to view contacts'>Sent <strong>"+this.options.app.addCommas(this.model.get('sentCount'))+"</strong></span>";
+                    html = html + "<span class='pclr6 pdf-pending chart-pending-views showtooltip' style='width:auto;cursor:pointer;' data-original-title='Click to view contacts'>Pending <strong>"+this.options.app.addCommas(this.model.get('pendingCount'))+"</strong></span>";
+                    return html;
                  }
                      //if(this.options.status ==  "P")  status = "Pending";
                 //    if(this.options.status == "C")  status = "Sent";
@@ -89,6 +105,36 @@ function (template,chart,contactsView,jsPDF) {
                 
                 
             } ,
+            sentViews:function(ev){
+                 this.active_ws = this.$el.parents(".ws-content.active");
+                  if(this.active_ws.find(".sent-views").parents('li').hasClass('active')) return;
+                  this.clearHTML();
+                  this.active_ws.find(".sent-views").parents('li').addClass('active');
+                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",triggerOrder:this.options.triggerOrder, trackId:this.trackId,app:this.options.app,campNum:this.options.campNum,listing:'page'}).el)
+                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+              
+            },
+            pendingViews:function(ev){
+                this.active_ws = this.$el.parents(".ws-content.active");
+                  if(this.active_ws.find(".pending-views").parents('li').hasClass('active')) return;
+                  this.clearHTML();
+                  this.active_ws.find(".pending-views").parents('li').addClass('active');
+                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",triggerOrder:this.options.triggerOrder, trackId:this.trackId,app:this.options.app,campNum:this.options.campNum,listing:'page'}).el)
+                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+              
+            },
+            clearHTML:function(self){
+               this.closeContactsListing();
+              this.active_ws.find(".contacts_listing").empty();
+               this.active_ws.find(".contacts_listing").hide();
+               this.active_ws.find(".contacts_listing").show();
+               this.active_ws.find(".contacts_listing").find("#tblcontacts tbody #loading-tr").remove();
+            },
+              closeContactsListing:function(){
+             this.active_ws.find(".page-views").parents('li').parents('ul').find('li').removeClass('active');
+             this.active_ws.find(".campaign-clickers").empty('');
+             this.active_ws.find(".campaign-clickers").hide();
+            },
             getBase64FromImageUrl:function(url,logo){
                 var canvas = document.createElement("canvas");
                 var ctx = canvas.getContext('2d');

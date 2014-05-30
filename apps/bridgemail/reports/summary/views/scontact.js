@@ -6,15 +6,17 @@
  * Dependency: SCONTACT HTML
  */
 
-define(['text!reports/summary/html/scontact.html'],
-function (template) {
+define(['text!reports/summary/html/scontact.html','moment'],
+function (template,moment) {
         'use strict';
         return Backbone.View.extend({
             className: 'erow',
             tagName:'tr',
             events: {
               'click .view-profile':"openContact",
-              'click .page-view':'loadPageViewsDialog'
+              'click .page-view':'loadPageViewsDialog',
+              'click .metericon':'showProgressMeter',
+              'click .closebtn':'closeProgressMeter'
             },
             initialize: function () {
                 _.bindAll(this, 'getRightText', 'pageClicked');
@@ -22,6 +24,7 @@ function (template) {
                  this.viewCount = 0;
                  this.type = this.options.type;
                  this.firstOpenDate = ""
+                 this.bounceType = "";
                  this.articleTitle = "";
                  this.articleUrl = "";
                  this.clickCount = 0;
@@ -32,9 +35,11 @@ function (template) {
             render: function () {
                  if(this.type == "C" || this.type == "P"){
                   this.isNurtureTrack = true;
+                  this.bounceType =   this.model.get('nurtureData')[0].bounceCategory;  
                   this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount;  
                   this.logTime =this.model.get('nurtureData')[0].execDate; 
                 }else{
+                  this.bounceType = this.model.get('activityData')[0].bounceCategory;
                   this.logTime = this.model.get('activityData')[0].logTime;
                   this.viewCount =   this.model.get('activityData')[0].pageViewCount;
                 }
@@ -74,20 +79,25 @@ function (template) {
                           text = this.unsubscribe("Sent on")
                           break;
                     case "P":
-                          text = this.unsubscribe("Pending");
+                          text = this.unsubscribe("Schedule to go on");
                           break;
                        
                 }
                 return text; 
                
             },
+            
             unsubscribe:function(text){
                 var str = "";
-                //if(this.options.type == "UN"){
-                   // str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
-              //  }
-                str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.options.app.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
-                return str;
+                 if(this.options.type == "CB"){
+                     str = str +  "<td width='10%'><div><div class='bounce-type colico' style='width:155px'><strong><span><em>Bounce Type</em>"+this.bounceType+"</span></strong></div></div></td>";;
+                 }
+                 if(text== "Schedule to go on"){
+                     str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
+                 }else{
+                    str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+                 }
+                    return str;
             },
             pageViews:function(text){
                
@@ -98,10 +108,10 @@ function (template) {
                     }
             },
             pageOpened:function(text){
-                return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
+                return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
             },
             pageClicked:function(text){
-                     return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.options.app.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
+                     return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
             },
             linkTd:function(){
                 if(this.type == "C" || this.type == "P") return;
@@ -140,10 +150,17 @@ function (template) {
                     return name;
             },
             loadPageViewsDialog:function(ev){
+                    
                      var dialog_width = 80;
+                     var encode = 0;
+                     if($(ev.target).data('id')){
+                         encode = $(ev.target).data('id')
+                     }else{
+                         encode = this.model.get('subNum.encode');
+                     }
                      var that = this;
                      var url = "";
-                     if(!this.options.url){
+                     if(!this.options.url && this.type != "C"){
                         var url = this.model.get('activityData')[0].articleURL;
                         var title = this.model.get('activityData')[0].articleTitle;
                         url = title+'|-.-|'+url;
@@ -170,7 +187,7 @@ function (template) {
                         }
                                  
                         require(["reports/summary/views/pageviews",],function(Views){
-                                var mPage = new Views({campNum:that.options.campNum,subNum:$(ev.target).data('id'),encode:that.model.get('subNum.encode'),app:that.options.app,email:name,salestatus:that.model.get('salesStatus'),url:url});
+                                var mPage = new Views({campNum:that.options.campNum,subNum:encode,encode:that.model.get('subNum.encode'),app:that.options.app,email:name,salestatus:that.model.get('salesStatus'),url:url});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           
@@ -178,13 +195,147 @@ function (template) {
                         
                 
             },
+            showProgressMeter:function(ev){
+                 var that = this;
+                 if($('.percent_stats').find(".ocp_stats").length > 0)
+                       $('.percent_stats').find(".ocp_stats").remove();
+                    
+                 var nurtureData = this.model.get('nurtureData')[0];
+                 var pageViews = nurtureData.pageViewsCount;
+                 var click = nurtureData.clickCount;
+                 var aPageViews = "<b>0</b>";
+                 var aClick = "<b>0</b>";
+                 var converted =  "-";
+                 var open =  "-";
+                 var position = "-560px";
+                 var className='open';
+                 if(nurtureData.conversionDate !=""){
+                     position = "-420px";
+                     className='conversion';
+                     converted = this.dateSetting(nurtureData.conversionDate,"/");
+                 }else if(pageViews !="0"){
+                     position = "-280px";
+                     className='pageview';
+                     aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
+                 }else if(click !="0"){
+                     aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                     position = "-140px"
+                     className='click';
+                 }else if(nurtureData.firstOpenDate  !=""){
+                     open = this.dateSetting(nurtureData.firstOpenDate ,"/")
+                      position = "0px";
+                     className='open';
+                 }
+                 var encode =this.model.get('subNum.encode')
+                 var str = "<div style='display:block;' class='ocp_stats left-side'><a class='closebtn'></a>"
+                           +"<div class='elevel'>"
+                           +"<h4>Engagement level</h4>"
+                           +"<ul>"
+                           +"<li class='open showtooltip' data-original-title='First opened on'><i class='icon'></i> "+open+" </li>"
+                           +"<li class='click showtooltip click-detail' data-original-title='Unique click count' ><i class='icon'></i> "+aClick+"</li>"
+                           +"<li class='pageview showtooltip page-view' data-id='"+encode+"' data-original-title='Page Views'><i class='icon'></i>"+aPageViews+"</li>"
+                           +"<li class='conversion showtooltip' data-original-title='Converted on'><i class='icon'></i>"+converted+" </li>"
+                           +"</ul>"
+                           +"</div>"
+                           +"<div class='meterdd pageview' style='background-position: "+position+" 0px !important;'>"
+                           +"<span title='Opened' class='open'></span>"
+                           +"<span title='Clicked' class='click'></span>"
+                           +"<span title='Page Viewed' class='visit'></span>"
+                           +"<span title='Conversion' class='conversion'></span>"
+                           +"</div>"
+                          +"</div>";
+                      $(ev.target).parents(".percent_stats").append(str);
+                      $(ev.target).parents(".percent_stats").find('.page-view').on('click',function(ev){
+                         that.loadPageViewsDialog(ev);
+                         return false;
+                      })
+                      $(ev.target).parents(".percent_stats").find('.click-detail').on('click',function(ev){
+                         that.loadClickViewDialog(ev);
+                         return false;
+                      })
+                       
+                   this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
+            },
+            closeProgressMeter:function(){
+                console.log('dagh Acchay hy');
+                $('.percent_stats').find(".ocp_stats").remove();
+            },
             firstLetterUpperCase:function(){
-                
              return this.model.get('salesStatus').toLowerCase().replace(/\b[a-z]/g, function(letter) {
                    return letter.toUpperCase();
               });
-              
+             },
+             getMeterIconClass:function(){
+                 var nurtureData = this.model.get('nurtureData')[0];
+                 var pageViews = nurtureData.pageViewsCount;
+                 var click = nurtureData.clickCount;
+                 var converted =  "-";
+                 var open =  "-";
+                 var className='';
+                 if(nurtureData.conversionDate !=""){
+                     className='conversion';
+                 }else if(pageViews !="0"){
+                     className='pageview';
+                 }else if(click !="0"){
+                     className='click';
+                 }else if(nurtureData.firstOpenDate  !=""){
+                     className='open';
+                 }
+                 return className;
+             },
+             dateSetting:function(sentDate, sep){
+               if(sep =="/") 
+                    var _date =  moment(sentDate,'MM/DD/YYYY');
+                if(sep =="-")
+                    var _date =  moment(sentDate,'YYYY-MM-DD');
                 
-            }
+                return _date.format("DD MMM YYYY");
+             },
+             loadClickViewDialog:function(ev){
+                     var dialog_width = 80;
+                     var encode = 0;
+                     if($(ev.target).data('id')){
+                         encode = $(ev.target).data('id')
+                     }else{
+                         encode = this.model.get('subNum.encode');
+                     }
+                     var that = this;
+                     var url = "";
+                     if(!this.options.url && this.type != "C"){
+                        var url = this.model.get('activityData')[0].articleURL;
+                        var title = this.model.get('activityData')[0].articleTitle;
+                        url = title+'|-.-|'+url;
+                     }else{
+                         url = this.options.url;
+                     }
+                     
+                     if($(ev.target).html() == "0")return;
+                     var dialog_height = $(document.documentElement).height()-200;
+                     var dialog = this.options.app.showDialog(
+                           {           
+                                       title:'Clicks',
+                                       css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
+                                       headerEditable:false,
+                                       headerIcon : 'preview3',
+                                       bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                            });
+                     that.options.app.showLoading('Loading Clicks....',dialog.getBody());
+                        var name = that.model.get('firstName');
+                        if(!name){
+                          name = that.model.get('email'); 
+                        }else{
+                            name = name + "  " + this.model.get('lastName') ;
+                        }
+                                 
+                        require(["reports/summary/views/clicks",],function(Clicks){
+                               // console.log(new Clicks());
+                                var mPage = new Clicks({campNum:that.options.campNum,subNum:encode,encode:that.model.get('subNum.encode'),app:that.options.app,email:name,salestatus:that.model.get('salesStatus'),url:url});
+                                dialog.getBody().html(mPage.$el);
+                                that.options.app.showLoading(false,dialog.getBody());
+                          
+                        });
+                        
+                
+            },
         });    
 });

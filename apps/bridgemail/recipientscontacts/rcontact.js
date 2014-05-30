@@ -63,6 +63,13 @@ function (template) {
                           
                         });
                 
-            }
+            },dateSetting:function(sentDate, sep){
+               if(sep =="/") 
+                    var _date =  moment(sentDate,'MM/DD/YYYY');
+                if(sep =="-")
+                    var _date =  moment(sentDate,'YYYY-MM-DD');
+                
+                return _date.format("DD MMM YYYY");
+             }
         });    
 });
