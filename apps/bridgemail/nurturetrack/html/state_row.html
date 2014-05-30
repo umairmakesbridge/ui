@@ -8,27 +8,27 @@
 </div>
 </td>
 <td width="90px"><div>
-<div class="subscribers count-click" style="min-width:90px" click-type="sent">
+        <div class="subscribers <% if(model.get('sentCount')!=='0'){print('count-click')} %>" style="min-width:90px" click-type="sent">
     <strong><span><em>Sent</em><% if(model.get('sentCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('sentCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers count-click" style="min-width:90px" click-type="pending">
+<div class="subscribers <% if(model.get('pendingCount')!=='0'){print('count-click')} %>" style="min-width:90px" click-type="pending">
     <strong><span><em>Pending</em><% if(model.get('pendingCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('pendingCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers count-click" style="min-width:90px" click-type="open">
+<div class="subscribers <% if(model.get('openCount')!=='0'){print('count-click')} %>" style="min-width:90px" click-type="open">
     <strong><span><em>Open</em><% if(model.get('openCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('openCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="subscribers count-click" style="min-width:90px" click-type="click">
+<div class="subscribers <% if(model.get('clickCount')!=='0'){print('count-click')} %>" style="min-width:90px" click-type="click">
     <strong><span><em>Click</em><% if(model.get('clickCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('clickCount')) +'</a>') } %></span></strong>
 </div>
 </div></td>
 <td width="90px"><div>
-<div class="colico pgview count-click" style="min-width:90px" click-type="views">
+<div class="colico pgview <% if(model.get('pageViewsCount')!=='0'){print('count-click')} %>" style="min-width:90px" click-type="views">
     <strong><span><em>Page Views</em><% if(model.get('pageViewsCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('pageViewsCount')) +'</a>') } %></span></strong>
 </div>
 </div>
