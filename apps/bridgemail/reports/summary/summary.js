@@ -36,9 +36,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                this.render();
             },
             render: function () {
-                this.options.app.showLoading('Loading Campaign....',this.$el);
                 this.fetchStats();
-                this.options.app.showLoading(false,this.$el);
+                
+               //
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
@@ -55,11 +55,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
             },
             addGraphs:function(data){
-                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId}).el);  
+                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId}).el);  
                 
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
+                this.options.app.showLoading("Loading Summary...",$(".ws-content.active").find(".campaign-content"));
                 var _data = {};
                 var self = this;
                 _data['type'] =  "stats";
@@ -72,8 +73,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     _data['type'] = "messageStats";
                     //type=get&trackId=kzaqwKb26Dd17Mj20kbhui&triggerOrder=1&status=C&searchText=jay
                 }
-                self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+               
                 this.stats.fetch({data:_data,success:function(data){
                     var _data = {};
                     _data['type'] = self.type;
@@ -81,8 +81,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     self.objSummary.fetch({data:_data,success:function(dataS){
                         
                          self.$el.html(self.template({stats:data,summary:dataS}));
+                          
+                         //self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
+                         //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                           self.addGraphs(data);
                          self.setHeader(self);
+                           self.options.app.showLoading(false,$(".ws-content.active").find(".campaign-content"));
                         if(dataS.get('campaignType') == "T"){
                              switch (self.clickType){
                                  case "sent":
@@ -113,8 +117,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     self.active_ws = self.$el.parents(".ws-content");
                    
                  }});
-                self.options.app.showLoading(false,self.$el.find('.links-container'));
-                self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+                //self.options.app.showLoading(false,self.$el.find('.links-container'));
+                //self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+               
                 
             }
             ,
@@ -153,8 +158,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     percent = Math.ceil(percent);
                     percent = (isNaN(percent = parseInt(percent, 10)) ? 0 : percent)
                     var span = "";
-                     if(this.trackId != null  && this.trackId && (tab == "views" || tab == "sent" || tab == "pending" )){
-                          span = "<span> "+tab+" </span>"+this.options.app.addCommas(numbers)+"</strong>";
+                     if(this.trackId != null  && this.trackId && (tab == "Page Views" || tab == "Sent" || tab == "Pending" )){
+                          span = "<span> "+tab+" </span><strong>"+this.options.app.addCommas(numbers)+"</strong>";
                      }else{
                            span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";
                      }
@@ -231,6 +236,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+               /// this.active_ws.find(".contacts_listing #tblcontacts").css('margin-bottom','90px!important');
             },
              sentViews:function(ev){
                  if(ev){ 
@@ -304,6 +310,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.$el.find(".stats_listing").empty();
                 this.active_ws.find(".stats_listing").hide();
                 this.active_ws.find(".stats_listing").show();
+                
                 this.active_ws.find(".stats_listing #tblcontacts tbody #loading-tr").remove();
                  
             },
@@ -338,7 +345,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                  this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:subheading});
                 if(this.objSummary.get('campaignType') == "T"){
                     this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='nurture2'></span>&nbsp;"+this.options.params.trackName+" </li></ul>");
-                    this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> <b>"+ this.options.params.messageNo +"</b> Message </strong>")
+                    this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Message <b>"+ this.options.params.messageNo +"</b>  </strong>")
+                    this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    
                 }else{
                   var tags ="<ul>";
                             _.each(this.options.app.encodeHTML(this.objSummary.get('tags')).split(","),function(t){ 
@@ -354,29 +363,11 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 var previewIconCampaign = $('<a class="icon preview showtooltip" data-original-title="Preview Campaign"></a>');  
                 var copyIconCampaign = $('<a class="icon copy showtooltip" data-original-title="Copy Campaign"></a>');
                 var deleteIconCampaign = $('<a class="icon delete showtooltip" data-original-title="Delete Campaign"></a>');
-                copyIconCampaign.on('click',function(){
-                    that.copyCampaign(that.campNum);
-                });
                 var header_title =this.active_ws.find(".camp_header .edited  h2");
                 var action_icon = $('<div class="pointy"></div>")');
-                action_icon.append(copyIconCampaign);
-                action_icon.append(deleteIconCampaign);
                 header_title.append(action_icon); 
-                header_title.append(previewIconCampaign); 
-                this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                deleteIconCampaign.click(function(){
-                        
-                        that.options.app.showAlertDetail({heading:'Confirm Deletion',
-                        detail: that.options.app.messages[0].CAMPS_delete_confirm_error,                                                
-                        callback: _.bind(function(){
-                                that.$el.parents(".ws-content").find(".overlay").remove();
-                                that.deleteCampaign(that.campNum);
-                        },that)},
-                        that.$el.parents(".ws-content"));
-                      //}
-                });
-                
-                 previewIconCampaign.click(function(e){
+                header_title.append(previewIconCampaign);
+                   previewIconCampaign.click(function(e){
                        //active_ws.find(".camp_header .c-name h2,#campaign_tags").hide();
                        var camp_name = that.active_ws.find("#workspace-header").html();                                                
                         var dialog_width = $(document.documentElement).width()-60;
@@ -400,6 +391,30 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
 //                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
                         e.stopPropagation();     
                   })
+                
+                 if(this.objSummary.get('campaignType') == "T"){return;}
+                action_icon.append(copyIconCampaign);
+                action_icon.append(deleteIconCampaign);
+                
+                
+                copyIconCampaign.on('click',function(){
+                    that.copyCampaign(that.campNum);
+                });
+               
+                this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                deleteIconCampaign.click(function(){
+                        
+                        that.options.app.showAlertDetail({heading:'Confirm Deletion',
+                        detail: that.options.app.messages[0].CAMPS_delete_confirm_error,                                                
+                        callback: _.bind(function(){
+                                that.$el.parents(".ws-content").find(".overlay").remove();
+                                that.deleteCampaign(that.campNum);
+                        },that)},
+                        that.$el.parents(".ws-content"));
+                      //}
+                });
+                
+              
                 
             },
               sendTextPreview:function(){

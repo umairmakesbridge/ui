@@ -103,8 +103,11 @@ define([
                          //  $(".percent_stats").remove(); 
                            $(".pstats").remove(); 
                        }
-                        
-                    
+                       // || $(ev.target).parents(".ocp_stats").length > 0
+                       //if(!($(ev.target).hasClass('metericon')) ){
+                        // $('.percent_stats').find(".ocp_stats").remove();
+                      // }
+                          
                        $(".tagbox-addbox").remove(); 
                        $("#camp_tags").removeClass("active");
                        $(".tooltip-inner").parents(".tooltip").remove();                       

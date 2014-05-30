@@ -2156,101 +2156,100 @@ position:relative;
    width: 24px;
 height: 16px;
 }
-
 .percent_stats {
-    float: left;
-    margin: 0 0 0 10px;}
-	
+   float: left;
+   margin: 0 0 0 10px;}
+
 .percent_stats .metericon {
-    background: url("../img/metericons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-    height: 20px;
-    width: 20px;
+   background: url("../img/metericons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+   height: 24px;
+   width: 24px;
 }
-.percent_stats .metericon { }
+.percent_stats .metericon { background-position:-96px 0;}
 .percent_stats .metericon.open  { background-position:-0px 0; }
-.percent_stats .metericon.click  { background-position:-20px 0;  }
-.percent_stats .metericon.pageview  { background-position:-40px 0; }
-.percent_stats .metericon.conversion  { background-position:-60px 0; }
+.percent_stats .metericon.click  { background-position:-24px 0;  }
+.percent_stats .metericon.pageview  { background-position:-48px 0; }
+.percent_stats .metericon.conversion  { background-position:-72px 0; }
 
 
 .percent_stats:hover div.ocp_stats { display:block;}
 
 .percent_stats div.ocp_stats {
-	display:none; 
-    left: -6px;
-    position: absolute;
-    top: 24px;
-	width: 330px;
-	padding:12px;
-	background:#fff;
-    z-index: 9;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	
-    box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-    -moz-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-    -webkit-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-	}
+display:none; 
+   left: -6px;
+   position: absolute;
+   top: 24px;
+width: 330px;
+padding:12px;
+background:#fff;
+   z-index: 9;
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+
+   box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+   -moz-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+   -webkit-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+}
 .percent_stats div.ocp_stats:after {
-    border-bottom: 7px solid #fff;
-    border-left: 7px solid rgba(255, 255, 255, 0);
-    border-right: 7px solid rgba(255, 255, 255, 0);
-    content: "";
-    display: block;
-    left: 9px;
-    position: absolute;
-    top: -6px;
+   border-bottom: 7px solid #fff;
+   border-left: 7px solid rgba(255, 255, 255, 0);
+   border-right: 7px solid rgba(255, 255, 255, 0);
+   content: "";
+   display: block;
+   left: 9px;
+   position: absolute;
+   top: -6px;
 }
 
 
 .percent_stats div.ocp_stats .elevel {
-    float: right;
-    margin: 3px 0 0;
-    width: 160px;
+   float: right;
+   margin: 3px 0 0;
+   width: 160px;
 }
 
 .percent_stats div.ocp_stats h4 {
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+   font-size: 13px;
+   letter-spacing: 1px;
+   text-transform: uppercase;
 }
 .percent_stats div.ocp_stats ul {
-     display: ;
-    z-index: 9;
-	 padding: 3px 0 0;
-	overflow:hidden;	
+    display: ;
+   z-index: 9;
+padding: 3px 0 0;
+overflow:hidden;	
 }
 
 
 
 .percent_stats div.ocp_stats li {
-    color: #94b0c1;
-    line-height: 18px;
-	font-size:12px;
+   color: #94b0c1;
+   line-height: 18px;
+font-size:12px;
 } 
 
 .percent_stats div.ocp_stats li strong {
-    display: block;
-    font-size: 24px;
-    line-height: 36px;
-    margin: 10px 0 0;
-    text-align: center;
+   display: block;
+   font-size: 24px;
+   line-height: 36px;
+   margin: 10px 0 0;
+   text-align: center;
 }
 .percent_stats div.ocp_stats li strong sup { font-size:14px; }
 .percent_stats div.ocp_stats li span {
-    display: block;
-    font-size: 12px;
-    margin: 0 auto;
-    padding: 0 0 0 14px;
-    text-align: center;
-    width: 58px;
+   display: block;
+   font-size: 12px;
+   margin: 0 auto;
+   padding: 0 0 0 14px;
+   text-align: center;
+   width: 58px;
 }
 .percent_stats div.ocp_stats li i {
-    display: block;
-    float: left;
-    height: 18px;
-    width: 22px;
+   display: block;
+   float: left;
+   height: 18px;
+   width: 22px;
 }
 .percent_stats div.ocp_stats li.open i { background: url("../img/openicon.png") no-repeat scroll 0 center ;  }
 .percent_stats div.ocp_stats li.click i { background: url("../img/clickicon.png") no-repeat scroll 0 center ;  }
@@ -2259,30 +2258,70 @@ height: 16px;
 
 
 
-
-
 .meterdd {
-    background: url("../img/meter.png") no-repeat scroll 0 0 #FFFFFF !important;
-    border-radius: 2px;
-    float: left;
-    height: 75px;
-    margin: 14px 8px 0;
-    width: 140px;
+   background: url("../img/meter.png") no-repeat scroll -560px 0 #FFFFFF ;
+   border-radius: 2px;
+   float: left;
+   height: 95px;
+position:relative;
+   margin: 14px 8px 0;
+   width: 140px;
 }
 .meterdd.open  {
-    background-position: 0 0;
+   background-position: 0 0 ;
 }
 .meterdd.click {
-    background-position: -140px 0 !important;
+   background-position: -140px 0 ;
 }
 .meterdd.pageview {
-    background-position: -280px 0 !important;
+   background-position: -280px 0 ;
 }
 .meterdd.conversion {
-    background-position: -420px 0 !important;
+   background-position: -420px 0 ;
 }
 
 
+.meterdd span {
+   display: block;
+   height: 30px;
+   position: absolute;
+   width: 34px;
+}
+.meterdd span.open { left: 6px; top: 37px;}
+.meterdd  span.click {  left: 34px;  top: 7px;}
+.meterdd span.pageview { right: 34px; top: 7px;}
+.meterdd  span.conversion { right: 6px; top: 37px;}
+
+.contacts_listing .view-profile:hover{
+    color: #0080CA!important;
+}
+.bounce-type > strong {
+    background: url("../img/bounceicon.png") no-repeat scroll 8px 23px;
+    color: #98B2C6;
+    display: inline-block;
+    font-size: 13px;
+	font-weight: normal;
+    margin: 0;
+    padding: 5px 10px 5px 35px;
+}
+.bounce-type > span {
+    float: left;
+    display: inline-block;
+    padding: 0px 10px 0px 0px;
+    color: #5E7684;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: normal;
+}
+.bounce-type > em {
+    color: #9BABB4;
+    display: block;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 18px;
+    margin: 0px 0px 0px -28px;
+    text-align: left;
+}
 
 
 
