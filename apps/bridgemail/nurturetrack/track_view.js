@@ -39,9 +39,14 @@ function (template,messagesCollection,messageView) {
             },
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
+                $("body").css("overflow-y","hidden");
+                this.$el.on("click",_.bind(this.closeView,this));
             },
             closeView:function(){
                 this.$el.remove();
+                if($(".overlay,.modal-backdrop").length==0){
+                    $("body").css("overflow-y","auto");
+                }                
             },
             init:function(){
                 this.setSize();

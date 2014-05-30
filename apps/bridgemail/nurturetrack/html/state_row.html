@@ -29,7 +29,7 @@
 </div></td>
 <td width="90px"><div>
 <div class="colico pgview count-click" style="min-width:90px" click-type="views">
-    <strong><span><em>Page Views</em><%- this.app.addCommas(model.get('pageViewsCount'))%></span></strong>
+    <strong><span><em>Page Views</em><% if(model.get('pageViewsCount')=='0'){print('0')} else {print('<a>'+this.app.addCommas(model.get('pageViewsCount')) +'</a>') } %></span></strong>
 </div>
 </div>
 </td>

@@ -36,7 +36,7 @@ function (template) {
             initControls:function(){
               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
-            messagePreview:function(){
+            messagePreview:function(e){
                 var camp_id = this.model.get("campNum.encode");                                		
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
@@ -54,6 +54,7 @@ function (template) {
                  dialog.getBody().html(tmPr.$el);
                  tmPr.init();
                },this));
+               e.stopPropagation();
             }
             
         });

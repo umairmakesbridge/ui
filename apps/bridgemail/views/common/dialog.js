@@ -90,11 +90,14 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                             }
                           },this))
                           $("#header,#activities").hide();
+                          $("body").css("overflow-y","hidden");
                         },
-                        hide:function(){
-                            
+                        hide:function(){                            
                             this.$el.modal("hide");
                             this.doubleBlackOut(false);
+                           if($(".overlay,.modal-backdrop").length==0){
+                                $("body").css("overflow-y","auto");
+                            }
                         },
                         getBody:function(){
                             return this.$(".modal-body");

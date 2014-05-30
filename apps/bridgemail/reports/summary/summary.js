@@ -44,6 +44,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 $(window).resize(_.bind(this.scrollTop,this));
                 //console.log(this.options);
             },
+            refreshWorkSpace:function(options){
+                 if(options && options.params){
+                    this.clickType = options.params.clickType;
+                    this.fetchStats();
+                 }
+            },
             addLinks:function(){
                this.$el.find('.links-container').prepend(new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum}).el);  
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
@@ -66,8 +72,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     _data['type'] = "messageStats";
                     //type=get&trackId=kzaqwKb26Dd17Mj20kbhui&triggerOrder=1&status=C&searchText=jay
                 }
-                 self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                    self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+                self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
+                self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                 this.stats.fetch({data:_data,success:function(data){
                     var _data = {};
                     _data['type'] = self.type;

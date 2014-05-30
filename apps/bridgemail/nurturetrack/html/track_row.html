@@ -2,7 +2,7 @@
 <td width="100%"><div>
         <div class="name-type">
             <h3>
-                <a  title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="showtooltip edit-track"><%- model.get('name')%></a> 
+                <a  title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="showtooltip edit-track"><%- this.app.decodeHTML(model.get('name')) %></a> 
                 <% if(model.get('status')==='D'){  %>
                 <a class="cstatus pclr1">Paused </a>
                 <% } else {

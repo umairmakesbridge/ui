@@ -10315,7 +10315,7 @@ display: block;
     display: block;
     float: none;
     margin: 15px auto;
-    width: 130px;
+    width: 152px;
 }
 #nurturetargets .col2 { width: 79%; }
 
@@ -10924,7 +10924,7 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 }
 .nurtureimg .droppanel h4 img { margin-bottom:5px;}
 .nurtureimg .btn-blue { margin:10px; }
-.nurtureimg .btn-blue span{ padding:0 24px; }
+.nurtureimg .btn-blue span{ padding:0 10px; }
 
 
 .nurturw_wizard .msg .sumry { float:left; width:75% }
@@ -11003,9 +11003,9 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 .tileview.t_v_pop .thumbnails > li .thumbnail { height:397px;}
 .tileview.t_v_pop .thumbnail .caption h3 { margin:0 0 8px; height:28px; }
 .tileview.t_v_pop .thumbnail .caption h3 a { float:left; font-size:16px;}
-.tileview.t_v_pop .thumbnail .caption h3 a:first-child { width: 160px;}
+.tileview.t_v_pop .thumbnail .caption h3 a:first-child { width: 216px;overflow-x: hidden; text-overflow: ellipsis;}
 .tileview.t_v_pop .thumbnail  .btm-bar > a.icon.preview { width:30px; float:right; margin-top:1px;}
-.tileview.t_v_pop .thumbnail  .btm-bar > a.icon.preview:hover {background: url("../img/preview-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+.tileview.t_v_pop .thumbnail  .btm-bar > a.icon.preview:hover {background: url("../img/preview-blue.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 
 .tileview.t_v_pop .thumbnail  .btm-bar a.cstatus { margin: 8px 0 0 -3px; }

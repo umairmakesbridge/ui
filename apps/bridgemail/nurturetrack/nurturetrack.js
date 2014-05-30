@@ -508,7 +508,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                      
                 },
                 insertImage:function(obj){
-                   this.showImage(obj.imgurl);
+                   this.showImage(obj.imgthumb);
                    this.saveImage(obj.imgencode);
                 },
                 saveAllMessages:function(obj){

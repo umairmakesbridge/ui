@@ -52,7 +52,7 @@
                   <%}else{%>
                   <div class="subscribers">
                   <%}%>
-                      <strong><span><em>Contacts</em><%if(this.model.get('populationCount') !="0" && this.model.get('status') =="D"){%><a class="pageview showtooltip" data-original-title="Click to view population detail" data-id="<%=this.model.get('filterNumber.encode')%>"><%=populationCount%></a><%}else{%><%=this.options.app.addCommas(this.model.get('populationCount'))%><%}%></span></strong>
+                      <strong><span><em>Contacts</em><%if(this.model.get('populationCount') !="0" && this.model.get('status') =="D" && !this.hidePopulation){%><a class="pageview showtooltip" data-original-title="Click to view population detail" data-id="<%=this.model.get('filterNumber.encode')%>"><%=populationCount%></a><%}else{%><%=this.options.app.addCommas(this.model.get('populationCount'))%><%}%></span></strong>
                         <%if(this.model.get('status') !="D"){%> 
                             <div class="prgressbar">    
                                 <span style="width:<%=this.getProgressBar()%>" class="prgrss"> </span>

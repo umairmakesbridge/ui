@@ -34,7 +34,7 @@
       %>      
   </div>
   <div class="caption nurture-caption">
-      <h3><a title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="edit-track showtooltip"><%- model.get('name')%></a></h3>
+      <h3><a title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="edit-track showtooltip"><%- this.app.decodeHTML(model.get('name'))%></a></h3>
     <% if(model.get('status')==='D'){  %>
     <a class="cstatus pclr1">Paused </a> 
     <% } else {

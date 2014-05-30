@@ -263,7 +263,7 @@ function (template,highlighter) {
                         },
                         reportShow:function(){
                                         var camp_id=this.model.get('campNum.encode');
-                                        this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+camp_id,tab_icon:'campaign-summary-icon'});
+                                        this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});
                         },
                         draftBtnClick: function(){
                              var camp_obj = this.sub;

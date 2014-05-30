@@ -21,8 +21,7 @@ function (template,moment,highlighter) {
               'click .message-view':'viewNurtureTrack',
               'click .report-bar':'reportNT',
               'click .t-scroll p i.ellipsis':'expandTags',
-              'mouseleave .thumbnail':'collapseTags',
-              
+              'mouseleave .thumbnail':'collapseTags'              
             },
             /**
              * Initialize view - backbone

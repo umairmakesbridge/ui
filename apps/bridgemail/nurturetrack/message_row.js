@@ -78,6 +78,7 @@ function (template) {
                     this.$(".timer-group button:first-child").removeClass("active");
                     this.$(".timer-group button:last-child").addClass("active");
                     this.$(".set-time").show();
+                    this.$(".set-instant").hide();
                 }
                 else{
                     this.$(".timebox-hour").val("09");
@@ -130,9 +131,11 @@ function (template) {
                 var btn = $.getObj(e,"button");
                 if(btn.attr("rel")=="i"){
                     this.$(".set-time").hide();
+                    this.$(".set-instant").show();
                 }
                 else{
                     this.$(".set-time").show();
+                    this.$(".set-instant").hide();
                 }
             },
             renameLabel:function(label,ele){
@@ -165,7 +168,7 @@ function (template) {
             editMessage:function(){
                 var dialog_width = $(document.documentElement).width()-50;
                 var dialog_height = $(document.documentElement).height()-162;
-                var dialog = this.app.showDialog({title:"'"+this.messageLabel+"' Settings",
+                var dialog = this.app.showDialog({title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                         headerEditable:false,                          
                         bodyCss:{"min-height":dialog_height+"px"},
@@ -206,6 +209,7 @@ function (template) {
                   this.$(".camp-subject").html(this.app.encodeHTML(camp_json.subject));
                   if(camp_json.subject){
                     this.$(".title").html(this.app.encodeHTML(camp_json.subject));
+                    this.messageLabel = this.app.encodeHTML(camp_json.subject);
                   }
                   else{
                       this.messageLabel = 'Subject line goes here ...';
@@ -344,7 +348,7 @@ function (template) {
                      
                 },
                 insertImage:function(obj){
-                   this.showImage(obj.imgurl);
+                   this.showImage(obj.imgthumb);
                    this.saveImage(obj.imgencode);
                 }
             

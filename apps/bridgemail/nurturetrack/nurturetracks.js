@@ -438,7 +438,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                 else{
                     _stateDiv.removeClass("right-corner");
                 }
-                this.app.showLoading("Loading states...",_stateDiv.find(".states-area"));         
+                this.app.showLoading("Loading stats...",_stateDiv.find(".states-area"));         
                 require(["nurturetrack/report"],_.bind(function(report){                                    
                     var report_table = new report({page:this,stateDiv:_stateDiv,model:model});
                     _stateDiv.find(".states-area").html(report_table.$el);                    

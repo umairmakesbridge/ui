@@ -27,6 +27,7 @@ function (template) {
                 this.template = _.template(template);
                 this.showUseButton = this.options.showUse;
                 this.showRemoveButton = this.options.showRemove;
+                this.hidePopulation = this.options.hidePopulation
                 this.model.on('change',this.render,this);
                 this.render();
             },

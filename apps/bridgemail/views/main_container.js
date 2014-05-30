@@ -146,11 +146,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#workspace .workspace").append(wp_view.$el);
                         //wp_view.initScroll(wp_view.$el);
                         wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-
-                        var self = this;
-                        $("#wp_li_" + wp_count).click(function() {
-                            self.activeWorkSpace($(this));
-                        });
+                        
+                        
+                        $("#wp_li_" + wp_count).click(_.bind(function() {
+                            this.activeWorkSpace($("#wp_li_" + wp_count));
+                        },this));
                         
                         //Handling for tab hover 
                          $("#wp_li_" + wp_count).mouseover(function(){
@@ -201,7 +201,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             this.$(".tw-toggle button:last-child").click();
                         }
                         if (!workspace_li.hasClass("active")) {
-                            workspace_li.click();
+                            this.activeWorkSpace(workspace_li,options);
                         }
                         //setTimeout(_.bind(this.app.fixCampaignInputStepOne, this), 400);
                     }
@@ -229,7 +229,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             $(".ws-content ."+options.workspace_id+"_list").find(".r-choose-"+options.params.type).click();
                         }
                 },
-                activeWorkSpace: function(obj) {
+                activeWorkSpace: function(obj,options) {
 
                     if (!obj.hasClass("active")) {
                         obj.removeClass("hover");
@@ -245,6 +245,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             if (objAttr[0] === 'campaign') {
                                 this.app.fixEmailFrom();
                                 //this.app.fixCampaignInputStepOne();
+                            }
+                            if(obj.data("viewObj") && obj.data("viewObj").refreshWorkSpace){
+                                obj.data("viewObj").refreshWorkSpace(options);
                             }
                         }
                     }
@@ -298,7 +301,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var track_checksum = opt.checksum ? opt.checksum : 0;
                     this.addWorkSpace({type: '',
                         title: "Loading...",
-                        sub_title:'Nuture Track Details',
+                        sub_title:'Nurture Track Wizard',
                         tab_icon: 'nuturetrack',
                         workspace_id: 'nurturetrack_' + track_checksum,
                         url: 'nurturetrack/nurturetrack',
