@@ -37,6 +37,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             },
             render: function () {
                 this.fetchStats();
+                
                //
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
@@ -53,6 +54,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
+                this.options.app.showLoading("Loading Summary...",$(".ws-content.active").find(".campaign-content"));
                 var _data = {};
                 var self = this;
                 _data['type'] =  "stats";
@@ -67,7 +69,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 }
                  // if(typeof this.active_ws.find(".contacts_listing") !="undefined")
                      // this.active_ws.find(".contacts_listing").html('');
-                  this.options.app.showLoading('Loading Stats...',$(".campaign-content"));
+                 
                 this.stats.fetch({data:_data,success:function(data){
                     var _data = {};
                     _data['type'] = self.type;
@@ -75,11 +77,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     self.objSummary.fetch({data:_data,success:function(dataS){
                         
                          self.$el.html(self.template({stats:data,summary:dataS}));
-                         self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                         self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+                          
+                         //self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
+                         //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                           self.addGraphs(data);
                          self.setHeader(self);
-                           self.options.app.showLoading(false,$(".campaign-content"));
+                           self.options.app.showLoading(false,$(".ws-content.active").find(".campaign-content"));
                         if(dataS.get('campaignType') == "T"){
                              switch (self.clickType){
                                  case "sent":
@@ -110,8 +113,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     self.active_ws = self.$el.parents(".ws-content");
                    
                  }});
-                self.options.app.showLoading(false,self.$el.find('.links-container'));
-                self.options.app.showLoading(false,self.$el.find('.col-cstats'));
+                //self.options.app.showLoading(false,self.$el.find('.links-container'));
+                //self.options.app.showLoading(false,self.$el.find('.col-cstats'));
                
                 
             }

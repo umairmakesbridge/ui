@@ -213,17 +213,23 @@ function (template,moment) {
                      position = "-420px";
                      className='conversion';
                      converted = this.dateSetting(nurtureData.conversionDate,"/");
-                 }else if(pageViews !="0"){
+                     open = this.dateSetting(nurtureData.firstOpenDate ,"/")
+                     aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                     aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
+                }else if(pageViews !="0"){
                      position = "-280px";
                      className='pageview';
-                     aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
+                    aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                    open = this.dateSetting(nurtureData.firstOpenDate ,"/") 
+                    aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
                  }else if(click !="0"){
                      aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                     open = this.dateSetting(nurtureData.firstOpenDate ,"/")
                      position = "-140px"
                      className='click';
                  }else if(nurtureData.firstOpenDate  !=""){
                      open = this.dateSetting(nurtureData.firstOpenDate ,"/")
-                      position = "0px";
+                     position = "0px";
                      className='open';
                  }
                  var encode =this.model.get('subNum.encode')
@@ -257,7 +263,6 @@ function (template,moment) {
                    this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
             closeProgressMeter:function(){
-                console.log('dagh Acchay hy');
                 $('.percent_stats').find(".ocp_stats").remove();
             },
             firstLetterUpperCase:function(){

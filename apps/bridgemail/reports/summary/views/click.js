@@ -12,9 +12,7 @@ function (template) {
         return Backbone.View.extend({
             tagName:"tr",
             className:"erow",
-            events: {
-                
-            },
+            
             initialize: function () {
                  this.template = _.template(template);				
                  this.render();
@@ -46,7 +44,8 @@ function (template) {
                     var _date =  moment(sentDate,'YYYY-MM-DD');
                 
                 return _date.format("DD MMM YYYY");
-             }
+             },
+             
           
             
         });
