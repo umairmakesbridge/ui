@@ -31,7 +31,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click .scheduled-campaign': 'scheduleCamp',
                       'click .draft-campaign':'setDraftCampaign',
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
-                      'click .preview-camp':'previewCampaignstep4',
+                      //'click .preview-camp':'previewCampaignstep4',
                       'click .prev-iframe-campaign':'htmlTextClick',
                       'click .save-step2': function(obj){
                             var button = $.getObj(obj,"a");
@@ -3395,7 +3395,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 useImage:function(url){
                     this.$el.find("#image_url").val(url);
                 },
-                previewCampaignstep4:function(){
+                /*previewCampaignstep4:function(){
                     var active_ws = this.$el.parents(".ws-content");
                     var camp_name = active_ws.find("#workspace-header").html();                                                
                         var dialog_width = $(document.documentElement).width()-60;
@@ -3412,7 +3412,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              dialog.getBody().html(tmPr.$el);
                              tmPr.init();
                          },this));             
-                },
+                },*/
                 /**
                 * A customized button action/ Import from Highrise...
                 * @Require Module Conections highrise
