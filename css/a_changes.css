@@ -2159,38 +2159,37 @@ height: 16px;
 .percent_stats {
    float: left;
    margin: 0 0 0 10px;}
-
 .percent_stats .metericon {
-   background: url("../img/metericons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-   height: 24px;
-   width: 24px;
+    background: url("../img/metericons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    height: 30px;
+    width: 30px;
 }
-.percent_stats .metericon { background-position:-96px 0;}
+.percent_stats .metericon { background-position:-120px 0;}
 .percent_stats .metericon.open  { background-position:-0px 0; }
-.percent_stats .metericon.click  { background-position:-24px 0;  }
-.percent_stats .metericon.pageview  { background-position:-48px 0; }
-.percent_stats .metericon.conversion  { background-position:-72px 0; }
+.percent_stats .metericon.click  { background-position:-30px 0;  }
+.percent_stats .metericon.pageview  { background-position:-60px 0; }
+.percent_stats .metericon.conversion  { background-position:-90px 0; }
 
 
 .percent_stats:hover div.ocp_stats { display:block;}
 
 .percent_stats div.ocp_stats {
-display:none; 
-   left: -6px;
-   position: absolute;
-   top: 24px;
-width: 330px;
-padding:12px;
-background:#fff;
-   z-index: 9;
--webkit-border-radius: 2px;
--moz-border-radius: 2px;
-border-radius: 2px;
-
-   box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-   -moz-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-   -webkit-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
-}
+    display:none; 
+    left: -1px;
+    position: absolute;
+    top: 30px;
+    width: 330px;
+    padding:12px;
+    background:#fff;
+    z-index: 9;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    
+    box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+    -moz-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+    -webkit-box-shadow: 0 4px 8px  rgba(121, 150, 168, 0.6);
+    }
 .percent_stats div.ocp_stats:after {
    border-bottom: 7px solid #fff;
    border-left: 7px solid rgba(255, 255, 255, 0);
