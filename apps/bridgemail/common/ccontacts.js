@@ -106,15 +106,12 @@ function (template,Contacts,viewContact) {
                        if(that.where != "page"){
                            var height = that.$el.find(".stats_listing").outerHeight(true) ;
                            if(height < 360){
-                               if(height <= 210){
-                                   that.$el.find(".stats_listing").css({"height":"200px", "overflow-y":"auto"});
-                               }
-                               else{
+                               
                              that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
-                            }
+                            
                            }else{
                                 if(data1.models.length != 0)
-                                    that.$el.find(".stats_listing").css({"height":"200px", "overflow-y":"auto"});
+                                    that.$el.find(".stats_listing").css({"height":"273px", "overflow-y":"auto"});
                              if(height > 375){
                                     that.$el.find(".stats_listing").find('.stats-scroll').remove();
                               that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>") ;
