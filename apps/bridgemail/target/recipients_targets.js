@@ -103,7 +103,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
 
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app}).el);
+                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that}).el);
                             });
                             if (that.searchText) {
                                 that.showSearchFilters(that.searchText, that.objTargets.total);

@@ -1,4 +1,4 @@
-define(['text!target/html/target.html', 'bms-filters'],
+define(['text!target/html/target.html', 'bms-filters','bms-tags'],
         function(template, bmsfilters) {
             'use strict';
             return Backbone.View.extend({
@@ -78,7 +78,12 @@ define(['text!target/html/target.html', 'bms-filters'],
                                             camp_obj.showHideTargetTitle();
                                             camp_obj.app.showMessge("Target Renamed");
                                             camp_obj.app.removeCache("targets");
-                                            campview.loadTargets();
+                                            if(campview.loadTargets){
+                                                campview.loadTargets();
+                                            }
+                                            else if(campview.parent && campview.parent.loadTargets){
+                                                campview.parent.loadTargets();
+                                            }
                                         }
                                         else {
                                             camp_obj.app.showAlert(target_json[1], camp_obj.$el);
@@ -101,7 +106,12 @@ define(['text!target/html/target.html', 'bms-filters'],
                                             camp_obj.showHideTargetTitle();
                                             camp_obj.app.showMessge("Target Created");
                                             camp_obj.app.removeCache("targets");
-                                            campview.loadTargets();
+                                            if(campview.loadTargets){
+                                                campview.loadTargets();
+                                            }
+                                            else if(campview.parent && campview.parent.loadTargets){
+                                                campview.parent.loadTargets();
+                                            }
                                         }
                                         else {
                                             camp_obj.app.showAlert(camp_json[1], camp_obj.$el);
@@ -183,7 +193,12 @@ define(['text!target/html/target.html', 'bms-filters'],
                                     else {
                                         camp_obj.app.showAlert(false, camp_obj.$el);
                                     }
-                                    campview.loadTargets();
+                                    if(campview.loadTargets){
+                                        campview.loadTargets();
+                                    }
+                                    else if(campview.parent && campview.parent.loadTargets){
+                                        campview.parent.loadTargets();
+                                    }
                                 });
                     }
                     else {

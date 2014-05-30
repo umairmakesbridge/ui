@@ -41,10 +41,11 @@ function (template) {
                               this.app.showLoading(false,this.$el);                            
                               var _json = jQuery.parseJSON(data);                              
                               if(_json[0]!=="err"){                                                                  
-                                 this.dialog.hide();
-                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this.parent});                                 
-                                 this.parent.addCountHeader();
-                                 this.parent.fetchTracks();
+                                 this.dialog.hide();                                 
+                                 if(this.parent.addCountHeader){
+                                    this.parent.addCountHeader();
+                                    this.parent.fetchTracks();
+                                 }
                                  this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this.parent});
                               }
                               else{

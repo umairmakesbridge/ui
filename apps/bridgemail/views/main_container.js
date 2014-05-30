@@ -68,6 +68,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     },
                     'click .new-campaign': 'createCampaign',
                     'click .new-template': 'createTemplate',
+                    'click .naturetrack-li':'createNurtureTrack',
                     'click .new-graphics':'createGraphics',
                     'click .view-contacts': 'viewContacts',
                     'click .campaign-listing': 'campaignListing',
@@ -518,6 +519,21 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
                     },this));
+                },
+                createNurtureTrack:function(){
+                    var dialog = this.app.showDialog({title:'New Nurture Track',
+                      css:{"width":"650px","margin-left":"-325px"},
+                      bodyCss:{"min-height":"100px"},							   
+                      headerIcon : 'new_headicon',
+                      buttons: {saveBtn:{text:'Create'} }                                                                           
+                  });
+                  this.app.showLoading("Loading...",dialog.getBody());
+                  require(["nurturetrack/newnurturetrack"],_.bind(function(trackPage){                                     
+                      var mPage = new trackPage({page:this,newdialog:dialog});
+                      dialog.getBody().html(mPage.$el);
+                      mPage.$("input").focus();
+                      dialog.saveCallBack(_.bind(mPage.createNurtureTrack,mPage));
+                  },this));  
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;

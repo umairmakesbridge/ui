@@ -124,8 +124,7 @@ function (template) {
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                               headerEditable:true,
                               bodyCss:{"min-height":dialog_height+"px"},
-                              headerIcon : 'targetw',
-                              buttons: {saveBtn:{text:'Save Target'} }                                                                           
+                              headerIcon : 'targetw'
                         });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
