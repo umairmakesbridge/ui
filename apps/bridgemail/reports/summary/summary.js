@@ -392,7 +392,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         e.stopPropagation();     
                   })
                 
-                 if(this.objSummary.get('campaignType') == "T"){return;}
+                 if(this.objSummary.get('campaignType') == "T"){
+                     this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                     return;
+                 }
                 action_icon.append(copyIconCampaign);
                 action_icon.append(deleteIconCampaign);
                 
