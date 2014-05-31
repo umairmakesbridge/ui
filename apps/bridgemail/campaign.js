@@ -3306,12 +3306,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var camp_json = jQuery.parseJSON(data);                                                      
                         if(camp_json[0]!=="err"){      
                            if(flag=='S'){ 
-                                camp_obj.showScheduleBox();
-                                camp_obj.states.step4.camp_status = 'P';
                                 camp_obj.rescheduled = true;
                                 camp_obj.hidecalender = true;
-                                camp_obj.setScheduleArea();
+                                camp_obj.states.step4.camp_status = 'P';
                                 camp_obj.scheduleStateCamp();
+                                camp_obj.setScheduleArea();
+                                camp_obj.showScheduleBox();
                                 camp_obj.app.showMessge("Campaign Scheduled Successfully!");
                            }
                            else{
