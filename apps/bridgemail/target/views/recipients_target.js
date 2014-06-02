@@ -64,7 +64,7 @@ function (template) {
                 },
                 refreshTarget:function(ev){
                     if(this.model.get('filtersCount') == "0" || this.model.get('filtersCount') == ""){
-                        this.options.app.showAlert("This target can't be refresh, please edit target and add filters to refresh.",$("body"),{fixed:true}); 
+                        this.options.app.showAlert("This Target is empty and can't be refreshed. Please add filters in it.",$("body"),{fixed:true}); 
                         return ;
                     }
                     var that = this;
