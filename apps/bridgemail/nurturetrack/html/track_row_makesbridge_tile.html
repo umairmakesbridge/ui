@@ -1,0 +1,30 @@
+<div class="thumbnail temp-thumbnail">
+  <div class="img">                               
+      <div class="two">                              
+        <a class="usebtn use-track"><span>Use</span></a>
+        <a class="previewbtn" id=""><span>Preview</span></a>
+      </div>              
+                                
+      <% if(model.get('thumbURL')){  %> 
+      <span>
+       <img src="<%- this.app.decodeHTML(model.get('thumbURL'))%>" data-src="holder.js" alt="">
+       </span>
+     <% } else {
+       %>  
+       <img src="img/nurtureimg.png" data-src="holder.js" alt="">              
+      <%}      
+      %>      
+  </div>
+  <div class="caption nurture-caption">
+      <h3><a class="edit-track showtooltip" title="Click to copy template"><%- this.app.decodeHTML(model.get('name'))%></a></h3>    
+   <a class="cstatus pclr1">Template</a>    
+   <div class="t-scroll">                         
+    <p>
+         <%= this.showTagsTemplate() %>
+    </p>
+    </div>    
+    <div class="btm-bar">        
+        <span style="float:left"><span class="icon mail message-view"></span><em><%- model.get('msgCount')%></em></span>        
+    </div>
+  </div>
+</div>

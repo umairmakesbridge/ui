@@ -13,7 +13,8 @@ function (template) {
              * Attach events on elements in view.
             */
             events: {
-              'click .preview':'messagePreview'
+              'click .previewmsg':'messagePreview',
+              'click .report':'reportShow'
             },
             /**
              * Initialize view - backbone
@@ -55,6 +56,11 @@ function (template) {
                  tmPr.init();
                },this));
                e.stopPropagation();
+            },
+            reportShow:function(){                
+                //this.parent.closeView();
+                var camp_id=this.model.get('campNum.encode');
+                this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.model.get('triggerOrder'),trackName:this.parent.trackName,trackId:this.parent.trackId},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
             }
             
         });

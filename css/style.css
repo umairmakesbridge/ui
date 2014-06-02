@@ -11000,7 +11000,7 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 
 
 .tileview.t_v_pop { background:none; }
-.tileview.t_v_pop .thumbnails > li .thumbnail { height:397px;}
+/*.tileview.t_v_pop .thumbnails > li .thumbnail { height:397px;}*/
 .tileview.t_v_pop .thumbnail .caption h3 { margin:0 0 8px; height:28px; }
 .tileview.t_v_pop .thumbnail .caption h3 a { float:left; font-size:16px;}
 .tileview.t_v_pop .thumbnail .caption h3 a:first-child { width: 216px;overflow-x: hidden; text-overflow: ellipsis;}

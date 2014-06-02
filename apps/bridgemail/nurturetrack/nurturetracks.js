@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','jquery.bmsgrid','jquery.searchcontrol'],
-function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
+define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','nurturetrack/track_row_makesbridge_tile','jquery.bmsgrid','jquery.searchcontrol'],
+function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,trackRowMakesbrdigeTile) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nutrue Track listing view, depends on search control, chosen control, icheck control
@@ -38,7 +38,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
             render: function () {
                this.$el.html(this.template({}));                                       
                this.$tracksArea = this.$(".template-container");     
-               this.$trackTileArea =  this.$("ul.thumbnails");
+               this.$trackTileArea =  this.$(".user_tracks ul.thumbnails");
                this.initControls();               
                this.fetchTracks();               
             }
@@ -60,7 +60,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                 this.tracksRequest.fetch({data:{type:'counts'},
                     success: _.bind(function (collection, response) {  
                         var header_part = $('<ul class="c-current-status">\n\
-                        <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Nurture Track Templates</a></li>\n\
+                        <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Templates</a></li>\n\
                         <li class="usertrackcount" style="display:none"><a ><span class="badge pclr20">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
                         <div class="savedmsg" style="margin:2px 0 0;"> <span class="playingicon"></span> '+response.playCount+' Playing </div>');
@@ -91,17 +91,17 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                      showicon: 'yes',
                      iconsource: 'campaigns'
               });
-               this.$(".nuture-search-tile").searchcontrol({
+               this.$(".user_tracks .nuture-search-tile").searchcontrol({
                      id:'nuture-search',
                      width:'320px',
                      height:'22px',
-                     gridcontainer: this.$('#content-1'),
+                     gridcontainer: this.$('.user_tracks #content-1'),
                      placeholder: 'Search nurture tracks',                     
                      showicon: 'yes',
                      iconsource: 'campaigns',
                      movingElement: 'li',
                      query:'a.edit-track',
-                     emptyMsgContainer:this.$('#content-1')
+                     emptyMsgContainer:this.$('.user_tracks #content-1')
               });
               
               this.$("#nurturetrack_grid").bmsgrid({
@@ -119,9 +119,21 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                      width:'320px',
                      height:'22px',                     
                      gridcontainer: this.$('#bms_nurturetrack_grid'),
-                     placeholder: 'Search makesbridge nurture tracks',                     
+                     placeholder: 'Search nurture track templates',                     
                      showicon: 'yes',
                      iconsource: 'campaigns'
+              });
+              this.$(".bms_tracks .nuture-search-tile").searchcontrol({
+                     id:'nuture-search',
+                     width:'320px',
+                     height:'22px',
+                     gridcontainer: this.$('.bms_tracks #content-1'),
+                     placeholder: 'Search nurture track templates',                     
+                     showicon: 'yes',
+                     iconsource: 'campaigns',
+                     movingElement: 'li',
+                     query:'a.edit-track',
+                     emptyMsgContainer:this.$('.bms_tracks #content-1')
               });
              
               this.$(".message-search").searchcontrol({
@@ -142,7 +154,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                     usepager : false,
                     colWidth : ['100%','90px','132px']
                 });
-                this.$tracksBmsContainer = this.$("#bms_nurturetrack_grid tbody");             
+                this.$tracksBmsContainer = this.$("#bms_nurturetrack_grid tbody");      
+                this.$trackTileBmsArea = this.$(".bms_tracks ul.thumbnails");
             },
             /**
              * Fetching contacts list from server.
@@ -257,6 +270,9 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                         for(var s=this.offset;s<collection.length;s++){
                             var trackView = new trackRowMakesbrdige({ model: collection.at(s),sub:this });                                                            
                             this.$tracksBmsContainer.append(trackView.$el);
+                            
+                            var trackViewTile = new trackRowMakesbrdigeTile({ model: collection.at(s),sub:this });                                                            
+                            this.$trackTileBmsArea.append(trackViewTile.$el);
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -390,8 +406,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
             },
             showBmsTracks:function(){
                 this.$(".user_tracks").hide();
-                this.$(".bms_tracks").fadeIn();
-                this.$(".nurturelisting").show();
+                this.$(".bms_tracks").fadeIn();                
                 this.ws_header.find(".bmstrackcount").hide();
                 this.ws_header.find(".usertrackcount").show();                
                 if(this.makesbridge_tracks ===false){
@@ -408,16 +423,21 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige) {
                 var obj = $.getObj(e,"button");
                 if(!obj.hasClass("active")){
                     this.$(".tile-list button").removeClass("active");
-                    obj.addClass("active");
+                    if(obj.hasClass("btn-tiles")){
+                        this.$(".btn-tiles").addClass("active");
+                    }
+                    else{
+                        this.$(".btn-listing").addClass("active");
+                    }                    
                     if(obj.hasClass("btn-listing")){
                         this.$(".nuture-search-tile").hide();
-                        this.$(".nuture-search").show();
+                        this.$(".nuture-search,.bms-nurture-search").show();
                         this.$(".nt_listing").show();
                         this.$(".tileview").hide();
                     }
                     else{
                         this.$(".nuture-search-tile").show();
-                        this.$(".nuture-search").hide();
+                        this.$(".nuture-search,.bms-nurture-search").hide();
                         this.$(".nt_listing").hide();
                         this.$(".tileview").show();
                     }

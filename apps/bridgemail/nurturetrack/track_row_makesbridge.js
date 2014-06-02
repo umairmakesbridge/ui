@@ -13,7 +13,8 @@ function (template,highlighter) {
             */
             events: {              
               'click .use-track':'copyNurtureTrack',
-              'click .preview':'viewNurtureTrack'
+              'click .preview':'viewNurtureTrack',
+              'click .edit-track':'copyNurtureTrack'
             },
             /**
              * Initialize view - backbone

@@ -258,7 +258,7 @@ div.tooltip.tags-div{
 }
 .tooltip.bottom{
     padding:2px 0px;
-    margin-top:5px;
+    margin-top:8px;
 }
 .tagscont ul li > div.tooltip{
     display:none;
@@ -1360,6 +1360,9 @@ ul.tabs-btns li.active a{
 }
 .thumbnail .img > div a.previewbtn {
     background: url("../img/preview48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.usebtn {
+    background: url("../img/check48.png") no-repeat scroll center center #7B929F;
 }
 .thumbnail .img > div a.editbtn {
     background: url("../img/edit48.png") no-repeat scroll center center  #7B929F;
@@ -2900,4 +2903,10 @@ text-align:center;
 .nurture_msgslist.right-corner:after{
     right: 10px;
     left:auto;
+}
+.thumbnail .img > div a.main-action.play-track span{
+  background:url("../img/play48.png") no-repeat scroll left center rgba(0, 0, 0, 0);      
+}
+.thumbnail .img > div a.main-action.previewmsg span{
+    background:url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);    
 }

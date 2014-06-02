@@ -1,21 +1,29 @@
-<div class="thumbnail">
-    <div class="img">
-        <% if(model.get("thumbURL")) { %>
+<div class="thumbnail temp-thumbnail">
+  <div class="img">                               
+       <div>
+        <a class="main-action previewmsg">
+                <span>Preview</span>
+         </a>         
+      </div>              
+                                
+       <% if(model.get("thumbURL")) { %>
             <span>
                 <img src="<%- this.app.decodeHTML(model.get('thumbURL')) %>" data-src="holder.js" alt="" />
             </span>
         <% }else{ %>
             <img src="img/msgimg.png" data-src="holder.js" alt="" />
-        <% } %>
-        
+        <% } %>   
+  </div>
+  <div class="caption nurture-caption">
+      <h3><a id="<%- model.get('campNum.checksum')%>">Loading...</a></h3>
+    <a class="cstatus pclr22">Message <strong><%-model.get('triggerOrder')%></strong> </a>
+   <div class="t-scroll">                         
+    <p>
+         
+    </p>
+    </div>    
+    <div class="btm-bar">        
+        <span style="float:left"><span class="icon report showtooltip" title="Click to view report"></span></span>                
     </div>
-    <div class="caption">
-
-        <h3><a id="<%- model.get('campNum.checksum')%>">Loading...</a></h3>
-        <div class="btm-bar">
-            <a class="cstatus pclr22">Message <strong><%-model.get('triggerOrder')%></strong> </a>
-            <a class="icon preview showtooltip" title="Preview"></a>
-        </div>
-
-    </div>
+  </div>
 </div>

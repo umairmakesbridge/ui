@@ -3,9 +3,12 @@
       
       <% if(model.get('status')==='D'){  %>    
       <div>
-        <a class="playbtn play-track"><span>Play</span></a>
-        <a class="copybtn copy-track"><span>Copy</span></a>
+        <a class="main-action play-track">
+                <span>Play Track</span>
+         </a>  
+        <a class="previewbtn message-view"><span>Preview</span></a>
         <a class="editbtn edit-track"><span>Edit</span></a>
+        <a class="copybtn copy-track"><span>Copy</span></a>        
         <a class="deletebtn delete-track"><span>Delete</span></a>
       </div>
        <% } else {
@@ -56,7 +59,7 @@
     </div>    
     <div class="btm-bar">
         <span><span class="icon report-bar showtooltip" title="Click to view stats"></span></span>
-        <span ><span class="icon mail message-view showtooltip" title="Click to view messages"></span><em><%- model.get('msgCount')%></em> </span>
+        <span ><span class="icon mail message-view showtooltip" title="Click to preview messages"></span><em><%- model.get('msgCount')%></em> </span>
 
         <span><span class="icon time"></span><em title="Last edited on" class="showtooltip"><%- ntDate %></em></span>
     </div>
