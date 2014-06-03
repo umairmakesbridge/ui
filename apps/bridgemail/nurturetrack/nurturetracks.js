@@ -199,6 +199,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             
                             var trackViewTile = new trackRowTile({ model: collection.at(s),sub:this });                                                            
                             this.$trackTileArea.append(trackViewTile.$el);
+                            trackViewTile.tmPr.trimTags();
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -274,6 +275,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             
                             var trackViewTile = new trackRowMakesbrdigeTile({ model: collection.at(s),sub:this });                                                            
                             this.$trackTileBmsArea.append(trackViewTile.$el);
+                            trackViewTile.tmPr.trimTags();
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -302,6 +304,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     }
                 });
             },
+           
              /**
             * Fetch next records on scroll and resize.
             *

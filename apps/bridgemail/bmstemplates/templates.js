@@ -318,7 +318,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                 _.each(collection.models, _.bind(function(model){
                                                         var rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
                                                         this.$el.find('.thumbnails').append(rowView.$el);
-                                                       this.trimTags(rowView.$el);
+                                                       rowView.tmPr.trimTags();
                                                     },this));
                                                    newCount = this.totalCount - this.offset;
                                                    //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
@@ -337,23 +337,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                              }, this)
                             });
                 },
-              trimTags : function(rowView){
-                 var isElipsis = true;
-                 var totalTagsWidth = 0;
-                  $.each(rowView.find(".t-scroll p a"),function(k,val){
-                        totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
-                        if(totalTagsWidth > 350){
-                          if(isElipsis){
-                             $(val).before('<i class="ellipsis">...</i>');
-                             isElipsis = false;
-                          }
-                        }
-                    });
-                     
-                        /*if(val.length > 8 ){
-                          tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Templates With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
-                        }else{*/
-             },
+             
                 liveLoading:function(){
                     var $w = $(window);
                     var th = 200;

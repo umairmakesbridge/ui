@@ -45,18 +45,7 @@
       <a class="cstatus pclr18">Playing </a>                
      <%}
                 %>                 
-   <div class="t-scroll">                         
-    <p>
-<!--         <% if(model.get('tags')){  
-                    _.each(model.get('tags').split(","),function(t){ %>  
-                    <a><%- t %></a>
-                    <% }                        
-                        )
-                    }
-                    %>  -->
-         <%= this.showTagsTemplate() %>
-        <!--<i class="ellipsis">...</i>--></p>
-    </div>    
+   <div class="t-scroll"></div>    
     <div class="btm-bar">
         <span><span class="icon report-bar showtooltip" title="Click to view stats"></span></span>
         <span ><span class="icon message-tiles message-view showtooltip" title="Click to preview messages gallery"></span><em><%- model.get('msgCount')%></em> </span>

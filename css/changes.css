@@ -2880,7 +2880,7 @@ text-align:center;
     min-height: 135px;
     padding: 10px 10px 0;
     position: absolute;
-    width: 216px;
+   /* width: 216px; */
 }
 /*-------------*/
 .fromemail-group{
