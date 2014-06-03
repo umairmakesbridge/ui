@@ -677,8 +677,13 @@ input[type="text"].search-template{
     z-index: 99;
 }
 .customicon {    background: url("../img/customicon.png") no-repeat scroll 0 0 transparent;}
-.builticon {    background: url("../img/builtinicon.png") no-repeat scroll 0 0 transparent;
+.builticon {    background: url("../img/builtinicon.png") no-repeat scroll 0 0 transparent;                
     
+}
+.builticonnew {
+    background: url("../img/mb.png") no-repeat scroll 0 0 / contain #FFFFFF;
+    border-radius: 50%;
+    padding: 0;
 }
 
 .btm-bar .temp2,.btm-bar .temp3,.btm-bar .temp4,.btm-bar .temp5,.btm-bar .temp6,.btm-bar .temp7,.btm-bar .temp8,.btm-bar .temp9  {
@@ -2910,3 +2915,5 @@ text-align:center;
 .thumbnail .img > div a.main-action.previewmsg span{
     background:url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);    
 }
+.icon.message-tiles{background: url("../img/tiles-g.png") no-repeat scroll center center ;cursor: pointer}
+.icon.message-tiles:hover {background: url("../img/tiles-b.png") no-repeat scroll center center ;}

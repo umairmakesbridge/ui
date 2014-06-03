@@ -10931,11 +10931,6 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 
 
 .nurturelisting {}
-.nurturelisting .bmsgrid .bDiv tr td:first-child {
-    background-image: url("../img/logowm.png");
-    background-position: -23px -39px;
-    background-repeat: no-repeat;
-}
 .c-name h2 strong.cstatus {
     cursor: default;
     letter-spacing: 0.5px;

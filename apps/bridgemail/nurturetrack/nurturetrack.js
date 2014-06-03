@@ -96,6 +96,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     });
                    
                    this.loadData();
+                   this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                   
                 },
                 initTag:function(tags){                                    

@@ -14,7 +14,8 @@ function (template,highlighter) {
             events: {              
               'click .use-track':'copyNurtureTrack',
               'click .previewbtn':'viewNurtureTrack',
-              'click .edit-track':'copyNurtureTrack'
+              'click .edit-track':'copyNurtureTrack',
+              'click .message-view':'viewNurtureTrack'
             },
             /**
              * Initialize view - backbone

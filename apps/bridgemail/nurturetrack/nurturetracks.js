@@ -53,7 +53,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.addNewButton = this.current_ws.find(".show-add");
                this.addNewButton.attr("title","Add Nuture Track").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                this.addCountHeader();               
-               this.addNewButton.click(_.bind(this.addNurtureTrack,this))
+               this.addNewButton.click(_.bind(this.addNurtureTrack,this));
+               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
             },
             addCountHeader:function(){
                 this.ws_header.find(".c-current-status,.savedmsg").remove();
@@ -61,7 +62,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     success: _.bind(function (collection, response) {  
                         var header_part = $('<ul class="c-current-status">\n\
                         <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Templates</a></li>\n\
-                        <li class="usertrackcount" style="display:none"><a ><span class="badge pclr20">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
+                        <li class="usertrackcount"><a ><span class="badge pclr20">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
                         <div class="savedmsg" style="margin:2px 0 0;"> <span class="playingicon"></span> '+response.playCount+' Playing </div>');
                         var $header_part = $(header_part);                        
@@ -152,7 +153,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     colresize:false,
                     height:'100%',
                     usepager : false,
-                    colWidth : ['100%','90px','132px']
+                    colWidth : ['90px','100%','90px','132px']
                 });
                 this.$tracksBmsContainer = this.$("#bms_nurturetrack_grid tbody");      
                 this.$trackTileBmsArea = this.$(".bms_tracks ul.thumbnails");
@@ -407,8 +408,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             showBmsTracks:function(){
                 this.$(".user_tracks").hide();
                 this.$(".bms_tracks").fadeIn();                
-                this.ws_header.find(".bmstrackcount").hide();
-                this.ws_header.find(".usertrackcount").show();                
+                //this.ws_header.find(".bmstrackcount").hide();
+                //this.ws_header.find(".usertrackcount").show();                
                 if(this.makesbridge_tracks ===false){
                     this.fetchBmsTracks();
                 }
@@ -416,8 +417,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             showUserTracks:function(){
                 this.$(".bms_tracks").hide();
                 this.$(".user_tracks").fadeIn();                                
-                this.ws_header.find(".bmstrackcount").show();
-                this.ws_header.find(".usertrackcount").hide();
+             //  this.ws_header.find(".bmstrackcount").show();
+             //  this.ws_header.find(".usertrackcount").hide();
             },
             toggleView:function(e){
                 var obj = $.getObj(e,"button");

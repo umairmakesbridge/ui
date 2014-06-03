@@ -1,4 +1,5 @@
 <div class="thumbnail temp-thumbnail">
+  <div title="Stock Template" class="template-type builticonnew showtooltip"></div>  
   <div class="img">                               
       <div class="two">                              
         <a class="usebtn use-track"><span>Use</span></a>
@@ -17,14 +18,14 @@
   </div>
   <div class="caption nurture-caption">
       <h3><a class="edit-track showtooltip" title="Click to copy template"><%- this.app.decodeHTML(model.get('name'))%></a></h3>    
-   <a class="cstatus pclr1">Template</a>    
+   <a class="cstatus pclr20">Template</a>    
    <div class="t-scroll">                         
     <p>
          <%= this.showTagsTemplate() %>
     </p>
     </div>    
     <div class="btm-bar">        
-        <span style="float:left"><span class="icon mail message-view"></span><em><%- model.get('msgCount')%></em></span>        
+        <span style="float:left"><span title="Click to preview messages gallery" class="icon message-tiles message-view showtooltip"></span><em><%- model.get('msgCount')%></em></span>        
     </div>
   </div>
 </div>
