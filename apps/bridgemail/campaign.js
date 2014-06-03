@@ -943,6 +943,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   if(this.draftstate){
                       this.$('.schedule-camp').show(); // Show Calender
                         this.$('.sch-made').hide();
+                        this.$('.draft-campaign').hide();
                   }
                 },
                 setupCampaign:function(){

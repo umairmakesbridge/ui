@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template_row.html','jquery.highlight','jquery.customScroll'],
-function (template,highlighter) {
+define(['text!bmstemplates/html/template_row.html','jquery.highlight','common/tags_row','jquery.customScroll'],
+function (template,highlighter,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page
@@ -19,7 +19,7 @@ function (template,highlighter) {
                "click .previewbtn":'previewTemplate',
                'click .deletebtn':'deleteTemplate',
                'click .editbtn,.single-template':'updateTemplate',
-               'click .caption p a':'tagsClick',
+               
                'click .cat':'searchByCategory',
                'click .feat_temp':'featureClick',
                'click .rpath':'returnPath',
@@ -81,7 +81,7 @@ function (template,highlighter) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-                if(this.parent.searchString.searchType==="nameTag"){
+               /* if(this.parent.searchString.searchType==="nameTag"){
                         var searchVal = $.trim(this.parent.$("#search-template-input").val());
                         this.$(".thumbnail .caption h3 a").highlight(searchVal);
                         this.$(".thumbnail .caption p a").each(function(){
@@ -97,30 +97,20 @@ function (template,highlighter) {
                            $(this).highlight(tagText);
                        });
                         
-                    }
+                    }*/
+                this.showTagsTemplate();
                 
             },
             showTagsTemplate:function(){
-                   var tags = this.model.get('tags');
-                   var tag_array = tags.split(",");
-                   var elipsisflag = true;
-                   var tag_html ="";
-                    $.each(tag_array,function(key,val){
-                        if(tag_array.length > 8 && key > 6){
-                            if(elipsisflag){
-                            tag_html +='<i class="ellipsis">...</i>';
-                            elipsisflag = false;
-                            }
-                        }
-                        if(val.length > 8 ){
-                          tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Templates With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
-                        }else{
-                        tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Templates With  <strong>&#39;"+val+"&#39;</strong> Tag'>"+val+"</a>";
-                        }
-                        
-                    });
-                    return tag_html; 
+                     var tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.app,
+                                    parents:this.parent,
+                                    tags:this.model.get('tags')});
+                      this.$('.t-scroll').append(tmPr.$el);
+                      
                 },
+            
              showCPCEDButtons : function(){
                  var templates_html = '';
                  var adminTemplate = this.model.get('isAdmin')==='Y'?"admin-template":"";
@@ -128,8 +118,8 @@ function (template,highlighter) {
                                 this.$('.thumbnail').addClass(adminTemplate);
                                 if(this.isAdmin === "Y"){
                                     templates_html +='<a class="previewbtn"  id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
-                                    templates_html +='<a class="copybtn"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                     templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'" ><span >Edit</span></a>';
+                                    templates_html +='<a class="copybtn"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                     templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                                 }else{
                                     templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
@@ -137,8 +127,8 @@ function (template,highlighter) {
                                 }
                             }else{
                                 templates_html +='<a class="previewbtn" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
-                                templates_html +='<a class="copybtn" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                 templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
+                                templates_html +='<a class="copybtn" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
                                 templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                             }
                             return templates_html;
@@ -252,13 +242,7 @@ function (template,highlighter) {
                             this.parent.$('#clearsearch').hide();
                             this.parent.loadTemplates('search','returnpath');
             },
-          tagsClick: function(obj){
-                             var tag = $.getObj(obj,"a");
-                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                             this.parent.$('#search-template-input').val('');
-                             this.parent.$('#clearsearch').hide();
-                             this.parent.loadTemplates('search','tag',{text:tag.text()});  
-          },
+         
           mobileClick : function(){             
                              this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
                              this.parent.$('#search-template-input').val('');

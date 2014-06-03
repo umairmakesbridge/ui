@@ -316,8 +316,10 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     this.app.showLoading(false,this.$(".template-container"));
                                                       
                                                 _.each(collection.models, _.bind(function(model){
-                                                       this.$el.find('.thumbnails').append(new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass}).el);
-                                                   },this));
+                                                        var rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
+                                                        this.$el.find('.thumbnails').append(rowView.$el);
+                                                       this.trimTags(rowView.$el);
+                                                    },this));
                                                    newCount = this.totalCount - this.offset;
                                                    //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
                                                    if(collection.length<parseInt(newCount)){
@@ -331,10 +333,27 @@ function (template,highlight,templateCollection,templateRowView) {
                                                         this.$(".template-container").append('<p class="notfound">No Templates found'+search_message+'</p>');
                                                     }
                                                     this.$(".footer-loading").hide();
-                                                   
+                                                    
                                              }, this)
                             });
                 },
+              trimTags : function(rowView){
+                 var isElipsis = true;
+                 var totalTagsWidth = 0;
+                  $.each(rowView.find(".t-scroll p a"),function(k,val){
+                        totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
+                        if(totalTagsWidth > 350){
+                          if(isElipsis){
+                             $(val).before('<i class="ellipsis">...</i>');
+                             isElipsis = false;
+                          }
+                        }
+                    });
+                     
+                        /*if(val.length > 8 ){
+                          tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Templates With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
+                        }else{*/
+             },
                 liveLoading:function(){
                     var $w = $(window);
                     var th = 200;
