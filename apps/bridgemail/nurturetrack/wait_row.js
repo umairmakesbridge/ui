@@ -16,7 +16,8 @@ function (template,moment) {
                 'click .delete-row':'deleteRow',
                 'click .schedule-group button':'showWait',
                 'click .calendericon':function(){this.$("#waitdatetime").focus()},
-                'click .save-wait': 'saveWait'
+                'click .save-wait': 'saveWait',
+                'click .collapse-handle':'toggleAccordion'
             },
             /**
              * Initialize view - backbone
@@ -132,7 +133,29 @@ function (template,moment) {
                                }
                        },this));
                 }
-            }
+            },
+            toggleAccordion:function(){      
+                    var accordion_body = this.$(".collapse-body");
+                    if(accordion_body.height()){
+                       this.collapse()
+                    }
+                    else{
+                       this.expand(); 
+                    }
+                },
+                collapse:function(){
+                    var accordion_body = this.$(".collapse-body");
+                    accordion_body.stop(1).animate({height: 0},300, function(){
+                       $(this).hide();  
+                    });
+                },
+                expand:function(){
+                    var accordion_body = this.$(".collapse-body");
+                    accordion_body.show();  
+                    accordion_body.stop(1).animate({height: 58},300, function(){
+
+                    });
+                }
             
             
         });

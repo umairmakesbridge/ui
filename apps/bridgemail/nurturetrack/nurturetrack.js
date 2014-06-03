@@ -17,7 +17,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .add-wait':'addWait',
                     'click .browse-button-nt':"imageDialog",
                     'click .save-all-nt':'saveAllMessages',
-                    'click .play-nt': 'playNurtureTrack'
+                    'click .play-nt': 'playNurtureTrack',
+                    'click .expand-all':'expandAll',
+                    'click .collapse':'collpaseAll'
                 },
                 /**
                  * Initialize view - backbone
@@ -526,6 +528,25 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         }
                         this.$(".save-all-nt").addClass("saving");
                     }
+                },
+                expandAll:function(){
+                   for(var i=0;i<this.messages.length;i++){
+                        var _message =  this.messages[i];                            
+                        _message.expand();
+                        if(_message.waitView){                            
+                            _message.waitView.expand();
+                        }
+                    } 
+                }
+                ,
+                collpaseAll:function(){
+                   for(var i=0;i<this.messages.length;i++){
+                        var _message =  this.messages[i];                            
+                        _message.collapse();
+                        if(_message.waitView){                            
+                            _message.waitView.collapse();
+                        }
+                    } 
                 }
                 
 

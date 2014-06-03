@@ -11046,3 +11046,53 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 .tileview.t_v_pop .row-fluid [class*="span"]:first-child { margin-left:10px;}
 
 /* ----------------------- End of tiles view changes  --------------------- */
+.e_c_all {
+    background: url("../img/expand.png") no-repeat scroll 15px center #01AEED;
+    border: 0 none;
+    border-radius: 2px 2px 0 0;
+    bottom: 0;
+    box-shadow: 0 0 8px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    height: 46px;
+    line-height: 47px;
+    opacity: 0.7;
+    padding: 0 15px 0 45px;
+    position: fixed;
+    right: 70px;
+    text-align: center;
+    width: 135px;
+    z-index: 99999;
+}
+.e_c_all.collapse { background: url("../img/collapse.png") no-repeat scroll 15px center #01AEED;}
+.e_c_all:hover {opacity: 0.9; } 
+
+.refresh_btn {
+    background: none repeat scroll 0 0 #177FC7;
+    border-radius: 2px;
+    display: block;
+    float: right;
+    height: 40px;
+    margin: 0 0 0 5px;
+    width: 40px;
+-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	 }
+.refresh_btn i {
+    color: #748592;
+    display: block;
+    font-size: 0;
+	line-height:0;
+	text-indent:-999em;
+    font-weight: normal;
+    margin: 0 auto;
+    width: 40px;
+	height:40px;
+	background: url("../img/refresh-listing.png") no-repeat scroll center center ;
+}
+
+ .refresh_btn:hover {background: none repeat scroll 0 0 #97D61D;}
+.refresh_btn:hover i  { color:#fff; }

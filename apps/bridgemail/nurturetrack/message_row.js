@@ -18,7 +18,8 @@ function (template) {
              'click .edit-message ':'editMessage',
              'click .preview': 'previewCampaign',
              'click .save-message': 'saveMessage',
-             'click .message-image':'imageDialog'
+             'click .message-image':'imageDialog',
+             'click .accordion-heading':'toggleAccordion'
             },
             /**
              * Initialize view - backbone
@@ -165,7 +166,7 @@ function (template) {
             showLabel:function(ele){
                 ele.val(this.messageLabel);
             },
-            editMessage:function(){
+            editMessage:function(e){
                 var dialog_width = $(document.documentElement).width()-50;
                 var dialog_height = $(document.documentElement).height()-162;
                 var dialog = this.app.showDialog({title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
@@ -181,8 +182,9 @@ function (template) {
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                     sPage.init();
                 },this));      
+                e.stopPropagation();
             },
-            previewCampaign:function(){
+            previewCampaign:function(e){
                 var camp_id = this.object[0]['campNum.encode'];                
                 //var appMsgs = this.app.messages[0];				
                 var dialog_width = $(document.documentElement).width()-60;
@@ -200,6 +202,7 @@ function (template) {
                  dialog.getBody().html(tmPr.$el);
                  tmPr.init();
                },this));
+               e.stopPropagation();
             },
             loadCampaign:function(){               
               var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.object[0]['campNum.encode']+"&type=basic";
@@ -350,6 +353,28 @@ function (template) {
                 insertImage:function(obj){
                    this.showImage(obj.imgthumb);
                    this.saveImage(obj.imgencode);
+                },
+                toggleAccordion:function(){
+                    var accordion_body = this.$(".accordion-body");
+                    if(accordion_body.height()){
+                       this.collapse();
+                    }
+                    else{
+                       this.expand();
+                    }
+                },
+                collapse:function(){
+                    var accordion_body = this.$(".accordion-body");
+                    accordion_body.stop(1).animate({height: 0},300, function(){
+                       $(this).hide();  
+                    });
+                },
+                expand:function(){
+                    var accordion_body = this.$(".accordion-body");
+                    accordion_body.show();  
+                    accordion_body.stop(1).animate({height: 243},300, function(){
+
+                    });
                 }
             
         });
