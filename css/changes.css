@@ -2808,8 +2808,8 @@ text-align:center;
 .trim-text{
     overflow: hidden;
     text-overflow:ellipsis;
-    max-width: 39px;
-    height:18px;
+    max-width: 200px;
+  white-space: nowrap;
 }
 
 .thumbnail .caption p i.ellipsis {
@@ -2838,10 +2838,6 @@ text-align:center;
     line-height: 1.2;
     margin: 0;
     padding: 0;
-}
-.temp-tag{
-    max-width: 40px;
-    white-space: nowrap;
 }
 .temp-thumbnail{
     background: none repeat scroll 0 0 #FFFFFF;

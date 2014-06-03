@@ -63,6 +63,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 });
                                 dialog.getBody().html('<iframe src="//player.vimeo.com/video/'+video_id+'" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>');
                         }
+                        
                         e.stopPropagation();
                         e.preventDefault();
                     },
@@ -413,7 +414,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var link = _arr[_id].url;
                     window.open(link, 'HELPSUPPORT_' + _id, 'width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');                   
                 },
-                createCampaign: function() {
+                createCampaign: function(e) {
                     var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title: dialog_title,
