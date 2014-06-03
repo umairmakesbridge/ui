@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/track_row_makesbridge_tile.html','jquery.highlight','jquery.customScroll'],
-function (template,highlighter) {
+define(['text!nurturetrack/html/track_row_makesbridge_tile.html','jquery.highlight','common/tags_row','jquery.customScroll'],
+function (template,highlighter,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nurture track Makesbridge View to show on listing page
@@ -50,33 +50,21 @@ function (template,highlighter) {
                 
             },
             showTagsTemplate:function(){
-                   var tags = this.model.get('tags');
-                   var tag_array = tags.split(",");
-                   var elipsisflag = true;
-                   var tag_html ="";
-                    $.each(tag_array,function(key,val){
-                        if(tag_array.length > 8 && key > 6){
-                            if(elipsisflag){
-                            tag_html +='<i class="ellipsis">...</i>';
-                            elipsisflag = false;
-                            }
-                        }
-                        if(val.length > 8 ){
-                          //tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Track With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
-                          tag_html +="<a class='temp-tag trim-text'>"+val+"</a>";                            
-                        }else{
-                        //tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Track With <strong>&#39;"+val+"&#39;</strong> Tag'>"+val+"</a>";
-                        tag_html +="<a class='tag temp-tag'>"+val+"</a>";
-                        }
-                        
-                    });
-                    return tag_html; 
+                   this.tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.app,
+                                    parents:this.parent,
+                                    rowElement: this.$el,
+                                    type:'NT',
+                                    tags:this.model.get('tags')});
+                      this.$('.t-scroll').append(this.tmPr.$el);
                 },
             /**
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.showTagsTemplate();
             } ,
             viewNurtureTrack:function(){
                 this.app.showLoading("Loading...",this.parent.$el);

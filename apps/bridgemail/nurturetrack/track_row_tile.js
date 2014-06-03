@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/track_row_tile.html','moment','jquery.highlight','jquery.customScroll'],
-function (template,moment,highlighter) {
+define(['text!nurturetrack/html/track_row_tile.html','moment','jquery.highlight','common/tags_row','jquery.customScroll'],
+function (template,moment,highlighter,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nurture track View to show on listing page
@@ -19,9 +19,7 @@ function (template,moment,highlighter) {
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
               'click .message-view':'viewNurtureTrack',
-              'click .report-bar':'reportNT',
-              'click .t-scroll p i.ellipsis':'expandTags',
-              'mouseleave .thumbnail':'collapseTags'              
+              'click .report-bar':'reportNT',    
             },
             /**
              * Initialize view - backbone
@@ -62,29 +60,17 @@ function (template,moment,highlighter) {
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.showTagsTemplate();
             },
             showTagsTemplate:function(){
-                   var tags = this.model.get('tags');
-                   var tag_array = tags.split(",");
-                   var elipsisflag = true;
-                   var tag_html ="";
-                    $.each(tag_array,function(key,val){
-                        if(tag_array.length > 8 && key > 6){
-                            if(elipsisflag){
-                            tag_html +='<i class="ellipsis">...</i>';
-                            elipsisflag = false;
-                            }
-                        }
-                        if(val.length > 8 ){
-                          //tag_html +="<a class='showtooltip temp-tag trim-text' title='Click to View Track With <strong>&#39;"+val+"&#39;</strong>  Tag'>"+val+"</a>";                            
-                          tag_html +="<a class='temp-tag trim-text'>"+val+"</a>";                            
-                        }else{
-                        //tag_html +="<a class='showtooltip tag temp-tag' title='Click to View Track With <strong>&#39;"+val+"&#39;</strong> Tag'>"+val+"</a>";
-                        tag_html +="<a class='tag temp-tag'>"+val+"</a>";
-                        }
-                        
-                    });
-                    return tag_html; 
+                 this.tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.app,
+                                    parents:this.parent,
+                                    type:'NT',
+                                    rowElement: this.$el,
+                                    tags:this.model.get('tags')});
+                      this.$('.t-scroll').append(this.tmPr.$el);
                 },
             tagSearch:function(obj){
                 this.trigger('tagclick',$(obj.target).html());
@@ -189,37 +175,7 @@ function (template,moment,highlighter) {
                      view_page.init();
                  },this));
             },
-            expandTags: function(){
-              this.$('.t-scroll' ).css('height', '155px');  
-              this.$(".caption").animate({height:"250px"},250); 
-	      this.$(".caption p i.ellipsis").hide(); 
-              this.$(".caption p").css({'height':'auto','display':'block'});
-	      this.$(".btm-bar").css({"position":"absolute","bottom":"0"});
-	      this.$(".img > div").animate({bottom:"105px"});
-              this.$('.t-scroll' ).mCustomScrollbar(); 
-              this.isTrim = true;
-          },
-          collapseTags : function(e){
-              if(this.isTrim){
-                  var e;
-                  if(e !== window){
-                   e = e.toElement || e.relatedTarget;
-                  }
-                  //console.log(e.nodeName);
-                  if(e){
-                   if(e.nodeName === 'UL' || e == window){
-                        this.$(".t-scroll").mCustomScrollbar("destroy");
-                        this.isTrim = false;
-                        this.$('.t-scroll' ).removeAttr('style');
-                        this.$(".caption").animate({height:"145px"},250);
-                        this.$(".caption p i.ellipsis").show();
-                        this.$(".caption p").removeAttr('style');
-                        this.$(".btm-bar").removeAttr('style');
-                        this.$(".img > div").removeAttr('style');
-                   }
-               }
-              }
-          }
+
             
         });
 });

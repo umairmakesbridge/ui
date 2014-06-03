@@ -28,7 +28,7 @@ function (template,highlighter,tagView) {
                'click .mail':'mailIconClick',
                'click .view':'viewIconClick',
                'click .selecttemp':'selectTemplate',
-               'click .t-scroll p i.ellipsis':'expandTags',
+               //'click .t-scroll p i.ellipsis':'expandTags',
                'mouseleave .thumbnail':'collapseTags'
             },
             /**
@@ -43,7 +43,7 @@ function (template,highlighter,tagView) {
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.isAdmin = this.app.get("isAdmin");
-                    this.isTrim = false;
+                    
                     this.tagCount = 0;
                     //this.isAdmin = 'Y';
                     this.render();
@@ -102,12 +102,13 @@ function (template,highlighter,tagView) {
                 
             },
             showTagsTemplate:function(){
-                     var tmPr =  new tagView(
+                    this.tmPr =  new tagView(
                                    {parent:this,
                                     app:this.app,
                                     parents:this.parent,
+                                    rowElement: this.$el,
                                     tags:this.model.get('tags')});
-                      this.$('.t-scroll').append(tmPr.$el);
+                      this.$('.t-scroll').append(this.tmPr.$el);
                       
                 },
             
@@ -261,37 +262,8 @@ function (template,highlighter,tagView) {
           viewIconClick : function(){
                             this.parent.$("#template_search_menu li:nth-child(4)").click();
           },
-          expandTags: function(){
-              this.$('.t-scroll' ).css('height', '155px');  
-              this.$(".caption").animate({height:"250px"},250); 
-	      this.$(".caption p i.ellipsis").hide(); 
-              this.$(".caption p").css({'height':'auto','display':'block'});
-	      this.$(".btm-bar").css({"position":"absolute","bottom":"0"});
-	      this.$(".img > div").animate({bottom:"105px"});
-              this.$('.t-scroll' ).mCustomScrollbar(); 
-              this.isTrim = true;
-          },
-          collapseTags : function(e){
-              if(this.isTrim){
-                  var e;
-                  if(e !== window){
-                   e = e.toElement || e.relatedTarget;
-                  }
-                  //console.log(e.nodeName);
-                  if(e){
-                   if(e.nodeName === 'UL' || e == window){
-                        this.$(".t-scroll").mCustomScrollbar("destroy");
-                        this.isTrim = false;
-                        this.$('.t-scroll' ).removeAttr('style');
-                        this.$(".caption").animate({height:"145px"},250);
-                        this.$(".caption p i.ellipsis").show();
-                        this.$(".caption p").removeAttr('style');
-                        this.$(".btm-bar").removeAttr('style');
-                        this.$(".img > div").removeAttr('style');
-                   }
-               }
-              }
-          }
+        
+         
          
         });
 
