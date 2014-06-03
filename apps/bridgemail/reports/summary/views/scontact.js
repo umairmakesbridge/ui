@@ -16,7 +16,8 @@ function (template,moment) {
               'click .view-profile':"openContact",
               'click .page-view':'loadPageViewsDialog',
               'click .metericon':'showProgressMeter',
-              'click .closebtn':'closeProgressMeter'
+              'click .closebtn':'closeProgressMeter',
+              'click .click-detail':'loadClickViewDialog'
             },
             initialize: function () {
                 _.bindAll(this, 'getRightText', 'pageClicked');
@@ -88,30 +89,43 @@ function (template,moment) {
             },
             
             unsubscribe:function(text){
-                var str = "";
+                 var str = "";
                  if(this.options.type == "CB"){
-                     str = str +  "<td width='10%'><div><div class='bounce-type colico' style='width:155px'><strong><span><em>Bounce Type</em>"+this.bounceType+"</span></strong></div></div></td>";;
+                     str = str +  "<td width='5%'><div><div class='bounce-type colico' style='width:155px'><strong><span><em>Bounce Type</em>"+this.bounceType+"</span></strong></div></div></td>";;
                  }
                  if(text== "Schedule to go on"){
-                     str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
+                     str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
                  }else{
-                    str = str +  "<td width='10%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+                    str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
                  }
                     return str;
             },
             pageViews:function(text){
                
                 if(this.viewCount !="0"){
-                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+his.viewCount +"</b></a></span></strong>";
+                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+hhis.viewCount +"</b></a></span></strong>";
                 }else{
-                      return "<strong><span><em>"+text+"</em> <b>"+his.viewCount +"</b> </span></strong>";
+                      return "<strong><span><em>"+text+"</em> <b>"+this.viewCount +"</b> </span></strong>";
                     }
             },
             pageOpened:function(text){
                 return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
             },
             pageClicked:function(text){
-                     return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
+                      if(text == "Clicked on"){
+                        if(this.model.get('activityData')[0].clickCount !="0"){
+                          var aClick = "<a class='click-detail showtooltip' data-original-title='Click to view detail'>"+this.options.app.addCommas(this.model.get('activityData')[0].clickCount)+"</a> ";
+                        }else{
+                           var aClick = "0";
+                        }
+                            var html ="<td width='10%'><div><div class='colico click'>";
+                            html = html + "<strong><span><em>Click count</em>"+aClick+"</span></strong></div></div>";
+                            return html;
+                      }else{
+                        return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
+                      }
+                  
+                     
             },
             linkTd:function(){
                 if(this.type == "C" || this.type == "P") return;
@@ -200,9 +214,14 @@ function (template,moment) {
                  if($('.percent_stats').find(".ocp_stats").length > 0)
                        $('.percent_stats').find(".ocp_stats").remove();
                     
-                 var nurtureData = this.model.get('nurtureData')[0];
-                 var pageViews = nurtureData.pageViewsCount;
-                 var click = nurtureData.clickCount;
+                var nurtureData;
+                 if(this.type == "C"){
+                   nurtureData  = this.model.get('nurtureData')[0];
+                 }else{
+                   nurtureData =  this.model.get('activityData')[0];
+                 }
+                 var pageViews = nurtureData.totalPageViewsCount;
+                 var click = nurtureData.totalClickCount;
                  var aPageViews = "<b>0</b>";
                  var aClick = "<b>0</b>";
                  var converted =  "-";
@@ -244,10 +263,10 @@ function (template,moment) {
                            +"</ul>"
                            +"</div>"
                            +"<div class='meterdd pageview' style='background-position: "+position+" 0px !important;'>"
-                           +"<span title='Opened' class='open'></span>"
-                           +"<span title='Clicked' class='click'></span>"
-                           +"<span title='Page Viewed' class='visit'></span>"
-                           +"<span title='Conversion' class='conversion'></span>"
+                           +"<span data-original-title='Opened ' class='open showtooltip'></span>"
+                           +"<span data-original-title='Clicked' class='click showtooltip'></span>"
+                           +"<span data-original-title='Page Viewed' class='pageview showtooltip'></span>"
+                           +"<span data-original-title='Conversion' class='conversion showtooltip'></span>"
                            +"</div>"
                           +"</div>";
                       $(ev.target).parents(".percent_stats").append(str);
@@ -271,9 +290,15 @@ function (template,moment) {
               });
              },
              getMeterIconClass:function(){
-                 var nurtureData = this.model.get('nurtureData')[0];
-                 var pageViews = nurtureData.pageViewsCount;
-                 var click = nurtureData.clickCount;
+                 var nurtureData;
+                 if(this.type=="C"){
+                   nurtureData  = this.model.get('nurtureData')[0];
+                 }else{
+                   nurtureData =  this.model.get('activityData')[0];
+                 }
+                 
+                 var pageViews = nurtureData.totalPageViewsCount;
+                 var click = nurtureData.totalClickCount;
                  var converted =  "-";
                  var open =  "-";
                  var className='';
@@ -289,6 +314,9 @@ function (template,moment) {
                  return className;
              },
              dateSetting:function(sentDate, sep){
+               if(sentDate)
+               sentDate = this.options.app.decodeHTML(sentDate);
+           
                if(sep =="/") 
                     var _date =  moment(sentDate,'MM/DD/YYYY');
                 if(sep =="-")
@@ -297,6 +325,7 @@ function (template,moment) {
                 return _date.format("DD MMM YYYY");
              },
              loadClickViewDialog:function(ev){
+                    
                      var dialog_width = 80;
                      var encode = 0;
                      if($(ev.target).data('id')){
@@ -339,7 +368,7 @@ function (template,moment) {
                                 that.options.app.showLoading(false,dialog.getBody());
                           
                         });
-                        
+                       return false;
                 
             },
         });    

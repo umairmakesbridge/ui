@@ -299,6 +299,10 @@ function (Wizard,template,moment) {
                         this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
                         return false;
                     }
+                    if (listName.toLowerCase().indexOf("supress_list_") >= 0){
+                        this.app.showAlert("List name with word supress_list_ not allowed",$("body"),{fixed:true});
+                        return false;
+                    }
                     var add_box = this.$(".add-list").data("addbox");
                     add_box.dialog.find(".btn-add").addClass("saving");
                     var URL = "/pms/io/list/saveListData/";

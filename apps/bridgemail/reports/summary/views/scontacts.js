@@ -33,6 +33,8 @@ function (template,Contacts,viewContact) {
             },
             render: function () {
               this.$el.html(this.template());
+               
+              
               this.loadContacts();
               
               if(this.where != "page"){
@@ -70,7 +72,7 @@ function (template,Contacts,viewContact) {
                   this.$el.find('#tblcontacts tbody .load-tr').remove();
                   this.$el.find('#tblcontacts tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=4><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No contacts founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
                   this.options.app.showLoading("&nbsp;",this.$el.find('#tblcontacts tbody').find('.loading-contacts'));
-                 
+                   
                   var that = this;
                   _data['offset'] = this.offset;
                   if(this.options.article)
@@ -155,6 +157,7 @@ function (template,Contacts,viewContact) {
                       });
                      
                   }});
+              
             },
             search:function(ev){
               this.searchText = '';
@@ -237,6 +240,14 @@ function (template,Contacts,viewContact) {
                    inview.removeAttr("data-load");
                     this.loadContacts(this.offsetLength);
                 }  
+            },
+            getContactWidth:function(){
+                   if(this.options.type == "UN" || this.options.type=="CB" || this.options.type=="SP"){
+                    return "width:565px;";
+                   }else{
+                     return "width:465px;";  
+                   }
+                   
             }
            
         });
