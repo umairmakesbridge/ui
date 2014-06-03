@@ -12,7 +12,9 @@ function (template) {
         return Backbone.View.extend({
             tagName:"tr",
             className:"erow",
-            
+            events: {
+                "click .page-view":"openPageViewsDialog",
+            },
             initialize: function () {
                  this.template = _.template(template);				
                  this.render();
@@ -45,7 +47,37 @@ function (template) {
                 
                 return _date.format("DD MMM YYYY");
              },
-             
+             openPageViewsDialog:function(){
+                 var dialog_width = 80;
+                     var articleNum = this.model.get('articleNum.encode')
+                     var that = this;
+                      var url = "";
+                    
+                      var url = this.model.get('articleURL');
+                        var title = this.model.get('articleTitle');
+                        url = title+'|-.-|'+url;
+                   
+                     var dialog_height = $(document.documentElement).height()-200;
+                     var dialog = this.options.app.showDialog(
+                           {           
+                                       title:'Page Views',
+                                       css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
+                                       headerEditable:false,
+                                       headerIcon : 'preview3',
+                                       bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                            });
+                     that.options.app.showLoading('Loading Page Views....',dialog.getBody());
+                        var name = that.options.attr.email;
+                        
+                                 
+                        require(["reports/summary/views/pageviews",],function(Views){
+                                var mPage = new Views({article:articleNum,campNum:that.options.attr.campNum,subNum:that.options.attr.subNum,encode:that.model.get('articleNum.encode'),app:that.options.app,email:name,salestatus:that.options.attr.salestatus,url:url});
+                                dialog.getBody().html(mPage.$el);
+                                that.options.app.showLoading(false,dialog.getBody());
+                          
+                        });
+                        return false;
+             }
           
             
         });

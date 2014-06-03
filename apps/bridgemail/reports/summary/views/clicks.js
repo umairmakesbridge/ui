@@ -23,8 +23,7 @@ function (template,Click,Clicks) {
                  this.render();
             },
             render: function () {
-                var that = this;
-                console.log('I am here');
+                var that = this; 
                 this.$el.html(this.template());
                 $(".modal-body").scroll(_.bind(this.liveLoading,this));
                 $(".modal-body").resize(_.bind(this.liveLoading,this));
@@ -69,7 +68,7 @@ function (template,Click,Clicks) {
                                    that.total_fetch = that.total_fetch + data.length;
                                   that.$el.find("#records-found .badge").html(data.total);
                                   _.each(data.models,function(model) {
-                                        that.$el.find(".clicks-listing table tbody").append(new Click({model:model,app:that.options.app}).el);
+                                        that.$el.find(".clicks-listing table tbody").append(new Click({model:model,app:that.options.app,attr:that.options}).el);
                                     });
                                      if(that.total_fetch < parseInt(data.total)){
                                          that.$el.find(".clicks-listing table tbody tr:last").attr("data-load","true");
@@ -89,7 +88,15 @@ function (template,Click,Clicks) {
            },
             liveLoading:function(){
                 var $w = $(window);
-                 
+                  if ($(".modal-body").scrollTop()>70) {
+                         if($(".modal-footer .pageviews-scroll").length < 1)
+                           $(".modal-footer").append("<button class='ScrollToTop clicks-scroll' type='button' style='position:absolute;bottom:65px;right:12px;'></button>");
+                           $('.clicks-scroll').on('click',function(){
+                               $(".modal-body").animate({scrollTop:0},600); 
+                           })
+                       } else {
+                          $(".modal-footer .clicks-scroll").remove();
+                    }         
                 var th = 200;
                 var inview =this.$el.find('table tbody tr:last').filter(function() {
                     var $e = $(this),

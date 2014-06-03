@@ -37,8 +37,6 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             },
             render: function () {
                 this.fetchStats();
-                
-               //
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
@@ -60,7 +58,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
             fetchStats:function(){
-                this.options.app.showLoading("Loading Summary...",$(".ws-content.active"));
+                this.options.app.showLoading("Loading Summary...",this.active_ws);
                 var _data = {};
                 var self = this;
                 _data['type'] =  "stats";
@@ -86,7 +84,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                          //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
                           self.addGraphs(data);
                          self.setHeader(self);
-                           self.options.app.showLoading(false,$(".ws-content.active"));
+                           self.options.app.showLoading(false,self.active_ws);
                         if(dataS.get('campaignType') == "T"){
                              switch (self.clickType){
                                  case "sent":

@@ -168,6 +168,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                         this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
                         return false;
                     }
+                    if (listName.toLowerCase().indexOf("supress_list_") >= 0){
+                        this.app.showAlert("List name with word supress_list_ not allowed",$("body"),{fixed:true});
+                        return false;
+                    }
                     var that = this;
                     var add_box = this.$(".add-list").data("addbox");
                     add_box.dialog.find(".btn-add").addClass("saving");

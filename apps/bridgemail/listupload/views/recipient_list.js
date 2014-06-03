@@ -175,6 +175,13 @@ function (template,tags) {
                     $('#div_pageviews').css('padding-top','0');
                     $('#div_pageviews').html(objContacts.$el);
                 });
+           },
+           getOpacity:function(){
+                if (this.model.get('name').toLowerCase().indexOf("supress_list_") >= 0){
+                    return '0.7';
+                }else{
+                    return '1';
+                }
            }
                 
         });    

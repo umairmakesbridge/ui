@@ -11,7 +11,7 @@ function (template,PageView,ViewsCollection) {
         'use strict';
         return Backbone.View.extend({
             events: {
-                
+                 'click .pageviews-scroll':'scrollToTop'
             },
             initialize: function () {
                  this.template = _.template(template);	
@@ -90,7 +90,23 @@ function (template,PageView,ViewsCollection) {
            },
             liveLoading:function(){
                 var $w = $(window);
-                console.log('score bar active');
+                var that = this;
+                var modal = $(".modal-body");
+                var footer = $(".modal-footer");
+                if($('.modal.in').length > 1){
+                     modal =  $(".modal-body:last");
+                     footer = $(".modal-footer:last");
+                     console.log(modal);
+                }
+                  if (modal.scrollTop()>70) {
+                         if(footer.find(".pageviews-scroll").length < 1)
+                           footer.append("<button class='ScrollToTop pageviews-scroll' type='button' style='position:absolute;bottom:65px;right:13px;'></button>");
+                           $('.pageviews-scroll').on('click',function(){
+                               modal.animate({scrollTop:0},600); 
+                           })
+                       } else {
+                          footer.find(".pageviews-scroll").remove();
+                    }            
                 var th = 200;
                 var inview =this.$el.find('table tbody tr:last').filter(function() {
                     var $e = $(this),
@@ -104,6 +120,8 @@ function (template,PageView,ViewsCollection) {
                    inview.removeAttr("data-load");
                     this.fetchViews(this.offsetLength);
                 }  
+            },scrollToTop:function(){
+                this.$el.animate({scrollTop:0},600);    
             }
         });
 });

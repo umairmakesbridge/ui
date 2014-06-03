@@ -33,7 +33,7 @@ function (template) {
                 else return title;
             },
             getLogTime:function(){
-
+                if(!this.model.get('logTime')) return;
                 var logTime = this.options.app.decodeHTML(this.model.get('logTime'));
                 if(logTime){
                     var arr = logTime.split(" ");
