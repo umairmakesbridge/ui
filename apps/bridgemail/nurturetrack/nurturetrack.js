@@ -19,7 +19,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .save-all-nt':'saveAllMessages',
                     'click .play-nt': 'playNurtureTrack',
                     'click .expand-all':'expandAll',
-                    'click .collapse':'collpaseAll'
+                    'click .collapse-all':'collpaseAll'
                 },
                 /**
                  * Initialize view - backbone

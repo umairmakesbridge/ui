@@ -167,6 +167,10 @@ function (template) {
                 ele.val(this.messageLabel);
             },
             editMessage:function(e){
+                if(!this.object[0]['campNum.encode']){
+                    this.app.showAlert('Message doesn\'t not exists',$("body"),{fixed:true});                    
+                }
+                else{
                 var dialog_width = $(document.documentElement).width()-50;
                 var dialog_height = $(document.documentElement).height()-162;
                 var dialog = this.app.showDialog({title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
@@ -182,6 +186,7 @@ function (template) {
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                     sPage.init();
                 },this));      
+                }
                 e.stopPropagation();
             },
             previewCampaign:function(e){
@@ -282,6 +287,7 @@ function (template) {
                                }
                        },this));
                 }
+                obj.stopPropagation();
             },
              getHour:function(hour){                   
                    if(this.$(".timebox-hours button.pm").hasClass("active")){
@@ -332,7 +338,7 @@ function (template) {
                     this.$("#message-image").show();
                     this.$("#message-image img").attr("src",img_thmbnail);
                 },
-                imageDialog:function(){                    
+                imageDialog:function(e){                    
                     var app = this.app;
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-162;
@@ -347,7 +353,7 @@ function (template) {
                          var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
                          dialog.getBody().html(mPage.$el);
                         
-                     },this));
+                     },this));                    
                      
                 },
                 insertImage:function(obj){
