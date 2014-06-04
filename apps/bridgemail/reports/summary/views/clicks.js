@@ -55,7 +55,11 @@ function (template,Click,Clicks) {
                         }else{
                             this.offset = this.offset + this.offsetLength;
                         }
-                       
+                            this.$el.find(".contactnm").attr('data-encode', this.options.encode).html("<strong>"+this.options.email+ "</strong>").on('click',function(ev){
+                         that.options.app.mainContainer.openSubscriber(that.options.encode);
+                         that.$el.parents('.modal').find('.close').click();
+                          });
+                         this.$el.find(".salestatus").html(this.capitalizeLetter());
                         _data['type'] = "subscriberClickDetail" ;
                         _data['subNum'] = this.options.subNum ;
                         _data['campNum'] = this.options.campNum;
