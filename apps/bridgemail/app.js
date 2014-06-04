@@ -69,8 +69,7 @@ define([
 			//Convenience for accessing the app object in the console
 			if (this.get('env') != 'production') {
                             window.BRIDGEMAIL = this;
-			}
-                        this.getUser();
+			}                        
                         //this.CRMGetStatus();
                         
 		},
@@ -86,7 +85,7 @@ define([
                                 $('body').append(this.mainContainer.$el);
                                 $('body').append(this.mainContainer.footer.$el);
                                 this.mainContainer.dashBoardScripts();
-                                
+                                this.getUser();
                                 this.initScript();                                
 				//call the callback
 				(callback || $.noop)();
