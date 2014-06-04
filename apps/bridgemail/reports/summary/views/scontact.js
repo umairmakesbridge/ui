@@ -96,7 +96,7 @@ function (template,moment) {
                  if(text== "Schedule to go on"){
                      str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
                  }else{
-                    str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.model.get('creationDate'),"-")+"</span></strong></div></div></td>";;
+                    str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
                  }
                     return str;
             },
@@ -114,12 +114,12 @@ function (template,moment) {
             pageClicked:function(text){
                       if(text == "Clicked on"){
                         if(this.model.get('activityData')[0].clickCount !="0"){
-                          var aClick = "<a class='click-detail showtooltip' data-original-title='Click to view detail'>"+this.options.app.addCommas(this.model.get('activityData')[0].clickCount)+"</a> ";
+                          var aClick = "<a class='click-detail showtooltip' data-original-title='Click to view detail'><b>"+this.options.app.addCommas(this.model.get('activityData')[0].clickCount)+"</b></a> ";
                         }else{
                            var aClick = "0";
                         }
                             var html ="<td width='10%'><div><div class='colico click'>";
-                            html = html + "<strong><span><em>Click count</em>"+aClick+"</span></strong></div></div>";
+                            html = html + "<strong><span><em>Click count</em><b>"+aClick+"</b></span></strong></div></div>";
                             return html;
                       }else{
                         return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
@@ -233,16 +233,16 @@ function (template,moment) {
                      className='conversion';
                      converted = this.dateSetting(nurtureData.conversionDate,"/");
                      open = this.dateSetting(nurtureData.firstOpenDate ,"/")
-                     aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
-                     aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
+                     aClick = "<a><b>"+this.options.app.addCommas(click)+"</b></a> ";
+                     aPageViews = "<a><b>"+this.options.app.addCommas(pageViews)+"</b></a> ";
                 }else if(pageViews !="0"){
                      position = "-280px";
                      className='pageview';
-                    aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                    aClick = "<a><b>"+this.options.app.addCommas(click)+"</b></a> ";
                     open = this.dateSetting(nurtureData.firstOpenDate ,"/") 
-                    aPageViews = "<a>"+this.options.app.addCommas(pageViews)+"</a> ";
+                    aPageViews = "<a><b>"+this.options.app.addCommas(pageViews)+"</b></a> ";
                  }else if(click !="0"){
-                     aClick = "<a>"+this.options.app.addCommas(click)+"</a> ";
+                     aClick = "<a><b>"+this.options.app.addCommas(click)+"</b></a> ";
                      open = this.dateSetting(nurtureData.firstOpenDate ,"/")
                      position = "-140px"
                      className='click';

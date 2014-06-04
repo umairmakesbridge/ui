@@ -2457,16 +2457,43 @@ ul.ddlist li:hover:after {
     background: url("../img/contactsicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 .sc-links .announcementicon {
-    background: url("../img/announcementicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    background: url("../img/announcementiconheader.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+.sc-links .messagesicon {
+    background: url("../img/messagesicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+} 
 .sc-links > a:hover {background: none repeat scroll 0 0 #294957; }
 .sc-links  .contactsicon:hover {background: url("../img/contactsicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-.sc-links  .announcementicon:hover {background: url("../img/announcementicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.sc-links  .announcementicon:hover {background: url("../img/announcementiconheader-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.sc-links  .messagesicon:hover {background: url("../img/messagesicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .ddlist-btn a:hover:after { color: #01AEEE;}
 .ddlist-btn a:hover .campaignicon {background: url("../img/campaignicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .ddlist-btn:hover { background: #294957;  }
 .activeB {background: url("../img/campaignicon-b.png") no-repeat scroll center center rgba(0, 0, 0, 0) !important; color: #01AEEE;}
 ul.leftnav > li.icon-menu { transition: none !important;}
+.sc-links > a.announcementbtn.active  {	background: #294957; }
+.sc-links > a.announcementbtn.active  .announcementicon { background: url("../img/announcementicon-r.png") no-repeat scroll center center; }
+
+.sc-links > a.messagesbtn.active  {	background: #294957; }
+.sc-links > a.messagesbtn.active  .messagesicon { background: url("../img/messagesicon-b.png") no-repeat scroll center center; }
+.sc-links > a.messagesbtn.active sup  {background: none repeat scroll 0 0 #fff; color: #3DB5FF;}
+
+
+.sc-links > a sup {
+    background: none repeat scroll 0 0 #3DB5FF;
+    border-radius: 10px;
+    color: #FFFFFF;
+    display: block;
+    font-weight: bold;
+    height: 14px;
+   right: 55px;
+    line-height: 13px;
+    padding: 0 5px;
+    position: absolute;
+    top: 15px;
+}
+
+
 /* ----------- --------------------------     Slide Nav Drop Down ------------------------- ----------- */	
 .slidenav-dd {
     background: none repeat scroll 0 0 #FFFFFF;

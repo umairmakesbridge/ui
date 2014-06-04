@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header.html'],
-	function ($, Backbone, _, app,  template) {
+define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header.html','notifications/notifications'],
+	function ($, Backbone, _, app,  template,Notifications) {
 		'use strict';
 		return Backbone.View.extend({			
                         tagName: 'div',
@@ -68,7 +68,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             //'click .sc-links span.ddicon':'scDropdown',
                             //'click .new-campaign': 'createNewCampaign',
                             'click .csv-upload': 'csvUpload',
-                            'click .new-nurturetrack':'addNurtureTrack'
+                            'click .new-nurturetrack':'addNurtureTrack',
+                            'click .messagesbtn':'loadNotifications'
                          },
 
 			initialize: function () {
@@ -122,6 +123,14 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                        
                         csvUpload: function() {
                             this.addWorkSpace({type: '', title: 'CSV Upload',sub_title:'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
+                        },
+                        loadNotifications:function(){
+                           if(this.$el.find(".messages_dialogue").length > 0 && this.$el.find(".messages_dialogue").is(':visible')){
+                              this.$el.find(".messages_dialogue").slideUp('fast'); 
+                              return;
+                           }
+                            this.$el.find(".messages_dialogue").slideDown('fast');
+                            this.$el.find(".messages_dialogue").html(new Notifications().el)
                         }
                         
 		});
