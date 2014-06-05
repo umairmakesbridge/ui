@@ -304,10 +304,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         sub_title:'Nurture Track Wizard',
-                        tab_icon: 'nuturetrack',
+                        tab_icon: 'nuturetrack',                        
                         workspace_id: 'nurturetrack_' + track_checksum,
                         url: 'nurturetrack/nurturetrack',
-                        params: {track_id: track_id,parent:opt.parent}
+                        params: {track_id: track_id,parent:opt.parent,editable:opt.editable}
                         
                     });
                 }

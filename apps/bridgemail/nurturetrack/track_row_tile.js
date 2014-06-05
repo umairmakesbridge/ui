@@ -85,12 +85,11 @@ function (template,moment,highlighter,tagView) {
                     this.parent.$el);                                                         
             },
             editNurtureTrack:function(){
-                if(this.model.get("status")=="D"){
-                    this.app.mainContainer.openNurtureTrack({"id":this.model.get("trackId.encode"),"checksum":this.model.get("trackId.checksum"),"parent":this.parent});
-                }
-                else{
-                    this.viewNurtureTrack();
-                }
+                var editable = true;
+                if(this.model.get("status")!=="D"){
+                    editable = false;
+                }                
+                this.app.mainContainer.openNurtureTrack({"id":this.model.get("trackId.encode"),"checksum":this.model.get("trackId.checksum"),"parent":this.parent,editable:editable});
                 
             },
             deleteTrack:function(){

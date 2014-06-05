@@ -19,7 +19,7 @@ function (template,highlighter) {
                "click .preview-camp":'previewCampaign',
                'click .taglink':'tagClick',
                'click .delete-camp':'deleteCampaginDialoge',
-               'click .report':'reportShow',
+               'click .report':'reportShow'
                
             },
             /**
@@ -30,6 +30,7 @@ function (template,highlighter) {
                     this.sub = this.options.sub; // Campaign View
                     this.app = this.sub.app; 
                     this.parent = this.options.parent;
+                    this.editable=this.options.editable;
                     this.tagTxt = '';
                     this.render();
                     //this.model.on('change',this.renderRow,this);

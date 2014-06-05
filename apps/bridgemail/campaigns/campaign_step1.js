@@ -7,7 +7,7 @@ function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
         return Backbone.View.extend({
-            className: '',            
+            className: 'pos-rel',            
             
             /**
              * Attach events on elements in view.
@@ -23,6 +23,7 @@ function (template) {
                     this.parent = this.options.page
                     this.camp_obj = this.options.camp_obj;                    
                     this.app = this.parent.app;     
+                    this.editable=this.options.editable;
                     this.settingchange = true;
                     this.render();                    
             },
@@ -40,6 +41,9 @@ function (template) {
             init:function(){
               this.setFromNameField();  
               this.loadData();  
+              if(this.editable===false){
+                this.$(".block-mask").show();
+              }
             },
             initControls:function(){                
                 

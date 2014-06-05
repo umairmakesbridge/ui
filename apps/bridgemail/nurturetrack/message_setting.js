@@ -24,6 +24,7 @@ function (template) {
                 this.dialog = this.options.dialog;
                 this.camp_obj = this.parent.object ? this.parent.object[0]:null;
                 this.camp_json = this.parent.camp_json;
+                this.editable=this.options.editable;
                 this.plainText = "";
                 this.htmlText = "";                    
                 this.camp_id = this.camp_obj['campNum.encode'];                                        
@@ -111,7 +112,7 @@ function (template) {
                 this.app.showLoading("Loading...",this.$settingInner);
                 require(["campaigns/campaign_step1"],_.bind(function(page){    
                      this.app.showLoading(false,this.$settingInner);                    
-                     this.step1_page = new page({page:this,camp_obj:this.camp_obj})                       
+                     this.step1_page = new page({page:this,camp_obj:this.camp_obj,editable:this.editable})                       
                      this.$settingInner.append(this.step1_page.$el);         
                      this.step1_page.init();
                  },this));
@@ -120,7 +121,7 @@ function (template) {
                 this.app.showLoading("Loading...",this.$bodyInner);
                 require(["campaigns/campaign_body"],_.bind(function(page){    
                      this.app.showLoading(false,this.$bodyInner);                    
-                     this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj})                       
+                     this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
                      this.$bodyInner.append(this.messagebody_page.$el);         
                      this.messagebody_page.init();
                  },this));

@@ -1,6 +1,10 @@
-<div class="btns" style="margin:0;">
-    <a  class="btn-gray play-nt left"><span>Play</span><i class="icon play"></i></a>
-    <a  class="btn-green left save-all-nt"><span>Save</span><i class="icon save"></i></a>
+<div class="btns" style="margin:0;">        
+    <% if(this.editable===true) { %>
+        <a  class="btn-gray play-nt left"><span>Play</span><i class="icon play"></i></a>
+        <a  class="btn-green left save-all-nt"><span>Save</span><i class="icon save"></i></a>
+    <% } else{ %>
+        <a class="btn-blue pause-nt left"><span>Pause</span><i class="icon pause"></i></a>
+    <% }%>
 </div>
 
 <div class="clearfix"></div>
@@ -25,7 +29,9 @@
                         <div style="float:none; width:150px; margin:0 auto;display: none;height:150px;overflow: hidden" id="nt-image" >
                             <img  width="150" height="170" alt="" src="">
                         </div>
+                        <% if(this.editable===true) { %>
                         <a class="btn-blue browse-button-nt" style="margin-top:5px;"><span style="padding:;">Browse Images</span><i style="padding-top:" class="icon update"></i></a>                       
+                        <% } %>
                     </div>
                     <div class="clearfix"></div>
 
@@ -49,7 +55,11 @@
                          <ul class="targets-ul">
 
                          </ul>    
-                        <a class="btn-green add-targets add-targets-nt" ><span>Add Targets</span><i class="icon targetw"></i></a>                    
+                        <% if(this.editable===true) { %> 
+                        <a class="btn-green add-targets add-targets-nt" ><span>Add Targets</span><i class="icon targetw"></i></a>
+                        <% } else { %>
+                            <a class="btn-green add-targets add-targets-nt" style="width:150px;"><span>View Targets</span><i class="icon targetw"></i></a>
+                        <% } %>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -60,12 +70,15 @@
 <!-- nurturetargets  -->
 <div class="accordion nurturw_wizard" id="accordion2">
    <div class="message-wait-container"></div>
+   <% if(this.editable===true) { %>
     <div class="wait-add">
         <div>
+            
             <a  class="btn-wait add-wait left" style="display: none"><span class="">Add Wait</span><i class="icon wait left"></i></a>
-            <a class="btn-green add-message left" ><span>Add Message</span><i class="icon mail"></i></a>
+            <a class="btn-green add-message left" ><span>Add Message</span><i class="icon mail"></i></a>            
         </div>
     </div>
+   <% } %>
     <div class="clearfix"></div>
 </div>
  <button style="display: block;" type="button" class="e_c_all expand-all">Expand All</button>

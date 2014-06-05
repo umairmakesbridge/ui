@@ -18,6 +18,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .browse-button-nt':"imageDialog",
                     'click .save-all-nt':'saveAllMessages',
                     'click .play-nt': 'playNurtureTrack',
+                    'click .pause-nt':'pauseNurtureTrack',
                     'click .expand-all':'expandAll',
                     'click .collapse-all':'collpaseAll'
                 },
@@ -25,11 +26,12 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                  * Initialize view - backbone
                  */
                 initialize: function() {                    
-                    this.template = _.template(template);
-                    this.messages = [];
+                    this.template = _.template(template);                    
                     this.saveAllCall = 0;
-                    this.targetsRequest = new TargetsCollection();
-                    this.targetsModelArray = [];
+                    this.editable = true;
+                    if (this.options.params) {                        
+                        this.editable = this.options.params.editable;
+                    }                   
                     this.render();
                 },
                 /**
@@ -38,6 +40,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 render: function() {
                     this.$el.html(this.template({}));
                     this.app = this.options.app;
+                    this.messages = [];
+                    this.targetsRequest = new TargetsCollection();
+                    this.targetsModelArray = [];
                     this.$messageWaitContainer = this.$(".message-wait-container");
                     this.targets = null
                     if (this.options.params) {
@@ -61,42 +66,41 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    
                    var deleteIcon = $('<a class="icon delete showtooltip" title="Delete Nurture Track"></a>');
                    var playIcon = $('<a class="icon play24 showtooltip" title="Play Nurture Track"></a>');
-                   var pauseIcon = $('<a class="icon pause24 showtooltip" title="Pause Nurture Track"></a>');
-                   var action_icon = $('<div class="pointy"></div>")');  
-                   var playicon = $('<strong class="cstatus pclr1"><i class="icon pause16 left"></i> Paused </strong>');
+                   var pauseIcon = $('<a class="icon pause24 showtooltip" title="Pause Nurture Track" style="display:none"></a>');
+                   var action_icon = $('<div class="pointy"></div>")');                     
+                   action_icon.append(pauseIcon);
                    action_icon.append(playIcon);
+                   this.ws_header.find(".pointy").remove();
                    action_icon.append(deleteIcon);
                    
-                   deleteIcon.click(_.bind(this.deleteNT,this))
-                   
-                   this.current_ws.find("h2").append(playicon); 
-                   this.current_ws.find("h2").append(pauseIcon); 
+                   deleteIcon.click(_.bind(this.deleteNT,this))                                      
                    this.current_ws.find("h2").append(action_icon); 
-                   this.current_ws.find(".camp_header #workspace-header").addClass("showtooltip").attr("title","Click to rename").click(_.bind(this.showHideTitle,this));                   
-                   this.current_ws.find("#workspace-header").addClass('header-edible-campaign');
-                   
-                   this.current_ws.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                   
-                   this.current_ws.find(".camp_header .cancelbtn").click(_.bind(function(obj){                        
-                         this.showHideTitle();                        
-                    },this));
-                    this.current_ws.find(".camp_header .savebtn").click(_.bind(this.renameNurtureTrack,this));
-                    this.current_ws.find(".camp_header  #header_wp_field").keyup(_.bind(function(e){
-                        if(e.keyCode==13){
-                            this.current_ws.find(".camp_header .savebtn").click();
-                        }
-                    },this));
+                    if(this.current_ws.find("#workspace-header").hasClass("header-edible-campaign")===false){
+                        this.current_ws.find(".camp_header #workspace-header").addClass("showtooltip").attr("title","Click to rename").click(_.bind(this.showHideTitle,this));                   
+                        this.current_ws.find("#workspace-header").addClass('header-edible-campaign');                                                         
+                        this.current_ws.find(".camp_header .cancelbtn").click(_.bind(function(obj){                        
+                              this.showHideTitle();                        
+                         },this));
+                         this.current_ws.find(".camp_header .savebtn").click(_.bind(this.renameNurtureTrack,this));
+                         this.current_ws.find(".camp_header  #header_wp_field").keyup(_.bind(function(e){
+                             if(e.keyCode==13){
+                                 this.current_ws.find(".camp_header .savebtn").click();
+                             }
+                         },this));
+                    }
+                    
+                    this.current_ws.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     playIcon.click(_.bind(this.playNurtureTrack,this));
                     pauseIcon.click(_.bind(this.pauseNurtureTrack,this));
-                    
-                    this.$(".nurtureimg").dragfile({
-                        post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
-                        callBack : _.bind(this.showSelectedImage,this),
-                        app:this.app,
-                        module:'template',
-                        progressElement:this.$('.nurtureimg')
-                    });
-                   
+                    if(this.editable){
+                        this.$(".nurtureimg").dragfile({
+                            post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
+                            callBack : _.bind(this.showSelectedImage,this),
+                            app:this.app,
+                            module:'template',
+                            progressElement:this.$('.nurtureimg')
+                        });
+                   }
                    this.loadData();
                    this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                   
@@ -110,7 +114,14 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         params:{type:'tags',trackId:this.track_id,tags:''},
                         module:'Nurture Track'
                     });
-                  
+                  if(this.editable===false){
+                      nurture_tag_ele.addClass("not-editable");
+                      this.current_ws.find(".camp_header #workspace-header").attr("data-original-title","");                      
+                  }
+                  else{
+                      this.current_ws.find(".camp_header #workspace-header").attr("data-original-title","Click to rename");
+                      nurture_tag_ele.removeClass("not-editable")
+                  }
                 },
                 loadData:function(){
                    var bms_token = this.app.get('bms_token');                    
@@ -146,7 +157,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                             this.ws_header.find(".pause24").hide();                            
                         }
                         else{
-                            this.ws_header.find(".play24").hide();
+                            this.ws_header.find(".play24,.delete").hide();
                             this.ws_header.find(".pause24").show();
                             this.ws_header.find(".cstatus").addClass("pclr18").removeClass("pclr1");
                             this.ws_header.find(".cstatus i").addClass("play16").removeClass("pause16");
@@ -187,6 +198,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     });
                 },
                 showHideTitle:function(show,isNew){
+                    if(this.editable==false){
+                        return false;
+                    }
                     var current_ws = this.current_ws.find(".camp_header");
                     if(show){
                         current_ws.find("h2").hide();
@@ -256,7 +270,10 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(!_json.err){
-                                this.app.showMessge("Nurture track played.");
+                               this.app.showMessge("Nurture track played.");
+                                this.editable = false;
+                                this.render();
+                                this.init();                                
                                 this.parentWS.fetchTracks();   
                                 this.parentWS.addCountHeader();
                            }
@@ -274,8 +291,11 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
                                this.app.showMessge("Nurture track paused.");
-                                this.parentWS.fetchTracks();   
-                                this.parentWS.addCountHeader();
+                               this.editable = true;
+                               this.render();
+                               this.init();                               
+                               this.parentWS.fetchTracks();   
+                               this.parentWS.addCountHeader();
                            }
                            else{
                                this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -283,16 +303,19 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    },this));
                 },
                 selectTargets:function(){
-                     var dialog = this.app.showDialog({title:'Select Targets',
+                    var dialog_object ={title:'Select Targets',
                         css:{"width":"1200px","margin-left":"-600px"},
                         bodyCss:{"min-height":"423px"},
-                        headerIcon : 'targetw',
-                        buttons: {saveBtn:{text:'Done'} }  
-                      });
+                        headerIcon : 'targetw'                        
+                      }
+                     if(this.editable){
+                         this.editable["buttons"]= {saveBtn:{text:'Done'} }  ;
+                     } 
+                     var dialog = this.app.showDialog(dialog_object);
 
                     this.app.showLoading("Loading Targets...",dialog.getBody());                                  
                     require(["target/selecttarget"],_.bind(function(page){                                     
-                         var targetsPage = new page({page:this,dialog:dialog});
+                         var targetsPage = new page({page:this,dialog:dialog,editable:this.editable});
                          dialog.getBody().html(targetsPage.$el);
                          targetsPage.init();                         
                          dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
@@ -305,7 +328,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         this.$(".dottedpanel").addClass("targetspanel").removeClass("dottedpanel");
                         this.$(".targets-ul").children().remove();
                         _.each(this.targetsModelArray,function(val,key){
-                             var targetLiView = new TargetLiView({ model:val,page:this });        
+                             var targetLiView = new TargetLiView({ model:val,page:this,editable:this.editable });        
                              this.$(".targets-ul").append(targetLiView.$el);
                         },this);                        
                     }
@@ -355,11 +378,11 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 _message:function(tOrder,model){
                     var bView = null;
                     
-                    var buttonsView = new ButtonsView({page:this,showWait:true});
+                    var buttonsView = new ButtonsView({page:this,showWait:true,editable:this.editable});
                     this.$messageWaitContainer.append(buttonsView.$el); 
                     bView = buttonsView.$el
                                     
-                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model});  
+                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model,editable:this.editable});  
                     this.messages.push(messageView);
                     this.$messageWaitContainer.append(messageView.$el);                                          
                     
@@ -396,7 +419,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     var bView = null;                    
                     var buttonsView = new ButtonsView({page:this,showWait:false});                        
                     bView = buttonsView.$el;                                                              
-                    var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder,model:model });                             
+                    var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder,model:model,editable:this.editable });                             
                     this.$("[t_order='"+tOrder+"']").before(waitView.$el);      
                     var buttonPlaceHolder = waitView.$el.prev()
                     if(buttonPlaceHolder && buttonPlaceHolder.length){

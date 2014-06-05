@@ -28,6 +28,7 @@ function (template,moment) {
                     this.triggerOrder = this.options.triggerOrder;
                     this.btnRow = this.options.buttonRow;
                     this.object = this.options.model;
+                    this.editable=this.options.editable;
                     this.app = this.parent.app;                            
                     this.render();                    
             },

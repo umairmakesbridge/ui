@@ -12,6 +12,7 @@ function (template, TargetsCollection, TargetView,moment) {
                         this.dialog = this.options.dialog;
                         this.scrollElement = null;
                         this.total_fetch = 0;
+                        this.editable=this.options.editable;
                         this.objTargets = new TargetsCollection();
                         this.targetsModelArray = [];
                         this.total = 0;
@@ -116,7 +117,11 @@ function (template, TargetsCollection, TargetView,moment) {
 
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                var _view = new TargetView({model: model, app: that.app,page:that, showUse:that.col2,hidePopulation:true});          
+                                var _view_obj ={model: model, app: that.app,page:that,hidePopulation:true};
+                                if(that.editable){
+                                    _view_obj["showUse"]=that.col2;
+                                }
+                                var _view = new TargetView(_view_obj);          
                                 _view.$el.attr("_checksum",model.get("filterNumber.checksum"));                                
                                 that.$el.find('#targets_grid tbody').append(_view.$el);
                             });
@@ -154,7 +159,11 @@ function (template, TargetsCollection, TargetView,moment) {
                         }});
                 },
                 addToCol2:function(model){
-                     var _view = new TargetView({model: model, app: this.app,page:this,showRemove:this.col1,hidePopulation:true})                                          
+                    var _view_obj ={model: model, app: this.app,page:this,hidePopulation:true};
+                    if(this.editable){
+                        _view_obj["showRemove"]=this.col1;
+                    }
+                     var _view = new TargetView(_view_obj);                                          
                      this.$(this.col2).find(".bDiv tbody").append(_view.$el);
                      this.targetsModelArray.push(model);
                 },

@@ -2940,3 +2940,21 @@ text-align:center;
 }
 .icon.message-tiles{background: url("../img/tiles-g.png") no-repeat scroll center center ;cursor: pointer}
 .icon.message-tiles:hover {background: url("../img/tiles-b.png") no-repeat scroll center center ;}
+.not-editable .tag i.cross{
+    display:none !important;
+}
+.not-editable .tags-buttons{
+    display:none !important;
+}
+.block-mask{
+    width:100%;
+    height:100%;
+    position: absolute;
+    top:0px;
+    left:0px;
+    opacity:0px;
+    z-index: 100;
+}
+.pos-rel{
+    position: relative;
+}

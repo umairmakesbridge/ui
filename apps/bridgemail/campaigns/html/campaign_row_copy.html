@@ -29,19 +29,17 @@
             <strong ><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
             <% } %>
          </div>
-        <div class="slide-btns <% if(model.get('status')==='D'){ print('three s-clr4') } else if(model.get('status')==='S') { print('three s-clr4 slidebtn-sp') } else if(model.get('status')==='C') { print('three s-clr4') } else if(model.get('status')==='P') { print('three s-clr4 slidebtn-sp') } else { print('three s-clr4') }%>" id="<%= this.model.get('campNum.encode') %>">
+        <div class="slide-btns <% if(this.editable===false){print('two s-clr3')}else{print('three s-clr4')}%>" id="<%= this.model.get('campNum.encode') %>">
            <span class="icon setting"></span>
-            <div>                 
-                 <% if(model.get('status')==='C') {
-               %>
+            <div>                               
+                   <% if(this.editable) {%> 
                    <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
                    <a class="icon preview-camp preview clr2"><span>Preview</span></a>
-                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
-               <%} else {%>  
-               <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
-               <a class="icon preview-camp preview clr2"><span>Preview</span></a>
-               <a class="icon delete-camp delete clr1"><span>Delete</span></a>
-               <% } %>
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	                                 
+                   <% }else{%>
+                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	              
+                   <% }%>
                </div>
                </div>   
         </div>

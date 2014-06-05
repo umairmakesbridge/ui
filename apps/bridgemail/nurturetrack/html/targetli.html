@@ -1,5 +1,8 @@
 <div class="targt"><span><%- this.app.decodeHTML(model.get("name")) %>
-        <a class="btn-red"><span>Remove</span><i class="icon cross"></i></a></span>
+        <% if(this.editable===true) { %>
+        <a class="btn-red"><span>Remove</span><i class="icon cross"></i></a>
+         <% } %>
+        </span>       
     <strong class="badge"><%- model.get("filtersCount") %>
         <div class="calctime">
             <span><em>Calculated on</em><%-countDate.date%></span>

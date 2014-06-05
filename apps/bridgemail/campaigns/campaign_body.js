@@ -38,6 +38,7 @@ function (template,editorView) {
                     this.states = {}
                     this.states.editor_change = false;
                     this.copyCampaigns = false;
+                    this.editable=this.options.editable;
                     this.scrollElement = this.options.scrollElement;                    
                     this.wp_id = "NT_MESSAGE";
                     this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});  
@@ -138,6 +139,10 @@ function (template,editorView) {
                 }
             },
             selectTemplate:function(obj){
+                if(this.editable===false){
+                     this.app.showAlert('Message is not editable',this.$el); 
+                     return false;
+                }
                 this.setEditor();
                 var target = $.getObj(obj,"a");
                 var bms_token =this.app.get('bms_token');
@@ -153,7 +158,7 @@ function (template,editorView) {
                 if(!this.copyCampaigns){
                 this.app.showLoading("Loading Campaigns...",this.$("#area_copy_campaign"));
                 require(["campaigns/copy_campaign_listing"],_.bind(function(copyCampaigns){                                     
-                    var mPage = new copyCampaigns({app:this.app,sub:this,scrollElement:this.scrollElement,checksum:this.camp_obj['campNum.checksum']});
+                    var mPage = new copyCampaigns({app:this.app,sub:this,scrollElement:this.scrollElement,checksum:this.camp_obj['campNum.checksum'],editable:this.editable});
                     this.$("#area_copy_campaign").html(mPage.$el);
                 },this));
                 this.copyCampaigns = true;

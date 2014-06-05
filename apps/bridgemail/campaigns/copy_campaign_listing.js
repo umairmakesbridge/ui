@@ -26,6 +26,7 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                     this.total_fetch = 0;
                     this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
                     this.taglinkVal = false;
+                    this.editable=true;
                     this.type = 'listNormalCampaigns';
                     this.searchTxt = '';
                     this.existCamp = false;
@@ -38,6 +39,9 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                this.$el.html(this.template({}));  
                this.app = this.options.app;           
                this.sub = this.options.sub; 
+               if(typeof(this.options.editable)!=="undefined"){
+                   this.editable = this.options.editable;
+               }
                this.$el.find('div#copycampsearch').searchcontrol({
                             id:'copy-camp-search',
                             width:'300px',
@@ -116,7 +120,7 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                                 
                                  _.each(data1.models, _.bind(function(model){
                                      if(this.options.checksum !== model.get('campNum.checksum')){
-                                        this.$copyCampaignContainer.append(new campaignRowView({model:model,sub:this.sub,parent:this,checksum:this.options.checksum}).el);
+                                        this.$copyCampaignContainer.append(new campaignRowView({model:model,sub:this.sub,parent:this,checksum:this.options.checksum,editable:this.editable}).el);
                                      }else{
                                          if(this.offsetLength == 1){
                                              this.sub.$el.find("#copy_no_of_camps .badge").html(parseInt(collection.totalCount)-1);

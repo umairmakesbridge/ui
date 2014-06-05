@@ -3,7 +3,9 @@
         <div class="ntmessageno"><%-no %>: </div><span class="title"><%-title %></span>
         <input type="text" class="editname" placeholder="Jay's Campaign" style="display: none;">
         <i class="icon preview showtooltip" title="Preview"></i>
-        <i class="icon editnt edit-message showtooltip" title="Edit"></i>
+        <% if(this.editable===true) { %>
+            <i class="icon editnt edit-message showtooltip" title="Edit"></i>
+        <% } %>
         <b class="caret"></b>
     </a>
 </div>
@@ -21,7 +23,9 @@
                     <div style="display: none;height:150px;overflow: hidden" id="message-image" >
                         <img  width="150" height="170" alt="" src="">
                     </div>
+                    <% if(this.editable===true) { %>
                     <a class="btn-blue message-image" style="margin-top:5px;"><span style="padding:;">Browse Images</span><i style="padding-top:" class="icon update"></i></a>                       
+                    <% } %>
                 </div>
            </div>     
             <div class="sumry">
@@ -67,9 +71,11 @@
         </div> 
 
         <div class="btns">
-            <a class="btn-blue left edit-message" ><span class="right">Edit Message</span><i class="icon edit left"></i></a>
+            <a class="btn-blue left edit-message" ><span class="right"><% if(this.editable===true) {print('Edit') } else {print('View')} %> Message</span><i class="icon edit left"></i></a>
+            <% if(this.editable===true) { %>
             <a class="btn-red left delete-row" ><span class="right">Delete</span><i class="icon delete left"></i></a>            
             <a class="btn-green left save-message"><span>Save</span><i class="icon save"></i></a>
+            <% } %>
         </div>
 
         <div class="clearfix"></div>

@@ -29,6 +29,7 @@ function (template) {
                     this.parent = this.options.page;
                     this.btnRow = this.options.buttonRow;
                     this.object = this.options.object;
+                    this.editable=this.options.editable;
                     this.waitView = null;
                     if(this.object){
                         this.messageLabel = this.object[0]["label"];
@@ -94,13 +95,15 @@ function (template) {
                     this.loadCampaign();                    
                }
                this.$el.attr("t_order",this.triggerOrder);
-               this.$(".accordion-body").dragfile({
-                    post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
-                    callBack : _.bind(this.showSelectedImage,this),
-                    app:this.app,
-                    module:'template',
-                    progressElement:this.$('.nurtureimg')
-                });
+               if(this.editable){
+                    this.$(".accordion-body").dragfile({
+                         post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
+                         callBack : _.bind(this.showSelectedImage,this),
+                         app:this.app,
+                         module:'template',
+                         progressElement:this.$('.nurtureimg')
+                     });
+                }
                 if(this.object[0] && this.object[0].thumbURL){
                     this.showImage(this.app.decodeHTML(this.object[0].thumbURL));
                 }
@@ -173,15 +176,18 @@ function (template) {
                 else{
                 var dialog_width = $(document.documentElement).width()-50;
                 var dialog_height = $(document.documentElement).height()-162;
-                var dialog = this.app.showDialog({title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
+                var dialog_object = {title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                         headerEditable:false,                          
-                        bodyCss:{"min-height":dialog_height+"px"},
-                        buttons: {saveBtn:{text:'Save'} }
-                });                        
+                        bodyCss:{"min-height":dialog_height+"px"}                        
+                        };
+                if(this.editable){
+                    dialog_object["buttons"]=  {saveBtn:{text:'Save'} }
+                }
+                var dialog = this.app.showDialog(dialog_object);                        
                 this.app.showLoading("Loading Settings...",dialog.getBody());
                 require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                    var sPage = new settingPage({page:this,dialog:dialog});    
+                    var sPage = new settingPage({page:this,dialog:dialog,editable:this.editable});    
                     dialog.getBody().html(sPage.$el);
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                     sPage.init();
@@ -287,7 +293,7 @@ function (template) {
                                }
                        },this));
                 }
-                obj.stopPropagation();
+                
             },
              getHour:function(hour){                   
                    if(this.$(".timebox-hours button.pm").hasClass("active")){

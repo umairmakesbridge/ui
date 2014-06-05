@@ -21,6 +21,7 @@ function (template,moment) {
                     this.template = _.template(template);				
                     this.parent = this.options.page
                     this.app = this.parent.app;
+                    this.editable = this.options.editable;
                     this.target = null;
                     this.render();                    
             },
