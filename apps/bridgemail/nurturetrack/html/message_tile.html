@@ -2,7 +2,7 @@
   <div class="img">                               
        <div>
         <a class="main-action previewmsg">
-                <span>Preview</span>
+                <span style="padding:0 0 0 20px">Preview</span>
          </a>         
       </div>              
                                 
@@ -16,14 +16,16 @@
   </div>
   <div class="caption nurture-caption">
       <h3><a id="<%- model.get('campNum.checksum')%>">Loading...</a></h3>
-    <a class="cstatus pclr22">Message <strong><%-model.get('triggerOrder')%></strong> </a>
+    <a class="cstatus pclr18">Message <strong><%-model.get('triggerOrder')%></strong> </a>
    <div class="t-scroll">                         
     <p>
          
     </p>
     </div>    
     <div class="btm-bar">        
+        <% if(!this.parent.hideReport) {%>
         <span style="float:left"><span class="icon report showtooltip" title="Click to view report"></span></span>                
+        <% } %>
     </div>
   </div>
 </div>

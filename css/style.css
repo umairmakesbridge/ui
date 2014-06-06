@@ -3866,6 +3866,12 @@ ul.setting-options li img {
 .thumbnail .img > div a.previewbtn:hover {
 	background-color:#01aeee;
 }
+.thumbnail .img > div a.previewmsg:hover {
+	background-color:#01aeee !important;
+}
+.thumbnail .img > div a.usebtn:hover {
+	background-color:#98d028;
+}
 .thumbnail .img > div a.selectbtn:hover {
 	background-color:#98d028;
 }

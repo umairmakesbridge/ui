@@ -29,9 +29,10 @@ function (template,highlighter) {
                     this.app = this.options.app;
                     this.tags = this.options.tags;
                     this.rowElement = this.options.rowElement;
-                    this.tagsplit = this.tags.split(",")
+                    this.tagsplit = this.tags.split(",");                    
                     this.tagTxt = '';
                     this.tagCount = 0;
+                    this.tagSearchCall = this.options.tagSearchCall;
                     this.isTrim = false;
                     this.render();
                     //this.model.on('change',this.renderRow,this);
@@ -85,12 +86,17 @@ function (template,highlighter) {
              
             },
          
-           tagsClick: function(obj){
-                             var tag = $.getObj(obj,"a");
-                             this.parents.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
-                             this.parents.$('#search-template-input').val('');
-                             this.parents.$('#clearsearch').hide();
-                             this.parents.loadTemplates('search','tag',{text:tag.text()});  
+           tagsClick: function(obj){               
+                var tag = $.getObj(obj,"a");
+                if(this.tagSearchCall){
+                    this.tagSearchCall(tag.text());
+                }
+                else{
+                    this.parents.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                    this.parents.$('#search-template-input').val('');
+                    this.parents.$('#clearsearch').hide();
+                    this.parents.loadTemplates('search','tag',{text:tag.text()});  
+                }
           },
            trimTags : function(){
                  var isElipsis = true;
@@ -100,7 +106,7 @@ function (template,highlighter) {
                         totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
                         if(totalTagsWidth > 320){
                           if(isElipsis){
-                               var eplisis = $('<i class="ellipsis">...</i>');
+                               var eplisis = $('<i class="ellipsis">...</i><div class="clearfix"></div>');
                              $(val).before(eplisis);
                              eplisis.click(_.bind(this.expandTags,this));
                              isElipsis = false;
@@ -112,6 +118,7 @@ function (template,highlighter) {
               this.parent.$('.t-scroll' ).css('height', '155px');  
               this.parent.$(".caption").animate({height:"250px"},250); 
 	      this.parent.$(".caption p i.ellipsis").hide(); 
+              this.parent.$(".caption p div.clearfix").hide();
               this.parent.$(".caption p").css({'height':'auto','display':'block'});
 	      this.parent.$(".btm-bar").css({"position":"absolute","bottom":"0"});
 	      this.parent.$(".img > div").animate({bottom:"105px"});
@@ -132,6 +139,7 @@ function (template,highlighter) {
                         this.rowElement.find('.t-scroll' ).removeAttr('style');
                         this.rowElement.find(".caption").animate({height:"145px"},250);
                         this.rowElement.find(".caption p i.ellipsis").show();
+                        this.parent.$(".caption p div.clearfix").show();
                         this.rowElement.find(".caption p").removeAttr('style');
                         this.rowElement.find(".btm-bar").removeAttr('style');
                         this.rowElement.find(".img > div").removeAttr('style');

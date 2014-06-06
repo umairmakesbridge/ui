@@ -52,7 +52,7 @@ function (template,highlighter) {
                 this.app.showLoading("Loading...",this.parent.$el);
                 require(["nurturetrack/track_view"],_.bind(function(page){    
                      this.app.showLoading(false,this.parent.$el);                    
-                     var view_page = new page({page:this});                       
+                     var view_page = new page({page:this,hideReport:"true"});                       
                      $("body").append(view_page.$el);        
                      view_page.init();
                  },this));

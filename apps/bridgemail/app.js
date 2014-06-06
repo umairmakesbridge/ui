@@ -102,6 +102,7 @@ define([
                          //  $(".percent_stats").remove(); 
                            $(".pstats").remove(); 
                        }
+                       $(".nurture_msgslist").hide();
                        // || $(ev.target).parents(".ocp_stats").length > 0
                        //if(!($(ev.target).hasClass('metericon')) ){
                         // $('.percent_stats').find(".ocp_stats").remove();

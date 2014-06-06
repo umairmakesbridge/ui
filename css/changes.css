@@ -2958,3 +2958,6 @@ text-align:center;
 .pos-rel{
     position: relative;
 }
+.font-bold{
+    font-weight: bold;
+}

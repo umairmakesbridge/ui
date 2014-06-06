@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','nurturetrack/track_row_makesbridge_tile','jquery.bmsgrid','jquery.searchcontrol'],
+define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','nurturetrack/track_row_makesbridge_tile','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight'],
 function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,trackRowMakesbrdigeTile) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -13,7 +13,10 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             */            
             events: {				
                 'click .tile-list button' : 'toggleView',
-                'click #report_close':'closeReport'
+                'click #report_close':'closeReport',
+                'click .nurture_msgslist':function(e){
+                    e.stopPropagation();
+                }
                 
             },
             /**
@@ -60,14 +63,20 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 this.ws_header.find(".c-current-status,.savedmsg").remove();
                 this.tracksRequest.fetch({data:{type:'counts'},
                     success: _.bind(function (collection, response) {  
-                        var header_part = $('<ul class="c-current-status">\n\
-                        <li class="bmstrackcount"><a><span class="badge pclr23">'+response.systemCount+'</span>Templates</a></li>\n\
-                        <li class="usertrackcount"><a ><span class="badge pclr20">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
+                        var header_part = $('<div><ul class="c-current-status">\n\
+                        <li class="bmstrackcount"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
+                        <li class="usertrackcount"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
-                        <div class="savedmsg" style="margin:2px 0 0;"> <span class="playingicon"></span> '+response.playCount+' Playing </div>');
+                        <div class="savedmsg" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon"></span> '+response.playCount+' Playing </div></div>');
                         var $header_part = $(header_part);                        
                         $header_part.find(".bmstrackcount").click(_.bind(this.showBmsTracks,this));
                         $header_part.find(".usertrackcount").click(_.bind(this.showUserTracks,this));
+                        $header_part.find(".savedmsg").click(_.bind(function(){                            
+                                this.$(".bms_tracks").hide();
+                                this.$(".user_tracks").fadeIn();                                
+                                this.ws_header.find(".usertrackcount a").addClass("font-bold");
+                                this.ws_header.find(".bmstrackcount a").removeClass("font-bold");                             
+                        },this));
                         this.ws_header.append($header_part);
                 }, this),
                   error: function (collection, resp) {
@@ -195,9 +204,11 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         
                         for(var s=this.offset;s<collection.length;s++){
                             var trackView = new trackRow({ model: collection.at(s),sub:this });                                                            
+                            trackView.on('tagclick',_.bind(this.searchByTag,this));
                             this.$tracksContainer.append(trackView.$el);
                             
                             var trackViewTile = new trackRowTile({ model: collection.at(s),sub:this });                                                            
+                            trackViewTile.on('tagclicktile',_.bind(this.searchByTagTile,this));
                             this.$trackTileArea.append(trackViewTile.$el);
                             trackViewTile.tmPr.trimTags();
                         }                        
@@ -372,12 +383,41 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 this.$(".total-bms-text").html(_text)
                                      
             },
-            searchByTag:function(tag){
-               this.searchTxt = '';
-               this.$("#contact-search").val("Tag: "+tag);
-               this.$("#clearsearch").show();
-               this.tagTxt = tag;
-               this.fetchContacts();
+            searchByTag:function(tag){                              
+               this.$("#nuture-search").val("Tag: "+tag);
+               this.$(".nuture-search #clearsearch").show();
+               this.$("#nurturetrack_grid tr").hide();
+               this.$("#nurturetrack_grid tr").filter(function() {
+                    var tagExist = false;
+                    $(this).find(".tagscont li").each(function(i){
+                        $(this).removeHighlight();
+                        if($.trim($(this).text()).toLowerCase() == $.trim(tag).toLowerCase()){
+                            $(this).highlight(tag);	
+                            tagExist = true;
+                        }
+                    });                    
+                    if(tagExist){
+                        return $(this);
+                    }
+               }).show();
+            },
+            searchByTagTile:function(tag){
+               this.$(".nuture-search-tile #nuture-search").val("Tag: "+tag);
+               this.$(".nuture-search-tile #clearsearch").show(); 
+               this.$(".user_tracks .thumbnails li").hide();
+               this.$(".user_tracks .thumbnails li").filter(function() {
+                    var tagExist = false;
+                    $(this).find(".t-scroll a").each(function(i){
+                        $(this).removeHighlight();
+                        if($.trim($(this).text()).toLowerCase() == $.trim(tag).toLowerCase()){
+                            $(this).highlight(tag);	
+                            tagExist = true;
+                        }
+                    });                    
+                    if(tagExist){
+                        return $(this);
+                    }
+               }).show();
             },
             updateRefreshCount:function(){                
                var checked_count = this.$(".contact-row-check:checked").length;                
@@ -408,18 +448,24 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     dialog.saveCallBack(_.bind(mPage.createNurtureTrack,mPage));
                 },this));
             },
-            showBmsTracks:function(){
+            showBmsTracks:function(e){
+                var target = $.getObj(e,"li");
                 this.$(".user_tracks").hide();
-                this.$(".bms_tracks").fadeIn();                
+                this.$(".bms_tracks").fadeIn();               
+                target.find("a").addClass("font-bold");
+                this.ws_header.find(".usertrackcount a").removeClass("font-bold");
                 //this.ws_header.find(".bmstrackcount").hide();
                 //this.ws_header.find(".usertrackcount").show();                
                 if(this.makesbridge_tracks ===false){
                     this.fetchBmsTracks();
                 }
             },
-            showUserTracks:function(){
+            showUserTracks:function(e){
+                var target = $.getObj(e,"li");
                 this.$(".bms_tracks").hide();
                 this.$(".user_tracks").fadeIn();                                
+                target.find("a").addClass("font-bold");
+                this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
              //  this.ws_header.find(".bmstrackcount").show();
              //  this.ws_header.find(".usertrackcount").hide();
             },
@@ -472,7 +518,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 _stateDiv.find(".message-count").html('Loading...');
                 _stateDiv.find(".search-control").val('');
                 _stateDiv.find("#clearsearch").hide();
-                _stateDiv.css({"left":left+"px","top":top+"px"}).show();                
+                _stateDiv.css({"left":left+"px","top":top+"px"}).show();  
+                obj.stopPropagation();
                 return false;
             },
             closeReport:function(){

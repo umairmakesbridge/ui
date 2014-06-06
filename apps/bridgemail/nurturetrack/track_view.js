@@ -21,7 +21,8 @@ function (template,messagesCollection,messageView) {
             initialize: function () {
                     this.messagesRequest = new messagesCollection();    
                     this.template = _.template(template);				
-                    this.parent = this.options.page
+                    this.parent = this.options.page;
+                    this.hideReport = this.options.hideReport;
                     this.app = this.parent.app;
                     this.trackId = this.parent.model.get("trackId.encode");
                     this.trackName = this.parent.model.get('name');

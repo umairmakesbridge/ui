@@ -68,12 +68,13 @@ function (template,moment,highlighter,tagView) {
                                     app:this.app,
                                     parents:this.parent,
                                     type:'NT',
+                                    tagSearchCall:_.bind(this.tagSearch,this),
                                     rowElement: this.$el,
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
                 },
-            tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).html());
+            tagSearch:function(val){
+                this.trigger('tagclicktile',val);
                 return false;
             },
             deleteNutureTrack:function(){

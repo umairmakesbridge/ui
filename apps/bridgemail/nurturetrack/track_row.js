@@ -18,14 +18,15 @@ function (template,highlighter) {
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
               'click .campaign_stats':'reportNT',
-              'click .message-view':'viewNurtureTrack'
+              'click .message-view':'viewNurtureTrack',
+              'click .tag':'tagSearch'
             },
             /**
              * Initialize view - backbone
             */
             initialize: function () {
                     this.template = _.template(template);				
-                    this.parent = this.options.sub
+                    this.parent = this.options.sub;                    
                     this.app = this.parent.app;
                     this.render();                    
             },
@@ -53,7 +54,7 @@ function (template,highlighter) {
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).html());
+                this.trigger('tagclick',$(obj.target).text());
                 return false;
             },
             deleteNutureTrack:function(){
