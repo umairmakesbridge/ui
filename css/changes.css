@@ -2961,3 +2961,6 @@ text-align:center;
 .font-bold{
     font-weight: bold;
 }
+.bar-heading{
+    padding:11px 10px;color:#01AEEE;font-weight: bold;
+}

@@ -309,7 +309,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         headerIcon : 'targetw'                        
                       }
                      if(this.editable){
-                         this.editable["buttons"]= {saveBtn:{text:'Done'} }  ;
+                         dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;
                      } 
                      var dialog = this.app.showDialog(dialog_object);
 
@@ -380,6 +380,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     
                     var buttonsView = new ButtonsView({page:this,showWait:true,editable:this.editable});
                     this.$messageWaitContainer.append(buttonsView.$el); 
+                    if(!this.editable){
+                        buttonsView.$el.hide();
+                    }
                     bView = buttonsView.$el
                                     
                     var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model,editable:this.editable});  
@@ -418,7 +421,10 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 _wait:function(tOrder,model,isAfter){
                     var bView = null;                    
                     var buttonsView = new ButtonsView({page:this,showWait:false});                        
-                    bView = buttonsView.$el;                                                              
+                    bView = buttonsView.$el;   
+                    if(!this.editable){
+                        buttonsView.$el.hide();
+                    }
                     var waitView = new WaitView({page:this,buttonRow:bView,triggerOrder:tOrder,model:model,editable:this.editable });                             
                     this.$("[t_order='"+tOrder+"']").before(waitView.$el);      
                     var buttonPlaceHolder = waitView.$el.prev()

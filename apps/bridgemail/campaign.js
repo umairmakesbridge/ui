@@ -44,7 +44,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.$(".textdiv").hide();
                           this.$(".editor_box").show();                          
                       },
-                      'click #btn_image_url':"TryDialog"
+                      'click #btn_image_url':"TryDialog",
+                      'click #btn_image_url2':"TryDialog"
                     },                    
 
                 initialize: function () {
@@ -3412,7 +3413,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      
                 },
                 useImage:function(url){
-                    this.$el.find("#image_url").val(url);
+                    if(this.$(".step2 #html_code").hasClass("selected")){
+                        this.$el.find("#image_url2").val(url);
+                    }
+                    else{
+                        this.$el.find("#image_url").val(url);
+                    }
                 },
                 /*previewCampaignstep4:function(){
                     var active_ws = this.$el.parents(".ws-content");

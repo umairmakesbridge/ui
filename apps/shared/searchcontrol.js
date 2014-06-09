@@ -17,7 +17,10 @@
             movingElement: 'tr',
             countcontainer: 'no_of_camps',
             query:null,
-            emptyMsgContainer : null
+            emptyMsgContainer : null,
+            searchCountEl:null,
+            searchTextEl:null,
+            searchText:''
         }, options );
         return this.each(function() {				  
             var imageClass= ""; 
@@ -70,6 +73,11 @@
                 grid.removeHighlight();
                 if($("#"+options.countcontainer))
                     $("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
+                if(options.searchCountEl && options.searchTextEl){
+                        var _grid = (movElement == 'tr')?grid.find("tr"):grid.find("li");
+                        options.searchCountEl.html(_grid.length);
+                        options.searchTextEl.html(options.searchText)
+                }
                 grid.parent().find('.notfound').remove();
             }
             function keydown_func(obj){
@@ -161,7 +169,12 @@
                     }
                     
                     if($("#"+options.countcontainer))
-                        $("#"+options.countcontainer).html(count + ' ' + options.placeholder.replace('Search ','') +' found <b>for &lsquo;' + searchterm + '&rsquo;</b>');
+                       $("#"+options.countcontainer).html(count + ' ' + options.placeholder.replace('Search ','') +' found <b>for &lsquo;' + searchterm + '&rsquo;</b>');
+                    if(options.searchCountEl && options.searchTextEl){
+                        options.searchCountEl.html(count);
+                        options.searchTextEl.html(options.searchText+' found <b>for &lsquo;' + searchterm + '&rsquo;</b>')
+                    }
+                     
                                                   
                     if(count == 0)
                     {
@@ -182,6 +195,11 @@
                         grid.find("li").show();
                     if($("#"+options.countcontainer))
                         $("#"+options.countcontainer).html(grid.find("tr").length + ' Campaigns found');
+                    if(options.searchCountEl && options.searchTextEl){
+                        var _grid = (movElement == 'tr')?grid.find("tr"):grid.find("li");
+                        options.searchCountEl.html(_grid.length);
+                        options.searchTextEl.html(options.searchText)
+                    }
                     grid.removeHighlight();
                 }
             }

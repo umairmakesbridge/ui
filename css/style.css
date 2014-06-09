@@ -10910,7 +10910,7 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
     border-radius: 2px;
 }
 
-.nurtureimg .droppanel {
+.nurtureimg .droppanel,.nurtureimg .noimagebox {
     border: 2px dashed #EAF4F9;
     border-radius: 3px;
     color: #666666;
@@ -10919,6 +10919,9 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
     margin: 10px;
     position: relative;
     text-align: center;
+}
+.nurtureimg .noimagebox{
+    border: 2px solid #EAF4F9;
 }
 .nurtureimg .droppanel h4 {
     color: #91ABBC;

@@ -23,8 +23,17 @@
                 <div class="accordion-inner" >
                     <div class="nurtureimg" style="position: relative;width:160px;margin-left:50px">
                         <div class="no-image">
-                            <div class="droppanel" style="height:132px"><h4><img width="30" alt="" src="img/droparrow.png">
-                            <br class="clearfix">Drag and drop<br>an image</h4></div>  
+                            
+                             <% if(this.editable===true) { %>
+                                <div class="droppanel" style="height:132px"><h4><img width="30" alt="" src="img/droparrow.png">
+                               <br class="clearfix">Drag and drop<br>an image</h4>
+                               </div>  
+                             <% }else{ %>
+                                <div class="noimagebox" style="height:132px"><h4>
+                                <br class="clearfix">No image</h4>
+                               </div>  
+                             <% } %>
+                             
                         </div>
                         <div style="float:none; width:150px; margin:0 auto;display: none;height:150px;overflow: hidden" id="nt-image" >
                             <img  width="150" height="170" alt="" src="">

@@ -99,7 +99,11 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                      gridcontainer: this.$('#nurturetrack_grid'),
                      placeholder: 'Search nurture tracks',                     
                      showicon: 'yes',
-                     iconsource: 'campaigns'
+                     iconsource: 'campaigns',
+                     searchCountEl : this.$(".total-count"),
+                     searchTextEl : this.$(".total-text"),
+                     searchText : 'My Nurture Tracks'
+                     
               });
                this.$(".user_tracks .nuture-search-tile").searchcontrol({
                      id:'nuture-search',
@@ -111,7 +115,10 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                      iconsource: 'campaigns',
                      movingElement: 'li',
                      query:'a.edit-track',
-                     emptyMsgContainer:this.$('.user_tracks #content-1')
+                     emptyMsgContainer:this.$('.user_tracks #content-1'),
+                     searchCountEl : this.$(".total-count"),
+                     searchTextEl : this.$(".total-text"),
+                     searchText : 'My Nurture Tracks'
               });
               
               this.$("#nurturetrack_grid").bmsgrid({
@@ -387,6 +394,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.$("#nuture-search").val("Tag: "+tag);
                this.$(".nuture-search #clearsearch").show();
                this.$("#nurturetrack_grid tr").hide();
+               var count = 0;
                this.$("#nurturetrack_grid tr").filter(function() {
                     var tagExist = false;
                     $(this).find(".tagscont li").each(function(i){
@@ -397,14 +405,18 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         }
                     });                    
                     if(tagExist){
+                        count++;
                         return $(this);
                     }
                }).show();
+               this.$(".total-count").html(count);
+               this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
             },
             searchByTagTile:function(tag){
                this.$(".nuture-search-tile #nuture-search").val("Tag: "+tag);
                this.$(".nuture-search-tile #clearsearch").show(); 
                this.$(".user_tracks .thumbnails li").hide();
+               var count = 0;
                this.$(".user_tracks .thumbnails li").filter(function() {
                     var tagExist = false;
                     $(this).find(".t-scroll a").each(function(i){
@@ -415,9 +427,12 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         }
                     });                    
                     if(tagExist){
+                         count++;
                         return $(this);
                     }
                }).show();
+               this.$(".total-count").html(count);
+               this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
             },
             updateRefreshCount:function(){                
                var checked_count = this.$(".contact-row-check:checked").length;                
@@ -491,6 +506,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         this.$(".nt_listing").hide();
                         this.$(".tileview").show();
                     }
+                    this.$(".search-control").val('');
+                    this.$(".search-control").keyup();
                 }
             },
             showStates:function(obj,model,leftMinus){
