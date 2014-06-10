@@ -20,6 +20,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                "click .search-graphics-div ._graphics":"TryDialog",
                "click .tip-dialogue .closebtn":"hideURL",
                "click .ScrollToTop":"scrollToTop",
+               "click .refresh_btn":function(){
+                    this.fetchImages();               
+                }
                
                ///"click .try":"showDialog"
             },

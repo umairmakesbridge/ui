@@ -18,6 +18,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                        this.app.mainContainer.openSubscriber(target.attr("id"));
                     }
                 },
+                "click .refresh_btn":function(){
+                    this.fetchContacts();               
+                },
                 "click .searchbtn":function(){
                         this.searchTxt=this.$("#contact-search").val();
                         if(this.searchTxt){

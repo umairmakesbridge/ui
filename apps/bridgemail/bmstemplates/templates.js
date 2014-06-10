@@ -15,7 +15,10 @@ function (template,highlight,templateCollection,templateRowView) {
                 'click .searchbtn':function(){
                      this.$("#search-template-input").keyup();
                 },
-                'click #clearsearch':'searchTemplateNameTag',
+                "click .refresh_btn":function(){
+                    this.loadTemplates();
+                },
+                'click #clearsearch':'searchTemplateNameTag'
                 //'click .temp-count':'searchTemplate'
             },
             /**

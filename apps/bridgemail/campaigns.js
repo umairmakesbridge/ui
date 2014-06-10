@@ -16,6 +16,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     this.$el.find('#daterange').val('');
                                     this.findCampaigns(obj);
                             },
+                            "click .refresh_btn":function(){
+                                this.getallcampaigns();
+                            },
                             "click .stattype":function(obj){					
                                     var camp_obj = this;
                                     var appMsgs = this.app.messages[0];
