@@ -50,6 +50,8 @@ function (template,moment) {
                         if(_json.dayLapse!=="1"){
                             this.$(".chosen-select").val(_json.dayLapse).trigger("chosen:updated");
                         }
+                        var dayText = _json.dayLapse=="1"?" Day":" Days";
+                        this.$(".wait-container").html(": "+_json.dayLapse + dayText);
                     }
                     else{
                         var _date = moment(_json.scheduleDate,'MM-DD-YY');                                                        
@@ -58,8 +60,12 @@ function (template,moment) {
                         this.$(".btn-group button:last-child").addClass("active");
                         this.$(".wait-select").hide();
                         this.$(".date-select").css("display","inline-block");
+                        this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
                     }
-                }                
+                }
+                else{
+                    this.$(".wait-container").html(": 1 Day");
+                }
                 
             },
             /**
@@ -105,11 +111,14 @@ function (template,moment) {
                         if(this.$(".schedule-group button:first-child").hasClass("active")){
                             post_data['dispatchType'] = 'D';
                             post_data['dayLapse'] = this.$(".chosen-select").val();
+                            var dayText =this.$(".chosen-select").val()=="1"?" Day":" Days";
+                            this.$(".wait-container").html(": "+this.$(".chosen-select").val() + dayText);
                         }
                         else{
                             post_data['dispatchType'] = 'S';
                             var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY');                            
                             post_data['scheduleDate'] = _date.format("MM-DD-YY");
+                            this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
                         }
                         this.$(".save-wait").addClass("saving");
                         $.post(URL, post_data)
@@ -147,8 +156,9 @@ function (template,moment) {
                 collapse:function(){
                     var accordion_body = this.$(".collapse-body");
                     accordion_body.stop(1).animate({height: 0},300, function(){
-                       $(this).hide();  
+                       $(this).hide();                         
                     });
+                    this.$(".wait-container").show();
                 },
                 expand:function(){
                     var accordion_body = this.$(".collapse-body");
@@ -156,6 +166,7 @@ function (template,moment) {
                     accordion_body.stop(1).animate({height: 58},300, function(){
 
                     });
+                    this.$(".wait-container").hide();
                 }
             
             

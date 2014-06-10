@@ -25,6 +25,7 @@ function (template) {
                     this.app = this.parent.app;     
                     this.editable=this.options.editable;
                     this.settingchange = true;
+                    this.isDataLoaded = false;
                     this.render();                    
             },
               /**
@@ -174,6 +175,7 @@ function (template) {
                  this.$("#campaign_gplus").prop("checked",camp_json.googleplus=="N"?false:true);                        
                  
                  this.initCheckbox();
+                 this.isDataLoaded = true; 
                  this.parent.loadMessageHTML();              
            },
             fromNameSelectBoxChange:function(obj){
@@ -236,12 +238,11 @@ function (template) {
                             }
                             else{
                                this.parent.loadCallCampaign(); 
-                            }
-                            
+                            }                            
                         }
                     },this)).fail(function() { console.log( "error in detauls" ); });      
            },
-           saveStep1:function(){            
+           saveStep1:function(validate){            
                     var isValid = true;
                     var defaultSenderName = "",defaultReplyToEmail="";
                     var replyto = this.$('#campaign_reply_to').val();
@@ -354,6 +355,11 @@ function (template) {
                     {           
                         this.app.hideError({control:this.$(".replyemail-container")});
                     } 
+                    
+                    if(validate){
+                        
+                       return  isValid;
+                    }
 
             
                     if(isValid)

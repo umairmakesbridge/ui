@@ -103,28 +103,54 @@ function (template) {
                   this.app.showLoading(false,this.$el);  
                   var camp_json = jQuery.parseJSON(xhr.responseText);
                   this.camp_json = camp_json;
-                  this.step1_page.loadCampaign(this.camp_json);
+                  this.step1_page.loadCampaign(this.camp_json);                  
                   
               },this));    
              
            },
            loadStep1:function(){
-                this.app.showLoading("Loading...",this.$settingInner);
+                this.app.showLoading("Loading...",this.$settingInner);                
                 require(["campaigns/campaign_step1"],_.bind(function(page){    
                      this.app.showLoading(false,this.$settingInner);                    
                      this.step1_page = new page({page:this,camp_obj:this.camp_obj,editable:this.editable})                       
                      this.$settingInner.append(this.step1_page.$el);         
-                     this.step1_page.init();
+                     this.step1_page.init();                     
+                     this.validateStep1();
                  },this));
+            },
+            validateStep1:function(){
+                if(!this.step1_page.isDataLoaded){
+                    setTimeout(_.bind(this.validateStep1,this),300)
+                }
+                else{
+                    var isStep1Valid = this.step1_page.saveStep1(true);
+                    if(isStep1Valid===false){
+                        this.$("#accordion_setting").accordion( "option", "active", 0);
+                    }
+                    
+                }
             },
             loadMessageBody:function(){
                 this.app.showLoading("Loading...",this.$bodyInner);
-                require(["campaigns/campaign_body"],_.bind(function(page){    
-                     this.app.showLoading(false,this.$bodyInner);                    
-                     this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
-                     this.$bodyInner.append(this.messagebody_page.$el);         
-                     this.messagebody_page.init();
-                 },this));
+                if(this.editable){
+                    require(["campaigns/campaign_body"],_.bind(function(page){    
+                         this.app.showLoading(false,this.$bodyInner);                    
+                         this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
+                         this.$bodyInner.append(this.messagebody_page.$el);         
+                         this.messagebody_page.init();
+                     },this));
+                 }
+                 else{
+                     var camp_id = this.camp_obj['campNum.encode'];                
+                     var dialog_height = $(document.documentElement).height()-182;
+                     var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                        require(["common/templatePreview"],_.bind(function(MessagePreview){
+                        var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                        this.$bodyInner.append(tmPr.$el);
+                        tmPr.$("#temp-camp-previewbar").hide();
+                        tmPr.init();
+                   },this));
+                 }
             },
             saveStep2:function(showLoading){                                                   
                  var html = "",plain="";                  

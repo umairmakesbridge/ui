@@ -16,6 +16,12 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 'click #report_close':'closeReport',
                 'click .nurture_msgslist':function(e){
                     e.stopPropagation();
+                },
+                'click .user_tracks .refresh_btn':function(){
+                    this.fetchTracks();
+                },
+                'click .bms_tracks .refresh_btn':function(){
+                    this.fetchBmsTracks();
                 }
                 
             },
@@ -58,6 +64,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.addCountHeader();               
                this.addNewButton.click(_.bind(this.addNurtureTrack,this));
                this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
             addCountHeader:function(){
                 this.ws_header.find(".c-current-status,.savedmsg").remove();
@@ -171,7 +178,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     usepager : false,
                     colWidth : ['90px','100%','90px','132px']
                 });
-                this.$tracksBmsContainer = this.$("#bms_nurturetrack_grid tbody");      
+                this.$tracksBmsContainer = this.$("#bms_nurturetrack_grid tbody");                      
                 this.$trackTileBmsArea = this.$(".bms_tracks ul.thumbnails");
             },
             /**
@@ -263,6 +270,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     remove_cache = true;
                     this.offset = 0;
                     this.$tracksBmsContainer.children().remove();
+                    this.$trackTileBmsArea.children().remove();
                     this.app.showLoading("Loading nurture track templates...",this.$tracksArea);             
                     this.$(".bms_tracks .notfound").remove();
                 }

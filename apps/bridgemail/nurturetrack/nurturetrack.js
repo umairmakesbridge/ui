@@ -152,13 +152,16 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                                 t_order = t_order+1;
                             },this)
                         }
+                        this.ws_header.find(".cstatus").remove();
                         if(_json.status=="D"){
                             this.ws_header.find(".play24").show();
-                            this.ws_header.find(".pause24").hide();                            
+                            this.ws_header.find(".pause24").hide();                             
+                            this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr1" style="margin:6px 4px 0px -7px">Paused </a>'));
                         }
                         else{
                             this.ws_header.find(".play24,.delete").hide();
                             this.ws_header.find(".pause24").show();
+                            this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr18" style="margin:6px 4px 0px -7px">Playing </a>'));
                             this.ws_header.find(".cstatus").addClass("pclr18").removeClass("pclr1");
                             this.ws_header.find(".cstatus i").addClass("play16").removeClass("pause16");
                         }
