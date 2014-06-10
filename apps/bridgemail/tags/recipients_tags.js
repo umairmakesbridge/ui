@@ -40,6 +40,7 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                     // _data['offset'] = this.offset;
                     var that = this; // internal access
                     _data['type'] = 'subscriberTagCountList';
+                    that.$el.find('#tagslist ul').children().remove();
                     this.objTags = new tagsCollection();
                     this.app.showLoading('Loading Tags...', this.el);
                     this.request = this.objTags.fetch({data: _data, success: function(data) {

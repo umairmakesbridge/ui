@@ -183,7 +183,12 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                if(!fcount){
                     this.offset = 0;
                     this.app.showLoading('Loading Images....',that.$el);
-              
+                    _.each(that.$el.find('.thumbnails li'),function(val,key){
+                        if(!$(val).hasClass("upload")){
+                            $(val).remove();
+                        }
+                    },this);
+                    
                }
                else{
                     this.offset = this.offset + this.offsetLength;
