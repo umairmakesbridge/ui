@@ -33,6 +33,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 this.loadLists();
                 this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
                 this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));

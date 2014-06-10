@@ -57,7 +57,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               this.stackImages = "";
               this.app = this.options.app;
               this.$el.html(this.template({}));
-              
+              this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
               this.fetchImages();
               if(this.fromDialog){
                 $(".modal-body").scroll(_.bind(this.liveLoading,this));

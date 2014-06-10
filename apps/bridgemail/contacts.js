@@ -64,7 +64,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.current_ws = this.$el.parents(".ws-content");
                this.current_ws.find("#campaign_tags").hide();
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
-               
+               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                this.addCountHeader();
                this.fetchCount();
             },
