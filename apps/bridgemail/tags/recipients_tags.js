@@ -14,7 +14,10 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                 events: {
                     "keyup #tags_search": "search",
                     "click  #clearsearch": "clearSearch",
-                    "click .closebtn": "closeContactsListing"
+                    "click .closebtn": "closeContactsListing",
+                    "click .refresh_btn":function(){
+                        this.loadTags();
+                    }
                 },
                 initialize: function() {
                     this.template = _.template(template);

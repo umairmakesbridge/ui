@@ -17,7 +17,10 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     "keyup #grids_search": "search",
                     "click #clearsearch": "clearSearch",
                     'click #newTarget': "createTarget",
-                    "click .closebtn": "closeContactsListing"
+                    "click .closebtn": "closeContactsListing",
+                    "click .refresh_btn":function(){
+                        this.loadTargets();
+                    }
                 },
                 initialize: function() {
                     this.template = _.template(template);

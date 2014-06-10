@@ -13,7 +13,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
             events: {
                "keyup #lists_search":"search",
                "click  #clearsearch":"clearSearch",
-               "click .closebtn":"closeContactsListing"
+               "click .closebtn":"closeContactsListing",
+               "click .refresh_btn":function(){
+                   this.loadLists();
+               }
             },
             initialize: function () {
                 this.template = _.template(template);				
