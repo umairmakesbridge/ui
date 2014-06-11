@@ -2254,7 +2254,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
+                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
@@ -2281,10 +2281,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                this.getcampaignscopy();
                               // this.getallcampaigns();                                 
                          break;
+                         case 'html_editor_mee':
+                               this.loadMEE();
+                              // this.getallcampaigns();                                 
+                         break;
                          default:
                          break;
                     }
                     
+                },
+                loadMEE:function(){
+                    if(!this.states.step2.meeEditor){
+                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));
+                         this.$("#mee_editor").attr("src","MEE/index.jsp?BMS_REQ_TK="+this.app.get('bms_token'));
+                         this.states.step2.meeEditor = true;
+                         this.$("#mee_editor").load(_.bind(function(){
+                             this.app.showLoading(false,this.$("#area_html_editor_mee"));
+                         },this))
+                    }
                 },
                 getcampaignscopy:function(){
                     // Abdullah 

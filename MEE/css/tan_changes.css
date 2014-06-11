@@ -1,0 +1,79 @@
+
+h2.header-list {
+    clear: both;
+    line-height: 44px;
+    margin: 0;
+    padding: 10px 0 10px 10px;
+}
+
+.notfound
+{
+	font-size:17px;
+	font-weight:normal;
+	margin:10px 0 0 20px;
+}
+
+.search .close-icon {    
+    right: 38px;
+    top: 8px;
+}
+.highlight { 
+    background-color: #0088CC !important;
+    color: #FFFFFF !important;
+    float: none !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    width: auto !important;
+    margin:0px !important;
+}
+.c-name h2 { margin-top:9px; }
+.step-contents { overflow-y:inherit; overflow-x:inherit; }
+ input[type=text].search-control { padding:5px 6px; }
+ #listssearch,#targetsearch { margin-right:5px; }
+#salesforce_campaigns .chosen-container-single .chosen-single { width:250px; }
+#salesforce_campaigns .chosen-container .chosen-drop { width:268px; }
+.bmsgrid .time span.highlight { background:none; }
+.unique_rec {
+    background: linear-gradient(to bottom, #FFFFFF 0%, #F6F6F6 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-top: 1px solid #E5E5E5;
+    bottom: 0;
+    color: #666666;
+    display: block;
+    left: 0;
+    padding: 2%;
+    position: absolute;
+    width: 96%;
+}
+h2.header-list span.recpscount {
+    background: none repeat scroll 0 0 #FCFCFC;
+    border: 1px solid #E5E5E5;
+    border-radius: 30px 30px 30px 30px;
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 30px;
+    padding: 0 14px;
+	color: #888888;
+}
+#list_grid_recipients .btn-red, #target_grid_recipients .btn-red, #target-lists .btn-green { padding:6px 15px; }
+#list_grid_recipients .subscribers, #target-lists .subscribers { margin:13px 0px 13px 25px; }
+#targets_grid .subscribers, #target_grid_recipients .subscribers { margin:13px 0px 13px 85px; }
+#list_grid_recipients .action, #target-lists .action { right:10px; top:-1px; }
+#targets_grid .action, #target_grid_recipients .action { right:10px; }
+#targets_grid .action .btn-green { float:left; margin-left:10px; }
+#targets_grid .action .use { margin-left:0; }
+#salesforce_campaigns .chosen-container .chosen-drop {  }
+.chosen-container-single .chosen-drop { margin-top:6px; border-top:solid 1px #aaa; }
+.chosen-drop:after {  
+	left: auto;
+    right: 7px;
+	border-bottom: 6px solid #aaaaaa;
+    border-left: 6px solid rgba(0, 0, 0, 0);
+    border-right: 6px solid rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;    
+    position: absolute;
+    top: -6px;	
+}
+.bmsgrid td .action { margin:auto 0px; }
+.bmsgrid div.bDiv table { margin-bottom:0; }

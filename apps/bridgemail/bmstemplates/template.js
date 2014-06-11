@@ -189,7 +189,8 @@ function (template,icheck,bmstags) {
                             params:{type:'tags',templateNumber:_this.template_id,tags:''}
                             ,showAddButton:true,                            
                             tags:template_json.tags,
-                            callBack:_.bind(_this.newTags,_this)
+                            callBack:_.bind(_this.newTags,_this),
+                            typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+_this.app.get('bms_token')+"&type=allTemplateTags"
                          });
                    }
                  }).fail(function() { console.log( "error in loading template" ); }); 
