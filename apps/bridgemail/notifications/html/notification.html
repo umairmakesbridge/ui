@@ -1,4 +1,37 @@
-    <em class="date"><%=this.dateSetting()%></em>
-    <h3><%=this.model.get('eventType')%></h3>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget ipsum sagittis, <a class="link" href="">https://www.behance.net/gallery/12411775/Harts-Hollow-Concept-art</a>  laoreet nulla vitae, ullamcorper nulla. Integer ullamcorper adipiscing.</p>
-    <a class="showmore">Show more â–¾</a>
+<em class="date"><%=this.getDate()%></em>
+<h3 style="<%=this.getStyleRead()%> ; cursor: pointer;" data-original-title="Click to expand and mark read" class="showtooltip"> <%=this.getTitle()%></h3>
+ 
+
+<div class="info-p">
+    <div class="infotxt">
+        <%=this.getLabelText()%>
+    </div> <!--  infotxt  -->
+    <div class="infotxt">
+        <%=this.getSentText()%>
+    </div> <!--  infotxt  -->
+    
+    <div class="infotxt">
+      <%=this.getScheduleDate()%>
+    </div> <!--  infotxt  -->
+    <div class="infotxt" style="clear:both">
+       <%=this.getSubject()%>
+    </div> <!--  infotxt  -->
+
+    <div class="infotxt">
+       <%=this.getPopulationCount()%>
+    </div> <!--  infotxt  -->
+    
+    <div class="infotxt">
+       <%=this.getTags()%>
+    </div> <!--  infotxt  -->
+     <div class="infotxt">
+       <%=this.isTextOnly()%>
+    </div> <!--  infotxt  -->
+
+</div>  <!--  info-p  -->
+
+<%=this.getActionButton()%>
+
+
+<a class="arrow down showtooltip" data-original-title="Click to expand and mark read"></a>
+<div class="clearfix"></div>
