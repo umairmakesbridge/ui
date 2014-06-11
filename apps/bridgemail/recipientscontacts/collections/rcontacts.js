@@ -11,7 +11,7 @@ define(['recipientscontacts/models/rcontact','app','backbone'], function (Modelr
 	return Backbone.Collection.extend({
 	   urlRoot: '/pms/io/list/getListPopulation/',
            initialize: function(models,options) {
-               console.log(this.options);
+              
                 options || (options = {});
                 if (options.total) {
                     this.total = options.count;

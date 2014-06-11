@@ -13,9 +13,13 @@ define(['backbone', 'app','notifications/models/notification'], function (Backbo
            initialize: function(models,options) {
                 options || (options = {});
                 if (options.total) {
-                    this.total = options.count;
-                };
-},
+                    this.total = options.totalCount;
+                   
+                }
+                if(options.totalUnread){
+                     this.unreadCount = options.totalUnread;
+                }
+            },
             model:ModelNotification,
             url: function () {
                 return '/pms/io/user/notification/?BMS_REQ_TK=' + app.get('bms_token');
@@ -29,6 +33,7 @@ define(['backbone', 'app','notifications/models/notification'], function (Backbo
                     })                    
                 }
                 this.total = response.totalCount;
+                this.unreadCount = response.unreadCount;
                 return result;
             }
              

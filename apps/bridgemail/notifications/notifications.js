@@ -11,6 +11,10 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
             'use strict';
             return Backbone.View.extend({
                 events: {
+                    "click .sortoption_expand":"toggleMenu",
+                     "click .closebtn": "closeContactsListing",
+                      "click #template_search_menu_expand li a":"sortNotifications",
+                      "click #refresh_notification":"initialize"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -18,48 +22,137 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     this.total_fetch = 0;
                     this.total = 0;
                     this.app = app;
+                    this.notifyType = "";
+                     this.loop = 0;
+                    this.eventType= "";
                     this.offsetLength = 0;
-
+                    this.notificationData = [];
                     this.render();
                 },
                 render: function() {
                     var that = this;
+                    
+                    this.notificationMetaData();
                     this.$el.html(this.template());
-                    $(".modal-body").scroll(_.bind(this.liveLoading, this));
-                    $(".modal-body").resize(_.bind(this.liveLoading, this));
+                    this.fetchNotifications();
+                    this.$el.find(".all-notification").scroll(_.bind(this.liveLoading, this));
+                    this.$el.find(".all-notification").resize(_.bind(this.liveLoading, this));
+                    
+                },
+                sortNotifications:function(ev){
+                  
+                    if($(ev.target).parents('li').hasClass('active')){ return;}
+                   
+                    $(ev.target).parents('ul').find('li').removeClass('active');
+                    var sort = $(ev.target).data('search');
+                    if ( sort.indexOf('_notify') !== -1 ){
+                        this.notifyType = sort.split("_")[0];
+                        this.eventType = null;
+                    }else{
+                            
+                        if(sort == ""){
+                            this.eventType = null;
+                        }else{
+                             this.eventType = sort;
+                        }
+                        
+                        this.notifyType = null;
+                    }
+                    $(this.el).find(".sortoption_expand").html($(ev.target).html());
+                    $(ev.target).parents('li').addClass('active');
+                    this.toggleMenu();
+                     
+                     this.total_fetch = 0;
                     this.fetchNotifications();
                 },
                 fetchNotifications: function(count) {
+                    var container = this.$el.find(".notification-container");
                     var _data = {};
                     var that = this;
                     if (!count) {
+                        container.html('');
+                        that.total_fetch = 0;
+                         this.loop = 0;
                         this.offset = 0;
-                    } else {
-                        this.offset = this.offset + this.offsetLength;
+                        this.app.showLoading("&nbsp;",container);
+                       } else {
+                           if(that.$el.find(".div-load-more").length > 0)
+                               that.$el.find(".div-load-more").remove();
+                            container.append("<div style='margin-right:50%; margin-top:10px; width:100% ; text-align:center' class='div-load-more'><img src='img/loading.gif'></div>"); 
+                            this.offset = this.offset + this.offsetLength;
                     }
-
+                    
+                    
                     _data['type'] = "get";
-                    _data['notifyType'] = "";
-                    _data['eventType'] = "";
+                    _data['notifyType'] =this.notifyType;
+                    _data['eventType'] = this.eventType;
                     _data['offset'] = this.offset;
-                    this.$el.find('.clicks-listing table tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:15px;padding-left:43%;'>No clicks founds!</div><div class='loading-contacts' style='margin-top:45px'></div></td></tr>");
-                    this.app.showLoading("&nbsp;", this.$el.find('.clicks-listing table').find('.loading-contacts'));
-
                     var objNotifications = new Notifications();
+                   
                     objNotifications.fetch({data: _data, success: function(data) {
                             that.offsetLength = data.length;
                             that.total_fetch = that.total_fetch + data.length;
+                            
+                            if(objNotifications.unreadCount != "0"){
+                                $(that.el).find('h4').find('span').html('New Messages');
+                                $(that.el).find('h4').find('.badge').html(objNotifications.unreadCount);
+                            }else{
+                                $(that.el).find('h4').find('span').html('Messages');
+                                $(that.el).find('h4').find('.badge').html(objNotifications.total);
+                            }
+                            
+                            if(data.length == 0){
+                              var noRecordHTML="<div class='alertmsg' style='height: auto;'><div class='info-p'><span style='margin-left:35%; margin-top:20%; color:#000;'> No message(s) found </span></div>";
+                              container.html(noRecordHTML);
+                              container.parents('.messages_dialogue').find('.viewallmsgs').hide();
+                            }else{
+                               
+                                if(that.options.isModel == false && data.length > 4)
+                                    container.parents('.messages_dialogue').find('.viewallmsgs').show()
+                            }
                             _.each(data.models, function(model) {
-                                that.$el.find(".notification-container").append(new Notification({model: model, app: that.app, attr: that.options}).el);
+                                
+                                container.append(new Notification({metaData:that.notificationData,model: model, app: that.app, attr: that.options}).el);
                             });
-                            if (that.total_fetch < parseInt(data.total)) {
-                                that.$el.find(".notification-container .alertmsg:last").attr("data-load", "true");
+                            if (that.total_fetch < parseInt(data.total) && that.options.isModel == true) {
+                                 container.find(".alertmsg:last").attr("data-load","true");
+                                 if($(".popmodel").scrollTop() < 1){ that.loop = that.loop + 1};
+                                
+                                 that.$el.find(".all-notification").css("height",$(window).height() - 230 + "px");
+                                    // container.append("<div style='margin-right:50%; width:100% ; text-align:center' class='div-load-more'></div>");
+                             // that.$el.find('.load-more').on('click',function(){
+                                //that.$el.find('.div-load-more').remove();
+                                //that.fetchNotifications(that.offsetLength);
+                             // });
+                            }
+                            if (!count) {
+                                 that.app.showLoading(false,container);
+                             
+                            }else{
+                              that.$el.find(".div-load-more").remove();
+                            }
+                            if ($(".popmodel").scrollTop() < 1){
+                                var $w = that.$el.find(".all-notification");
+                                var th = 200;
+                                    var inview = that.$el.find('.all-notification .alertmsg:last').filter(function() {
+                                 var $e = $(this),
+                                     wt = $w.scrollTop(),
+                                     wb = wt + $w.height(),
+                                     et = $e.offset().top,
+                                     eb = et + $e.height();
+                                 return eb >= wt - th && et <= wb + th;
+                                 });
+                                if (inview.length && inview.attr("data-load") && that.$el.height() > 0) {
+                                    inview.removeAttr("data-load");
+                                    that.fetchNotifications(that.offsetLength);
+                                }  
                             }
                         }});
+                     
 
-
-
-
+                },
+                toggleMenu:function(){
+                     $(this.el).find("#template_search_menu_expand").slideToggle();   
                 },
                 capitalizeLetter: function() {
 
@@ -69,17 +162,18 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                 },
                 liveLoading: function() {
                     var $w = $(window);
-                    if ($(".modal-body").scrollTop() > 70) {
-                        if ($(".modal-footer .pageviews-scroll").length < 1)
-                            $(".modal-footer").append("<button class='ScrollToTop clicks-scroll' type='button' style='position:absolute;bottom:65px;right:12px;'></button>");
-                        $('.clicks-scroll').on('click', function() {
-                            $(".modal-body").animate({scrollTop: 0}, 600);
-                        })
+                    if ($(".all-notification").scrollTop() > 70) {
+                        if($(".all-notification").find(".notify-scroll").length < 1){
+                            $(".all-notification").append("<button class='ScrollToTop notify-scroll' type='button' style='position:absolute;bottom:2px;right:18px;'></button>");
+                            $(".all-notification").find('.notify-scroll').on('click', function() {
+                                $(".all-notification").animate({scrollTop: 0}, 600);
+                            })
+                        }
                     } else {
-                        $(".modal-footer .clicks-scroll").remove();
+                        $(".all-notification").find(".notify-scroll").remove();
                     }
                     var th = 200;
-                    var inview = this.$el.find('table tbody tr:last').filter(function() {
+                    var inview = this.$el.find('.all-notification .alertmsg:last').filter(function() {
                         var $e = $(this),
                                 wt = $w.scrollTop(),
                                 wb = wt + $w.height(),
@@ -89,9 +183,27 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     });
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
-                        this.fetchClicks(this.offsetLength);
-                    }
+                        this.fetchNotifications(this.offsetLength);
+                    }  
+                   
+                },
+                notificationMetaData:function(){
+                    var URL = "/pms/io/user/notification/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=metadata";
+                    var that = this;
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        var data = jQuery.parseJSON(xhr.responseText);
+                            _.each(data.types[0].event[0], function(key, value){
+                                that.notificationData[key] = value;
+                                $("#template_search_menu_expand").append("<li data-search='"+key+"' ><a  data-search='"+key+"'>"+value+"</a></li>");                  
+                            });
+                     
+                    });
+                } ,
+                 closeContactsListing: function() {
+                    $("#div_pageviews").empty('');
+                    $("#div_pageviews").hide();
                 }
-            });
-        });
 
+            });
+
+        });

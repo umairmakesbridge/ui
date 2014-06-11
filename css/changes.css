@@ -2307,6 +2307,7 @@ input[type='file'] {
     display: block;
     float: left;
     height: 34px;
+    
     margin: 9px 5px 0 0;
     position: relative;
 }
@@ -2362,6 +2363,7 @@ ul.ddlist {
     overflow: hidden;
     position: absolute;
     top: 50px;
+    z-index: 9999;
     width: 170px;
 }
 ul.ddlist li:first-child {
@@ -2480,17 +2482,19 @@ ul.leftnav > li.icon-menu { transition: none !important;}
 
 
 .sc-links > a sup {
-    background: none repeat scroll 0 0 #3DB5FF;
-    border-radius: 10px;
-    color: #FFFFFF;
-    display: block;
-    font-weight: bold;
-    height: 14px;
-   right: 55px;
-    line-height: 13px;
-    padding: 0 5px;
-    position: absolute;
-    top: 15px;
+  background: none repeat scroll 0px 0px #dc0d17;
+border-radius: 10px;
+color: #FFF;
+display: block;
+font-weight: bold;
+height: 15px;
+right: -3px;
+line-height: 15px;
+padding: 3px 5px;
+position: absolute;
+top: 15px;
+width: 18px;
+text-align: center;
 }
 
 
