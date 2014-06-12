@@ -99,10 +99,16 @@ define([
                     $("body").click(function(ev){
                        $(".custom_popup").hide(); 
                        if(!($(ev.target).hasClass('percent'))){
-                         //  $(".percent_stats").remove(); 
                            $(".pstats").remove(); 
                        }
-                       $(".nurture_msgslist").hide();
+                        var container = $(".messages_dialogue");
+                        if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
+                        && container.has(ev.target).length === 0){ // ... nor a descendant of the  message dialogue
+                            if(!$(ev.target).hasClass('messagesbtn') && !$(ev.target).hasClass('view-all') && !$(ev.target).parents('.messagesbtn').length && !$(ev.target).parents('.refresh_btn').length){
+                                  container.hide();
+                            }
+                        }
+                        $(".nurture_msgslist").hide();
                        // || $(ev.target).parents(".ocp_stats").length > 0
                        //if(!($(ev.target).hasClass('metericon')) ){
                         // $('.percent_stats').find(".ocp_stats").remove();

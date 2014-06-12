@@ -93,11 +93,12 @@ function (template,Click,Clicks) {
             liveLoading:function(){
                 var $w = $(window);
                   if ($(".modal-body").scrollTop()>70) {
-                         if($(".modal-footer .pageviews-scroll").length < 1)
-                           $(".modal-footer").append("<button class='ScrollToTop clicks-scroll' type='button' style='position:absolute;bottom:65px;right:12px;'></button>");
-                           $('.clicks-scroll').on('click',function(){
-                               $(".modal-body").animate({scrollTop:0},600); 
-                           })
+                         if($(".modal-footer").find('.clicks-scroll').length < 1){  
+                                $(".modal-footer").append("<button class='ScrollToTop clicks-scroll' type='button' style='position:absolute;bottom:65px;right:12px;'></button>");
+                                $('.clicks-scroll').on('click',function(){
+                                    $(".modal-body").animate({scrollTop:0},600); 
+                                })
+                          }
                        } else {
                           $(".modal-footer .clicks-scroll").remove();
                     }         
