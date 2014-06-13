@@ -95,7 +95,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         hide:function(){                            
                             this.$el.modal("hide");
                             this.doubleBlackOut(false);
-                           if($(".overlay,.modal-backdrop").length==0){
+                           if($("body > .overlay,.modal-backdrop").length==0){
                                 $("body").css("overflow-y","auto");
                             }
                         },

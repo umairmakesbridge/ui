@@ -45,7 +45,7 @@ function (template,messagesCollection,messageView) {
             },
             closeView:function(){
                 this.$el.remove();
-                if($(".overlay,.modal-backdrop").length==0){
+                if($("body > .overlay,.modal-backdrop").length==0){
                     $("body").css("overflow-y","auto");
                 }                
             },
