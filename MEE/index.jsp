@@ -1871,10 +1871,10 @@
 					SearchImagesProperties: _searchImagesAjaxParameters,
 					AddImageProperties: _AddimageAjaxParameters,
 					preDefinedHTML: _preDefinedHTML,
-                    landingPage: false,
-                    formWizURL: _formWizURL,
-                    formDeleteURL: _formDeleteURL ,
-                    sessionIDFromServer: "<%=WebSecurityManager.getCSRFToken_HREF(session)%>",
+                                        landingPage: false,
+                                        formWizURL: _formWizURL,
+                                        formDeleteURL: _formDeleteURL ,
+                                        sessionIDFromServer: "<%=WebSecurityManager.getCSRFToken_HREF(session)%>",
 					OnDropElementOnBuildingBlock: function (args) {
 
 						//Save to Server

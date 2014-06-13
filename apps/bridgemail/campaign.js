@@ -2254,7 +2254,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
+                        this.$(".step2 .selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
