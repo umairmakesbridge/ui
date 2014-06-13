@@ -18,7 +18,8 @@ function (template,highlighter) {
                'click .edit-camp':'openCampaign',
                "click .preview-camp":'previewCampaign',
                'click  a.campname': 'campaignStateOpen',
-               "click .schedule-camp, .reschedule-camp":'schOpenCampaign',
+               "click .schedule-camp":'schOpenCampaign',
+               "click .reschedule-camp":'reschOpenCampaign',
                'click .delete-camp':'deleteCampaginDialoge',
                'click .taglink':'tagClick',
                'click .report':'reportShow',
@@ -259,7 +260,7 @@ function (template,highlighter) {
                         tagClick:function(obj){
                             this.sub.taglinkVal = true;
                             this.tagTxt = obj.currentTarget.text;
-                             this.app.initSearch(obj,this.sub.$el.find("#list-search"));
+                            this.app.initSearch(obj,this.sub.$el.find("#list-search"));
                         },
                         reportShow:function(){
                                         var camp_id=this.model.get('campNum.encode');
@@ -332,6 +333,23 @@ function (template,highlighter) {
                             var camp_id = this.model.get('campNum.encode');
                             var camp_wsid = this.model.get('campNum.checksum');
                             this.app.mainContainer.openCampaign(camp_id,camp_wsid,schFlag,reschedule,hidecalender);  
+                        },
+                        reschOpenCampaign : function(ev){
+                            var camp_id = this.model.get('campNum.encode');
+                            var campstates = {"init":true,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''};
+                            var dialog_title = "Reschedule Campaign";
+                            var dialog = this.app.showDialog({title:dialog_title,
+                                              css:{"width":"615px","margin-left":"-300px"},
+                                              bodyCss:{"min-height":"260px"},							   
+                                              headerIcon : '',                                                                         
+                            });
+                            this.app.showLoading("Loading...",dialog.getBody());
+                            //this.sub.total_fetch = 0;
+                           require(["campaigns/schedule_campaign"],_.bind(function(reschedulePage){                                     
+                                             var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:true,hidecalender:this.hidecalender,scheduleFlag:'reschedule'});
+                                             dialog.getBody().html(mPage.$el);
+                                            // dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                            },this));
                         }
             
         });

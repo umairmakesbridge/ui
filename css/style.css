@@ -4328,7 +4328,7 @@ ul.setting-options li img {
 
 
 .schedule-camp {
-	
+	float:left;
 	}
 
 /* ************************************ */
@@ -4346,7 +4346,7 @@ ul.setting-options li img {
 .schedule-box .calendar {
     float: left;
     overflow: hidden;
-    width: 50%;
+    width: 100%;
 }
 .calendar header {
 	position: relative;
@@ -7502,12 +7502,12 @@ div.returnpath {
 
 
 .sch-right {
-    background: none repeat scroll 0 0 #fff;
+    background: none repeat scroll 0 0 #FFFFFF;
     float: right;
-    height: 101%;
-    margin: 110px -17px 0;
+    height: 100%;
+    margin: 110px 0 0;
     padding: 15px;
-    width: 45%;
+    width: 100%;
 }
 
 
@@ -7586,7 +7586,7 @@ div.returnpath {
     font-weight: 200;
     height: 36px;
     line-height: 36px;
-    margin: 2px;
+    margin: 0px;
     padding: 5px;
     text-align: center;
     width: 52px;
@@ -10579,10 +10579,10 @@ background:#F1F9FD;
 
 
 .set-time .timebox { position:relative;}
-.set-time .timebox input { font-size:26px; font-weight:bold; background:#EAF5FC;   cursor: default !important;
+.set-time .timebox input { font-size:26px; font-weight:bold; background:#fff;   cursor: default !important;
     padding: 5px 10px;
     text-align: left;
-    width: 46px !important;}
+    width: 63px !important;}
 .set-time .timebox input:focus{background:#EAF5FC;}
 
  .set-time .colon {   margin: 0 6px 0 -2px; }
@@ -11096,3 +11096,5 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
 
  .refresh_btn:hover {background: none repeat scroll 0 0 #97D61D;}
 .refresh_btn:hover i  { color:#fff; }
+
+

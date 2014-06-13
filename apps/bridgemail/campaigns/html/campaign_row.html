@@ -36,33 +36,33 @@
               <div>                 
                 <% if(model.get('status')==='D'){  %>
 
-               <a class="icon preview-camp preview clr2"><span>Preview</span></a>
-               <a class="icon edit-camp edit clr5"><span>Edit</span></a>
-               <a class="icon schedule-camp calender clr4"><span>Schedule</span></a>  
-               <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+               <a class="icon edit-camp edit clr4"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
                <a class="icon delete-camp delete clr1"><span>Delete</span></a>
 
                <% } else if(model.get('status')==='S') {
                %>
-                   <a class="icon preview-camp preview"><span>Preview</span></a>
-                   <a class="icon draft-camp draft" title="draft"><span>Draft</span></a>
-                   <a class="icon reschedule-camp calender"><span>Reschedule</span></a>
-                   <a class="icon copy-camp copy"><span>Copy</span></a> 
-                   <a class="icon delete-camp delete"><span>Delete</span></a>                                 	
+                   <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+                   <a class="icon draft-camp draft clr4" title="draft"><span>Draft</span></a>
+                   <a class="icon reschedule-camp calender clr3"><span>Reschedule</span></a>
+                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                   <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
                <%} else if(model.get('status')==='P') {
                %>
-                   <a class="icon preview-camp preview clr1"><span>Preview</span></a>                                 	
-                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>                                 	
+                   <a class="icon copy-camp copy clr1"><span>Copy</span></a> 
                <%} else if(model.get('status')==='C') {
                %>
-                   <a class="icon preview-camp preview clr2"><span>Preview</span></a>
-                   <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+                   <a class="icon preview-camp preview clr3"><span>Preview</span></a>
+                   <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                 	
                <%} else {%>
-               <a class="icon preview-camp preview clr2"><span>Preview</span></a>
-               <a class="icon edit-camp edit clr5"><span>Edit</span></a>
-               <a class="icon schedule-camp calender clr4"><span>Schedule</span></a>  
-               <a class="icon copy-camp copy clr3"><span>Copy</span></a> 
+               <a class="icon preview-camp preview clr5"><span>Preview</span></a>
+               <a class="icon edit-camp edit clr4"><span>Edit</span></a>
+               <a class="icon schedule-camp calender clr3"><span>Schedule</span></a>  
+               <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
                <a class="icon delete-camp delete clr1"><span>Delete</span></a>
                <% } %>
                </div>   

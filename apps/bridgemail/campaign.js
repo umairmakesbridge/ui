@@ -28,8 +28,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'click #btnSFLogin':'loginSalesForce',
                       'click #btnHSLogin':'loginHighrise',
                       'click #btnNSLogin':'loginNetSuite',
-                      'click .scheduled-campaign': 'scheduleCamp',
-                      'click .draft-campaign':'setDraftCampaign',
+                      
+                     
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
                       //'click .preview-camp':'previewCampaignstep4',
                       'click .prev-iframe-campaign':'htmlTextClick',
@@ -70,9 +70,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''},
                         "editor_change":false,
                         "saleforce_campaigns":null
-                    };
-                    this.bmseditor = new editorView({opener:this,wp_id:this.wp_id});                        
+                    }; 
+                    this.bmseditor = new editorView({opener:this,wp_id:this.wp_id}); 
                     this.render();
+                    
                     var appMsgs = this.app.messages[0];
                     this.app.showInfo(this.$el.find('#lblSubject'),appMsgs.CAMP_subject_info);
                     this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
@@ -711,7 +712,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else if(this.states.step3.recipientType.toLowerCase()=="target"){
                             source_li = "choose_targets";
                         }
-      else if(this.states.step3.recipientType.toLowerCase()=="tags"){
+                        else if(this.states.step3.recipientType.toLowerCase()=="tags"){
                             source_li = "choose_tags";
                         }
                         else if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
@@ -726,8 +727,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$(".step3 #"+source_li).click();
                     }
                 },
-                fetchServerTime:function(){         
-                   this.app.showLoading("Loading Calender...",this.$(".schedule-box > div")); 
+                fetchServerTime:function(){    
+                  
+                  /* this.app.showLoading("Loading Calender...",this.$(".schedule-box > div")); 
                    var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
@@ -737,42 +739,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             }
                             this.loadCalender(_json[0]);
                         }
-                   },this)); 
+                   },this)); */
+                   this.app.showLoading("Loading Calender...",this.$(".schedule-box")); 
+                   require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
+                            var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'schedule'});
+                           //tmPr.init(); // Call view functions
+                            this.$el.find('.schedule-box').append(tmPr.$el);
+                            this.$el.find('.schedule-box').removeAttr('style');
+                            this.app.showLoading(false,this.$(".schedule-box"));
+                         },this));
+                 
                 },
-                loadCalender:function(dateTime){
-                        this.app.showLoading(false,this.$(".schedule-box > div"));
-                        var serverDate = moment(this.app.decodeHTML(dateTime),"YYYY-M-D H:m");
-                        this.createCalender(new Date(serverDate.format("MMMM DD, YYYY HH:mm")));  
-                        this.states.step4.datetime['day'] = this.states.step4.cal.today.getDate();
-                        this.states.step4.datetime['month'] = this.states.step4.cal.today.getMonth()+1 
-                        this.states.step4.datetime['year'] = this.states.step4.cal.today.getFullYear();
-                        var hour = this.states.step4.cal.today.getHours();
-                        var min = this.states.step4.cal.today.getMinutes();
-                        if(hour>=12){
-                            var hour = hour-12;                            
-                            this.$(".timebox-hours button.pm").addClass("active");
-                        }
-                        else{
-                            this.$(".timebox-hours button.am").addClass("active");
-                        }
-
-                        hour = hour==0 ? "12":hour;                        
-
-                        this.$(".timebox-hour").spinner({max: 12,min:1,start: function( event, ui ) {
-
-                        }});
-                        this.$(".timebox-min").spinner({max: 59,min:0,stop: function( event, ui ) {
-                               if($(this).val().length==1){
-                                   $(this).val("0"+$(this).val())
-                               }
-                        }});
-                        this.$(".timebox-hour").val(hour);
-                        this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
-                    
-                }                
-                ,
                 initStep4:function(){
-                    
                     if(this.states.step4.init===false){                        
                         this.$("#accordion_info").accordion({ collapsible: false,heightStyle: "fill"});
                         this.$("#accordion_recipients").accordion({ collapsible: false}); 
@@ -799,8 +777,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     this.rescheduled = this.wizard.options.rescheduled;
                     this.hidecalender = this.wizard.options.hidecalender;
-                    this.setScheduleArea();
-                    this.scheduleStateCamp();
+                    //this.setScheduleArea();
+                    //this.scheduleStateCamp();
                     this.$("#campaign_preview_subject").html(this.app.encodeHTML(this.$("#campaign_subject").val()));
                     this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email_input").val()));
                     if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
@@ -891,61 +869,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     },this));
                 },
-                setScheduleArea:function(){
-                    if(this.states.step4.camp_status!=='D'){
-                        this.$(".draft-campaign").show();
-                        this.$(".scheduled-campaign").show();
-                    }
-                    else{
-                        this.$(".draft-campaign").hide();
-                        this.$(".scheduled-campaign").show();
-                    }
-                },
-                /*
-                 * Schedule campaign button views
-                 */
-                scheduleStateCamp:function(){
-                    
-                    if(this.rescheduled){
-                        this.$(".draft-campaign").show();
-                        this.$('.gotostep2,.gotostep1,.gotostep3').hide();
-                       // this.$('.schedule-camp').hide();
-                        //this.$('.sch-made').show();
-                        if(this.campobjData){
-                        this.$('.camp-sch-detail strong').text(this.campobjData.name);
-                        this.$('.camp-sch-detail span').text(this.campobjData.scheduledDate.split(" ")[0]);
-                        this.$('.camp-sch-detail em').text(this.campobjData.scheduledDate.split(" ")[1]);
-                        }
-                        this.$el.parents('.ws-content.active').find('.backbtn').hide();
-                        this.$el.parents('.ws-content.active').find('#workspace-header').attr('data-original-title','');
-                        this.$el.parents('.ws-content.active').find('#workspace-header').unbind("click");
-                        this.$el.parents('.ws-content.active').find('.addtag').hide();
-                        
-                    }else{
-                        this.$(".draft-campaign").hide();
-                        //this.$('.schedule-camp').show();
-                        //this.$('.sch-made').hide();
-                        this.$('.gotostep2,.gotostep1,.gotostep3').removeAttr('style');
-                        this.$el.parents('.ws-content.active').find('#workspace-header').attr('data-original-title','Click to rename');
-                        this.$el.parents('.ws-content.active').find('#workspace-header').bind("click",_.bind(function(e){
-                            this.workspaceHeader(e);
-                        },this));
-                        this.$el.parents('.ws-content.active').find('.backbtn').show();
-                        this.$el.parents('.ws-content.active').find('.addtag').show();
-                    }
-                   if(this.hidecalender){
-                        this.$('.schedule-camp').hide(); // Hide Calender
-                        this.$('.sch-made').show();    
-                    }else{
-                        this.$('.schedule-camp').show(); // Show Calender
-                        this.$('.sch-made').hide();
-                    }
-                  if(this.draftstate){
-                      this.$('.schedule-camp').show(); // Show Calender
-                        this.$('.sch-made').hide();
-                        this.$('.draft-campaign').hide();
-                  }
-                },
+               
+               
                 setupCampaign:function(){
                   var active_ws = this.$el.parents(".ws-content");
                   if(this.camp_id===0){                      
@@ -2029,7 +1954,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else{
                         $(".mergefields .browsefields").show();
-      $(".mergefields .browsefields #mergefields_links").hide();
+                        $(".mergefields .browsefields #mergefields_links").hide();
                         m_fields_box.removeClass("hide-selected");     
                          _.each($(".mergefields .browsefields #salesRep li"),function(ele,index){                                
                              $(ele).removeClass("group1");                                
@@ -2077,72 +2002,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         
                     }
                     obj.stopPropagation();
-                },
-                createCalender:function(_date){
-                     var self = this;
-                     var transEndEventNames = {
-                            'WebkitTransition' : 'webkitTransitionEnd',
-                            'MozTransition' : 'transitionend',
-                            'OTransition' : 'oTransitionEnd',
-                            'msTransition' : 'MSTransitionEnd',
-                            'transition' : 'transitionend'
-                    },
-                    transEndEventName = transEndEventNames[ Modernizr.prefixed( 'transition' ) ],
-                    $wrapper = this.$( '#custom-inner' ),
-                    $calendar = this.$( '#calendar' ),
-                    cal = $calendar.calendario( {
-                    onDayClick : function( $el, $contentEl, dateProperties ) {                                
-                            if($el.hasClass("fc-disabled")===false){
-                               self.$('#calendar').find("div.selected").removeClass("selected"); 
-                               $el.addClass("selected");
-                               self.states.step4.datetime['day'] = dateProperties.day;
-                               self.states.step4.datetime['month'] = dateProperties.month; 
-                               self.states.step4.datetime['year'] = dateProperties.year;
-                            }                                
-                            if( $contentEl.length > 0 ) {
-
-                                    showEvents( $contentEl, dateProperties );
-                            }
-
-                    },                                    
-                    displayWeekAbbr : true,
-                    setDate : _date
-                    } ),
-                    $month = this.$( '#custom-month' ).html( cal.getMonthName() +" "+ cal.getYear() ),
-                    $year = this.$( '#custom-year' ).html("");
-                    
-                    function updateMonthYear() {        
-                            $month.html( cal.getMonthName() +" "+cal.getYear());
-                            $year.html("");
-                    }
-
-                    // just an example..
-                    function showEvents( $contentEl, dateProperties ) {
-                        hideEvents();
-                        var $events = $( '<div id="custom-content-reveal" class="custom-content-reveal"><h4>Campaigns for ' + dateProperties.monthname + ' ' + dateProperties.day + ', ' + dateProperties.year + '</h4></div>' ),
-                                $close = $( '<span class="icon close custom-content-close "></span>' ).on( 'click', hideEvents );
-                        $events.append( $contentEl.html() , $close ).insertAfter( $wrapper );
-                        setTimeout( function() {
-                                $events.css( 'top', '0%' );
-                        }, 25 );
-
-                    }
-                    function hideEvents() {
-                        var $events = $( '#custom-content-reveal' );
-                        if( $events.length > 0 ) {
-
-                                $events.css( 'top', '100%' );
-                                Modernizr.csstransitions ? $events.on( transEndEventName, function() { $( this ).remove(); } ) : $events.remove();
-
-                        }
-                    }
-                    this.states.step4.cal = cal;
-                    this.$( '#custom-next' ).on( 'click', function() {
-                            cal.gotoNextMonth( updateMonthYear );
-                    } );
-                    this.$( '#custom-prev' ).on( 'click', function() {
-                            cal.gotoPreviousMonth( updateMonthYear );
-                    } );
                 },
                 mergeFieldsSetup:function(){                    
                     $(".mergefields .merge-feilds-type li").click(_.bind(this.showMergeFields,this));
@@ -3280,112 +3139,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      }).fail(function() { console.log( "Receipts data load failed" ); });
                     
                },               
-               scheduledCampaign:function(flag,message){
-                   var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
-                   var step4_obj = this.states.step4.datetime;
-                   var _date = step4_obj.year +"-"+this.addZero(step4_obj.month)+"-"+this.addZero(step4_obj.day); 
-                   var _time = this.$(".timebox-hour").val();                   
-                   var _hour = this.getHourForSchedule(_time);                    
-                   _hour = this.addZero(_hour);
-                   var _min = this.addZero(this.$(".timebox-min").val());
-                   var time =  _hour+":"+_min+":00";                  
-                   var camp_obj = this;
-                   
-                   var post_data = {"campNum": this.camp_id,
-                                    "type":"saveStep4",
-                                    "status":flag                                    
-                                    }
-                   if(flag=='S'){
-                       post_data["scheduleType"] = "scheduled";
-                       post_data["scheduleDate"] =_date+" "+time;                                    
-                   }                 
-                   var _message = message?message:'Changing mode...';
-                   this.app.showLoading(_message,this.$el.parents(".ws-content"));  
-                   $.post(URL,post_data)
-                    .done(function(data) {                              
-                        camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));  
-                        var camp_json = jQuery.parseJSON(data);                                                      
-                        if(camp_json[0]!=="err"){      
-                           if(flag=='S'){ 
-                                camp_obj.rescheduled = true;
-                                camp_obj.hidecalender = true;
-                                camp_obj.states.step4.camp_status = 'P';
-                                camp_obj.scheduleStateCamp();
-                                camp_obj.setScheduleArea();
-                                camp_obj.showScheduleBox();
-                                camp_obj.app.showMessge("Campaign Scheduled Successfully!");
-                           }
-                           else{
-                                camp_obj.$(".schedule-camp").show(); 
-                                camp_obj.$(".sch-made").hide();  
-                                camp_obj.states.step4.camp_status = 'D';
-                                camp_obj.setScheduleArea();
-                                camp_obj.app.showMessge("Campaign is now in draft mode!");
-                           }
-                           camp_obj.app.removeCache("campaigns");
-                           camp_obj.refreshCampaignList();
-                           
-                        }
-                        else{                                  
-                            camp_obj.app.showAlert(camp_json[1],$("body"),{fixed:true});
-                        }                        
-                   });
-                   //camp_obj.getallcampaigns();
-                   camp_obj.refreshCampaignList();
-                   //var campaign_listing = $(".ws-tabs li[workspace_id='campaigns']");
-                   
-               },
-               addZero:function(val){
-                   val = val.toString().length==1?"0"+val:val;
-                   return val;
-               },
-               getHourForSchedule:function(hour){                   
-                   if(this.$(".timebox-hours button.pm").hasClass("active")){
-                       if(parseInt(hour)<=11){
-                          hour = parseInt(hour)+12;
-                       }
-                   }
-                   else{
-                       if(parseInt(hour)==12){
-                           hour = "00";
-                       }
-                   }
-                   return hour;
-               },
-               showScheduleBox:function(){                   
-                   var step4_obj = this.states.step4.datetime;
-                   this.$(".schedule-camp").hide(); 
-                   var camp_detail = '<strong>'+this.$el.parents(".ws-content").find("#workspace-header").html()+'</strong> Has been Scheduled to be sent on'; 
-                   camp_detail +='<span>'+step4_obj.day+' '+this.app.getMMM(step4_obj.month-1)+' '+step4_obj.year+'</span> at <em>'+this.$(".timebox-hour").val()+':'+this.$(".timebox-min").val()+' '+this.$(".timebox-hours button.active").html()+'</em>'; 
-                   this.$(".camp-sch-detail").html(camp_detail) 
-                   this.$(".sch-made").show(); 
-               },
-               scheduleCamp:function(){
-                   this.draftstate = false; 
-                   this.scheduledCampaign('S',"Scheduling Campaign...");
-                   
-               },
-               setDraftCampaign:function(obj){
-                    var button = $.getObj(obj,"a");
-                    this.rescheduled = false;
-                    if(button.hasClass("reschedule")){                            
-                       this.$(".schedule-camp").show();
-                       this.$(".sch-made").hide();
-                       this.rescheduled = true;
-                       this.hidecalender = false;
-                       this.draftstate = false;
-                       this.setScheduleArea();
-                    }
-                    else  if(button.hasClass("edit")){
-                       this.scheduledCampaign('D','Edit Campaign...'); 
-                    }
-                    else{
-                        this.scheduledCampaign('D','Changing Campaign to Draft...');
-                        this.draftstate = true;
-                         this.hidecalender = false;
-                    }
-                    this.scheduleStateCamp();
-               },
+               
                TryDialog:function(){
                     var that = this;
                     var app = this.options.app;
