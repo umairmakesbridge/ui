@@ -32,8 +32,7 @@
             
 
             this.each(function () {
-               var $this = $(this);
-                console.log(this.length);
+               var $this = $(this);                
                 var undoManager = new MakeBridgeUndoRedoManager();
 
                 //Getting View with the help of Backbone:
@@ -46,21 +45,13 @@
                     },
 
                     render: function () {
-                         this.$el.html(this.my_template);
-                        // var that=this;
-                        // $.get( 'view/mee_view.html', function (data) {
-                        //     var template = _.template(data, {  });
-                        //     console.log("HTML contents for MEE are:"+template);
-                        //     that.$el.html(template);  
-                        // }, 'html');
+                         this.$el.html(this.my_template);                      
                     }
                     
 
 
                 });
 
-                // console.log("Going to print passed element");
-                // console.log(element);
                 var mainView = new MainHtmlView();
                 //$this = element;
                 $this.html(mainView.el);
@@ -95,10 +86,8 @@
                 var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
                 
                 // var firstTime = true;
-
-                console.log("LandingPage:"+ options.landingPage);
+                
                 if (options.landingPage) {
-                    console.log("Its Here..");
                     myElement.find(".DCH3").hide();
                     myElement.find(".DCCC").hide();
                     myElement.find(".formH3").show();
@@ -110,70 +99,44 @@
 
 
                 if (options.preDefinedHTML != null && options.preDefinedHTML != "") {
-
-                    // console.log("PRE-DEFINED HTML:" + options.preDefinedHTML);
+                    
                     var oHtml= new Object();
                     var args = new Object();
 
                     if(options.preDefinedHTML == "TEMPLATE") {
                         options.LoadTemplate(args);
                         var templateHtml = args.HTMLTEXT;
-                        var templateObj = $(templateHtml);
-                        console.log("Template HTML:" + templateHtml);
-                        options.preDefinedHTML = templateHtml;
-                        // if(templateObj.hasClass("MEE_DOCUMENT")) {
-                        //     options.preDefinedHTML = templateHtml;
-                        // }
-                        // else {
-                        //     var mt = templateObj.find("table.MEE_DOCUMENT");
-                        //     if(mt != undefined) {
-                        //         options.preDefinedHTML = mt.outerHTML;
-                        //     }    
-                        // }
-                        // console.log(templateObj);
-                        // var mt = templateObj.find("table.MEE_DOCUMENT");
-                        // console.log("CONTAINS MEE_DOCUMENT CLASS:" + templateObj.hasClass("MEE_DOCUMENT"));
-
-                        // var mee_template_String = mt.html();
-                        // console.log("Template REmaining thml:\n"+  mee_template_String);
-                        // options.preDefinedHTML = mee_template_String;
+                        var templateObj = $(templateHtml);                        
+                        options.preDefinedHTML = templateHtml;                        
                     }
                     
                         
-                    oHtml = $(options.preDefinedHTML);
-                    console.log(oHtml);
+                    oHtml = $(options.preDefinedHTML);                    
                     
                     var isMEEDoc = false;
                     oHtml.filter(function () {
                         return this.nodeType == 8;
-                    }).each (function(i, e){
-                        console.log("COMMENT FOUND WITH VALUE:" + e.nodeValue);
+                    }).each (function(i, e){                        
                         if(e.nodeValue.trim() == "MEE_DOCUMENT") {
                             isMEEDoc = true;
                         }
                     })
 
                     if(isMEEDoc) {
-                        // if(oHtml.hasClass("MEE_DOCUMENT")) {
-                            // console.log("class found");
+                        
                             oHtml = reConstructCode(options.preDefinedHTML);                
                         
                             oInitDestroyEvents.InitAll(oHtml);
 
                             var mainObj = myElement.find(".mainContentHtml");
                             oInitDestroyEvents.InitAll(mainObj);
-                            
-                            //console.log("RETURNED HTML after Reconstructing:\n" + oHtml.html());
-                            // console.log(mainObj);
-                            // mainObj = oHtml.clone(true, true);
-                            mainObj.append(oHtml);
-                            //console.log("FINALIZED HTML:\n" + mainObj.html());
-                            //mainObj.find("div.textcontent").css('visibility', 'visible');
+                                                   
+                            mainObj.append(oHtml);                            
                             IsStyleActivated = false;
                             oInitDestroyEvents.InitAll(mainObj);
-                        // }
+                        
                     }
-                    // oInitDestroyEvents.InitAll(mainTable, true);
+                    
                 }
 
                 function makeCloneAndRegister() {
@@ -212,18 +175,13 @@
                     }
                 });
 
-                $.fn.getMEEHTML = function() {
-                    console.log("Hello From HTML");
+                $.fn.getMEEHTML = function() {                    
                     var mainHTMLELE = myElement.find(".mainContentHtml");
-                    var constructedHTML = $(mainHTMLELE.outerHTML());
-                    console.log("HTML going for cleanup:"+ constructedHTML.outerHTML());
-                    var cleanedupHTML = CleanCode(constructedHTML).html();
-                    // console.log("HTML after cleanup:"+ cleanedupHTML);
+                    var constructedHTML = $(mainHTMLELE.outerHTML());                    
+                    var cleanedupHTML = CleanCode(constructedHTML).html();                    
                     var outputter = $("<div></div>");
-                    outputter.wrapInner(cleanedupHTML);
-                    
-                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
-                    // console.log("OutputHTML:"+ outputHTML);
+                    outputter.wrapInner(cleanedupHTML);                    
+                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                    
                     return outputHTML;
                 };
 
@@ -235,14 +193,8 @@
                     oInitDestroyEvents.InitAll(oHtml);
 
                     var mainObj = myElement.find(".mainContentHtml");
-                    oInitDestroyEvents.InitAll(mainObj);
-                    
-                    //console.log("RETURNED HTML after Reconstructing:\n" + oHtml.html());
-                    // console.log(mainObj);
-                    // mainObj = oHtml.clone(true, true);
-                    mainObj.append(oHtml);
-                    //console.log("FINALIZED HTML:\n" + mainObj.html());
-                    //mainObj.find("div.textcontent").css('visibility', 'visible');
+                    oInitDestroyEvents.InitAll(mainObj);                                        
+                    mainObj.append(oHtml);                    
                     IsStyleActivated = false;
                     oInitDestroyEvents.InitAll(mainObj);
                 };
@@ -375,8 +327,7 @@
                         //////////////////////
                         //Vertical Align
                         myElement.find(".sVerticalAlign").click(function () {
-
-                            // console.log("Vertical Align clicked.");
+                            
                             if (SelectedElementForStyle != null) {
 
                                 
@@ -457,8 +408,7 @@
                         
                         //Email Width
                         myElement.find(".btnContainerSize").click(function () {
-                            var value = $(this).data("value");
-                            //console.log("background value:"+ value);
+                            var value = $(this).data("value");                            
                             myElement.find(".mainTable").css("width", value + "px");
                             if (value == "700") {
                                 myElement.find("input#700").addClass("active");
@@ -500,13 +450,7 @@
                                 }
 
                                 _LoadMyColors();
-
-                                // ulMyColors.find("li").click(function () {                
-                                //         SetBackgroundColor($(this).data("color"));
-                                // });
-
-
-
+                               
                             };
 
                         });
@@ -543,10 +487,7 @@
                     var paddingleftVal = selectedElement.inlineStyle("padding-left");
 
                     var verticalAlignVal = selectedElement.inlineStyle("vertical-align");
-
-                    console.log("Border  (top:"+topVal+", bottom:"+bottomVal+", left:"+leftVal+", right:"+rightVal+")");
-                    console.log("Padding (top:"+paddingtopVal+", bottom:"+paddingbottomVal+", left:"+paddingleftVal+", right:"+paddingrightVal+")");
-                    console.log("vertical-align:"+verticalAlignVal);
+                    
 
                     $element = myElement.find(".borderControl .ved-edge-inner");
                     var borderType = myElement.find(".ddlBorderType").val();
@@ -741,21 +682,15 @@
 
                         $.each(myColorsArray, function (i, obj) {
 
-                            //Assigning unique ID here:
-                            console.log("MyCOlor from AArray: " + obj);
-                            //var block = $("<li style='background-color:"+ obj + ";'></li>");                       
-
 
                             listOfMyColorsHtml += "<li style='background-color:" + obj + ";' data-color='" + obj + "'></li>";
 
 
                         });
-                        //console.log(listOfMyColorsHtml);
                         ulMyColors.empty();
                         ulMyColors.append(listOfMyColorsHtml);
 
-                        ulMyColors.find("li").click(function () {
-                            console.log("li color" + $(this).data("color"));
+                        ulMyColors.find("li").click(function () {                           
                             SetBackgroundColor($(this).data("color"));
 
                         });
@@ -823,8 +758,7 @@
 
                 var SetBackgroundColor = function (hex) {
 
-                    if (hex == null && SelectedElementForStyle != null) {
-                        //console.log(hex);
+                    if (hex == null && SelectedElementForStyle != null) {                        
                         SelectedElementForStyle.removeInlineStyle("background-color");
                         return;
                     }
@@ -940,26 +874,7 @@
 
 
 
-                        //if (args.IsUpdate) { //!!
-                        //UPDATE CASE               
-
-
-
-
-                        //}
-                        //else {
-
-                        //NEW CASE
-
-                        //var dcContents = args.predefinedControl.Html.find(".dcContents");
-                        //var newLi = $($(".dcLI").html());
-                        //newLi.find("span:first").html(args.DynamicContent.Label);
-                        //newLi.data("content", args.DynamicContent);
-
-                        //dcContents.prepend(newLi);
-                        //}
-
-                        //RePopulateContentNames(args);
+                        
 
                     }
 
@@ -986,13 +901,7 @@
                                         var ContentLi = defaultLiContentForDC.clone();
                                         ContentLi.data("dcInternalData", $('<div/>').html(variation.InternalContents).text());
                                         ContentLi.data("content", variation);
-                                        ContentLi.addClass("defaultLi");
-                                        //console.log(variation.internalContents);
-                                        //console.log(unescape(variation.internalContents));
-                                        //console.log(decodeURIComponent( unescape(unescape(variation.internalContents))));
-                                        //var decodeHTML = $('<div/>').html(variation.internalContents);
-                                        //dcInternalContents.html(decodeHTML);
-                                        //ContentLi.css('background-color','#748EA2');
+                                        ContentLi.addClass("defaultLi");                                      
 
                                         var dcInternal = args.droppedElement.find(".dcInternalContents:first");
 
@@ -1026,23 +935,7 @@
 
                                 });
                             }
-                            //else {
-                            //    //Add Default Content     
-                                
-                            //    var dcContents = args.predefinedControl.Html.find(".dcContents");
-
-                            //    var defaultLi = defaultLiContentForDC.clone();
-                                
-                            //    if (defaultLi.data("content") == null) {
-                            //        var defaultContent = new DynamicContents();
-                            //        defaultContent.Label = "Default";
-                            //        defaultContent.IsDefault = true;
-                                    
-                            //        var defaultContentLi = defaultLi;
-                            //        defaultContentLi.data("content", defaultContent);
-                            //        dcContents.append(defaultContentLi);
-                            //    }
-                            //}
+                           
 
 
 
@@ -1182,8 +1075,7 @@
                             var ele_height =  _ele.height();
                             var top = ele_offset.top + ele_height +4;
                             var left = ele_offset.left-left_minus;  
-
-                            console.log("left:"+left+"px, top:"+top+"px");
+                            
                             OpenRulesWindow(args, top, left);
 
 
@@ -1289,8 +1181,7 @@
                     }
                     
                     if (args.predefinedControl != null) {
-
-                        console.log(args);
+                        
                         // var mainParent = args.predefinedControl.Html.find(".dynamicContentContainer");
                         var mainParent = $(args.predefinedControl.Html);//.find(".dynamicContentContainer");
 
@@ -1298,99 +1189,18 @@
                         mainParent.attr("id", args.DynamicVariation.DynamicVariationID);
                         mainParent.attr("keyword", args.DynamicVariation.DynamicVariationCode);
                         mainParent.data("content", args.DynamicVariation);
-
-                        // mainParent.addClass(args.DynamicVariation.DynamicVariationID);
-                        // console.log(mainParent);
-                        // console.log(mainParent.html());
-                        console.log(mainParent.attr("id"));
-                        console.log(mainParent.data("variationID"));
-
+                        
                         
                         dcInternalContents = args.predefinedControl.Html.find(".dcInternalContents");
                         
                         PopulateContent(args);
                         
-                       
-                            
-                        
-
-                        //Save Click
-                        //args.predefinedControl.Html.find(".dcSaveButton").click(function () {
-
-                        //    if (txtVariationName.isEmpty())
-                        //    {
-                        //        alert("Please enter dynamic control name.");
-                        //        return;
-                        //    }
-                        //    else
-                        //    {
-                        //        var variation = new DynamicVariation();
-                        //        variation.Label = txtVariationName.val();
-
-                        //        if (txtVariationName.data("isUpdate") != null && txtVariationName.data("variationID") != null) {
-                        //            variation.IsUpdate = txtVariationName.data("isUpdate");
-                        //            variation.DynamicVariationID = txtVariationName.data("variationID");
-                        //        }
-
-                        //        args.predefinedControl.Html.find(".dcContents li").each(function (i, o) {
-
-                        //            var obj = $(o);
-
-                        //            var dContent = obj.data("content");
-
-                        //            if (obj.hasClass("active")) {
-                        //                var dcClickedContainer = obj.parents(".dynamicContentContainer:first");
-                        //                var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
-
-                        //                oInitDestroyEvents.DestroyPluginsEvents(dcInternal);
-                        //                dContent.InternalContents = dcInternal.html();
-                        //                oInitDestroyEvents.InitAll(dcInternal);
-
-                        //                // alert(obj.data("dcInternalData").outerHTML());
-                        //            }
-                        //            else
-                        //            {
-                        //                //Expect here HTML TEXT in DATA
-                        //                dContent.InternalContents = obj.data("dcInternalData");
-
-                        //                //console.log("Internal Contents of "+ dContent.Label + "  are:" + dContent.InternalContents);
-                        //                // alert(obj.data("dcInternalData").outerHTML());
-                        //            }
-
-
-
-                        //            variation.ListOfDynamicContents.push(dContent);
-                        //        });
-
-                        //        if (options.OnDynamicControlSave != null) {
-                        //            options.OnDynamicControlSave(variation);
-                        //        }
-
-                        //        //args.DynamicVariation = variation;
-                        //        //PopulateContent(args);
-
-
-                        //        _LoadDynamicBlocks(args);
-
-                        //    }
-
-
-                        //});
-
                         //Edit Button
                         args.predefinedControl.Html.find(".editname").click(function () {
 
                             args.predefinedControl.Html.find(".editNameBox").toggle();
                         });
 
-
-                        
-                        //if (args.DynamicVariation.Label == undefined) {
-                        //    txtVariationName.val("Dynamic Block 1");
-                        //}
-                        //else {
-                          
-                        //}
 
                         args.predefinedControl.Html.find(".btnCloseDCName").click(function () {
                             args.predefinedControl.Html.find(".editNameBox").hide();
@@ -1414,88 +1224,7 @@
                             
                         });
 
-                        //OLD FUNCTION FOR SAVE ALL AT A TIME:
-                        //args.predefinedControl.Html.find(".btnSaveDCName").click(function () {
-                        //    alert("im save");
-                        //    var txtVariationName = args.predefinedControl.Html.find(".txtVariationName");
-                        //    if (txtVariationName.isEmpty()) {
-                        //        alert("Please enter dynamic control name.");
-                        //        return;
-                        //    }
-                        //    else {
-
-
-                        //        args.predefinedControl.Html.find(".dcName span:first").html(txtVariationName.val());
-
-                        //        var variation = new DynamicVariation();
-                        //        variation.Label = txtVariationName.val();
-
-                        //        //if (txtVariationName.data("isUpdate") != null && txtVariationName.data("variationID") != null) {
-                        //            //variation.IsUpdate = txtVariationName.data("isUpdate");
-                        //            //variation.DynamicVariationID = txtVariationName.data("variationID");
-                        //        //}
-
-                                
-                        //        variation.IsUpdate = true;
-                        //        variation.DynamicVariationID = mainParent.data("variationID");
-
-                        //        args.predefinedControl.Html.find(".dcContents li").each(function (i, o) {
-
-                        //            var obj = $(o);
-
-                        //            var dContent = obj.data("content");
-
-                        //            if (obj.hasClass("active")) {
-                        //                var dcClickedContainer = obj.parents(".dynamicContentContainer:first");
-                        //                var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
-
-                        //                oInitDestroyEvents.DestroyPluginsEvents(dcInternal);
-                        //                dContent.InternalContents = dcInternal.html();
-                        //                oInitDestroyEvents.InitAll(dcInternal);
-
-                        //                // alert(obj.data("dcInternalData").outerHTML());
-                        //            }
-                        //            else {
-                        //                //Expect here HTML TEXT in DATA
-                        //                dContent.InternalContents = obj.data("dcInternalData");
-
-                        //                //console.log("Internal Contents of "+ dContent.Label + "  are:" + dContent.InternalContents);
-                        //                // alert(obj.data("dcInternalData").outerHTML());
-                        //            }
-
-                        //            variation.ListOfDynamicContents.push(dContent);
-                        //        });
-
-                        //        if (options.OnDynamicControlSave != null) {
-                        //            options.OnDynamicControlSave(variation);
-
-                        //            alert("Successfully Saved");
-                        //        }
-
-                        //        //args.DynamicVariation = variation;
-                        //        //PopulateContent(args);
-
-
-                        //        _LoadDynamicBlocks(args);
-
-
-
-                        //    }
-                        //});
-
-
-
-                        // var PopulateRulesWindow = function (args)
-                        // {
-                        //     //myElement.find(".dcRulesDialog").html("adnan");
-                        // }
-
-
-                        
-                        //if (dcContents.is(':empty')) {
-
-                        
-                        //}               
+                            
                         ///////////
 
                         args.predefinedControl.Html.find(".dcContents").on("click", "li", (function (event) { //&&
@@ -1649,8 +1378,7 @@
                 
           
                myElement.find("input#searchDC").keyup(function (e) {
-                    if(e.which == 13){
-                        console.log("enter pressed");
+                    if(e.which == 13){                        
                         _searchDynamicBlocks();
                     }
                     
@@ -1670,10 +1398,7 @@
 
                         //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                         $.each(dynamicBlocksFromService, function (i, obj) {
-
-                            //Assigning unique ID here:
-                            //obj[0].ID = "buildingBlock" + count;
-                            //console.log("DC Label:" + obj[0].label);
+                            
                             var label = obj[0].label;
                             if(label.startsWith(textForSearch)) {
                                 counter++;
@@ -1687,75 +1412,7 @@
                                                //actionButtons.html() +
                                              "</li>");
 
-                                //var block = $("<li class='draggableControl droppedDynamicBlock' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "'>" +
-                                //              "<i class='icon dyblck'></i>" +
-                                //              "<span class='font_75'>" + obj[0].label + "</span>" +
-                                //              "</li>");
-
-                                //Initialize with default draggable:
-
-                                // block.find(".imgicons.edit").click(function () {
-                                //     var parentLi = $(this).closest(".draggableControl");
-                                //     var editBox = parentLi.find(".editBox");
-                                //     var bbName = parentLi.find(".bbName");
-                                //     editBox.find(".txtBlockName").val(bbName.text());
-
-                                //     editBox.show();
-
-                                //     var closeBtn = editBox.find(".closebtn");
-                                //     closeBtn.click(function () {
-                                //         editBox.hide();
-                                //     });
-
-                                //     var saveBtn = editBox.find(".btnSave");
-                                //     saveBtn.click(function () {
-                                //         var txtBlockName = editBox.find(".txtBlockName");
-
-                                //         var args = new Object();
-                                //         args.DCName = txtBlockName.val();
-                                //         args.DCID = parentLi.data("id");
-
-                                //         //Call overridden Method here: will use when exposing properties to developer
-                                //         if (options.OnEditDynamicVariation != null) {
-                                //             options.OnEditDynamicVariation(args);
-
-                                //             parentLi.find(".bbName").text(args.DCName);
-                                //             console.log("Saved successfully");
-                                //         }
-                                //     });
-
-                                // });
-
-                                // block.find(".imgicons.delete").click(function () {
-                                //     var parentLi = $(this).closest(".draggableControl");
-
-                                //     var delBox = parentLi.find(".delBox");
-                                //     delBox.show();
-
-                                //     var btnDelete = delBox.find(".btnDelete");
-                                //     btnDelete.click(function () {
-
-                                //         var args = new Object();
-                                //         args.DCID = parentLi.data("id");
-
-                                //         //Call overridden Method here: will use when exposing properties to developer
-                                //         if (options.OnDeleteDynamicVariation != null) {
-                                //             options.OnDeleteDynamicVariation(args);
-
-                                //             parentLi.remove();
-                                //             console.log("Deleted Successfully");
-                                //         }
-
-
-                                //     });
-
-                                //     var closeBtn = delBox.find(".closebtn");
-                                //     closeBtn.click(function () {
-                                //         delBox.hide();
-                                //     });
-
-                                // });
-
+                               
                                 //Initialize with default draggable:
                                 InitializeMainDraggableControls(block);
 
@@ -1773,12 +1430,7 @@
         
                         myElement.find("#DCResultDiv").html(counter + " records Found");
                         myElement.find("#DCResultDiv").show();
-                        //console.log(listOfDynamicBlocksHtml);
-                        // var ulDynamicBlocks = myElement.find(".dynamicBlockDroppable .ulDynamicBlocks");
-                        // ulDynamicBlocks.empty();
-                        // ulDynamicBlocks.append(listOfDynamicBlocksHtml);
-
-                        //dynamicBlocksGlobal = dynamicBlocksFromService;
+                        
 
                     
                     }
@@ -1818,11 +1470,7 @@
 
                         //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                         $.each(dynamicBlocksFromService, function (i, obj) {
-
-                            //Assigning unique ID here:
-                            //obj[0].ID = "buildingBlock" + count;
-                            //console.log("DC Label:" + obj[0].label);
-
+                            
 
                             var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                               "<i class='icon dyblck'></i> " +
@@ -1834,74 +1482,7 @@
                                                //actionButtons.html() +
                                              "</li>");
 
-                            //var block = $("<li class='draggableControl droppedDynamicBlock' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "'>" +
-                            //              "<i class='icon dyblck'></i>" +
-                            //              "<span class='font_75'>" + obj[0].label + "</span>" +
-                            //              "</li>");
-
-                            //Initialize with default draggable:
-
-                            // block.find(".imgicons.edit").click(function () {
-                            //     var parentLi = $(this).closest(".draggableControl");
-                            //     var editBox = parentLi.find(".editBox");
-                            //     var bbName = parentLi.find(".bbName");
-                            //     editBox.find(".txtBlockName").val(bbName.text());
-
-                            //     editBox.show();
-
-                            //     var closeBtn = editBox.find(".closebtn");
-                            //     closeBtn.click(function () {
-                            //         editBox.hide();
-                            //     });
-
-                            //     var saveBtn = editBox.find(".btnSave");
-                            //     saveBtn.click(function () {
-                            //         var txtBlockName = editBox.find(".txtBlockName");
-
-                            //         var args = new Object();
-                            //         args.DCName = txtBlockName.val();
-                            //         args.DCID = parentLi.data("id");
-
-                            //         //Call overridden Method here: will use when exposing properties to developer
-                            //         if (options.OnEditDynamicVariation != null) {
-                            //             options.OnEditDynamicVariation(args);
-
-                            //             parentLi.find(".bbName").text(args.DCName);
-                            //             console.log("Saved successfully");
-                            //         }
-                            //     });
-
-                            // });
-
-                            // block.find(".imgicons.delete").click(function () {
-                            //     var parentLi = $(this).closest(".draggableControl");
-
-                            //     var delBox = parentLi.find(".delBox");
-                            //     delBox.show();
-
-                            //     var btnDelete = delBox.find(".btnDelete");
-                            //     btnDelete.click(function () {
-
-                            //         var args = new Object();
-                            //         args.DCID = parentLi.data("id");
-
-                            //         //Call overridden Method here: will use when exposing properties to developer
-                            //         if (options.OnDeleteDynamicVariation != null) {
-                            //             options.OnDeleteDynamicVariation(args);
-
-                            //             parentLi.remove();
-                            //             console.log("Deleted Successfully");
-                            //         }
-
-
-                            //     });
-
-                            //     var closeBtn = delBox.find(".closebtn");
-                            //     closeBtn.click(function () {
-                            //         delBox.hide();
-                            //     });
-
-                            // });
+                           
 
                             //Initialize with default draggable:
                             InitializeMainDraggableControls(block);
@@ -1909,18 +1490,11 @@
                             //listOfDynamicBlocksHtml.append(block);
 
                             ulDynamicBlocks.append(block);
-
-                            //block.find(".imageicons").draggable({ disabled: true });
-                            //InitializeMainDraggableControls(block);
-                            //ulDynamicBlocks.append(block);
+                            
 
 
 
-                        });
-                        //console.log(listOfDynamicBlocksHtml);
-                        // var ulDynamicBlocks = myElement.find(".dynamicBlockDroppable .ulDynamicBlocks");
-                        // ulDynamicBlocks.empty();
-                        // ulDynamicBlocks.append(listOfDynamicBlocksHtml);
+                        });                        
 
                         dynamicBlocksGlobal = dynamicBlocksFromService;
 
@@ -2161,9 +1735,7 @@
                         dataType: "json",
                         cache: false,
                         async: false,
-                        success: function (e) {
-                            console.log("get Dynamic Variation success:" + e);
-                            console.log(e);
+                        success: function (e) {                           
                             dynamicVariation.DynamicVariationID = e["dynamicNumber.encode"];
                             dynamicVariation.DynamicVariationCode = e.keyword;
                             dynamicVariation.Label = e.label;
@@ -2245,20 +1817,12 @@
                             if (obj[2] == "B") {
                                 listOfPersonalizeTagsHtml.push(entry);
                             }
-                            //Initialize with default draggable:
-                            //InitializeMainDraggableControls(block);
-
-                            //listOfDynamicBlockFieldssHtml.append(block);
+                           
 
 
-                        });
-                        //console.log(listOfDynamicBlocksHtml);
-                        // var ulPersonalizeTags = myElement.find(".dcRuleFormat");
-                        // ulPersonalizeTags.empty();
-                        // ulPersonalizeTags.append(listOfPersonalizeTagsHtml);
+                        });                        
                         personalizedTagsGlobal = listOfPersonalizeTagsHtml;
-                        // dynamicBlocksGlobal = dynamicBlocksFromService;
-                        console.log(personalizedTagsGlobal);
+                        
                     }
 
                 }
@@ -2279,19 +1843,19 @@
 
 
                     lnkPreviewCode.click(function () {
-                        console.log("Its in preveiw code");
+                        
 
                         //var templateHTML = mainContentHtmlGrand.html();
                         var mainHTMLELE = myElement.find(".mainContentHtml");
                         var constructedHTML = $(mainHTMLELE.outerHTML());
-                        console.log("HTML going for cleanup:"+ constructedHTML.outerHTML());
+                        
                         var cleanedupHTML = CleanCode(constructedHTML).html();
-                        console.log("HTML after cleanup:"+ cleanedupHTML);
+                        
                         var outputter = $("<div></div>");
                         outputter.wrapInner(cleanedupHTML);
                         
                         var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
-                        console.log("OutputHTML:"+ outputHTML);
+                        
 
 
 
@@ -2327,7 +1891,7 @@
 
                 function reConstructCode(html) {
 
-                    console.log("HTML in reConstructCode:\n"+ html);
+                   
                     var oHtml = $(html);
 
                     oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
@@ -2342,7 +1906,7 @@
                     // oHtml.find(".MEE_TEXT").addClass("textcontent").removeClass("MEE_TEXT");
                                                     
 
-                    console.log(oHtml.length);
+                  
 
 
                     // if(oHtml.hasClass("MEE_DROPPABLE")) {
@@ -2412,51 +1976,15 @@
                         element.replaceWith(newElement);
                     }
 
-                    // oHtml[1].each(function (i, e) {
-                    //     try {
-                    //         var obj = $(e);
-                    //         console.log(obj.outerHtml);
-                            
-                    //         console.log("Droppabel:" + obj.hasClass("MEE_DROPPABLE"));
-                    //         console.log("Node Name:"+ obj[0].nodeName);
-                    //         if(obj.hasClass("MEE_DROPPABLE")) {
-                    //             // console.log("droppable found on elem" + obj.nodeName);
-                    //             // obj.addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
-                    //             // RevertCommonLi(obj); 
-                    //             // console.log(obj.html());
-                    //             obj.replaceWith($("<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>"));
-                    //         }
-                    //         if(obj.hasClass("MEE_ELEMENT")) {
-                    //             // console.log("droppable found on elem" + obj.nodeName);
-                    //             obj.addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
-                    //             RevertCommonLi($(obj));
-                    //         } 
-
-
-                    //         if(obj[0].nodeName == "DIV") {
-                    //             // console.log("droppable found on elem" + obj.nodeName);
-                    //             // obj.addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
-                    //             var elem = $(obj);
-                    //             var html = elem.html();
-                    //             var newHtml = "<li class='csHaveData ui-draggable ui-droppable'>" + html + "</li></ul>";
-                    //             elem.html(newHtml);
-                    //         }
-                    //     }
-                    //     catch(ex) {
-                    //         console.log("Got Exception:" + ex);
-                    //     }
-
-                    // });
+                   
 
 
                     
                     
                     oHtml.find(".MEE_ITEM").each(function (i, e) {    
                         var elem = $(e);
-                        console.log("MEE_ITEM FOUND>>>");
-                        if(elem.find("img").length) {
-                            console.log("Image found::");
-                            console.log("ALign Value:" +elem.attr("align"));
+                        
+                        if(elem.find("img").length) {                        
                             var alignVal = elem.attr("align");
                             if(alignVal == undefined) {
                                 alignVal = "left";
@@ -2465,9 +1993,9 @@
                             elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
                             imageElem.addClass("imageHandlingClass  resizable clickEvent");
                             var imgHeight = imageElem.inlineStyle("height");
-                            console.log("Image height:"+ imgHeight);
+                            
                             var imgWidth = imageElem.inlineStyle("width");
-                            console.log("Image height:"+ imgWidth);
+                            
                             imageElem.css("height", "100%");
                             imageElem.css("width", "100%");
 
@@ -2478,15 +2006,14 @@
                                 imgWidth = "200px";
                             }
                             //var html = elem.html();
-                            console.log("Image Parent is:" + imageElem.parent().get( 0 ).tagName);
+                            
                             var imgOutHtml = "";
                             if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
-                                console.log("Link applied on image");
+                            
                                 imgOutHtml = imageElem.parent().outerHTML();
                             
                             }
-                            else {
-                                console.log("No Link applied on image");
+                            else {                            
                                 imgOutHtml = imageElem.outerHTML();
                             
                             }
@@ -2496,8 +2023,7 @@
                         }
                         else {
                             elem.removeClass("MEE_ITEM")
-                            var html = elem.html();
-                            console.log("HTML IN MEE_ITEM:" +html);
+                            var html = elem.html();                            
                             var newHtml = "<div class='textcontent'>" + html + "</div>";
                             elem.html(newHtml);
                         }
@@ -2536,15 +2062,13 @@
                             if(obj[0].nodeName == "DIV") {
                                 
                                 if(obj.children().length > 1) {
-                                    var ht = obj.html();
-                                    console.log("OUTER HTEML:"+ ht);
+                                    var ht = obj.html();                                    
                                     
                                     oHtml = $(ht);
                                     
                                 }
                                 else {
-                                    var ht = obj.html();
-                                    console.log("OUTER HTEML:"+ obj.text());
+                                    var ht = obj.html();                                    
                                     var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
                                     newHtml.append(obj);
 
@@ -2554,26 +2078,11 @@
                                 
                             }
 
-                            if(obj[0].nodeName == "TABLE") {
-                                // console.log("droppable found on elem" + obj.nodeName);
-                                // obj.addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
-                                // var elem = $(obj);
-                                // var html = elem.html();
-                                // var newHtml = "<li class='csHaveData ui-draggable ui-droppable'>" + html + "</li></ul>";
-                                // elem.replaceWith($(newHtml));
-                                // RevertCommonLi($(oHtml[i]));
-
-                                // $(oHtml[i]).wrap("<li class='csHaveData ui-draggable ui-droppable'></li>");
-                                var ht = obj.html();
-                                console.log("OUTER HTEML:"+ obj.text());
+                            if(obj[0].nodeName == "TABLE") {                               
+                                var ht = obj.html();                                
                                 var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
-                                newHtml.append(obj);
-                                // var droppableLI = $("<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>");
-                                // newHtml.prepend(droppableLI);
-                                // newHtml.append(droppableLI);
-                                // newHtml = droppableLI + newHtml + droppableLI
-                                oHtml = $(newHtml);
-                                // obj.contents(newHtml);
+                                newHtml.append(obj);                                
+                                oHtml = $(newHtml);                                
                             }
                         }
 
@@ -2581,11 +2090,9 @@
 
 
                     oHtml.find(".DYNAMIC_VARIATION").each(function (index, object) {
-                        var variation = $(object);
-                        // console.log("variationID-id:" + variation.attr("id"));
+                        var variation = $(object);                       
                         var variation_ID = variation.attr("id");
-                        var keyword = variation.text();
-                        console.log("Keyword Found is:"+ keyword);
+                        var keyword = variation.text();                        
                         variation.removeClass("DYNAMIC_VARIATION");
                         variation.addClass("dynamicContentContainer");
                         variation.addClass("container");
@@ -2678,9 +2185,6 @@
 
                     });
 
-
-                    console.log("Return HTML:"+ oHtml);
-
                     return oHtml;
                 }
 
@@ -2689,9 +2193,7 @@
 
                 function CleanCode (html) {
 
-                    var oHtml = $(html);
-
-                    console.log("HTML CAME IN CLEAN METHOD:"+ html);
+                    var oHtml = $(html);                    
 
                     //DestroyPluginsEvents(oHtml);
                     //oHtml.removeClass("mainTable");
@@ -2718,25 +2220,20 @@
                         var imageContainer = $(object);
                         var img = imageContainer.find("img");
                         var resizableImg = imageContainer.find(".resizableImage");
-                        var myImage = imageContainer.find(".myImage");
-                        console.log("While Cleaning Image myImage Align is:" + myImage.attr("align"));
-
-                        console.log("ImageWidth:"+resizableImg.inlineStyle("width"));
-                        console.log("ImageHeight:"+resizableImg.inlineStyle("height"));
+                        var myImage = imageContainer.find(".myImage");                        
                         
                         img.css("width", resizableImg.inlineStyle("width"));
                         img.css("height", resizableImg.inlineStyle("height"));
                         
-                        img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");
-                        console.log("Image Parent is:" + img.parent().get( 0 ).tagName);
+                        img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
 
                         if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
-                            console.log("Link applied on image");
+                            
                             imageContainer.html(img.parent().outerHTML());
                         
                         }
                         else {
-                            console.log("No Link applied on image");
+                            
                             imageContainer.html(img.outerHTML());
                         
                         }
@@ -2748,13 +2245,7 @@
 
 
                     oHtml.find(".dynamicContentContainer").each(function (index, object) {
-                        var variation = $(object);
-                        console.log("Variation in clean code:");
-                        console.log(variation);
-                        console.log("variationID:" + variation.data("variationID"));
-                        console.log("variationID-id:" + variation.attr("id"));
-                        console.log("variation-Keyword:" + variation.attr("keyword"));
-
+                        var variation = $(object);                        
                         var keyword = variation.attr("keyword");
                         // variation.removeAttr("keyword");
                         // variation.removeAttr("keyword");
@@ -2895,9 +2386,7 @@
                                     // { title: 'My page 2', value: 'http://www.moxiecode.com' }
                                     // ],
                                     setup: function (editor) {
-                                        editor.on("mouseDown", function(e) {
-                                            console.log(e);
-                                            console.log('Editor was clicked: ' + e.target.nodeName);
+                                        editor.on("mouseDown", function(e) {                                           
                                             selectedLinkFromTinyMCE = e.target;
                                             //editor.selection.select(e.target);
                                         });
@@ -2942,8 +2431,7 @@
                                                 var selectedFontColor = myElement.find(".selectedFontColor");
                                                 divFontColorPicker.minicolors({
                                                     letterCase: 'uppercase',
-                                                    change: function (hex, opacity) {
-                                                        console.log(hex);
+                                                    change: function (hex, opacity) {                                                       
                                                         //SetBackgroundColor(hex);
                                                         selectedFontColor.val(hex);
                                                         //txtColorCode.val(hex);
@@ -2956,9 +2444,7 @@
                                                 if (myColorsFromServiceGlobal == "") {
                                                     _LoadMyColors();
                                                 }
-                                                var myFontColors = myElement.find(".myFontColors");
-                                                console.log(ulMyColors);
-                                                console.log(myFontColors);
+                                                var myFontColors = myElement.find(".myFontColors");                                                
 
                                                 myFontColors.empty();
                                                 myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
@@ -2966,8 +2452,7 @@
 
                                                 myFontColors.append(ulMyColors.html());
 
-                                                myFontColors.find("li").click(function () {
-                                                    console.log("li color" + $(this).data("color"));
+                                                myFontColors.find("li").click(function () {                                                    
                                                     selectedFontColor.val($(this).data("color"));
 
                                                 });
@@ -2980,15 +2465,11 @@
                                                 });
                                                 myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
                                                     if(dialogForTextColor) {
-                                                        var selectedText = tinyMCE.activeEditor.selection.getContent({ format: 'text' });
-                                                        console.log(selectedText);
-                                                        console.log("Element Name:" + tinyMCE.activeEditor.selection.getNode().nodeName);
+                                                        var selectedText = tinyMCE.activeEditor.selection.getContent({ format: 'text' });                                                        
                                                         var selectedFontColor = myElement.find(".selectedFontColor");
-                                                        var selectedColor = selectedFontColor.val();
-                                                        console.log("selected COlor:" + selectedColor);
+                                                        var selectedColor = selectedFontColor.val();                                                        
                                                         if (selectedColor != "") {
-                                                            var result = editor.execCommand('ForeColor', false, selectedColor);
-                                                            console.log("Result of command:" + result);
+                                                            var result = editor.execCommand('ForeColor', false, selectedColor);                                                           
                                                             // var changedText = "<span style='color:"+ selectedColor +";'>" + selectedText+"</span>";
                                                             // tinyMCE.activeEditor.selection.setContent(changedText);
                                                         }
@@ -3039,14 +2520,13 @@
                                                 var selectedFontColor = myElement.find(".selectedFontColor");
                                                 divFontColorPicker.minicolors({
                                                     letterCase: 'uppercase',
-                                                    change: function (hex, opacity) {
-                                                        console.log(hex);
+                                                    change: function (hex, opacity) {                                                        
                                                         //SetBackgroundColor(hex);
                                                         selectedFontColor.val(hex);
                                                         //txtColorCode.val(hex);
                                                     },
                                                     click: function() {
-                                                        console.log("minicolors clicked...");
+                                                        
                                                     },
                                                     inline: true
 
@@ -3061,8 +2541,7 @@
                                                     _LoadMyColors();
                                                 }
                                                 var myFontColors = myElement.find(".myFontColors");
-                                                console.log(ulMyColors);
-                                                console.log(myFontColors);
+                                                
 
                                                 myFontColors.empty();
                                                 myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
@@ -3071,8 +2550,7 @@
                                                 
                                                 myFontColors.append(ulMyColors.html());
 
-                                                myFontColors.find("li").click(function () {
-                                                    console.log("li color" + $(this).data("color"));
+                                                myFontColors.find("li").click(function () {                                                   
                                                     selectedFontColor.val($(this).data("color"));
 
                                                 });
@@ -3085,16 +2563,12 @@
                                                 });
                                                 myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
                                                     if(!dialogForTextColor) {                                                
-                                                        var selectedText = tinyMCE.activeEditor.selection.getContent({ format: 'text' });
-                                                        console.log(selectedText);
-                                                        console.log("Element Name in BG:" + tinyMCE.activeEditor.selection.getNode().nodeName);
+                                                        var selectedText = tinyMCE.activeEditor.selection.getContent({ format: 'text' });                                                        
                                                         
                                                         var selectedFontColor = myElement.find(".selectedFontColor");
-                                                        var selectedColor = selectedFontColor.val();
-                                                        console.log("selected BG COlor:" + selectedColor);
+                                                        var selectedColor = selectedFontColor.val();                                                        
                                                         if (selectedColor != "") {
-                                                            var result = editor.execCommand('HiliteColor', false, selectedColor);
-                                                            console.log("Result of command:" + result);
+                                                            var result = editor.execCommand('HiliteColor', false, selectedColor);                                                            
                                                         }
 
                                                         myElement.find(".modalDialog").hide();

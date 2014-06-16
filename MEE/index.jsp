@@ -1751,12 +1751,13 @@
     <script src="js/script.js" type="text/javascript"></script>
     
 		<script type="text/javascript">
+                 
 			if (typeof String.prototype.startsWith != 'function') {
-                // see below for better implementation!
-                String.prototype.startsWith = function (str) {
-                    return this.indexOf(str) == 0;
-                };
-            }
+                            // see below for better implementation!
+                            String.prototype.startsWith = function (str) {
+                                return this.indexOf(str) == 0;
+                            };
+                        }
 
 			$(document).ready(function () {
 
@@ -1864,7 +1865,7 @@
                 var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&ukey=<%=userInfo.getUserKey()%>";
 
 
-				$(".myMakeBridge").MakeBridgeEditor({
+				 $(".myMakeBridge").MakeBridgeEditor({
 					SaveImageTagsProperties: _saveImageTagsAjaxParameters,
 					DeleteImageProperties: _deleteImageAjaxParameter,
 					ImagesAjaxProperties: _imageAjaxParameters,
@@ -1904,26 +1905,25 @@
 					LoadTemplate: function (args) {
                     //LoadTemplate
 
-                        $.ajax({
-                            // url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=jbKw21Ps30Uu33Kr26ja",
-                            url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=BzAEqwsJp20In21Vr30Rk33BdTMyio",
-                            
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                              
-                                args.HTMLTEXT = $('<div/>').html(e.htmlText).text().replace(/&line;/g,"");
-                                console.log("LoadTemplate success:"+ args.HTMLTEXT);
-                                
-                            },
-                            error: function (e) {
-                                console.log("LoadTemplate Failed:"+ e);
-                            }
-                        });
+                                        $.ajax({
+                                            // url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=jbKw21Ps30Uu33Kr26ja",
+                                            url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=BzAEqwsJp20In21Vr30Rk33BdTMyio",
+
+                                            data: "{}",
+                                            type: "POST",
+                                            contentType: "application/json; charset=latin1",
+                                            dataType: "json",
+                                            cache: false,
+                                            async: false,
+                                            success: function (e) {
+
+                                                args.HTMLTEXT = $('<div/>').html(e.htmlText).text().replace(/&line;/g,"");                             
+
+                                            },
+                                            error: function (e) {
+                                                console.log("LoadTemplate Failed:"+ e);
+                                            }
+                                        });
                     },
                     LoadBuildingBlocks: function (args) {
     					//GetBuildingBlocks

@@ -1233,6 +1233,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         post_data['isCampaignText'] = 'Y';
                         //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
                      }                 
+                     else if(selected_li=="html_editor_mee"){
+                         html =this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").getMEEHTML();
+                         post_data['htmlCode'] = html;
+                     }
                         
                  if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
                     if(typeof(gotoNext)==="undefined"){
@@ -2297,6 +2301,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          this.states.step2.meeEditor = true;
                          this.$("#mee_editor").load(_.bind(function(){
                              this.app.showLoading(false,this.$("#area_html_editor_mee"));
+                             this.states.step2.meeLoaded =  true;
+                             //this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML('');
                          },this))
                     }
                 },
@@ -2331,8 +2337,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading('Loading HTML...',this.$el);
                     this.states.editor_change = true;
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
-                    jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
-                    this.$("#html_editor").click();
+                    jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
 
                 },
                 copyCampaign:function(obj){
@@ -2355,9 +2360,25 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                        tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                        if(html_json.isEasyEditorCompatible=="Y"){
+                            this.$("#html_editor_mee").click();
+                            this.setMEE(this.app.decodeHTML(html_json.htmlText,true));
+                           
+                        }
+                        else{
+                            this.$("#html_editor").click();
+                            tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                        }
                     }
                     
+                },
+                setMEE:function(html){
+                   if( this.states.step2.meeLoaded  && this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML){
+                        this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML(html);
+                   } 
+                   else{
+                       setTimeout(_.bind(this.setMEE,this,html),200);
+                   }
                 },
                 step3TileClick:function(obj){
                    var target_li = obj.target.tagName=="LI" ? $(obj.target) : $(obj.target).parents("li");                           
