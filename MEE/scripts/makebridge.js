@@ -28,6 +28,9 @@
     $.fn.extend({
 
         MakeBridgeEditor: function (options) {
+
+            
+
             this.each(function () {
                var $this = $(this);
                 console.log(this.length);
@@ -55,6 +58,7 @@
 
 
                 });
+
                 // console.log("Going to print passed element");
                 // console.log(element);
                 var mainView = new MainHtmlView();
@@ -207,6 +211,42 @@
                         oInitDestroyEvents.InitAll(mainObj, true);
                     }
                 });
+
+                $.fn.getMEEHTML = function() {
+                    console.log("Hello From HTML");
+                    var mainHTMLELE = myElement.find(".mainContentHtml");
+                    var constructedHTML = $(mainHTMLELE.outerHTML());
+                    console.log("HTML going for cleanup:"+ constructedHTML.outerHTML());
+                    var cleanedupHTML = CleanCode(constructedHTML).html();
+                    // console.log("HTML after cleanup:"+ cleanedupHTML);
+                    var outputter = $("<div></div>");
+                    outputter.wrapInner(cleanedupHTML);
+                    
+                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
+                    // console.log("OutputHTML:"+ outputHTML);
+                    return outputHTML;
+                };
+
+
+                $.fn.setMEEHTML = function(html) {
+                    options.preDefinedHTML = html;
+                    oHtml = reConstructCode(options.preDefinedHTML);                
+                        
+                    oInitDestroyEvents.InitAll(oHtml);
+
+                    var mainObj = myElement.find(".mainContentHtml");
+                    oInitDestroyEvents.InitAll(mainObj);
+                    
+                    //console.log("RETURNED HTML after Reconstructing:\n" + oHtml.html());
+                    // console.log(mainObj);
+                    // mainObj = oHtml.clone(true, true);
+                    mainObj.append(oHtml);
+                    //console.log("FINALIZED HTML:\n" + mainObj.html());
+                    //mainObj.find("div.textcontent").css('visibility', 'visible');
+                    IsStyleActivated = false;
+                    oInitDestroyEvents.InitAll(mainObj);
+                };
+
 
                 function InitializeElementsForStyle(isActive) {
 
@@ -2438,7 +2478,19 @@
                                 imgWidth = "200px";
                             }
                             //var html = elem.html();
-                            var newHtml = "<div class='myImage' style='float:none;' align='"+ alignVal +"'><div class='resizableImage' style='height:"+imgHeight+";width:"+ imgWidth +"'>" + imageElem.outerHTML() + "</div></div>";
+                            console.log("Image Parent is:" + imageElem.parent().get( 0 ).tagName);
+                            var imgOutHtml = "";
+                            if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
+                                console.log("Link applied on image");
+                                imgOutHtml = imageElem.parent().outerHTML();
+                            
+                            }
+                            else {
+                                console.log("No Link applied on image");
+                                imgOutHtml = imageElem.outerHTML();
+                            
+                            }
+                            var newHtml = "<div class='myImage' style='float:none;' align='"+ alignVal +"'><div class='resizableImage' style='height:"+imgHeight+";width:"+ imgWidth +"'>" + imgOutHtml + "</div></div>";
                             elem.html(newHtml);
 
                         }
@@ -2635,7 +2687,7 @@
 
 
 
-                var CleanCode = function (html) {
+                function CleanCode (html) {
 
                     var oHtml = $(html);
 
@@ -2659,7 +2711,7 @@
                     oHtml.find("div.ui-resizable-s").remove();
                     oHtml.find("div.ui-resizable-se").remove();                       
 
-
+                    oHtml.find(".space").removeInlineStyle("background");
                     
                     //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                     oHtml.find(".drapableImageContainer").each(function (index, object) {
@@ -2676,7 +2728,19 @@
                         img.css("height", resizableImg.inlineStyle("height"));
                         
                         img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");
-                        imageContainer.html(img.outerHTML());
+                        console.log("Image Parent is:" + img.parent().get( 0 ).tagName);
+
+                        if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
+                            console.log("Link applied on image");
+                            imageContainer.html(img.parent().outerHTML());
+                        
+                        }
+                        else {
+                            console.log("No Link applied on image");
+                            imageContainer.html(img.outerHTML());
+                        
+                        }
+
                         imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
                         imageContainer.attr("align", myImage.attr("align") );
 
@@ -2763,7 +2827,7 @@
 
 
 
-                //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                //â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘
                 // [Muhammad.Adnan] --------------- DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) ------------ //            
 
 
@@ -4784,7 +4848,7 @@
                     });
                 }
                 // ------------------------------------------------------------------------------------------------------------------//
-                //░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+                //â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘
 
                 function InitializeBuildingBlockUpdatePopup() {
                     myElement.find('.buildingBlock_name_edit').dialog({
@@ -6651,6 +6715,7 @@
                         console.log("OutputHTML:"+ outputHTML);
                         //console.log("Reconstructed HTML:\n"+ reConstructCode(outputHTML).html());
                         options.CallBackSaveMethod(templateHTML, outputHTML);
+                        alert("Template has been successfully saved on Server.");
                     }
                 };
 
