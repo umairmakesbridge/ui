@@ -4,7 +4,8 @@ function (template,MyImports,moment) {
         return Backbone.View.extend({                                
                 className:'clearfix',
                 events: {
-                    'click #addnew_import':'newImport'
+                    'click #addnew_import':'newImport',
+                    'click .add-some':'newImport'
                  },
                 initialize: function () {
                     this.template = _.template(template);				
@@ -50,7 +51,8 @@ function (template,MyImports,moment) {
                                 myimports_html += '</td>';
                                 myimports_html += '<td>';
                                     if(val.get("status")=='S'){
-                                        myimports_html += '<div class="sched show" style="width:145px"><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+this.getDate(val.get("scheduledDate"))+'</span></strong></div>';                                    
+                                        var daysDisplay = this.getDate(val.get("scheduledDate"),val.get("frequency"),val.get("day"));
+                                        myimports_html += '<div class="sched show"><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
                                         myimports_html += '<div class="action"><a class="btn-red deactivate-import" id="deact_'+val.get("tId")+'"><span>Delete</span><i class="icon deactivate"></i></a><a class="btn-gray get-import" id="edit_'+val.get("tId")+'"><span>Edit</span><i class="icon edit"></i></a></div>';
                                     }
                                 myimports_html += '</td>';
@@ -66,15 +68,15 @@ function (template,MyImports,moment) {
                                     usepager : false,
                                     colWidth : ['100%','20px','60px']
                             });
-                            this.$("#myimports_list_grid tr td:nth-child(1)").attr("width","100%");
+                            this.$("#myimports_list_grid tr td:nth-child(1)").attr("width","80%");
                             this.$("#myimports_list_grid tr td:nth-child(2)").attr("width","20px");
-                            this.$("#myimports_list_grid tr td:nth-child(3)").attr("width","60px");
+                            this.$("#myimports_list_grid tr td:nth-child(3)").attr("width","220px");
                             this.$myImportsContainer.find(".deactivate-import").click(_.bind(this.deactivateImport,this)); 
                             this.$myImportsContainer.find(".get-import").click(_.bind(this.getImport,this)); 
                             
                           }
                           else{
-                             this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
+                             this.$myImportsContainer.html('<p class="notfound">No import(s) found.</p>');
                           }
                           
                             
@@ -96,9 +98,53 @@ function (template,MyImports,moment) {
                     
                     return statusHTML;
                 },
-                getDate:function(val){
+               getDate:function(val,freq, days){
+                   
+                    if(freq =="O"){
+                         if(days != ""){
+                             return this.caluculateDays(days);
+                         }
+                    }
                     var _date = moment(this.app.decodeHTML(val),'YYYY-M-D H:m');
                     return _date.format("DD MMM, YYYY");
+                },
+                caluculateDays:function(days){
+                    var days = days.split(",");
+                    var str = "";
+                    
+                    _.each(days,function(day){
+                        
+                        switch(day){
+                            case "1":
+                                str = str + "Sun";
+                                break;
+                            case "2":
+                                str = str + ", Mon";
+                                break;
+                            case "3":
+                                str = str + ", Tue";
+                                break;
+                            case "4":
+                                str = str + ", Wed";
+                                break;
+                            case "5":
+                                str = str + ", Thu";
+                                break;
+                            case "6":
+                                str = str + ", Fri";
+                                break;
+                            case "7":
+                                str = str + ", Sat";
+                                break;
+                        }
+                    })
+                    var result = [];
+                    str =  str.replace(/^,|,$/g,'');
+                   // result[0] = str;
+                  //  str =  $.trim(str).substring(0, 25).split(" ").slice(0, -1).join(" ") + "...";
+                    //result[1] = str;
+                    //console.log(result);
+                    return str;
                 },
                 getFrequency:function(freq){
                     var frequency = "";
@@ -106,13 +152,13 @@ function (template,MyImports,moment) {
                         frequency = "Once only";
                     }
                     else if(freq=="O"){
-                        frequency = "Once a Week";
+                        frequency = "Next import";
                     }
                     else if(freq=="T"){
-                        frequency = "After two weeks";
+                        frequency = "Next import";
                     }
                     else if(freq=="M"){
-                        frequency = "After a month";
+                        frequency = "Next import";
                     }
                     return frequency;
                 },
