@@ -104,7 +104,7 @@ function (template,highlighter) {
                 
                   $.each(this.rowElement.find(".t-scroll p a"),_.bind(function(k,val){
                         totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
-                        if(totalTagsWidth > 320){
+                        if(totalTagsWidth > 350){
                           if(isElipsis){
                                var eplisis = $('<i class="ellipsis">...</i><div class="clearfix"></div>');
                              $(val).before(eplisis);
@@ -118,7 +118,8 @@ function (template,highlighter) {
               this.parent.$('.t-scroll' ).css('height', '155px');  
               this.parent.$(".caption").animate({height:"250px"},250); 
 	      this.parent.$(".caption p i.ellipsis").hide(); 
-              this.parent.$(".caption p div.clearfix").hide();
+	      this.parent.$(".caption p div.clearfix").hide(); 
+
               this.parent.$(".caption p").css({'height':'auto','display':'block'});
 	      this.parent.$(".btm-bar").css({"position":"absolute","bottom":"0"});
 	      this.parent.$(".img > div").animate({bottom:"105px"});
@@ -139,7 +140,7 @@ function (template,highlighter) {
                         this.rowElement.find('.t-scroll' ).removeAttr('style');
                         this.rowElement.find(".caption").animate({height:"145px"},250);
                         this.rowElement.find(".caption p i.ellipsis").show();
-                        this.parent.$(".caption p div.clearfix").show();
+                        this.parent.$(".caption p div.clearfix").show(); 
                         this.rowElement.find(".caption p").removeAttr('style');
                         this.rowElement.find(".btm-bar").removeAttr('style');
                         this.rowElement.find(".img > div").removeAttr('style');

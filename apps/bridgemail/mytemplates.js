@@ -43,17 +43,18 @@ function (template) {
                 this.current_ws.find("#campaign_tags").hide();
                 this.addNewTemplateBtn = this.current_ws.find(".camp_header #addnew_action");
                 this.addNewTemplateBtn.attr("data-original-title","New Template")
-                
+                this.tempCount = null;
                 this.app.showLoading("Loading Templates...",this.$el);  
                 var _this = this;
                 require(["bmstemplates/templates"],function(templatesPage){  								                                    
-                    var page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign',hideCreateButton:true,selectTextClass:'createcamp',selectCallback:_.bind(_this.createCampaign,_this)});								
-                    page.on('updatecount',_.bind(_this.addCountHeader,_this));
-                    _this.$el.html(page.$el);                            
-                    page.init();
-                    _this.addNewTemplateBtn.click(_.bind(page.createTemplate,page));
+                    _this.page = new templatesPage({page:_this,app:_this.app,selectAction:'Create Campaign',hideCreateButton:true,selectTextClass:'createcamp',selectCallback:_.bind(_this.createCampaign,_this)});								
+                    _this.page.on('updatecount',_.bind(_this.addCountHeader,_this));
+                    _this.$el.html(_this.page.$el);                            
+                    _this.page.init();
+                    _this.addNewTemplateBtn.click(_.bind(_this.page.createTemplate,_this.page));
+                    
                     if(_this.action){
-                        page.createTemplate();
+                        _this.page.createTemplate();
                         $("#create-template-container .loading").remove();
                     }
                 })
@@ -66,6 +67,8 @@ function (template) {
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader); 
+                 this.tempCount = this.ws_header.find('.temp-count');
+                 this.tempCount.click(_.bind(this.page.triggerAll,this.page));
                  this.ws_header.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false}); 
             },
             createCampaign: function(obj)

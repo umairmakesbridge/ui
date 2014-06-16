@@ -6,7 +6,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
 			tags : 'div',
 			events: {				
                             "click #addnew_campaign":function(){             		
-                                    this.createCampaign();
+                                   // this.createCampaign();
                             },
                             "keyup #daterange":function(){
                                     this.$el.find('#clearcal').show();

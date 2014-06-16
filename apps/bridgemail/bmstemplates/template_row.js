@@ -169,10 +169,14 @@ function (template,highlighter,tagView) {
                                 __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
                         },this));
                 },
-                updateTemplate:function(){                                   
+                updateTemplate:function(tempNum){                                   
                    var _this = this.parent;
                    var self = this;
-                   _this.template_id = this.model.get('templateNumber.encode');
+                   if(tempNum){
+                        _this.template_id = tempNum;
+                    }else{
+                    _this.template_id = this.model.get('templateNumber.encode');
+                    }
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = this.app.showDialog({title:'Loading ...',
@@ -189,6 +193,7 @@ function (template,highlighter,tagView) {
                     mPage.init();
                     dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
                     }); 
+                    this.parent.callTemplates(this.parent.offset);
                 },
               deleteTemplate:function(){        
                   this.app.showAlertDetail({heading:'Confirm Deletion',

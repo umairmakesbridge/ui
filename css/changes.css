@@ -13,7 +13,9 @@
 }
 
 .schedule-box .sch-btn{
-    width: 220px;
+    width: 260px;
+    line-height: 66px;
+    font-size: 30px;
 }
 #activities{
     display: none !important;
@@ -1119,7 +1121,8 @@ ul.tabs-btns li.active a{
 }
 .ui-accordion .ui-accordion-header .sub-count .badge { float:right;}
 .schedule-box > div{
-    height:326px;
+    /*height:326px;*/
+    padding: 0;
 }
 .schedule-box{
     height:368px;
@@ -2926,6 +2929,124 @@ text-align:center;
     left: 3px;
     position: relative;
     top: 3px;
+}
+/* Schedule Calender */
+.set-time {
+    background: none repeat scroll 0 0 #E0F1FB !important;
+    width: 92.5% !important;
+    float:left;
+    padding: 10px;
+    height: 46px;
+}
+.sch-right {
+     
+     padding:0px !important;
+}
+.schedule-detail {
+    background: none repeat scroll 0 0 #4FC8F5;
+    border-radius: 2px;
+    display: table-cell;
+    height: 240px;
+    overflow: hidden;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    width: 240px;
+}
+.schedule-detail.scheduled {
+    background: none repeat scroll 0 0 #FFCC89;
+}
+.schedule-detail h3 {
+    color: #FFFFFF;
+    font-size: 18px;
+    line-height: 24px;
+}
+
+.schedule-detail p {
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.schedule-detail .date-time {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 2px;
+    padding: 10px;
+}
+.schedule-detail .date-time h3 {
+    color: #6494AF;
+}
+.schedule-detail .date-time h3 span {
+    font-size: 16px;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+.schedule-panel p.note {
+    clear: both;
+    color: #598398;
+    font-size: 13px;
+    text-align: center;
+}
+
+.schedule-panel .sch-btn .icon {
+    background-color: rgba(0, 0, 0, 0) !important;
+    height: 65px;
+    margin: 0;
+    width: 65px;
+}
+.modal-body .schedule-height{
+    height: 240px !important;
+}
+.modal-body .sch-btn{
+    width: 260px;
+    line-height: 66px;
+    font-size: 30px;
+    margin: 0px 10px 0 !important;
+}
+.fc-five-rows .fc-row {
+    height: 17%;
+}
+.sch-selected{
+    background : #94CF1E !important;
+}
+.sch-selected span:first-child{
+    color:#fff !important; 
+}
+.schedule-panel{
+    margin-left:18px;
+}
+.schedule-box {
+     border: 2px solid #EAF4F9;
+     background:none !important;
+     height: 410px;
+}
+.modal-body .greenbtn-wrap{
+    margin: 10px 10px 0 !important;
+}
+.reschedule-dialog-wrap{
+     background: none repeat scroll 0 0 #fff;
+    display: block;
+    height: 445px;
+    left: 50%;
+    position: fixed;
+    top: 50%;
+    width: 560px;
+    z-index: 999;
+}
+.schedule-panel h1 {
+    color: #6494AF;
+    font-size: 20px;
+    margin: 0;
+    padding: 0 0 12px;
+}
+
+.schedule-panel .closebtn {
+    top: 15px;
+}
+.modal-body .closebtn{
+    display: block !important;
 }
 /* ENDS */
 

@@ -16,9 +16,10 @@ function (template,highlighter) {
             events: {
                'click .copy-camp':'copyCampaign',
                'click .edit-camp':'openCampaign',
-               "click .preview-camp":'previewCampaign',
+               "click .preview-camp,.scheduleOpn-camp":'previewCampaign',
                'click  a.campname': 'campaignStateOpen',
-               "click .schedule-camp, .reschedule-camp":'schOpenCampaign',
+               "click .schedule-camp":'schOpenCampaign',
+               "click .reschedule-camp":'reschOpenCampaign',
                'click .delete-camp':'deleteCampaginDialoge',
                'click .taglink':'tagClick',
                'click .report':'reportShow',
@@ -259,7 +260,7 @@ function (template,highlighter) {
                         tagClick:function(obj){
                             this.sub.taglinkVal = true;
                             this.tagTxt = obj.currentTarget.text;
-                             this.app.initSearch(obj,this.sub.$el.find("#list-search"));
+                            this.app.initSearch(obj,this.sub.$el.find("#list-search"));
                         },
                         reportShow:function(){
                                         var camp_id=this.model.get('campNum.encode');
@@ -319,7 +320,7 @@ function (template,highlighter) {
                            camp_obj.getallcampaigns();
                         },
                         schOpenCampaign:function(ev){
-                            var schFlag = false;
+                           /* var schFlag = false;
                             var reschedule = false;
                             var hidecalender = false;
                             if(this.$(ev.currentTarget).hasClass('reschedule-camp')){
@@ -331,7 +332,28 @@ function (template,highlighter) {
                             }
                             var camp_id = this.model.get('campNum.encode');
                             var camp_wsid = this.model.get('campNum.checksum');
-                            this.app.mainContainer.openCampaign(camp_id,camp_wsid,schFlag,reschedule,hidecalender);  
+                            this.app.mainContainer.openCampaign(camp_id,camp_wsid,schFlag,reschedule,hidecalender);  */
+                             this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body"></div></div>');
+                            this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px','margin-top': '-223px','max-height':'455px'});
+                            
+                            var camp_id = this.model.get('campNum.encode');
+                            var campstates = {"init":true,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''};
+                            require(["campaigns/schedule_campaign"],_.bind(function(reschedulePage){                                     
+                                             var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:false,hidecalender:this.hidecalender,scheduleFlag:'schedule'});
+                                             this.$el.parents('body').find('.reschedule-dialog-wrap').html(mPage.$el);
+                            },this));
+                            
+                        },
+                        reschOpenCampaign : function(ev){
+                            this.$el.parents('body').append('<div class="overlay sch-overlay"><div class="reschedule-dialog-wrap modal-body"></div></div>');
+                            this.$el.parents('body').find('.reschedule-dialog-wrap').css({'margin-left': '-280px','margin-top': '-223px','max-height':'455px'});
+                            
+                            var camp_id = this.model.get('campNum.encode');
+                            var campstates = {"init":true,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''};
+                            require(["campaigns/schedule_campaign"],_.bind(function(reschedulePage){                                     
+                                             var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:true,hidecalender:this.hidecalender,scheduleFlag:'reschedule'});
+                                             this.$el.parents('body').find('.reschedule-dialog-wrap').html(mPage.$el);
+                            },this));
                         }
             
         });

@@ -396,7 +396,7 @@ function (template,icheck,bmstags) {
                     this.dialog.$(".tagscont").show();
                 }
             },
-             updateTemplate:function(){                                           
+             /*updateTemplate:function(){                                           
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = this.app.showDialog({title:'Loading ...',
@@ -428,7 +428,7 @@ function (template,icheck,bmstags) {
                            }
                    });
                     
-                },
+                },*/
                  TryDialog:function(obj){
                     this.image_obj = $.getObj(obj,"a");
                     var that = this;

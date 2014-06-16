@@ -16,7 +16,7 @@ function (template) {
             events: {
               'click .view-profile':"openContact",
               'click .page-view':'loadPageViewsDialog',
-              'click .btn-green':'selectContact',
+              'click .select-contact-camp':'selectContact',
               'click .checkedadded-preview':'removeContact'
              
             },

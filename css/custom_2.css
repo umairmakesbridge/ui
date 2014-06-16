@@ -26,6 +26,8 @@
 .custom-inner {
 	background: #fff;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        border-radius: 2px;
+        overflow: hidden;
 }
 
 .custom-inner:before,
@@ -50,11 +52,11 @@
 }
 
 .custom-header {
-    background: none repeat scroll 0 0 #FBFBFB;    
-    height: 35px;
-    padding: 0 10px ;
+   background: none repeat scroll 0 0 #E6F4FC;
+   /* height: 30px;*/
+    padding: 10px !important;
     position: relative;
-		text-transform: uppercase;
+   text-transform: uppercase;
 }
 .custom-header h2,
 .custom-header h3 {
@@ -62,33 +64,44 @@
 
 }
 .custom-header h2 {
-    text-align: center;
-    color: #6494AF;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 28px;
+   color: #6494AF;
+    float: left;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 30px;
     margin: 0;
     padding: 0;
+    text-align: left;
     text-transform: uppercase;
 }
 
 .custom-header h3 {
-	font-size: 10px;
-	font-weight: 700;
-	color: #b7bbc2;
+	 color: #92B1C2;
+        float: left;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 30px;
+        margin-left: 10px !important;
+        text-align: left;
 }
-
+.custom-header nav span.custom-next {
+    background: url("../img/arrow-right.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.custom-header nav span.custom-prev {
+    background: url("../img/arrow-left.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 .custom-header nav span {
-        
-        background: url("../img/arrows.png") no-repeat scroll 0 bottom rgba(0, 0, 0, 0);
-	color: #cbd1d2;
-	height: 20px;
-	font-size:0;
-	position: absolute;
-	top: 5px;
-	width: 20px;
-	background-size:cover;
-	cursor: pointer;
+    -moz-user-select: none;
+    cursor: pointer;
+    float: right;
+    font-size: 20px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0 1px;
+    position: relative;
+    width: 30px;
+    opacity:0.6;
+	
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	-khtml-user-select: none;
@@ -100,6 +113,8 @@
 .custom-header nav span:first-child {
 	left: 0;	
 }
+
+.custom-header nav span:hover { opacity:1; }
 
 .custom-header nav span:last-child {
        background-position: right center;
@@ -194,20 +209,23 @@
 /* Modifications */
 
 .fc-calendar-container {
-	height: 220px;
+        background: none repeat scroll 0 0 #E0F1FB;
+        height: 190px;
+        padding: 10px;
+        width: auto;
+	/*height: 220px;
 	width: auto;
 	 margin: 0 -1px -1px !important;
-	background: #FBFBFB;
+	background: #FBFBFB;*/
 
 }
 
 .fc-calendar .fc-head {
-	background: transparent;
-	color: #0096ff;
-	background: none repeat scroll 0 0 #FFFFFF;
-	font-weight: 400;
-	text-transform: uppercase;
-	font-size: 12px;
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    color: #01AEEE;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .fc-calendar .fc-row > div {
@@ -235,6 +253,11 @@
 	background: #0096ff;
 
 }
+
+.fc-six-rows .fc-row {
+    height: calc(100% / 6 - 2px);
+}
+
 .fc-calendar .fc-row > div.selected > span.fc-date{
     color:#fff !important;
     text-shadow: none;
@@ -243,7 +266,7 @@
 	background: #eee;
 }
 .fc-calendar .fc-row > div.selected{
-    background: #94CF1E;
+    background: #4FC8F5;
     color:#fff;
     font-weight: bold;
 }
@@ -283,6 +306,159 @@ border-color: #0096FF #0096FF transparent transparent;
 .fc-calendar .fc-row > div > div span {
 	display: none;
 	font-size: 22px;
+}
+
+@media screen and (max-width: 400px) {
+	.fc-calendar-container {
+		height: 300px;
+	}
+.fc-calendar .fc-row > div > span.fc-date {
+		font-size: 15px;
+	}
+}
+/*New Changes Abdullah*/
+.fc-calendar .fc-row > div > span.fc-date {
+    color: #3C6D86;
+    font-weight: 400;
+    left: 50%;
+    margin: -10px 0 0 -15px;
+    pointer-events: none;
+    text-align: center;
+    top: 50%;
+}
+.fc-calendar .fc-row > div > span.fc-date {
+    color: #3C6D86;
+    font-weight: 400;
+    left: 50%;
+    margin: -10px 0 0 -15px;
+    pointer-events: none;
+    text-align: center;
+    top: 50%;
+}
+.fc-calendar .fc-row > div > span.fc-date {
+    bottom: 5px;
+    color: #DDDDDD;
+    font-size: 14px;
+    font-weight: 700;
+    height: 20px;
+    line-height: 20px;
+    position: absolute;
+    right: 5px;
+    text-align: right;
+    text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8);
+    width: 30px;
+}
+/* Modifications */
+
+.fc-calendar-container {
+	height: 190px;
+	width: auto;
+	padding: 10px !important;
+	background: #e0f1fb; 
+}
+
+.fc-calendar .fc-head {
+	background: transparent;
+	color: #01aeee;
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+.fc-calendar .fc-row > div, .fc-calendar .fc-head > div {
+    float: left;
+    height: 100%;
+    position: relative;
+    width: calc(100% / 7 - 2px);
+}
+
+.fc-calendar .fc-row > div {
+	background: #fff;
+	cursor: pointer;
+	margin:1px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius:  2px;
+}
+
+.fc-calendar .fc-row > div:empty {
+	background: transparent;
+}
+
+.fc-calendar .fc-row > div > span.fc-date {
+	top: 50%;
+	left: 50%;
+	text-align: center;
+	margin: -10px 0 0 -15px;
+	color: #3c6d86;
+	font-weight: 400;
+	pointer-events: none;
+}
+
+.fc-calendar .fc-row > div.fc-today {
+	background: #4fc8f5; 
+}
+
+.fc-calendar .fc-row > div.fc-today > span.fc-date {
+	color: #fff; 
+}
+
+.fc-calendar .fc-row > div.fc-content:after {
+	content: '\00B7';
+	text-align: center;
+	width: 20px;
+	margin-left: -10px;
+	position: absolute;
+	color: #DDD;
+	font-size: 70px;
+	line-height: 20px;
+	left: 50%;
+	bottom: 3px;
+	
+	display:none;
+}
+
+.fc-calendar .fc-row > div.fc-today.fc-content:after {
+	color: #b02c42;
+}
+
+.fc-calendar .fc-row > div.fc-content:hover:after{
+	color: #ef4f69;
+}
+
+.fc-calendar .fc-row > div.fc-today.fc-content:hover:after{
+	color: #fff;
+}
+
+.fc-calendar .fc-row > div > div a,
+.fc-calendar .fc-row > div > div span {
+	display: none;
+	font-size: 22px;
+}
+.fc-calendar .fc-row > div{
+    border-right:none !important;
+    border-bottom: none;
+}
+
+.fc-calendar .fc-row {
+    border-bottom: none;
+}
+
+.set-time .btn-group > .btn{
+    background: #FFFFFF;
+    line-height: 18px !important;
+    margin: 0 0 5px;
+}
+.fc-calendar .fc-head > div {
+    margin: 1px;
+    text-align: center;
+}
+.set-time .timebox input:focus{background:#FFF !important;}
+.fc-calendar .fc-head {
+    color: #01AEEE;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 @media screen and (max-width: 400px) {
