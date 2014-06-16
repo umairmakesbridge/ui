@@ -194,7 +194,7 @@
 
                     var mainObj = myElement.find(".mainContentHtml");
                     oInitDestroyEvents.InitAll(mainObj);                                        
-                    mainObj.append(oHtml);                    
+                    mainObj.html(oHtml);                    
                     IsStyleActivated = false;
                     oInitDestroyEvents.InitAll(mainObj);
                 };

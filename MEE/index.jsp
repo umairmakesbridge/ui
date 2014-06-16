@@ -1905,7 +1905,7 @@
 					LoadTemplate: function (args) {
                     //LoadTemplate
 
-                                        $.ajax({
+                                       /* $.ajax({
                                             // url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=jbKw21Ps30Uu33Kr26ja",
                                             url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=BzAEqwsJp20In21Vr30Rk33BdTMyio",
 
@@ -1924,6 +1924,7 @@
                                                 console.log("LoadTemplate Failed:"+ e);
                                             }
                                         });
+                                        */
                     },
                     LoadBuildingBlocks: function (args) {
     					//GetBuildingBlocks

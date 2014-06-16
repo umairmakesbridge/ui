@@ -2362,7 +2362,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     if(html_json.htmlText){
                         if(html_json.isEasyEditorCompatible=="Y"){
                             this.$("#html_editor_mee").click();
-                            this.setMEE(this.app.decodeHTML(html_json.htmlText,true));
+                            this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
                            
                         }
                         else{
