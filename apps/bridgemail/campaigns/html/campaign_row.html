@@ -5,7 +5,7 @@
               
                 <h3>
                     <% if(this.getCampStatus().status == "Scheduled"){ %>
-                         <a class="reschedule-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" title="Click to reschedule"> <%= this.model.get('name')%> </a>
+                         <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" title="Click to view"> <%= this.model.get('name')%> </a>
                     <% }else{ %>
                     <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
                     <% } %>
@@ -70,4 +70,5 @@
         
     </div>
 </td>
+
 

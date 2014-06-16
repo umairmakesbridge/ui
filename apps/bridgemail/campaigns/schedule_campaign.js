@@ -16,7 +16,7 @@ function (template,calendario,moment) {
             events: {
                  'click .scheduled-campaign': 'scheduleCamp',
                  'click .draft-campaign':'setDraftCampaign',
-//               'click .edit-camp':'openCampaign',
+                 'click .closebtn':'closeDialog',
 //               "click .preview-camp":'previewCampaign',
 //               'click  a.campname': 'campaignStateOpen',
 //               "click .schedule-camp, .reschedule-camp":'schOpenCampaign',
@@ -121,6 +121,7 @@ function (template,calendario,moment) {
                                    $(this).val("0"+$(this).val())
                                }
                         }});
+                        var hour = this.addZero(hour);
                         this.$(".timebox-hour").val(hour);
                         this.$(".timebox-min").val(min.toString().length==1?("0"+min):min);
                     
@@ -251,11 +252,11 @@ function (template,calendario,moment) {
                    
                },
                refreshList : function(){
-                   if(this.scheduleFlag === 'reschedule'){
+                   if(this.scheduleFlag === 'reschedule' || this.scheduleFlag === 'schedule'){
                         this.parent.sub.total_fetch = 0;
                         this.parent.sub.getallcampaigns();
                         this.parent.sub.headBadge();
-                   }else{
+                   }else {
                        this.parent.refreshCampaignList();
                    }
                },
@@ -445,6 +446,10 @@ function (template,calendario,moment) {
                                     }
                             },this));
                     } 
+              },
+              closeDialog : function(){
+                  this.$el.parents('body').find('.reschedule-dialog-wrap').parent().remove();
+                  //this.$el.parents('body').find('.sch-overlay').remove();
               }
               
         });

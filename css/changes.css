@@ -1121,7 +1121,8 @@ ul.tabs-btns li.active a{
 }
 .ui-accordion .ui-accordion-header .sub-count .badge { float:right;}
 .schedule-box > div{
-    height:326px;
+    /*height:326px;*/
+    padding: 0;
 }
 .schedule-box{
     height:368px;
@@ -2987,6 +2988,34 @@ text-align:center;
 }
 .schedule-box {
      border: 2px solid #EAF4F9;
+     background:none !important;
+     height: 410px;
+}
+.modal-body .greenbtn-wrap{
+    margin: 10px 10px 0 !important;
+}
+.reschedule-dialog-wrap{
+     background: none repeat scroll 0 0 #fff;
+    display: block;
+    height: 445px;
+    left: 50%;
+    position: fixed;
+    top: 50%;
+    width: 560px;
+    z-index: 999;
+}
+.schedule-panel h1 {
+    color: #6494AF;
+    font-size: 20px;
+    margin: 0;
+    padding: 0 0 12px;
+}
+
+.schedule-panel .closebtn {
+    top: 15px;
+}
+.modal-body .closebtn{
+    display: block !important;
 }
 /* ENDS */
 

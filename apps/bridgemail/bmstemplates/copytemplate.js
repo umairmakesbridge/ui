@@ -68,7 +68,7 @@ function (template) {
                         }
                         else{
                                 var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+app.get('bms_token')+"&type=clone";
-                                app.showLoading("Creating copy of campaign...",curview.$el);
+                                app.showLoading("Creating copy of Template...",curview.$el);
                                 $.post(URL, { templateNumber: template_id,templateName: templateName})
                                 .done(function(data) {
                                         app.showLoading(false,curview.$el);
@@ -86,8 +86,8 @@ function (template) {
                                                       }
                                                       //curview.options.dialog.hide();
                                                       curview.options.templatesDialog.hide();
-                                                      _current.template_id = id;
-                                                      _current.updateTemplate();
+                                                      //_current.template_id = id;
+                                                      _current.updateTemplate(id);
                                                       _current.$el.find("#template_search_menu li:first-child").removeClass("active").click();
                                                 
                                           } 
