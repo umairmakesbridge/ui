@@ -141,8 +141,13 @@ function (template,calendario,moment) {
                     cal = $calendar.calendario( {
                     onDayClick : function( $el, $contentEl, dateProperties ) {                                
                             if($el.hasClass("fc-disabled")===false){
-                               self.$('#calendar').find("div.selected").removeClass("selected"); 
-                               $el.addClass("selected");
+                               if(self.options.rescheduled){
+                                   self.$('#calendar').find("div.sch-selected").removeClass("sch-selected"); 
+                                   $el.addClass("sch-selected");
+                               }else{
+                                self.$('#calendar').find("div.selected").removeClass("selected"); 
+                               $el.addClass("selected");   
+                               }
                                self.currentState.datetime['day'] = dateProperties.day;
                                self.currentState.datetime['month'] = dateProperties.month; 
                                self.currentState.datetime['year'] = dateProperties.year;
@@ -301,6 +306,7 @@ function (template,calendario,moment) {
                         this.$el.parents('.ws-content.active').find('.backbtn').show();
                         this.$el.parents('.ws-content.active').find('.addtag').show();
                     }
+                    
                    if(this.hidecalender){
                        // this.$('.schedule-camp,.drf-sch-btn').hide(); // Hide Calender
                         
@@ -373,12 +379,13 @@ function (template,calendario,moment) {
                         this.hidecalender = false;
                     }
                     this.scheduleBoxDD();
+                    this.closeDialog();
                },
                /*
                 * Check view either Schedule or Reschdule
                 */
                scheduleReschedule : function(){
-                   if(this.scheduleFlag === 'schedule'){
+                   if(this.scheduleFlag === 'schedule' || this.scheduleFlag === 'draft'){
                        this.scheduleBoxDD();
                    }else if(this.scheduleFlag === 'reschedule'){
                        this.reScheduleBoxDD();

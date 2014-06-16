@@ -742,7 +742,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    },this)); */
                    this.app.showLoading("Loading Calender...",this.$(".schedule-box")); 
                    require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
-                            var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'schedule'});
+                            var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'draft'});
                            //tmPr.init(); // Call view functions
                             this.$el.find('.schedule-box').append(tmPr.$el);
                             this.$el.find('.schedule-box').removeAttr('style');

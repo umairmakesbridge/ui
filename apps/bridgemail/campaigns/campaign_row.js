@@ -339,7 +339,7 @@ function (template,highlighter) {
                             var camp_id = this.model.get('campNum.encode');
                             var campstates = {"init":true,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''};
                             require(["campaigns/schedule_campaign"],_.bind(function(reschedulePage){                                     
-                                             var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:true,hidecalender:this.hidecalender,scheduleFlag:'schedule'});
+                                             var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:false,hidecalender:this.hidecalender,scheduleFlag:'schedule'});
                                              this.$el.parents('body').find('.reschedule-dialog-wrap').html(mPage.$el);
                             },this));
                             
