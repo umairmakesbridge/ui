@@ -104,7 +104,7 @@ define([
                         var container = $(".messages_dialogue");
                         if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
                         && container.has(ev.target).length === 0){ // ... nor a descendant of the  message dialogue
-                            if(!$(ev.target).hasClass('messagesbtn') && !$(ev.target).hasClass('view-all') && !$(ev.target).parents('.messagesbtn').length && !$(ev.target).parents('.refresh_btn').length){
+                            if(!$(ev.target).hasClass('messagesbtn') && !$(ev.target).hasClass('view-all') && !$(ev.target).parents('.messagesbtn').length && !$(ev.target).hasClass('r-notify') && !$(ev.target).hasClass('closebtn')){
                                   container.hide();
                             }
                         }

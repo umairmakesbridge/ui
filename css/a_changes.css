@@ -2351,13 +2351,18 @@ position:relative;
 
 .sortoption_expand {
     background: #EAFaFa;
-box-shadow: 1px;
-border-right: 1px solid #eee;
+       
+border: 2px solid #EAF4F9;
+cursor: pointer;
+-webkit-border-radius: 2px 2px;
+-moz-border-radius: 2px 2px;
+border-radius: 2px 2px;
     display: block;
     float: left;
-    line-height: 40px;
+    line-height: 36px;
     padding: 0 15px;
-    width: 154px;
+    width: 154px; 
+
 }
 .sortoption_expand .caret { border-top: 4px solid #637F95; margin: 18px 0 0 8px; }
 
@@ -2371,7 +2376,7 @@ ul#template_search_menu_expand {
     border-radius: 0 2px 2px 0;
     line-height: 18px;
     padding: 5px;
-    width: 220px;
+    width: 250px;
 }
 .template_search_menu_expand {
     background: none repeat scroll 0 0 #F4FBFF;
@@ -2462,8 +2467,18 @@ ul#template_search_menu_expand li.active a, ul#template_search_menu_expand li a:
 }
 .text-truncated { display:inline-block; max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
-
-
+ul#template_search_menu_expand li a i.icon {
+background-size: cover !important;
+float: left;
+height: 18px;
+margin: 3px 8px 0 -10px !important;
+width: 18px;
+}
+.messages_dialogue .alertmsg .msgicon {
+left: 17px;
+position: absolute;
+top: 14px;
+}
 
 
 

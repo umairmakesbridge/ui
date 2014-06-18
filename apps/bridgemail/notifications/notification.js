@@ -19,7 +19,8 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                     "click .current-count":'getContactsPopulation',
                     "click h3": "showMessage",
                     "click .view-target":"editTarget",
-                    "click #campaign_analytics":"showReport"
+                    "click #campaign_analytics":"showReport",
+                    "click .list-name":"openListWorkspace"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -28,20 +29,41 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
+                    var colorName = "blue";
                     switch (this.model.get('notifyType')) {
                         case "I":
+                            colorName = "blue";
                             $(this.el).attr('id', this.id).addClass('info');
                             break;
                         case "W":
+                            colorName = "yell";
                             $(this.el).attr('id', this.id).addClass('warning');
                             break;
                         case "E":
+                            colorName = "red";
                             $(this.el).attr('id', this.id).addClass('error');
                             break;
 
                     }
+                    var img = "";
+                      switch (this.model.get('eventType')) {
+                        case "CMP_C":
+                            
+                            img = "img/campaign-"+colorName+".png";
+                            break;
+                        case "TG_PCT":
+                             img = "img/target-"+colorName+".png";
+                            break;
+                        case "CSV":
+                             img = "img/csvicon-"+colorName+".png";
+                            break;
+                    }
+                    var label = "<img class='msgicon' src='"+img+"'>"
+                     $(this.el).prepend(label);
                     if (this.model.get('isViewed') == "N") {
                         $(this.el).attr('id', this.id).addClass('new');
+                    }else{
+                        $(this.el).attr('id', this.id).css('font-weight','normal!important');
                     }
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
@@ -91,6 +113,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                             var messages = $(".messagesbtn sup").html();
                             messages = parseInt(messages) - 1;
                             $(".messagesbtn sup").html(messages);
+                            if(messages == 0)
+                                $(".messagesbtn sup").hide();
+                            $(that.el).parents('.messages_dialogue').find('h4').find('.badge').html(messages);
                             $(that.el).attr('id', that.id).removeClass('new');
                         }
 
@@ -173,7 +198,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                     var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
-                            label = "<strong>Subject</strong> <span data-original-title='"+this.model.get('subject')+"' class='text-truncated showtooltip'>" + this.model.get('subject') + "</span>"
+                            label = "<strong>Subject</strong> <span data-original-title='"+this.model.get('subject')+"' class='text-truncated showtooltip'>" + this.model.get('subject') + "</span><a id='campaign_analytics' style='display: inline-block; margin-bottom:-3px;' data-original-title='Click to view message report' class='icon report showtooltip'></a>"
                             break;
                         case "TG_PCT":
                                if(this.model.get('currentPopulationCount') == "0")
@@ -183,38 +208,64 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                             //  break;
                             break;
                         case "CSV":
-                             label = "<strong>List Name</strong> <span data-original-title='"+this.model.get('listName')+"' class='text-truncated showtooltip'>" + this.model.get('listName') + "</span>"
+                             label = "<strong>List Name</strong> <span data-original-title='"+this.model.get('listName')+"' class='text-truncated showtooltip'><a class='list-name'>" + this.model.get('listName') + "<a/></span>"
                                 break;
                     }
                     return label;
 
 
                 },
-                getTags: function() {
-                    var label = "";
-                    //if (this.model.get('tags') == "")
-                    //    return;
+                getHeader:function(){
+                    var caption = "";
+                    var noun = "has been";
+                    var to = "Sent to";
+                    var count = "";
+                    var date = "";
+                    var nameOf = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
-                            label = "<strong>Tags</strong> <span>" + this.model.get('tags') + "</span>"
+                            caption = this.model.get('campaignName');
+                            noun = "has been "
+                            to = "Sent to";
+                            count ="&nbsp;"+this.options.app.addCommas(this.model.get('sentCount'))+"&nbsp;";
+                            date = this.dateSetting(this.model.get('scheduledDate'));
+                            nameOf = "Contacts On &nbsp;";
                             break;
                         case "TG_PCT":
-                            label = "<strong>Tags</strong> <span>" + this.model.get('tags') + "</span>"
+                              caption = this.options.app.addCommas(this.model.get("currentPopulationCount"))+"&nbsp;Target Population";
+                             noun = "Calculated in "
+                             to = "";
+                             
+                             count = "";
+                            //count = this.options.app.addCommas(this.model.get('processCount'));
+                            date = this.model.get("filterName");
                             break;
                         case "CSV":
-                            label = "<strong>Tags</strong> <span>" + this.model.get('tags') + "</span>"
+                            caption = "CSV Upload";
+                            noun = "has  "
+                            to = "Add Count&nbsp;"+this.options.app.addCommas(this.model.get('addCount'));
+                            count = "&nbsp; <span style='font-weight:normal'>and</span> &nbsp; Updated Count&nbsp;"+this.options.app.addCommas(this.model.get('updateCount'))+"&nbsp;";
+                            date = this.dateSetting(this.model.get('logTime'));
+                            nameOf = "on";
                             break;
                     }
-                    return label;
-                },
+                   if(caption){
+                    var str ="<a><strong class='text-truncated' style='display:inline;'>"+caption+"&nbsp;</strong></a>";
+                    str = str + noun +"&nbsp;<strong>"+to + count +"</strong>";
+                    str = str + nameOf+" <strong>"+date+"</strong>";
+                    return str;
+                   }
+                } ,
                 getActionButton: function() {
                     var label = "";
+                   
+                          
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
-                            label = "<a class='btn-green preview-campaign' style='margin-top: -85px;clear: both;float: right;'><span>Preview Campaign</span></a>";
+                            label = " <div class='info-p'><a class='btn-blue preview-campaign' style='display:block; width:190px;float: right;margin-top:-100px;'><i class='icon preview3'></i><span>Preview Campaign</span></a></div>";
                             break;
                         case "TG_PCT":
-                            label = "<a class='btn-green view-target' style='margin-top: -85px;clear: both;float: right;'><span>View Target</span></a>";
+                            label = " <div class='info-p'><a class='btn-green view-target' style='float: right;margin-top:-100px;'><i class='icon edit'></i> <span>View Target</span></a></div>";
                             break;
                         case "CSV":
                            // label = "<a class='btn-green view-list' style='margin-top:5px;'><span>View List</span></a>";
@@ -273,15 +324,15 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                       $('#div_pageviews').empty();
                       $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                       $('#div_pageviews').css('right','');
-                      $('#div_pageviews').css({left:offset.left-200, top:offset.top - 30});      
+                      $('#div_pageviews').css({left:offset.left-200, top:offset.top - 40});      
                       require(["recipientscontacts/rcontacts"],function(Contacts){
                          var objContacts = new Contacts({type:type,app:that.options.app,listNum:listNumber});
                         
                    
                           $('#div_pageviews').css('padding-top','0');
                           $('#div_pageviews').html(objContacts.$el);
-                            $('#div_pageviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
-                          $('#div_pageviews .temp-filters #imgCorner').css({left:offset.left-420});
+                          //  $('#div_pageviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
+                         // $('#div_pageviews .temp-filters #imgCorner').css({left:offset.left-420});
                       });
                 },
                 editTarget:function(){
@@ -311,6 +362,10 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                 showReport:function(){
                      var camp_id=this.model.get('campaignNumber.encode');
                      this.options.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campaignNumber.checksum'),tab_icon:'campaign-summary-icon'});
+                },
+                openListWorkspace:function(){
+                       this.options.app.mainContainer.addWorkSpace({type:'',title: "Lists, Targets, Tags",sub_title:'Listing',url:'contacts/recipients',workspace_id: 'recipients',tab_icon:'subscribers',single_row:true,params: {type: 'lists',listName:this.model.get('listName')}});
+                     return;
                 }
             });
         });

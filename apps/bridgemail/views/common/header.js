@@ -75,6 +75,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                 initialize: function() {
                     this.template = _.template(template);
                     this.render();
+                    this.firstTime = false;
                     this.newMessages = null;
                   
                     
@@ -138,6 +139,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.$el.find(".messages_dialogue").slideDown('fast');
                     this.$el.find(".messages_dialogue").html(new Notifications({newMessages : this.newMessages,isModel:false}).el)
                     this.$el.find(".messages_dialogue").append("<div class='viewallmsgs' style='margin:0px;padding:0px;height:40px'><div style='text-align:center'><a class='btn-blue' style='margin-top:5px;'><span class='view-all'>View All Messages </span></a></div></div>");
+                    this.$el.find(".messages_dialogue").append("<div class='btm-thumb'></div>");
+                    this.$el.find(".messages_dialogue").find(".btm-thumb").on('click',function(){
+                        that.$el.find(".messages_dialogue").slideUp('fast');
+                    });
                     this.$el.find(".messages_dialogue").find(".view-all").on("click",function(){
                          
                         that.$el.find(".messages_dialogue").addClass('popmodel').html(new Notifications({isModel:true,newMessages : that.newMessages}).el)
@@ -161,8 +166,19 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
+                        if(that.newMessages < data[1] && this.firstTime == false){
+                            that.$el.find('.messagesbtn').addClass('swing');
+                            
+                        }else{
+                            that.$el.find('.messagesbtn').removeClass('swing');
+                        }
                         that.newMessages = data[1];
                         that.$el.find('.messagesbtn sup').html(data[1]);
+                        
+                        if(data[1] == "0" || data[1] == 0){
+                            that.$el.find('.messagesbtn sup').remove();
+                        }
+                        that.firstTime = true;
                      
                     });
                }
