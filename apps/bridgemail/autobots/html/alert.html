@@ -1,0 +1,186 @@
+
+<h2><i class="icon target"></i>Target </h2>
+
+<div class="bot_p_box">
+    <div class="bmsgrid" style="overflow:visible;">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0">
+                </table>
+            </div>
+        </div>
+        <div style="height: ;" class="bDiv">
+            <table cellspacing="0" cellpadding="0" border="0" id="camp_list_grid">
+                <tbody>
+                    <tr id="">
+                        <td width="100%"><div>
+                                <div class="name-type">
+                                    <h3><a href="">Test CMP</a>
+
+                                    </h3>
+                                    <div class="tags tagscont">
+                                        <ul>
+                                            <li><a>1test umair</a></li>
+                                            <li><a>demand generation11</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div></td>
+
+                        <td width="132px"><div>
+
+                                <div class="subscribers ">
+                                    <strong><span><em>Subscribers</em><a href="">3,456</a></span></strong>
+
+                                    <div class="prgressbar"><span class="prgrss" style="width:45%"> </span></div>
+
+                                </div>
+
+
+
+                            </div></td>
+
+                        <td width="100px"><div>
+
+
+
+                                <div class="time" style="width:"> <strong><span><em>Played on</em>04 Sep, 2007</span></strong> </div>                          
+
+
+                                <div style="width:;" class="slide-btns s-clr5 four ">
+
+                                    <span class="icon setting"></span>
+                                    <div>
+                                        <a title="refresh" class="icon refresh s-clr4"><span>Refresh</span></a>
+
+
+
+
+                                        <a title="preview" class="icon preview s-clr3"><span>Preview</span></a>
+                                        <a title="edit" class="icon edit  s-clr2"><span>Edit</span></a>
+                                        <a title="delete" class="icon delete s-clr1"><span>Delete</span></a>
+                                    </div>
+                                </div> <!-- slide-btns two  -->
+
+
+                            </div></td>
+
+                    </tr>
+
+
+
+
+                </tbody>
+            </table>
+            <div style="display: none;" class="iDiv"></div>
+        </div>
+    </div>
+</div>
+
+<h2><i class="icon setting"></i>Setting </h2>
+
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+
+
+        <div class="set-row">
+            <div>
+                <div class="checkpanelinput"><input type="checkbox" id="reoccure" class="checkpanel" value="" style="position: absolute; opacity: 0;"><div class="icheck_line-icon"></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                <label for="reoccure">Reoccuring</label>
+            </div>
+
+            <div class="set-row_col">
+                <select class=" nosearch" style="width: 120px; display: none;">
+                    <option>Days</option>
+                    <option>Month</option>
+                    <option>Year</option>
+                </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="width: 120px;" title=""><a class="chosen-single" tabindex="-1"><span>Days</span><div><b></b></div></a><div class="chosen-drop"><div><div class="chosen-search"><input type="text" placeholder="Search..." autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div></div>
+
+                <span class="" style="margin-left:25px;">After every </span>
+
+                <input type="text" value="" name="" placeholder="1" style="width:50px">
+                <span class="" style="margin-right:25px;"> Days </span>
+
+                <input type="text" value="" name="" placeholder="2" style="width:50px">
+                <span class=""> Times </span>
+            </div>
+
+        </div> <!-- set-row  -->
+        <div class="set-row">
+            <div>
+                <div class="checkpanelinput"><input type="checkbox" id="Sweep" class="checkpanel" value="" style="position: absolute; opacity: 0;"><div class="icheck_line-icon"></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                <label for="Sweep">Sweep All Contacts</label>
+            </div>
+
+            <div class="set-row_col">
+                <span class=""> <em>Selecting this option will allow to add contacts before playing this bot.</em> </span>
+            </div>
+
+        </div> <!-- set-row  -->
+
+
+
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<h2><i class="icon alerts"></i>Alert </h2>
+
+<div class="bot_p_box">
+    <div class="bot_p_boxinner">
+
+        <div class="alert_b_content">
+
+            <div class="row">
+                <label>Recepients
+                    <span class="fieldinfo"><i class="icon"></i><em>Subject of the name can not be empty.</em></span>
+                </label>
+                <div class="input-append adv_dd ">
+                    <div class="inputcont">
+
+
+
+                        <input type="text" placeholder="Recepient" id="campaign_from_name" class="header-info"></div>
+                    <div class="btn-group">
+                        <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                    </div>
+                </div>
+            </div><!-- row -->
+
+            <div class="row">
+                <label>Alert Message</label>
+                <div class="input-append adv_dd ">
+                    <div class="inputcont">
+                        <textarea>Hello {{LASTNAME}}, you are selected for special offer...</textarea>
+
+
+
+                        <em>You may choose the merge tags from the list and copy &amp; paste in your alert message.</em>
+                        <div class="input-append adv_dd " style="margin:0;">
+                            <div class="inputcont">
+
+
+
+                                <input type="text" placeholder="{{LASTNAME}}" id="campaign_from_name" class="header-info"></div>
+                            <div class="btn-group">
+                                <button class="btn dropdown-toggle open mergefields-box" id="" data-toggle="dropdown" tabindex="-1"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div> <!-- sumry -->
+
+
+
+
+        <div class="clearfix"></div>
+    </div>
+</div>
+

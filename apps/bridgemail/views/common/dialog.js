@@ -44,6 +44,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                                         this.$(".modal-footer .btn-close span").html(this.options.buttons.closeBtn.text);
                                     }
                                 }
+                                if(this.options.buttons.playBtn){
+                                    if(this.options.buttons.playBtn.text){
+                                        this.$(".modal-footer .btn-play span").html(this.options.buttons.playBtn.text);
+                                    }
+                                }
                              }
                              if(this.options.headerIcon){
                                  this.$(".header-icon").addClass(this.options.headerIcon).show();
