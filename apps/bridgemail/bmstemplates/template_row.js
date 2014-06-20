@@ -118,21 +118,37 @@ function (template,highlighter,tagView) {
                  if(adminTemplate === "admin-template"){
                                 this.$('.thumbnail').addClass(adminTemplate);
                                 if(this.isAdmin === "Y"){
-                                    templates_html +='<a class="previewbtn"  id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
-                                    templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'" ><span >Edit</span></a>';
-                                    templates_html +='<a class="copybtn"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
-                                    templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
+                                    templates_html +='<a class="previewbtn clr2"  id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
+                                    templates_html +='<a class="editbtn clr3" id="edit_'+this.tempNum+'" ><span >Edit</span></a>';
+                                    templates_html +='<a class="copybtn clr4"  id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
+                                    templates_html +='<a class="deletebtn clr5" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                                 }else{
-                                    templates_html +='<a class="previewbtn"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
-                                    templates_html +='<a class="copybtn"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
+                                    templates_html +='<a class="previewbtn clr2"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
+                                    templates_html +='<a class="copybtn clr3"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
                                 }
                             }else{
-                                templates_html +='<a class="previewbtn" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
-                                templates_html +='<a class="editbtn" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
-                                templates_html +='<a class="copybtn" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
-                                templates_html +='<a class="deletebtn" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
+                                templates_html +='<a class="previewbtn clr2" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
+                                templates_html +='<a class="editbtn clr3" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
+                                templates_html +='<a class="copybtn clr4" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
+                                templates_html +='<a class="deletebtn clr5" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                             }
                             return templates_html;
+             },
+             CPCEDWrap : function(){
+                 var returnClass = '';
+                 var adminTemplate = this.model.get('isAdmin')==='Y'?"admin-template":"";
+                 if(adminTemplate === "admin-template"){
+                                this.$('.thumbnail').addClass(adminTemplate);
+                                if(this.isAdmin === "Y"){
+                                   returnClass = 'five s-clr6';
+                                }else{
+                                   returnClass = 'three s-clr4';
+                                }
+                            }else{
+                               returnClass = 'five s-clr6';
+                            }
+                            return returnClass;
+                
              },
              previewTemplate:function(obj,tag){
                        

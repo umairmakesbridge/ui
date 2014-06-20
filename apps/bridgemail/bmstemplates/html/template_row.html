@@ -9,13 +9,13 @@
                           
                        
     <div class="img">
-        <div>
+        <div class="tempCPCED-wrap <%= this.CPCEDWrap() %>">
             <% if(this.selectTextClass){ %>
-            <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp">
+            <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp clr1">
                 <span>Create Campaign</span>
             </a>
             <% } else { %>
-                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action selecttemp">
+                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action selecttemp clr1">
                         <span>Select Template</span>
                     </a>
             <% } %>
