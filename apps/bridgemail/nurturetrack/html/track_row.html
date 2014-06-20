@@ -19,9 +19,9 @@
                 <ul>
                     <% if(model.get('tags')){  
                     _.each(model.get('tags').split(","),function(t){ %>  
-                    <li><a class="tag showtooltip" title='Click to View Tracks With <strong>&#39;<%- t %>"&#39;</strong> Tag'><%- t %></a> </li>
+                    <li><a class="tag showtooltip" title='Click to View Tracks With <strong>&#39;<%- t %>"&#39;</strong> Tag'><%- this.app.decodeHTML(t) %></a> </li>
                     <% }                        
-                        )
+                        ,this)
                     }
                     %>  
                 </ul>

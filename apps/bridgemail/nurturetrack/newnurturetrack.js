@@ -46,7 +46,7 @@ function (template) {
                                     this.parent.addCountHeader();
                                     this.parent.fetchTracks();
                                  }
-                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this.parent});
+                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this.parent,editable:true});
                               }
                               else{
                                   this.app.showAlert(_json[1],this.$el);

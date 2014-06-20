@@ -1125,6 +1125,9 @@
                 if(rule_val=="prior" || rule_val=="after" || rule_val=="pbday"){
                     filters_post +="&"+N+".gap="+ filter.find(".gap").val()
                 }
+                if(rule_val=="dr"){
+                  filters_post +="&"+N+".matchValue="+ filter.find(".matchValue").val()   
+                }
               }
               else{
                   filters_post +="&"+N+".matchValue="+ filter.find(".matchValue").val()              
