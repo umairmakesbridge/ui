@@ -1,6 +1,8 @@
 <em class="date"><%=this.getDate()%></em>
-<h3 style="<%=this.getStyleRead()%> ; cursor: pointer;" data-original-title="Click to expand and mark read" class="showtooltip"> <%=this.getTitle()%></h3>
- 
+<h3 style="<%=this.getStyleRead()%> ; cursor: pointer;" data-original-title="Click to expand and mark read" 
+    class="showtooltip">
+    <%=this.getHeader()%>
+</h3> 
 
 <div class="info-p">
     <div class="infotxt">
@@ -22,7 +24,20 @@
     </div> <!--  infotxt  -->
     
     <div class="infotxt">
-       <%=this.getTags()%>
+        <strong>Tags</strong>
+        
+     <div class="tags tagscont">
+      
+      <ul>
+        <%if(this.model.get('tags')){%>
+            <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                <li><a  class="tag"><%- t %></a> </li>
+            <% })%> 
+        <%}%>
+      </ul>
+    </div>
+     
+     </div>
     </div> <!--  infotxt  -->
      <div class="infotxt">
        <%=this.isTextOnly()%>

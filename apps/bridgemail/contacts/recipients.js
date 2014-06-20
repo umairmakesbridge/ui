@@ -53,7 +53,7 @@ function (template,app) {
                 this.app.showLoading('Loading Lists...', this.$el.find(".template-container"));
                 var that = this; // assign this to that, so there will be no scope issue.
                 require(['listupload/recipients_list'],function(viewLists){
-                    var objViewLists = new viewLists();
+                    var objViewLists = new viewLists({params:that.options.params});
                    that.$el.find(".template-container").html(objViewLists.el);
                    
                    that.app.showLoading(false, that.$el.find(".template-container"));

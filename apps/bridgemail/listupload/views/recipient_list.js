@@ -26,11 +26,13 @@ function (template,tags) {
                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             editList:function(ev){
-                var that = this;
-                var target = $(ev.target);
-                var listNumber = target.data('id');
-                var listName = target.data('name');
                 
+                var that = this;
+                if(ev){
+                    var target = $(ev.target);
+                    var listNumber = target.data('id');
+                    var listName = target.data('name');
+                } 
                 var dialog_title = "Edit List";
                 var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},

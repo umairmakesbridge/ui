@@ -1588,89 +1588,109 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
 
 .messages_dialogue .closebtn {background: url("../img/closebtn-red.png") no-repeat scroll center center;}
 
+.alertmsg.new { background:#e7f6ff; } 
 
 
-.messages_dialogue .alertmsg {
-    background: none repeat scroll 0 0 #fafcfd;
-    color: #FFFFFF;
-    line-height: 16px;
-	position:relative;
-    margin: 5px 0 0;
-    padding: 10px 10px 10px 60px;
-	-webkit-border-radius: 2px 2px;
-	-moz-border-radius:  2px 2px;
-	border-radius: 2px 2px;
-}
-
-
-.messages_dialogue .alertmsg:after {
-	background: url("../img/.png") no-repeat scroll center center;
-	 content: "";
+.alertmsg .arrow {
+    background: none repeat scroll 0 0 #f3f8fa;
+    bottom: 0;
     display: block;
-    height: 100%;
+    height: 10px;
     left: 0;
+	opacity:0;
     position: absolute;
-    top: 0;
-    width: 60px;
+    width: 100%;
 }
-.messages_dialogue .alertmsg em.date {
-    color: #abb8c3;
-    font-size: 11px;
-    font-style: normal;
-    font-weight: normal;
-    position: absolute;
-    right: 20px;
-    top: 10px;       
+.alertmsg:hover .arrow  { opacity:1; }
+.alertmsg .arrow.down { background: url("../img/arrow-down.png") no-repeat scroll center center #f3f8fa; }
+.alertmsg .arrow.up { background: url("../img/arrow-up.png") no-repeat scroll center center #f3f8fa; }
+.alertmsg.new .arrow.down { background-color:#e1f3fe; }
+.alertmsg.new .arrow.up { background-color:#e1f3fe; }
+
+
+
+/* --------------------------------- */
+
+
+
+.alertmsg .info-p {
+    margin: 10px 0 0;
+    min-height: 40px;
 }
-.messages_dialogue  .alertmsg h3 {
-    clear: both;
-    color: #5f757f;
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 18px;
-    margin: 0;
-    padding:0 0 5px;
-    width: 80%;
+ 
+.alertmsg .info-p {
+  *zoom: 1;
 }
-
-.messages_dialogue .alertmsg p {
-    color: #5F757F;
-    font-size: 13px;
-    font-weight: normal;
-    line-height: 16px;
-    margin: 0;
-    padding: 0 0 5px;
-    text-align: left;
+.alertmsg .info-p:before,
+.alertmsg .info-p:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+.alertmsg .info-p:after {
+  clear: both;
 }
 
 
-.messages_dialogue  .alertmsg.info:after {	background: url("../img/info-icon.png") no-repeat scroll center 10px;}
-.messages_dialogue  .alertmsg.error:after {	background: url("../img/error-icon.png") no-repeat scroll center 10px;}
-.messages_dialogue  .alertmsg.warning:after {	background: url("../img/warning-icon.png") no-repeat scroll center 10px;}
 
 
-.messages_dialogue  .alertmsg.info h3 {color: #3db5ff;}
-.messages_dialogue  .alertmsg.error h3 {color: #f65f5f;}
-.messages_dialogue  .alertmsg.warning h3 {color: #ffb137;}
-
-
-
-
-
-.messages_dialogue .alertmsg .link {
-    background: url("../img/hyperlink.png") no-repeat scroll 5px center rgba(0, 0, 0, 0);
-    display: inline;
-    padding: 0 0 0 20px;
+.alertmsg .infotxt {
+    color: #5C9BB5;
+    float: left;
+    height: 35px;
+    margin-bottom: 5px;
+    margin-right: 50px; 
 }
-.messages_dialogue .alertmsg .link_block {
-    background: url("../img/hyperlink.png") no-repeat scroll left center rgba(0, 0, 0, 0);
+.alertmsg .infotxt span {
+    font-size: 14px;
+    font-weight: 600;
+	line-height:18px;
+}
+.alertmsg .infotxt span em { font-size:12px;}
+.alertmsg .infotxt span i.icon { width:18px; height:18px; float:left; margin:0 5px 0 0 !important;}
+
+.alertmsg .infotxt strong {
     display: block;
-    padding: 5px 0 5px 15px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 14px;
+    margin: 0 0 3px;
 }
 
-.messages_dialogue .alertmsg  .showmore { padding:0 10px 0 0; clear:both; font-size:12px; position:relative; }
-.messages_dialogue .alertmsg  .showless { padding:0 10px 0 0; clear:both; font-size:12px; }
+.refresh-contacts
+{    background: url("../img/refresh-contacts-g.png") no-repeat scroll center center ;
 
+   }
+
+
+
+
+.alertmsg > i.icon {
+    left: 54px;
+    position: absolute;
+	display:none;
+    top: 8px;
+}
+
+
+
+.alertmsg .tagscont {
+    max-width: none;
+    width: auto;
+}
+.alertmsg .tagscont ul { padding:2px 0; width:auto; height:auto; max-width: none;}
+.alertmsg .tagscont ul li > a { padding:0 5px; }
+
+
+.alertmsg .tagscont ul li > span {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #5C9BB5;
+	font-weight:normal;
+	font-size:12px;
+      padding: 2px 5px;
+	  	-webkit-border-radius: 2px 2px;
+	-moz-border-radius:  2px 2px;
+	border-radius: 2px 2px;}
 
 .messages_dialogue .viewallmsgs {
     clear: both;
@@ -1706,7 +1726,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
 
 .messages_dialogue .template-filter strong.sort {   height: 20px;    line-height: 20px;}
 .messages_dialogue .template-filter strong.sort:after {  top: 10px;}
-.messages_dialogue .template-filter .sortoption {   line-height: 30px;    padding: 0 15px; cursor:pointer;}
+.messages_dialogue .template-filter .i {   line-height: 30px;    padding: 0 15px; cursor:pointer;}
 .messages_dialogue .template-filter .sortoption .caret {    margin: 14px 0 0 8px;}
 .messages_dialogue .template_search_menu { top:32px;}
 
@@ -1823,12 +1843,18 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
 }
 
 
-.messages_dialogue  .alertmsg.info:after {	background: url("../img/info-icon.png") no-repeat scroll center 10px;}
-.messages_dialogue  .alertmsg.error:after {	background: url("../img/error-icon.png") no-repeat scroll center 10px;}
-.messages_dialogue  .alertmsg.warning:after {	background: url("../img/warning-icon.png") no-repeat scroll center 10px;}
 .messages_dialogue  .sort_info:after {	background: url("../img/info-icon.png") no-repeat scroll center center;}
 .messages_dialogue  .sort_error:after {	background: url("../img/error-icon.png") no-repeat scroll center center;}
 .messages_dialogue  .sort_warning:after {	background: url("../img/warning-icon.png") no-repeat scroll center center;}
+
+.messages_dialogue li a i.icon.info {     background: url("../img/info-icon.png") no-repeat scroll center center ;}
+.messages_dialogue li a i.icon.error {   background: url("../img/error-icon.png") no-repeat scroll center center;}
+.messages_dialogue li a i.icon.warning {  background: url("../img/warning-icon.png") no-repeat scroll center center;}
+
+.messages_dialogue li a i.icon.campaign {     background: url("../img/campaign.png") no-repeat scroll center center ;}
+.messages_dialogue li a i.icon.csvicon {   background: url("../img/csvicon.png") no-repeat scroll center center;}
+.messages_dialogue li a i.icon.target {  background: url("../img/target-notify.png") no-repeat scroll center center;}
+
 
 
 
@@ -2030,6 +2056,118 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
     line-height: 14px;
 }
 .alertmsg > i.icon { position:absolute; top:50px; left:12px;}
+
+
+
+@-webkit-keyframes swing {
+  20% {
+    -webkit-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes swing {
+  20% {
+    -webkit-transform: rotate(15deg);
+    -ms-transform: rotate(15deg);
+    transform: rotate(15deg);
+  }
+
+  40% {
+    -webkit-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+  }
+
+  60% {
+    -webkit-transform: rotate(5deg);
+    -ms-transform: rotate(5deg);
+    transform: rotate(5deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(-5deg);
+    -ms-transform: rotate(-5deg);
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+}
+
+.swing {
+	-webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  
+	  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  
+  -webkit-transform-origin: top center;
+  -ms-transform-origin: top center;
+  transform-origin: top center;
+  -webkit-animation-name: swing;
+  animation-name: swing;
+}
+
+
+
+/*----------------------------------------------------- */
+
+
+.icon.report:hover {   background: url("../img/report2.png") no-repeat scroll center center ;}
+
+.alertmsg .infotxt .icon.report {
+    height: 18px;
+    margin: 0 0 0 4px;
+    width: 18px;
+}
+
+
+.messages_dialogue .btm-thumb {
+	background: url("../img/arrowup.png") no-repeat scroll center center #FAFCFD;
+    border-radius: 0 0 2px 2px;
+    bottom: -18px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
+    display: block;
+    height: 20px;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+	
+	-webkit-border-radius: 0px 0px 2px 2px;
+	-moz-border-radius:  0px 0px 2px 2px;
+	border-radius: 0px 0px 2px 2px;
+	
+	 box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
+}
 
 
 

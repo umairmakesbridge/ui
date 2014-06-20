@@ -37,6 +37,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));
+                if(this.options.params.listName){
+                    this.searchText = this.options.params.listName;
+                    this.loadLists();
+                }
             },
             loadLists:function(fcount){
                     var _data = {};

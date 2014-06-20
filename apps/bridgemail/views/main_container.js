@@ -84,7 +84,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .view-lists':'viewLists',
                     'click .view-tags':'viewTags',
                     'click .view-targets':'viewTargets',
-                    'click .nurture-tracks' : 'nurtureTracks'
+                    'click .nurture-tracks' : 'nurtureTracks',
+                    'click .autobots-gallery':'autoBots'
                     
 
                 },
@@ -475,7 +476,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 nurtureTracks:function(){
                     this.addWorkSpace({type:'',title:'Nurture Tracks',sub_title:'Listing',url : 'nurturetrack/nurturetracks',workspace_id: 'nuture','addAction':true,tab_icon:'nuturelisting'});
                 },
-                
+                autoBots:function(){
+                    this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting'});
+                },
                 salesforceCrm:function(){
                     this.addWorkSpace({
                         type:'',

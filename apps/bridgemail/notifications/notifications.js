@@ -12,9 +12,9 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
             return Backbone.View.extend({
                 events: {
                     "click .sortoption_expand":"toggleMenu",
-                     "click .closebtn": "closeContactsListing",
-                      "click #template_search_menu_expand li a":"sortNotifications",
-                      "click #refresh_notification":"initialize"
+                    "click .closebtn": "closeContactsListing",
+                    "click #template_search_menu_expand li a":"sortNotifications",
+                    "click #refresh_notification":"initialize"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -23,7 +23,7 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     this.total = 0;
                     this.app = app;
                     this.notifyType = "";
-                     this.loop = 0;
+                    this.loop = 0;
                     this.eventType= "";
                     this.offsetLength = 0;
                     this.notificationData = [];
@@ -31,18 +31,15 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                 },
                 render: function() {
                     var that = this;
-                    
                     this.notificationMetaData();
                     this.$el.html(this.template());
                     this.fetchNotifications();
                     this.$el.find(".all-notification").scroll(_.bind(this.liveLoading, this));
                     this.$el.find(".all-notification").resize(_.bind(this.liveLoading, this));
-                    
+                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 sortNotifications:function(ev){
-                  
-                    if($(ev.target).parents('li').hasClass('active')){ return;}
-                   
+                  if($(ev.target).parents('li').hasClass('active')){ return;}
                     $(ev.target).parents('ul').find('li').removeClass('active');
                     var sort = $(ev.target).data('search');
                     if ( sort.indexOf('_notify') !== -1 ){
@@ -58,7 +55,8 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                         
                         this.notifyType = null;
                     }
-                    $(this.el).find(".sortoption_expand").html($(ev.target).html());
+                    var html = $(ev.target).data('warn');
+                     $(this.el).find(".sortoption_expand").html(html);
                     $(ev.target).parents('li').addClass('active');
                     this.toggleMenu();
                      
@@ -94,10 +92,10 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                             that.total_fetch = that.total_fetch + data.length;
                             
                             if(objNotifications.unreadCount != "0"){
-                                $(that.el).find('h4').find('span').html('New Messages');
+                                $(that.el).find('h4').find('span').html('new messages');
                                 $(that.el).find('h4').find('.badge').html(objNotifications.unreadCount);
                             }else{
-                                $(that.el).find('h4').find('span').html('Messages');
+                                $(that.el).find('h4').find('span').html('messages');
                                 $(that.el).find('h4').find('.badge').html(objNotifications.total);
                             }
                             
@@ -194,7 +192,17 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                         var data = jQuery.parseJSON(xhr.responseText);
                             _.each(data.types[0].event[0], function(key, value){
                                 that.notificationData[key] = value;
-                                $("#template_search_menu_expand").append("<li data-search='"+key+"' ><a  data-search='"+key+"'>"+value+"</a></li>");                  
+                                var cld = "";
+                                if(key === "CMP_C")
+                                    cld = "icon campaign";
+                                
+                                if(key ==="TG_PCT")
+                                    cld="icon target";
+                                
+                                if(key === "CSV")
+                                    cld= "icon csvicon";
+                                
+                                $("#template_search_menu_expand").append("<li data-search='"+key+"' ><a data-warn='"+value+"'  data-search='"+key+"'>"+value+"<i class='"+cld+"'></i></a></li>");                  
                             });
                      
                     });
