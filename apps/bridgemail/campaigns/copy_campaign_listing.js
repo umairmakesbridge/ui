@@ -12,7 +12,6 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
              * Attach events on elements in view.
             */            
             events: {				
-                
             },
             /**
              * Initialize view - backbone .
@@ -71,6 +70,9 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                this.$copyCampaignContainer = this.$("#copy_camps_grid tbody");
                this.scrollElement.scroll(_.bind(this.liveLoading,this));
                this.scrollElement.resize(_.bind(this.liveLoading,this));
+               this.$('.refresh_btn').click(_.bind(function(){
+                   this.sub.states.step2.copyCampaigns = false;
+                   this.sub.getcampaignscopy()},this));
                this.app.scrollingTop({scrollDiv:'window',appendto:this.$el,scrollElement:this.scrollElement});
             },
             /**

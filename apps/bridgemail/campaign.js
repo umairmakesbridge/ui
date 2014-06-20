@@ -741,13 +741,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             this.loadCalender(_json[0]);
                         }
                    },this)); */
-                   this.app.showLoading("Loading Calender...",this.$(".schedule-box")); 
+                   this.app.showLoading("Loading Calender...",this.$(".schedule-box2")); 
                    require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
                             var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'draft'});
                            //tmPr.init(); // Call view functions
-                            this.$el.find('.schedule-box').append(tmPr.$el);
-                            this.$el.find('.schedule-box').removeAttr('style');
-                            this.app.showLoading(false,this.$(".schedule-box"));
+                            this.$el.find('.schedule-box2').append(tmPr.$el);
+                            this.$el.find('.schedule-box2').removeAttr('style');
+                            this.app.showLoading(false,this.$(".schedule-box2"));
                          },this));
                  
                 },

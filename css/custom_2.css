@@ -64,7 +64,7 @@
 
 }
 .custom-header h2 {
-   color: #6494AF;
+   color: #92B1C2;
     float: left;
     font-size: 20px;
     font-weight: 300;
@@ -263,7 +263,7 @@
     text-shadow: none;
 }
 .fc-calendar .fc-row > div.fc-disabled {
-	background: #eee;
+	background: #F0F8FD;
 }
 .fc-calendar .fc-row > div.selected{
     background: #4FC8F5;
@@ -390,7 +390,7 @@ border-color: #0096FF #0096FF transparent transparent;
 	left: 50%;
 	text-align: center;
 	margin: -10px 0 0 -15px;
-	color: #3c6d86;
+	color: #aed6ea;
 	font-weight: 400;
 	pointer-events: none;
 }

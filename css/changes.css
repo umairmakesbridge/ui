@@ -2933,7 +2933,7 @@ text-align:center;
 /* Schedule Calender */
 .set-time {
     background: none repeat scroll 0 0 #E0F1FB !important;
-    width: 92.5% !important;
+    width: 92.5%;
     float:left;
     padding: 10px;
     height: 46px;
@@ -2996,6 +2996,7 @@ text-align:center;
     margin: 0;
     width: 65px;
 }
+/* MODAL DIALOG*/
 .modal-body .schedule-height{
     height: 240px !important;
 }
@@ -3005,6 +3006,21 @@ text-align:center;
     font-size: 30px;
     margin: 0px 10px 0 !important;
 }
+.modal-body .calendar{
+    width:auto !important;
+}
+.modal-body .set-time{
+    width: 92.5% !important;
+}
+
+.modal-body .schedule-panel{
+    margin-left:0px !important;
+}
+.modal-body .greenbtn-wrap{
+    margin: 10px 10px 0 !important;
+}
+
+/* MODAL End*/
 .fc-five-rows .fc-row {
     height: 17%;
 }
@@ -3015,16 +3031,14 @@ text-align:center;
     color:#fff !important; 
 }
 .schedule-panel{
-    margin-left:18px;
+    margin-left:5px;
 }
 .schedule-box {
      border: 2px solid #EAF4F9;
      background:none !important;
      height: 410px;
 }
-.modal-body .greenbtn-wrap{
-    margin: 10px 10px 0 !important;
-}
+
 .reschedule-dialog-wrap{
      background: none repeat scroll 0 0 #fff;
     display: block;
@@ -3048,6 +3062,74 @@ text-align:center;
 .modal-body .closebtn{
     display: block !important;
 }
+.right-col{
+    width : 49%;
+}
+.col1{
+    width : 50.2%;
+}
+.schedule-box2 {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 570px !important;
+}
+.schedule-box2 .schedule-panel {
+    border: 2px solid #EAF4F9;
+}
+.schedule-container {
+    position: relative;
+}
+.schedule-panel {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-radius: 2px;
+    height: 403px;
+    margin-bottom: 10px;
+    padding: 10px;
+    position: relative;
+}
+
+.schedule-container > .span6:first-child {
+    float: none;
+    margin-right: 580px;
+    width: auto;
+}
+.schedule-panel .sch-btn {
+    clear: both;
+    display: block;
+    float: none !important;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 65px;
+    margin: 10px auto 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+    width: 260px;
+}
+ .schedule-panel .col2 {
+    width: 260px;
+}
+.schedule-panel .col1{
+    width : 262px;
+}
+/*@media (min-width: 1900px){ 
+    .set-time{
+        width: 61.8%;
+        float:right;
+    }
+    .calendar{
+        float:right !important;
+        width: 66% !important;
+    }
+    .modal-body .calendar{
+    float:none !important;
+    }
+    .modal-body .set-time{
+        float:none !important;
+    }
+    
+}*/
 /* ENDS */
 
 .videobar{

@@ -4506,7 +4506,7 @@ ul.setting-options li img {
     font-size: 24px;
     font-weight: 600;
     line-height: 56px;
-    margin: 0 auto;
+   /* margin: 0 auto;*/
     padding: 0;
     position: relative;
     text-align: center;
