@@ -29,10 +29,11 @@
      <div class="tags tagscont">
       
       <ul>
-        <% _.each(this.model.get('tags').split(","),function(t){ %>  
-            <li><a  class="tag"><%- t %></a> </li>
-        <% })%> 
-
+        <%if(this.model.get('tags')){%>
+            <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                <li><a  class="tag"><%- t %></a> </li>
+            <% })%> 
+        <%}%>
       </ul>
     </div>
      

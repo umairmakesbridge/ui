@@ -69,6 +69,7 @@ function (template,Autobots,Autobot,app,Choosebot) {
                    });
             },
             addNewAutobot:function(){
+                
                 $(this.el).find("#new_autobot").html(new Choosebot({app:this.app}).el);
             }
         });    

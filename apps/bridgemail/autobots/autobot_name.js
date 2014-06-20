@@ -49,6 +49,7 @@ define(['text!autobots/html/autobot_name.html'],
                           this.openTagAutobot();
                           break;
                   }
+                  $('.overlay').hide();
                 },
                 //1
                 openAlertAutobot:function(){

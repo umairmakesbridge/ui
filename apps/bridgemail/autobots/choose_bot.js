@@ -23,9 +23,11 @@ define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
                 closeAutobot:function(){
                     $(this.el).remove();
                     this.remove();
+                    $('.overlay').hide();
                 },
                 selectAutobot:function(ev){
                     var botType = $(ev.target).parents('li').data('bot');
+                     $('.overlay').show();
                     $(this.el).parents('#new_autobot').html(new AutobotName({botType:botType,app:this.options.app}).el);
                 }
             });

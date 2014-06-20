@@ -26,6 +26,21 @@ define(['text!autobots/html/autobot.html', 'moment','jquery.chosen'],
                      return "<a class='cstatus pclr1'> Pause </a>";
                     if(this.model.get('status') == "R")
                      return "<a class='cstatus pclr18'> Playing </a>";
+                },
+                getAutobotImage:function(){
+                     var label = "";
+                     switch(this.model.get('actionType')){
+                         case "SC":
+                            label = "<img src='img/scorebot-icon.png'>";
+                            break;
+                        case "A":
+                            label = "<img src='img/alertbot-icon.png'>";
+                            break;
+                        case "E":
+                            label = "<img src='img/mailbot-icon.png'>";
+                     }
+                      return label;
                 }
+               
             });
         });
