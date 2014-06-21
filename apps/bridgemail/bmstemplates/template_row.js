@@ -188,10 +188,10 @@ function (template,highlighter,tagView) {
                 updateTemplate:function(tempNum){                                   
                    var _this = this.parent;
                    var self = this;
-                   if(tempNum){
-                        _this.template_id = tempNum;
+                   if(typeof(tempNum)==="object"){
+                        _this.template_id = this.model.get('templateNumber.encode');                         
                     }else{
-                    _this.template_id = this.model.get('templateNumber.encode');
+                        _this.template_id = tempNum;
                     }
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
