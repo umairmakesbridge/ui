@@ -538,7 +538,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                    dialog.hide();
                                     _this.template_id = _json[1];    
                                     _this.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.rowView.updateTemplate();
+                                    _this.rowView.updateTemplate(_this.template_id);
                                }
                                else{
                                    _this.app.showAlert(_json[1],$("body"),{fixed:true}); 

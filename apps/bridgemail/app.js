@@ -170,11 +170,11 @@ define([
                           return false;
                     }
                     this.set("user",_json);   
-                    if(this.mainContainer){
+                    /*if(this.mainContainer){
                         this.NTusers();
                     }else{
                         setTimeout(_.bind(this.NTusers,this),200);
-                    }
+                    }*/
                 
                 },this));
             },
