@@ -1305,7 +1305,7 @@
                     <i class="icon preview"></i><span>Preview</span>
                 </a>
             </li>
-            <li class="save MenuCallBackSave">
+            <li class="save MenuCallBackSave" style="display:none">
                 <a href="#" class="btn-green ">
                     <i class="icon save"></i><span>Save</span>
                 </a>
