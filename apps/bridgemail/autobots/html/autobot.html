@@ -1,38 +1,62 @@
 <td width="90px">
     <div class="img">
-       <%=this.getAutobotImage()%>
+        <%=this.getAutobotImage()%>
     </div>
 </td>
 <td width="100%"><div>
         <div class="name-type">
             <h3> <a><%=this.model.get('label')%></a><%=this.getStatus()%> 
-                <a class="icon-b reoccure" href=""></a>
+                <%=this.isRecurring()%>
             </h3>
             <div class="tags tagscont">
                 <ul>
-                <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                    <% _.each(this.model.get('tags').split(","),function(t){ %>  
                     <li><a  class="tag"><%- t %></a> </li>
-                <% })%>
+                    <% })%>
                 </ul>
             </div>
         </div>
     </div>
 </td>
 <td width="90px"><div>
-     <div class="subscribers"> <strong><span><em>Sent</em><a><%=this.options.app.addCommas(this.model.get('sentCount'))%></a></span></strong> </div>
+        <div class="subscribers"> <strong><span><em>Sent</em>
+                  <%if(this.model.get('sentCount') == "0"){%>
+                   <%=this.options.app.addCommas(this.model.get('sentCount'))%> 
+                  <%}else{%>
+                   <a class="show-sent-views showtooltip" data-original-title="Click to view contacts"><%=this.options.app.addCommas(this.model.get('sentCount'))%></a>
+                     
+                  <%}%>
+                </span></strong> </div>
     </div>
 </td>
 <td width="90px"><div>
-    <div class="subscribers"> <strong><span><em>Pending</em><a><%=this.options.app.addCommas(this.model.get('pendingCount'))%></a></span></strong> </div>
+        <div class="subscribers"> <strong><span><em>Pending</em>
+                     <%if(this.model.get('pendingCount') == "0"){%>
+                     <%=this.options.app.addCommas(this.model.get('pendingCount'))%> 
+                  <%}else{%>
+                  <a class="show-pending-views" showtooltip" data-original-title="Click to view contacts"><%=this.options.app.addCommas(this.model.get('pendingCount'))%></a>
+                     
+                  <%}%>
+                   
+                </span></strong> </div>
     </div>
 </td>
 <td width="132px">
     <div>
-        <div style="width:105px" class="time"> <strong><span><em>Played on</em>04 Sep, 2007</span></strong> </div>
-        <div style="width:;" class="slide-btns s-clr4 three"> <span class="icon setting"></span>
-            <div> <a class="icon pause s-clr3" title="pause"><span>Pause</span></a>
+
+        <div style="width:105px" class="time"> <strong><span><%=this.getPlayedOn()%></strong> </div>
+        <div style="width:;" class="slide-btns s-clr5 four"> <span class="icon setting"></span>
+            <div> 
+                <%if(this.model.get('status') == "D"){%>
+                <a class="icon play s-clr4" title="play"><span>Play</span></a>
+                <a class="icon edit s-clr3" title="edit"><span>Edit</span></a>
+                <%}else{%>
+                <a class="icon pause s-clr3" title="pause"><span>Pause</span></a>
+                <%}%>
                 <a class="icon preview s-clr2" title="preview"><span>Preview</span></a> 
+                <%if(this.model.get('status') == "D"){%>
                 <a title="delete" class="icon delete s-clr1"><span>Delete</span></a> </div>
+            <%}%>
         </div>
     </div>
 </td>

@@ -23,10 +23,10 @@ function (template,tags) {
             },
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
-                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             editList:function(ev){
-                
+               if (this.model.get('isSupressList') =="true" || this.model.get('isBounceSupressList')=="true" ) return;
                 var that = this;
                 if(ev){
                     var target = $(ev.target);
@@ -167,15 +167,15 @@ function (template,tags) {
                 var that = this;
                 var offset = $(ev.target).offset();
                 var listNum = $(ev.target).data('id');
-                $('#div_pageviews').show();
-                $('#div_pageviews').empty();
-                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                $('#div_listviews').show();
+                $('#div_listviews').empty();
+                $('#div_listviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
-                $('#div_pageviews').css({top:offset.top-290});
+                $('#div_listviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum});
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
+                    $('#div_listviews').css('padding-top','0');
+                    $('#div_listviews').html(objContacts.$el);
                 });
            },
            getOpacity:function(){

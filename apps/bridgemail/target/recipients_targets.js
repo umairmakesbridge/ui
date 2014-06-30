@@ -233,8 +233,8 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                       });
                 },
                 closeContactsListing: function() {
-                    $("#div_pageviews").empty('');
-                    $("#div_pageviews").hide();
+                    $("#div_targets").empty('');
+                    $("#div_targets").hide();
                 },
                 liveLoading: function(where) {
                     var $w = $(window);

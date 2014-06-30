@@ -26,7 +26,14 @@ define(['text!autobots/html/autobot_name.html'],
                     this.remove();
                 },
                 nextAction:function(ev){
-                  this.autobotName = $(this.el).find('#txtAuotbotName').val();;
+                  this.autobotName = $(this.el).find('#txtAutobotName').val();
+                  if(!this.autobotName){
+                       this.options.app.showError({
+                        control:$(this.el).find('.uid-container'),
+                        message:"Autobot Name can not be empty!"
+                    });
+                    return;
+                  }
                   switch(this.options.botType){
                       case "email":
                           $(this.el).remove();
@@ -49,7 +56,7 @@ define(['text!autobots/html/autobot_name.html'],
                           this.openTagAutobot();
                           break;
                   }
-                  $('.overlay').hide();
+                 $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove(); 
                 },
                 //1
                 openAlertAutobot:function(){
@@ -60,7 +67,7 @@ define(['text!autobots/html/autobot_name.html'],
                                        title:this.autobotName,
                                        css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                        headerEditable:false,
-                                       headerIcon : 'autobot',
+                                       headerIcon : 'bot',
                                        buttons: {saveBtn:{text:'Save'}},
                                        bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
@@ -81,7 +88,7 @@ define(['text!autobots/html/autobot_name.html'],
                                        title:this.autobotName,
                                        css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                        headerEditable:false,
-                                       headerIcon : 'autobot',
+                                       headerIcon : 'bot',
                                        buttons: {saveBtn:{text:'Save'}},
                                        bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
@@ -102,7 +109,7 @@ define(['text!autobots/html/autobot_name.html'],
                                        title:this.autobotName,
                                        css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                        headerEditable:false,
-                                       headerIcon : 'autobot',
+                                       headerIcon : 'bot',
                                        buttons: {saveBtn:{text:'Save'}},
                                        bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
@@ -123,7 +130,7 @@ define(['text!autobots/html/autobot_name.html'],
                                        title:this.autobotName,
                                        css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                        headerEditable:false,
-                                       headerIcon : 'autobot',
+                                       headerIcon : 'bot',
                                        buttons: {saveBtn:{text:'Save'}},
                                        bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });
@@ -143,7 +150,7 @@ define(['text!autobots/html/autobot_name.html'],
                                        title:this.autobotName,
                                        css:{"width":dialog_width+"%","margin-left":"-"+(dialog_width/2)+"%","top":"20px"},
                                        headerEditable:false,
-                                       headerIcon : 'autobot',
+                                       headerIcon : 'bot',
                                        buttons: {saveBtn:{text:'Save'}},
                                        bodyCss:{"min-height":dialog_height+"px"}                                                                          
                             });

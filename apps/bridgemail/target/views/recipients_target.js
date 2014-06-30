@@ -161,15 +161,15 @@ function (template) {
                 var that = this;
                 var offset = $(ev.target).offset();
                 var listNum = $(ev.target).data('id');
-                $('#div_pageviews').show();
-                $('#div_pageviews').empty();
-                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                $('#div_targets').show();
+                $('#div_targets').empty();
+                $('#div_targets').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
-                $('#div_pageviews').css({top:offset.top-290});
+                $('#div_targets').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target'});
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
+                    $('#div_targets').css('padding-top','0');
+                    $('#div_targets').html(objContacts.$el);
                 });
            }
             ,
