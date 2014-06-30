@@ -73,7 +73,7 @@ function (template,moment) {
               
             },
             getActivityDate:function(){
-                var _date = moment(this.app.decodeHTML(this.model.get("logTime")),'M/D/YYYY H:m');
+                var _date = moment(this.app.decodeHTML(this.model.get("logTime")),'M/D/YYYY h:m a');
                 return {date:_date.format("DD MMM YYYY"),time:_date.format("hh:mm A")};
                                 
             },

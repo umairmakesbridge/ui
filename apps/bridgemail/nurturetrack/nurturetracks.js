@@ -39,7 +39,9 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.tracks_bms_request = null;
                this.app = this.options.app;  
                this.makesbridge_tracks = false;
-               this.render();
+               this.render();               
+               this.checkStatus = [];
+               this.dispenseTimeout = null;
             },
             /**
              * Initialize view .
@@ -134,7 +136,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     colresize:false,
                     height:'100%',
                     usepager : false,
-                    colWidth : ['100%','90px','132px']
+                    colWidth : ['100%','90px','90px','132px']
                 });
                 this.$tracksContainer = this.$("#nurturetrack_grid tbody");             
                 
@@ -225,6 +227,10 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             trackViewTile.on('tagclicktile',_.bind(this.searchByTagTile,this));
                             this.$trackTileArea.append(trackViewTile.$el);
                             trackViewTile.tmPr.trimTags();
+                            var _model = collection.at(s);
+                            if(_model.get("status")=="P" || _model.get("status")=="Q"){                                
+                                this.callDispenseStats(_model.get("trackId.encode"),_model.get("trackId.checksum"),true);
+                            }
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -302,6 +308,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             var trackViewTile = new trackRowMakesbrdigeTile({ model: collection.at(s),sub:this });                                                            
                             this.$trackTileBmsArea.append(trackViewTile.$el);
                             trackViewTile.tmPr.trimTags();
+                            
+                            
                         }                        
                         
                         if(collection.length<parseInt(response.totalCount)){
@@ -549,6 +557,43 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             },
             closeReport:function(){
                 this.$(".nurture_msgslist").hide();
+            },
+            dispenseStats:function(){
+                if(this.checkStatus.length){
+                    for(var i=0;i<this.checkStatus.length;i++){
+                        var URL = '/pms/io/trigger/getNurtureData/?type=dispenseStats&trackId='+this.checkStatus[i].id+'&BMS_REQ_TK='+this.app.get('bms_token')
+                         jQuery.getJSON(URL,  _.bind(function(_i, state, xhr){                                                        
+                            var _json = state;   
+                            if(this.app.checkError(_json)){
+                                return false;
+                            }
+                            if(this.$("."+this.checkStatus[_i].checksum).length){
+                                this.$("."+this.checkStatus[_i].checksum).css("width",_json.percentageDone+"%");
+                                if(_json.percentageDone=="100"){
+                                    this.fetchTracks();
+                                    this.checkStatus[_i].splic(i,1);
+                                }
+                            }
+                            else{
+                                clearTimeout(this.dispenseTimeout);
+                            }
+                         },this,i));
+                    }
+                }
+                this.dispenseTimeout = setTimeout(_.bind(this.dispenseStats,this),1000*30);
+            },
+            callDispenseStats:function(id,checksum,immediate){
+                this.checkStatus.push({"checksum":checksum,"id":id});
+                clearTimeout(this.dispenseTimeout);                
+                if(immediate){
+                    this.dispenseStats();
+                }
+                else{
+                    this.dispenseTimeout = setTimeout(_.bind(this.dispenseStats,this),1000*30);
+                }
+            },
+            closeCallBack:function(){
+                clearTimeout(this.dispenseTimeout);            
             }
         });
 });

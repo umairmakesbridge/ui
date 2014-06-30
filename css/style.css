@@ -9894,6 +9894,7 @@ display:block;
 }
 
 .pclr1 {background-color: #E7E7E7!important;    color: #464646 !important;}
+.pclr26 {background-color: #f9e9a3!important;    color: #bb8207 !important;}
 .pclr2 { background-color: #B6CFF5!important;
     color: #0D3472 !important;}
 .pclr3 {background-color: #98D7E4!important;
@@ -10491,6 +10492,7 @@ background:#F1F9FD;
 
 
 .nurturw_wizard .accordion-heading .accordion-toggle .preview:hover, .nurturw_wizard .accordion-heading .accordion-toggle .editnt:hover  {    background-color: #77c9a3;}
+.nurturw_wizard .wait-message .accordion-heading .accordion-toggle .editnt:hover  { background-color: #ffb2ac;  }
 
 .nurturw_wizard .accordion-heading .accordion-toggle .editnt {  
     height: 26px; width:28px; float:left !important; margin:1px 0 0 5px !important; !important;background: url("../img/edit.png") no-repeat scroll center center rgba(0, 0, 0, 0);

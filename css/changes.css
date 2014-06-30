@@ -3172,3 +3172,9 @@ text-align:center;
 .bar-heading{
     padding:11px 10px;color:#01AEEE;font-weight: bold;
 }
+.showprogressnt{
+    position: absolute; 
+    top: -10px; 
+    left: 50%;
+    margin-left:-10px;
+}

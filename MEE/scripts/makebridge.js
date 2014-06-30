@@ -63,6 +63,7 @@
                 //TODO Styles
                 //--Muhammad Adnan -----------------------STYLES ----------------------------//
                 var IsStyleActivated = false;
+                var changFlag = null;
                 var SelectedElementForStyle = null;
                 var borderColor = "#000";
                 var chkChangeAllMatching = myElement.find(".chkChangeAllMatching");
@@ -174,6 +175,13 @@
                         oInitDestroyEvents.InitAll(mainObj, true);
                     }
                 });
+                mainContentHtmlGrand.mouseup(function(){
+                    changFlag.editor_change = true;
+                })
+                
+                $.fn.setChange = function(states) {                    
+                    changFlag = states;
+                };
 
                 $.fn.getMEEHTML = function() {                    
                     var mainHTMLELE = myElement.find(".mainContentHtml");
@@ -2324,6 +2332,8 @@
 
 
                 function InitializeAndDestroyEvents() {
+                    
+                    
 
                     //Destroy plugin events all event
                     this.DestroyPluginsEvents = function (element) {

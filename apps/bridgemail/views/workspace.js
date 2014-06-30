@@ -9,7 +9,11 @@ function ($,Backbone, _,app,Wizard, template) {
                     'click .close-wp':function(obj){
                         var cur_wp = $(obj.target).parents(".ws-content");
                         var wp_id = cur_wp.attr("id").split("_")[1];
-                        $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
+                        var close_wp = $("#wp_li_"+wp_id).data('viewObj');
+                        if(close_wp && close_wp.closeCallBack){
+                            close_wp.closeCallBack();
+                        }
+                        $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();                        
                         if($("#wstabs li").length==1){                           
                             $(".tw-toggle button").removeClass("active");
                             $(".tw-toggle button:first").addClass("active");

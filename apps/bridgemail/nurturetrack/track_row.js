@@ -112,7 +112,8 @@ function (template,highlighter) {
                 .done(_.bind(function(data) {                  
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
-                       if(!_json.err){
+                       if(!_json.err){                           
+                           this.app.showMessge("Nurture track played successfully.");
                             this.parent.fetchTracks();   
                             this.parent.addCountHeader();
                        }
@@ -130,6 +131,7 @@ function (template,highlighter) {
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
+                           this.app.showMessge("Nurture track paused successfully.");
                             this.parent.fetchTracks();   
                             this.parent.addCountHeader();
                        }

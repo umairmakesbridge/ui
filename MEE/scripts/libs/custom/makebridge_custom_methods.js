@@ -201,7 +201,7 @@ function SendServerRequest(requestProperties, errorCallBack) {
         cache: false,
         async: false,
         success: function (e) {
-            console.log("Response Came:"+e);
+            //console.log("Response Came:"+e);
             returnJson = e;
         },
         error: errorCallBack
@@ -223,10 +223,7 @@ function filterImages(query, obj) {
 
 function getImagesMarkup(obj) {
     var imagesMarkup = "";
-    $.each(obj[0], function(index, val) {     
-        console.log(val[0].fileName); 
-        console.log(val[0]["imageId.encode"]);
-        console.log(val[0].tags);
+    $.each(obj[0], function(index, val) {             
         var tagsArr = val[0].tags.split(',');
          
         var j = index + 1;

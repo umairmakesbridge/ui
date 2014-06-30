@@ -5,7 +5,7 @@
        waitSeconds:300,
        urlArgs: "bust=1.28" ,
        paths:{
-           jquery:'../shared/libs/jquery',
+           jquery:'//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min',
            underscore:'../shared/libs/underscore',
            backbone:'../shared/libs/backbone-min',
            text:'../shared/libs/text',

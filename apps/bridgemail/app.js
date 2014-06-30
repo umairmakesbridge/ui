@@ -130,6 +130,9 @@ define([
                            app.mainContainer.$('.sc-links ul').removeClass('open');
                            app.mainContainer.$('.sc-links ul').hide();
                        }
+                       $(".messsage_alert").fadeOut("fast",function(){
+                           $(this).remove();
+                       }) 
                     });
                     
                    var self = this;                                                                         
@@ -251,7 +254,7 @@ define([
                             title = 'Caution';
                     }
                     
-                    var message_box = $('<div class="messagebox messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
+                    var message_box = $('<div class="messagebox messsage_alert messagebox_ '+ cl +'" style='+inlineStyle+'><h3>'+ title +'</h3><p>'+message+'</p><a class="closebtn"></a></div> ');
                     $(container).append(message_box);
                     message_box.find(".closebtn").click(function(e){
                       message_box.fadeOut("fast",function(){

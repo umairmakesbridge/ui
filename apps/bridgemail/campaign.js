@@ -2159,9 +2159,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          this.$("#mee_editor").attr("src","MEE/index.jsp?BMS_REQ_TK="+this.app.get('bms_token'));
                          this.states.step2.meeEditor = true;
                          this.$("#mee_editor").load(_.bind(function(){
-                             this.app.showLoading(false,this.$("#area_html_editor_mee"));
-                             this.states.step2.meeLoaded =  true;
-                             //this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML('');
+                             this.app.showLoading(false,this.$("#area_html_editor_mee"));                             
+                             this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
                          },this))
                     }
                 },
@@ -2233,7 +2232,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 setMEE:function(html){
                    if( this.states.step2.meeLoaded  && this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML){
-                        this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML(html);
+                        this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML(html);                        
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);

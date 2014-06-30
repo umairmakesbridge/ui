@@ -9,7 +9,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
             return Backbone.View.extend({               
                 id:'nurturetargets',
                 /**
-                 * Attach events on elements in view.
+                 * Attach events on elements in view.addRowMessage
                  */
                 events: {
                     'click .add-targets':'selectTargets',
@@ -423,7 +423,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 },
                 _wait:function(tOrder,model,isAfter){
                     var bView = null;                    
-                    var buttonsView = new ButtonsView({page:this,showWait:false});                        
+                    var buttonsView = new ButtonsView({page:this,showWait:false,editable:this.editable});                        
                     bView = buttonsView.$el;   
                     if(!this.editable){
                         buttonsView.$el.hide();
@@ -465,7 +465,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     var bView = null;
                     var referenceObj = option.row;
                     if(this.messages.length){
-                        var buttonsView = new ButtonsView({page:this,showWait:true});
+                        var buttonsView = new ButtonsView({page:this,showWait:true,editable:this.editable});
                         if(option.isAfter){
                             referenceObj.after(buttonsView.$el); 
                         }
@@ -474,7 +474,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         }
                         bView = buttonsView.$el
                     }                     
-                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model});  
+                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model,editable:this.editable});  
                     this.messages.splice(tOrder-1,0,messageView);
                     if(option.isAfter){
                         referenceObj.after(messageView.$el); 

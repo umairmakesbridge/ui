@@ -1,6 +1,11 @@
 <div class="thumbnail temp-thumbnail">
   <div class="img">
-      
+      <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>    
+      <img alt="" class="recurring2img" src="img/recurring2.gif">
+      <div class="prgressbar">    
+          <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
+      </div>
+      <% }  %>    
       <% if(model.get('status')==='D'){  %>    
       <div>
         <a class="main-action play-track">
@@ -26,7 +31,7 @@
       
       <% if(model.get('thumbURL')){  %> 
       <span>
-       <img src="<%- this.app.decodeHTML(model.get('thumbURL'))%>" data-src="holder.js" alt="">
+       <img src="<%- this.app.decodeHTML(model.get('thumbURL').replace('http&#58;',''))%>" data-src="holder.js" alt="">
        </span>
      <% } else {
        %>  
@@ -40,11 +45,11 @@
       <h3><a title="<% if(model.get('status')==='D'){print('Click to edit') }else{ print('Click to view')} %>" class="edit-track showtooltip"><%- this.app.decodeHTML(model.get('name'))%></a></h3>
     <% if(model.get('status')==='D'){  %>
     <a class="cstatus pclr1">Paused </a> 
-    <% } else {
-                %>
+    <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
+        <a class="statusdd">Dispensing </a> 
+    <% } else { %>
       <a class="cstatus pclr18">Playing </a>                
-     <%}
-                %>                 
+     <% } %>                 
    <div class="t-scroll"></div>    
     <div class="btm-bar">
         <span><span class="icon report-bar showtooltip" title="Click to view stats"></span></span>

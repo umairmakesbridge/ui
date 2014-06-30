@@ -377,14 +377,14 @@ function (template) {
                 },
                 collapse:function(){
                     var accordion_body = this.$(".accordion-body");
-                    accordion_body.stop(1).animate({height: 0},300, function(){
+                    accordion_body.stop(1).animate({height: 0},50, function(){
                        $(this).hide();  
                     });
                 },
                 expand:function(){
                     var accordion_body = this.$(".accordion-body");
                     accordion_body.show();  
-                    accordion_body.stop(1).animate({height: 243},300, function(){
+                    accordion_body.stop(1).animate({height: 243},50, function(){
 
                     });
                 }

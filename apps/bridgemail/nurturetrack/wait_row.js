@@ -17,7 +17,8 @@ function (template,moment) {
                 'click .schedule-group button':'showWait',
                 'click .calendericon':function(){this.$("#waitdatetime").focus()},
                 'click .save-wait': 'saveWait',
-                'click .collapse-handle':'toggleAccordion'
+                'click .collapse-handle':'toggleAccordion',
+                'click .edit-message':'expand'
             },
             /**
              * Initialize view - backbone
@@ -66,7 +67,7 @@ function (template,moment) {
                 else{
                     this.$(".wait-container").html(": 1 Day");
                 }
-                
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false}); 
             },
             /**
              * Render Row view on page.
@@ -86,7 +87,7 @@ function (template,moment) {
                 }
                 if(this.triggerOrder){
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-                        $.post(URL, {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder,dispatchType:'L'})
+                        $.post(URL, {type:'deleteWait',trackId:this.parent.track_id,triggerOrder:this.triggerOrder})
                         .done(_.bind(function(data) {                                             
                                var _json = jQuery.parseJSON(data);        
                                if(_json[0]!=='err'){
@@ -155,18 +156,18 @@ function (template,moment) {
                 },
                 collapse:function(){
                     var accordion_body = this.$(".collapse-body");
-                    accordion_body.stop(1).animate({height: 0},300, function(){
+                    accordion_body.stop(1).animate({height: 0},50, function(){
                        $(this).hide();                         
                     });
-                    this.$(".wait-container").show();
+                    this.$(".wait-container,.edit-message").show();                    
                 },
                 expand:function(){
                     var accordion_body = this.$(".collapse-body");
                     accordion_body.show();  
-                    accordion_body.stop(1).animate({height: 58},300, function(){
+                    accordion_body.stop(1).animate({height: 58},50, function(){
 
                     });
-                    this.$(".wait-container").hide();
+                    this.$(".wait-container,.edit-message").hide();
                 }
             
             

@@ -1,6 +1,9 @@
 <div class="accordion-heading collapse-handle">
     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-        <span>Wait <span class="wait-container"></span></span>
+        <span style="float:left">Wait <span class="wait-container"></span></span>
+        <% if(this.editable===true) { %>
+            <i title="Edit" class="icon editnt edit-message showtooltip"></i>
+        <% } %>
         <b class="caret"></b>
     </a>
 </div>

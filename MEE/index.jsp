@@ -1,4 +1,4 @@
-﻿<%@page import="java.util.*" %>
+<%@page import="java.util.*" %>
 <%@page import="com.PMSystems.*" %>
 <%@page import="com.PMSystems.util.*" %>
 <%@page import="com.PMSystems.logger.*" %>
@@ -1806,59 +1806,10 @@
 
 				var _preDefinedHTML = "";
 
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><div><div style='' class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' style='position: relative;'><p>This is sample text</p></div></div><div style='' class='MEE_DROPPABLE'></div></div> ";
-
-
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><div><div style='' class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><table class='MEE_CONTAINER ' width='100%'><tbody><tr><td style='width: 50%;'><div class='sortable'><div style='' class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' style='position: relative;'><p>This is sample text</p></div></div><div style='' class='MEE_DROPPABLE'></div></div></td><td style='width: 50%;'><div class='sortable'><div style='' class='MEE_DROPPABLE'></div><div class='MEE_ELEMENT'><div class='MEE_ITEM' style='position: relative;'><p>This is sample text</p></div></div><div style='' class='MEE_DROPPABLE'></div></div></td></tr></tbody></table></div><div style='background-color: rgb(220, 238, 254);' class='MEE_DROPPABLE'></div></div>"; 
-
-
-
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><div><div style='' class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM'><img style='height: 200px; width: 200px; margin: 0px; resize: none; position: static; zoom: 1; display: block;' class='' src='images/img1.png'></div></div><div style='' class='MEE_DROPPABLE'></div></div> ";
-
-
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><div><div style='background-color: rgb(220, 238, 254);' class='MEE_DROPPABLE'></div><div class='MEE_ELEMENT'><table class='MEE_CONTAINER container' width='100%'><tbody><tr><td style='width: 50%;'><div class='sortable'><div style='' class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' style='position: relative;'><p>This is sample text</p></div></div><div style='' class='MEE_DROPPABLE'></div></div></td><td style='width: 50%;'><div class='sortable'><div style='' class='MEE_DROPPABLE'></div><div class='MEE_ELEMENT'><div class='MEE_ITEM'><img style='height: 200px; width: 200px; margin: 0px; resize: none; position: static; zoom: 1; display: block;' class='' src='images/img2.png'></div></div><div style='' class='MEE_DROPPABLE'></div></div></td></tr></tbody></table></div><div style='background-color: rgb(220, 238, 254);' class='MEE_DROPPABLE'></div></div>";
-
-
-
-                // for testing text items 
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><table style='width:100%'> <tr><td><div  class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_CONTAINER sortable\" width=\"100%\"><tbody><tr><td style=\"width: 50%;\"><div class=\"sortable\"><div class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_TEXTCONTENT\" width=\"100%\"><tbody><tr><td><div class=\"textcontent\" style=\"position: relative;\"><p>This is sample text</p></div></td></tr></tbody></table></div><div class=\"MEE_DROPPABLE\"></div></div></td><td class=\"MEE_ITEM\" style=\"width: 50%;\">This is sample text</td></tr></tbody></table></div><div class=\"MEE_DROPPABLE\"></div></td></tr></table>";
-
-
-                //for testing images
-                // var _preDefinedHTML = "<table style=\"width: 600px; height: 100%; vertical-align: top;\" align=\"center\" class=\"MEE_DOCUMENT\"><tbody><tr><td class=\"MEE_DOCUMENT_CONTENTS\" valign=\"top\"><div class=\"MEE_CONTENTS\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_CONTAINER container\" width=\"100%\"><tbody><tr><td style=\"width: 50%;\"><div class=\"sortable\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_IMAGECONTENT\" width=\"100%\"><tbody><tr><td><div class=\"\"><div class=\"myImage\" align=\"left\"><div class=\"ui-wrapper\" style=\"overflow: hidden; width: 200px; height: 200px;\"><img style=\"height: 200px; width: 200px; margin: 0px; resize: none; position: static; zoom: 1; display: block;\" class=\"imageHandlingClass resizable clickEvent ui-resizable\" src=\"images/img2.png\"><div class=\"ui-resizable-handle ui-resizable-e\" style=\"z-index: 90; display: block;\"></div><div class=\"ui-resizable-handle ui-resizable-s\" style=\"z-index: 90; display: block;\"></div><div class=\"ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se\" style=\"z-index: 90; display: block;\"></div></div></div></div></td></tr></tbody></table></div><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div></div></td><td style=\"width: 50%;\"><div class=\"sortable\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div class=\"MEE_ELEMENT\"><table class=\"MEE_IMAGECONTENT\" width=\"100%\"><tbody><tr><td><div class=\"imageContainer imagePlaceHolderAlone ui-droppable\"><div class=\"drapableImageContainer\">Drag image here</div></div></td></tr></tbody></table></div><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div></div></td></tr></tbody></table></div><div style=\"visibility: hidden; background-color: rgb(220, 238, 254);\" class=\"MEE_DROPPABLE\"></div></div></td></tr></tbody></table>"; 
-
-
-
-
-
-
-
-                // testing text With Image Container
-                // var _preDefinedHTML = "<table style=\"width: 600px; height: 100%; vertical-align: top;\" align=\"center\" class=\"MEE_DOCUMENT\"><tbody><tr><<td class=\"MEE_DOCUMENT_CONTENTS\" valign=\"top\"><div class=\"MEE_CONTENTS\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_TEXTWITHIMAGECONTENT\" width=\"100%\"><tbody><tr><td valign=\"top\" width=\"50%\"><div class=\"textcontent\" style=\"position: relative;\"><p>this is Text with Image</p></div></td><td width=\"50%\"><div class=\"imageContainer imagePlaceHolderAlone ui-droppable\"><div class=\"drapableImageContainer\">Drag image here</div></div></td></tr></tbody></table></div><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div></div></td></tr></tbody></table>"; 
-
-
-
-                // testing text With Image embeded
-                // var _preDefinedHTML = "<table style=\"width: 600px; height: 100%; vertical-align: top;\" align=\"center\" class=\"MEE_DOCUMENT\"><tbody><tr<td class=\"MEE_DOCUMENT_CONTENTS\" valign=\"top\"><div class=\"MEE_CONTENTS\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"MEE_ELEMENT\"><table class=\"MEE_TEXTWITHIMAGECONTENT\" width=\"100%\"><tbody><tr><td valign=\"top\" width=\"50%\"><div class=\"textcontent\" style=\"position: relative;\"><p>this is Text with Image</p></div></td><td width=\"50%\"><div class=\"\"><div class=\"myImage\" align=\"left\"><div class=\"ui-wrapper\" style=\"overflow: hidden; width: 200px; height: 200px;\"><img style=\"height: 200px; width: 200px; margin: 0px; resize: none; position: static; zoom: 1; display: block;\" class=\"imageHandlingClass resizable clickEvent ui-resizable\" src=\"images/img2.png\"><div class=\"ui-resizable-handle ui-resizable-e\" style=\"z-index: 90; display: block;\"></div><div class=\"ui-resizable-handle ui-resizable-s\" style=\"z-index: 90; display: block;\"></div><div class=\"ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se\" style=\"z-index: 90; display: block;\"></div></div></div></div></td></tr></tbody></table></div><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div></div></td></tr></tbody></table>"; 
-
-
-
-
-
-
-
-
-                // testing dynamic content
-
-                // var _preDefinedHTML = "<table style=\"width: 600px; height: 100%; vertical-align: top;\" align=\"center\" class=\"MEE_DOCUMENT\"><tbody><tr><td class=\"MEE_DOCUMENT_CONTENTS\" valign=\"top\"><div class=\"MEE_CONTENTS\"><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div><div style=\"\" class=\"csDynamicData MEE_ELEMENT\"><table class=\"dataContainer DYNAMIC_VARIATION\" id=\"v123\"></table></div><div style=\"visibility: hidden;\" class=\"MEE_DROPPABLE\"></div></div></td></tr></tbody></table>"; 
+                
 
                 var _preDefinedHTML = "TEMPLATE";
-
-
-
-                // var _preDefinedHTML = "<!-- MEE_DOCUMENT --><div><div class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' align='center'><img style=' width: 200px; margin: 0px; position: static; zoom: 1; display: block; top: auto; left: auto; resize: none;' class='' src='images/img2.png'></div></div><div class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' align='right'><img style='height: 213px; width: 213px; margin: 0px; position: static; zoom: 1; display: block; top: auto; left: auto; resize: none; overflow: hidden;' class='' src='images/img2.png'></div></div><div class='MEE_DROPPABLE'></div><div style='' class='MEE_ELEMENT'><div class='MEE_ITEM' align='left'><img style=' margin: 0px; position: static; zoom: 1; display: block; top: auto; left: auto; resize: none; overflow: hidden;' class='' src='images/img2.png'></div></div><div class='MEE_DROPPABLE'></div></div>";
-
-				// var _preDefinedHTML = "<ul class=\"sortable mainContentHtml\"><li class=\"myDroppable ui-draggable ui-droppable\" style=\"visibility: hidden; background-color: rgb(220, 238, 254);\"></li><li class=\"ui-draggable ui-droppable csHaveData\"><table width=\"100%\"><tbody><tr><td><div class=\"textcontent mce-content-body\" id=\"mce_0\" tabindex=\"-1\" contenteditable=\"true\" spellcheck=\"false\" style=\"position: relative;\"><p>This is sample text</p></div></td></tr></tbody></table></li><li class=\"myDroppable ui-draggable ui-droppable\" style=\"visibility: hidden; background-color: rgb(220, 238, 254);\"></li></ul>" ;
+ 
 
                 var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&ukey=<%=userInfo.getUserKey()%>";
 
@@ -1892,8 +1843,7 @@
 								cache: true,
 								async: false,
 								success: function (e) {
-
-									console.log("InsertBuildingBlock success");
+									
 								}
 
 							});
@@ -1903,29 +1853,8 @@
 
 					},
 					LoadTemplate: function (args) {
-                    //LoadTemplate
-
-                                       /* $.ajax({
-                                            // url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=jbKw21Ps30Uu33Kr26ja",
-                                            url: "/pms/io/campaign/getUserTemplate/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=html&templateNumber=BzAEqwsJp20In21Vr30Rk33BdTMyio",
-
-                                            data: "{}",
-                                            type: "POST",
-                                            contentType: "application/json; charset=latin1",
-                                            dataType: "json",
-                                            cache: false,
-                                            async: false,
-                                            success: function (e) {
-
-                                                args.HTMLTEXT = $('<div/>').html(e.htmlText).text().replace(/&line;/g,"");                             
-
-                                            },
-                                            error: function (e) {
-                                                console.log("LoadTemplate Failed:"+ e);
-                                            }
-                                        });
-                                        */
-                    },
+                 
+                                       },
                     LoadBuildingBlocks: function (args) {
     					//GetBuildingBlocks
 
@@ -1940,11 +1869,11 @@
     						success: function (e) {
     						  if(e.count != "0") {
     							args.buildingBlocks = e.blocks[0];
-    							console.log("GetBuildingBlocks success:"+ e);
+    							//console.log("GetBuildingBlocks success:"+ e);
     						  }
     						},
     						error: function (e) {
-    							console.log("GetBuildingBlocks Failed:"+ e);
+    							//console.log("GetBuildingBlocks Failed:"+ e);
     						}
     					});
     				},
@@ -1977,11 +1906,11 @@
 								cache: false,
 								async: false,
 								success: function (e) {
-									console.log("RenameBuilding success:" + e);
+									//console.log("RenameBuilding success:" + e);
 									//LoadBuildingBlocks();
 								},
 								error: function (e) {
-									console.log("RenameBuilding failed:" + e);
+									//console.log("RenameBuilding failed:" + e);
 								}
 
 							});
@@ -2003,11 +1932,11 @@
 								cache: false,
 								async: false,
 								success: function (e) {
-									console.log("delete building block success:" + e);
+									//console.log("delete building block success:" + e);
 									//LoadBuildingBlocks();
 								},
 								error: function (e) {
-									console.log("delete building block failed:" + e);
+									//console.log("delete building block failed:" + e);
 								}
 
 							});
@@ -2028,18 +1957,15 @@
 							async: false,
 							success: function (e) {
 								args.myColors = e.colors;
-								console.log("MyColors success:" + e.colors);
+								//console.log("MyColors success:" + e.colors);
 							},
 							error: function (e) {
-								console.log("MyColors Failed:" + e);
+								//console.log("MyColors Failed:" + e);
 							}
 						});
 					},
 
-					OnColorAdded: function (args) {
-						console.log("Color to be added:" + args.AddedColor);
-						console.log("Color Already added:" + args.myColorsFromServiceGlobal);
-
+					OnColorAdded: function (args) {						
 						var saveColors = "";
 						if (args.myColorsFromServiceGlobal == "") {
 							saveColors = args.AddedColor;
@@ -2047,14 +1973,14 @@
 						else {
 							saveColors = args.myColorsFromServiceGlobal + "," + args.AddedColor;
 						}
-						console.log("Color list to be added:" + saveColors);
+						//console.log("Color list to be added:" + saveColors);
 
 						saveColors = encodeURIComponent(saveColors);
-						console.log("Color list to be added after encoded:" + saveColors);
+						//console.log("Color list to be added after encoded:" + saveColors);
 						var URL = "/pms/io/publish/saveEditorData/?<%=WebSecurityManager.getCSRFToken_HREF(session)%>&type=saveColors&colors=" + saveColors ;
 						$.post(URL)
 						.done(function (data) {
-							console.log("Insert My Color success:" + data);
+							//console.log("Insert My Color success:" + data);
 							// your code go here. 
 						});
 
@@ -2074,12 +2000,12 @@
                             cache: false,
                             async: false,
                             success: function (ec) {
-                                console.log("Insert Dynamic Variation Content success:"+ ec);  
-                                console.log("Dynamic number Content is:" + ec[1]);
+                                //console.log("Insert Dynamic Variation Content success:"+ ec);  
+                                //console.log("Dynamic number Content is:" + ec[1]);
                                               
                             },
                             error: function (e) {
-                                console.log("Insert Dynamic Variation Content failed:"+ e);
+                                //console.log("Insert Dynamic Variation Content failed:"+ e);
                             }
                         });
 
@@ -2109,11 +2035,11 @@
                             cache: false,
                             async: false,
                             success: function (e) {
-                                console.log("Insert Dynamic Variation Content Rule success:"+ e);  
+                                //console.log("Insert Dynamic Variation Content Rule success:"+ e);  
                                  
                             },
                             error: function (e) {
-                                console.log("Insert Dynamic Variation Rule failed:"+ e);
+                                //console.log("Insert Dynamic Variation Rule failed:"+ e);
                             }
                         });
                                 
@@ -2135,13 +2061,13 @@
                             cache: false,
                             async: false,
                             success: function (ec) {
-                                console.log("Update Dynamic Variation Content success:"+ ec);  
+                                //console.log("Update Dynamic Variation Content success:"+ ec);  
                                 //console.log("Dynamic number Content is:" + ec[1]);
                                    
                                                      
                             },
                             error: function (e) {
-                                console.log("Insert Dynamic Variation Content failed:"+ e);
+                                //console.log("Insert Dynamic Variation Content failed:"+ e);
                             }
                         }); 
                     },
@@ -2162,13 +2088,13 @@
                             cache: false,
                             async: false,
                             success: function (ec) {
-                                console.log("Delete Dynamic Content success:"+ ec);  
+                                //console.log("Delete Dynamic Content success:"+ ec);  
                                 //console.log("Dynamic number Content is:" + ec[1]);
                                    
                                                      
                             },
                             error: function (e) {
-                                console.log("Delete Dynamic Content failed:"+ e);
+                                //console.log("Delete Dynamic Content failed:"+ e);
                             }
                         }); 
                     },
@@ -2189,13 +2115,13 @@
                             cache: false,
                             async: true,
                             success: function (ec) {
-                                console.log("Update Dynamic  Content success:"+ ec);  
+                                //console.log("Update Dynamic  Content success:"+ ec);  
                                 //console.log("Dynamic number Content is:" + ec[1]);
                                    
                                                      
                             },
                             error: function (e) {
-                                console.log("update Dynamic  Content failed:"+ e);
+                                //console.log("update Dynamic  Content failed:"+ e);
                             }
                         }); 
                     },
@@ -2465,7 +2391,7 @@
 							success: function (e) {
 								if (e.variations != undefined) {
 									args.dynamicBlocks = e.variations[0];
-									console.log("GetDynamicBlocks success:" + e.data);
+									//console.log("GetDynamicBlocks success:" + e.data);
 								}
 							},
 							error: function (e) {
@@ -2486,11 +2412,11 @@
 							async: false,
 							success: function (e) {
 								args.dynamicBlockFields = e;
-								console.log("LoadDynamicBlockFields success:" + e);
+								//console.log("LoadDynamicBlockFields success:" + e);
 
 							},
 							error: function (e) {
-								console.log("LoadDynamicBlockFields Failed:" + e);
+								//console.log("LoadDynamicBlockFields Failed:" + e);
 							}
 						});
 					},
@@ -2507,7 +2433,7 @@
 							async: false,
 							success: function (e) {
 								args.dynamicBlockRuleConditions = e;
-								console.log("LoadDynamicBlockRuleConditions success:" + e);
+								//console.log("LoadDynamicBlockRuleConditions success:" + e);
 
 							},
 							error: function (e) {
@@ -2528,11 +2454,11 @@
 							async: false,
 							success: function (e) {
 								args.dynamicBlockFormats = e;
-								console.log("LoadDynamicBlockFormats success:" + e);
+								//console.log("LoadDynamicBlockFormats success:" + e);
 
 							},
 							error: function (e) {
-								console.log("LoadDynamicBlockFormats Failed:" + e);
+								//console.log("LoadDynamicBlockFormats Failed:" + e);
 							}
 						});
 					},
@@ -2549,11 +2475,11 @@
 							async: false,
 							success: function (e) {
 								args.personalizeTags = e;
-								console.log("LoadPersonalizeTags success:" + e);
+								//console.log("LoadPersonalizeTags success:" + e);
 
 							},
 							error: function (e) {
-								console.log("LoadPersonalizeTags Failed:" + e);
+								//console.log("LoadPersonalizeTags Failed:" + e);
 							}
 						});
 					},

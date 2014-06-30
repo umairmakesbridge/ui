@@ -133,6 +133,8 @@ function (template,moment,highlighter,tagView) {
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(!_json.err){
+                            this.app.showMessge("Nurture track played successfully.");
+                            //this.parent.callDispenseStats(this.model.get("trackId.encode"),this.model.get("trackId.checksum"));
                             this.parent.fetchTracks();   
                             this.parent.addCountHeader();
                        }
@@ -150,6 +152,7 @@ function (template,moment,highlighter,tagView) {
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
+                           this.app.showMessge("Nurture track paused successfully.");
                             this.parent.fetchTracks();   
                             this.parent.addCountHeader();
                        }
