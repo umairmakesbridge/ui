@@ -2,12 +2,14 @@
     <div>
         <div class="name-type">
             <h3><a class="edit-list" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"><%=name%></a>
+              <%if (this.model.get('isSupressList')!="true" || this.model.get('isBounceSupressList') !="true"){%>
                 <div class="percent_stats">
                     <a class="icon percent showtooltip" data-original-title="Click to see responsiveness of this list" 
                        data-list="<%=this.model.get('listNumber.encode')%>"
                        style="margin:0px!important;">
                     </a>
-                </div>    
+                </div>
+              <%}%>
                 <!-- percent_stats  -->
             </h3>
         </div>
@@ -29,15 +31,8 @@
         </div> 
 
 
-           <%if (this.model.get('isSupressList')=="true"){%>
-              <div class="slide-btns one s-clr2" style="width:;">
-                  <span  class="icon setting"></span>
-                    <div>
-                        <a class="icon edit edit-list clr1" data-name="<%=name%>" data-id="<%=this.model.get('listNumber.encode')%>"   data-id="<%=this.model.get('listNumber.encode')%>"><span>Edit</span></a>
-
-                     </div> <!-- slide-btns two  -->
-
-                </div>    
+           <%if (this.model.get('isSupressList')=="true" || this.model.get('isBounceSupressList')== "true"){%>
+                  
                 <%}else{%>
                 <div class="slide-btns two s-clr3" style="width:;">
 

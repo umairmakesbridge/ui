@@ -1,0 +1,44 @@
+<div class="thumbnail" style="overflow:visible; ">
+    <div title="" class="template-type showtooltip" data-original-title="Stock Template"></div>
+    <div class="img">
+        
+        <div>
+            <%if(this.model.get('status') == "D"){%>
+                <a id="" class="playbtn s-clr4"><span>Play</span></a>
+                <a class="editbtn s-clr2"><span>Edit</span></a> 
+            <%}else{%>
+                <a id="" class="pausebtn s-clr4"><span>Pause</span></a>
+            <%}%>
+            <a class="previewbtn s-clr3"><span>Preview</span></a> 
+            <%if(this.model.get('status') == "D"){%>
+                <a id="" class="deletebtn s-clr1"><span>Delete</span></a>
+            <%}%>    
+        </div>
+        <%=this.getAutobotImage()%>  </div>
+    <div class="caption" style="height: 145px;">
+        <h3><a class="left" style="width:initial!important;"><%=this.model.get('label')%></a>
+            
+
+        </h3>
+        <div class="t-scroll" style="padding:0 0;margin: 0 0 5px;">
+            <p>
+
+                <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                <a  class="tag"><%- t %></a> 
+                <% })%>
+
+            </p>
+        </div>
+      <%=this.isRecurring()%>
+       <div class="btm-bar" style="margin-top:22px!important;">
+             <div class="percent_stats" style="position:absolute;">
+            <span><span data-original-title="Click to view stats" class="icon percent showtooltip"></span>
+
+                   </span>
+            </div>
+        
+
+        <span><span class="icon time"></span><%=this.getDate()%></span>
+    </div>
+    </div>
+</div>

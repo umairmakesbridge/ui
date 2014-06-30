@@ -15,16 +15,18 @@
         </div>
 </td>
 <td width="90px">
+    <%if(this.options.type != "autobots"){ var data = this.model.get('subscriptionData')[0]}else{var data = this.model.get('autobotData')[0]}%>
+    
     <div>
         <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
-            <strong><span><em>Open</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].openCount)%></span></strong>
+            <strong><span><em>Open</em><%=this.options.app.addCommas(data.openCount)%></span></strong>
         </div>
     </div>
 </td>
 <td width="90px">
     <div>
         <div class="colico click showtooltip" data-original-title="Unique campaign links clicked count">
-            <strong><span><em>Clicks</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].clickCount)%></span></strong>
+            <strong><span><em>Clicks</em><%=this.options.app.addCommas(data.clickCount)%></span></strong>
         </div>
     </div>
 </td>
@@ -32,10 +34,10 @@
     <div>
         <div class="colico pgview">
             <strong><span><em>Page Views</em>
-                    <% if(this.model.get('subscriptionData')[0].pageViewsCount !="0") { %>
+                    <% if(data.pageViewsCount !="0") { %>
                     <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
                     <% } else { %>
-                     <%=this.model.get('subscriptionData')[0].pageViewsCount%> 
+                     <%=data.pageViewsCount%> 
                     <% } %>
                 </span></strong>
         </div>

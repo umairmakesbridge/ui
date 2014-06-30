@@ -115,25 +115,25 @@ function (template) {
                 var that = this;
                 var offset = $(ev.target).offset();
                 var tag = $(ev.target).data('tag');
-                $('#div_pageviews').show();
-                $('#div_pageviews').empty();
+                $('#div_tagviews').show();
+                $('#div_tagviews').empty();
                 
-                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                $('#div_tagviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 if((offset.left + 500) > $(window).width()){
-                         $('#div_pageviews').css('left','');
-                         $('#div_pageviews').css({right:30, top:offset.top - 280});
+                         $('#div_tagviews').css('left','');
+                         $('#div_tagviews').css({right:30, top:offset.top - 280});
                      }else{
-                         $('#div_pageviews').css('right','');
-                         $('#div_pageviews').css({left:30, top:offset.top - 280});
+                         $('#div_tagviews').css('right','');
+                         $('#div_tagviews').css({left:30, top:offset.top - 280});
                  }
                
-                $('#div_pageviews #imgCorner').css({left:offset.left-112});
+                $('#div_tagviews #imgCorner').css({left:offset.left-112});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:tag,type:'tag'});
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
-                    $('#div_pageviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
-                    $('#div_pageviews .temp-filters #imgCorner').css({left:offset.left-242});
+                    $('#div_tagviews').css('padding-top','0');
+                    $('#div_tagviews').html(objContacts.$el);
+                    $('#div_tagviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
+                    $('#div_tagviews .temp-filters #imgCorner').css({left:offset.left-242});
                 });
            }
                 

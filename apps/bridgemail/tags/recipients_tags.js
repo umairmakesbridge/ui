@@ -110,8 +110,8 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                 },
                 closeContactsListing: function() {
 
-                    $("#div_pageviews").empty('');
-                    $("#div_pageviews").hide();
+                    $("#div_tagviews").empty('');
+                    $("#div_tagviews").hide();
                 }
 
             });

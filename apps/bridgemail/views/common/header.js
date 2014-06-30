@@ -85,8 +85,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                      var that = this;
                      that.updateNotfication()
+                     that.setIsActiveTab();
                       setInterval(function(){
-                                that.updateNotfication();
+                        if($('body').hasClass('visible') || $('body').attr('class') == undefined){
+                            that.updateNotfication()
+                        }
+//                  
                     },60000);
                     this.$('.sc-links .ddicon').mouseenter(_.bind(function(event) {
                         $('.dropdown-nav').hide();
@@ -166,21 +170,58 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
-                        if(that.newMessages < data[1] && this.firstTime == false){
+                        if(that.newMessages < data[1] && that.firstTime == false){
                             that.$el.find('.messagesbtn').addClass('swing');
+                            that.$el.find('.messagesbtn sup').css({"top":"5px",right:"5px"});
                             
                         }else{
                             that.$el.find('.messagesbtn').removeClass('swing');
+                            that.$el.find('.messagesbtn sup').css({"top":"10px",right:"10px"});
                         }
+                        
                         that.newMessages = data[1];
+                        that.$el.find('.messagesbtn sup').show();
                         that.$el.find('.messagesbtn sup').html(data[1]);
                         
                         if(data[1] == "0" || data[1] == 0){
-                            that.$el.find('.messagesbtn sup').remove();
+                            that.$el.find('.messagesbtn sup').hide();
                         }
                         that.firstTime = true;
                      
                     });
+               },
+               setIsActiveTab:function(){
+                        var hidden = "hidden";
+
+                        // Standards:
+                        if (hidden in document)
+                            document.addEventListener("visibilitychange", onchange);
+                        else if ((hidden = "mozHidden") in document)
+                            document.addEventListener("mozvisibilitychange", onchange);
+                        else if ((hidden = "webkitHidden") in document)
+                            document.addEventListener("webkitvisibilitychange", onchange);
+                        else if ((hidden = "msHidden") in document)
+                            document.addEventListener("msvisibilitychange", onchange);
+                        // IE 9 and lower:
+                        else if ('onfocusin' in document)
+                            document.onfocusin = document.onfocusout = onchange;
+                        // All others:
+                        else
+                            window.onpageshow = window.onpagehide 
+                                = window.onfocus = window.onblur = onchange;
+
+                        function onchange (evt) {
+                            var v = 'visible', h = 'hidden',
+                                evtMap = { 
+                                    focus:v, focusin:v, pageshow:v, blur:h, focusout:h, pagehide:h 
+                                };
+
+                            evt = evt || window.event;
+                            if (evt.type in evtMap)
+                                document.body.className = evtMap[evt.type];
+                            else        
+                                document.body.className = this[hidden] ? "hidden" : "visible";
+                        }
                }
 
             });

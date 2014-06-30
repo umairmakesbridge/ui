@@ -2359,7 +2359,7 @@ cursor: pointer;
 border-radius: 2px 2px;
     display: block;
     float: left;
-    line-height: 36px;
+    line-height: 38px;
     padding: 0 15px;
     width: 154px; 
 
@@ -2509,22 +2509,22 @@ top: 14px;
     margin: 0;
 	float:right;
 }
-.autobots .thumbnail .caption h3 a { float:left; width:auto;}
+.autobots .thumbnail .caption  a { float:left; width:none!important;}
 
-.autobots .thumbnail .caption h3 .percent_stats {
-    margin: 5px 0 0 5px;
+.autobots .thumbnail .caption  .percent_stats {
+    margin: 4px 0 0 5px;
 }
-.autobots .thumbnail .caption h3 .percent_stats div.pstats {  left: -139px;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats:after {  left: 142px;}
+.autobots .thumbnail .caption  .percent_stats div.pstats {  left: -139px;}
+.autobots .thumbnail .caption  .percent_stats div.pstats:after {  left: 142px;}
 
-.autobots .thumbnail .caption h3 .percent_stats div.pstats,
-.autobots .thumbnail .caption h3 .percent_stats div.pstats ul { width:300px; }
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li { margin:0; width:50%;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li a{width:100%; background:none;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li a:hover { color:#fff; opacity:0.8;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li.sent {  background: none repeat scroll 0 0 #57B1EF;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li.pending {  background: none repeat scroll 0 0 #389FE7;}
-.autobots .thumbnail .caption h3 .percent_stats div.pstats li span {  padding: 0;  width: 100%; }
+.autobots .thumbnail .caption  .percent_stats div.pstats,
+.autobots .thumbnail .caption  .percent_stats div.pstats ul { width:300px; }
+.autobots .thumbnail .caption  .percent_stats div.pstats li { margin:0; width:50%;}
+.autobots .thumbnail .caption  .percent_stats div.pstats li a{width:100%; background:none;}
+.autobots .thumbnail .caption  .percent_stats div.pstats li a:hover { color:#fff; opacity:0.8;}
+.autobots .thumbnail .caption  .percent_stats div.pstats li.sent {  background: none repeat scroll 0 0 #57B1EF;}
+.autobots .thumbnail .caption  .percent_stats div.pstats li.pending {  background: none repeat scroll 0 0 #389FE7;}
+.autobots .thumbnail .caption  .percent_stats div.pstats li span {  padding: 0;  width: 100%; }
 
 
 
@@ -2979,28 +2979,13 @@ ul#autobots_search_menu {
     width: 180px;
 }
 ul#autobots_search_menu {
-    background: none repeat scroll 0 0 #F4FBFF;
-    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
     display: block;
-    right: 177px;
+   right: 320px;
     padding: 0 1px 1px 0;
     position: absolute;
     top: 50px;
     z-index: 9999;
 }
-ul#autobots_search_menu:before {
-    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #F4FBFF;
-    border-style: solid;
-    border-width: 6px;
-    bottom: auto;
-    content: "";
-    display: inline-block;
-    right: 12px;
-    position: absolute;
-    top: -12px;
-}
-
-
 ul#autobots_search_menu li {
     display: block;
     margin: 2px 0 0;
@@ -3034,19 +3019,45 @@ ul#autobots_search_menu {
 ul#autobots_search_menu li { margin:0 2px; }
 
 ul#autobots_search_menu li a {
-    background: none repeat scroll 0 0 #EAF4F9;
-    border-radius: 30px;
-    color: #5A5A5A;
-    float: none;
-    font-size: 12px;
-    font-weight: normal;
-	font-family: 'PT Sans', sans-serif;
-    letter-spacing: 0.5px;
-    line-height: 16px;
-    padding: 3px 10px 5px;
-    text-shadow: none;
+  background: none repeat scroll 0px 0px #EAF4F9;
+ 
+color: #5A5A5A;
+float: none;
+font-size: 12px;
+font-weight: normal;
+font-family: "PT Sans",sans-serif;
+letter-spacing: 0.5px;
+line-height: 16px;
+padding: 3px 10px 5px;
+text-shadow: none;
+margin-bottom: 5px;
 }
 ul#autobots_search_menu li.active a, ul#autobots_search_menu li a:hover  {   background: none repeat scroll 0 0 #01AEEE;
     color: #FFFFFF;}
+.c-name strong.cstatus {
+    cursor: default;
+    letter-spacing: 0.5px;
+    line-height: 16px;
+    margin: 7px 5px 0 0;
+    padding: 0 10px;
+}
+
+.c-name strong.cstatus .icon {
+    background-size: cover;
+    height: 16px;
+    margin: 0 4px 0 -7px !important;
+    width: 16px;
+}
+/*------*/
+.s-clr8 {	background-color: #2FA4F6 !important; }
+.s-clr7 {	background-color: #2A9EEF !important; }
+.s-clr6 {	background-color: #2699E9 !important; }
+.s-clr5 {	background-color: #1F94E5 !important; }
+.s-clr4 {	background-color: #1D8FDE !important; }
+.s-clr3 {	background-color: #1E8BD7 !important; }
+.s-clr2 {	background-color: #1985D0 !important; }
+.s-clr1 {	background-color: #177FC7 !important; }
+
+/* ---- */
 
 

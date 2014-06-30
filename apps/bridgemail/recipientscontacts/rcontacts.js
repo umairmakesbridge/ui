@@ -60,6 +60,9 @@ function (template,rContact,rContacts) {
                 }else if(this.options.type=="target"){
                     _data['filterNumber'] = this.listNum;
                     this.objRContacts.url =    '/pms/io/filters/getTargetPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                }else if(this.options.type=="autobots"){
+                    this.objRContacts.url =    '/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
+                    _data['botId'] = this.options.botId;
                 }else{
                     _data['listNum'] = this.listNum;
                     _data['status'] = this.status;
