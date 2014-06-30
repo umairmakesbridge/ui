@@ -569,9 +569,9 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             }
                             if(this.$("."+this.checkStatus[_i].checksum).length){
                                 this.$("."+this.checkStatus[_i].checksum).css("width",_json.percentageDone+"%");
-                                if(_json.percentageDone=="100"){
+                                if( _json[0]=='err' || _json.percentageDone=="100"){
                                     this.fetchTracks();
-                                    this.checkStatus[_i].splic(i,1);
+                                    this.checkStatus[_i].splice(i,1);
                                 }
                             }
                             else{
