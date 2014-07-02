@@ -172,15 +172,16 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         if(app.checkError(data)){return false;}
                         if(that.newMessages < data[1] && that.firstTime == false){
                             that.$el.find('.messagesbtn').addClass('swing');
+                            that.$el.find('.messagesbtn sup').css({"top":"-3px",right:"-6px"});
                             setTimeout(function(){
                                  that.$el.find('.messagesbtn').removeClass('swing');
-                                 that.$el.find('.messagesbtn sup').css({"top":"10px",right:"10px"});
-                            },5000);
-                            that.$el.find('.messagesbtn sup').css({"top":"1px",right:"5px"});
+                                 that.$el.find('.messagesbtn sup').css({"top":"5px",right:"-2px"});
+                            },5000)
+                           
                             
                         }else{
                             that.$el.find('.messagesbtn').removeClass('swing');
-                            that.$el.find('.messagesbtn sup').css({"top":"10px",right:"10px"});
+                            that.$el.find('.messagesbtn sup').css({"top":"5px",right:"-5px"});
                         }
                         that.newMessages = data[1];
                         that.$el.find('.messagesbtn sup').show();

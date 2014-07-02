@@ -219,15 +219,16 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                         if(app.checkError(data)){return false;}
                         if(that.options.newMessages < data[1]){
                             $('.messagesbtn').addClass('swing');
+                              $('.messagesbtn sup').css({"top":"-3px",right:"-6px"});
                             setTimeout(function(){
                                  $('.messagesbtn').removeClass('swing');
-                                 $('.messagesbtn sup').css({"top":"10px",right:"10px"});
+                                 $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
                             },5000);
-                            $('.messagesbtn sup').css({"top":"1px",right:"5px"});
+                          
                             
                         }else{
                             $('.messagesbtn').removeClass('swing');
-                            $('.messagesbtn sup').css({"top":"10px",right:"10px"});
+                            $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
                         }
                         that.options.newMessages = data[1];
                         $('.messagesbtn sup').show();
