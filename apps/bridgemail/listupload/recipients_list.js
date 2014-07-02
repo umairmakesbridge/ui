@@ -37,8 +37,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));
-                //console.log(this.options);
-                if(typeof this.options.params.listName !="undefined"){
+                if(this.options.params.listName){
                     this.searchText = this.options.params.listName;
                     this.loadLists();
                 }

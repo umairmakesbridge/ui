@@ -45,17 +45,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.$(".editor_box").show();                          
                       },
                       'click #btn_image_url':"TryDialog",
-                      'click #btn_image_url2':"TryDialog",
-                      'click .target-fresh':function(){
-                            var targetobj = this.$('.step3 #choose_soruce li.selected');
-                            this.app.removeCache("targets");
-                           this.step3SlectSource(targetobj);
-                      },
-                      'click .lists-fresh':function(){
-                           var targetobj = this.$('.step3 #choose_soruce li.selected');
-                           this.app.removeCache("lists");
-                           this.step3SlectSource(targetobj);
-                      }
+                      'click #btn_image_url2':"TryDialog"
                     },                    
 
                 initialize: function () {
@@ -109,6 +99,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     this.loadDataAjax(); // Load intial Calls
                     
+                     this.$el.find('div#listssearch').searchcontrol({
+                            id:'list-search',
+                            width:'300px',
+                            height:'22px',
+                            placeholder: 'Search lists',
+                            gridcontainer: 'list_grid',
+                            showicon: 'yes',
+                            iconsource: 'list'
+                     });
+                     this.$el.find('div#listrecpssearch').searchcontrol({
+                            id:'list-recps-search',
+                            width:'300px',
+                            height:'22px',
+                            placeholder: 'Search recipient lists',
+                            gridcontainer: 'recipients',
+                            showicon: 'yes',
+                            iconsource: 'list'
+                     });
                      this.$el.find('div#targetssearch').searchcontrol({
                             id:'target-list-search',
                             width:'300px',
@@ -185,7 +193,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 init:function(){
                     //Load mergeFields
-                    //this.mergeFieldsSetup();                    
+                    this.mergeFieldsSetup();                    
                     this.initHeader();
                     //
                     this.setupCampaign();
@@ -536,7 +544,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var preview_url = "https://"+camp_obj.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_obj.camp_id;  
                         require(["common/templatePreview"],_.bind(function(templatePreview){
                             var tmPr =  new templatePreview({frameSrc:preview_url,app:camp_obj.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_obj.camp_id,isText:camp_obj.camp_istext});
-                             dialog.requiregetBody().html(tmPr.$el);
+                             dialog.getBody().html(tmPr.$el);
                              tmPr.init();
                          },this));             
                         e.stopPropagation();     
@@ -721,6 +729,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
                 fetchServerTime:function(){    
+                  
+                  /* this.app.showLoading("Loading Calender...",this.$(".schedule-box > div")); 
+                   var URL = '/pms/io/getMetaData/?type=time&BMS_REQ_TK='+this.app.get('bms_token');
+                   jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
+                        if(xhr && xhr.responseText){
+                            var _json = jQuery.parseJSON(xhr.responseText);
+                            if(this.app.checkError(_json)){
+                                return false;
+                            }
+                            this.loadCalender(_json[0]);
+                        }
+                   },this)); */
                    this.app.showLoading("Loading Calender...",this.$(".schedule-box2")); 
                    require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
                             var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'draft'});
@@ -1483,7 +1503,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     });
                     this.app.showLoading(false,camp_obj.$el.find('#area_choose_lists .leftcol'));         
                     if(this.states.step3.recipientType.toLowerCase()=="list"){
-                       // this.setRecipients();
+                        this.setRecipients();
                     }
                 },
                 setSalesForceStep1:function(obj){
@@ -1925,7 +1945,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                                         
                 },
-                /*showMergeFieldDialog:function(obj){   
+                showMergeFieldDialog:function(obj){   
                     var self = this;                 
                     if(this.camp_id==0){
                         return false;
@@ -2086,7 +2106,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         $(".mergefields .browsefields").show();
                         $(".mergefields  .searchfields .searchlist li").show();                        
                     }
-                },*/
+                },
                 setFooterArea:function(){
                     this.$("#campaign_footer_text").prop("disabled",!this.$("#campaign_isFooterText")[0].checked)                                            
                 },
@@ -2265,7 +2285,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     
                                 break;
                         case 'choose_lists':               
-                                /*if(this.checkRecipientsSaved("list")){
+                                if(this.checkRecipientsSaved("list")){
                                     return false;
                                 }                
                                 if(!this.app.getAppData("lists")){
@@ -2278,8 +2298,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                 else{
                                     this.createListTable();
-                                }*/
-                                this.choseLists();
+                                }
                                 break;
                         case 'upload_csv':
                             camp_obj.app.showLoading("Loading CSV upload...",camp_obj.$el.find('#area_upload_csv'));
@@ -3073,14 +3092,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                },
                saveLists:function(){
-                   /*var selected_list = this.$("#area_choose_lists .col2 tr").map(function(){
+                   var selected_list = this.$("#area_choose_lists .col2 tr").map(function(){
                                             return $(this).attr("id").split("_")[1]
-                                        }).toArray().join();*/
-                   var selected_list = this.RecListsPage.getListCol2();
+                                        }).toArray().join();
                    if(!selected_list){
                        this.app.showAlert("Please select list(s) to set recipients",$("body"),{fixed:true});
                    }
-                   return selected_list.toString();
+                   return selected_list;
                },
                saveTargets:function(){
                    var selected_targets = this.$("#area_choose_targets .col2 tr").map(function(){
@@ -3119,12 +3137,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                   
                                 if(rec_josn.type){ 
                                     if(rec_josn.type.toLowerCase()=="list"){
-                                      
                                         if(rec_josn.count!=="0"){
-                                           camp_obj.RecListsPage.showRecList(rec_josn);
-                                         /*$.each(rec_josn.listNumbers[0], function(index, val) { 
+                                         $.each(rec_josn.listNumbers[0], function(index, val) { 
                                            camp_obj.$(".step3 #area_choose_lists .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
-                                         })*/
+                                         })
                                         }
                                         else
                                         {                     
@@ -3465,11 +3481,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         this.$(".recipient-details").append('<label>'+listValue+'</label>');
                     }else{
-                        var  totalRecipientList = this.RecListsPage.getRecipientListCol2();
+                        var  totalRecipientList = this.app.getAppData("lists");
                         _.each(lists,function(values,k){
-                            _.each(totalRecipientList,function(val){
-                                if(val.encode===values){
-                                returnList.push(val.name);
+                            _.each(totalRecipientList.lists[0],function(val){
+                                if(val[0]["listNumber.encode"]===values){
+                                returnList.push(val[0]["listNumber.checksum"]);
                                 }
                             });
                     });
@@ -3497,7 +3513,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         if(recipientChecksum!=false){
                              _.each(recipientChecksum, function(val) {
-                            this.$(".recipient-details").append('<label>' + val + ', </label>');
+                            this.$(".recipient-details").append('<label>' + $("[checksum='" + val + "']").find('h3').text() + ', </label>');
                         }, this);
                         // Making Comma Separated String
                         var textstring = this.$('.recipient-details label').text();
@@ -3509,8 +3525,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if (type === "Target" || type === "List") {
                             var recipientDetailsVal = this.$("#recipients tr");
                             _.each(recipientDetailsVal,function(val) {
-                                //var checksum = $(val).attr('_checksum');
-                                this.$(".recipient-details").append('<label>' + $(val).find('h3').text() + ', </label>');
+                                var checksum = $(val).attr('checksum');
+                                this.$(".recipient-details").append('<label>' + $("[checksum='" + checksum + "']").find('h3').text() + ', </label>');
                             },this);
                             // Making Comma Separated String
                             var textstring = this.$('.recipient-details label').text();
@@ -3731,26 +3747,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 this.$('.prev-iframe-campaign').removeClass('selected');
                 this.$('#'+tabID).addClass('selected');
                 this.setiFrameSrc();
-            },
-            choseLists : function(){
-                //var params = {type : 'lists'};
-                this.app.showLoading("Loading Lists...",this.$('#area_choose_lists'));                                  
-                    require(["listupload/campaign_recipients_lists"],_.bind(function(page){                                     
-                         this.RecListsPage = new page({params:{type:"batches",recipientType : this.states.step3.recipientType.toLowerCase()},parent:this,app:this.app,campNum:this.camp_id});
-                         this.$('#area_choose_lists').html(this.RecListsPage.$el);
-                         //console.log();
-                         //this.RecListsPage.init();                         
-                        // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
-                        this.setRecipients();
-                        
-                        //this.RecListsPage.createRecipients(listArray);
-                    },this));
-                /*var that = this;
-                require(['listupload/recipients_list'],function(viewLists){
-                    var objViewLists = new viewLists();
-                    $(that.el).find("#target-lists").html(objViewLists.el);
-                  });*/
-                
             }
 
         });

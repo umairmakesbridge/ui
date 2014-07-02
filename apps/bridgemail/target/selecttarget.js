@@ -148,6 +148,7 @@ function (template, TargetsCollection, TargetView,moment) {
                                 that.searchText = $.trim(html);
                                 that.$el.find("#grids_search").val(that.searchText);
                                 that.$el.find('#clearsearch').show();
+
                                 that.loadTargets();
                             });
                             that.hideRecipients();
