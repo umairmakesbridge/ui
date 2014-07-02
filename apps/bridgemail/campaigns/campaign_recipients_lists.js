@@ -1,19 +1,26 @@
-define(['text!target/html/selecttarget.html','target/collections/recipients_targets', 'target/views/recipients_target','moment','jquery.bmsgrid','bms-shuffle'],
-function (template, TargetsCollection, TargetView,moment) {
+/* 
+ Module Name: Campaign Recipients Lists
+ * Author:Abdullah Tariq    
+ * Date Created:25 June 2014
+ * Description:this view is called from campaign wizard, so changing this may cause problem in recipients list.
+ */
+
+define(['text!campaigns/html/campaign_recipients_lists.html','listupload/collections/recipients_lists', 'campaigns/views/campaign_recipients_list','moment','jquery.bmsgrid','bms-shuffle'],
+function (template, ListsCollection, TargetView,moment) {
         'use strict';
         return Backbone.View.extend({                
                 events: {                   
-                      'click .add-target':'createTarget'
+                      //'click .add-target':'createTarget'
                  },
                 initialize: function () {
                         this.template = _.template(template);				
                         this.parent = this.options.page;
-                        this.app = this.parent.app;
+                        this.app = this.options.app;
                         this.dialog = this.options.dialog;
                         this.scrollElement = null;
                         this.total_fetch = 0;
                         this.editable=this.options.editable;
-                        this.objTargets = new TargetsCollection();
+                        this.objTargets = new ListsCollection();
                         this.targetsModelArray = [];
                         this.total = 0;
                         this.offsetLength = 0;
@@ -21,7 +28,8 @@ function (template, TargetsCollection, TargetView,moment) {
                 },
 
                 render: function () {                       
-                        this.$el.html(this.template({}));                            
+                        this.$el.html(this.template({})); 
+                        this.init();
                 },
                 init:function(){
                   this.$('div#targetrecpssearch').searchcontrol({
@@ -47,7 +55,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     this.col2 =  this.$("#area_choose_targets").data("shuffle").getCol2();
                     this.col1 = this.$("#targets_grid tbody")
                     this.scrollElement = this.$(".leftcol .bDiv");
-                    this.loadTargets();
+                    this.loadLists();
                     this.scrollElement.scroll(_.bind(this.liveLoading,this));
                     this.scrollElement.resize(_.bind(this.liveLoading,this));
                     this.$(".col1 #target-search").on("keyup",_.bind(this.search,this));
@@ -88,13 +96,13 @@ function (template, TargetsCollection, TargetView,moment) {
                     });
                     //return isListExists;
                 },
-                loadTargets:function(fcount){
+                loadLists:function(fcount){
                   var _data = {};
                     if (!fcount) {
                         this.offset = 0;
                         this.total_fetch = 0;
                         this.$el.find('#targets_grid tbody').empty();
-                        this.objTargets = new TargetsCollection();
+                        this.objTargets = new ListsCollection();
                     }
                     else {
                         this.offset = this.offset + this.offsetLength;
@@ -108,9 +116,9 @@ function (template, TargetsCollection, TargetView,moment) {
                         // that.showSearchFilters(this.searchText);
                     }
                     var that = this; // internal access
-                    _data['type'] = 'batches';
-                    _data['filterFor'] = 'C';
-                    //this.objTargets = new TargetsCollection();
+                    _data['type'] = this.options.params.type;
+                    _data['campNum'] = this.options.campNum;
+                    //this.objTargets = new ListsCollection();
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("&nbsp;", this.$el.find('#targets_grid tbody').find('.loading-target'));
@@ -148,7 +156,7 @@ function (template, TargetsCollection, TargetView,moment) {
                                 that.searchText = $.trim(html);
                                 that.$el.find("#grids_search").val(that.searchText);
                                 that.$el.find('#clearsearch').show();
-                                that.loadTargets();
+                                that.loadLists();
                             });
                             that.hideRecipients();
                             that.app.showLoading(false, that.el);
@@ -219,13 +227,13 @@ function (template, TargetsCollection, TargetView,moment) {
                         that.$el.find('.col1 #clearsearch').show();
 
                         this.searchText = text;
-                        that.loadTargets();
+                        that.loadLists();
                     } else if (code == 8 || code == 46) {
 
                         if (!text) {
                             that.$el.find('.col1 #clearsearch').hide();
                             this.searchText = text;
-                            that.loadTargets();
+                            that.loadLists();
                         }
                     } else {
                         that.$el.find('.col1 #clearsearch').show();
@@ -235,7 +243,7 @@ function (template, TargetsCollection, TargetView,moment) {
                             if (text.length < 2)
                                 return;
                             that.searchText = text;
-                            that.loadTargets();
+                            that.loadLists();
                         }, 500); // 2000ms delay, tweak for faster/slower
                     }
                 }, clearSearch: function(ev) {
@@ -246,7 +254,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     this.searchTags = '';
                     this.total_fetch = 0;
                     this.$("#total_targets span").html("Target(s) found");    
-                    this.loadTargets();
+                    this.loadLists();
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
@@ -266,7 +274,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     });
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
-                        this.loadTargets(this.offsetLength);
+                        this.loadLists(this.offsetLength);
                     }
                 },
                 createTarget:function(){

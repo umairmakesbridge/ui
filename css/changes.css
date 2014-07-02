@@ -3114,23 +3114,9 @@ text-align:center;
 .schedule-panel .col1{
     width : 262px;
 }
-/*@media (min-width: 1900px){ 
-    .set-time{
-        width: 61.8%;
-        float:right;
-    }
-    .calendar{
-        float:right !important;
-        width: 66% !important;
-    }
-    .modal-body .calendar{
-    float:none !important;
-    }
-    .modal-body .set-time{
-        float:none !important;
-    }
-    
-}*/
+.ListsViewWrap{
+    overflow:hidden;
+}
 /* ENDS */
 
 .videobar{
