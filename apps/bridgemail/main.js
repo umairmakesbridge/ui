@@ -3,9 +3,9 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:300,
-       urlArgs: "bust=1.28" ,
+       urlArgs: "bust=1.30" ,
        paths:{
-           jquery:'//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min',
+           jquery:'../shared/libs/jquery',
            underscore:'../shared/libs/underscore',
            backbone:'../shared/libs/backbone-min',
            text:'../shared/libs/text',
