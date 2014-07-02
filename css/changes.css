@@ -2494,12 +2494,13 @@ ul.leftnav > li.icon-menu { transition: none !important;}
  background: none repeat scroll 0 0 #0092e6;
 border-radius: 10px;
 color: #FFFFFF;
+font-size:90%!important;
 display: block;
 font-weight: bold;
-height: 14px;
+height: 15px;
 right: 10px;
 line-height: 13px;
-padding: 0 5px;
+padding: 0 8px;
 position: absolute;
 top: 10px;
 }

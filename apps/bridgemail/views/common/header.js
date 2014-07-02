@@ -90,8 +90,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         if($('body').hasClass('visible') || $('body').attr('class') == undefined){
                             that.updateNotfication()
                         }
-//                  
-                    },60000);
+                   },60000);
                     this.$('.sc-links .ddicon').mouseenter(_.bind(function(event) {
                         $('.dropdown-nav').hide();
                         $('.icon-menu').removeClass('active');
@@ -170,19 +169,22 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
+                        if(app.checkError(data)){return false;}
                         if(that.newMessages < data[1] && that.firstTime == false){
                             that.$el.find('.messagesbtn').addClass('swing');
-                            that.$el.find('.messagesbtn sup').css({"top":"5px",right:"5px"});
+                            setTimeout(function(){
+                                 that.$el.find('.messagesbtn').removeClass('swing');
+                                 that.$el.find('.messagesbtn sup').css({"top":"10px",right:"10px"});
+                            },5000);
+                            that.$el.find('.messagesbtn sup').css({"top":"1px",right:"5px"});
                             
                         }else{
                             that.$el.find('.messagesbtn').removeClass('swing');
                             that.$el.find('.messagesbtn sup').css({"top":"10px",right:"10px"});
                         }
-                        
                         that.newMessages = data[1];
                         that.$el.find('.messagesbtn sup').show();
                         that.$el.find('.messagesbtn sup').html(data[1]);
-                        
                         if(data[1] == "0" || data[1] == 0){
                             that.$el.find('.messagesbtn sup').hide();
                         }
