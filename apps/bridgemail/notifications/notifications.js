@@ -14,7 +14,7 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     "click .sortoption_expand":"toggleMenu",
                     "click .closebtn": "closeContactsListing",
                     "click #template_search_menu_expand li a":"sortNotifications",
-                    "click #refresh_notification":"initialize"
+                    "click #refresh_notification":"updateNotfication"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -210,7 +210,36 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                  closeContactsListing: function() {
                     $("#div_pageviews").empty('');
                     $("#div_pageviews").hide();
-                }
+                },
+                updateNotfication:function(){
+                     var URL = "/pms/io/user/notification/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=unReadCount";
+                    var that = this;
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if(app.checkError(data)){return false;}
+                        if(that.options.newMessages < data[1]){
+                            $('.messagesbtn').addClass('swing');
+                              $('.messagesbtn sup').css({"top":"-3px",right:"-6px"});
+                            setTimeout(function(){
+                                 $('.messagesbtn').removeClass('swing');
+                                 $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
+                            },5000);
+                          
+                            
+                        }else{
+                            $('.messagesbtn').removeClass('swing');
+                            $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
+                        }
+                        that.options.newMessages = data[1];
+                        $('.messagesbtn sup').show();
+                        $('.messagesbtn sup').html(data[1]);
+                        if(data[1] == "0" || data[1] == 0){
+                            $('.messagesbtn sup').hide();
+                        }
+                        
+                    });
+                    this.initialize();
+               }
 
             });
 

@@ -2363,7 +2363,7 @@ position:relative;
 
 .sortoption_expand {
     background: #EAFaFa;
-       
+
 border: 2px solid #EAF4F9;
 cursor: pointer;
 -webkit-border-radius: 2px 2px;
@@ -2371,7 +2371,7 @@ cursor: pointer;
 border-radius: 2px 2px;
     display: block;
     float: left;
-    line-height: 38px;
+    line-height: 37px;
     padding: 0 15px;
     width: 154px; 
 
