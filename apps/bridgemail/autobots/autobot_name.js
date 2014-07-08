@@ -5,58 +5,107 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobot_name.html'],
-        function(template) {
+define(['text!autobots/html/autobot_name.html','jquery.searchcontrol'],
+        function(template,searchcontrol) {
             'use strict';
             return Backbone.View.extend({
                 events: {
                     'click .close-autobot':'closeAutobot',
-                    'click .next-action':'nextAction'
+                    'click .next-action':'nextAction',
+                    'keyup #txtAutobotName':'captureEnterKey'
                  },
                 initialize: function() {
                     this.template = _.template(template);
                     this.autobotName = "";
                     this.render();
+                    var that = this;
+                    setTimeout(function(){
+                        $(that.el).find('#txtAutobotName').focus();
+                    },100);
+                    
                 },
                 render: function() {
                     this.$el.html(this.template());
                 },
                 closeAutobot:function(){
                     $(this.el).remove();
+                    $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove(); 
                     this.remove();
                 },
+                captureEnterKey:function(e){
+                    var key = e.keyCode || e.which;
+                    if(key==13){
+                        this.nextAction();
+                    }
+                },
                 nextAction:function(ev){
+                    
                   this.autobotName = $(this.el).find('#txtAutobotName').val();
                   if(!this.autobotName){
-                       this.options.app.showError({
+                    this.options.app.showError({
                         control:$(this.el).find('.uid-container'),
                         message:"Autobot Name can not be empty!"
                     });
+                    $(this.el).find('#txtAutobotName').focus();
                     return;
                   }
-                  switch(this.options.botType){
-                      case "email":
+                   this.saveAutobotData(this.options.actionType,this.options.botType);
+                  
+                  
+                },
+                chooseAutobotType:function(){
+                    
+                     switch(this.options.actionType){
+                      case "E":
                           $(this.el).remove();
-                          this.openEmailAutobot();
-                          break;
-                      case "bdaybot":
+                          if(this.options.botType == "B"){
+                            this.openBirthDayAutobot();
+                          }else{
+                              this.openEmailAutobot();
+                          }
+                         break;
+                      case "SC":
                           $(this.el).remove();
-                          this.openBirthDayAutobot();
-                          break;
-                      case "scorebot":
-                          $(this.el).remove();
+                        
                           this.openScoreAutobot();
                           break;
-                      case "alertbot":
+                      case "A":
                           $(this.el).remove();
                           this.openAlertAutobot();
                           break;
-                      case "tagbot":
+                      case "TG":
                           $(this.el).remove();
                           this.openTagAutobot();
                           break;
                   }
-                 $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove(); 
+                         
+                 $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove();
+                 
+                },
+                saveAutobotData:function(actionType,bType){
+                    console.log(actionType + 'bot' + bType);
+                        var post_data = {label:this.autobotName,actionType:actionType,botType:bType};             
+                        var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=create";
+                        var result = false;
+                        var that = this;
+                        $.post(URL, post_data)
+                        .done(function(data) { 
+                             var _json = jQuery.parseJSON(data);
+                              if(_json[0]!=="err"){
+                                   that.chooseAutobotType();
+                               }
+                               else{
+                                    that.options.app.showError({
+                                        control:$(that.el).find('.uid-container'),
+                                        message:_json[1]
+                                    });
+                                    $(that.el).find('#txtAutobotName').focus();
+                                    return;
+                               }
+                             return result;
+                       });
+                  
+                    
                 },
                 //1
                 openAlertAutobot:function(){
@@ -73,7 +122,7 @@ define(['text!autobots/html/autobot_name.html'],
                             });
                         that.options.app.showLoading('Loading Alert Autobots....',dialog.getBody());
                         require(["autobots/alert",],function(Alert){
-                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType});
+                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType,app:that.options.app});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           
@@ -94,7 +143,7 @@ define(['text!autobots/html/autobot_name.html'],
                             });
                         that.options.app.showLoading('Loading Email Autobots....',dialog.getBody());
                         require(["autobots/email",],function(Alert){
-                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType});
+                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType,app:that.options.app});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           
@@ -115,7 +164,7 @@ define(['text!autobots/html/autobot_name.html'],
                             });
                         that.options.app.showLoading('Loading Tag Autobots....',dialog.getBody());
                         require(["autobots/tag",],function(Alert){
-                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType});
+                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType,app:that.options.app});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           
@@ -136,7 +185,7 @@ define(['text!autobots/html/autobot_name.html'],
                             });
                         that.options.app.showLoading('Loading Score Autobots....',dialog.getBody());
                         require(["autobots/score",],function(Alert){
-                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType});
+                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType,app:that.options.app});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           
@@ -144,6 +193,7 @@ define(['text!autobots/html/autobot_name.html'],
                 },//5
                  openBirthDayAutobot:function(){
                      var that = this;
+                     console.log('I am inside function');
                        var dialog_width = 80;
                      var dialog_height = $(document.documentElement).height()-200;
                      var dialog = this.options.app.showDialog({
@@ -156,7 +206,7 @@ define(['text!autobots/html/autobot_name.html'],
                             });
                         that.options.app.showLoading('Loading Birthday Autobots....',dialog.getBody());
                         require(["autobots/birthday",],function(Alert){
-                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType});
+                                var mPage = new Alert({name:that.autobotName, botType:that.options.botType,app:that.options.app});
                                 dialog.getBody().html(mPage.$el);
                                 that.options.app.showLoading(false,dialog.getBody());
                           

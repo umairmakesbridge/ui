@@ -136,6 +136,8 @@ function (template,Autobots,Autobot,AutobotTile,app,Choosebot) {
                     $(this.el).find('#total_autobots').find('.search-text').html('');
                 }
                 if(this.sortBy && this.sortText !="All"){
+                    this.sortText = this.sortText.toLowerCase();
+                    console.log(this.sortText);
                     $(this.el).find('#total_autobots').find('.sort-text').html(this.sortText);
                 }else{
                     $(this.el).find('#total_autobots').find('.sort-text').html('');
@@ -161,17 +163,18 @@ function (template,Autobots,Autobot,AutobotTile,app,Choosebot) {
                    jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         var header_part = "<ul class='c-current-status'>";
-                            header_part = header_part + "<li> <a data-text='D'> <span class='badge pclr2 '>"+that.options.app.addCommas(data.pauseCount)+"</span> Paused </a> </li>";
+                            header_part = header_part + "<li> <a data-text='D'><span class='badge pclr2'>"+that.options.app.addCommas(data.pauseCount)+"</span> Paused </a> </li>";
                             header_part = header_part + "<li> <a data-text='R'><span class='badge pclr18'>"+that.options.app.addCommas(data.playCount)+"</span> Playing </a> </li>";
                             header_part = header_part + "<li> <a data-text='P'><span class='badge pclr6'>"+that.options.app.addCommas(data.pendingCount)+"</span> Pending </a> </li>";
                             header_part = header_part + "</ul>";
                         var $header_part = $(header_part);                        
                         that.ws_header.append($header_part);
                         that.ws_header.find(".c-current-status li a").on('click',function(ev){
+                                if($(this).text().split(" ")[0] == "0") return;
                                 that.sortBy = $(this).data('text');
-                                this.sortText = $(this).text();
+                                that.sortText = $(this).text().split(" ")[1];
                                 that.fetchBots();
-                                that.updateCount();
+                               
                         })
                         // this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr18" style="margin:6px 4px 0px -7px">Playing </a>'));
                    }); 

@@ -346,8 +346,7 @@ div.tags-div:before {
 .tagscont ul,.targt .tagscont ul{
     float: left;
     position: relative;
-    left:0px;
-	max-width: 300px;
+    left:0px; 
 }
 .tagscont .ellipsis{
     
