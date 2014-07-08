@@ -43,19 +43,35 @@
 </td>
 <td width="132px">
     <div>
-
+        <%if(this.model.get('actionType') == "E"){
+             if(this.model.get('status') == "D"){
+                var btns = "four";
+             }else{
+                var btns = "two";
+             }
+        }else{
+            if(this.model.get('status') == "D"){
+                var btns = "three";
+             }else{
+                var btns = "one";
+             }
+        }
+        %>
         <div style="width:105px" class="time"> <strong><span><%=this.getPlayedOn()%></strong> </div>
-        <div style="width:;" class="slide-btns s-clr5 four"> <span class="icon setting"></span>
+        <div style="width:;" class="slide-btns s-clr5 <%=btns%>"> <span class="icon setting"></span>
             <div> 
                 <%if(this.model.get('status') == "D"){%>
-                <a class="icon play s-clr4" title="play"><span>Play</span></a>
-                <a class="icon edit s-clr3" title="edit"><span>Edit</span></a>
+                <a class="icon play s-clr4" data-id="<%=this.model.get('botId.encode')%>"><span>Play</span></a>
+                <a class="icon edit s-clr3"><span>Edit</span></a>
                 <%}else{%>
-                <a class="icon pause s-clr3" title="pause"><span>Pause</span></a>
+                <a class="icon pause s-clr3" data-id="<%=this.model.get('botId.encode')%>"><span>Pause</span></a>
                 <%}%>
-                <a class="icon preview s-clr2" title="preview"><span>Preview</span></a> 
+                
+                 <%if(this.model.get('actionType') == "E"){%>
+                        <a class="icon preview s-clr2"><span>Preview</span></a> 
+                 <%}%>
                 <%if(this.model.get('status') == "D"){%>
-                <a title="delete" class="icon delete s-clr1"><span>Delete</span></a> </div>
+                <a class="icon delete s-clr1" data-id="<%=this.model.get('botId.encode')%>"><span>Delete</span></a> </div>
             <%}%>
         </div>
     </div>

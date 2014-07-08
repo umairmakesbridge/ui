@@ -67,8 +67,8 @@ function (template) {
                         this.options.app.showAlert("This Target is empty and can't be refreshed. Please add filters in it.",$("body"),{fixed:true}); 
                         return ;
                     }
-                    var that = this;
-                    var target_id = $(ev.target).data('id');
+                     var that = this;
+                     var target_id = $(ev.target).data('id');
                      var bms_token =that.app.get('bms_token');
                      var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+bms_token;
                                     that.options.app.showLoading("Refreshing Target...",that.$el);

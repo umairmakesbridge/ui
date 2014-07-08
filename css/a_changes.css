@@ -2498,7 +2498,7 @@ top: 14px;
     width: 20px;
 	margin-left:5px;}
 .icon-b.target {background: url("../img/b-target.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-.icon-b.reoccure {background: url("../img/b-reoccure.png") no-repeat scroll center center rgba(0, 0, 0, 0);padding-left: 10px;vertical-align: top;}
+.icon-b.reoccure {background: url("../img/b-reoccure.png") no-repeat scroll center center rgba(0, 0, 0, 0);vertical-align: top;padding-left:20px; padding-top:5px;}
 .icon-b.sweep {background: url("../img/b-sweep.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 .tileview .thumbnail .icon-b {
@@ -2767,7 +2767,7 @@ top: 14px;
 .choosebot ul li a img { display:block; width:150px;}
 
 
-.choosebot ul li:hover { background:#94cf1e; }
+.choosebot ul li:hover { background:#1985D0; }
 
 
 
@@ -3071,5 +3071,15 @@ ul#autobots_search_menu li.active a, ul#autobots_search_menu li a:hover  {   bac
 .s-clr1 {	background-color: #177FC7 !important; }
 
 /* ---- */
-
+.autobots .thumbnail .caption .percent_stats div.pstats:after {
+    border-bottom: 7px solid #57B1EF;
+    border-left: 7px solid rgba(255, 255, 255, 0);
+    border-right: 7px solid rgba(255, 255, 255, 0);
+    content: "";
+    display: block;
+    position: absolute;
+    top: -6px;
+ 
+    left: 142px;
+}
 

@@ -8,7 +8,7 @@ function (template, TargetsCollection, TargetView,moment) {
                 initialize: function () {
                         this.template = _.template(template);				
                         this.parent = this.options.page;
-                        this.app = this.parent.app;
+                        this.app = this.parent.app ;
                         this.dialog = this.options.dialog;
                         this.scrollElement = null;
                         this.total_fetch = 0;
@@ -94,7 +94,7 @@ function (template, TargetsCollection, TargetView,moment) {
                         this.offset = 0;
                         this.total_fetch = 0;
                         this.$el.find('#targets_grid tbody').empty();
-                        this.objTargets = new TargetsCollection();
+                       
                     }
                     else {
                         this.offset = this.offset + this.offsetLength;
@@ -114,7 +114,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("&nbsp;", this.$el.find('#targets_grid tbody').find('.loading-target'));
-
+                    this.objTargets = new TargetsCollection();
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
                                 var _view_obj ={model: model, app: that.app,page:that,hidePopulation:true};
