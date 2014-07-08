@@ -450,7 +450,7 @@
           filter_html += '<div class="match row" style="margin-bottom:0px"> Match '
                 filter_html += '<div class="btn-group"><select class="match-box"><option value="Y">All</option><option value="N">Any</option></select></div> of the selected list(s).'                  
           filter_html += '</div>'
-          filter_html += '<h2 class="header-list" style="margin-top:0px;background-color:transparent"><a style="margin: -4px 2px;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
+          filter_html += '<h2 class="header-list" style="margin-top:0px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search"></div></h2><div class="target-listing"  style="margin-top:9px">'
             filter_html += '<table cellpadding="0" cellspacing="0" width="100%" id="__list_grid"><tbody>'
             if(!this.lists){
                 this.loadLists();
@@ -895,7 +895,7 @@
                     });
             list_html += '<button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></tbody></table>'
        
-        d +='<div><h2 class="header-list filter-target-head">&nbsp;<a style="margin: -2px 2px;" data-original-title="Refresh listing" class="refresh_btn showtooltip subscribe-refresh"><i>Refresh</i></a><div id="listssearch" class="input-append search"></div><a class="closebtn" id="filter-dropdown-close"></a></h2>'
+        d +='<div><h2 class="header-list filter-target-head">&nbsp;<a style="margin: -2px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip subscribe-refresh"><i>Refresh</i></a><div id="listssearch" class="input-append search"></div><a class="closebtn" id="filter-dropdown-close"></a></h2>'
         d += '<div class="template-container" style="margin-right:5px;min-height:290px"><div class="target-listing" id="filter-lists"><div style="display: inline-block; padding: 4px 0px; margin-left: 1%;" class="temp-filters clearfix"><h2 id="total_subscriber"><strong class="badge">'+list_array.count+'</strong><span>lists found</span></h2></div>'+list_html+'</div></div>'
         d += '</div>'
         

@@ -249,10 +249,10 @@ function (template,icheck,bmstags) {
                                  categoryID:this.$(".cat").text(),
                                  templateHtml:tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
                         };
-                _this.app.showLoading("Updating Template...",this.$el);   
+                _this.app.showLoading("Updating Template...",this.$el.parents('.modal'));   
                 $.post(URL,this.dataObj )
                 .done(function(data) {                  
-                      _this.app.showLoading(false,_this.$el);   
+                      _this.app.showLoading(false,_this.$el.parents('.modal'));   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
                            _this.app.showMessge("Template Updated Successfully!");                                     

@@ -787,7 +787,7 @@ input[type="text"].search-template{
     line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
-    min-width: 30px;
+    min-width: 100px;
 }
 
 .c-name .edited .btn-green,.c-name .edited .btn-gray {
@@ -1193,12 +1193,12 @@ ul.tabs-btns li.active a{
     display: block;
 }
 .saveing-blue {
-    background: url("../img/loader.gif") no-repeat scroll 25px center #01AEEE;
+    background: url("../img/greenloader.gif") no-repeat scroll 25px center #01AEEE;
     font-size: 0;
     line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
-    min-width: 30px;
+    min-width: 100px;
 }
 .saveing-blue span{
     min-width: 30px;

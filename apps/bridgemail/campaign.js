@@ -1577,7 +1577,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
             
                     this.app.showLoading(false,camp_obj.$el.find('#area_choose_targets .leftcol'));
                     if(this.states.step3.recipientType.toLowerCase()=="target"){
-                        this.setRecipients();
+                       // this.setRecipients();
                     }         
                 },
                 addToCol2:function(obj){
@@ -2248,7 +2248,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });                            
                           break;
                         case 'choose_targets':                                                                
-                                if(this.checkRecipientsSaved("target")){
+                                /*if(this.checkRecipientsSaved("target")){
                                     return false;
                                 }
                                 if(!this.app.getAppData("targets")){                                    
@@ -2261,8 +2261,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 }
                                 else{
                                     this.createTargetsTable();
-                                }
-                                    
+                                }*/
+                                    this.choseTargets();
                                 break;
                         case 'choose_lists':               
                                 /*if(this.checkRecipientsSaved("list")){
@@ -3077,19 +3077,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                             return $(this).attr("id").split("_")[1]
                                         }).toArray().join();*/
                    var selected_list = this.RecListsPage.getListCol2();
-                   if(!selected_list){
+                   if(!selected_list || selected_list.length === 0){
                        this.app.showAlert("Please select list(s) to set recipients",$("body"),{fixed:true});
                    }
                    return selected_list.toString();
                },
                saveTargets:function(){
-                   var selected_targets = this.$("#area_choose_targets .col2 tr").map(function(){
+                  /* var selected_targets = this.$("#area_choose_targets .col2 tr").map(function(){
                                 return $(this).attr("id").split("_")[1]
-                            }).toArray().join();
-                   if(!selected_targets){
+                            }).toArray().join();*/
+                   var selected_targets = this.RecTargetPage.getTargetCol2();
+                   if(!selected_targets || selected_targets.length === 0){
                        this.app.showAlert("Please select target(s) to set recipients",$("body"),{fixed:true});
                    }
-                   return selected_targets;
+                   //console.log(selected_targets);
+                   return selected_targets.toString();
+                   //this.RecTargetPage.saveCall();
                },
                setRecipients:function(){
                    var camp_obj = this;
@@ -3133,9 +3136,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     }
                                     else if(rec_josn.type.toLowerCase()=="target"){
                                         if(rec_josn.count!=="0"){
-                                         $.each(rec_josn.filterNumbers[0], function(index, val) { 
+                                            camp_obj.RecTargetPage.showRecTarget(rec_josn);
+                                        /* $.each(rec_josn.filterNumbers[0], function(index, val) { 
                                               camp_obj.$(".step3 #area_choose_targets .col1 tr[checksum='"+val[0].checksum+"'] .move-row").click();
-                                         })
+                                         })*/
                                         }
                                         else
                                         {
@@ -3603,15 +3607,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 recipientTarget : function(lists){
                     
-                     var  totalRecipientTarget = this.app.getAppData("targets");
+                   //  var  totalRecipientTarget = this.app.getAppData("targets");
                    var returnList = [];  
                     lists = lists.split(','); 
+                     var  totalRecipientTarget = this.RecTargetPage.getRecipientTargetCol2();
                         _.each(lists,function(values,k){
-                            _.each(totalRecipientTarget.filters[0],function(val){
-                                if(val[0]["filterNumber.encode"]===values){
-                                returnList.push(val[0]["filterNumber.checksum"]);
+                            _.each(totalRecipientTarget,function(val){
+                                if(val.encode===values){
+                                returnList.push(val.name);
                                 }
-                            })
+                            });
                     });
                     return returnList;
                 },
@@ -3740,6 +3745,25 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          this.$('#area_choose_lists').html(this.RecListsPage.$el);
                          //console.log();
                          //this.RecListsPage.init();                         
+                        // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
+                        this.setRecipients();
+                        
+                        //this.RecListsPage.createRecipients(listArray);
+                    },this));
+                /*var that = this;
+                require(['listupload/recipients_list'],function(viewLists){
+                    var objViewLists = new viewLists();
+                    $(that.el).find("#target-lists").html(objViewLists.el);
+                  });*/
+                
+            },
+            choseTargets : function(){
+                //var params = {type : 'lists'};
+                this.app.showLoading("Loading Targets...",this.$('#area_choose_targets'));                                  
+                    require(["target/selecttarget"],_.bind(function(page){                                     
+                         this.RecTargetPage = new page({page:this,editable:true});
+                         this.$('#area_choose_targets').html(this.RecTargetPage.$el);
+                         this.RecTargetPage.init();                         
                         // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
                         this.setRecipients();
                         

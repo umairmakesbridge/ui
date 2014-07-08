@@ -25,7 +25,7 @@
 <td width="90px" style="opacity:<%=this.getOpacity()%>">
     <div>
         <div class="subscribers ">
-            <strong><span><em>Contacts</em><%if(this.model.get('subscriberCount') !="0"){%><%=this.options.app.addCommas(this.model.get('subscriberCount'))%><%}else{%><%=subscriberCount%><%}%></span></strong>
+           <strong><span><em>Contacts</em><%if(this.model.get('subscriberCount') !="0"){%><a class="pageview showtooltip" data-original-title="Click to view population detail"  data-id="<%=this.model.get('listNumber.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriberCount'))%></a><%}else{%><%=subscriberCount%><%}%></span></strong>
         </div> 
 
 

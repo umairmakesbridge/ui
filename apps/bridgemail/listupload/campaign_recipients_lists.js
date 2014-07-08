@@ -70,47 +70,14 @@ function (template, ListsCollection, TargetView,moment) {
                     this.$(".col1 #clearsearch").on("click",_.bind(this.clearSearch,this));
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 },
-                updateRunningModels:function(){
-                    var that = this;
-                    var csv = "";
-                    var runningModels = this.objTargets.filter(function(target) {
-                        return target.get("status") === "P" || target.get("status") === "S" 
-                    });
-                    _.each(runningModels,function(model){
-                        csv = csv + model.get('filterNumber.encode')+",";
-                    })
-                    if(csv)
-                        that.checkForUpdatedModels(csv);
-                },
-                checkForUpdatedModels:function(csv){
-                     if(!csv || csv == "") return;
-                     var that = this;
-                     var URL = "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&filterNumber_csv="+csv+"&type=list_csv";
-                     jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        var data = jQuery.parseJSON(xhr.responseText);
-                        if(that.app.checkError(data)){
-                            return false;
-                        }
-                        _.each(data.filters[0],function(val,key){
-                            val[0]._id = val[0]['filterNumber.encode'];
-                             var model = that.objTargets.findWhere({name:val[0]['name']});
-                             model.set('status', val[0]['status']);
-                             model.set('totalCount', val[0]['totalCount']);
-                             model.set('pendingCount', val[0]['pendingCount']);
-                             model.set('populationCount', val[0]['populationCount']);
-                             model.set('scheduleDate', val[0]['scheduleDate']);
-                             
-                        })    
-                    });
-                    //return isListExists;
-                },
+             
                 loadLists:function(fcount){
                   var _data = {};
                     if (!fcount) {
                         this.offset = 0;
                         this.total_fetch = 0;
                         this.$el.find('#list_grid tbody').empty();
-                        this.objTargets = new ListsCollection();
+                        //this.objTargets = new ListsCollection();
                     }
                     else {
                         this.offset = this.offset + this.offsetLength;
@@ -164,13 +131,13 @@ function (template, ListsCollection, TargetView,moment) {
                                 that.searchText = $.trim(html);
                                 that.$el.find("#lists_search").val(that.searchText);
                                 that.$el.find('#clearsearch').show();
-                                that.loadLists();
+                                //that.loadLists();
                             });
                             that.app.showLoading(false, that.el);
                             that.hideRecipients();
-                            setInterval(function(){
+                            /*setInterval(function(){
                                 that.updateRunningModels();
-                            },30000);
+                            },30000);*/
                         }});
                 },
                 addToCol2:function(model){

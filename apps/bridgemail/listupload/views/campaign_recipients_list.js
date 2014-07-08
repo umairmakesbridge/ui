@@ -14,8 +14,8 @@ function (template,tags) {
                 'click .edit-list':'editList',
                 'click .delete-list':'deleteList',
                 "click .row-move":"addRowToCol2",
-                "click .row-remove":"removeRowToCol2"
-                //'click .pageview':'showPageViews'
+                "click .row-remove":"removeRowToCol2",
+                'click .pageview':'showPageViews'
             },
             initialize: function () {
                 this.app = this.options.app;
@@ -170,18 +170,38 @@ function (template,tags) {
            },
            showPageViews:function(ev){
                 var that = this;
-                var offset = $(ev.target).offset();
+                 var dialog_title = "Contacts Viewed";
+                //var offset = $(ev.target).offset();
                 var listNum = $(ev.target).data('id');
-                $('#div_pageviews').show();
-                $('#div_pageviews').empty();
-                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
-                $('#div_pageviews').css({top:offset.top-290});
+                 var dialog = this.app.showDialog({title:dialog_title,
+                        css:{"width":"850px","margin-left":"-425px"},
+                        bodyCss:{"min-height":"250px",'max-height':"420px"},                
+                        headerIcon : 'list2',
+                });
+                //$('#div_pageviews').show();
+                //$('#div_pageviews').empty();
+                //$('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                
+                //$('#div_pageviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum});
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
+                    dialog.getBody().html(objContacts.$el);
+                    objContacts.$el.find('#contacts_close').remove();
+                    objContacts.$el.find('.temp-filters').removeAttr('style');
+                   
                 });
+                
+                  /*require(["text!listupload/html/editlist.html"],function(list){
+                    dialog.getBody().html(list);
+                    
+                    dialog.$el.addClass('gray-panel');
+                     dialog.$el.find('#list_name').focus();
+                    that.showTags(dialog);
+                     dialog.$el.find('#list_name').val(listName);
+                   
+                });
+                dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));*/
            },
            getOpacity:function(){
                 if (this.model.get('name').toLowerCase().indexOf("supress_list_") >= 0){

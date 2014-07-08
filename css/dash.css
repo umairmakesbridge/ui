@@ -423,7 +423,7 @@ ul.rightnav > li.logout .lo-confirm {
 
 ul.rightnav > li.logout .lo-confirm p { color:#fff; font-size:13px; line-height:16px;}
 ul.rightnav > li.logout .lo-confirm  a {  
-	background: none repeat scroll 0 0 #94CF1E;
+	background: none repeat scroll 0 0 #7996a8;
     border: 0 none;
     border-radius: 2px;
 	font-family: 'proxima_nova_semibold';
@@ -443,9 +443,9 @@ ul.rightnav > li.logout .lo-confirm  a {
 	-moz-border-radius: 2px 2px 2px 2px;
 	border-radius: 2px 2px 2px 2px;
 	}
-ul.rightnav > li.logout .lo-confirm  a:hover {background: #80C000 ; }
+ul.rightnav > li.logout .lo-confirm  a:hover {background: #7996a8;opacity:0.9; }
 
-ul.rightnav > li.logout .lo-confirm  a.lo-no { background: #7996a8; }
+ul.rightnav > li.logout .lo-confirm  a.lo-no { background: #01aeee; }
 ul.rightnav > li.logout .lo-confirm  a.lo-no:hover {opacity: 0.9; }
 
 

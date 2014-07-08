@@ -8,7 +8,8 @@
 
 
             <div class="input-append search" id="targetsearch"> 
-                <span class="icon target"></span><input type="text" style="width:220px;" class="search-control show-image" placeholder="Search targets" id="target-search"><a style="display: none;" id="clearsearch" class="close-icon"></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
+                <a class="refresh_btn showtooltip" data-original-title="Refresh listing"><i>Refresh</i></a>
+                <span class="icon target"></span><input type="text" style="width:200px;" class="search-control show-image" placeholder="Search targets" id="target-search"><a style="display: none;right: 80px;" id="clearsearch" class="close-icon" ></a><div class="btn-group"><button id="searchbtn" class="searchbtn" tabindex="-1"><span class="icon-search icon-white"> 				  </span></button></div></div>
         </h2>
         <div class="template-container leftcol" style="margin-right:5px">
             <div class="target-listing" id="targets">
@@ -21,8 +22,9 @@
 
     <div class="col2">
         <h2 class="header-list">Recipients
-            <span class="fieldinfo"><i class="icon"></i><em style="font-size:13px;line-height: 14px;z-index: 108;width: 300px">Contacts matching ANY one of the Targets will be sent message. Don't worry about duplicates. Only one message will be sent to each contact.</em></span>
-            
+            <label style="position:absolute;" class="step2-lists">
+                <span class="fieldinfo" style="display: block;"><i class="icon"></i><em style="font-size:13px;line-height: 14px;z-index: 108;width: 300px">Contacts matching ANY one of the Targets will be sent message. Don't worry about duplicates. Only one message will be sent to each contact.</em></span>
+            </label>
             <div id="targetrecpssearch" class="input-append search"> </div>
         </h2>
         <div class="template-container rightcol" style="margin-left:5px">

@@ -355,6 +355,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     // show Main Menu 
                     this.$('.icon-menu').mouseenter(_.bind(function(event){
                         $('.dropdown-nav').hide();
+                        this.$('a.lo-no').click();
                         $('.dropdown-nav').removeClass('open');
                         $('.dropdown-nav-addcampaign i').removeClass('activeB')
                         var li = $.getObj(event, "li");

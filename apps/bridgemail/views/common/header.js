@@ -117,11 +117,13 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     }, this));
                     // Hide all dropdown
                     this.$('.add-new-header').on('mouseover', _.bind(function() {
+                        this.$('.messages_dialogue').hide();
+                        this.$el.find('.lo-confirm a.lo-no').click();
                         this.$('.sc-links ul').removeClass('open');
                         $('.icon-menu').removeClass('active');
                         $('#slidenav-newdd').hide();
                         this.$('#add-menu').css('display', 'none');
-                    }, this))
+                    }, this));
                 },
                 getTitle: function(obj) {
                     var title = $(obj.target).parent("li").find("a").text();
@@ -131,6 +133,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.addWorkSpace({type: '', title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                 },
                 loadNotifications: function() {
+                    this.$el.find('.lo-confirm a.lo-no').click();
                     if (this.$el.find(".messages_dialogue").length > 0 && this.$el.find(".messages_dialogue").is(':visible')) {
                         this.$el.find(".messages_dialogue").slideUp('fast');
                         return;
