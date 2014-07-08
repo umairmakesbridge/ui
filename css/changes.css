@@ -3185,3 +3185,6 @@ text-align:center;
     left: 50%;
     margin-left:-10px;
 }
+.zero-margin-left{
+    margin-left:0px !important;
+}

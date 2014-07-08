@@ -215,7 +215,7 @@
                     <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <!--<b class="caret"></b> -->
                 </h3>
                 <div class="accordion-inner">
-                    <div class="cont" style="height:170px;">
+                    <div class="cont" style="height:128px;">
                         <div class="row-fluid">
                             <div class="span12"> 
 
@@ -223,19 +223,15 @@
 
                                 <div class="fluidlabel">&nbsp;</div>
                                 <div class="span6 " style="margin:0; width:100%;">
-                                    <div class="row">
+                                    <div class="row" id="sf-camp-container">
                                         <label>Select Campaign</label>
-                                        <div id="salesforce_campaigns" class="btn-group subs-dd">
+                                        <div id="salesforce_campaigns" class="btn-group subs-dd inputcont">
                                             <select data-placeholder="Choose a Salesforce Campaign..." class="chosen-select" id="sf_campaigns_combo" >
                                                 <option value=""></option>
                                             </select>
                                         </div>
                                     </div>                
-                                    <div class="row">                                                        
-                                        <div class="btns left  accordion-action-btn">
-                                            <a  class="btn-green left" id="save_results_sf"><span>Save</span><i class="icon save"></i></a>
-                                        </div>                        
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <!--span6  --> 
@@ -247,37 +243,68 @@
             </div>
         </div>
         <div class="span6">
+            <div id="campaign_add_to_netsuite_accordion">
+                <h3> 
+                    <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_netsuite" />
+                    <img width="36" style="margin:0 7px 0 20px;" src="img/NS_plus.png" alt=""> Add Results to Netsuite Campaign 
+                </h3>
+                <div class="accordion-inner">
+                    <div class="cont" style="height:128px;">
+                        <div class="row-fluid">
+                            <div class="span12"> 
+
+                                <!--btn-group  -->
+
+                                <div class="fluidlabel">&nbsp;</div>
+                                <div class="span6 " style="margin:0; width:100%;">
+                                    <div class="row" id="ns-camp-container">
+                                        <label>Select Campaign</label>
+                                        <div id="netsuite_campaigns" class="btn-group subs-dd inputcont" style="margin-left: 20px;">
+                                            <select data-placeholder="Choose a Netsuite Campaign..." class="chosen-select" id="ns_campaigns_combo" disabled="disabled">
+                                                <option value=""></option>
+                                            </select>
+                                        </div>
+                                    </div>                
+                                    
+                                </div>
+                            </div>
+                            <!--span6  --> 
+                            <!-- span6  --> 
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span6 zero-margin-left">
             <div id="conversion_filter_accordion">
                 <h3> 
                     <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="conversion_filter">
                     <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <!--<b class="caret"></b>-->
                 </h3>
                 <div class="accordion-inner">
-                    <div class="cont" style="height:170px;">
+                    <div class="cont" style="height:128px;">
                         <div class="row-fluid">
                             <div class="span12"> 
 
                                 <div class="fluidlabel">&nbsp;</div>
                                 <div class="span6" style="margin:0; width:100%;">
-                                    <div class="row">
+                                    <div class="row" id="cov-matchtype-container">
                                         <label>Match Type</label>
-                                        <div id="match_type" class="btn-group subs-dd">
+                                        <div id="match_type" class="btn-group subs-dd inputcont">
                                             <select id="con_filter_combo" style="width:150px;" class="chosen-select">                      
                                                 <option value="ct">Contains</option>
                                                 <option value="=">Equal to</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row texturl">
+                                    <div class="row texturl" id="cov-texturl-container">
                                         <label>Text in URL</label>
-                                        <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
-                                    </div>                
-                                    <div class="row">
-                                        <div class="btns left accordion-action-btn"> 
-                                            <a  class="btn-green left" id="save_conversion_filter" ><span>Save</span><i class="icon save"></i></a>
+                                        <div class="inputcont" style="width:450px">
+                                            <input type="text" disabled="disabled" placeholder="Text in your Conversion URL, Example: /products" id="con_filter_field"/>
                                         </div>
-
-                                    </div>
+                                    </div>                
+                                    
 
                                 </div>
                             </div>
@@ -289,6 +316,7 @@
                 </div>
             </div>
         </div>
+        
     </div>  
     <div class="clearfix"></div>  
 </div>

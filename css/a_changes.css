@@ -20,7 +20,8 @@
    margin: 12px 0px 0px 10px;
 }
 
-#campaign_add_to_salesforce_accordion .checkpanelinput .icheck_line-icon,#campaign_add_to_salesforce_accordion  .radiopanelinput .icheck_radio-icon {
+#campaign_add_to_salesforce_accordion .checkpanelinput .icheck_line-icon,#campaign_add_to_salesforce_accordion  .radiopanelinput .icheck_radio-icon
+,#campaign_add_to_netsuite_accordion  .checkpanelinput .icheck_line-icon,#campaign_add_to_netsuite_accordion .radiopanelinput .icheck_radio-icon{
     margin: 13px 0px 0px 13px;
  }
  #conversion_filter_accordion .checkpanelinput .icheck_line-icon,#conversion_filter_accordion  .radiopanelinput .icheck_radio-icon {

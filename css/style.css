@@ -4275,12 +4275,12 @@ ul.setting-options li img {
 	margin:0;
 	width:256px;
 }
-.accordion-inner .texturl span {
+/*.accordion-inner .texturl span {
 	color: #666666;
 	display: block;
 	margin: 0 0 0 110px;
 	padding: 8px 0;
-}
+}*/
 .accordion-inner .fluidlabel input[type="checkbox"] {
 	float:left;
 	margin: 8px 8px 8px 0;
