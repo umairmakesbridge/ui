@@ -320,6 +320,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     require(["target/selecttarget"],_.bind(function(page){                                     
                          var targetsPage = new page({page:this,dialog:dialog,editable:this.editable});
                          dialog.getBody().html(targetsPage.$el);
+                         targetsPage.$el.find('.step2-lists').css({'top':'0'});
+                         targetsPage.$el.find('.step2-lists span').css({'left':'70px'});
                          targetsPage.init();                         
                          dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
                          targetsPage.createRecipients(this.targetsModelArray);

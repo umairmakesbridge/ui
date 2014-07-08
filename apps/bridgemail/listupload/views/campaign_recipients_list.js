@@ -1,10 +1,10 @@
 /* Name: List Upload
- * Date: 21 May 2014
- * Author: Pir Abdul Wakeel
+ * Date: 25 June 2014
+ * Author: Abdullah Tariq
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html','bms-tags'],
+define(['text!listupload/html/campaign_recipients_list.html','bms-tags'],
 function (template,tags) {
         'use strict';
         return Backbone.View.extend({
@@ -13,20 +13,25 @@ function (template,tags) {
                 'click .percent':'showPercentDiv',
                 'click .edit-list':'editList',
                 'click .delete-list':'deleteList',
+                "click .row-move":"addRowToCol2",
+                "click .row-remove":"removeRowToCol2",
                 'click .pageview':'showPageViews'
             },
             initialize: function () {
                 this.app = this.options.app;
-                this.template = _.template(template);	
-                this.model.bind("change", this.render, this);
+                this.template = _.template(template);
+                this.parent = this.options.page;
+                 this.showUseButton = this.options.showUse;
+                this.showRemoveButton = this.options.showRemove;
+                //this.model.bind("change", this.render, this);
                 this.render();
             },
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
-                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             editList:function(ev){
-               if (this.model.get('isSupressList') =="true" || this.model.get('isBounceSupressList')=="true" ) return;
+                
                 var that = this;
                 if(ev){
                     var target = $(ev.target);
@@ -164,25 +169,39 @@ function (template,tags) {
                 }
            },
            showPageViews:function(ev){
-
-                 var that = this;
+                var that = this;
                  var dialog_title = "Contacts Viewed";
-                
-                 var listNum = $(ev.target).data('id');
+                //var offset = $(ev.target).offset();
+                var listNum = $(ev.target).data('id');
                 
                  var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"850px","margin-left":"-425px"},
                         bodyCss:{"min-height":"250px",'max-height':"420px"},                
                         headerIcon : 'list2',
                 });
+                //$('#div_pageviews').show();
+                //$('#div_pageviews').empty();
+                //$('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
                 
-                 require(["recipientscontacts/rcontacts"],function(Contacts){
+                //$('#div_pageviews').css({top:offset.top-290});
+                require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum});
                     dialog.getBody().html(objContacts.$el);
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
                    
                 });
+                
+                  /*require(["text!listupload/html/editlist.html"],function(list){
+                    dialog.getBody().html(list);
+                    
+                    dialog.$el.addClass('gray-panel');
+                     dialog.$el.find('#list_name').focus();
+                    that.showTags(dialog);
+                     dialog.$el.find('#list_name').val(listName);
+                   
+                });
+                dialog.saveCallBack(_.bind(this.finishEditList,this,dialog,listNumber,listName,target));*/
            },
            getOpacity:function(){
                 if (this.model.get('name').toLowerCase().indexOf("supress_list_") >= 0){
@@ -190,7 +209,24 @@ function (template,tags) {
                 }else{
                     return '1';
                 }
-           }
+           },
+            addRowToCol2:function(){
+                if(this.showUseButton){
+                    this.$el.fadeOut("fast",_.bind(function(){                        
+                        this.parent.addToCol2(this.model);    
+                        this.$el.hide();
+                    },this));
+                }
+            },
+            removeRowToCol2:function(){
+                if(this.showRemoveButton){
+                    this.$el.fadeOut("fast",_.bind(function(){                        
+                        this.parent.adToCol1(this.model);    
+                        this.$el.remove();
+                    },this));
+                }
+            },
+            
                 
         });    
 });

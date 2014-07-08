@@ -159,17 +159,24 @@ function (template) {
             ,
            showPageViews:function(ev){
                 var that = this;
-                var offset = $(ev.target).offset();
+                 var dialog_title = "Target Viewed";
                 var listNum = $(ev.target).data('id');
-                $('#div_targets').show();
-                $('#div_targets').empty();
-                $('#div_targets').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
-                
-                $('#div_targets').css({top:offset.top-290});
+                var dialog = this.app.showDialog({title:dialog_title,
+                        css:{"width":"850px","margin-left":"-425px"},
+                        bodyCss:{"min-height":"250px",'max-height':"420px"},                
+                        headerIcon : 'list2',
+                });
+                /*require(["recipientscontacts/rcontacts"],function(Contacts){
+                   
+                    $('#div_pageviews').css('padding-top','0');
+                    $('#div_pageviews').html(objContacts.$el);
+                });*/
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                   var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target'});
-                    $('#div_targets').css('padding-top','0');
-                    $('#div_targets').html(objContacts.$el);
+                  var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target'});
+                    dialog.getBody().html(objContacts.$el);
+                    objContacts.$el.find('#contacts_close').remove();
+                    objContacts.$el.find('.temp-filters').removeAttr('style');
+                   
                 });
            }
             ,
