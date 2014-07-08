@@ -164,18 +164,23 @@ function (template,tags) {
                 }
            },
            showPageViews:function(ev){
-                var that = this;
-                var offset = $(ev.target).offset();
-                var listNum = $(ev.target).data('id');
-                $('#div_pageviews').show();
-                $('#div_pageviews').empty();
-                $('#div_pageviews').append("<div class='loading-contacts' style='margin-top:15px; font-weight:bold; text-align:center; margin-left:auto; margin-right:auto;'>Loading...</div> ");
+                 var that = this;
+                 var dialog_title = "Contacts Viewed";
                 
-                $('#div_pageviews').css({top:offset.top-290});
-                require(["recipientscontacts/rcontacts"],function(Contacts){
+                 var listNum = $(ev.target).data('id');
+                
+                 var dialog = this.app.showDialog({title:dialog_title,
+                        css:{"width":"850px","margin-left":"-425px"},
+                        bodyCss:{"min-height":"250px",'max-height':"420px"},                
+                        headerIcon : 'list2',
+                });
+                
+                 require(["recipientscontacts/rcontacts"],function(Contacts){
                    var objContacts = new Contacts({app:that.app,listNum:listNum});
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
+                    dialog.getBody().html(objContacts.$el);
+                    objContacts.$el.find('#contacts_close').remove();
+                    objContacts.$el.find('.temp-filters').removeAttr('style');
+                   
                 });
            },
            getOpacity:function(){
