@@ -20,8 +20,7 @@ function (template, ListsCollection, TargetView,moment) {
                         this.dialog = this.options.dialog;
                         this.scrollElement = null;
                         this.total_fetch = 0;
-                        this.editable=this.options.editable;
-                        this.objTargets = new ListsCollection();
+                        this.editable=this.options.editable;                        
                         this.listsModelArray = [];
                         this.listsIdArray = [];
                         this.totalListArray = [];
@@ -93,7 +92,7 @@ function (template, ListsCollection, TargetView,moment) {
                     var that = this; // internal access
                     _data['type'] = this.options.params.type;
                     _data['campNum'] = this.options.campNum;
-                    //this.objTargets = new ListsCollection();
+                    this.objTargets = new ListsCollection();
                     this.$el.find('#list_grid tbody .load-tr').remove();
                     this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No Listings founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("&nbsp;", this.$el.find('#list_grid tbody').find('.loading-target'));
