@@ -153,7 +153,7 @@ function (template, TargetsCollection, TargetView,moment) {
                                 var html = $(this).html();
                                 that.searchText = $.trim(html);
                                 that.$el.find("#target-search").val(that.searchText);
-                                that.$el.find('#clearsearch').show();
+                                that.$el.find('.target-search').show();
                                 that.loadTargets();
                             });
                             that.hideRecipients();

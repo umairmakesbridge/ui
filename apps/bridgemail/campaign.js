@@ -1946,7 +1946,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //this.app.showAlert('Please select netsuite campaign.',this.$el);
                         this.app.showError({
                             control:this.$("#ns-camp-container"),
-                            message:'Please select netsuite campaign.'
+                            message:'Please select Netsuite campaign.'
                         });
                     }
                     else{

@@ -129,8 +129,8 @@ function (template, ListsCollection, TargetView,moment) {
                                 var html = $(this).html();
                                 that.searchText = $.trim(html);
                                 that.$el.find("#lists_search").val(that.searchText);
-                                that.$el.find('#clearsearch').show();
-                                //that.loadLists();
+                                that.$el.find('.list-search-close').show();
+                                that.loadLists();
                             });
                             that.app.showLoading(false, that.el);
                             that.hideRecipients();
