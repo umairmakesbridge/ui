@@ -103,7 +103,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("&nbsp;", this.$el.find('#targets_grid tbody').find('.loading-target'));
-
+                    this.objTargets = new TargetsCollection();
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
                                 that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that}).el);
