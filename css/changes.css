@@ -3173,3 +3173,6 @@ text-align:center;
 .zero-margin-left{
     margin-left:0px !important;
 }
+.icon.population{    
+    background: url("../img/contactsicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}

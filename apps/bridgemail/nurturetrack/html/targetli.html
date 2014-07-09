@@ -3,7 +3,7 @@
         <a class="btn-red"><span>Remove</span><i class="icon cross"></i></a>
          <% } %>
         </span>       
-    <strong class="badge"><%- model.get("filtersCount") %>
+    <strong class="badge" style="<% if(model.get('populationCount')!=='0'){ %> cursor:pointer <%}%>"><%- this.app.addCommas(model.get("populationCount")) %>
         <div class="calctime">
             <span><em>Calculated on</em><%-countDate.date%></span>
         </div>

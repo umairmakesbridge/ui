@@ -159,18 +159,13 @@ function (template) {
             ,
            showPageViews:function(ev){
                 var that = this;
-                 var dialog_title = "Target Viewed";
+                 var dialog_title = "Population of '"+this.model.get("name")+"'";
                 var listNum = $(ev.target).data('id');
                 var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"850px","margin-left":"-425px"},
+                        css:{"width":"900px","margin-left":"-455px"},
                         bodyCss:{"min-height":"250px",'max-height':"420px"},                
-                        headerIcon : 'list2',
-                });
-                /*require(["recipientscontacts/rcontacts"],function(Contacts){
-                   
-                    $('#div_pageviews').css('padding-top','0');
-                    $('#div_pageviews').html(objContacts.$el);
-                });*/
+                        headerIcon : 'population'
+                });                
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                   var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target'});
                     dialog.getBody().html(objContacts.$el);

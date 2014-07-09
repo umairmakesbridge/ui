@@ -29,7 +29,8 @@ function (template) {
                     return this.model.get('email');
             },
             openContact:function(){
-                this.$el.parents('.modal').find('.close').click();
+                //this.$el.parents('.modal').find('.close').click();
+                $(".modal,.modal-backdrop").remove();
                 this.options.app.mainContainer.openSubscriber(this.model.get('subNum.encode'));
             },
             showPageView:function(ev){
