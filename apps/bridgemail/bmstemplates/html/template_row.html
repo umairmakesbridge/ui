@@ -9,17 +9,19 @@
                           
                        
     <div class="img">
-        <div class="tempCPCED-wrap <%= this.CPCEDWrap() %>">
-            <% if(this.selectTextClass){ %>
-            <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp clr1">
+        <div class="tempCPCED-wrap gallery-action-btns <%= this.CPCEDWrap().returnClass %>">
+            <div>
+                <% if(this.selectTextClass){ %>
+            <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action createcamp <%= this.CPCEDWrap().campClass %>">
                 <span>Create Campaign</span>
             </a>
             <% } else { %>
-                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action selecttemp clr1">
+                 <a id="temp_<%= this.model.get('templateNumber.encode') %>" class="selectbtn select-template main-action selecttemp <%= this.CPCEDWrap().campClass %>">
                         <span>Select Template</span>
                     </a>
             <% } %>
              <%= this.showCPCEDButtons() %>
+            </div>
         </div>
         <% if(this.app.decodeHTML(this.model.get("thumbURL"))){ %>
         <span><img src='<%= this.app.decodeHTML(this.model.get("thumbURL")) %>'></span>
