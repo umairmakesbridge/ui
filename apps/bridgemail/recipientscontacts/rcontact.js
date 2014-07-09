@@ -30,7 +30,7 @@ function (template) {
             },
             openContact:function(){
                 //this.$el.parents('.modal').find('.close').click();
-                $(".modal,.modal-backdrop").remove();
+                this.app.removeDialogs();
                 this.options.app.mainContainer.openSubscriber(this.model.get('subNum.encode'));
             },
             showPageView:function(ev){
@@ -40,6 +40,7 @@ function (template) {
                      var that = this;
                      var url = "";
                      if($(ev.target).html() == "0")return;
+                     this.app.removeDialogs();
                      var dialog_height = $(document.documentElement).height()-200;
                      var dialog = this.options.app.showDialog(
                            {           

@@ -170,14 +170,14 @@ function (template,tags) {
            },
            showPageViews:function(ev){
                 var that = this;
-                 var dialog_title = "Contacts Viewed";
+                 var dialog_title = "Population '"+this.model.get("name")+"'";
                 //var offset = $(ev.target).offset();
                 var listNum = $(ev.target).data('id');
                 
                  var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"850px","margin-left":"-425px"},
+                        css:{"width":"900px","margin-left":"-450px"},
                         bodyCss:{"min-height":"250px",'max-height':"420px"},                
-                        headerIcon : 'list2',
+                        headerIcon : 'list2'
                 });
                 //$('#div_pageviews').show();
                 //$('#div_pageviews').empty();
