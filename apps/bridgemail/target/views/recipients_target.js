@@ -59,7 +59,7 @@ function (template) {
                                            }
                                    });
                             },that)},
-                       that.$el); 
+                       $("body")); 
                 
                 },
                 refreshTarget:function(ev){
