@@ -786,7 +786,7 @@ input[type="text"].search-template{
     line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
-    min-width: 100px;
+    min-width: 65px;
 }
 
 .c-name .edited .btn-green,.c-name .edited .btn-gray {
