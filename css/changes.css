@@ -3190,8 +3190,8 @@ text-align:center;
 .thumbnail .img > div a.main-action.play-track{
   background:url("../img/play48.png") no-repeat scroll center center rgba(0, 0, 0, 0);      
 }
-.thumbnail .img > div a.main-action.previewmsg span{
-    background:url("../img/preview48.png") no-repeat scroll left center rgba(0, 0, 0, 0);    
+.thumbnail .img > div a.main-action.previewmsg{
+    background:url("../img/preview48.png") no-repeat scroll center center rgba(0, 0, 0, 0);    
 }
 .icon.message-tiles{background: url("../img/tiles-g.png") no-repeat scroll center center ;cursor: pointer}
 .icon.message-tiles:hover {background: url("../img/tiles-b.png") no-repeat scroll center center ;}
@@ -3233,3 +3233,10 @@ text-align:center;
     background: url("../img/contactsicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 
+.bmsgrid .name-type h3 a.edit-target{
+    max-width:235px;
+    overflow-y: hidden;
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+}
