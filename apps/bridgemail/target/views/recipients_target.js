@@ -167,12 +167,12 @@ function (template) {
                                   title:dialog_title,
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
-                                  headerIcon : 'dlgpreview',
+                                  headerIcon : 'population',
                                   bodyCss:{"min-height":dialog_height+"px"},
                                   //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
                         });      
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                  var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:true});
+                  var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:dialog_height});
                     dialog.getBody().html(objContacts.$el);
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');

@@ -102,7 +102,7 @@ function (template,rContact,rContacts) {
                     }else{
                             if(that.objRContacts.models.length != 0)
                                 if(that.dialogHeight){
-                                    that.$el.find(".stats_listing").css({"height":"420px", "overflow-y":"auto"});
+                                    that.$el.find(".stats_listing").css({"height":that.dialogHeight-70+"px", "overflow-y":"auto"});
                                 }else{
                                 that.$el.find(".stats_listing").css({"height":"357px", "overflow-y":"auto"});
                             }

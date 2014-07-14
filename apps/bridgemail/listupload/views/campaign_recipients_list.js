@@ -178,7 +178,7 @@ function (template,tags) {
                  var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                         bodyCss:{"min-height":dialog_height+"px"},                
-                        headerIcon : 'list2'
+                        headerIcon : 'population'
                 });
                 //$('#div_pageviews').show();
                 //$('#div_pageviews').empty();
@@ -186,7 +186,7 @@ function (template,tags) {
                 
                 //$('#div_pageviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                   var objContacts = new Contacts({app:that.app,listNum:listNum,dialogHeight:true});
+                   var objContacts = new Contacts({app:that.app,listNum:listNum,dialogHeight:dialog_height});
                     dialog.getBody().html(objContacts.$el);
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
