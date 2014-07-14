@@ -30,6 +30,7 @@ function (template,rContact,rContacts) {
                 this.total_fetch  = 0;
                 this.total = 0;
                 this.timer = 0;
+                this.dialogHeight = this.options.dialogHeight;
                 this.render();
             },
             render: function () {
@@ -100,7 +101,11 @@ function (template,rContact,rContacts) {
                       that.$el.find(".stats_listing").css({"height":"300px", "overflow-y":"auto"});
                     }else{
                             if(that.objRContacts.models.length != 0)
+                                if(that.dialogHeight){
+                                    that.$el.find(".stats_listing").css({"height":"420px", "overflow-y":"auto"});
+                                }else{
                                 that.$el.find(".stats_listing").css({"height":"357px", "overflow-y":"auto"});
+                            }
                       if(height > 375){
                         that.$el.find(".stats_listing").find('.stats-scroll').remove();
                         that.$el.find(".stats_listing").append("<button class='stats-scroll ScrollToTop' type='button' style='display: none; position:absolute;bottom:5px;right:20px;'></button>") ;

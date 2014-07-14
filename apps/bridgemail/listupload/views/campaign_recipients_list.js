@@ -173,10 +173,11 @@ function (template,tags) {
                  var dialog_title = "Population '"+this.model.get("name")+"'";
                 //var offset = $(ev.target).offset();
                 var listNum = $(ev.target).data('id');
-                
+                var dialog_width = $(document.documentElement).width()-60;
+                var dialog_height = $(document.documentElement).height()-182;
                  var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"900px","margin-left":"-450px"},
-                        bodyCss:{"min-height":"250px",'max-height':"420px"},                
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                        bodyCss:{"min-height":dialog_height+"px"},                
                         headerIcon : 'list2'
                 });
                 //$('#div_pageviews').show();
@@ -185,7 +186,7 @@ function (template,tags) {
                 
                 //$('#div_pageviews').css({top:offset.top-290});
                 require(["recipientscontacts/rcontacts"],function(Contacts){
-                   var objContacts = new Contacts({app:that.app,listNum:listNum});
+                   var objContacts = new Contacts({app:that.app,listNum:listNum,dialogHeight:true});
                     dialog.getBody().html(objContacts.$el);
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
