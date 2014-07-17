@@ -9,27 +9,24 @@
 
 <% UserInfo userInfo = (UserInfo)session.getAttribute("userInfo"); %>
 
-
-<!-- You can use this JSP snippet <=WebSecurityManager.getCSRFToken_HREF(session)> in your code also, but you will need to convert your .HTML file to .JSP file -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 	<title>Make Bridge Editor</title>
 	<link href="css/bootstrap.css" rel="stylesheet">
 
-    <link href="css/icons.css" rel="stylesheet" />
+        <link href="css/icons.css" rel="stylesheet" />
 	<link href="css/style.css" rel="stylesheet" />
 	<link href="css/changes.css" rel="stylesheet" />
 	<link href="css/chosen.css" rel="stylesheet" />
 	<link href="css/bmsgrid.css" rel="stylesheet" />
-    <link href="css/jquery-ui.css" rel="stylesheet" />
-    
+        <link href="css/jquery-ui.css" rel="stylesheet" />
     
 	<link href="css/isotope.css" rel="stylesheet" />
 	<link href="editorcss/skin.css" rel="stylesheet" />
 	<link href="scripts/libs/miniColor/jquery.minicolors.css" rel="stylesheet" />
 	<link href="editorcss/style.css" rel="stylesheet" />
-    <link href="editorcss/editorstyle.css" rel="stylesheet" />
+        <link href="editorcss/editorstyle.css" rel="stylesheet" />
     
     
     <style type="text/css">
@@ -40,7 +37,7 @@
         }
         
     </style>
-	<script type="text/template" id="tmpMakeBridgeContainer">
+<script type="text/template" id="tmpMakeBridgeContainer">
 
 <div id="imageTitleDialog" title="Basic dialog">
     <table style="width: 400px;">
@@ -1727,7 +1724,7 @@
     </div>
 
     </script>
-	  <script type="text/javascript" src="scripts/libs/jquery/jquery.js"></script>
+    <script type="text/javascript" src="scripts/libs/jquery/jquery.js"></script>
     <script type="text/javascript" src="scripts/libs/underscore/underscore.js"></script>
     <script type="text/javascript" src="scripts/libs/backbone/backbone.js"></script>
     <script type="text/javascript" src="scripts/libs/jquery/jquery_ui.js"></script>
@@ -1741,7 +1738,7 @@
     <script type="text/javascript" src="scripts/libs/miniColor/jquery.minicolors.js"></script>
     <script type="text/javascript" src="scripts/makebridge.js"></script>
 
-    <script src="js/jquery.isotope.min.js" type="text/javascript"></script> 
+    
     <script src="js/jquery.icheck.min.js?v=0.9.1" type="text/javascript"></script> 
     <script src="js/chosen.jquery.js" type="text/javascript"></script> 
     <script src="js/jquery.mCustomScrollbar.concat.min.js"></script> 

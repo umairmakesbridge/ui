@@ -540,10 +540,6 @@ a.closebtn:hover {
 ---------------------------------------------
 ------------------------------------------------*/
 
-.content {
-	padding:0 10px;
-	min-width: 1100px;
-}
 #container {
 	width:100%;
 	float:left;

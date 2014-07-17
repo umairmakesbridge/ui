@@ -123,7 +123,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                      showicon: 'yes',
                      iconsource: 'campaigns',
                      movingElement: 'li',
-                     query:'a.edit-track',
+                     query:'div.nurture-caption',
                      emptyMsgContainer:this.$('.user_tracks #content-1'),
                      searchCountEl : this.$(".total-count"),
                      searchTextEl : this.$(".total-text"),

@@ -3179,9 +3179,6 @@ text-align:center;
 .gallery-action-btns a.clr2 { background-color: #1985D0 !important; }
 .gallery-action-btns a.clr1 { background-color: #177FC7 !important; }
 
-.icon.population {background: url("../img/contactsicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
-/* ENDS */
-
 .videobar{
     cursor: pointer;
 }

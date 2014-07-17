@@ -2040,7 +2040,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
+                        this.$(".step2 .selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
@@ -2139,15 +2139,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                        if(html_json.isEasyEditorCompatible=="Y"){
+                       /* if(html_json.isEasyEditorCompatible=="Y"){
                             this.$("#html_editor_mee").click();
                             this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
                             this.states.editor_change = true;                           
                         }
-                        else{
+                        else{*/
                             this.$("#html_editor").click();
                             tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                        }
+                        //}
                     }
                     
                 },
