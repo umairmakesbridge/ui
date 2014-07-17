@@ -11,9 +11,9 @@
             <div class="tags tagscont">
                 <% if(model.get('tags')){  
                     _.each(model.get('tags').split(","),function(t){ %>  
-                    <li><a class="tag"><%- this.app.decodeHTML(t) %></a> </li>
+                        <li><a class="tag"><%- this.app.decodeHTML(t) %></a> </li>
                     <% }                        
-                        )
+                        ,this)
                     }
                 %>  
             </div>
