@@ -20,7 +20,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     'click .play-nt': 'playNurtureTrack',
                     'click .pause-nt':'pauseNurtureTrack',
                     'click .expand-all':'expandAll',
-                    'click .collapse-all':'collpaseAll'
+                    'click .collapse-all':'collpaseAll',
+                    'click .add-to-netsuite':'addResultToNetsuite'
                 },
                 /**
                  * Initialize view - backbone
@@ -43,6 +44,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     this.messages = [];
                     this.targetsRequest = new TargetsCollection();
                     this.targetsModelArray = [];
+                    this.netsuiteCampaignId= 0;
                     this.$messageWaitContainer = this.$(".message-wait-container");
                     this.targets = null
                     if (this.options.params) {
@@ -144,6 +146,10 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         if(_json.targets){
                             this.targets = _json.targets[0];
                             this.loadTargets();
+                        }
+                        if(_json.addToNSStatus=="Y"){
+                            this.netsuiteCampaignId = _json.nsCampaignID;
+                            this.$(".add-to-netsuite span").html("Update results to Netsuite");
                         }
                         if(_json.messages){
                             var t_order = 1;
@@ -581,6 +587,22 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                             _message.waitView.collapse();
                         }
                     } 
+                },
+                addResultToNetsuite:function(){
+                    var dialogTitle = this.netsuiteCampaignId ?"Update Results to Netsuite Campaign":"Add Results to Netsuite Campaign";
+                     var dialog = this.app.showDialog({title:dialogTitle,
+                            css:{"width":"600px","margin-left":"-300px","top":"8%","overflow":"visible"},
+                            headerEditable:false,
+                            headerIcon : 'addnetsuite',
+                            buttons: {saveBtn:{text:'Done'}},   
+                            bodyCss:{"min-height":"170px","overflow":"visible"}                                                                          
+                         });                        
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["crm/netsuite/addresult"],_.bind(function(pageTemplate){                                                              
+                         var mPage = new pageTemplate({parent:this,dialog:dialog});
+                         dialog.getBody().html(mPage.$el);
+                         dialog.saveCallBack(_.bind(mPage.saveResultsTo,mPage,dialog));
+                     },this));
                 }
                 
 
