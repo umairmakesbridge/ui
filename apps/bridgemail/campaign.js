@@ -1916,9 +1916,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj =this;
                     var camp_id= this.camp_id;
                     
-                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');                        
+                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');                        
                     this.$("#save_results_sf").addClass("saving");
-                    $.post(URL, { campNum: camp_id,nsCampaignID: this.$("#ns_campaigns_combo").val() , add:'Y',type:"addToNetsuite"})
+                    $.post(URL, { campNum: camp_id,nsCampaignID: this.$("#ns_campaigns_combo").val() , add:'Y',type:"addToNetsuite","campaignType":"N"})
                     .done(function(data) {                            
                         camp_obj.$("#save_results_ns").removeClass("saving");
                         camp_obj.states.step1.hasResultToSalesCampaign = true;
