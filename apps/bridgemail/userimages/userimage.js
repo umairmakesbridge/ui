@@ -243,7 +243,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     _this.options.app.showAlertDetail({heading: 'Confirm Deletion',
                         detail: "Are you sure you want to delete this image?",
                         callback: _.bind(function() {
-                            this.options.app.showLoading("Deleting Graphics...", $(e.target).parents('.span3'));
+                            this.options.app.showLoading("Deleting Graphics...", $(e.target).parents('.span3'),{fixed:'fixed'});
                             var URL = "/pms/io/publish/saveImagesData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                             $.post(URL, {type: 'delete', imageId: imageId})
                                     .done(function(data) {

@@ -89,7 +89,7 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                             }
                             else{
                                 this.offset = parseInt(this.offset) + this.offsetLength;
-                                this.$copyCampaignContainer.append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/></div></td></tr>');
+                                this.$copyCampaignContainer.append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more campaigns.</p></div></td></tr>');
                                 
                                 }
                               

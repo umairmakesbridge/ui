@@ -170,7 +170,7 @@ function (template,moment,highlighter,tagView) {
                 this.parent.showStates(obj,this.model,80);
             },
             viewNurtureTrack:function(){
-                this.app.showLoading("Loading...",this.parent.$el);
+                this.app.showLoading("Loading...",this.parent.$el,{fixed:'fixed'});
                 require(["nurturetrack/track_view"],_.bind(function(page){    
                      this.app.showLoading(false,this.parent.$el);                    
                      var view_page = new page({page:this});                       

@@ -232,7 +232,7 @@ function (template,highlighter) {
                             
                             var appMsgs = this.app.messages[0];
                             var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
-                            camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"));
+                            camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"),{fixed:'fixed'});
                             $.post(URL, {type:'delete',campNum:this.model.get('campNum.encode')})
                             .done(_.bind(function(data) {   
                                 this.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));	

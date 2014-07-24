@@ -2,6 +2,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags'],
         function(template, bmsfilters) {
             'use strict';
             return Backbone.View.extend({
+                className:'edit-target-view',
                 events: {
                 },
                 initialize: function() {
@@ -12,8 +13,10 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags'],
                     this.app = this.options.camp.app;
                     this.target_id = this.options.target_id;
                     this.dialog = this.options.dialog;
+                    this.editable = this.options.editable;
                     this.$el.html(this.template({}));
                     this.$("#c_c_target").filters({app: this.app});
+                   
                     if (!this.target_id) {
                         this.dialog.$(".tagscont").tags({app: this.app,
                             url: '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token'),
@@ -24,7 +27,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags'],
                     else {
                         this.loadTarget(this.target_id);
                     }
-                    this.showTitle();
+                        this.showTitle();
                 },
                 showTitle: function() {
                     this.dialog.$(".pointy .edit").click(_.bind(function() {
@@ -235,6 +238,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags'],
                         }
                         if (selected_target) {
                             camp_obj.target_id = selected_target["filterNumber.encode"];
+                            
                             camp_obj.dialog.$("#dialog-title span").html(selected_target.name);
                             camp_obj.showHideTargetTitle(false);
                             camp_obj.dialog.$(".tagscont").tags({app: camp_obj.app,
@@ -243,13 +247,23 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags'],
                                 , showAddButton: true,
                                 tags: selected_target.tags
                             });
+                             if(camp_obj.editable){
+                                
+                                camp_obj.dialog.$el.find('.btn-save').hide();
+                                camp_obj.dialog.$el.find('.camp_header .tagscont ul li').addClass('not-editable');
+                                camp_obj.dialog.$el.find('.camp_header .tagscont .tags-buttons').hide();
+                                camp_obj.dialog.$el.find('.edit').hide();
+                                
+                                }
+                            
                             var filters = camp_obj.$("#c_c_target").data("filters")
                             if (filters) {
                                 filters.loadFilters(selected_target);
                             }
+                             
                         }
 
                     });
-                }
+                },
             });
         });
