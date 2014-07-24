@@ -58,6 +58,7 @@ define([
 				env: 'developement',
 				bms_token: $.getUrlVar(false,'BMS_REQ_TK'),
                                 isNurtureTrack: $.getUrlVar(false,'enableNT'),
+                                isFromCRM: $.getUrlVar(false,'crm'),
                                 preview_domain : previewDomain,
                                 images_CDN : imagesCDN,
                                 static_CDN : staticCDN,
@@ -180,6 +181,14 @@ define([
                     }*/
                 
                 },this));
+                this.checkFromCRM();           
+            },
+            checkFromCRM:function(){
+              if(this.mainContainer){
+                        this.fromCRM();
+                }else{
+                    setTimeout(_.bind(this.fromCRM,this),200);
+                }       
             },
             NTusers:function(){
               var allowedUser = ['admin','jayadams','erpguru','hawaiilife'];  
@@ -189,6 +198,14 @@ define([
               else{
                   this.mainContainer.$(".nt-li,.naturetrack-li").hide();
               }  
+            },
+            fromCRM:function(){
+              if(this.get("isFromCRM") && this.get("isFromCRM").toLowerCase()=="y"){
+                this.mainContainer.$(".logout").hide();
+              }
+              else{
+                  this.mainContainer.$(".logout").show();
+              } 
             },
              clearCache:function(){
                 window.setTimeout(_.bind(this.removeAllCache,this),1000*60*30);
