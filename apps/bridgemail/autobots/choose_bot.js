@@ -23,13 +23,14 @@ define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
                 closeAutobot:function(){
                     $(this.el).remove();
                     this.remove();
-                    $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove(); 
+                    $("#new_autobot").parents('.campaign-content').find('.autobots-modal-in').remove();
+                    $('.autobots-modal-in').remove();
                 },
                 selectAutobot:function(ev){
                     var actionType = $(ev.target).parents('li').data('bot');
                     var botType = $(ev.target).parents('li').data('type');
-                    $(this.el).parents('#new_autobot').html(new AutobotName({actionType:actionType,botType:botType,app:this.options.app}).el);
-                    $(this.el).parents('#new_autobot').parents('.campaign-content').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
+                    $('#new_autobot').html(new AutobotName({actionType:actionType,botType:botType,app:this.options.app,listing:this.options.listing}).el);
+
                 }
             });
         });

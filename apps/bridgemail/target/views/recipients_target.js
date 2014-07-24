@@ -159,7 +159,7 @@ function (template) {
             ,
            showPageViews:function(ev){
                 var that = this;
-                 var dialog_title = "Target Viewed";
+                var dialog_title = "Target Viewed";
                 var listNum = $(ev.target).data('id');
                 var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"850px","margin-left":"-425px"},
@@ -209,10 +209,16 @@ function (template) {
                 }
             },
             addRowToCol2:function(){
+                var that = this;
                 if(this.showUseButton){
-                    this.$el.fadeOut("fast",_.bind(function(){                        
-                        this.parent.addToCol2(this.model);    
-                        this.$el.hide();
+                    this.$el.fadeOut("fast",_.bind(function(){
+                        if(that.options.type == "autobots"){
+                            that.parent.options.page.addToCol2(this.model);
+                            that.options.dialog.hide();
+                        }else{
+                            this.parent.addToCol2(this.model);    
+                            this.$el.hide();
+                        }
                     },this));
                 }
             },

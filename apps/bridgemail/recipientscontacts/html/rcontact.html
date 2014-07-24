@@ -1,32 +1,45 @@
 <td width="100%">
-        <div>
-            <div class="name-type">
-                <h3><a   class="view-profile showtooltip" data-original-title="Click to view profile detail"><%=this.getFullName()%></a> 
-                </h3>
-               <%if(this.model.get('salesStatus') !=""){%> <a class="statusdd color2 salestatus showtooltip" data-original-title="Click to view contacts with same sale status"><%=this.model.get('salesStatus')%> </a><%}%>
-                <div class="tags tagscont">
-                    <ul>
-                       <% _.each(this.model.get('tags').split(","),function(t){ %>  
-                            <li><a  class="tag showtooltip" data-original-title="Click to view contacts with same tag"><%- t %></a> </li>
-                        <% })%> 
-                    </ul>
-                </div>
+    <div>
+        <div class="name-type">
+            <h3><a   class="view-profile showtooltip" data-original-title="Click to view profile detail"><%=this.getFullName()%></a> 
+            </h3>
+            <%if(this.model.get('salesStatus') !=""){%> <a class="statusdd color2 salestatus showtooltip" data-original-title="Click to view contacts with same sale status"><%=this.model.get('salesStatus')%> </a><%}%>
+            <div class="tags tagscont">
+                <ul>
+                    <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                    <li><a  class="tag showtooltip" data-original-title="Click to view contacts with same tag"><%- t %></a> </li>
+                    <% })%> 
+                </ul>
             </div>
         </div>
+    </div>
 </td>
 <td width="90px">
-    <%if(this.options.type != "autobots"){ var data = this.model.get('subscriptionData')[0]}else{var data = this.model.get('autobotData')[0]}%>
-    
+    <%if(this.options.type != "autobots"){ 
+    var data = this.model.get('subscriptionData')[0]
+    var click = data.clickCount;
+    var open = data.openCount;
+    var openLabel = "Opens";
+    var views = data.pageViewsCount;
+
+    }else{
+    var data = this.model.get('autobotData')[0];
+    var click = data.totalClickCount;
+    var open = data.recurCount;
+    var views = data.totalPageViewsCount;
+    var openLabel = "Repeat";
+    }%>
+
     <div>
         <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
-            <strong><span><em>Open</em><%=this.options.app.addCommas(data.openCount)%></span></strong>
+            <strong><span><em><%=openLabel%></em><%=this.options.app.addCommas(open)%></span></strong>
         </div>
     </div>
 </td>
 <td width="90px">
     <div>
         <div class="colico click showtooltip" data-original-title="Unique campaign links clicked count">
-            <strong><span><em>Clicks</em><%=this.options.app.addCommas(data.clickCount)%></span></strong>
+            <strong><span><em>Clicks</em><%=this.options.app.addCommas(click)%></span></strong>
         </div>
     </div>
 </td>
@@ -34,10 +47,15 @@
     <div>
         <div class="colico pgview">
             <strong><span><em>Page Views</em>
-                    <% if(data.pageViewsCount !="0") { %>
+                    <% if(views !="0") { %>
+                    <%if(this.options.type != "autobots"){ %>
                     <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
+                        <% } else { %>
+                    <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('autobotData')[0].totalPageViewsCount)%></b></a>
+                    <% } %>
+
                     <% } else { %>
-                     <%=data.pageViewsCount%> 
+                    <%=views%> 
                     <% } %>
                 </span></strong>
         </div>
@@ -48,9 +66,13 @@
 <td width="132px">
     <div>
         <div style="width:105px" class="time show">
-             <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+            <%if(this.options.type != "autobots"){%>
+            <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+            <%}else{%>
+            <strong><span><em><%=this.options.sentAt%></em><%=this.dateSetting(data.execDate,"/")%></span></strong> 
+            <%}%>
         </div>
     </div>
 </td>
-  <% } %>
-  <% } %>
+<% } %>
+<% } %>

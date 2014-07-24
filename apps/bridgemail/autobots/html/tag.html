@@ -1,12 +1,39 @@
-            	<h2><i class="icon target"></i>Target </h2>
-                
+<div style="position:relative;top:-22px; left:85px; width:20px;">
+    <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
+            <i class="icon"></i><em>Please tell me which target to check for this bot, you can select only one target.</em></span></label>
+</div>            	
+<h2><i class="icon target"></i>
+                    <span>Choose Target</span> 
+                   
+                   <span style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;" id="hrfchangetarget" class="add-targets"> Change Target</span>
+</h2>
                 	<div class="bot_p_box">
-                           <div style="margin-left:auto; text-align:center;" class="no-target-defined">
-                    	  <a class="btn-green add-targets target-added"><span>Add Targets</span><i class="icon targetw"></i></a>
+                            
+                            <div class="bmsgrid" style="overflow:visible;">
+                      <div class="hDiv">
+                        <div class="hDivBox">
+                          <table cellspacing="0" cellpadding="0">
+                          </table>
+                        </div>
+                      </div>
+                      <div style="height: ; background:none repeat scroll 0% 0% #EFF7FB;overflow:visible" class="bDiv">
+                        <table cellspacing="0" cellpadding="0" border="0" id="autobot_targets_grid" style="margin-bottom:0px!important;">
+                          <tbody>
+                           
+                            <div style="margin-left:41%; text-align:center;" class="no-target-defined">
+                              <a class="btn-green add-targets target-added showtooltip"  style="width:143px;"><span>Add Target</span><i class="icon targetw"></i></a>
                            </div>
+                            
+                          </tbody>
+                        </table>
+                        <div style="display: none;" class="iDiv"></div>
+                      </div>
+                    </div>
+                           
                   	</div>
                 
-            	<h2><i class="icon setting"></i>Setting </h2>
+               <div style="position:relative;top:-21px; left:40px; width:20px"><label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo"><i style="width:;height:none!important" class="icon"></i><em>Please tell me when and how do you want to repeat?</em></span></label></div>
+            	<h2><i class="icon setting"></i>Settings </h2>
 					
                     <div class="bot_p_box">
                     	<div class="bot_p_boxinner">
@@ -14,30 +41,33 @@
                              
                               <div class="set-row">
                               	<div>
-                                    <div class="checkpanelinput"><input type="checkbox" id="reoccure" class="checkpanel" value="" style="position: absolute; opacity: 0;"><div class="icheck_line-icon"></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
-                                    <label for="reoccure">Reoccuring</label>
+                                    
+                                     <input type="checkbox" id="chckIsRecur" class="checkpanel" value="" style="">
+                                    <label for="reoccure">Recurring</label>
                                 </div>
                                 
                                 	<div class="set-row_col">
-                                		<select class=" nosearch" style="width: 120px; display: none;">
-                                              <option>Days</option>
-                                              <option>Month</option>
-                                              <option>Year</option>
-                                            </select><div class="chosen-container chosen-container-single chosen-container-single-nosearch" style="width: 120px;" title=""><a class="chosen-single" tabindex="-1"><span>Days</span><div><b></b></div></a><div class="chosen-drop"><div><div class="chosen-search"><input type="text" placeholder="Search..." autocomplete="off" readonly=""></div><ul class="chosen-results"></ul></div></div></div>
-                                            
-                                  <span class="" style="margin-left:25px;">After every </span>
+                                	   <select id="ddlRecurType" class="nosearch" style="width: 120px; display: none;">
+                                              <option value="D">Days</option>
+                                              <option value="M">Month</option>
+                                              <option value="Y">Year</option>
+                                            </select>
+                                       
+                               
+                                            <span class="" style="margin-left:25px;">After every </span>
                                    
-                                            <input type="text" value="" name="" placeholder="1" style="width:50px">
-                             <span class="" style="margin-right:25px;"> Days </span>
-                            
-                            		 <input type="text" value="" name="" placeholder="2" style="width:50px">
-                                   <span class=""> Times </span>
+                                            <input type="text" value="" id="txtRecurPeriod" name="" placeholder="1" style="width:50px">
+                                            <span class="" style="margin-right:25px;"> Days </span>
+                                             <select id="txtRecurTimes" class="nosearch" style="width:70px;">
+                                              <%=this.recurTimes()%>
+                                             </select>
+                                   <span class=""> time(s) </span>
                                    </div>
                                 
                               </div> <!-- set-row  -->
-                              <div class="set-row">
+                              <div class="set-row" style="display: none;">
                               	<div>
-                                    <div class="checkpanelinput"><input type="checkbox" id="Sweep" class="checkpanel" value="" style="position: absolute; opacity: 0;"><div class="icheck_line-icon"></div><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins></div>
+                                    <input type="checkbox" id="chkIsSweepAll" class="checkpanel" value=""> 
                                     <label for="Sweep">Sweep All Contacts</label>
                                 </div>
                                 
@@ -53,49 +83,22 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
-
-            	<h2><i class="icon tags"></i>Tags </h2>
+<div style="position:relative;top:-22px; left:80px; width:70%;">
+    <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
+            <i class="icon"></i><em>Please tell me which tags to check for this bot, you can select as many as you want.</em></span></label>
+</div>  
+            	<h2><i class="icon tags"></i>Choose Tags </h2>
 					
                     <div class="bot_p_box">
                     	<div class="bot_p_boxinner">
                         
                         	
-                            <div class=" tagscont">  
-                <ul>
-                  <li><a class="tag" href=""><span>Business</span><i class="icon cross"></i></a> </li>
-                  <li><a class="tag" href=""><span>marketing</span><i class="icon cross"></i></a> </li>
-                  <li><a class="tag" href=""><span>online shopping</span><i class="icon cross"></i></a> </li> 
-                  <li><a class="tag" href=""><span>amazon</span><i class="icon cross"></i></a> </li>
-                  <li><a class="tag" href=""><span>online shopping</span><i class="icon cross"></i></a> </li> 
-                  <li><a class="tag" href=""><span>amazon</span><i class="icon cross"></i></a> </li>
-                  <li></li>
-                </ul>
-                
-                <a href="" class="btn-green add-tag "><span class="right">Add Tag</span><i class="icon plus left"></i></a>
-                
-               
-               
-                
-              </div>
+                            <div id="divtags"> 
+                               
+                           </div>
               
                        <!-- 
                         <div class=" tagscont tagslist"> 
-                    <ul>
-                      <li><a class="tag" href=""><span>Business</span></a>
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>marketing</span></a> 
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>Online</span></a>
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>Amazon</span></a> 
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>Entertainment</span></a>
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>Shopping</span></a>
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                      <li><a class="tag" href=""><span>Online shopping</span></a>
-                      <a class="btn-red" href=""><i class="icon cross"></i><span>Remove</span></a></li>
-                    </ul>
                     
                     	<a href="" class="btn-green add-tag "><span class="right">Add Tag</span><i class="icon plus left"></i></a>
              
@@ -106,5 +109,7 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
-                     
+                     <div style="right: 78px;   min-height: 70px; width:70%; display:none; top:150px!important;" class="dddiv" id="div_targets">
+
+</div>
             

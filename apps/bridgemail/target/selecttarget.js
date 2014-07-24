@@ -116,6 +116,9 @@ function (template, TargetsCollection, TargetView,moment) {
                     var that = this; // internal access
                     _data['type'] = 'batches';
                     _data['filterFor'] = 'C';
+                    if(typeof this.options.type !="undefined" && this.options.type == "autobots"){
+                        var type = this.options.type;
+                    }
                     //this.objTargets = new TargetsCollection();
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
@@ -123,7 +126,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     this.objTargets = new TargetsCollection();
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                var _view_obj ={model: model, app: that.app,page:that,hidePopulation:false};
+                                var _view_obj ={type:type,model: model, app: that.app,page:that,hidePopulation:false};
                                 if(that.editable){
                                     _view_obj["showUse"]=that.col2;
                                 }
@@ -167,6 +170,12 @@ function (template, TargetsCollection, TargetView,moment) {
                     var _view_obj ={model: model, app: this.app,page:this,hidePopulation:true};
                     if(this.editable){
                         _view_obj["showRemove"]=this.col1;
+                    }
+                    if(this.options.type == "autobots"){
+                        if(this.targetsModelArray.length == 1) {
+                             this.app.showAlert("Only one target allowed",$("body"),{fixed:true}); 
+                            return;
+                        }
                     }
                      var _view = new TargetView(_view_obj);                                          
                      this.$(this.col2).find(".bDiv tbody").append(_view.$el);
