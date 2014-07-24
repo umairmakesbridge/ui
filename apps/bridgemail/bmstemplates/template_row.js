@@ -225,7 +225,7 @@ function (template,highlighter,tagView) {
                 },
              deleteCall:function(templateNum){
                     
-                    this.app.showLoading("Deleting Template...",this.$el);
+                    this.app.showLoading("Deleting Template...",this.$el,{fixed:'fixed'});
                     var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'delete',templateNumber:templateNum})
                     .done(_.bind(function(data) {                  

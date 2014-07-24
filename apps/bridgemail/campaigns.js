@@ -250,7 +250,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             }
                             else{
                                 this.offset = parseInt(this.offset) + this.offsetLength;
-                                this.$("#camps_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/></div></td></tr>');
+                                this.$("#camps_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more campaigns.</p></div></td></tr>');
                             }
                               if(this.campaigns_request)
                               {

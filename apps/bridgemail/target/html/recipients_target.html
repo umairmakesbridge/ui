@@ -2,7 +2,7 @@
     <div>
     <div class="name-type">
         <h3><%if(this.model.get('status') =="P" || this.model.get('status') =="S"){%> 
-                <a  class=" showtooltip edit-target" data-original-title="Click to preview" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
+                <a  class=" showtooltip preview" data-original-title="Click to preview" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
             <%}else{%>
                 <a  class=" showtooltip edit-target" data-original-title="Click to edit" data-id="<%=this.model.get('filterNumber.encode')%>"><%=name%></a>
             <%}%>

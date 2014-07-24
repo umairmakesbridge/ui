@@ -27,7 +27,8 @@ function (template) {
                 this.template = _.template(template);
                 this.showUseButton = this.options.showUse;
                 this.showRemoveButton = this.options.showRemove;
-                this.hidePopulation = this.options.hidePopulation
+                this.hidePopulation = this.options.hidePopulation;
+                this.dialogArray = this.options.dialogArray ;
                 this.model.on('change',this.render,this);
                 this.render();
             },
@@ -94,6 +95,7 @@ function (template) {
                 editTarget:function(ev){
                     var target_id = $(ev.target).data('id');
                     var self = this;
+                    
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
                     var dialog_width = $(document.documentElement).width()-60;
@@ -103,19 +105,25 @@ function (template) {
                               headerEditable:true,
                               bodyCss:{"min-height":dialog_height+"px"},
                               headerIcon : 'targetw',
+                              wrapDiv : 'edit-target-view',
                               buttons: {saveBtn:{text:'Save Target'} }                                                                           
                         });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
                            dialog.getBody().html(mPage.$el);
+                            //self.app.showLoading(false, mPage.$el.parent());
                             dialog.$el.find('#target_name').focus();
+                            
+                           
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                       });
+                       
                 },
                 previewTarget:function(ev){
                    var target_id = $(ev.target).data('id');
                     var self = this;
+                    var isEditable = true; // Future will be get from server side
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
                     var dialog_width = $(document.documentElement).width()-60;
@@ -124,13 +132,16 @@ function (template) {
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                               headerEditable:true,
                               bodyCss:{"min-height":dialog_height+"px"},
+                              wrapDiv : 'edit-target-view',
                               headerIcon : 'targetw'
-                        });         
-                    this.app.showLoading("Loading...",dialog.getBody());                                  
+                        });        
+                      this.app.showLoading("Loading...",dialog.getBody());                               
                       require(["target/target"],function(targetPage){                                     
-                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
-                           dialog.getBody().html(mPage.$el);
-                           dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
+                               dialog.getBody().html(mPage.$el);
+                               dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                           mPage.$el.find('.addfilter').hide();
+                           mPage.$el.find('#c_c_target .filter-div').append('<div class="block-mask"></div>');
                       });
                 },
             showPercentDiv:function(ev){
@@ -168,9 +179,11 @@ function (template) {
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
                                   headerIcon : 'population',
+                                  wrapDiv : 'rcontacts-view',
                                   bodyCss:{"min-height":dialog_height+"px"},
                                   //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                        });      
+                        });     
+                this.app.showLoading("Loading...",dialog.getBody());
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                   var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:dialog_height});
                     dialog.getBody().html(objContacts.$el);

@@ -13,6 +13,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
         function(template, TargetsCollection, TargetView, app, addBox,chosen) {
             'use strict';
             return Backbone.View.extend({
+               
                 events: {
                     "keyup #grids_search": "search",
                     "click #clearsearch": "clearSearch",

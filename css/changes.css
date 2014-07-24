@@ -1128,6 +1128,8 @@ ul.tabs-btns li.active a{
 }
 .saving span{
     min-width: 25px;
+    padding : 0 15px\0; /* IE 11*/
+    padding : 0 15px\9; /* IE 8 to 10*/
 }
 .filterbtn{
     opacity: 0; 
@@ -3239,6 +3241,7 @@ text-align:center;
     white-space: nowrap;
     text-overflow:ellipsis;
 }
+
 .icon.addnetsuite{
     background: url("../img/NS_plus.png") no-repeat scroll center center rgba(0, 0, 0, 0);
-	}
+}

@@ -206,6 +206,37 @@ function (template,highlighter) {
                                             });*/
                                 }
             },
+            deleteCampaign: function()
+			{
+                            var camp_obj = this.sub;
+                            
+                            var appMsgs = this.app.messages[0];
+                            var URL = '/pms/io/campaign/saveCampaignData/?BMS_REQ_TK='+camp_obj.app.get('bms_token');
+                            camp_obj.app.showLoading("Deleting Campaign...",camp_obj.$el.parents(".ws-content.active"),{fixed:'fixed'});
+                            $.post(URL, {type:'delete',campNum:this.model.get('campNum.encode')})
+                            .done(_.bind(function(data) {   
+                                this.app.showLoading(false,camp_obj.$el.parents(".ws-content.active"));	
+                                var del_camp_json = jQuery.parseJSON(data);  
+                                /*if(camp_obj.app.checkError(del_camp_json)){
+                                               return false;
+                                }*/
+                                if(del_camp_json[0]!=="err"){
+                                        this.app.showMessge(appMsgs.CAMPS_delete_success_msg);
+                                        //camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
+                                        this.app.removeCache("campaigns");
+                                        camp_obj.total_fetch = 0;
+                                        camp_obj.$el.find('.step2 .refresh_btn').click();
+                                         if($("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").length){
+                                            var wp_id = $("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").attr('id').split("_")[2];
+                                            $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
+                                       }
+                                }
+                                else{
+                                             camp_obj.app.showAlert(del_camp_json[1],camp_obj.$el.parents(".ws-content.active"));							
+                                }
+                              				   
+                            },this));
+			},
             
         });
 });

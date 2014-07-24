@@ -95,8 +95,8 @@ function (template, ListsCollection, TargetView,moment) {
                     this.objTargets = new ListsCollection();
                     this.$el.find('#list_grid tbody .load-tr').remove();
                     this.$el.find('#list_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No Listings founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
-                    this.app.showLoading("&nbsp;", this.$el.find('#list_grid tbody').find('.loading-target'));
-
+                    this.app.showLoading("Please wait, loading more lists.", this.$el.find('#list_grid tbody').find('.loading-target'));
+                    this.$el.find('#list_grid tbody').find('.loading-target .loading p ').css('padding','30px 0 0');
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
                                 var _view_obj ={model: model, app: that.app,page:that,hidePopulation:true};

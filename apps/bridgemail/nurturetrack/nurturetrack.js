@@ -312,9 +312,12 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    },this));
                 },
                 selectTargets:function(){
+                   
+                    
                     var dialog_object ={title:'Select Targets',
                         css:{"width":"1200px","margin-left":"-600px"},
                         bodyCss:{"min-height":"423px"},
+                        wrapDiv : 'select-target-view',
                         headerIcon : 'targetw'                        
                       }
                      if(this.editable){

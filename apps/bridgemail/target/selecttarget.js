@@ -1,7 +1,8 @@
 define(['text!target/html/selecttarget.html','target/collections/recipients_targets', 'target/views/recipients_target','moment','jquery.bmsgrid','bms-shuffle'],
 function (template, TargetsCollection, TargetView,moment) {
         'use strict';
-        return Backbone.View.extend({                
+        return Backbone.View.extend({  
+                className:'select-target-view',
                 events: {                   
                       'click .add-target':'createTarget'
                  },
@@ -14,7 +15,6 @@ function (template, TargetsCollection, TargetView,moment) {
                         this.total_fetch = 0;
                         this.editable=this.options.editable;
                         this.objTargets = new TargetsCollection();
-                        
                         this.targetsModelArray = [];
                         this.targetsIdArray = [];
                         this.total = 0;
@@ -119,7 +119,8 @@ function (template, TargetsCollection, TargetView,moment) {
                     //this.objTargets = new TargetsCollection();
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
-                    this.app.showLoading("&nbsp;", this.$el.find('#targets_grid tbody').find('.loading-target'));
+                    this.app.showLoading("Please wait, loading more targets.", this.$el.find('#targets_grid tbody').find('.loading-target'));
+                    this.$el.find('#targets_grid tbody').find('.loading-target .loading p ').css('padding','30px 0 0');
                     this.objTargets = new TargetsCollection();
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
@@ -285,12 +286,13 @@ function (template, TargetsCollection, TargetView,moment) {
                     var camp_obj = this;
                     var dialog_title = "New Target";
                     var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
+                        css: {"width": "650px", "margin-left": "-325px","z-index":"1002"},
                         bodyCss: {"min-height": "100px"},
                         headerIcon: 'targetw',
                         buttons: {saveBtn: {text: 'Create Target'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
+                    dialog.$el.next(".modal-backdrop").css('z-index','1001');
                     require(["target/newtarget"], function(newtargetPage) {
                         var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
                         dialog.getBody().html(mPage.$el);
