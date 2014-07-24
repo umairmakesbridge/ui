@@ -22,6 +22,8 @@
          //this.dialog.addClass("image-url-preview");
          this.options.template =  '<div class="tags-contents" style="display: inline-block;"><span class="tagicon gray"></span><ul style="width:auto"></ul></div><div class="tags-buttons"><span class="showtooltip ellipsis" style="display:none" data-original-title="More Tags">...</span><div class="addtag pointy add"><a class="showtooltip" data-original-title="Add Tag"><strong>+</strong></a></div></div>';    
       }
+       
+      
       this.ele = $(this.options.template)
       this.dialog = $(this.options.dialog)
       this.toolbar = $(this.options.toolbar)
@@ -96,8 +98,9 @@
             this.ele.find(".tags-contents").css("display","inline-block");           
             tags_ul.css("width","auto");
             if(tags_ul.width()>260){
-                tags_ul.css("width","250px");              
-                this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");              
+                   tags_ul.css("width","250px");              
+                   this.$element.find(".tags-buttons .ellipsis").css("display","inline-block");              
+                
             }
             else{
                 tags_ul.unbind("mouseout")

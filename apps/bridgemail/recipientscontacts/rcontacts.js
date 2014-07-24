@@ -13,6 +13,7 @@ function (template,rContact,rContacts) {
                 "click  #clearsearchcontact":"clearSearch",
                 'click .stats-scroll':'scrollToTop',
                 'click .sortoption':'openSortDiv',
+                "click .refresh_autobots":"render",
                 "click #template_search_menu":"changeSortBy"
             },
             initialize: function () {
@@ -38,6 +39,10 @@ function (template,rContact,rContacts) {
                 this.loadRContacts();
                 this.$el.find(".stats_listing").scroll(_.bind(this.liveLoading,this));
                 this.$el.find(".stats_listing").resize(_.bind(this.liveLoading,this));
+                if(typeof this.options.sentAt !="undefined"){
+                    this.$el.find("#contacts_close").remove();
+                    this.$el.find(".input-append").css("margin-right","-45px");
+                }
             } ,
             loadRContacts:function(offset){
                 var that = this;
@@ -77,7 +82,7 @@ function (template,rContact,rContacts) {
                     that.offsetLength = contacts.length;
                     that.total_fetch = that.total_fetch + contacts.length;                         
                         _.each(contacts.models, function(model){
-                            that.$el.find('#table_pageviews tbody').append(new rContact({model:model,app:that.options.app,listNum:that.options.listNum,type:that.options.type}).el);
+                            that.$el.find('#table_pageviews tbody').append(new rContact({model:model,app:that.options.app,listNum:that.options.listNum,type:that.options.type,sentAt:that.options.sentAt}).el);
                          });
                     if(that.searchText !=''){
                        that.showSearchFilters(that.searchText,that.options.app.addCommas(that.objRContacts.total),that.searchText);

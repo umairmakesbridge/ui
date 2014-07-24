@@ -8292,7 +8292,6 @@ div.crms a img {
 .actionbots li:hover span {opacity:1;}
 .actionbots li:hover img { opacity:0.15; }
 */
-
 .tagsbox { background:#EAF4F9; padding:10px;}
 
 .tagslist { margin:0; width:auto; max-width:100% ; height:auto;}
@@ -8309,13 +8308,16 @@ div.crms a img {
     width: 28px;
 }
 .tagslist ul li > a .badge {
-    background-color: #4fcfff;
+
+    background-color: #4FCFFF;
     border-radius: 0 2px 2px 0;
     color: #FFFFFF;
     float: right;
     line-height: 28px;
     margin: 0;
+    min-width: 15px;
     padding: 0 8px;
+    text-align: center;
 		-webkit-border-radius: 0 2px 2px 0;
 	-moz-border-radius:0 2px 2px 0;
 	border-radius: 0 2px 2px 0;
@@ -8337,7 +8339,6 @@ div.crms a img {
 
 
 .tagslist ul li:hover > .btn-green, .tagslist ul li:hover > .btn-red { opacity:1; }
-
 
 
 

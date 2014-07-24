@@ -1,0 +1,54 @@
+ 
+<td width="100%"><div>
+        <div class="name-type">
+            <h3><a><%- this.app.decodeHTML(model.get("name")) %></a>
+
+            </h3>
+            <div class="tags tagscont">
+                <ul>
+                    <% _.each(this.model.get('tags').split(","),function(t){ %>  
+                    <li><a  class="tag showtooltip" data-original-title="Click to view targets with same tag"><%- t %></a> </li>
+                    <% })%> 
+
+                </ul>
+            </div>
+        </div>
+    </div></td>
+
+<td width="132px"><div>
+
+        <div class="subscribers ">
+            <strong><span><em>contacts</em><a href="">3,456</a></span></strong>
+
+            <div class="prgressbar"><span class="prgrss" style="width:45%"> </span></div>
+
+        </div>
+
+
+
+    </div></td>
+
+<td width="100px"><div>
+
+
+
+        <div class="time" style="width:"> <strong><span><em>Played on</em>04 Sep, 2007</span></strong> </div>                          
+
+
+        <div style="width:;" class="slide-btns s-clr5 four ">
+
+            <span class="icon setting"></span>
+            <div>
+                <a title="refresh" class="icon refresh s-clr4"><span>Refresh</span></a>
+
+
+
+
+                <a title="preview" class="icon preview s-clr3"><span>Preview</span></a>
+                <a title="edit" class="icon edit  s-clr2"><span>Edit</span></a>
+                <a title="delete" class="icon delete s-clr1"><span>Delete</span></a>
+            </div>
+        </div> <!-- slide-btns two  -->
+
+
+    </div></td>

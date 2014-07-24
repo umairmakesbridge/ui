@@ -47,7 +47,7 @@
             }
             if (id == "merge_field_plugin" || id == "merge-field-editor" || id=="merge-field-hand" || id=="merge-field-plain") {
                 this.template.css({'width': '325px'});
-                this.template.find('input').attr({'style': ''});
+                this.template.find('input').attr({'style': 'width:72%'});
             }
             if (id == "campaign_from_name" || id == "campaign_reply_to") {
                 this.$element.css('width','100%');
@@ -154,14 +154,20 @@
             var $thisCustomFields = this.configs.customFields;
             var $thisLinks = this.configs.links;
             var $thisEmailType = this.configs.emailType;
-            
+            var $isClass = this.options.class;
             var btn = $.getObj(obj, "button");
             $this.find("#merge_list_search").val("");
             
             var ele_offset = btn.offset();
             var ele_width = btn.width();
             var ele_height = btn.height();
-            var top = ele_offset.top + ele_height + 11;
+             var top = '';
+            if($isClass){
+                top = ele_offset.top - ele_height - 211;
+                $this.addClass($isClass);
+            }else{
+                top = ele_offset.top + ele_height + 11;
+            }
             var left = ele_offset.left - $this.width() + ele_width + 14;
             if ($this.css("display") == "block" && parseInt($this.css("top")) == parseInt(top)) {
                 $this.hide();
@@ -403,7 +409,7 @@
         addCallBack: null,
         placeholder_text: '',
         config: {basicFields: true, salesForce: false, customFields: true, links: false, emailType: false},
-        dialog: '<div id="merge-field-plug-wrap" class="dropdown-menu mergefields sort-options custom_popup" style="width:386px;">\
+        dialog: '<div id="merge-field-plug-wrap" class="dropdown-menu mergefields sort-options custom_popup" style="width:390px;">\
             <h2>Merge Fields<div class="input-append search"> <span class="icon list"></span>\
             <input type="text" id="merge_list_search" placeholder="Search merge fields here..." />\
             <a class="close-icon" id="remove-merge-list" style="display:none"></a>\

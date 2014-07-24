@@ -102,6 +102,10 @@ define([
                        if(!($(ev.target).hasClass('percent'))){
                            $(".pstats").remove(); 
                        }
+                       if(!($(ev.target).hasClass('sortoption_expand'))){
+                           $("#autobots_search_menu").hide(); 
+                       }
+                       
                         var container = $(".messages_dialogue");
                         if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
                         && container.has(ev.target).length === 0){ // ... nor a descendant of the  message dialogue

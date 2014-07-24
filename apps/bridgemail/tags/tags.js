@@ -11,7 +11,17 @@ function (template,Mapping,bmsSearch) {
 					curview.$el.find(".col2 .rightcol li").each(function(i) {
 						tags += $(this).find("a:nth-child(1) span").text() + ',';
 					});
-					return tags.substring(0,tags.length-1);
+                                         if(typeof curview.options.type !="undefined" && curview.options.type=="autobots"){
+                                             this.campview.tags = tags.substring(0,tags.length-1);
+                                                this.campview.updateTags();
+                                                if(curview.options.dialog){
+                                                   curview.options.dialog.hide();
+                                                }
+                                                
+                                         }else{
+                                             return tags.substring(0,tags.length-1);
+                                         }
+					
 				},
 				loadTags: function(){
 					var app = this.app;
@@ -35,16 +45,34 @@ function (template,Mapping,bmsSearch) {
 								});
 								curview.$el.find('.leftcol .tagslist ul').children().remove();
 								curview.$el.find('.leftcol .tagslist ul').html(tags_html);
-								campview.$el.find("#area_choose_tags").removeData("mapping");
-								campview.$el.find("#area_choose_tags").mapping({
-										sumColumn: 'a.tag .badge',
-										sumTarget: 'tags_total_recps .badge',
-										template:'',
-										movingElement:'li'
-								});
-								
-								if(campview.states.step3.recipientType.toLowerCase()=="tags")
+                                                                
+								if(typeof campview.states !="undefined" && campview.states.step3.recipientType.toLowerCase()=="tags")
 									campview.setRecipients();
+                                                                    
+                                                                 if(typeof curview.options.type !="undefined" && curview.options.type=="autobots"){
+                                                                     console.log('Testing Ignore this.');
+                                                                    curview.$el.removeData("mapping");
+                                                                    curview.$el.mapping({
+                                                                               sumColumn: 'a.tag .badge',
+                                                                               sumTarget: 'tags_total_recps .badge',
+                                                                               template:'',
+                                                                               movingElement:'li'
+                                                                    });
+                                                                      
+                                                                          var tags = curview.options.tags;
+                                                                          
+                                                                         for(var i=0;i<tags.length;i++) { 
+                                                                            curview.$el.find(".col1 li[checksum='"+tags[i]+"'] .move-row").click();
+                                                                         }
+                                                                   }else{
+                                                                    campview.$el.find("#area_choose_tags").removeData("mapping");
+                                                                    campview.$el.find("#area_choose_tags").mapping({
+                                                                                    sumColumn: 'a.tag .badge',
+                                                                                    sumTarget: 'tags_total_recps .badge',
+                                                                                    template:'',
+                                                                                    movingElement:'li'
+                                                                    });
+                                                                 }
 							}
 						}
 					});
@@ -76,7 +104,11 @@ function (template,Mapping,bmsSearch) {
                 initialize: function () {
 					this.template = _.template(template);				
 					this.render();
-					this.app.showLoading(false,this.campview.$el.find('#area_choose_tags'));
+                                        if(this.options.type == "autobots")
+                                        this.app.showLoading(false,this.campview.$el);
+                                            else
+                                        this.app.showLoading(false,this.campview.$el.find('#area_choose_tags'));        
+					
 					this.loadTags();
                 },
                 render: function () {

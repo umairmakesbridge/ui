@@ -107,6 +107,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog.html'],
                         getBody:function(){
                             return this.$(".modal-body");
                         },
+                        getFooter:function(){
+                            return this.$(".modal-footer");
+                        },
                         saveCallBack:function(save){
                             this.saveCall = save;
                         },

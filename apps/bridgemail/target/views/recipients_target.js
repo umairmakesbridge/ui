@@ -170,7 +170,7 @@ function (template) {
             ,
            showPageViews:function(ev){
                 var that = this;
-                 var dialog_title = "Population of '"+this.model.get("name")+"'";
+                var dialog_title = "Population of '"+this.model.get("name")+"'";
                 var listNum = $(ev.target).data('id');
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
@@ -222,10 +222,16 @@ function (template) {
                 }
             },
             addRowToCol2:function(){
+                var that = this;
                 if(this.showUseButton){
-                    this.$el.fadeOut("fast",_.bind(function(){                        
-                        this.parent.addToCol2(this.model);    
-                        this.$el.hide();
+                    this.$el.fadeOut("fast",_.bind(function(){
+                        if(that.options.type == "autobots"){
+                            that.parent.options.page.addToCol2(this.model);
+                            that.options.dialog.hide();
+                        }else{
+                            this.parent.addToCol2(this.model);    
+                            this.$el.hide();
+                        }
                     },this));
                 }
             },

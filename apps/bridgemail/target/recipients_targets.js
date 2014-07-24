@@ -31,6 +31,16 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.objTargets = new TargetsCollection();
                     this.total = 0;
                     this.offsetLength = 0;
+                    this.showUse = false;
+                    this.type = "";
+                    if(typeof this.options.showUseButton !="undefined"){
+                        this.showUse = this.options.showUseButton;
+                    }
+                    this.dialog = null;
+                    if(typeof this.options.type !="undefined"){
+                        this.type = this.options.type;
+                        this.dialog = this.options.dialog;
+                    } 
                     this.render();
                 },
                 render: function(search) {
@@ -83,9 +93,9 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     if (!fcount) {
                         this.offset = 0;
                         this.total_fetch = 0;
-                        this.$el.find('#targets_grid tbody').empty();                        
-                    }
-                    else {
+
+                        this.$el.find('#targets_grid tbody').empty();
+                    }else {
                         this.offset = this.offset + this.offsetLength;
                     }
                     if (this.request)
@@ -98,16 +108,16 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     }
                     var that = this; // internal access
                     _data['type'] = 'batches';
-                    _data['filterFor'] = 'C';
-                    this.objTargets = new TargetsCollection();
-                    //this.objTargets = new TargetsCollection();
+                    _data['filterFor'] = 'C';                    
+
                     this.$el.find('#targets_grid tbody .load-tr').remove();
                     this.$el.find('#targets_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No targets founds!</div><div class='loading-target' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("&nbsp;", this.$el.find('#targets_grid tbody').find('.loading-target'));
-                        
+                    this.objTargets = new TargetsCollection();
+
                     this.request = this.objTargets.fetch({remove: false,data: _data, success: function(data) {
                             _.each(data.models, function(model) {
-                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that}).el);
+                                that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.type,dialog:that.dialog}).el);
                             });
                             if (that.searchText) {
                                 that.showSearchFilters(that.searchText, that.objTargets.total);
