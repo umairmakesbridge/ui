@@ -1128,8 +1128,7 @@ ul.tabs-btns li.active a{
 }
 .saving span{
     min-width: 25px;
-    padding : 0 15px\0; /* IE 11*/
-    padding : 0 15px\9; /* IE 8 to 10*/
+    padding : 18px 15px\0; /* IE 11*/
 }
 .filterbtn{
     opacity: 0; 
@@ -3181,6 +3180,12 @@ text-align:center;
 .gallery-action-btns a.clr2 { background-color: #1985D0 !important; }
 .gallery-action-btns a.clr1 { background-color: #177FC7 !important; }
 
+    @media screen and (min-width:0\0) {  
+       .saving span{ padding : 18px 15px; }
+    }  
+/*
+-------------- ENDS HERE ----------
+*/
 .videobar{
     cursor: pointer;
 }

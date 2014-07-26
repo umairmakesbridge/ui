@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
-        function(template, moment, chosen) {
+define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','common/tags_row'],
+        function(template, moment, chosen,tagView) {
             'use strict';
             return Backbone.View.extend({
                 tagName: "li",
@@ -32,7 +32,21 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
-                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+
+                    this.$el.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.showTagsTemplate();
+                },
+                showTagsTemplate:function(){
+                 this.tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.options.app,
+                                    parents:this.options.page,
+                                    type:'NT',
+                                   //tagSearchCall:_.bind(this.tagSearch,this),
+                                    rowElement: this.$el,
+                                    tags:this.model.get('tags')});
+                      this.$el.find('.t-scroll').append(this.tmPr.$el);
+                      
                 } ,
                 getStatus: function() {
                     if (this.model.get('status') == "D")
@@ -118,7 +132,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                             label2 = label + label2;
                             label = label + "...";
                         }
-                        return "<span class='icon-b reoccure showtooltip'  style='width:15px;margin-top: 7px;margin-left: 60px;'  data-original-title='" + label2 + "'></span>";
+                        return "<span class='icon-b reoccure showtooltip'  style='width:15px;margin-top: -2px;margin-left: 60px;'  data-original-title='" + label2 + "'></span>";
                     } else {
 
                     }
@@ -405,6 +419,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                 getTags: function() {
                     ///if(typeof this.model.get('actionData')[0].actionTags != "undefined" && this.model.get('actionData')[0].actionTags !="")
                     return  this.model.get('tags').split(",");//this.model.get('actionData')[0].actionTags.split(",");
+
 
                 },
                 autoLoadBotImages:function(){

@@ -98,7 +98,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             }
                             _.each(data.models, function(model) {
                                 that.$el.find("#tblAutobots tbody").append(new Autobot({model: model, app: that.options.app, page: that}).el)
-                                that.$el.find(".thumbnails").append(new AutobotTile({model: model, app: that.options.app, page: that}).el)
+                                var autoBotTiles = new AutobotTile({model: model, app: that.options.app, page: that});
+                                that.$el.find(".thumbnails").append(autoBotTiles.el)
+                                autoBotTiles.tmPr.trimTags();
                             })
                             that.$el.find('.tag').on('click', function() {
                                 var html = $(this).html();
