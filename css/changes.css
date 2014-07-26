@@ -3242,6 +3242,8 @@ text-align:center;
 }
 
 .icon.addnetsuite{
-    background: url("../img/NS_plus.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    background: url("../img/NS_plus-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
-
+.btn-listing{
+    border-radius: 3px !important;
+}

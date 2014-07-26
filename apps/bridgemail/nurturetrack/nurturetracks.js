@@ -502,29 +502,29 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             },
             toggleView:function(e){
                 var obj = $.getObj(e,"button");
-                if(!obj.hasClass("active")){
-                    this.$(".tile-list button").removeClass("active");
-                    if(obj.hasClass("btn-tiles")){
-                        this.$(".btn-tiles").addClass("active");
-                    }
-                    else{
-                        this.$(".btn-listing").addClass("active");
-                    }                    
-                    if(obj.hasClass("btn-listing")){
-                        this.$(".nuture-search-tile").hide();
-                        this.$(".nuture-search,.bms-nurture-search").show();
-                        this.$(".nt_listing").show();
-                        this.$(".tileview").hide();
-                    }
-                    else{
-                        this.$(".nuture-search-tile").show();
-                        this.$(".nuture-search,.bms-nurture-search").hide();
-                        this.$(".nt_listing").hide();
-                        this.$(".tileview").show();
-                    }
-                    this.$(".search-control").val('');
-                    this.$(".search-control").keyup();
+                if(obj.hasClass("btn-tiles")){
+                    this.$(".btn-tiles").hide();
+                    this.$(".btn-listing").show();
                 }
+                else{
+                    this.$(".btn-listing").hide();
+                    this.$(".btn-tiles").show();
+                }                    
+                if(obj.hasClass("btn-listing")){
+                    this.$(".nuture-search-tile").hide();
+                    this.$(".nuture-search,.bms-nurture-search").show();
+                    this.$(".nt_listing").show();
+                    this.$(".tileview").hide();
+                }
+                else{
+                    this.$(".nuture-search-tile").show();
+                    this.$(".nuture-search,.bms-nurture-search").hide();
+                    this.$(".nt_listing").hide();
+                    this.$(".tileview").show();
+                }
+                this.$(".search-control").val('');
+                this.$(".search-control").keyup();
+                
             },
             showStates:function(obj,model,leftMinus){
                 var _ele = $.getObj(obj,"div");
