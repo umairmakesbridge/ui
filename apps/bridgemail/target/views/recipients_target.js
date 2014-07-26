@@ -95,7 +95,16 @@ function (template) {
                 editTarget:function(ev){
                     var target_id = $(ev.target).data('id');
                     var self = this;
-                    
+                    var isEditable = false;
+                    if(this.options.type == "autobots_listing"){
+                        if(this.options.editable == true){
+                            this.previewTarget(target_id); 
+                            return;
+                        }
+                    }else{
+                        isEditable = false;
+                    }
+                    console.log(isEditable);
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
                     var dialog_width = $(document.documentElement).width()-60;
@@ -110,7 +119,7 @@ function (template) {
                         });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
-                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog});
+                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
                            dialog.getBody().html(mPage.$el);
                             //self.app.showLoading(false, mPage.$el.parent());
                             dialog.$el.find('#target_name').focus();
@@ -121,7 +130,16 @@ function (template) {
                        
                 },
                 previewTarget:function(ev){
-                   var target_id = $(ev.target).data('id');
+                      if(this.options.type == "autobots_listing"){
+                        if(this.options.editable == true)
+                            var target_id = ev;
+                        }else{
+                            var target_id = $(ev.target).data('id');
+                        }      
+                   
+                   if(this.options.type == "autobots_listing"){
+                       
+                   }
                     var self = this;
                     var isEditable = true; // Future will be get from server side
                     var t_id = target_id?target_id:"";

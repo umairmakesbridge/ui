@@ -43,6 +43,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.fetchBots();
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
+                    this.autoLoadBotImages();
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 sortByoptions: function(ev) {
@@ -122,13 +123,14 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             }
 
                             that.app.showLoading(false, that.$el);
+                            
                         }})
 
                 },
-                searchAutobots: function(ev) {
+                searchAutobots: function(ev,isTag) {
                     this.searchText = '';
                     this.searchTags = '';
-                    var text = $(ev.target).val();
+                     
                     var that = this;
                     var code = ev.keyCode ? ev.keyCode : ev.which;
                     var nonKey = [17, 40, 38, 37, 39, 16];
@@ -291,5 +293,13 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 scrollToTop: function() {
                     $("html,body").css('height', '100%').animate({scrollTop: 0}, 600).css("height", "");
                 },
+             
+                autoLoadBotImages:function(){
+                 var preLoadArray = ['img/scorebot-h.png','img/alertbot-h.png','img/mailbot-h.png','img/tagbot-h.png','img/bdaybot-h.png']
+                 $(preLoadArray).each(function() {
+                    var image = $('<img />').attr('src', this);                    
+                 });
+                }
+               
             });
         });

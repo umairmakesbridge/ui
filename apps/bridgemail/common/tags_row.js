@@ -104,6 +104,7 @@ function (template,highlighter) {
                 
                   $.each(this.rowElement.find(".t-scroll p a"),_.bind(function(k,val){
                         totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
+                        
                         if(totalTagsWidth > 350){
                           if(isElipsis){
                                var eplisis = $('<i class="ellipsis">...</i><div class="clearfix"></div>');

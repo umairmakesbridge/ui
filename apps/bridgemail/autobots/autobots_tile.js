@@ -33,7 +33,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                },
+                } ,
                 getStatus: function() {
                     if (this.model.get('status') == "D")
                         return "<a class='cstatus pclr1'> Paused </a>";
@@ -87,12 +87,12 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                     if (this.model.get('sentCount') == "0") {
                         str = str + "<li class='sent'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></li>";
                     } else {
-                        str = str + "<li class='sent'><a class='show-sent-views showtooltip' data-original-title='Click to view contacts'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></a></li>";
+                        str = str + "<li class='sent'><a class='showtooltip' data-original-title='Click to view contacts'><strong class='show-sent-views'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></a></li>";
                     }
                     if (this.model.get('pendingCount') == "0") {
                         str = str + "<li class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
                     } else {
-                        str = str + "<li class='pending '><a class='show-pending-views' data-original-title='Click to view contacts'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
+                        str = str + "<li class='pending '><a  data-original-title='Click to view contacts'><strong class='show-pending-views'>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
                     }
                     str = str + "</ul>";
                     str = str + "</div>";
@@ -146,12 +146,13 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                     }else{
                         sentAt = "Scheduled on";
                     } 
+                    var dialog_title = "Population of '"+this.model.get("label")+"'";
                     var dialog = this.options.app.showDialog(
                             {
-                                title: 'Contacts',
+                                title:dialog_title,
                                 css:{"width":"850px","margin-left":"-425px"},
                                 bodyCss:{"min-height":"250px",'max-height':"420px"}, 
-                                headerIcon: 'subscribers',
+                                headerIcon: 'population',
                                 
                             });
                     var botId = this.model.get('botId.encode');
@@ -395,8 +396,8 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                                 break;
                         }
-                        if (that.model.get('status') == "D")
-                            dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        //if (that.model.get('status') == "D")
+                            //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                         that.options.app.showLoading(false, dialog.getBody());
 
                     });
@@ -405,7 +406,13 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                     ///if(typeof this.model.get('actionData')[0].actionTags != "undefined" && this.model.get('actionData')[0].actionTags !="")
                     return  this.model.get('tags').split(",");//this.model.get('actionData')[0].actionTags.split(",");
 
-                }
+                },
+                autoLoadBotImages:function(){
+                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif','img/loader.gif']
+                 $(preLoadArray).each(function() {
+                    var image = $('<img />').attr('src', this);                    
+                 });
+             }
             });
         });
  

@@ -8335,8 +8335,8 @@ div.crms a img {
 .tagslist ul li > .btn-red i {background-color:#D90E0E  !important ;  }
 .tagslist ul li > .btn-red:hover { background:#F71A1A;  }
 .tagslist ul li > .btn-red:hover i {background-color:#D90E0E !important ; }
-
-
+.tagslist ul li > .btn-red span:hover {background-color:#F71A1A !important ; color:#fff; cursor:pointer;}
+ 
 
 .tagslist ul li:hover > .btn-green, .tagslist ul li:hover > .btn-red { opacity:1; }
 

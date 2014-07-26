@@ -13,7 +13,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                 tagName: "div",
                 events: {
                     "click .add-targets": "loadTargets",
-                    "click .add-tag": "chooseTags"
+                    "click .add-tag": "chooseTags",
+                    "change #ddlIsRecur":"changeSetting",
+                    "change #ddlendless":"showRecurInput"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -27,13 +29,18 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
 
                     this.filterNumber = null;
                     if (typeof this.options.model != "undefined") {
-                        this.status = this.options.model.get('status');
+                        this.status = (typeof this.options.model.get('status') == null)?"D":this.options.model.get('status');
                         this.botId = this.options.model.get('botId.encode');
                         this.filterNumber = this.options.model.get('filterNumber.encode');
                     } else {
                         this.botId = this.options.botId;
                         this.status = "D";
                         this.botType = this.options.botType;
+                    }
+                    if(this.status == "D"){
+                        this.editable = false;
+                    }else{
+                        this.editable = true;
                     }
                     this.mainTags = "";
                     this.render();
@@ -44,10 +51,22 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
                     });
+                    var that = this;
                     if (this.options.type == "edit") {
                         this.getTargets();
-                        this.options.model.get('isRecur') == "Y" ? this.$el.find("#chckIsRecur").iCheck('check') : this.$el.find("#chckIsRecur").iCheck('uncheck');
+                        this.$el.find("#ddlIsRecur").val(this.options.model.get('isRecur'));
                         this.$el.find("#ddlRecurType").val(this.options.model.get('recurType'));
+                        this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
+                        if(this.options.model.get('recurPeriod') != "0"){
+                            this.$el.find("#ddlendless").val("1");
+                            this.$el.find(".show-recur-period").css('display','inline-block');
+                        }
+                        if(this.options.model.get('isRecur') != "N"){
+                             this.$el.find("#show_other").show();
+                             this.$el.find("#spnhelptext").hide();
+                        }else{
+                            this.$el.find("#spnhelptext").show();
+                        }
                         this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
                         this.$el.find("#txtRecurTimes").val(this.options.model.get('recurTimes'));
                         this.options.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
@@ -58,10 +77,15 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     }
 
                     this.showTags();
-                    this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');
+                     if (that.status == "D"){
+                        this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');  
+                     }
+                    
+                   
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
-                        if (this.status != "D")
+                        if (that.status != "D"){
                             return false;
+                        }
                         this.showHideTargetTitle(true);
                     }, this));
 
@@ -74,11 +98,30 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             this.showHideTargetTitle();
                         }
                     }, this));
+                    this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
+                    this.$el.find("#txtRecurTimes").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "70px", disable_search: "true"});
                     this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
-                    this.$el.find("#txtRecurTimes").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
+                    this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-
+                    
+                },changeSetting:function(ev){
+                  var selected = $(ev.target).val();
+                  if(selected == "N"){
+                      this.$el.find("#show_other").hide();
+                      this.$el.find("#spnhelptext").show();
+                  }else{
+                      this.$el.find("#show_other").show();
+                      this.$el.find("#spnhelptext").hide();
+                  }
+                },
+                showRecurInput:function(ev){
+                  var selected = $(ev.target).val();
+                  if(selected == "0"){
+                      this.$el.find(".show-recur-period").hide();
+                  }else{
+                      this.$el.find(".show-recur-period").css('display','inline-block');
+                  }
                 },
                 loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',
@@ -89,9 +132,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var dialog = this.options.app.showDialog(dialog_object);
 
                     this.options.app.showLoading("Loading Targets...", dialog.getBody());
-
+                    var that = this;
                     require(["target/recipients_targets"], _.bind(function(page) {
-                        var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "autobots", showUseButton: true});
+                        var targetsPage = new page({page: this, dialog: dialog, editable: that.editable, type: "autobots", showUseButton: true});
                         dialog.getBody().html(targetsPage.$el);
                     }, this));
 
@@ -117,9 +160,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
                     this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
                     if (this.status == "D") {
-                        this.head_action_bar.find(".edit").addClass('play').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
                     } else {
-                        this.head_action_bar.find(".edit").addClass('pause').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
                     }
                     var that = this;
                     if (this.status != "D") {
@@ -152,6 +195,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
+                    if(this.status !="D"){
+                      this.tagDiv.addClass("not-editable");
+                     }
                 },
                 newTags: function(tags) {
                     if (typeof this.options.model != "undefined") {
@@ -173,9 +219,14 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             that.tags = that.tags + checksum + ",";
                         }
                     });
-                    var isRecur = this.$el.find("#chckIsRecur").is(':checked') ? "Y" : "N";
+                     var isRecur = this.$el.find("#ddlIsRecur").val();
                     var recurType = this.$el.find("#ddlRecurType").val();
-                    var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    console.log(this.$el.find("#ddlendless").val());
+                     if(this.$el.find("#ddlendless").val() == "1"){
+                        var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    }else{
+                        var recurPeriod = 0;
+                    }
                     var recurTimes = this.$el.find("#txtRecurTimes").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, actionTags: this.tags};
@@ -191,6 +242,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                         that.options.refer.getAutobotById(that.botId);
                                         that.options.dialog.hide();
                                         if (typeof that.options.botType != "undefined") {
+                                           if(typeof that.options.refer.options.listing !="undefined")
                                             that.options.refer.options.listing.fetchBots();
                                         }
                                     }
@@ -229,15 +281,22 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var that = this;
                     if (this.targetsModel.get('filterNumber.encode')) {
                         this.$el.find("#autobot_targets_grid tbody").children().remove();
-                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model: this.targetsModel, app: that.options.app}).el);
+                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model: this.targetsModel, app: that.options.app,editable:that.editable }).el);
+                        if(that.status != "D"){
+                            if(that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0) 
+                                  that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
+                            else
+                                  that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
+       
+                           that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove(); 
+                        }
                         that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
                             that.targetsModel = null;
                             that.changeTargetText();
                             that.$el.find('#autobot_targets_grid tbody').html('');
                             that.loadTargets();
                         });
-                        if (that.status != "D")
-                            that.disableAllEvents();
+                       
                     }
                     if (save) {
                         this.saveTargets()
@@ -345,12 +404,14 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                 },
                 changeTargetText: function() {
                     if (this.targetsModel) {
-                        $(this.el).find("#hrfchangetarget").html("Change Target");
+                       $(this.el).find("#hrfchangetarget").show();
                         $(this.el).find(".no-target-defined").hide();
                     } else {
                         $(this.el).find(".no-target-defined").show();
                         $(this.el).find("#hrfchangetarget").hide("");
                     }
+                    if(this.status !="D")
+                        $(this.el).find("#hrfchangetarget").hide();
                 },
                 recurTimes: function() {
                     var options = "";

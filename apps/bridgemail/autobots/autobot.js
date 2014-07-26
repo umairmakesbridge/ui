@@ -105,13 +105,14 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         sentAt = "Scheduled on";
                     }
                     var dialog_height = $(document.documentElement).height() - 375;
+                    var dialog_title = "Population of '"+this.model.get("label")+"'";
                     var dialog = this.options.app.showDialog(
                             {
-                                title: 'Contacts',
+                                title: dialog_title,
                                 css:{"width":"850px","margin-left":"-425px"},
                                 bodyCss:{"min-height":"250px",'max-height':"420px"}, 
                                 headerEditable: false,
-                                headerIcon: 'subscribers',
+                                headerIcon: 'population',
                             });
                     var botId = this.model.get('botId.encode');
                     that.options.app.showLoading('Loading Contacts....', dialog.getBody());
@@ -332,8 +333,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                 break;
                         }
                         that.options.app.showLoading(false, dialog.getBody());
-                        if (that.model.get('status') == "D")
-                            dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                       //if (that.model.get('status') == "D")
+                            //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
                 getTags: function() {
