@@ -43,6 +43,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.fetchBots();
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
+                    this.autoLoadBotImages();
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 sortByoptions: function(ev) {
@@ -97,7 +98,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             }
                             _.each(data.models, function(model) {
                                 that.$el.find("#tblAutobots tbody").append(new Autobot({model: model, app: that.options.app, page: that}).el)
-                                that.$el.find(".thumbnails").append(new AutobotTile({model: model, app: that.options.app, page: that}).el)
+                                var autoBotTiles = new AutobotTile({model: model, app: that.options.app, page: that});
+                                that.$el.find(".thumbnails").append(autoBotTiles.el)
+                                autoBotTiles.tmPr.trimTags();
                             })
                             that.$el.find('.tag').on('click', function() {
                                 var html = $(this).html();
@@ -122,6 +125,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             }
 
                             that.app.showLoading(false, that.$el);
+                            
                         }})
 
                 },
@@ -291,5 +295,13 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 scrollToTop: function() {
                     $("html,body").css('height', '100%').animate({scrollTop: 0}, 600).css("height", "");
                 },
+             
+                autoLoadBotImages:function(){
+                 var preLoadArray = ['img/scorebot-h.png','img/alertbot-h.png','img/mailbot-h.png','img/tagbot-h.png','img/bdaybot-h.png']
+                 $(preLoadArray).each(function() {
+                    var image = $('<img />').attr('src', this);                    
+                 });
+                }
+               
             });
         });

@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
-        function(template, moment, chosen) {
+define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','common/tags_row'],
+        function(template, moment, chosen,tagView) {
             'use strict';
             return Backbone.View.extend({
                 tagName: "li",
@@ -32,8 +32,22 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
-                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    
+                    this.$el.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.showTagsTemplate();
                 },
+                showTagsTemplate:function(){
+                 this.tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.options.app,
+                                    parents:this.options.page,
+                                    type:'NT',
+                                   //tagSearchCall:_.bind(this.tagSearch,this),
+                                    rowElement: this.$el,
+                                    tags:this.model.get('tags')});
+                      this.$el.find('.t-scroll').append(this.tmPr.$el);
+                      
+                } ,
                 getStatus: function() {
                     if (this.model.get('status') == "D")
                         return "<a class='cstatus pclr1'> Paused </a>";
@@ -87,12 +101,12 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                     if (this.model.get('sentCount') == "0") {
                         str = str + "<li class='sent'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></li>";
                     } else {
-                        str = str + "<li class='sent'><a class='show-sent-views showtooltip' data-original-title='Click to view contacts'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></a></li>";
+                        str = str + "<li class='sent'><a class='showtooltip' data-original-title='Click to view contacts'><strong class='show-sent-views'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></a></li>";
                     }
                     if (this.model.get('pendingCount') == "0") {
                         str = str + "<li class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
                     } else {
-                        str = str + "<li class='pending '><a class='show-pending-views' data-original-title='Click to view contacts'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
+                        str = str + "<li class='pending '><a  data-original-title='Click to view contacts'><strong class='show-pending-views'>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
                     }
                     str = str + "</ul>";
                     str = str + "</div>";
@@ -118,7 +132,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                             label2 = label + label2;
                             label = label + "...";
                         }
-                        return "<span class='icon-b reoccure showtooltip'  style='width:15px;margin-top: 7px;margin-left: 60px;'  data-original-title='" + label2 + "'></span>";
+                        return "<span class='icon-b reoccure showtooltip'  style='width:15px;margin-top: -2px;margin-left: 60px;'  data-original-title='" + label2 + "'></span>";
                     } else {
 
                     }
@@ -395,17 +409,23 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen'],
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                                 break;
                         }
-                        if (that.model.get('status') == "D")
-                            dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        //if (that.model.get('status') == "D")
+                            //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                         that.options.app.showLoading(false, dialog.getBody());
 
                     });
                 },
-                getTags: function() {
+               /* getTags: function() {
                     ///if(typeof this.model.get('actionData')[0].actionTags != "undefined" && this.model.get('actionData')[0].actionTags !="")
                     return  this.model.get('tags').split(",");//this.model.get('actionData')[0].actionTags.split(",");
 
-                }
+                },*/
+                autoLoadBotImages:function(){
+                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif','img/loader.gif']
+                 $(preLoadArray).each(function() {
+                    var image = $('<img />').attr('src', this);                    
+                 });
+             }
             });
         });
  
