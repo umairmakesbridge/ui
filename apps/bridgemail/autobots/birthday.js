@@ -17,7 +17,9 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     "change #fieldname": "showFields",
                     "mouseover .sumry": 'showButtons',
                     "mouseout .sumry": "hideButtons",
-                    "click .edit-message": "editMessage"
+                    "click .small-edit":"editMessage",
+                    "click #preivew_bot":"previewCampaign",
+                    
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -26,7 +28,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
 
                     this.targetsModelArray = [];
                     if (typeof this.options.model != "undefined") {
-                        this.status = this.options.model.get('status');
+                        this.status = (typeof this.options.model.get('status') == null)?"D":this.options.model.get('status');
                         this.botId = this.options.model.get('botId.encode');
 
                     } else {
@@ -52,6 +54,10 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     }
                     // this.campNum = "BzAEqwsEk20Mr21Ws30BgyStRf"; // this is for test;
                     this.mainTags = "";
+                    if(this.status == "D")
+                         this.editable = false;
+                     else
+                         this.editable = true;
                     this.filterNumber = null;
                     this.render();
                 },
@@ -66,7 +72,9 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         this.loadCampaign();
                     }
                     this.showTags();
-                    this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click to rename").css('cursor', 'pointer');
+                     if (this.status == "D"){
+                        this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');  
+                     }
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
                         if (this.status != "D")
                             return false;
@@ -89,14 +97,41 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
 
                 },
                 checkMailMessages: function() {
-
-
-                    var str = "<a class='btn-blue left edit-message'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
-                    this.$el.find(".sumry .last-row").append("<div class='btns show-btn' style='float: right; display: none; height: 20px;'>" + str + "</div>");
+                     var str = "<a class='btn-blue left edit-message' style='margin-right:10px;'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
+                    str = str + "<a class='btn-gray left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
+                    this.$el.find(".sumry .last-row").append("<div class='btns show-btn' style='float: right;position: absolute;right: 1px;bottom: 5px;'>" + str + "</div>");
+                    var that = this;
+                     this.$el.find(".sumry").find(".preview-message").on('click',function(){
+                        that.previewCampaign();
+                    });
                     var that = this;
                     this.$el.find(".sumry").find(".edit-message").on('click', function() {
                         that.editMessage();
                     });
+                },
+                 previewCampaign: function(e) {
+                    var camp_name = this.options.model.get('label');
+                    var that = this;
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'dlgpreview',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
+                    //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                    var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
+                    require(["common/templatePreview"], _.bind(function(templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.campNum});
+                        dialog.getBody().html(tmPr.$el);
+                        tmPr.init();
+                    }, this));
+//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+//                        dialog.getBody().html(preview_iframe);               
+//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                    e.stopPropagation();
                 },
                 loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',
@@ -137,9 +172,9 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
                     this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
                     if (this.status == "D") {
-                        this.head_action_bar.find(".edit").addClass('play').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
                     } else {
-                        this.head_action_bar.find(".edit").addClass('pause').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
                     }
                     var that = this;
                     if (this.status != "D") {
@@ -172,6 +207,9 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
+                    if(this.status !="D"){
+                      this.tagDiv.addClass("not-editable");
+                     }
                 },
                 newTags: function(tags) {
                     if (typeof this.options.model != "undefined") {
@@ -200,6 +238,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                         that.options.refer.getAutobotById(that.botId);
                                         that.options.dialog.hide();
                                         if (typeof that.options.botType != "undefined") {
+                                          if(typeof that.options.refer.options.listing !="undefined")
                                             that.options.refer.options.listing.fetchBots();
                                         }
                                     }
@@ -393,6 +432,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.$el.find(".add-targets").on('click', function() {
                         return false;
                     });
+                    this.$el.find('.edit-message span').html('View Message');
                     //that.$el.find('#autobot_targets_grid tbody tr td .remove-target');('click',function(){return false;});
                     this.modal = $('.modal');
                     this.modal.find('.modal-header').find("#dialog-title span").on('click', function() {
@@ -436,6 +476,11 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     //   this.app.showAlert('Message doesn\'t not exists',$("body"),{fixed:true});                    
                     //}
                     //else{
+                    var that = this;
+                    if(that.editable == false)
+                         that.editable = true;
+                     else
+                         that.editable = false;
                     var dialog_width = $(document.documentElement).width() - 50;
                     var dialog_height = $(document.documentElement).height() - 162;
                     var dialog_object = {title: this.messageLabel + '<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>' + this.triggerOrder + '</b> </strong>',
@@ -445,11 +490,11 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     };
 
                     dialog_object["buttons"] = {saveBtn: {text: 'Save'}}
-
+                    var that = this;
                     var dialog = this.app.showDialog(dialog_object);
                     this.app.showLoading("Loading Settings...", dialog.getBody());
                     require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
-                        var sPage = new settingPage({page: this, dialog: dialog, editable: true, type: "autobots", campNum: this.campNum});
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: that.editable, type: "autobots", campNum: this.campNum});
                         dialog.getBody().html(sPage.$el);
                         dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
                         sPage.init();
@@ -514,7 +559,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                     if (val[0] != "{{BIRTH_DATE}}")
                                         return true;
                                     // self.basicFields.push(val)
-                                    bas_field_html += '<option value="' + val[0] + '" ' + selected_field + '>' + val[1] + '</option>'
+                                    bas_field_html += '<option value="' + val[0] + '" ' + selected_field + ' selected=selected>' + val[1] + '</option>'
                                 }
                                 else {
                                     // self.customFields.push(val)

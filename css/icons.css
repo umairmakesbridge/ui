@@ -768,6 +768,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.hide {   background: url("../img/hide.png") no-repeat scroll center center ;}
 .icon.preview2 {   background: url("../img/preview2.png") no-repeat scroll center center ;}
 .icon.preview3 {   background: url("../img/preview3.png") no-repeat scroll center center ;}
+.icon.preview24 {   background: url("../img/preview24.png") no-repeat scroll center center ;}
 .icon.mbaction {   background: url("../img/mbaction.png") no-repeat scroll center center ;}
 
 /*.icon.workflow {   background: url("../img/workflow.png") no-repeat scroll center center ;}*/

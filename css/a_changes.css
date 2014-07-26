@@ -2363,19 +2363,17 @@ position:relative;
 }
 
 .sortoption_expand {
-    background: #EAFaFa;
-
-border: 0px solid #EAF4F9;
+background: #fff;
+border: 2px solid #EAF4F9;
 cursor: pointer;
 -webkit-border-radius: 2px 2px;
 -moz-border-radius: 2px 2px;
 border-radius: 2px 2px;
     display: block;
     float: left;
-    line-height: 30px;
+    line-height: 26px;
     padding: 5px 15px;
-    width: 154px; 
-
+    width: 154px;  
 }
 .sortoption_expand .caret { border-top: 4px solid #637F95; margin: 18px 0 0 8px; }
 
@@ -2463,16 +2461,17 @@ ul#template_search_menu_expand li.active a, ul#template_search_menu_expand li a:
 	content: "";
 	display: inline-block;
 	position: absolute;
-	right: -12px;
+	right: -13px;
 	top: 15px;
 }
 .template-filter_expand strong.sort {
 	background-color: #EAF4F9;
 	border-radius: 2px 0 0 2px;
 	color: #637F95;
+        border: 2px solid #EAF4F9;
 	float: inherit;
-	height: 30px;
-	line-height: 30px;
+	height: 26px;
+	line-height: 26px;
 	margin: 0;
 	padding: 5px 10px;
 	position: relative;
@@ -2638,7 +2637,6 @@ top: 14px;
 
 .set-row_col { float:left; margin:0 0 0 20px; color: #6292AD;}
 
-.set-row_col .chosen-container { float:left; margin:-1px 0 0; }
 
 .set-row_col > span { line-height:36px; margin:0 5px;}
 
@@ -3124,9 +3122,7 @@ ul#autobots_search_menu li.active a, ul#autobots_search_menu li a:hover  {   bac
 
 
 .set-row_col { float:left; margin:0 0 0 20px;}
-
-.set-row_col .chosen-container { float:left; margin:-1px 0 0; }
-
+ 
 .set-row_col > span { line-height:36px; margin:0 5px;}
 
 .set-row_col input { margin:0;}

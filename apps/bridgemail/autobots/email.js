@@ -16,7 +16,10 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     "click .add-tag": "chooseTags",
                     "mouseover .sumry":'showButtons',
                     "mouseout .sumry":"hideButtons",
-                    "click .edit-message":"editMessage"
+                     "click .small-edit":"editMessage",
+                     "change #ddlIsRecur":"changeSetting",
+                     "click #preivew_bot":"previewCampaign",
+                    "change #ddlendless":"showRecurInput"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -25,7 +28,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.filterNumber = null;
                     
                     if (typeof this.options.model != "undefined") {
-                        this.status = this.options.model.get('status');
+                        this.status = (typeof this.options.model.get('status') == null)?"D":this.options.model.get('status');
                         this.botId = this.options.model.get('botId.encode');
                         this.filterNumber = this.options.model.get('filterNumber.encode');
                     } else {
@@ -45,7 +48,10 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         this.messageLabel = 'Subject line goes here ...';
                         this.campNum = this.options.model.get('actionData')[0]['campNum.encode'];
                     }
-                    
+                    if(this.status == "D")
+                         this.editable = false;
+                     else
+                         this.editable = true;
                     this.mainTags = "";
                   
                     this.render();
@@ -60,14 +66,29 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     if (this.options.type == "edit") {
                         this.getTargets();
                         this.loadCampaign();
-                        this.options.model.get('isRecur') == "Y" ? this.$el.find("#chckIsRecur").iCheck('check') : this.$el.find("#chckIsRecur").iCheck('uncheck');
+                         this.$el.find("#ddlIsRecur").val(this.options.model.get('isRecur'));
+                        this.$el.find("#ddlRecurType").val(this.options.model.get('recurType'));
+                        this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
+                        if(this.options.model.get('recurPeriod') != "0"){
+                            this.$el.find("#ddlendless").val("1");
+                            this.$el.find(".show-recur-period").css('display','inline-block');
+                        }
+                        if(this.options.model.get('isRecur') != "N"){
+                             this.$el.find("#show_other").show();
+                             this.$el.find("#spnhelptext").hide();
+                        }else{
+                            this.$el.find("#spnhelptext").show();
+                             this.$el.find("#show_other").hide();
+                        }
                         this.$el.find("#ddlRecurType").val(this.options.model.get('recurType'));
                         this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
                         this.$el.find("#txtRecurTimes").val(this.options.model.get('recurTimes'));
                         this.options.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
                     }
                     this.showTags();
-                    this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click to rename").css('cursor', 'pointer');
+                     if (this.status == "D"){
+                        this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');  
+                     }
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
                         if (this.status != "D")
                             return false;
@@ -83,21 +104,70 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             this.showHideTargetTitle();
                         }
                     }, this));
-                    this.$el.find("#txtRecurTimes").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
+                    this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
+                    this.$el.find("#txtRecurTimes").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "70px", disable_search: "true"});
                     this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
+                    this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.checkMailMessages();
 
+                }, changeSetting:function(ev){
+                  var selected = $(ev.target).val();
+                  if(selected == "N"){
+                      this.$el.find("#show_other").hide();
+                      this.$el.find("#spnhelptext").show();
+                  }else{
+                      this.$el.find("#show_other").show();
+                      this.$el.find("#spnhelptext").hide();
+                  }
+                },
+                showRecurInput:function(ev){
+                  var selected = $(ev.target).val();
+                  if(selected == "0"){
+                      this.$el.find(".show-recur-period").hide();
+                  }else{
+                      this.$el.find(".show-recur-period").css('display','inline-block');
+                  }
                 },
                 checkMailMessages:function(){
-                    var str = "<a class='btn-blue left edit-message'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
-                    this.$el.find(".sumry .last-row").append("<div class='btns btn-show' style='float: right; display: none; height: 20px;'>"+str+"</div>");
+                    var str = "<a class='btn-blue left edit-message' style='margin-right:10px;'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
+                    str = str + "<a class='btn-gray left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
+                    this.$el.find(".sumry .last-row").append("<div class='btns btn-show' style='float: right;position: absolute;right: 1px;bottom:  0px;'>"+str+"</div>");
                     var that = this;
+                    this.$el.find(".sumry").find(".preview-message").on('click',function(){
+                        that.previewCampaign();
+                    });
                     this.$el.find(".sumry").find(".edit-message").on('click',function(){
                         that.editMessage();
                     });
+                    
                 },
+                  previewCampaign: function(e) {
+                    var camp_name = this.options.model.get('label');
+                    var that = this;
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'dlgpreview',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
+                    //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                    var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
+                    require(["common/templatePreview"], _.bind(function(templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: this.campNum});
+                        dialog.getBody().html(tmPr.$el);
+                        tmPr.init();
+                    }, this));
+//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
+//                        dialog.getBody().html(preview_iframe);               
+//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                    e.stopPropagation();
+                },
+                
                loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',
                         css: {"width": "1200px", "margin-left": "-600px"},
@@ -134,9 +204,9 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.head_action_bar.find(".pointy").css({'padding-left':'10px','margin-top':'4px'});
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
                    if(this.status == "D"){
-                        this.head_action_bar.find(".edit").addClass('play').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Play").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Play").css('cursor', 'pointer');
                     }else{
-                        this.head_action_bar.find(".edit").addClass('pause').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Pause").css('cursor', 'pointer');
+                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Pause").css('cursor', 'pointer');
                     }   
                     var that = this;
                     if(this.status != "D"){
@@ -169,6 +239,9 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
+                    if(this.status !="D"){
+                      this.tagDiv.addClass("not-editable");
+                     }
                 },
                 newTags: function(tags) {
                     if(typeof this.options.model !="undefined"){
@@ -182,9 +255,13 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                        this.options.refer.pauseAutobot(('dialog',this.botId));
                         return;
                     }
-                    var isRecur = this.$el.find("#chckIsRecur").is(':checked') ? "Y" : "N";
+                    var isRecur = this.$el.find("#ddlIsRecur").val();
                     var recurType = this.$el.find("#ddlRecurType").val();
-                    var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    if(this.$el.find("#ddlendless").val() == "1"){
+                        var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    }else{
+                        var recurPeriod = 0;
+                    }
                     var recurTimes = this.$el.find("#txtRecurTimes").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var post_data = {tags:this.mainTags,botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
@@ -200,6 +277,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                                         that.options.refer.getAutobotById(that.botId);
                                         that.options.dialog.hide();
                                         if(typeof that.options.botType !="undefined"){
+                                            if(typeof that.options.refer.options.listing !="undefined")
                                             that.options.refer.options.listing.fetchBots();
                                          }
                                     }
@@ -238,7 +316,14 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     var that = this;
                      if( this.targetsModel.get('filterNumber.encode')){
                              this.$el.find("#autobot_targets_grid tbody").children().remove();
-                             that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model:this.targetsModel, app: that.options.app}).el);
+                             that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model:this.targetsModel, app: that.options.app,editable:that.editable}).el);
+                             if(that.status != "D"){
+                                if(that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0) 
+                                 that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
+                                else
+                                    that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
+                                that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove(); 
+                             }
                              that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
                                 that.targetsModel = null;
                                 that.changeTargetText();
@@ -320,12 +405,14 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 } ,
                  changeTargetText: function() {
                     if (this.targetsModel) {
-                        $(this.el).find("#hrfchangetarget").html("Change Target");
+                       $(this.el).find("#hrfchangetarget").show();
                         $(this.el).find(".no-target-defined").hide();
                     } else {
                         $(this.el).find(".no-target-defined").show();
                         $(this.el).find("#hrfchangetarget").hide("");
                     }
+                    if(this.status !="D")
+                        $(this.el).find("#hrfchangetarget").hide();
                 },
                  recurTimes: function() {
                     var options = "";
@@ -390,6 +477,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.$el.find(".add-targets").on('click', function() {
                         return false;
                     });
+                    this.$el.find('.edit-message span').html('View Message');
                     //that.$el.find('#autobot_targets_grid tbody tr td .remove-target');('click',function(){return false;});
                     this.modal = $('.modal');
                     this.modal.find('.modal-header').find("#dialog-title span").on('click', function() {
@@ -432,7 +520,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     //if(!this.object[0]['campNum.encode']){
                      //   this.app.showAlert('Message doesn\'t not exists',$("body"),{fixed:true});                    
                     //}
-                    //else{
+                    //else{\
+                    var that = this;
+                      if(that.editable == false)
+                         that.editable = true;
+                     else
+                         that.editable = false;
                     var dialog_width = $(document.documentElement).width()-50;
                     var dialog_height = $(document.documentElement).height()-162;
                     var dialog_object = {title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
@@ -445,8 +538,9 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                    
                     var dialog = this.app.showDialog(dialog_object);                        
                     this.app.showLoading("Loading Settings...",dialog.getBody());
+                    var that = this;
                     require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                        var sPage = new settingPage({page:this,dialog:dialog,editable:true,type:"autobots",campNum:this.campNum});    
+                        var sPage = new settingPage({page:this,dialog:dialog,editable:that.editable,type:"autobots",campNum:this.campNum});    
                         dialog.getBody().html(sPage.$el);
                         dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                         sPage.init();

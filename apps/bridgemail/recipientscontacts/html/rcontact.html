@@ -24,9 +24,9 @@
 
     }else{
     var data = this.model.get('autobotData')[0];
-    var click = data.totalClickCount;
+    var click = (typeof data.totalClickCount !="undefined")?data.totalClickCount:0;
     var open = data.recurCount;
-    var views = data.totalPageViewsCount;
+    var views = (typeof data.totalPageViewsCount !="undefined")?data.totalPageViewsCount:0;
     var openLabel = "Repeat";
     }%>
 

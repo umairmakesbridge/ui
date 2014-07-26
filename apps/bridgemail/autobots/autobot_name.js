@@ -150,7 +150,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveAlertAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
                 //2
@@ -173,7 +173,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveEmailAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
                 //3
@@ -195,7 +195,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                       // dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
                 //4
@@ -217,7 +217,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveScoreAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                       // dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 }, //5
                 openBirthDayAutobot: function() {
@@ -238,7 +238,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
                 deleteAutobot: function(where, id, loc) {

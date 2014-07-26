@@ -26,8 +26,11 @@ function (template) {
                 this.camp_json = this.parent.camp_json;
                 this.editable=this.options.editable;
                 this.plainText = "";
-                this.htmlText = "";                    
-                this.camp_id = this.camp_obj['campNum.encode'];                                        
+                this.htmlText = "";     
+                if(this.options.type !="undefined" && this.options.type == "autobots")
+                     this.camp_id = this.options.campNum;     
+                 else
+                     this.camp_id = this.camp_obj['campNum.encode'];     
                 this.app = this.parent.app;                                                
                 this.render();                    
             },
@@ -59,7 +62,7 @@ function (template) {
                 
             },
             previewCampaign:function(){
-                var camp_id = this.camp_obj['campNum.encode'];                
+                var camp_id = this.camp_id;                
                 //var appMsgs = this.app.messages[0];				
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
@@ -97,7 +100,7 @@ function (template) {
            }
           ,
            loadCallCampaign:function(){
-              var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_obj['campNum.encode']+"&type=basic";
+              var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=basic";
               this.app.showLoading("Loading Campaign...",this.$el);
               jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
                   this.app.showLoading(false,this.$el);  
@@ -141,7 +144,7 @@ function (template) {
                      },this));
                  }
                  else{
-                     var camp_id = this.camp_obj['campNum.encode'];                
+                     var camp_id = this.camp_id;                
                      var dialog_height = $(document.documentElement).height()-182;
                      var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                         require(["common/templatePreview"],_.bind(function(MessagePreview){
