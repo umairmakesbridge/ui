@@ -104,6 +104,9 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    if (this.status != "D"){
+                          this.disableAllEvents();
+                    }
                     
                 },changeSetting:function(ev){
                   var selected = $(ev.target).val();
@@ -221,7 +224,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     });
                      var isRecur = this.$el.find("#ddlIsRecur").val();
                     var recurType = this.$el.find("#ddlRecurType").val();
-                    console.log(this.$el.find("#ddlendless").val());
+                    //console.log(this.$el.find("#ddlendless").val());
                      if(this.$el.find("#ddlendless").val() == "1"){
                         var recurPeriod = this.$el.find("#txtRecurPeriod").val();
                     }else{
@@ -477,6 +480,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         return false;
                     });
                     //that.$el.find('#autobot_targets_grid tbody tr td .remove-target');('click',function(){return false;});
+                    this.$el.find(".addtag").hide();
                     this.modal = $('.modal');
                     this.modal.find('.modal-header').find("#dialog-title span").on('click', function() {
                         return false;

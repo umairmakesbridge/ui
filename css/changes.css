@@ -2518,15 +2518,13 @@ color: #FFFFFF;
 font-size:90%!important;
 display: block;
 font-weight: bold;
-height: 15px;
-right: 10px;
-width: 14px;
+height: 15px; 
 line-height: 13px;
 padding: 2px 8px;
 position: absolute;
-top: 10px;
+top: 5px;
+left:144px;
 }
-
 
 /* ----------- --------------------------     Slide Nav Drop Down ------------------------- ----------- */	
 .slidenav-dd {
@@ -3251,4 +3249,10 @@ text-align:center;
 }
 .btn-listing{
     border-radius: 3px !important;
+}
+.modal .tagsbox {
+    background: none repeat scroll 0 0 #eaf4f9;
+}
+.auto-botthumb{
+    min-width: 242px;
 }

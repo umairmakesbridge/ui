@@ -313,7 +313,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         }
                         var m = new Backbone.Model(autobot);
                         that.model = m;
-                        console.log(that.model);
+                        //console.log(that.model);
                         that.render();
                         if (where == "dialog") {
                             that.dialog.hide();

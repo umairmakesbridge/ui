@@ -217,18 +217,18 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         if(app.checkError(data)){return false;}
-                        if(that.options.newMessages < data[1]){
+                         if(that.options.newMessages < data[1]){
                             $('.messagesbtn').addClass('swing');
-                              $('.messagesbtn sup').css({"top":"-3px",right:"-6px"});
+                              $('.messagesbtn sup').css({"top":"-4px",left:"22px"});
                             setTimeout(function(){
                                  $('.messagesbtn').removeClass('swing');
-                                 $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
+                                 $('.messagesbtn sup').css({"top":"5px",left:"144px"});
                             },5000);
                           
                             
                         }else{
                             $('.messagesbtn').removeClass('swing');
-                            $('.messagesbtn sup').css({"top":"5px",right:"-2px"});
+                            $('.messagesbtn sup').css({"top":"5px",left:"144px"});
                         }
                         that.options.newMessages = data[1];
                         $('.messagesbtn sup').show();

@@ -1,4 +1,4 @@
-define(['text!target/html/target.html', 'bms-filters','bms-tags'],
+define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid','jquery.searchcontrol'],
         function(template, bmsfilters) {
             'use strict';
             return Backbone.View.extend({

@@ -1,4 +1,4 @@
-<div class="thumbnail temp-thumbnail" >
+<div class="thumbnail temp-thumbnail auto-botthumb"  style="overflow:visible">
     <div title="" class="template-type showtooltip"></div>
     <div class="img">
         <%if(this.model.get('actionType') == "E"){
@@ -25,7 +25,7 @@
             <%if(this.model.get('status') == "D"){%>
                <%if(this.model.get('actionType') == "E"){%>
                  <a class="previewbtn clr5" style="width:100%; margin-bottom:1px" data-id="<%=this.model.get('botId.encode')%>">
-                        <span>Preview</span>
+                        <span>Preview message</span>
                   </a>
                     <a class="playbtn clr4" style="<%=width_pause%>"><span>Play</span></a> 
                  <%}else{%>
@@ -37,7 +37,7 @@
                    <a id="" class="deletebtn clr1" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Delete</span></a>
             <%}else{%>
                  <%if(this.model.get('actionType') == "E"){%>
-                      <a class="previewbtn clr3" style="width:100%"><span>Preview</span></a> 
+                      <a class="previewbtn clr3" style="width:100%;margin-bottom: 1px"><span>Preview message</span></a> 
                  <%}%>
                 <a id="" class="pausebtn clr2" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_playing%>"><span>Pause</span></a>
                  <a id="" class="copybtn clr1" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_playing%>"><span>Copy</span></a>

@@ -129,17 +129,16 @@ function (template) {
                       });
                        
                 },
-                previewTarget:function(ev){
+               previewTarget:function(ev){
                       if(this.options.type == "autobots_listing"){
-                        if(this.options.editable == true)
+                        if(this.options.editable == true){
                             var target_id = ev;
                         }else{
                             var target_id = $(ev.target).data('id');
                         }      
-                   
-                   if(this.options.type == "autobots_listing"){
-                       
-                   }
+                      }else{
+                           var target_id = $(ev.target).data('id');
+                      }
                     var self = this;
                     var isEditable = true; // Future will be get from server side
                     var t_id = target_id?target_id:"";

@@ -129,10 +129,10 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         }})
 
                 },
-                searchAutobots: function(ev,isTag) {
+                searchAutobots: function(ev) {
                     this.searchText = '';
                     this.searchTags = '';
-                     
+                    var text = $(ev.target).val();
                     var that = this;
                     var code = ev.keyCode ? ev.keyCode : ev.which;
                     var nonKey = [17, 40, 38, 37, 39, 16];
