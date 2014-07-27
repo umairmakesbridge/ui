@@ -40,7 +40,7 @@
                             <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
                         <%}%>
                     <% } else { %>
-                    <%=views%> 
+                    <%=this.model.get('subscriptionData')[0].pageViewsCount%> 
                     <% } %>
                 </span></strong>
         </div>
