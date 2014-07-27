@@ -217,7 +217,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         botId = id;
                         location = loc;
                     } else {
-                        location = this.$el;
+                        location = $('body');
                         botId = this.model.get('botId.encode');
                     }
                     var tile = this.$el;
@@ -247,7 +247,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                             }
                                         }
                                     });
-                        }, that)},
+                        }, $('body'))},
                     location);
                 },
                 playAutobot: function(where, id) {

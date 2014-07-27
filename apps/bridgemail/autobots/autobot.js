@@ -135,7 +135,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         botId = id;
                         location = loc;
                     } else {
-                        location = this.$el;
+                        location = $('body');
                         botId = this.model.get('botId.encode');
                     }
                     var tile = this.$el;
