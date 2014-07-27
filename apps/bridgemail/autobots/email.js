@@ -319,7 +319,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                              that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model:this.targetsModel, app: that.options.app,editable:that.editable}).el);
                              if(that.status != "D"){
                                 if(that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0) 
-                                 that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
+                                     that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
                                 else
                                     that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
                                 that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove(); 
@@ -489,7 +489,14 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     //btnSave.removeClass('btn-save');
                     btnSave.find('.save').addClass('pause').removeClass('save');
+                    var that = this;
+                    btnSave.on('click',function(){
+                        that.options.refer.getAutobotById('dialog',that.botId);
+                         //that.options.refer.pauseAutobot('dialog',that.botId);
+                    });
                     btnSave.find('span').html("Pause");
+                   
+                     
                 },
                 pauseAutobot: function(close) {
                     var that = this;

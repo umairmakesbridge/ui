@@ -96,28 +96,33 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     }
                 },
                 showPageViews: function(ev) {
-                    var dialog_width = 80;
                     var that = this;
                     var sentAt;
-                    if($(ev.target).hasClass('show-sent-views')){
+                   if($(ev.target).hasClass('show-sent-views')){
                         sentAt = "Sent at";
+                        var status = "C";
+                        var dialog_title = this.model.get("label") + " - Sent Population" ;
                     }else{
+                        var status = "P";
                         sentAt = "Scheduled on";
-                    }
-                    var dialog_height = $(document.documentElement).height() - 375;
-                    var dialog_title = "Population of '"+this.model.get("label")+"'";
-                    var dialog = this.options.app.showDialog(
-                            {
-                                title: dialog_title,
-                                css:{"width":"850px","margin-left":"-425px"},
-                                bodyCss:{"min-height":"250px",'max-height':"420px"}, 
-                                headerEditable: false,
-                                headerIcon: 'population',
-                            });
+                        var dialog_title = this.model.get("label") + " - Pending Population" ;
+                    } 
+                    
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = that.options.app.showDialog({
+                                title:dialog_title,
+                                css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                headerEditable:false,
+                                headerIcon : 'population',
+                                wrapDiv : 'rcontacts-view',
+                                bodyCss:{"min-height":dialog_height+"px"},
+                                //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                      });  
                     var botId = this.model.get('botId.encode');
                     that.options.app.showLoading('Loading Contacts....', dialog.getBody());
                     require(["recipientscontacts/rcontacts"], function(Contacts) {
-                        var objContacts = new Contacts({sentAt:sentAt,app: that.options.app, botId: botId, type: 'autobots'});
+                        var objContacts = new Contacts({sentAt:sentAt,app: that.options.app,status:status, botId: botId, type: 'autobots',dialogHeight:dialog_height});
                         dialog.getBody().html(objContacts.$el);
                         that.options.app.showLoading(false, dialog.getBody());
 

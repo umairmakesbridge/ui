@@ -15,8 +15,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     "click .percent": "showPercentage",
                     "mouseover .thumbnail": "showImageH",
                     "mouseout .thumbnail": "hideImageH",
-                    'click .show-sent-views': 'showPageViews',
-                    'click .show-pending-views': 'showPageViews',
+                 
                     "click .deletebtn": "deleteAutobot",
                     "click .playbtn": "playAutobot",
                     "click .pausebtn": "pauseAutobot",
@@ -101,16 +100,24 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     if (this.model.get('sentCount') == "0") {
                         str = str + "<li class='sent'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></li>";
                     } else {
-                        str = str + "<li class='sent'><a class='showtooltip' data-original-title='Click to view contacts'><strong class='show-sent-views'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></a></li>";
+                        str = str + "<li class='sent  '><a class='showtooltip show-sent' data-original-title='Click to view contacts'><strong >" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span >Sent</span></a></li>";
                     }
                     if (this.model.get('pendingCount') == "0") {
-                        str = str + "<li class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
+                        str = str + "<li  class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
                     } else {
-                        str = str + "<li class='pending '><a  data-original-title='Click to view contacts'><strong class='show-pending-views'>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
+                        str = str + "<li class='pending'><a class='showtooltip  show-pending'  data-original-title='Click to view contacts'><strong  >" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
                     }
                     str = str + "</ul>";
                     str = str + "</div>";
+                    str = $(str);
+                    var that = this;
                     $(ev.target).parents(".percent_stats").append(str);
+                    this.current_ws.find(".pstats ul a.show-pending").on('click',function (e) {
+                        that.showPendingPopulation();
+                    });
+                    this.current_ws.find(".pstats ul a.show-sent").on('click',function (e) {
+                        that.showSentPopulation();
+                    });
                 },
                 isRecurring: function() {
                     if (this.model.get('isRecur') == "Y") {
@@ -150,34 +157,59 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     var _date = moment(sentDate, 'MM-DD-YY');
                     return _date.format("DD MMM YYYY");
                 },
-                showPageViews: function(ev) {
-                    var dialog_width = 80;
+                showSentPopulation: function(ev) {
                     var that = this;
-                     
-                    var sentAt;
-                    if($(ev.target).hasClass('show-sent-views')){
-                        sentAt = "Sent at";
-                    }else{
-                        sentAt = "Scheduled on";
-                    } 
-                    var dialog_title = "Population of '"+this.model.get("label")+"'";
-                    var dialog = this.options.app.showDialog(
-                            {
+                    var sentAt = "Sent at";
+                        var status = "C";
+                        var dialog_title = this.model.get("label") + " - Sent Population" ;
+                        var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = that.options.app.showDialog({
                                 title:dialog_title,
-                                css:{"width":"850px","margin-left":"-425px"},
-                                bodyCss:{"min-height":"250px",'max-height':"420px"}, 
-                                headerIcon: 'population',
-                                
-                            });
+                                css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                headerEditable:false,
+                                headerIcon : 'population',
+                                wrapDiv : 'rcontacts-view',
+                                bodyCss:{"min-height":dialog_height+"px"},
+                                //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                      });     
+
                     var botId = this.model.get('botId.encode');
                     that.options.app.showLoading('Loading Contacts....', dialog.getBody());
                     require(["recipientscontacts/rcontacts"], function(Contacts) {
-                        var objContacts = new Contacts({sentAt:sentAt,app: that.options.app, botId: botId, type: 'autobots'});
+                        var objContacts = new Contacts({sentAt:sentAt,status:status,app: that.options.app, botId: botId, type: 'autobots',dialogHeight:dialog_height});
                         dialog.getBody().html(objContacts.$el);
                         that.options.app.showLoading(false, dialog.getBody());
 
                     });
                 },
+                showPendingPopulation:function(){
+                    var that = this;
+                      var status = "P";
+                        var sentAt = "Scheduled on";
+                        var dialog_title = this.model.get("label") + " - Pending Population" ;
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = that.options.app.showDialog({
+                                title:dialog_title,
+                                css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                headerEditable:false,
+                                headerIcon : 'population',
+                                wrapDiv : 'rcontacts-view',
+                                bodyCss:{"min-height":dialog_height+"px"},
+                                //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                      });     
+
+                    var botId = this.model.get('botId.encode');
+                    that.options.app.showLoading('Loading Contacts....', dialog.getBody());
+                    require(["recipientscontacts/rcontacts"], function(Contacts) {
+                        var objContacts = new Contacts({sentAt:sentAt,status:status,app: that.options.app, botId: botId, type: 'autobots',dialogHeight:dialog_height});
+                        dialog.getBody().html(objContacts.$el);
+                        that.options.app.showLoading(false, dialog.getBody());
+
+                    });  
+                } ,
+               
                 deleteAutobot: function(where, id, loc) {
                     var that = this;
                     var botId, location;

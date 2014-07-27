@@ -69,6 +69,7 @@ function (template,rContact,rContacts) {
                 }else if(this.options.type=="autobots"){
                     this.objRContacts.url =    '/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK=' + this.options.app.get('bms_token');
                     _data['botId'] = this.options.botId;
+                     _data['status'] = this.options.status;
                 }else{
                     _data['listNum'] = this.listNum;
                     _data['status'] = this.status;

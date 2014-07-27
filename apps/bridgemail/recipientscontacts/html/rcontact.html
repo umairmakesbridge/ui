@@ -14,32 +14,20 @@
         </div>
     </div>
 </td>
+<%if(this.options.type != "autobots"){ %>
 <td width="90px">
-    <%if(this.options.type != "autobots"){ 
-    var data = this.model.get('subscriptionData')[0]
-    var click = data.clickCount;
-    var open = data.openCount;
-    var openLabel = "Opens";
-    var views = data.pageViewsCount;
-
-    }else{
-    var data = this.model.get('autobotData')[0];
-    var click = (typeof data.totalClickCount !="undefined")?data.totalClickCount:0;
-    var open = data.recurCount;
-    var views = (typeof data.totalPageViewsCount !="undefined")?data.totalPageViewsCount:0;
-    var openLabel = "Repeat";
-    }%>
-
+    
+     
     <div>
         <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
-            <strong><span><em><%=openLabel%></em><%=this.options.app.addCommas(open)%></span></strong>
+            <strong><span><em>Opens</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].openCount)%></span></strong>
         </div>
     </div>
 </td>
 <td width="90px">
     <div>
         <div class="colico click showtooltip" data-original-title="Unique campaign links clicked count">
-            <strong><span><em>Clicks</em><%=this.options.app.addCommas(click)%></span></strong>
+            <strong><span><em>Clicks</em><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].clickCount)%></span></strong>
         </div>
     </div>
 </td>
@@ -47,13 +35,10 @@
     <div>
         <div class="colico pgview">
             <strong><span><em>Page Views</em>
-                    <% if(views !="0") { %>
-                    <%if(this.options.type != "autobots"){ %>
-                    <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
-                        <% } else { %>
-                    <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('autobotData')[0].totalPageViewsCount)%></b></a>
-                    <% } %>
-
+                    <% if(this.model.get('subscriptionData')[0].pageViewsCount !="0") { %>
+                        <%if(this.options.type != "autobots"){ %>
+                            <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
+                        <%}%>
                     <% } else { %>
                     <%=views%> 
                     <% } %>
@@ -61,15 +46,26 @@
         </div>
     </div>
 </td>
+<%}else{ var data = this.model.get('autobotData')[0];%>
+  <td width="90px">
+    <div>
+        <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
+            <strong><span><em>Repeat</em><%=this.options.app.addCommas(data.recurCount)%></span></strong>
+        </div>
+    </div>
+</td>
+   
+<%}%>
+
 <% if(this.options.type != "tag") { %>
 <% if(this.options.type != "target") { %>
 <td width="132px">
     <div>
         <div style="width:105px" class="time show">
-            <%if(this.options.type != "autobots"){%>
-            <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
+            <%if(this.options.type == "autobots"){%>
+                  <strong><span><em><%=this.options.sentAt%></em><%=this.getFullDate(data.execDate)%></span></strong>
             <%}else{%>
-            <strong><span><em><%=this.options.sentAt%></em><%=this.dateSetting(data.execDate,"/")%></span></strong> 
+                  <strong><span><em>Subscribed on</em><%=this.dateSetting(this.model.get('creationDate'),"-")%></span></strong> 
             <%}%>
         </div>
     </div>

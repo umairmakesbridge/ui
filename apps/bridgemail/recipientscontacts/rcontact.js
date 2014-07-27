@@ -72,6 +72,18 @@ function (template) {
                     var _date =  moment(sentDate,'YYYY-MM-DD');
                 
                 return _date.format("DD MMM YYYY");
+             },
+             getFullDate:function(date){
+                  var date = moment(this.options.app.decodeHTML(date),'MM/DD/YYYY H:m');														
+				var dateFormat = date.format("DD MMM, YYYY");
+                                        if(this.options.sentAt == 'Scheduled on'){
+                                            dateFormat = date.format("DD MMM, YYYY<br/> hh:mm A");
+                                        }else{
+                                            dateFormat = date.format("DD MMM, YYYY");
+                                        }
+                                        
+                 return dateFormat;
              }
+             
         });    
 });
