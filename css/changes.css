@@ -332,7 +332,7 @@ div.tags-div:before {
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
      -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
           box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-   z-index: 1001;
+   z-index: 1003;
 }
 .tagbox input {
     color: #000000;
