@@ -459,6 +459,11 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     //btnSave.removeClass('btn-save');
                     btnSave.find('.save').addClass('pause').removeClass('save');
+                    var that = this;
+                    btnSave.on('click',function(){
+                        that.options.refer.getAutobotById('dialog',that.botId);
+                         //that.options.refer.pauseAutobot('dialog',that.botId);
+                    });
                     btnSave.find('span').html("Pause");
                 },
                 pauseAutobot: function(close) {

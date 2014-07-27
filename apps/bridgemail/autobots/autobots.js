@@ -11,6 +11,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
             return Backbone.View.extend({
                 events: {
                     "click .sortoption_expand": "toggleSortOption",
+                    "click .sortoption_expand .spntext": "toggleSortOption",
                     "click .tile-list .view-tiles": "showTiles",
                     "click .scrollautobots": "scrollToTop",
                     "click .tile-list .view-listing": "showListing",
@@ -34,6 +35,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.offsetLength = 0;
                     this.actionType = "";
                     this.sortText = "";
+                    this.topClickEvent = false;
                     this.request = null;
                     this.app = app;
                     this.render();
@@ -49,6 +51,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 sortByoptions: function(ev) {
                     this.actionType = "";
                     this.sort = "";
+                    this.topClickEvent = false;
                     var sort = $(ev.target).data('text');
                     $(this.el).find("#autobots_search_menu li").removeClass('active');
                     $(ev.target).parents('li').addClass('active');
@@ -114,19 +117,22 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             if (that.total_fetch < parseInt(that.objAutobots.total)) {
                                 that.$el.find("#tblAutobots tbody tr:last").attr("data-load", "true");
                                 that.$el.find(".thumbnails li:last").attr("data-load", "true");
+                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='img/loading.gif'></div></td>");
+                                 
                             }
-                            if (!offset) {
-                                if (that.searchText == "" && that.sortBy == "") {
-                                    that.topCounts();
-                                }
-                                that.updateCount();
-                            } else {
-                                that.$el.find(".footer-loading").hide();
-                            }
-
                             that.app.showLoading(false, that.$el);
                             
+                                if (!offset) {
+                                    if (that.searchText == "" && that.sortBy == "") {
+                                     that.topCounts();
+                                    }
+                                     that.updateCount();
+                                  } else {
+                                     that.$el.find("#tblAutobots tbody").find('#tr_loading').remove();
+                                     that.$el.find(".footer-loading").hide();
+                                }
                         }})
+                    
 
                 },
                 searchAutobots: function(ev) {
@@ -186,6 +192,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.sortText = $.trim(this.sortText);
                         if (this.sortText != "All") {
                             $(this.el).find('#total_autobots').find('.sort-text').html(this.sortText);
+                            $(this.el).find(".sortoption_expand").find('.spntext').html(this.sortText);
+                            if(this.topClickEvent){
+                                 $(this.el).find("#autobots_search_menu").find('li').removeClass('active');
+                                    if(this.sortText == "Playing")
+                                        $(this.el).find("#autobots_search_menu").find('#li_playing').addClass('active');
+                                    else
+                                         $(this.el).find("#autobots_search_menu").find('#li_paused').addClass('active');
+
+                            }
                         } else {
                             $(this.el).find('#total_autobots').find('.sort-text').html('');
                         }
@@ -208,24 +223,25 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.ws_header.find("#addnew_action").attr('data-original-title', "Add new autobot");
                     this.ws_header.find("#addnew_action").on('click', function() {
                         that.addNewAutobot();
-                    })
+                    }) 
+                    var progress  = $("<ul class='c-current-status' id='top_count'><li style='margin-left:5px;'><a><img src='img/greenloader.gif'></a></li></ul>");
+                    that.ws_header.append(progress);
                     var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
-                        var header_part = "<ul class='c-current-status'>";
-                        header_part = header_part + "<li> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
+                        var header_part = "<li> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
                         header_part = header_part + "<li> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
                         header_part = header_part + "<li> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
-                        header_part = header_part + "</ul>";
                         var $header_part = $(header_part);
-                        that.ws_header.append($header_part);
+                        that.ws_header.find(".c-current-status").html($header_part);
                         that.ws_header.find(".c-current-status li a").on('click', function(ev) {
                             if ($(this).text().split(" ")[0] == "0")
                                 return;
                             that.sortBy = $(this).data('text');
                             that.sortText = $(this).text().split(" ")[1];
+                            that.topClickEvent = true;
                             that.fetchBots();
-
+                             
                         })
                         if (isDelete) {
                             that.objAutobots.total = that.objAutobots.total - 1;
@@ -269,7 +285,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     if (this.isTiles == true) {
                         var filters = this.$el.find('.thumbnails li:last');
                     } else {
-                        var filters = this.$el.find('table tbody tr:last');
+                        var filters = this.$el.find('table tbody tr:last').prev();
                     }
                     var inview = filters.filter(function() {
                         var $e = $(this),

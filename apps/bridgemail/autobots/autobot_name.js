@@ -49,9 +49,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                             message: "Autobot Name can not be empty!"
                         });
                           if (that.msieversion()){ //test for MSIE x.x;
-                                      $(that.el).find('.errortext').css({'right': '6px', 'top': ' -22px'});
+                                      $(that.el).find('.errortext').css({'right': '6px'});
                                     }else{
-                                        $(that.el).find('.errortext').css({'right': '4px', 'top': ' -22px'});
+                                        $(that.el).find('.errortext').css({'right': '5px'});
                                     }
                         $(this.el).find('#txtAutobotName').focus();
                         return;
@@ -118,9 +118,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                                         message: _json[1]
                                     });
                                     if (that.msieversion()){ //test for MSIE x.x;
-                                      $(that.el).find('.errortext').css({'right': '6px', 'top': ' -22px'});
+                                      $(that.el).find('.errortext').css({'right': '6px'});
                                     }else{
-                                        $(that.el).find('.errortext').css({'right': '4px', 'top': ' -22px'});
+                                        $(that.el).find('.errortext').css({'right': '5px'});
                                     }
                                     
                                     $(that.el).find('#txtAutobotName').focus();
