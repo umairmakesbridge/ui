@@ -42,6 +42,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                     app:this.options.app,
                                     parents:this.options.page,
                                     type:'NT',
+                                    helpText : 'Autobots',
                                    //tagSearchCall:_.bind(this.tagSearch,this),
                                     rowElement: this.$el,
                                     tags:this.model.get('tags')});

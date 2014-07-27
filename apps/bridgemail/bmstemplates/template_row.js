@@ -107,6 +107,7 @@ function (template,highlighter,tagView) {
                                     app:this.app,
                                     parents:this.parent,
                                     rowElement: this.$el,
+                                    helpText : 'Templates',
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
                       

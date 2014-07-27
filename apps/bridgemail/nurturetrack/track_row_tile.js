@@ -70,6 +70,7 @@ function (template,moment,highlighter,tagView) {
                                     type:'NT',
                                     tagSearchCall:_.bind(this.tagSearch,this),
                                     rowElement: this.$el,
+                                    helpText : 'Tracks',
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
                 },
