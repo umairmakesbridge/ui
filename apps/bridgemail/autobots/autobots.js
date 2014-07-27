@@ -51,6 +51,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 sortByoptions: function(ev) {
                     this.actionType = "";
                     this.sort = "";
+                    this.topClickEvent = false;
                     var sort = $(ev.target).data('text');
                     $(this.el).find("#autobots_search_menu li").removeClass('active');
                     $(ev.target).parents('li').addClass('active');
