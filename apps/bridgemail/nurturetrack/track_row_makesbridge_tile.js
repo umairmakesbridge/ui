@@ -56,6 +56,7 @@ function (template,highlighter,tagView) {
                                     parents:this.parent,
                                     rowElement: this.$el,
                                     type:'NT',
+                                    helpText : 'Tracks',
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
                 },
