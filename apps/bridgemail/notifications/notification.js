@@ -49,13 +49,13 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                       switch (this.model.get('eventType')) {
                         case "CMP_C":
                             
-                            img = "img/campaign-"+colorName+".png";
+                            img = this.options.app.get("path")+"img/campaign-"+colorName+".png";
                             break;
                         case "TG_PCT":
-                             img = "img/target-"+colorName+".png";
+                             img = this.options.app.get("path")+"img/target-"+colorName+".png";
                             break;
                         case "CSV":
-                             img = "img/csvicon-"+colorName+".png";
+                             img = this.options.app.get("path")+"img/csvicon-"+colorName+".png";
                             break;
                     }
                     var label = "<img class='msgicon' src='"+img+"'>"

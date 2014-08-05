@@ -60,28 +60,30 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
-                            label = "<img class='img-replaced' src='img/scorebot.png'>";
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/scorebot.png'>";
                             break;
                         case "A":
-                            label = "<img class='img-replaced' src='img/alertbot.png'>";
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/alertbot.png'>";
                             break;
                         case "E":
-                            label = "<img class='img-replaced' src='img/mailbot.png'>";
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/mailbot.png'>";
                             break;
                         case "TG":
-                            label = "<img class='img-replaced' src='img/tagbot.png'>";
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/tagbot.png'>";
                             break;
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
-                        label = "<img class='img-replaced' src='img/bdaybot.png'>"
+                        label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>"
 
                     return label;//+"botType" + this.model.get('actionType');
                 },
                 showImageH: function(ev) {
                     var src = this.$el.find('.img-replaced').attr('src');
                     if (typeof src != "undefined") {
-                        src = src.replace(".", "-h.");
-                        this.$el.find('.img-replaced').attr('src', src);
+                        if(src.indexOf("-h.") === -1){
+                            src = src.replace(".", "-h.");
+                            this.$el.find('.img-replaced').attr('src', src);
+                        }
                     }
 
                 },
@@ -187,7 +189,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                 showPendingPopulation:function(){
                     var that = this;
                       var status = "P";
-                        var sentAt = "Scheduled on";
+                        var sentAt = "Scheduled for";
                         var dialog_title = this.model.get("label") + " - Pending Population" ;
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
@@ -457,7 +459,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
 
                 },
                 autoLoadBotImages:function(){
-                 var preLoadArray = ['img/trans_gray.png','img/recurring.gif','img/loading.gif','img/spinner-medium.gif','img/greenloader.gif','img/loader.gif']
+                 var preLoadArray = [this.options.app.get("path")+'img/trans_gray.png',this.options.app.get("path")+'img/recurring.gif',this.options.app.get("path")+'img/loading.gif',this.options.app.get("path")+'img/spinner-medium.gif',this.options.app.get("path")+'img/greenloader.gif',this.options.app.get("path")+'img/loader.gif']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });

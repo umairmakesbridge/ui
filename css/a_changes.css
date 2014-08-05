@@ -613,7 +613,8 @@ ul.chartstatdetail li.active { background:#97D61D;}
     background: url("../img/scoreicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.duration > strong {
     background: url("../img/durationicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
-
+.bmsgrid .colico.recur > strong {
+    background: url("../img/b-reoccure.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 
 
 

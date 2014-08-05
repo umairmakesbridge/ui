@@ -47,12 +47,12 @@
     </div>
 </td>
 <%}else{ var data = this.model.get('autobotData')[0];%>
-  <td width="90px">
-    <div>
-        <div class="colico open showtooltip" data-original-title="Unique campaigns open count">
-            <strong><span><em>Repeat</em><%=this.options.app.addCommas(data.recurCount)%></span></strong>
+  <td width="120px">
+     
+        <div class="colico   recur showtooltip " data-original-title="How many time action repeated">
+            <strong><span><em>Match</em><%=this.options.app.addCommas(data.recurCount)%> times</span></strong> 
         </div>
-    </div>
+     
 </td>
    
 <%}%>

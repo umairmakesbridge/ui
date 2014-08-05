@@ -121,7 +121,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             if (that.total_fetch < parseInt(that.objAutobots.total)) {
                                 that.$el.find("#tblAutobots tbody tr:last").attr("data-load", "true");
                                 that.$el.find(".thumbnails li:last").attr("data-load", "true");
-                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='img/loading.gif'></div></td>");
+                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='"+that.options.app.get("path")+"img/loading.gif'></div></td>");
                                  
                             }
                             that.app.showLoading(false, that.$el);
@@ -228,7 +228,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.ws_header.find("#addnew_action").on('click', function() {
                         that.addNewAutobot();
                     }) 
-                    var progress  = $("<ul class='c-current-status' id='top_count'><li style='margin-left:5px;'><a><img src='img/greenloader.gif'></a></li></ul>");
+                    var progress  = $("<ul class='c-current-status' id='top_count'><li style='margin-left:5px;'><a><img src='"+this.options.app.get("path")+"img/greenloader.gif'></a></li></ul>");
                     that.ws_header.append(progress);
                     var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
@@ -317,7 +317,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
              
                 autoLoadBotImages:function(){
-                 var preLoadArray = ['img/scorebot-h.png','img/alertbot-h.png','img/mailbot-h.png','img/tagbot-h.png','img/bdaybot-h.png']
+                 var preLoadArray = [this.options.app.get("path")+'img/scorebot-h.png',this.options.app.get("path")+'img/alertbot-h.png',this.options.app.get("path")+'img/mailbot-h.png',this.options.app.get("path")+'img/tagbot-h.png',this.options.app.get("path")+'img/bdaybot-h.png']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });

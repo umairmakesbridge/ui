@@ -201,7 +201,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     return list;
                 },
                 preview: function() {
-                    var img = "<img src=" + this.model.get("originalURL") + "/>"
+                    var img = "<img src="+this.model.get("originalURL") + "/>"
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 162;
@@ -221,7 +221,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     dialog.$el.find('.pointy').remove();
                     dialog.$el.find("camp_header .icon").css("margin", "0px");
                     dialog.$el.find('.dialog-title').addClass('images-preview');
-                    var img = "<img id='img1' src='" + this.model.get("originalURL") + "'>";
+                    var img = "<img id='img1' src= '"+this.model.get("originalURL") + "'>";
                     dialog.getBody().html(img);
                     this.showLoadingWheel(true, dialog.$el.find(".images-preview"));
                     $('#img1').load(function() {

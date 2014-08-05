@@ -11,14 +11,14 @@
 
                 <ul id="autobots_search_menu" class="breadcrumb template_search_menu" style="display: none;">
                     <li text-info=" " title="" class=" showtooltip active" data-text="all"><a search="recent" tabindex="-1" data-text="all" >   All </a></li>
-                    <li text-info=" " title="" class=" showtooltip"><a search="recent" tabindex="-1" data-text="E"><i class="icon "><img src="img/mailbot-icon.png" data-text="E" alt=""></i> Email</a></li>
-                    <li text-info=" " title="" class=" showtooltip"><a data-text="A" search="recent" tabindex="-1"><i class="icon "><img data-text="A" alt="" src="img/alertbot-icon.png"></i> Alert</a></li>
-                    <li text-info=" " title="" class=" showtooltip"><a data-text="TG" search="recent" tabindex="-1"><i class="icon "><img data-text="TG" alt="" src="img/tagbot-icon.png"></i> Tag</a></li>
-                    <li text-info=" " title="" class=" showtooltip"><a data-text="SC" search="recent" tabindex="-1"><i class="icon "><img data-text="SC" alt="" src="img/scorebot-icon.png"></i> Score</a></li>
-                    <li text-info=" " title="" class=" showtooltip"><a data-text="E" search="recent" tabindex="-1"><i class="icon "><img data-text="E" alt="" src="img/bdaybot-icon.png"></i> Birthday</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a search="recent" tabindex="-1" data-text="E"><i class="icon "><img src="<%=this.options.app.get('path')%>img/mailbot-icon.png" data-text="E" alt=""></i> Email</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="A" search="recent" tabindex="-1"><i class="icon "><img data-text="A" alt="" src="<%=this.options.app.get('path')%>img/alertbot-icon.png"></i> Alert</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="TG" search="recent" tabindex="-1"><i class="icon "><img data-text="TG" alt="" src="<%=this.options.app.get('path')%>img/tagbot-icon.png"></i> Tag</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="SC" search="recent" tabindex="-1"><i class="icon "><img data-text="SC" alt="" src="<%=this.options.app.get('path')%>img/scorebot-icon.png"></i> Score</a></li>
+                    <li text-info=" " title="" class=" showtooltip"><a data-text="E" search="recent" tabindex="-1"><i class="icon "><img data-text="E" alt="" src="<%=this.options.app.get('path')%>img/bdaybot-icon.png"></i> Birthday</a></li>
  
-                    <li id="li_playing" text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="R"><i class="icon  "><img alt="" src="img/play-g.png" data-text="R"></i>Playing</a></li>
-                    <li id='li_paused' text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="D"><i class="icon "><img alt="" data-text="D" src="img/pause-g.png"></i>Paused</a></li>
+                    <li id="li_playing" text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="R"><i class="icon  "><img alt="" src="<%=this.options.app.get('path')%>img/play-g.png" data-text="R"></i>Playing</a></li>
+                    <li id='li_paused' text-info=" " title="" class=" showtooltip"><a search="recent" class="" tabindex="-1" data-text="D"><i class="icon "><img alt="" data-text="D" src="<%=this.options.app.get('path')%>img/pause-g.png"></i>Paused</a></li>
                 </ul>
             </div>
 
@@ -37,7 +37,7 @@
             </ul> 
             <div class="footer-loading" style="display:none">
                 <hr>
-                <div class="gridLoading" ><img src="img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
+                <div class="gridLoading" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
                     </table>
                     <div class="footer-loading" style="display:none">
                         <hr>
-                        <div class="gridLoading" ><img src="img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
+                        <div class="gridLoading" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
                     </div>
                 </div>
             </div>

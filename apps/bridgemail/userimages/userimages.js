@@ -423,7 +423,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                var li = "<li class='span3 upload'>"
                             +"<div class='thumbnail browse graphics'>"
                                +"<div class='drag'>"
-                                   +"<div class='droppanel'><h4><img src='img/droparrow.png'><br class='clearfix'>Drag images here to upload</h4></div>"
+                                   +"<div class='droppanel'><h4><img src='"+this.options.app.get("path")+"img/droparrow.png'><br class='clearfix'>Drag images here to upload</h4></div>"
                                    +"<div class='SI-FILES-STYLIZED' style='display:inline-block;position:relative;'>"
                                    +"<label style='width:154px;' class='cabinet'>"
                                    +"<input id='file_control' name='file' class='file' type='file'>"

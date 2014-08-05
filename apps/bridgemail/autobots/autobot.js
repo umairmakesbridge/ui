@@ -44,20 +44,20 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
-                            label = "<img src='img/scorebot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/scorebot-icon.png'>";
                             break;
                         case "A":
-                            label = "<img src='img/alertbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/alertbot-icon.png'>";
                             break;
                         case "E":
-                            label = "<img src='img/mailbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/mailbot-icon.png'>";
                             break;
                         case "TG":
-                            label = "<img src='img/tagbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png'>";
                             break;
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
-                        label = "<img src='img/bdaybot-icon.png'>"
+                        label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png'>"
                     return label;
                 },
                 getPlayedOn: function() {
@@ -104,7 +104,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         var dialog_title = this.model.get("label") + " - Sent Population" ;
                     }else{
                         var status = "P";
-                        sentAt = "Scheduled on";
+                        sentAt = "Scheduled for";
                         var dialog_title = this.model.get("label") + " - Pending Population" ;
                     } 
                     
@@ -315,6 +315,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         buttons: {saveBtn: {text: 'Save'}},
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
+                    this.dialog = dialog;
                     that.options.app.showLoading('Loading Autobots....', dialog.getBody());
                     require([files], function(Alert) {
                         var mPage = new Alert({refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model});
