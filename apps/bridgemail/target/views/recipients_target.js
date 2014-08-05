@@ -120,12 +120,11 @@ function (template) {
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
-                           dialog.getBody().html(mPage.$el);
-                            //self.app.showLoading(false, mPage.$el.parent());
-                            dialog.$el.find('#target_name').focus();
-                            
-                           
+                           dialog.getBody().append(mPage.$el);
+                            self.app.showLoading(false, mPage.$el.parent());
+                            dialog.$el.find('#target_name').focus();    
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                          
                       });
                        
                 },
@@ -155,7 +154,8 @@ function (template) {
                       this.app.showLoading("Loading...",dialog.getBody());                               
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
-                               dialog.getBody().html(mPage.$el);
+                               dialog.getBody().append(mPage.$el);
+                                self.app.showLoading(false, mPage.$el.parent());
                                dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                            mPage.$el.find('.addfilter').hide();
                            mPage.$el.find('#c_c_target .filter-div').append('<div class="block-mask"></div>');
@@ -203,7 +203,8 @@ function (template) {
                 this.app.showLoading("Loading...",dialog.getBody());
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                   var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:dialog_height});
-                    dialog.getBody().html(objContacts.$el);
+                    dialog.getBody().append(objContacts.$el);
+                    that.app.showLoading(false, objContacts.$el.parent());
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
                    

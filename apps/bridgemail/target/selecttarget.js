@@ -295,16 +295,18 @@ function (template, TargetsCollection, TargetView,moment) {
                     var camp_obj = this;
                     var dialog_title = "New Target";
                     var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px","z-index":"1002"},
+                        css: {"width": "650px", "margin-left": "-325px"},
                         bodyCss: {"min-height": "100px"},
                         headerIcon: 'targetw',
+                        wrapDiv : 'new-target-view',
                         buttons: {saveBtn: {text: 'Create Target'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
-                    dialog.$el.next(".modal-backdrop").css('z-index','1001');
+                    //dialog.$el.next(".modal-backdrop").css('z-index','1001');
                     require(["target/newtarget"], function(newtargetPage) {
                         var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
-                        dialog.getBody().html(mPage.$el);
+                        dialog.getBody().append(mPage.$el);
+                        camp_obj.app.showLoading(false, mPage.$el.parent());
                         dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
                         dialog.$el.find('#target_name').focus();
                     });

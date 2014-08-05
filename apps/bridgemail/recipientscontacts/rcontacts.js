@@ -8,6 +8,7 @@ define(['text!recipientscontacts/html/rcontacts.html','recipientscontacts/rconta
 function (template,rContact,rContacts) {
         'use strict';
         return Backbone.View.extend({
+            className:'rcontacts-view',
             events: {
                 "keyup #contacts_search":"search",
                 "click  #clearsearchcontact":"clearSearch",

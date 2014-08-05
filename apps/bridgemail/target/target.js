@@ -241,7 +241,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                             
                             camp_obj.dialog.$("#dialog-title span").html(selected_target.name);
                             camp_obj.showHideTargetTitle(false);
-                            camp_obj.dialog.$(".tagscont").tags({app: camp_obj.app,
+                            camp_obj.dialog.$(".modal-header .tagscont").tags({app: camp_obj.app,
                                 url: '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + camp_obj.app.get('bms_token'),
                                 params: {type: 'tags', filterNumber: selected_target["filterNumber.encode"], tags: ''}
                                 , showAddButton: true,
@@ -252,6 +252,8 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                                 camp_obj.dialog.$el.find('.btn-save').hide();
                                 camp_obj.dialog.$el.find('.camp_header .tagscont ul li').addClass('not-editable');
                                 camp_obj.dialog.$el.find('.camp_header .tagscont .tags-buttons').hide();
+                                camp_obj.dialog.$el.find("#dialog-title span").unbind( "click" );
+                                camp_obj.dialog.$el.find(".modal-header").removeClass("header-editable-highlight");
                                 camp_obj.dialog.$el.find('.edit').hide();
                                 
                                 }

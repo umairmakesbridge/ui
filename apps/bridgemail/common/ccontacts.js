@@ -33,6 +33,9 @@ function (template,Contacts,viewContact) {
                  this.timer = 0;
                  this.app = this.options.page.app;
                  this.parent = this.options.page;
+                 this.searchWidth = this.options.searchCss ? this.options.searchCss:'415px';
+                 this.isHideCross = this.options.hideCross;
+                 this.isCamPreview = this.options.isCamPreview;
                  this.render();
                   
             },
@@ -43,7 +46,9 @@ function (template,Contacts,viewContact) {
                 this.$el.find(".stats_listing").scroll(_.bind(this.liveLoading,this));
                 this.$el.find(".stats_listing").resize(_.bind(this.liveLoading,this));
               }
-            
+              // Search Text Width 
+              if(this.isHideCross)this.$('#prev-closebtn').hide();
+              if(this.isCamPreview)this.$('.stats_listing').hide();
            // $(window).scroll(_.bind(this.liveLoading,this));
            // $(window).resize(_.bind(this.liveLoading,this));
              
@@ -101,7 +106,7 @@ function (template,Contacts,viewContact) {
                            that.$el.find('#tblcontacts tbody #loading-tr').remove();
                       }
                       _.each(data1.models, function(model){
-                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,page:that}).el);
+                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,page:that,isCamPreview:that.isCamPreview}).el);
                        });
                        if(that.where != "page"){
                            var height = that.$el.find(".stats_listing").outerHeight(true) ;
@@ -158,6 +163,7 @@ function (template,Contacts,viewContact) {
                
                if (code == 13 || code == 8){
                  that.$el.find('#clearsearch').show();
+                
                  var text = $(ev.target).val();
                  this.searchText = text;
                  that.loadContacts();
@@ -170,6 +176,7 @@ function (template,Contacts,viewContact) {
                    }
                }else{ 
                      that.$el.find('#clearsearch').show();
+                      if(that.isCamPreview) {that.$('.stats_listing').show();that.$el.parents('#camp-prev-contact-search').css('background','#fff');that.loadContacts();}
                      var text = $(ev.target).val();
                      clearTimeout(that.timer); // Clear the timer so we don't end up with dupes.
                      that.timer = setTimeout(function() { // assign timer a new timeout 
@@ -186,7 +193,17 @@ function (template,Contacts,viewContact) {
                    this.searchText = '';
                    this.searchTags = '';
                    this.total_fetch = 0; 
+                   
+                   if(this.isCamPreview) {
+                       this.$('.stats_listing').hide();
+                       this.parent.$el.find('#camp-prev-contact-search').css('background','none');
+                       if(this.parent.subNum != null){
+                           this.parent.subNum=null;
+                           this.parent.setiFrameSrc();
+                       }
+                   };
                    this.$el.find("#total_subscriber span").html("contacts found");
+                   
                    this.loadContacts();
            },
            liveLoading:function(){

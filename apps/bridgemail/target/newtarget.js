@@ -2,6 +2,7 @@ define(['text!target/html/newtarget.html'],
         function(template) {
             'use strict';
             return Backbone.View.extend({
+                className: 'new-target-view',
                 events: {
                     "keyup #target_name": function(e)
                     {
