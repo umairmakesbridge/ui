@@ -46,6 +46,7 @@ function (template,contactsView,icheck,chosen) {
                /*if(this.options.hideCreateButton){
                    this.$(".iconpointy").hide();
                }*/
+               
               this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
              init:function(){                
@@ -64,6 +65,8 @@ function (template,contactsView,icheck,chosen) {
                     /* Chosen Plugin dropdown*/
                     this.$("#campaign-prev-select").chosen();
                //this.loadTemplates();
+                if(this.options.prevFlag==='C')
+                    this.loadContact();
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             attachEvents:function(){
@@ -148,7 +151,7 @@ function (template,contactsView,icheck,chosen) {
                 
             },
             loadContact:function(ev){
-                var btnID = ev.currentTarget.id;
+                /*var btnID = ev.currentTarget.id;
                 if(!$('#'+btnID).hasClass('active') && this.subNum===null){
                      this.$('#'+btnID).addClass('active');
                      this.$('.annonymous-btn').removeClass('active');   
@@ -158,20 +161,20 @@ function (template,contactsView,icheck,chosen) {
                     $('#'+btnID).removeClass('active');
                    this.$('.annonymous-btn').addClass('active');
                 if($("body").hasClass('modal-open')){
-                     var offset = $(ev.target).offset();
+                     var offset = $(ev.target).offset();*/
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();
-                     active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'></div>"); 
-                      active_ws.find('.campaign-clickers').append(new contactsView({page:this}).el)
+                     //active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'></div>"); 
+                      active_ws.find('#camp-prev-contact-search').append(new contactsView({page:this,searchCss:'489px',hideCross:true,isCamPreview:true}).el)
                       active_ws.find('#prev-closebtn').css({'top':'18px'});
                       
                       /*active_ws.find(".campaign-clickers .closebtn").on('click', function(){
                       that.closeContactsListing();
                       });*/
                       //ev.stopPropagation();
-                    }
+                    //}
                   return;
-                }
+                //}
                 
             },
             htmlTextClick:function(ev){

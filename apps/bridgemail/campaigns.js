@@ -441,9 +441,17 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
             },
             showTotalCount:function(count){
                
-                                      
+                var statusType = 'All';                      
                 var _text = parseInt(count)<="1"?"Campaign":"Campaigns";
-                var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong>';
+                  if(this.status=='D')
+                                   statusType = 'Draft';
+                  else if(this.status === 'C')
+                                    statusType = 'Sent';
+                  else if(this.status === 'P')
+                                    statusType = 'Pending';
+                  else if(this.status === 'S')
+                                    statusType = 'Scheduled';
+                var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong><b>'+statusType+' </b>';
                
                 if(this.searchTxt){
                     this.$("#total_templates").html(text_count+_text+" found containing text '<b>"+this.searchTxt+"</b>'");

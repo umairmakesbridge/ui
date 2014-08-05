@@ -53,13 +53,21 @@ function (template) {
             },
             selectContact:function(){
                 //alert(this.model.get('firstName'));
-                this.$el.parents('.modal-body').find('.contact-name').text(this.getFullName());
-                this.$el.parents('.modal-body').find('#contact-name-prev').show();
+                
+                
                 this.parent.parent.subNum = this.model.get('subNum');
                 this.$el.parents('#tblcontacts').find('.checkedadded-preview').hide();
                 this.$el.parents('#tblcontacts').find('.use-preview-btn').show();
-                this.parent.$el.parent().hide();
                 
+                if(this.options.isCamPreview){
+                    this.parent.$el.find('#contact-search').val(this.getFullName());
+                    this.parent.$el.find('.stats_listing').hide();
+                    this.$el.parents('#camp-prev-contact-search').css('background','none');
+                }else{
+                    this.$el.parents('.modal-body').find('.contact-name').text(this.getFullName());
+                    this.$el.parents('.modal-body').find('#contact-name-prev').show();
+                    this.parent.$el.parent().hide();
+                }
                 this.$('.use-preview-btn').hide();
                 //this.$('.checkedadded-preview').show();
                 this.parent.parent.setiFrameSrc();
