@@ -443,7 +443,8 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                                 break;
                         }
-                        //if (that.model.get('status') == "D")
+                            var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                            dialog.getFooter().append(btn);
                             //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                         that.options.app.showLoading(false, dialog.getBody());
 

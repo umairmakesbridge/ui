@@ -46,7 +46,11 @@
                 this.$element.html('');
             }
             if (id == "merge_field_plugin" || id == "merge-field-editor" || id=="merge-field-hand" || id=="merge-field-plain") {
-                this.template.css({'width': '325px'});
+                if(this.options.autobot == true){
+                    this.$element.css('width','100%');
+                }else{
+                    this.template.css({'width': '325px'});
+                }
                 this.template.find('input').attr({'style': 'width:72%'});
             }
             if (id == "campaign_from_name" || id == "campaign_reply_to") {

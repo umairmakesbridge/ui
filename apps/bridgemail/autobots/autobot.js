@@ -338,6 +338,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                 break;
                         }
                         that.options.app.showLoading(false, dialog.getBody());
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                        //if (that.model.get('status') == "D")
                             //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });

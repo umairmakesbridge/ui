@@ -23,43 +23,55 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                 },
                 initialize: function() {
                     this.template = _.template(template);
-                    this.app = this.options.app;
-                    this.dialog = this.options.dialog;
-
-                    this.targetsModelArray = [];
-                    if (typeof this.options.model != "undefined") {
-                        this.status = (typeof this.options.model.get('status') == null)?"D":this.options.model.get('status');
-                        this.botId = this.options.model.get('botId.encode');
-
-                    } else {
-                        this.botId = this.options.botId;
-                        this.status = "D";
-                    }
-                    if (typeof this.options.model != "undefined") {
-                        this.messageLabel = this.options.model.get("subject");
-                        this.triggerOrder = "";
-                        if (!this.messageLabel) {
-                            this.messageLabel = 'Subject line goes here ...';
+                     this.model = null;
+                      this.dialog = this.options.dialog;
+                    this.getAutobotById();
+                },
+                 getAutobotById: function() {
+                    
+                    var that = this;
+                    var bms_token = that.options.app.get('bms_token');
+                    var name = this.dialog.$("#dialog-title span").html();
+                    that.options.app.showLoading("Loading "+name+"...", that.$el);
+                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + this.options.botId;
+                    jQuery.getJSON(url, function(tsv, state, xhr) {
+                        var autobot = jQuery.parseJSON(xhr.responseText);
+                        if (that.options.app.checkError(autobot)) {
+                            return false;
+                        }
+                        var m = new Backbone.Model(autobot);
+                        that.model = m;
+                        that.template = _.template(template);
+                        that.app = that.options.app;
+                        that.dialog = that.options.dialog;
+                        
+                        that.targetsModel = null;
+                        that.filterNumber = null;
+                        that.messageLabel = that.model.get("subject");
+                        that.triggerOrder = "";
+                        if (!that.messageLabel) {
+                            that.messageLabel = 'Subject line goes here ...';
                         }
 
-                        this.campNum = this.options.model.get('actionData')[0]['campNum.encode'];
-                        this.fieldName = this.options.model.get('actionData')[0]['fieldName'];
-                        this.dateFormat = this.options.model.get('actionData')[0]['dateFormat'];
-                    } else {
-                        this.triggerOrder = "";
-                        this.fieldName = "";
-                        this.dateFormat = "";
-                        this.messageLabel = 'Subject line goes here ...';
-                        this.campNum = this.options.model.get('actionData')[0]['campNum.encode'];
-                    }
-                    // this.campNum = "BzAEqwsEk20Mr21Ws30BgyStRf"; // this is for test;
-                    this.mainTags = "";
-                    if(this.status == "D")
-                         this.editable = false;
-                     else
-                         this.editable = true;
-                    this.filterNumber = null;
-                    this.render();
+                        that.campNum = that.model.get('actionData')[0]['campNum.encode'];
+                        that.fieldName = that.model.get('actionData')[0]['fieldName'];
+                        that.dateFormat = that.model.get('actionData')[0]['dateFormat'];
+                        that.status = that.model.get('status');
+                        that.botId = that.model.get('botId.encode');
+                        that.filterNumber = that.model.get('filterNumber.encode');
+                        if(that.status == "D"){
+                            that.editable  = false;
+                            $('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                        }else{
+                            that.disableAllEvents();
+                            that.editable = true;
+                        }
+                        that.mainTags = "";
+                        that.render();
+                        that.options.app.showLoading(false, that.$el);
+                        //console.log(that.model);
+                       
+                    });
                 },
                 render: function() {
                     this.$el.html(this.template());
@@ -98,7 +110,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                 },
                 checkMailMessages: function() {
                      var str = "<a class='btn-blue left edit-message' style='margin-right:10px;'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
-                    str = str + "<a class='btn-gray left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
+                    str = str + "<a class='btn-blue left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
                     this.$el.find(".sumry .last-row").append("<div class='btns show-btn' style='float: right;position: absolute;right: 1px;bottom: 5px;'>" + str + "</div>");
                     var that = this;
                      this.$el.find(".sumry").find(".preview-message").on('click',function(){
@@ -110,7 +122,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     });
                 },
                  previewCampaign: function(e) {
-                    var camp_name = this.options.model.get('label');
+                    var camp_name = this.model.get('label');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
@@ -131,7 +143,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
 //                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
 //                        dialog.getBody().html(preview_iframe);               
 //                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
-                    e.stopPropagation();
+                    //e.stopPropagation();
                 },
                 loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',
@@ -163,8 +175,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                 showTags: function() {
                     this.modal = $('.modal');
                     var tags = "";
-                    if (typeof this.options.model != "undefined")
-                        tags = this.options.model.get('tags');
+                    if (typeof this.model != "undefined")
+                        tags = this.model.get('tags');
                     this.modal.find('.modal-header').removeClass('ws-notags');
                     this.tagDiv = this.modal.find(".tagscont");
                     var labels = this.getStatus();
@@ -190,6 +202,10 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
                         }
                     })
+                     this.modal = $(".modal");
+                    this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                        that.options.refer.playAutobot('dialog', that.botId);
+                     })
                     this.head_action_bar.find(".copy").on('click', function() {
                         that.options.refer.cloneAutobot('dialog', that.botId);
                     });
@@ -212,8 +228,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                      }
                 },
                 newTags: function(tags) {
-                    if (typeof this.options.model != "undefined") {
-                        this.options.model.set('tags', tags);
+                    if (typeof this.model != "undefined") {
+                        this.model.set('tags', tags);
                     } else {
                         this.mainTags = tags;
                     }
@@ -236,7 +252,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                     that.app.showMessge(_json[1]);
                                     if (!close) {
                                         that.options.refer.getAutobotById(that.botId);
-                                        that.options.dialog.hide();
+                                       // that.options.dialog.hide();
                                         if (typeof that.options.botType != "undefined") {
                                           if(typeof that.options.refer.options.listing !="undefined")
                                             that.options.refer.options.listing.fetchBots();
@@ -290,8 +306,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                 that.$el.find('#autobot_targets_grid tbody').html('');
 
                             });
-                            if (that.status != "D")
-                                that.disableAllEvents();
+                            
+                            
                         }, this);
 
                     }
@@ -319,7 +335,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                 getTargets: function() {
                     var that = this;
                     var bms_token = that.options.app.get('bms_token');
-                    this.filterNumber = this.options.model.get('filterNumber.encode');
+                    this.filterNumber = this.model.get('filterNumber.encode');
                     if (this.filterNumber == "") {
                         return;
                     }
@@ -375,8 +391,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         options = options + "<option value='" + i + "'>" + i + "</option>";
                     }
                     var recurTimes
-                    if (typeof this.options.model != "undefined") {
-                        var recurTimes = this.options.model.get('recurTimes');
+                    if (typeof this.model != "undefined") {
+                        var recurTimes = this.model.get('recurTimes');
                     }
                     if (i == recurTimes)
                         options = options + "<option value='0' selected='selected'> Unlimited </option>";
@@ -399,7 +415,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                     _this.showHideTargetTitle();
                                     _this.app.showMessge("Autobot Renamed");
                                     //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.options.model.set("name", name.val());
+                                    _this.model.set("name", name.val());
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], _this.$el);
@@ -442,9 +458,11 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         return false;
                     });
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                     this.modal.find('.modal-footer').find('.btn-play').remove();
                     //btnSave.removeClass('btn-save');
                     btnSave.find('.save').addClass('pause').removeClass('save');
                     var that = this;
+                    btnSave.addClass('btn-gray').removeClass('btn-blue');
                     btnSave.on('click',function(){
                         that.options.refer.getAutobotById('dialog',that.botId);
                          //that.options.refer.pauseAutobot('dialog',that.botId);
@@ -544,14 +562,14 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     }, this));
                 },
                 addBasicFilter: function() {
-                    var filter = this.$el.find(".sumry");
-                    var self = this;
-                    var selected_field = "";
-                    var URL = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=fields_all";
-                    jQuery.getJSON(URL, function(tsv, state, xhr) {
-                        if (xhr && xhr.responseText) {
-                            var fields_json = jQuery.parseJSON(xhr.responseText);
-                            if (self.options.app.checkError(fields_json)) {
+                            var filter = this.$el.find(".sumry");
+                            var self = this;
+                            var selected_field = "";
+                            if(typeof this.options.refer.options.listing !="undefined") // incase of new auto bot
+                                 var fields_json = this.options.refer.options.listing.basicFilters;
+                            else
+                                 var fields_json = this.options.refer.options.page.basicFilters;
+                             if (self.options.app.checkError(fields_json)) {
                                 return false;
                             }
                             var bas_field_html = '<option value=""></option>'
@@ -575,14 +593,14 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                             cust_field_html += '</optgroup>'
                             self.$el.find("#fieldname").html(bas_field_html + cust_field_html).prop("disabled", false);//.trigger("chosen:updated")
                             self.$el.find("#fieldname").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "220px", disable_search: "true"});
-                        }
-                    }).fail(function() {
-                    });
-                    var selected_formats;
-                    var URL = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=formats";
-                    jQuery.getJSON(URL, function(tsv, state, xhr) {
-                        if (xhr && xhr.responseText) {
-                            var formats_json = jQuery.parseJSON(xhr.responseText);
+                       
+                    
+                            var selected_formats;
+                            if(typeof this.options.refer.options.listing !="undefined") // incase of new auto bot
+                                 var formats_json = this.options.refer.options.listing.basicFormats;
+                            else
+                                 var formats_json = this.options.refer.options.page.basicFormats;
+                             
                             if (self.options.app.checkError(formats_json)) {
                                 return false;
                             }
@@ -601,9 +619,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                             } else {
                                 self.$el.find("#dateformat_chosen").show();
                             }
-                        }
-                    }).fail(function() {
-                    });
+                         
 
 
 

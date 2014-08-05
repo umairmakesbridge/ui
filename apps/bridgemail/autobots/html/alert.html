@@ -5,7 +5,7 @@
 
 <h2><i class="icon target"></i>
     <span>Choose Target</span> 
-    <a style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;display:none" id="hrfchangetarget" class="add-targets"  > change target</a>
+    <a style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;display:none" id="hrfchangetarget" class="add-targets"  > Set target</a>
 </h2>
 <div class="bot_p_box">
 
@@ -21,7 +21,7 @@
                 <tbody>
 
                 <div style="margin-left:41%; text-align:center; min-height: 50px; padding-top: 4px;" class="no-target-defined">
-                    <a class="btn-green add-targets target-added  "   style="width:137px;"><span>Add Target</span><i class="icon targetw"></i></a>
+                    <a class="btn-green add-targets target-added  "   style="width:132px;"><span>Set target</span><i class="icon targetw"></i></a>
                 </div>
 
                 </tbody>
@@ -47,7 +47,7 @@
             </div>
             <div id="show_other" class="set-row_col" style="display:none">
                 <span class="" style="margin-left:25px;">After every </span>
-                <select id="txtRecurTimes" class="nosearch" style="width: 70px; display: none;">
+                <select id="txtRecurPeriod" class="nosearch" style="width: 70px; display: none;">
                     <option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option>
                 </select>
                 <select id="ddlRecurType" class="nosearch" style="width: 120px; display: none;">
@@ -60,7 +60,7 @@
                     <option value="1">Not more than</option>
                 </select>
                 <div class="show-recur-period" style="display:none; padding-top:2px;">
-                    <input type="text" value="1" id="txtRecurPeriod" name="" placeholder="1" style="width:50px">
+                    <input type="text" value="1" id="txtRecurTimes" name="" placeholder="1" style="width:50px">
                    
                 </div>
                  <span class="">    time(s) </span>
@@ -95,7 +95,7 @@
                     <div class="inputcont">
                         <textarea id="alertmessage" placehoder="Type your alert message here. You can also insert merge tags in your message."></textarea>
                         <em>You may choose the merge tags from the list and copy &amp; paste in your alert message.</em>
-                        <div class="input-append adv_dd " id="wrap_email" style="margin:0px 0px 0px 25px;">
+                        <div class="input-append adv_dd " id="wrap_email" style="margin:0px 0px 0px 0px;">
                             <div class="inputcont">
                                 <input placeholder="{{LASTNAME}}" id="alert_merge_field" class="header-info" type="text" style="width:72%!important;"></div>
                             <div class="btn-group">
