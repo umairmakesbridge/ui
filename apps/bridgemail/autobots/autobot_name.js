@@ -65,7 +65,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                     switch (this.options.actionType) {
                         case "E":
                             $(this.el).remove();
-                            this.getAutobotById('dialog', this.botId);
+                            //this.getAutobotById('dialog', this.botId);
                             if (this.options.botType == "B") {
                                 this.openBirthDayAutobot();
                             } else {
@@ -150,6 +150,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveAlertAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                         //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
@@ -173,6 +175,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveEmailAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                         //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
@@ -195,6 +199,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                        // dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                     });
                 },
@@ -217,7 +223,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveScoreAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                       // dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                     });
                 }, //5
                 openBirthDayAutobot: function() {
@@ -230,7 +237,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         headerEditable: false,
                         headerIcon: 'bot',
                         buttons: {saveBtn: {text: 'Save'}},
-                        bodyCss: {"min-height": dialog_height + "px"}
+                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     that.options.app.showLoading('Loading Birthday Autobots....', dialog.getBody());
                     require(["autobots/birthday", ], function(Alert) {
@@ -238,7 +245,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());
-                        //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                        var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                        dialog.getFooter().append(btn);
                     });
                 },
                 deleteAutobot: function(where, id, loc) {

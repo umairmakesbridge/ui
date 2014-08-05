@@ -14,47 +14,60 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 events: {
                     "click .add-targets": "loadTargets",
                     "click .add-tag": "chooseTags",
-                    "mouseover .sumry":'showButtons',
-                    "mouseout .sumry":"hideButtons",
-                     "click .small-edit":"editMessage",
-                     "change #ddlIsRecur":"changeSetting",
-                     "click #preivew_bot":"previewCampaign",
-                    "change #ddlendless":"showRecurInput"
+                    "mouseover .sumry": 'showButtons',
+                    "mouseout .sumry": "hideButtons",
+                    "click .small-edit": "editMessage",
+                    "change #ddlIsRecur": "changeSetting",
+                    "click #preivew_bot": "previewCampaign",
+                    "change #ddlendless": "showRecurInput"
                 },
                 initialize: function() {
                     this.template = _.template(template);
-                    this.app = this.options.app;
+                    this.model = null;
                     this.dialog = this.options.dialog;
-                    this.filterNumber = null;
-                    
-                    if (typeof this.options.model != "undefined") {
-                        this.status = (typeof this.options.model.get('status') == null)?"D":this.options.model.get('status');
-                        this.botId = this.options.model.get('botId.encode');
-                        this.filterNumber = this.options.model.get('filterNumber.encode');
-                    } else {
-                        this.botId = this.options.botId;
-                        this.status = "D";
-                        
-                    }
-                    if (typeof this.options.model != "undefined") {
-                        this.messageLabel = this.options.model.get("subject");
-                        this.triggerOrder =""; 
-                        if(!this.messageLabel){
-                             this.messageLabel = 'Subject line goes here ...';
+                    this.getAutobotById();
+                },
+                getAutobotById: function() {
+                    var that = this;
+                    var bms_token = that.options.app.get('bms_token');
+                    var name = this.dialog.$("#dialog-title span").html();
+                    that.options.app.showLoading("Loading " + name + "...", that.$el);
+                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + this.options.botId;
+                    jQuery.getJSON(url, function(tsv, state, xhr) {
+                        var autobot = jQuery.parseJSON(xhr.responseText);
+                        if (that.options.app.checkError(autobot)) {
+                            return false;
                         }
-                        this.campNum = this.options.model.get('actionData')[0]['campNum.encode'];
-                     }else{
-                        this.triggerOrder =""; 
-                        this.messageLabel = 'Subject line goes here ...';
-                        this.campNum = this.options.model.get('actionData')[0]['campNum.encode'];
-                    }
-                    if(this.status == "D")
-                         this.editable = false;
-                     else
-                         this.editable = true;
-                    this.mainTags = "";
-                  
-                    this.render();
+                        var m = new Backbone.Model(autobot);
+                        that.model = m;
+                        that.template = _.template(template);
+                        that.app = that.options.app;
+                        that.dialog = that.options.dialog;
+
+                        that.targetsModel = null;
+                        that.filterNumber = null;
+                        that.messageLabel = that.model.get("subject");
+                        that.triggerOrder = "";
+                        if (!that.messageLabel) {
+                            that.messageLabel = 'Subject line goes here ...';
+                        }
+
+                        that.campNum = that.model.get('actionData')[0]['campNum.encode'];
+                        that.status = that.model.get('status');
+                        that.botId = that.model.get('botId.encode');
+                        that.filterNumber = that.model.get('filterNumber.encode');
+                        if (that.status == "D"){
+                            that.editable = false;
+                            $('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                        }else{
+                            that.editable = true;
+                        }
+                        that.mainTags = "";
+                        that.render();
+                        that.options.app.showLoading(false, that.$el);
+                        //console.log(that.model);
+
+                    });
                 },
                 render: function() {
                     this.$el.html(this.template());
@@ -62,33 +75,32 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
                     });
-                    
+
                     if (this.options.type == "edit") {
                         this.getTargets();
                         this.loadCampaign();
-                         this.$el.find("#ddlIsRecur").val(this.options.model.get('isRecur'));
-                        this.$el.find("#ddlRecurType").val(this.options.model.get('recurType'));
-                        this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
-                        if(this.options.model.get('recurPeriod') != "0"){
+                        this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));
+                        this.$el.find("#ddlRecurType").val(this.model.get('recurType'));
+                        this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod'));
+                        if (this.model.get('recurTimes') != "0") {
                             this.$el.find("#ddlendless").val("1");
-                            this.$el.find(".show-recur-period").css('display','inline-block');
+                            this.$el.find(".show-recur-period").css('display', 'inline-block');
                         }
-                        if(this.options.model.get('isRecur') != "N"){
-                             this.$el.find("#show_other").show();
-                             this.$el.find("#spnhelptext").hide();
-                        }else{
+                        if (this.model.get('isRecur') != "N") {
+                            this.$el.find("#show_other").show();
+                            this.$el.find("#spnhelptext").hide();
+                        } else {
                             this.$el.find("#spnhelptext").show();
-                             this.$el.find("#show_other").hide();
+                            this.$el.find("#show_other").hide();
                         }
-                        this.$el.find("#ddlRecurType").val(this.options.model.get('recurType'));
-                        this.$el.find("#txtRecurPeriod").val(this.options.model.get('recurPeriod'));
-                        this.$el.find("#txtRecurTimes").val(this.options.model.get('recurTimes'));
-                        this.options.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
+                        this.$el.find("#ddlRecurType").val(this.model.get('recurType'));
+                        this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
+                        this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
                     }
                     this.showTags();
-                     if (this.status == "D"){
-                        this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');  
-                     }
+                    if (this.status == "D") {
+                        this.dialog.$(".dialog-title").addClass('showtooltip').attr('data-original-title', "Click here to name ").css('cursor', 'pointer');
+                    }
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
                         if (this.status != "D")
                             return false;
@@ -104,47 +116,49 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             this.showHideTargetTitle();
                         }
                     }, this));
+                    
                     this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
-                    this.$el.find("#txtRecurTimes").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "70px", disable_search: "true"});
+                    this.$el.find("#txtRecurPeriod").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "100px", disable_search: "true"});
                     this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
                     this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.$el.find("#txtRecurTimes").ForceNumericOnly();
                     this.checkMailMessages();
 
-                }, changeSetting:function(ev){
-                  var selected = $(ev.target).val();
-                  if(selected == "N"){
-                      this.$el.find("#show_other").hide();
-                      this.$el.find("#spnhelptext").show();
-                  }else{
-                      this.$el.find("#show_other").show();
-                      this.$el.find("#spnhelptext").hide();
-                  }
+                }, changeSetting: function(ev) {
+                    var selected = $(ev.target).val();
+                    if (selected == "N") {
+                        this.$el.find("#show_other").hide();
+                        this.$el.find("#spnhelptext").show();
+                    } else {
+                        this.$el.find("#show_other").show();
+                        this.$el.find("#spnhelptext").hide();
+                    }
                 },
-                showRecurInput:function(ev){
-                  var selected = $(ev.target).val();
-                  if(selected == "0"){
-                      this.$el.find(".show-recur-period").hide();
-                  }else{
-                      this.$el.find(".show-recur-period").css('display','inline-block');
-                  }
+                showRecurInput: function(ev) {
+                    var selected = $(ev.target).val();
+                    if (selected == "0") {
+                        this.$el.find(".show-recur-period").hide();
+                    } else {
+                        this.$el.find(".show-recur-period").css('display', 'inline-block');
+                    }
                 },
-                checkMailMessages:function(){
+                checkMailMessages: function() {
                     var str = "<a class='btn-blue left edit-message' style='margin-right:10px;'><span class='right'>   Edit Message</span><i class='icon edit left'></i></a>";
-                    str = str + "<a class='btn-gray left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
-                    this.$el.find(".sumry .last-row").append("<div class='btns btn-show' style='float: right;position: absolute;right: 1px;bottom:  0px;'>"+str+"</div>");
+                    str = str + "<a class='btn-blue left preview-message'><span class='right'>   Preview</span><i class='icon preview24 left'></i></a>";
+                    this.$el.find(".sumry .last-row").append("<div class='btns btn-show' style='float: right;position: absolute;right: 1px;bottom:  0px;'>" + str + "</div>");
                     var that = this;
-                    this.$el.find(".sumry").find(".preview-message").on('click',function(){
+                    this.$el.find(".sumry").find(".preview-message").on('click', function() {
                         that.previewCampaign();
                     });
-                    this.$el.find(".sumry").find(".edit-message").on('click',function(){
+                    this.$el.find(".sumry").find(".edit-message").on('click', function() {
                         that.editMessage();
                     });
-                    
+
                 },
-                  previewCampaign: function(e) {
-                    var camp_name = this.options.model.get('label');
+                previewCampaign: function(e) {
+                    var camp_name = this.model.get('label');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
@@ -165,21 +179,20 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
 //                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
 //                        dialog.getBody().html(preview_iframe);               
 //                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
-                    e.stopPropagation();
+                    //e.stopPropagation();
                 },
-                
-               loadTargets: function() {
+                loadTargets: function() {
                     var dialog_object = {title: 'Select Targets',
                         css: {"width": "1200px", "margin-left": "-600px"},
                         bodyCss: {"min-height": "423px"},
                         headerIcon: 'targetw'
                     }
-                     var dialog = this.options.app.showDialog(dialog_object);
+                    var dialog = this.options.app.showDialog(dialog_object);
 
                     this.options.app.showLoading("Loading Targets...", dialog.getBody());
-                    
+
                     require(["target/recipients_targets"], _.bind(function(page) {
-                        var targetsPage = new page({page: this, dialog: dialog, editable: true,type:"autobots",showUseButton:true});
+                        var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "autobots", showUseButton: true});
                         dialog.getBody().html(targetsPage.$el);
                     }, this));
 
@@ -195,40 +208,44 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 showTags: function() {
                     this.modal = $('.modal');
                     var tags = "";
-                    if (typeof this.options.model != "undefined")
-                        tags = this.options.model.get('tags');
+                    if (typeof this.model != "undefined")
+                        tags = this.model.get('tags');
                     this.modal.find('.modal-header').removeClass('ws-notags');
                     this.tagDiv = this.modal.find(".tagscont");
                     var labels = this.getStatus();
                     this.head_action_bar = this.modal.find(".modal-header .edited  h2");
-                    this.head_action_bar.find(".pointy").css({'padding-left':'10px','margin-top':'4px'});
+                    this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
-                   if(this.status == "D"){
-                        this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Play").css('cursor', 'pointer');
-                    }else{
-                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title',"Click to Pause").css('cursor', 'pointer');
-                    }   
-                    var that = this;
-                    if(this.status != "D"){
-                        this.head_action_bar.find(".delete").hide(); 
+                    if (this.status == "D") {
+                        this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
+                    } else {
+                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
                     }
-                    this.head_action_bar.find(".copy").addClass('showtooltip').attr('data-original-title',"Click to Copy").css('cursor', 'pointer');
-                    this.head_action_bar.find(".delete").addClass('showtooltip').attr('data-original-title',"Click to Delete").css('cursor', 'pointer');
-                    this.head_action_bar.find(".change-status").on('click',function(){
+                    var that = this;
+                    if (this.status != "D") {
+                        this.head_action_bar.find(".delete").hide();
+                    }
+                    this.head_action_bar.find(".copy").addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
+                    this.head_action_bar.find(".delete").addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
+                    this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
-                        if(that.status == "D"){
-                          res = that.options.refer.playAutobot('dialog',that.botId);
-                        }else{
-                          res =  that.options.refer.pauseAutobot('dialog',that.botId);
+                        if (that.status == "D") {
+                            res = that.options.refer.playAutobot('dialog', that.botId);
+                        } else {
+                            res = that.options.refer.pauseAutobot('dialog', that.botId);
                         }
                     })
-                    this.head_action_bar.find(".copy").on('click',function(){
-                       that.options.refer.cloneAutobot('dialog',that.botId); 
+                     this.modal = $(".modal");
+                    this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                        that.options.refer.playAutobot('dialog', that.botId);
+                     })
+                    this.head_action_bar.find(".copy").on('click', function() {
+                        that.options.refer.cloneAutobot('dialog', that.botId);
                     });
-                    this.head_action_bar.find(".delete").on('click',function(){
-                       if(that.options.refer.deleteAutobot('dialog',that.botId,that.$el)){
-                           that.options.dialog.hide();
-                       } 
+                    this.head_action_bar.find(".delete").on('click', function() {
+                        if (that.options.refer.deleteAutobot('dialog', that.botId, that.$el)) {
+                            that.options.dialog.hide();
+                        }
                     });
                     this.tagDiv.addClass("template-tag").show();
                     this.tagDiv.tags({app: this.options.app,
@@ -240,32 +257,32 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
-                    if(this.status !="D"){
-                      this.tagDiv.addClass("not-editable");
-                     }
+                    if (this.status != "D") {
+                        this.tagDiv.addClass("not-editable");
+                    }
                 },
                 newTags: function(tags) {
-                    if(typeof this.options.model !="undefined"){
-                      this.options.model.set('tags', tags);
-                    }else{
+                    if (typeof this.model != "undefined") {
+                        this.model.set('tags', tags);
+                    } else {
                         this.mainTags = tags;
                     }
                 },
                 saveEmailAutobot: function(close) {
                     if (this.status != "D") {
-                       this.options.refer.pauseAutobot(('dialog',this.botId));
+                        this.options.refer.pauseAutobot(('dialog', this.botId));
                         return;
                     }
                     var isRecur = this.$el.find("#ddlIsRecur").val();
                     var recurType = this.$el.find("#ddlRecurType").val();
-                    if(this.$el.find("#ddlendless").val() == "1"){
-                        var recurPeriod = this.$el.find("#txtRecurPeriod").val();
-                    }else{
-                        var recurPeriod = 0;
+                    if (this.$el.find("#ddlendless").val() == "1") {
+                        var recurTimes = this.$el.find("#txtRecurTimes").val();
+                    } else {
+                        var recurTimes = 0;
                     }
-                    var recurTimes = this.$el.find("#txtRecurTimes").val();
+                    var recurPeriod = this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
-                    var post_data = {tags:this.mainTags,botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
+                    var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
                     var that = this;
@@ -276,11 +293,11 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                                     that.app.showMessge(_json[1]);
                                     if (!close) {
                                         that.options.refer.getAutobotById(that.botId);
-                                        that.options.dialog.hide();
-                                        if(typeof that.options.botType !="undefined"){
-                                            if(typeof that.options.refer.options.listing !="undefined")
-                                            that.options.refer.options.listing.fetchBots();
-                                         }
+                                        //that.options.dialog.hide();
+                                        if (typeof that.options.botType != "undefined") {
+                                            if (typeof that.options.refer.options.listing != "undefined")
+                                                that.options.refer.options.listing.fetchBots();
+                                        }
                                     }
                                 }
                                 else {
@@ -295,7 +312,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     var remove_cache = true;
                     var offset = 0;
                     var that = this;
-                    var _data = {offset: offset, type: 'list_csv', filterNumber_csv:  this.options.model.get('filterNumber.encode')};
+                    var _data = {offset: offset, type: 'list_csv', filterNumber_csv: this.model.get('filterNumber.encode')};
                     this.tracks_bms_request = this.targetsRequest.fetch({data: _data, remove: remove_cache,
                         success: _.bind(function(collection, response) {
                             // Display items
@@ -315,34 +332,34 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 },
                 createTargets: function(save) {
                     var that = this;
-                     if( this.targetsModel.get('filterNumber.encode')){
-                             this.$el.find("#autobot_targets_grid tbody").children().remove();
-                             that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model:this.targetsModel, app: that.options.app,editable:that.editable}).el);
-                             if(that.status != "D"){
-                                if(that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0) 
-                                     that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
-                                else
-                                    that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
-                                that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove(); 
-                             }
-                             that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
-                                that.targetsModel = null;
-                                that.changeTargetText();
-                                that.$el.find('#autobot_targets_grid tbody').html('');
-                                that.loadTargets();
-                            });
-                            if (that.status != "D")
-                                that.disableAllEvents();
-                     }
+                    if (this.targetsModel.get('filterNumber.encode')) {
+                        this.$el.find("#autobot_targets_grid tbody").children().remove();
+                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', model: this.targetsModel, app: that.options.app, editable: that.editable}).el);
+                        if (that.status != "D") {
+                            if (that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0)
+                                that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
+                            else
+                                that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
+                            that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove();
+                        }
+                        that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
+                            that.targetsModel = null;
+                            that.changeTargetText();
+                            that.$el.find('#autobot_targets_grid tbody').html('');
+                            that.loadTargets();
+                        });
+                        if (that.status != "D")
+                            that.disableAllEvents();
+                    }
                     if (save) {
                         this.saveTargets()
                     }
                     this.changeTargetText();
                 },
-                addToCol2:function(model){
-                  this.targetsModel = model;
-                  this.createTargets(true);
-                  
+                addToCol2: function(model) {
+                    this.targetsModel = model;
+                    this.createTargets(true);
+
                 },
                 saveTargets: function() {
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token');
@@ -363,7 +380,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                 getTargets: function() {
                     var that = this;
                     var bms_token = that.options.app.get('bms_token');
-                    this.filterNumber = this.options.model.get('filterNumber.encode');
+                    this.filterNumber = this.model.get('filterNumber.encode');
                     if (this.filterNumber == "") {
                         return;
                     }
@@ -374,7 +391,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             return false;
                         }
                         var objRecipients = new ModelRecipient(data);
-                        that.targetsModel =objRecipients;
+                        that.targetsModel = objRecipients;
                         that.targets = data;
                         that.changeTargetText();
                         that.createTargets();
@@ -403,32 +420,32 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
 
 
 
-                } ,
-                 changeTargetText: function() {
+                },
+                changeTargetText: function() {
                     if (this.targetsModel) {
-                       $(this.el).find("#hrfchangetarget").show();
+                        $(this.el).find("#hrfchangetarget").show();
                         $(this.el).find(".no-target-defined").hide();
                     } else {
                         $(this.el).find(".no-target-defined").show();
                         $(this.el).find("#hrfchangetarget").hide("");
                     }
-                    if(this.status !="D")
+                    if (this.status != "D")
                         $(this.el).find("#hrfchangetarget").hide();
                 },
-                 recurTimes: function() {
+                recurTimes: function() {
                     var options = "";
                     for (var i = 1; i < 31; i++) {
                         options = options + "<option value='" + i + "'>" + i + "</option>";
                     }
                     var recurTimes
-                    if(typeof this.options.model !="undefined"){
-                        var recurTimes = this.options.model.get('recurTimes');
+                    if (typeof this.model != "undefined") {
+                        var recurTimes = this.model.get('recurTimes');
                     }
-                    if(i == recurTimes )
+                    if (i == recurTimes)
                         options = options + "<option value='0' selected='selected'> Unlimited </option>";
                     else
                         options = options + "<option value='0'> Unlimited </option>";
-                    
+
                     return options;
                 },
                 saveTemplateName: function(obj) {
@@ -445,7 +462,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                                     _this.showHideTargetTitle();
                                     _this.app.showMessge("Autobot Renamed");
                                     //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.options.model.set("name", name.val());
+                                    _this.model.set("name", name.val());
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], _this.$el);
@@ -488,16 +505,18 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         return false;
                     });
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                     this.modal.find('.modal-footer').find('.btn-play').remove();
                     //btnSave.removeClass('btn-save');
                     btnSave.find('.save').addClass('pause').removeClass('save');
                     var that = this;
-                    btnSave.on('click',function(){
-                        that.options.refer.getAutobotById('dialog',that.botId);
-                         //that.options.refer.pauseAutobot('dialog',that.botId);
+                    btnSave.addClass('btn-gray').removeClass('btn-blue');
+                    btnSave.on('click', function() {
+                        that.options.refer.getAutobotById('dialog', that.botId);
+                        //that.options.refer.pauseAutobot('dialog',that.botId);
                     });
                     btnSave.find('span').html("Pause");
-                   
-                     
+
+
                 },
                 pauseAutobot: function(close) {
                     var that = this;
@@ -508,7 +527,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             .done(function(data) {
                                 that.options.app.showLoading(false, that.$el);
                                 var _json = jQuery.parseJSON(data);
-                                 if (_json[0] !== 'err') {
+                                if (_json[0] !== 'err') {
                                     if (typeof _json[1] != "undefined" && _json[1].indexOf("err") >= 0) {
                                         that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                     } else {
@@ -524,80 +543,80 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                                 }
                             });
                 },
-                editMessage:function(e){
+                editMessage: function(e) {
                     //if(!this.object[0]['campNum.encode']){
-                     //   this.app.showAlert('Message doesn\'t not exists',$("body"),{fixed:true});                    
+                    //   this.app.showAlert('Message doesn\'t not exists',$("body"),{fixed:true});                    
                     //}
                     //else{\
                     var that = this;
-                      if(that.editable == false)
-                         that.editable = true;
-                     else
-                         that.editable = false;
-                    var dialog_width = $(document.documentElement).width()-50;
-                    var dialog_height = $(document.documentElement).height()-162;
-                    var dialog_object = {title:this.messageLabel +'<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>'+this.triggerOrder+'</b> </strong>',
-                            css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                            headerEditable:false,                          
-                            bodyCss:{"min-height":dialog_height+"px"}                        
-                            };
-                     
-                        dialog_object["buttons"]=  {saveBtn:{text:'Save'} }
-                   
-                    var dialog = this.app.showDialog(dialog_object);                        
-                    this.app.showLoading("Loading Settings...",dialog.getBody());
+                    if (that.editable == false)
+                        that.editable = true;
+                    else
+                        that.editable = false;
+                    var dialog_width = $(document.documentElement).width() - 50;
+                    var dialog_height = $(document.documentElement).height() - 162;
+                    var dialog_object = {title: this.messageLabel + '<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>' + this.triggerOrder + '</b> </strong>',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    };
+
+                    dialog_object["buttons"] = {saveBtn: {text: 'Save'}}
+
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Settings...", dialog.getBody());
                     var that = this;
-                    require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                        var sPage = new settingPage({page:this,dialog:dialog,editable:that.editable,type:"autobots",campNum:this.campNum});    
+                    require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: that.editable, type: "autobots", campNum: this.campNum});
                         dialog.getBody().html(sPage.$el);
-                        dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
+                        dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
                         sPage.init();
-                    },this));      
-                   // }
-                    
-            },loadCampaign:function(){               
-              var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.campNum+"&type=basic";
-              jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
-                  var camp_json = jQuery.parseJSON(xhr.responseText);
-                  this.camp_json = camp_json;
-                  this.$(".camp-subject").html(this.app.encodeHTML(camp_json.subject));
-                  if(camp_json.subject){
-                    this.$(".title").html(this.app.encodeHTML(camp_json.subject));
-                    this.messageLabel = this.app.encodeHTML(camp_json.subject);
-                  }
-                  else{
-                      this.messageLabel = 'Subject line goes here ...';
-                      this.$(".title").html('Subject line goes here ...');
-                      this.$(".camp-subject").html('Subject line goes here ...');
-                  }
-                  this.$(".camp-fromemail").html(this.app.encodeHTML(camp_json.fromEmail));
-                  var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");                             
-                  if( merge_field_patt.test(this.app.decodeHTML(camp_json.fromEmail)) && camp_json.defaultFromEmail){                    
-                    this.$(".camp-fromemail").append($('<em >Default Value: <i >'+this.app.encodeHTML(camp_json.defaultFromEmail)+'</i></em>'));
-                  }
-                  if(camp_json.senderName){
-                       this.$(".camp-fromname").html(this.app.encodeHTML(camp_json.senderName));                      
-                  }
-                  else{
-                       this.$(".camp-fromname").html('MakesBridge Technology');
-                  }                                    
-                  if(camp_json.defaultSenderName){
-                    this.$(".camp-fromname").append($('<em >Default Value: <i >'+this.app.encodeHTML(camp_json.defaultSenderName)+'</i></em>'));
-                  }
-                  
-                  this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.replyTo));
-                  if(camp_json.defaultReplyTo){                    
-                    this.$(".camp-replyto").append($('<em >Default Value: <i >'+this.app.encodeHTML(camp_json.defaultReplyTo)+'</i></em>'))
-                  }
-                  
-              },this));
-            },
-            showButtons:function(){
-                this.$el.find(".btn-show").show();
-            },
-            hideButtons:function(){
-                this.$el.find(".btn-show").hide();
-            }
+                    }, this));
+                    // }
+
+                }, loadCampaign: function() {
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.campNum + "&type=basic";
+                    jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                        var camp_json = jQuery.parseJSON(xhr.responseText);
+                        this.camp_json = camp_json;
+                        this.$(".camp-subject").html(this.app.encodeHTML(camp_json.subject));
+                        if (camp_json.subject) {
+                            this.$(".title").html(this.app.encodeHTML(camp_json.subject));
+                            this.messageLabel = this.app.encodeHTML(camp_json.subject);
+                        }
+                        else {
+                            this.messageLabel = 'Subject line goes here ...';
+                            this.$(".title").html('Subject line goes here ...');
+                            this.$(".camp-subject").html('Subject line goes here ...');
+                        }
+                        this.$(".camp-fromemail").html(this.app.encodeHTML(camp_json.fromEmail));
+                        var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
+                        if (merge_field_patt.test(this.app.decodeHTML(camp_json.fromEmail)) && camp_json.defaultFromEmail) {
+                            this.$(".camp-fromemail").append($('<em >Default Value: <i >' + this.app.encodeHTML(camp_json.defaultFromEmail) + '</i></em>'));
+                        }
+                        if (camp_json.senderName) {
+                            this.$(".camp-fromname").html(this.app.encodeHTML(camp_json.senderName));
+                        }
+                        else {
+                            this.$(".camp-fromname").html('MakesBridge Technology');
+                        }
+                        if (camp_json.defaultSenderName) {
+                            this.$(".camp-fromname").append($('<em >Default Value: <i >' + this.app.encodeHTML(camp_json.defaultSenderName) + '</i></em>'));
+                        }
+
+                        this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.replyTo));
+                        if (camp_json.defaultReplyTo) {
+                            this.$(".camp-replyto").append($('<em >Default Value: <i >' + this.app.encodeHTML(camp_json.defaultReplyTo) + '</i></em>'))
+                        }
+
+                    }, this));
+                },
+                showButtons: function() {
+                    this.$el.find(".btn-show").show();
+                },
+                hideButtons: function() {
+                    this.$el.find(".btn-show").hide();
+                }
 
             });
         });

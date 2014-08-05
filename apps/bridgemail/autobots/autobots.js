@@ -36,9 +36,13 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.actionType = "";
                     this.sortText = "";
                     this.topClickEvent = false;
+                    this.basicFilters = null;
+                    this.basicFormats = null;
                     this.request = null;
                     this.app = app;
                     this.render();
+                    this.getFiltersData();
+                    this.getFormatsData();
                 },
                 render: function() {
                     this.$el.html(this.template());
@@ -317,6 +321,26 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });
+                },
+                getFiltersData:function(){ 
+                    var that = this;
+                    var url = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=fields_all";
+                      jQuery.getJSON(url,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                               var data = jQuery.parseJSON(xhr.responseText);                                
+                               that.basicFilters = data;
+                          }
+                      }).fail(function() { console.log( "error in basic fields" ); });                  
+                },
+                getFormatsData:function(){
+                    var that = this;
+                     var url = "/pms/io/getMetaData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=formats";
+                      jQuery.getJSON(url,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){
+                               var data = jQuery.parseJSON(xhr.responseText);                                
+                               that.basicFormats = data;
+                          }
+                      }).fail(function() { console.log( "error in basic fields" ); });    
                 }
                
             });

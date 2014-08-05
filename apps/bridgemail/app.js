@@ -481,7 +481,7 @@ define([
                     params.control.find(".inputcont").addClass("error");
                     params.control.find(".inputcont").append('<span class="errortext"><i class="erroricon"></i><em>'+ params.message +'</em></span>');					                    
                 }
-            },
+            } ,
             hideError:function(params){
                 if(params.control){
                     params.control.find(".inputcont").removeClass("error");
@@ -581,8 +581,17 @@ define([
                 if($("body > .overlay,.modal-backdrop").length==0){
                     $("body").css("overflow-y","auto");
                 }
+            },
+            isEmpty:function(val){
+                return (val === undefined || val == null || val.length <= 0) ? true : false;
+            },
+             isNumeric:function(s){
+                if(!/^\d+$/.test(s)){
+                     return false;
+                }else{
+                    return true;
+                }
             }
-
 	});
 
 	return new App();
