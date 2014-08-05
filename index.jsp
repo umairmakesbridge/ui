@@ -26,7 +26,7 @@ if(userInfo == null) {
 %><jsp:forward page="../InvalidAccess.jsp"/><%
   return;
 }
-
+String _path = "/pms/alpha/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,27 +39,28 @@ if(userInfo == null) {
     <meta name="author" content="">    
     <link rel="shortcut icon" href="img/favicon.ico">
     
-    <link href="css/bootstrap.css" rel="stylesheet" type="text/css" >
-    <link href="css/icons.css" rel="stylesheet" type="text/css" >
-    <link href="css/style.css" rel="stylesheet" type="text/css" >  
-    <link rel="stylesheet" href="css/isotope.css" rel="stylesheet" />    
-    <link href="css/bmsgrid.css" rel="stylesheet" type="text/css" >
-    <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" >
-    <link href="css/calendar.css" rel="stylesheet" type="text/css" >
-    <link href="css/custom_2.css" rel="stylesheet" type="text/css" >
-    <link href="css/chosen.css" rel="stylesheet" type="text/css" >
-    <link href="css/changes.css" rel="stylesheet" type="text/css" >
-    <link href="css/skins/lightgray/skin.min.css" rel="stylesheet">
-    <link href="css/tan_changes.css" rel="stylesheet" type="text/css" >
-    <link rel="stylesheet" href="css/ui.daterangepicker.css" type="text/css" />
-    <link rel="stylesheet" href="css/animate.css" type="text/css" />
-    <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />        
-    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />        
+    <link href="<%= _path %>css/bootstrap.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/icons.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/style.css" rel="stylesheet" type="text/css" >  
+    <link rel="stylesheet" href="<%= _path %>css/isotope.css" rel="stylesheet" />    
+    <link href="<%= _path %>css/bmsgrid.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/jquery-ui.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/calendar.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/custom_2.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/chosen.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/changes.css" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/skins/lightgray/skin.min.css" rel="stylesheet">
+    <link href="<%= _path %>css/tan_changes.css" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="<%= _path %>css/ui.daterangepicker.css" type="text/css" />
+    <link rel="stylesheet" href="<%= _path %>css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="<%= _path %>css/dash.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= _path %>css/a_changes.css" rel="stylesheet" />        
+    <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css" rel="stylesheet" />        
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
+        var _path = '<%= _path %>'
     </script>
-    <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
+    <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";

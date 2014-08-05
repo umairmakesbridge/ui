@@ -63,6 +63,7 @@ define([
                                 images_CDN : imagesCDN,
                                 static_CDN : staticCDN,
 				host: window.location.hostname,
+                                path:_path,
 				session: null,
                                 app_data : {}
 			}, window.sz_config || {}));

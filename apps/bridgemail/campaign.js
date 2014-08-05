@@ -59,6 +59,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     },                    
 
                 initialize: function () {
+                    this.app = this.options.app;
                     this.template = _.template(template);                               
                     this.tags =  '';
                     this.tag_limit = 5;
@@ -102,8 +103,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge Tags'});
                 },
                 render: function () {
-                    this.$el.html(this.template({}));                               
-                    this.app = this.options.app;
+                    this.$el.html(this.template({}));                                                   
                     this.wizard = this.options.wizard;    
                     if(this.options.params && this.options.params.camp_id){
                         this.camp_id = this.options.params.camp_id;
