@@ -189,6 +189,7 @@ function (template,icheck,bmstags) {
                             params:{type:'tags',templateNumber:_this.template_id,tags:''}
                             ,showAddButton:true,                            
                             tags:template_json.tags,
+                             fromDialog:_this.dialog.$el,
                             callBack:_.bind(_this.newTags,_this),
                             typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+_this.app.get('bms_token')+"&type=allTemplateTags"
                          });

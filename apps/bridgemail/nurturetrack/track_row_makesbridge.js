@@ -14,7 +14,8 @@ function (template,highlighter) {
             events: {              
               'click .use-track':'copyNurtureTrack',
               'click .preview':'viewNurtureTrack',
-              'click .edit-track':'copyNurtureTrack'
+              'click .edit-track':'copyNurtureTrack',
+              'click .tag':'tagSearch'
             },
             /**
              * Initialize view - backbone
@@ -47,6 +48,10 @@ function (template,highlighter) {
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+            },
+            tagSearch:function(obj){
+                this.trigger('tagbmsclick',$(obj.target).text());
+                return false;
             } ,
             viewNurtureTrack:function(){
                 this.app.showLoading("Loading...",this.parent.$el);

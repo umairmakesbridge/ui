@@ -124,7 +124,7 @@
     });
  
     define(['backbone', 'app', 'router', 'views/main_container'], function (Backbone, app, Router, MainContainer) {
-        app.start(Router, MainContainer, function () {
+        app.start(Router, MainContainer, function () {                
                 Backbone.history.start({pushState: true}); //Start routing
         });
         return app;

@@ -9,6 +9,7 @@
                 <a class="showtooltip edit-track" title="Click to copy template"><%- model.get('name')%></a> 
             </h3>
             <div class="tags tagscont">
+                <ul>
                 <% if(model.get('tags')){  
                     _.each(model.get('tags').split(","),function(t){ %>  
                         <li><a class="tag"><%- this.app.decodeHTML(t) %></a> </li>
@@ -16,6 +17,7 @@
                         ,this)
                     }
                 %>  
+                </ul>
             </div>
         </div>
     </div>

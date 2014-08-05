@@ -626,7 +626,8 @@ input[type="text"].search-template{
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
-    width: auto;
+    max-width: 204px;
+    text-overflow:ellipsis;
 }
 
 

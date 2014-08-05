@@ -147,9 +147,13 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                      gridcontainer: this.$('#bms_nurturetrack_grid'),
                      placeholder: 'Search nurture track templates',                     
                      showicon: 'yes',
-                     iconsource: 'campaigns'
+                     tdNo:2,
+                     iconsource: 'campaigns',
+                     searchCountEl : this.$(".total-bms-count"),
+                     searchTextEl : this.$(".total-bms-text"),
+                     searchText : 'Nurture Track Templates'
               });
-              this.$(".bms_tracks .nuture-search-tile").searchcontrol({
+              this.$(".bms_tracks .bms-nuture-search-tile").searchcontrol({
                      id:'nuture-search',
                      width:'320px',
                      height:'22px',
@@ -159,7 +163,10 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                      iconsource: 'campaigns',
                      movingElement: 'li',
                      query:'a.edit-track',
-                     emptyMsgContainer:this.$('.bms_tracks #content-1')
+                     emptyMsgContainer:this.$('.bms_tracks #content-1'),
+                     searchCountEl : this.$(".total-bms-count"),
+                     searchTextEl : this.$(".total-bms-text"),
+                     searchText : 'Nurture Track Templates'
               });
              
               this.$(".message-search").searchcontrol({
@@ -303,9 +310,11 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         
                         for(var s=this.offset;s<collection.length;s++){
                             var trackView = new trackRowMakesbrdige({ model: collection.at(s),sub:this });                                                            
+                            trackView.on('tagbmsclick',_.bind(this.searchByTagBms,this));
                             this.$tracksBmsContainer.append(trackView.$el);
                             
                             var trackViewTile = new trackRowMakesbrdigeTile({ model: collection.at(s),sub:this });                                                            
+                            trackViewTile.on('tagbmsclicktile',_.bind(this.searchByTagTileBms,this));
                             this.$trackTileBmsArea.append(trackViewTile.$el);
                             trackViewTile.tmPr.trimTags();
                             
@@ -407,8 +416,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                                      
             },
             searchByTag:function(tag){                              
-               this.$("#nuture-search").val("Tag: "+tag);
-               this.$(".nuture-search #clearsearch").show();
+               this.$(".user_tracks #nuture-search").val("Tag: "+tag);
+               this.$(".user_tracks .nuture-search #clearsearch").show();
                this.$("#nurturetrack_grid tr").hide();
                var count = 0;
                this.$("#nurturetrack_grid tr").filter(function() {
@@ -427,6 +436,28 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                }).show();
                this.$(".total-count").html(count);
                this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
+            },
+            searchByTagBms:function(tag){                              
+               this.$(".bms_tracks #bms-nurture-search").val("Tag: "+tag);
+               this.$(".bms_tracks .bms-nurture-search #clearsearch").show();
+               this.$("#bms_nurturetrack_grid tr").hide();
+               var count = 0;
+               this.$("#bms_nurturetrack_grid tr").filter(function() {
+                    var tagExist = false;
+                    $(this).find(".tagscont li").each(function(i){
+                        $(this).removeHighlight();
+                        if($.trim($(this).text()).toLowerCase() == $.trim(tag).toLowerCase()){
+                            $(this).highlight(tag);	
+                            tagExist = true;
+                        }
+                    });                    
+                    if(tagExist){
+                        count++;
+                        return $(this);
+                    }
+               }).show();
+               this.$(".total-bms-count").html(count);
+               this.$(".total-bms-text").html('Nurture Track Templates <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
             },
             searchByTagTile:function(tag){
                this.$(".nuture-search-tile #nuture-search").val("Tag: "+tag);
@@ -449,6 +480,28 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                }).show();
                this.$(".total-count").html(count);
                this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
+            },
+            searchByTagTileBms:function(tag){
+               this.$(".bms-nuture-search-tile #nuture-search").val("Tag: "+tag);
+               this.$(".bms-nuture-search-tile #clearsearch").show(); 
+               this.$(".bms_tracks .thumbnails li").hide();
+               var count = 0;
+               this.$(".bms_tracks .thumbnails li").filter(function() {
+                    var tagExist = false;
+                    $(this).find(".t-scroll a").each(function(i){
+                        $(this).removeHighlight();
+                        if($.trim($(this).text()).toLowerCase() == $.trim(tag).toLowerCase()){
+                            $(this).highlight(tag);	
+                            tagExist = true;
+                        }
+                    });                    
+                    if(tagExist){
+                         count++;
+                        return $(this);
+                    }
+               }).show();
+               this.$(".total-bms-count").html(count);
+               this.$(".total-bms-text").html('Nurture Track Templates <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
             },
             updateRefreshCount:function(){                
                var checked_count = this.$(".contact-row-check:checked").length;                
@@ -511,13 +564,13 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     this.$(".btn-tiles").show();
                 }                    
                 if(obj.hasClass("btn-listing")){
-                    this.$(".nuture-search-tile").hide();
+                    this.$(".nuture-search-tile,.bms-nuture-search-tile").hide();
                     this.$(".nuture-search,.bms-nurture-search").show();
                     this.$(".nt_listing").show();
                     this.$(".tileview").hide();
                 }
                 else{
-                    this.$(".nuture-search-tile").show();
+                    this.$(".nuture-search-tile,.bms-nuture-search-tile").show();
                     this.$(".nuture-search,.bms-nurture-search").hide();
                     this.$(".nt_listing").hide();
                     this.$(".tileview").show();

@@ -245,6 +245,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                                 url: '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + camp_obj.app.get('bms_token'),
                                 params: {type: 'tags', filterNumber: selected_target["filterNumber.encode"], tags: ''}
                                 , showAddButton: true,
+                                fromDialog:camp_obj.dialog.$el,
                                 tags: selected_target.tags
                             });
                              if(camp_obj.editable){

@@ -28,6 +28,7 @@
       this.dialog = $(this.options.dialog)
       this.toolbar = $(this.options.toolbar)
       this.tag_id = -1
+      this.fromDialog = this.options.fromDialog
       this.tag_li = null
       this.tag_action = 'add'
       this.tags_common = []
@@ -63,8 +64,7 @@
      //this.toolbar.find(".edit").on("click",$.proxy(this.editTag,this))
      //Delete tag from toolbar
      //this.toolbar.find(".delete").on("click",$.proxy(this.deleteTag,this))
-     
-     $("body").append(this.dialog)
+          
      //$("body").append(this.toolbar)
      //Show hide add button
      this.showAddTagButton()
@@ -301,7 +301,17 @@
             
      });
   }
-  ,showTagsDialog:function(obj){      
+  ,showTagsDialog:function(obj){ 
+      var dialogLeft=0,dialogTop=0;
+      if(this.fromDialog){
+          this.fromDialog.append(this.dialog);
+          dialogLeft = this.fromDialog.offset().left;
+          dialogTop = 66;//this.fromDialog.offset().top;
+      }
+      else{
+          $("body").append(this.dialog);
+      }
+      
       var _ele  = obj?$.getObj(obj,"div"):this.tag_li;
       var _input = this.dialog.find("input.tag-input")      
       var left_minus = 0;
@@ -324,7 +334,8 @@
       var left = ele_offset.left-left_minus            
       
       $(".custom_popup").hide();      
-      this.dialog.css({"left":left+"px","top":top+"px"}).show();
+      var topPos = dialogTop?dialogTop:top;
+      this.dialog.css({"left":(left-dialogLeft)+"px","top":topPos+"px"}).show();
       this.dialog.find("input.tag-input").focus();
       this.dialog.find("input.tag-input").click();
       
@@ -334,7 +345,7 @@
   }
   ,
   hideTagDialog:function(){
-      this.dialog.hide()
+      this.dialog.hide();
   }
   ,editTag:function(obj){      
       this.tag_action = 'edit'
@@ -452,6 +463,7 @@
     url:'',
     module:"Campaign",
     params:{},
+    fromDialog:null,
     typeAheadURL:'',
     callBack:null
     , app:null

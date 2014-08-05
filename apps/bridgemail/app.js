@@ -56,7 +56,7 @@ define([
 			//Load config or use defaults
 			this.set(_.extend({
 				env: 'developement',
-				bms_token: $.getUrlVar(false,'BMS_REQ_TK'),
+				bms_token: bms_token,
                                 isNurtureTrack: $.getUrlVar(false,'enableNT'),
                                 isFromCRM: $.getUrlVar(false,'crm'),
                                 preview_domain : previewDomain,

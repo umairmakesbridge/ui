@@ -56,7 +56,9 @@ if(userInfo == null) {
     <link rel="stylesheet" href="css/dash.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />        
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />        
-    
+    <script>
+        var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
+    </script>
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";

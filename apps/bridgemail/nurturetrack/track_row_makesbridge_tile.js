@@ -56,10 +56,16 @@ function (template,highlighter,tagView) {
                                     parents:this.parent,
                                     rowElement: this.$el,
                                     type:'NT',
+                                    tagSearchCall:_.bind(this.tagSearch,this),
                                     helpText : 'Tracks',
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
-                },
+                }
+                ,
+            tagSearch:function(val){
+                this.trigger('tagbmsclicktile',val);
+                return false;
+            },
             /**
              * Initializing all controls here which need to show in view.
             */

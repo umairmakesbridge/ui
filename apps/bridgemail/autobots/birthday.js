@@ -204,6 +204,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         params: {type: 'tags', botId: this.botId, tags: ''}
                         , showAddButton: true,
                         tags: tags,
+                        fromDialog:this.dialog.$el,
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
