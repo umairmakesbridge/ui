@@ -25,8 +25,9 @@ function (template) {
              * Initialize view - backbone
             */
             initialize: function () {
-                    this.template = _.template(template);				
                     this.parent = this.options.page;
+                    this.app = this.parent.app; 
+                    this.template = _.template(template);				                    
                     this.btnRow = this.options.buttonRow;
                     this.object = this.options.object;
                     this.editable=this.options.editable;
@@ -41,8 +42,7 @@ function (template) {
                         this.messageLabel = 'Subject line goes here ...';
                     }
                     this.camp_json = null;
-                    this.triggerOrder = this.options.triggerOrder;                    
-                    this.app = this.parent.app; 
+                    this.triggerOrder = this.options.triggerOrder;                                        
                     this.isWait = false;
                     this.render();                    
             },

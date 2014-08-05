@@ -101,7 +101,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     // Render header, main container, footer and news panel          
                     //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
                     this.app = this.options.app;
-                    this.$el.append(this.header.$el, LandingPage);                    
+                    this.template = _.template(LandingPage);     
+                    this.$el.append(this.header.$el, this.template({}));                    
 
                 },
                 allowWorkspace:function(options){                                    

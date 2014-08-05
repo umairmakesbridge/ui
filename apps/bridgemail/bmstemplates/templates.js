@@ -25,6 +25,8 @@ function (template,highlight,templateCollection,templateRowView) {
              * Initialize view - backbone .
             */
             initialize:function(){              
+               this.app = this.options.app;           
+               this.page = this.options.page; 
                this.template = _.template(template);		
                this.offset = 0;
                this.totalcount = 0;
@@ -43,9 +45,8 @@ function (template,highlight,templateCollection,templateRowView) {
              * Initialize view .
             */
             render: function () {
-               this.$el.html(this.template({}));
-               this.app = this.options.app;           
-               this.page = this.options.page;
+                
+               this.$el.html(this.template({}));               
                this.selectText  = this.options.selectAction?this.options.selectAction:'Select Template';
                this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                if(this.options.hideCreateButton){

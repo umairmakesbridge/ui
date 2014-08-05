@@ -33,7 +33,7 @@
 <td width="90px"><div>
         <div class="mail">
              <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>    
-                <img alt="" class="recurring2img showprogressnt" src="img/recurring2.gif">
+                <img alt="" class="recurring2img showprogressnt" src="<%- this.app.get('path')%>img/recurring2.gif">
                 <div class="prgressbar" style="left:50%;margin-left:-40px">    
                     <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
                 </div>

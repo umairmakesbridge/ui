@@ -12,7 +12,8 @@ define(['text!crm/salesforce/html/salesforce.html'],
             /**
              * Initialize view - backbone .
             */
-            initialize: function () {                    
+            initialize: function () {   
+                this.app = this.options.app;
                 this.template = _.template(template);	
                 this.states = {
                     setup:false,
@@ -29,8 +30,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
              * Initialize view .
             */
             render: function () {                        
-                this.$el.html(this.template({}));                    
-                this.app = this.options.app;
+                this.$el.html(this.template({}));                                    
                 this.setupArea = this.$("#salesforce-setup");
                 this.myImportsArea = this.$("#salesforce-imports");
                 this.newImportArea = this.$("#salesforce-new-import");

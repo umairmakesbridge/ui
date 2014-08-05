@@ -1,7 +1,7 @@
 <div class="thumbnail temp-thumbnail">
   <div class="img">
       <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>    
-      <img alt="" class="recurring2img" src="img/recurring2.gif">
+      <img alt="" class="recurring2img" src="<%- this.app.get('path')%>img/recurring2.gif">
       <div class="prgressbar">    
           <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
       </div>
@@ -35,7 +35,7 @@
        </span>
      <% } else {
        %>  
-       <img src="img/nurtureimg.png" data-src="holder.js" alt="">       
+       <img src="<%- this.app.get('path')%>img/nurtureimg.png" data-src="holder.js" alt="">       
        
       <%}
       

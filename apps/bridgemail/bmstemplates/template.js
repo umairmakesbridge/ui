@@ -26,12 +26,12 @@ function (template,icheck,bmstags) {
              * Initialize view .
             */
             render: function () {
+               this.app = this.options.template.app;                                               
                this.$el.html(this.template({}));
                this.page = this.options.template;
                this.modelTemplate = this.options.rowtemplate;
                this.dialog = this.options.dialog;
-               this.template_id = this.page.template_id;
-               this.app = this.options.template.app;                                             
+               this.template_id = this.page.template_id;               
                this.$('input.checkpanel').iCheck({
                     checkboxClass: 'checkpanelinput',
                     insert: '<div class="icheck_line-icon"></div>'

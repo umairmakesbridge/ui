@@ -25,9 +25,9 @@ function (template,highlighter) {
              * Initialize view - backbone
             */
             initialize: function () {
-                    this.template = _.template(template);				
-                    this.parent = this.options.sub;                    
+                    this.parent = this.options.sub;      
                     this.app = this.parent.app;
+                    this.template = _.template(template);				                                                      
                     this.render();                    
             },
             /**

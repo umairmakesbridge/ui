@@ -26,7 +26,7 @@
         <% if(this.app.decodeHTML(this.model.get("thumbURL"))){ %>
         <span><img src='<%= this.app.decodeHTML(this.model.get("thumbURL")) %>'></span>
             <% } else { %>
-            <img  src="img/templateimg.png" />
+            <img  src="<%- this.app.get('path')%>img/templateimg.png" />
             <% } %>
     </div>
     <div class="caption nurture-caption" style="height: 145px;">

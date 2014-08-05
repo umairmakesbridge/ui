@@ -11,7 +11,7 @@
                 <img src="<%- this.app.decodeHTML(model.get('thumbURL')) %>" data-src="holder.js" alt="" />
             </span>
         <% }else{ %>
-            <img src="img/msgimg.png" data-src="holder.js" alt="" />
+            <img src="<%- this.app.get('path')%>img/msgimg.png" data-src="holder.js" alt="" />
         <% } %>   
   </div>
   <div class="caption nurture-caption">

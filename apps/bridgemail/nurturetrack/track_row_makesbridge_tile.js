@@ -21,10 +21,10 @@ function (template,highlighter,tagView) {
              * Initialize view - backbone
             */
             initialize: function () {
-                    this.template = _.template(template);				
-                    this.parent = this.options.sub
-                    this.app = this.parent.app;
-                    this.render();                    
+                this.parent = this.options.sub                    
+                this.app = this.parent.app;
+                this.template = _.template(template);				                
+                this.render();                    
             },
             /**
              * Render view on page.

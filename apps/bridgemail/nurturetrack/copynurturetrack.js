@@ -11,12 +11,12 @@ function (template) {
                      }
                 },
                 initialize: function () {
-                        this.template = _.template(template);				
-                        this.parent = this.options.page;                        
-                        this.app = this.parent.app;
-                        this.trackObj = this.parent.model;
-                        this.dialog = this.options.copydialog;
-                        this.render();                        
+                    this.parent = this.options.page;      
+                    this.app = this.parent.app;
+                    this.template = _.template(template);				                                                                  
+                    this.trackObj = this.parent.model;
+                    this.dialog = this.options.copydialog;
+                    this.render();                        
                 },
                 render: function () {                        						
                     this.$el.html(this.template({trackName:this.trackObj.get("name")}));                                        

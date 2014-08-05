@@ -73,6 +73,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     'click .messagesbtn': 'loadNotifications'
                 },
                 initialize: function() {
+                    this.app = app;
                     this.template = _.template(template);
                     this.render();
                     this.firstTime = false;

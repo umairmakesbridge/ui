@@ -15,8 +15,8 @@ define(['text!crm/html/crm.html','app'],
              * Initialize view .
             */
             initialize: function () {
-                this.template = _.template(template);				
-                this.app = this.options.app;                
+                this.app = this.options.app;          
+                this.template = _.template(template);				                      
                 this.render();              
                 this.checkSalesForceStatus();
                 this.checkNetSuiteStatus();

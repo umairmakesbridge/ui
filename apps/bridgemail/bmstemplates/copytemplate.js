@@ -47,9 +47,8 @@ function (template) {
                          
                 },
                 render: function () {                        						
-                    this.$el.html(this.template({}));
                     this.app = this.options.app;
-                    
+                    this.$el.html(this.template({}));
                 },
                copyTemplate : function(){
                         var template_id = this.options.template_id;

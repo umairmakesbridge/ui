@@ -26,7 +26,8 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                 /**
                  * Initialize view - backbone
                  */
-                initialize: function() {                    
+                initialize: function() {             
+                    this.app = this.options.app;
                     this.template = _.template(template);                    
                     this.saveAllCall = 0;
                     this.editable = true;
@@ -39,8 +40,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                  * Render view on page.
                  */
                 render: function() {
-                    this.$el.html(this.template({}));
-                    this.app = this.options.app;
+                    this.$el.html(this.template({}));                    
                     this.messages = [];
                     this.targetsRequest = new TargetsCollection();
                     this.targetsModelArray = [];

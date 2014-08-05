@@ -34,8 +34,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                  * Render view on page.
                  */
                 render: function() {
-                    this.$el.html(this.template({}));
                     this.app = this.options.app;
+                    this.$el.html(this.template({}));                    
                     if (this.options.params && this.options.params.sub_id) {
                         this.sub_id = this.options.params.sub_id;
                     }

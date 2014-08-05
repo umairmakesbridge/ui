@@ -24,6 +24,7 @@ define(['text!crm/highrise/html/highrise.html'],
                 }
            },
             initialize: function () {                    
+                this.app = this.options.app;
                 this.template = _.template(template);	
                 this.states = {
                     setup:false,
@@ -74,8 +75,7 @@ define(['text!crm/highrise/html/highrise.html'],
              * Initialize view .
             */
             render: function () {                        
-                this.$el.html(this.template({}));                    
-                this.app = this.options.app;
+                this.$el.html(this.template({}));                                    
                 this.setupArea = this.$("#netsuite-setup");
                 this.myImportsArea = this.$("#netsuite-imports");
                 this.newImportArea = this.$("#netsuite-new-import");

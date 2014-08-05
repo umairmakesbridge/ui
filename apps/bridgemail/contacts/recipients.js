@@ -22,8 +22,8 @@ function (template,app) {
                 'click .r-choose-tags':'showTagsGrid'
             },
             initialize: function () {
-                this.template = _.template(template);
                 this.app = app;
+                this.template = _.template(template);                
                 this.type = this.options.params.type;
                 this.active = 0;
                 this.render();

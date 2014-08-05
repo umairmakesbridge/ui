@@ -2,7 +2,6 @@
     <h4><span class="icon target"></span>Recipients Count: 20</h4>
     <div class="s-progress-bar" style="width:10%;"> </div>
 </div>-->
-
 <div class="wizard-steps step1">
     <div class="row-fluid show-grid">
         <div class="span6 settings">
@@ -212,7 +211,7 @@
             <div id="campaign_add_to_salesforce_accordion">
                 <h3> 
                     <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_salesforce" />
-                    <img width="36" style="margin:0 7px 0 20px;" src="img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <!--<b class="caret"></b> -->
+                    <img width="36" style="margin:0 7px 0 20px;" src="<%- this.app.get('path')%>img/SF_plus.png" alt=""> Add Results to Salesforce Campaign <!--<b class="caret"></b> -->
                 </h3>
                 <div class="accordion-inner">
                     <div class="cont" style="height:128px;">
@@ -246,7 +245,7 @@
             <div id="campaign_add_to_netsuite_accordion">
                 <h3> 
                     <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="campaign_add_to_netsuite" />
-                    <img width="36" style="margin:0 7px 0 20px;" src="img/NS_plus.png" alt=""> Add Results to Netsuite Campaign 
+                    <img width="36" style="margin:0 7px 0 20px;" src="<%- this.app.get('path')%>img/NS_plus.png" alt=""> Add Results to Netsuite Campaign 
                 </h3>
                 <div class="accordion-inner">
                     <div class="cont" style="height:128px;">
@@ -280,7 +279,7 @@
             <div id="conversion_filter_accordion">
                 <h3> 
                     <input type="checkbox" class="checkpanel accrodion-checkbox" value="" id="conversion_filter">
-                    <img width="36" style="margin: 0 7px 0 20px;" src="img/conversion_large.png" alt=""> Conversion Page <!--<b class="caret"></b>-->
+                    <img width="36" style="margin: 0 7px 0 20px;" src="<%- this.app.get('path')%>img/conversion_large.png" alt=""> Conversion Page <!--<b class="caret"></b>-->
                 </h3>
                 <div class="accordion-inner">
                     <div class="cont" style="height:128px;">
@@ -432,13 +431,13 @@ width: 244px;" ></div>
     <div class="selection-boxes" style="width: 980px;"> <!--<a class="prev"><span></span></a>-->
         <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recipients</strong>"  options from  below.</p></div>
         <ul id="choose_soruce">
-            <li id="choose_lists"><a><img alt="" src="img/lists.png"><span>Select Lists</span></a></li>
-            <li id="choose_targets"><a><img alt="" src="img/targets.png"><span>Select Targets</span></a></li>      
-            <li id="choose_tags"><a><img alt="" src="img/tags.png"><span>Tags</span></a></li>
-            <li id="upload_csv"><a><img alt="" src="img/csv.png"><span>Upload CSV</span></a></li>
-            <li id="salesforce_import"><a><img alt="" src="img/salesforce.png"><span>Import from Salesforce</span></a></li>
-            <li id="netsuite_import"><a><img alt="" src="img/netsuite.png"><span>Import from Netsuite</span></a></li>
-            <li id="highrise_import"><a><img alt="" src="img/highrisewizard.png"><span>Import from Highrise</span></a></li>
+            <li id="choose_lists"><a><img alt="" src="<%- this.app.get('path')%>img/lists.png"><span>Select Lists</span></a></li>
+            <li id="choose_targets"><a><img alt="" src="<%- this.app.get('path')%>img/targets.png"><span>Select Targets</span></a></li>      
+            <li id="choose_tags"><a><img alt="" src="<%- this.app.get('path')%>img/tags.png"><span>Tags</span></a></li>
+            <li id="upload_csv"><a><img alt="" src="<%- this.app.get('path')%>img/csv.png"><span>Upload CSV</span></a></li>
+            <li id="salesforce_import"><a><img alt="" src="<%- this.app.get('path')%>img/salesforce.png"><span>Import from Salesforce</span></a></li>
+            <li id="netsuite_import"><a><img alt="" src="<%- this.app.get('path')%>img/netsuite.png"><span>Import from Netsuite</span></a></li>
+            <li id="highrise_import"><a><img alt="" src="<%- this.app.get('path')%>img/highrisewizard.png"><span>Import from Highrise</span></a></li>
         </ul>
         <!--<a class="next"><span></span></a>-->
         <div class="clearfix"></div>
@@ -504,7 +503,7 @@ width: 244px;" ></div>
         <div id="salesforce_welcome" style="display:none">
             <div class="tag_msg1"><span class="caution"></span>Your Salesforce account has not been setup.</div>
             <div class="recept">
-                <img src="img/salesforce-logo.jpg" alt="" />
+                <img src="<%- this.app.get('path')%>img/salesforce-logo.jpg" alt="" />
                 <div class="clearfix"></div>
                 <a id="btnSFLogin" class="btn-green">Setup Salesforce Account</a>
             </div>
@@ -581,7 +580,7 @@ width: 244px;" ></div>
      <div id="highrise_welcome" style="display:none">
             <div class="tag_msg1"><span class="caution"></span>Your Highrise account has not been setup.</div>
             <div class="recept">
-                <img src="img/highrise.jpg" alt="" />
+                <img src="<%- this.app.get('path')%>img/highrise.jpg" alt="" />
                 <div class="clearfix"></div>
                 <a id="btnHSLogin" class="btn-green">Setup Highrise Account</a>
             </div>
@@ -614,7 +613,7 @@ width: 244px;" ></div>
         <div id="netsuite_welcome" style="display:none"> 
             <div class="tag_msg1"><span class="caution"></span>Your Netsuite account has not been setup.</div>
             <div class="recept">
-                <img src="img/netsuite-logo.jpg" alt="" />
+                <img src="<%- this.app.get('path')%>img/netsuite-logo.jpg" alt="" />
                 <div class="clearfix"></div>
                 <a id="btnNSLogin" class="btn-green">Setup Netsuite Account</a>
             </div>
@@ -793,8 +792,8 @@ width: 244px;" ></div>
                     <div class="email-preview">
                         <div class="selection-boxes previewbtns" style="width: 280px; margin:10px auto 0;">
                             <ul id="choose_soruce">
-                              <li class="selected prev-iframe-campaign prev-iframe" id="prev-iframe-html"><a><img alt="" src="img/myhtml.png"><span>HTML</span></a></li>
-                              <li class="prev-iframe-campaign prev-iframe" id="prev-iframe-text"><a><img alt="" src="img/plaintext.png"><span>Text</span></a></li>      
+                              <li class="selected prev-iframe-campaign prev-iframe" id="prev-iframe-html"><a><img alt="" src="<%- this.app.get('path')%>img/myhtml.png"><span>HTML</span></a></li>
+                              <li class="prev-iframe-campaign prev-iframe" id="prev-iframe-text"><a><img alt="" src="<%- this.app.get('path')%>img/plaintext.png"><span>Text</span></a></li>      
                             </ul>
                             <div class="clearfix"></div>
                         </div>
