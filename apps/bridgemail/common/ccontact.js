@@ -68,6 +68,7 @@ function (template,highlighter) {
                 if(this.options.isCamPreview){
                     this.parent.$el.find('#contact-search').val(this.getFullName());
                     this.parent.$el.find('.stats_listing').hide();
+                    this.$el.parents('#temp-camp-previewbar').find('.loading-wheel').show();
                     this.$el.parents('#camp-prev-contact-search').css('background','none');
                 }else{
                     this.$el.parents('.modal-body').find('.contact-name').text(this.getFullName());

@@ -64,11 +64,17 @@ function (template,contactsView,icheck,chosen) {
                     
                     /* Chosen Plugin dropdown*/
                     this.$("#campaign-prev-select").chosen();
+                    
+                    // IFrame Loaded Successfully 
+                    this.$( "#email-template-iframe" ).load(_.bind(function() {
+                       this.$('.loading-wheel').hide();
+                    },this));
                //this.loadTemplates();
                 if(this.options.prevFlag==='C')
                     this.loadContact();
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
+            
             attachEvents:function(){
                 
                 

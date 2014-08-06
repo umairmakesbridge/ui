@@ -198,6 +198,7 @@ function (template,Contacts,viewContact) {
                    if(this.isCamPreview) {
                        this.$('.stats_listing').hide();
                        this.parent.$el.find('#camp-prev-contact-search').css('background','none');
+                       this.$el.parents('#temp-camp-previewbar').find('.loading-wheel').show();
                        if(this.parent.subNum != null){
                            this.parent.subNum=null;
                            this.parent.setiFrameSrc();
