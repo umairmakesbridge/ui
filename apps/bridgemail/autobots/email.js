@@ -555,7 +555,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         that.editable = false;
                     var dialog_width = $(document.documentElement).width() - 50;
                     var dialog_height = $(document.documentElement).height() - 162;
-                    var dialog_object = {title: this.messageLabel + '<strong class="cstatus pclr18" style="float:right; margin-left:5px"> Message <b>' + this.triggerOrder + '</b> </strong>',
+                    var dialog_object = {title: this.messageLabel,
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         bodyCss: {"min-height": dialog_height + "px"}
