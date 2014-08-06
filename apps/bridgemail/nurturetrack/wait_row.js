@@ -40,17 +40,18 @@ function (template,moment) {
                 this.$el.html(this.template({
                     model: this.model
                 }));                
-                
-                this.$(".chosen-select").chosen({no_results_text:'Oops, nothing found!', width: "130px",disable_search: "true"});
+                this.$("#waitday").ForceNumericOnly();
+                //this.$(".chosen-select").chosen({no_results_text:'Oops, nothing found!', width: "130px",disable_search: "true"});
                 this.$(".btn-group").t_button();   
                 this.$("#waitdatetime").datetimepicker({format:'d-m-Y',timepicker:false,closeOnDateSelect:true});                                
                 
                 if(this.object && this.object[0].dispatchType){
                     var _json = this.object[0];
                     if(_json.dispatchType=="D"){
-                        if(_json.dayLapse!=="1"){
+                        /*if(_json.dayLapse!=="1"){
                             this.$(".chosen-select").val(_json.dayLapse).trigger("chosen:updated");
-                        }
+                        }*/
+                        this.$("#waitday").val(_json.dayLapse);
                         var dayText = _json.dayLapse=="1"?" Day":" Days";
                         this.$(".wait-container").html(": "+_json.dayLapse + dayText);
                     }
@@ -111,9 +112,9 @@ function (template,moment) {
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
                         if(this.$(".schedule-group button:first-child").hasClass("active")){
                             post_data['dispatchType'] = 'D';
-                            post_data['dayLapse'] = this.$(".chosen-select").val();
-                            var dayText =this.$(".chosen-select").val()=="1"?" Day":" Days";
-                            this.$(".wait-container").html(": "+this.$(".chosen-select").val() + dayText);
+                            post_data['dayLapse'] = this.$("#waitday").val();
+                            var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
+                            this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
                         }
                         else{
                             post_data['dispatchType'] = 'S';
