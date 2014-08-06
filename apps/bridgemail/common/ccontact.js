@@ -6,8 +6,8 @@
  * Dependency: CCONTACT HTML
  */
 
-define(['text!common/html/ccontact.html'],
-function (template) {
+define(['text!common/html/ccontact.html','jquery.highlight'],
+function (template,highlighter) {
         'use strict';
         return Backbone.View.extend({
             className: 'erow',
@@ -32,6 +32,12 @@ function (template) {
                 //this.template.id();
                 
                 //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
+                 if(this.parent.searchText){
+                    this.$(".view-profile").highlight($.trim(this.parent.searchText));
+                    this.$(".tag").highlight($.trim(this.parent.searchText));
+                }else{
+                    this.$(".tag").highlight($.trim(this.parent.searchTags));
+                }
             },
             openContact:function(){
                 this.$el.parents('.modal').find('.close').click();
