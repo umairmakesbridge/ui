@@ -105,16 +105,25 @@ function (template,moment) {
                 var btn = $.getObj(e,"button");
                 this.$(".wait-select").hide();
                 this.$("."+btn.attr("rel")+"-select").css("display","inline-block");
+                if(btn.attr("rel")=="days"){
+                    this.$("#waitday").focus();
+                }
             },
             saveWait:function(obj){
                 if(this.triggerOrder){
+                    var isError = "";
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
                         if(this.$(".schedule-group button:first-child").hasClass("active")){
                             post_data['dispatchType'] = 'D';
                             post_data['dayLapse'] = this.$("#waitday").val();
-                            var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
-                            this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
+                            if(post_data['dayLapse']>0 && post_data['dayLapse']<=365){                                                            
+                                var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
+                                this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
+                            }
+                            else{
+                                isError = "Days must be between 1-365";
+                            }
                         }
                         else{
                             post_data['dispatchType'] = 'S';
@@ -122,28 +131,34 @@ function (template,moment) {
                             post_data['scheduleDate'] = _date.format("MM-DD-YY");
                             this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
                         }
-                        this.$(".save-wait").addClass("saving");
-                        $.post(URL, post_data)
-                        .done(_.bind(function(data) {                                             
-                               var _json = jQuery.parseJSON(data);        
-                               this.$(".save-wait").removeClass("saving");
-                               if(_json[0]!=='err'){
-                                   if(obj){
-                                    this.app.showMessge("Message wait saved Successfully!"); 
+                        if(!isError){
+                            this.$(".save-wait").addClass("saving");
+                            $.post(URL, post_data)
+                            .done(_.bind(function(data) {                                             
+                                   var _json = jQuery.parseJSON(data);        
+                                   this.$(".save-wait").removeClass("saving");
+                                   if(_json[0]!=='err'){
+                                       if(obj){
+                                        this.app.showMessge("Message wait saved Successfully!"); 
+                                       }
+                                       else{
+                                           this.parent.saveAllCall--;
+                                           if(this.parent.saveAllCall==0){
+                                              this.app.showMessge("Nurture track saved Successfully!"); 
+                                              this.parent.$(".save-all-nt").removeClass("saving");
+                                           } 
+                                       }
+                                       this.parent.messages[this.triggerOrder-1].isWait = true;
                                    }
                                    else{
-                                       this.parent.saveAllCall--;
-                                       if(this.parent.saveAllCall==0){
-                                          this.app.showMessge("Nurture track saved Successfully!"); 
-                                          this.parent.$(".save-all-nt").removeClass("saving");
-                                       } 
+                                       this.app.showAlert(_json[0],$("body"),{fixed:true}); 
                                    }
-                                   this.parent.messages[this.triggerOrder-1].isWait = true;
-                               }
-                               else{
-                                   this.app.showAlert(_json[0],$("body"),{fixed:true}); 
-                               }
-                       },this));
+                           },this));
+                       }
+                       else{
+                           this.app.showAlert(isError,$("body"),{fixed:true}); 
+                           obj.stopPropagation();
+                       }
                 }
             },
             toggleAccordion:function(){      

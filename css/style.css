@@ -7223,7 +7223,7 @@ div.returnpath {
 }
 .messagebox:after {content:""; width:45px; height:100%; display:block; position:absolute; left:0; top:0;}
 .messagebox a.closebtn {
-	background: url("../img/closebtn.png") no-repeat scroll 0 0 transparent;
+	background: url("../img/closebtn.png") no-repeat scroll 0 0 transparent !important;
 	display:block;
 	width:18px;
 	height:18px;

@@ -89,6 +89,11 @@
                 value_display = "none" 
              }
         }
+         if(params.rule=="empty" || params.rule=="notempty"){
+             value_display = "none" 
+             format_display = "none"
+             gap_display="none"
+         }
       }
              
       var filter_html = '<div class="btn-group field-container"><div class="inputcont"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
@@ -163,6 +168,12 @@
                     filter.find(".formats-container").hide()
                 }
                 filter.find(".value-container").show()
+             }
+             
+             if($(this).val()=="empty" || $(this).val()=="notempty"){
+                  filter.find(".days-container").hide()  
+                  filter.find(".formats-container").hide()
+                  filter.find(".value-container").hide()
              }
              
              
