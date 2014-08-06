@@ -56,8 +56,8 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         $(this.el).find('#txtAutobotName').focus();
                         return;
                     }
-                    this.saveAutobotData(this.options.actionType, this.options.botType);
-
+                    that.options.app.showLoading('Saving bot....', $("#new_autobot"));
+                    this.saveAutobotData(this.options.actionType, this.options.botType);                    
 
                 },
                 chooseAutobotType: function(botId) {
@@ -107,6 +107,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                     $.post(URL, post_data)
                             .done(function(data) {
                                 var _json = jQuery.parseJSON(data);
+                                that.options.app.showLoading(false, $("#new_autobot"));
                                 if (_json[0] !== "err") {
                                     that.campNum = _json[1];
                                     that.chooseAutobotType(_json[1]);

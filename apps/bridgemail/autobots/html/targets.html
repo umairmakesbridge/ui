@@ -7,7 +7,7 @@
             <div class="tags tagscont">
                 <ul>
                     <% _.each(this.model.get('tags').split(","),function(t){ %>  
-                    <li><a  class="tag showtooltip" data-original-title="Click to view targets with same tag"><%- t %></a> </li>
+                    <li><a  class="tag showtooltip" data-original-title="Click to view targets with same tag"><%- this.app.decodeHTML(t) %></a> </li>
                     <% })%> 
 
                 </ul>
