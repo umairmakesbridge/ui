@@ -34,6 +34,7 @@ function (template,Contacts,viewContact) {
                  this.app = this.options.page.app;
                  this.parent = this.options.page;
                  this.searchWidth = this.options.searchCss ? this.options.searchCss:'415px';
+                 this.placeholderText = this.options.placeholderText ? this.options.placeholderText:'Search Contacts &amp; Tags';
                  this.isHideCross = this.options.hideCross;
                  this.isCamPreview = this.options.isCamPreview;
                  this.render();
