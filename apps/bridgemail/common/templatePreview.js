@@ -165,7 +165,7 @@ function (template,contactsView,icheck,chosen) {
                      var active_ws = $(".modal-body");
                      active_ws.find('.campaign-clickers').remove();
                      //active_ws.append("<div class='dddiv-prevCam campaign-clickers' id='campaign-temp-contact-dialog'></div>"); 
-                      active_ws.find('#camp-prev-contact-search').append(new contactsView({page:this,searchCss:'489px',hideCross:true,isCamPreview:true}).el)
+                      active_ws.find('#camp-prev-contact-search').append(new contactsView({page:this,searchCss:'489px',hideCross:true,isCamPreview:true,placeholderText:'Search for a contact to use for testing merge tag values'}).el)
                       active_ws.find('#prev-closebtn').css({'top':'18px'});
                       
                       /*active_ws.find(".campaign-clickers .closebtn").on('click', function(){
