@@ -15,10 +15,10 @@ function (template,highlighter) {
             */
             events: {
                'click .copy-camp':'copyCampaign',
-               'click  a.campname':'previewCampaign',
-               "click .preview-camp":'previewCampaign',
+               'click  a.campname-copy':'previewCampaign',
+               "click .preview-camp-copy":'previewCampaign',
                'click .taglink':'tagClick',
-               'click .delete-camp':'deleteCampaginDialoge',
+               'click .delete-camp-copy':'deleteCampaginDialoge',
                'click .report':'reportShow'
                
             },
