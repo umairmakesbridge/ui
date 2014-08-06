@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog','jquery.icheck'/*,'jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-shuffle','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope','jquery.customScroll'*/
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog2','jquery.icheck'/*,'jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-shuffle','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope','jquery.customScroll'*/
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -82,7 +82,12 @@ define([
 			$(_.bind(function () {
                                 //Create the main container
 				this.mainContainer = new MainContainer({app:this});				              
-                                
+                                // Dialog Flag 
+                                this.isDialogExists = false;
+                                // Dialog view 
+                                this.dialogView = '';
+                                // Dialog Array
+                                this.dialogArray = [];
                                 //attaching main container in body                                
                                 $('body').append(this.mainContainer.$el);
                                 $('body').append(this.mainContainer.footer.$el);
@@ -448,10 +453,19 @@ define([
                 }).fail(function() { console.log( "error in "+data.key+" fields" ); });                  
             },
             showDialog:function(options){
-                var dialog = new bmsDialog(options);                                
-                $("body").append(dialog.$el);
-                dialog.show();               
-                return dialog;
+                 options['app'] = this;
+                if(!this.isDialogExists){
+                    this.dialogArray.push(options.wrapDiv);
+                    var dialog = new bmsDialog(options); 
+                    this.dialogView = dialog;
+                    $("body").append(dialog.$el);
+                    dialog.show();   
+                    this.isDialogExists = true;
+                    return dialog;
+                }else{
+                   var returnDialog = this.appendDialogView(options);
+                   return returnDialog;
+                }
             },
             enableValidation:function(options)
             {
@@ -591,6 +605,22 @@ define([
                 }else{
                     return true;
                 }
+            },
+            appendDialogView : function(options){
+                this.dialogArray.push(options.wrapDiv);
+               var length = this.dialogArray.length;
+               var hideElement = this.dialogArray[length-2];
+               // Assign values
+               this.dialogView.optionObj[options.wrapDiv] = options;
+               
+               console.log(this.dialogView.optionObj);
+               this.dialogView.dialogHeader(this.dialogView.optionObj[options.wrapDiv]);
+               this.dialogView.dialogFooter(this.dialogView.optionObj[options.wrapDiv]);
+               // Hide Previous and show new 
+               this.dialogView.$el.find($('.'+hideElement)).hide();
+               this.dialogView.$el.find('.backbtn').show(); 
+              console.log(this.dialogArray);
+              return this.dialogView;
             }
 	});
 
