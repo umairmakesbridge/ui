@@ -1,9 +1,9 @@
-<div style="position:relative;top:-22px; left:85px; width:20px;">
+<div style="position:relative;top:-22px; left:350px; width:20px;display:none">
     <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
             <i class="icon"></i><em>Please tell me which target to check for this bot, you can select only one target.</em></span></label>
 </div>            	
 <h2><i class="icon target"></i>
-    <span>Choose Target</span> 
+    <span>Please use a target to specify who I should tag.</span> 
 
     <a style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;display:none;" id="hrfchangetarget" class="add-targets">Set target</a>
 </h2>
@@ -32,18 +32,18 @@
 
 </div>
 
-<div style="position:relative;top:-21px; left:40px; width:20px">
+<div style="position:relative;top:-21px; left:40px; width:20px;display:none">
     <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
             <i style="width:;height:none!important" class="icon"></i><em>
                 Choose to perform the tags action once or mutliple times</em></span></label></div>
-<h2><i class="icon setting"></i>Repeat </h2>
+<h2><i class="icon setting"></i>How often should I check your contacts to tag them? </h2>
 <div class="bot_p_box">
     <div class="bot_p_boxinner">
         <div>
             <div style="display:inline-block; float:left">
                 <select id="ddlIsRecur" class="nosearch" style="width: 120px; display: none;">
                     <option value="N">Only once</option>
-                    <option value="Y">Repeats</option>
+                    <option value="Y">Repeat</option>
                 </select>
                 <span id="spnhelptext" style="color: #6292AD;">&nbsp;Selected action will be perform one time.</span>       
             </div>
@@ -58,24 +58,24 @@
                     <option value="Y">Year</option>
                 </select>
                 <select id="ddlendless" class="nosearch" style="width: 150px; display: none;">
-                    <option value="0" selected="selected">Endless</option>
+                    <option value="0" selected="selected">forever</option>
                     <option value="1">Not more than</option>
                 </select>
                 <div class="show-recur-period" style="display:none; padding-top:2px;">
                     <input type="text" value="1" id="txtRecurTimes" name="" placeholder="1" style="width:50px">
                    
                 </div>
-                 <span class="">    time(s) </span>
+                <span class="">    time(s) </span>
             </div>
         </div> <!-- set-row  -->
         <div class="clearfix"></div>
     </div>
 </div>
-<div style="position:relative;top:-22px; left:80px; width:70%;">
+<div style="position:relative;top:-22px; left:80px; width:70%;display:none">
     <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
             <i class="icon"></i><em>Following tags will be applied to matching contacts.</em></span></label>
 </div>  
-<h2><i class="icon tags"></i>Choose Tags </h2>
+<h2><i class="icon tags"></i>What tags should I apply? </h2>
 
 <div class="bot_p_box">
     <div class="bot_p_boxinner">

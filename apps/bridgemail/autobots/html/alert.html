@@ -1,10 +1,10 @@
-<div style="position:relative;top:-22px; left:85px; width:20px;">
+<div style="position:relative;top:-22px; left:296px; width:20px;display: none">
     <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
             <i class="icon"></i><em>Please tell me which target to check for this bot, you can select only one target.</em></span></label>
 </div>
 
 <h2><i class="icon target"></i>
-    <span>Choose Target</span> 
+    <span>Please use a target to specify Alert rules</span> 
     <a style="float:right; margin-right:5px;text-decoration:underline; cursor:pointer;font-size: 16px;display:none" id="hrfchangetarget" class="add-targets"  > Set target</a>
 </h2>
 <div class="bot_p_box">
@@ -32,8 +32,8 @@
 
 </div>
 
-<div style="position:relative;top:-21px; left:40px; width:20px"><label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo"><i style="width:;height:none!important" class="icon"></i><em>Choose to perform the alerts action once or mutliple times</em></span></label></div>
-<h2><i class="icon setting"></i>Repeat </h2>
+<div style="position:relative;top:-21px; left:334px; width:20px;display: none"><label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo"><i style="width:;height:none!important" class="icon"></i><em>Choose to perform the alerts action once or mutliple times</em></span></label></div>
+<h2><i class="icon setting"></i>Would you like to be alerted more than once? </h2>
 
 <div class="bot_p_box">
     <div class="bot_p_boxinner">
@@ -41,7 +41,7 @@
             <div style="display:inline-block; float:left">
                 <select id="ddlIsRecur" class="nosearch" style="width: 120px; display: none;">
                     <option value="N">Only once</option>
-                    <option value="Y">Repeats</option>
+                    <option value="Y">Repeat</option>
                 </select>
                 <span id="spnhelptext" style="color: #6292AD;">&nbsp;Selected action will be perform one time.</span>       
             </div>
@@ -56,20 +56,20 @@
                     <option value="Y">Year</option>
                 </select>
                 <select id="ddlendless" class="nosearch" style="width: 150px; display: none;">
-                    <option value="0" selected="selected">Endless</option>
+                    <option value="0" selected="selected">forever</option>
                     <option value="1">Not more than</option>
                 </select>
                 <div class="show-recur-period" style="display:none; padding-top:2px;">
                     <input type="text" value="1" id="txtRecurTimes" name="" placeholder="1" style="width:50px">
                    
                 </div>
-                 <span class="">    time(s) </span>
+                <span class="text-times">    time(s) </span> 
             </div>
         </div> <!-- set-row  -->
         <div class="clearfix"></div>
     </div>
 </div>
-<div style="position:relative;top:-22px; left:25px; width:20px">
+<div style="position:relative;top:-22px; left:25px; width:20px;display: none">
     <label style="display: block;  " class="step2-lists"><span style="display: block;" class="fieldinfo">
             <i class="icon"></i><em>Following alert will be sent on entered emails for matching contacts</em></span></label>
 </div>
@@ -94,7 +94,7 @@
                 <div class="input-append adv_dd ">
                     <div class="inputcont">
                         <textarea id="alertmessage" placehoder="Type your alert message here. You can also insert merge tags in your message."></textarea>
-                        <em>You may choose the merge tags from the list and copy &amp; paste in your alert message.</em>
+                        <em>Select merge tags here then copy and paste into your alert message.</em>
                         <div class="input-append adv_dd " id="wrap_email" style="margin:0px 0px 0px 0px;">
                             <div class="inputcont">
                                 <input placeholder="{{LASTNAME}}" id="alert_merge_field" class="header-info" type="text" style="width:72%!important;"></div>

@@ -179,11 +179,11 @@ define([
                           return false;
                     }
                     this.set("user",_json);   
-                    /*if(this.mainContainer){
+                    if(this.mainContainer){
                         this.NTusers();
                     }else{
                         setTimeout(_.bind(this.NTusers,this),200);
-                    }*/
+                    }
                 
                 },this));
                 this.checkFromCRM();           
@@ -196,12 +196,12 @@ define([
                 }       
             },
             NTusers:function(){
-              var allowedUser = ['admin','jayadams','erpguru','hawaiilife'];  
-              if(allowedUser.indexOf(this.get("user").userId)>-1 || this.get("isNurtureTrack")){
-                this.mainContainer.$(".nt-li,.naturetrack-li").show();
+              var allowedUser = ['admin','jayadams','demo'];  
+              if(allowedUser.indexOf(this.get("user").userId)>-1){
+                this.mainContainer.$(".autobots-gallery").show();
               }
               else{
-                  this.mainContainer.$(".nt-li,.naturetrack-li").hide();
+                  this.mainContainer.$(".autobots-gallery").hide();
               }  
             },
             fromCRM:function(){
