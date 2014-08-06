@@ -112,17 +112,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                         this.$(".modal-footer .btn-save i").removeClass("save").addClass(this.option.buttons.saveBtn.btnicon);
                                     }
                                 }
-                                 if(this.option.buttons.closeBtn){
-                                    if(this.option.buttons.saveButtn.text){
-                                        this.$(".modal-footer .btn-close span").html(this.option.buttons.closeBtn.text);
-                                    }
-                                }
-                                if(this.option.buttons.playBtn){
-                                    if(this.option.buttons.playBtn.text){
-                                        this.$(".modal-footer .btn-play span").html(this.option.buttons.playBtn.text);
-                                    }
-                                }
-                            
+                                 
+                            }else{
+                                this.$(".modal-footer .btn-save").hide();
                             }
                             
                         },
