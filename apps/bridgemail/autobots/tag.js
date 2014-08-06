@@ -79,6 +79,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             this.$el.find("#show_other").show();
                             this.$el.find("#spnhelptext").hide();
                         } else {
+                            this.$el.find("#show_other").hide();
                             this.$el.find("#spnhelptext").show();
                         }
                         this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));

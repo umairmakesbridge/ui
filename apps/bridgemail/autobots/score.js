@@ -81,6 +81,7 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                              this.$el.find("#show_other").show();
                              this.$el.find("#spnhelptext").hide();
                         }else{
+                            this.$el.find("#show_other").hide();
                             this.$el.find("#spnhelptext").show();
                         }
                          this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
