@@ -710,7 +710,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     else if(this.states.step2.plainText){
                         this.$("#plain_text").click();
-                        this.$("#plain-text").val(this.states.step2.plainText);
+                        this.$("#plain-text").val(this.app.decodeHTML(this.states.step2.plainText,true));
                     }
                     var _height = $(window).height()-431;
                     var _width = this.$el.width()-24;
@@ -2132,7 +2132,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 setEditor:function(){
                   this.bmseditor.showEditor(this.wp_id);                                       
                   tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
-                  this.$("#bmstexteditor").val(this.states.step2.plainText);
+                  this.$("#bmstexteditor").val(this.app.decodeHTML(this.states.step2.plainText,true));
                   this.$(".textdiv").hide();
                 },
                 setEditorHTML:function(tsv, state, xhr){

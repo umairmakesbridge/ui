@@ -64,11 +64,11 @@ function (template,editorView) {
             populateBody:function(){
               if(this.parent.htmlText){
                     this.$("#html_editor").click();
-                    this.$("#plain-text").val(this.parent.plainText);
+                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
                 }
                 else if(this.parent.plainText){
                     this.$("#plain_text").click();
-                    this.$("#plain-text").val(this.parent.plainText);
+                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
                 }  
             },
             init:function(){
