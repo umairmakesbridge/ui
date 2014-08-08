@@ -1200,7 +1200,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
                      }                 
                      else if(selected_li=="html_editor_mee"){
-                         html =this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").getMEEHTML();
+                         html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;
                      }
                         
@@ -1916,9 +1916,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj =this;
                     var camp_id= this.camp_id;
                     
-                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');                        
+                    var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');                        
                     this.$("#save_results_sf").addClass("saving");
-                    $.post(URL, { campNum: camp_id,nsCampaignID: this.$("#ns_campaigns_combo").val() , add:'Y',type:"addToNetsuite"})
+                    $.post(URL, { campNum: camp_id,nsCampaignID: this.$("#ns_campaigns_combo").val() , add:'Y',type:"addToNetsuite",campaignType:'N'})
                     .done(function(data) {                            
                         camp_obj.$("#save_results_ns").removeClass("saving");
                         camp_obj.states.step1.hasResultToSalesCampaign = true;
@@ -2040,7 +2040,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
+                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
@@ -2079,10 +2079,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));
                          this.$("#mee_editor").attr("src","MEE/index.jsp?BMS_REQ_TK="+this.app.get('bms_token'));
                          this.states.step2.meeEditor = true;
-                         this.$("#mee_editor").load(_.bind(function(){
+                         /* this.$("#mee_editor").load(_.bind(function(){
                              this.app.showLoading(false,this.$("#area_html_editor_mee"));                             
                              this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
-                         },this))
+                         },this))*/
+                         require(["editor/MEE"],_.bind(function(MEE){                  
+                            this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor")});                                    
+                            this.$("#mee_editor").setChange(this.states);
+                        },this));
                     }
                 },
                 getcampaignscopy:function(){
@@ -2139,21 +2144,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                       /* if(html_json.isEasyEditorCompatible=="Y"){
+                        if(html_json.isEasyEditorCompatible=="Y"){
                             this.$("#html_editor_mee").click();
                             this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
                             this.states.editor_change = true;                           
                         }
-                        else{*/
+                        else{
                             this.$("#html_editor").click();
                             tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                        //}
+                        }
                     }
                     
                 },
                 setMEE:function(html){
-                   if( this.states.step2.meeLoaded  && this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML){
-                        this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML(html);                        
+                   if(this.$("#mee_editor").setMEEHTML){
+                        this.$("#mee_editor").setMEEHTML(html);                        
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);
