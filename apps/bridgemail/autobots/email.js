@@ -51,7 +51,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         if (!that.messageLabel) {
                             that.messageLabel = 'Subject line goes here ...';
                         }
-
+                        that.object = that.model.get('actionData');    
                         that.campNum = that.model.get('actionData')[0]['campNum.encode'];
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
@@ -549,10 +549,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     //}
                     //else{\
                     var that = this;
-                    if (that.editable == false)
-                        that.editable = true;
-                    else
-                        that.editable = false;
+                    var isEdit = true;
+                        if (that.status == "D"){
+                           isEdit = true;
+                       }else{
+                           isEdit = false;
+                       }
                     var dialog_width = $(document.documentElement).width() - 50;
                     var dialog_height = $(document.documentElement).height() - 162;
                     var dialog_object = {title: this.messageLabel,
@@ -567,7 +569,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.app.showLoading("Loading Settings...", dialog.getBody());
                     var that = this;
                     require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
-                        var sPage = new settingPage({page: this, dialog: dialog, editable: that.editable, type: "autobots", campNum: this.campNum});
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "autobots", campNum: this.campNum});
                         dialog.getBody().html(sPage.$el);
                         dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
                         sPage.init();

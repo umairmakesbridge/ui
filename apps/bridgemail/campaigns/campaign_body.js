@@ -168,7 +168,7 @@ function (template,editorView) {
               if(tinyMCE && tinyMCE.get('bmseditor_'+this.wp_id))  {
                 this.bmseditor.showEditor(this.wp_id);                                       
                 tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
-                this.$("#bmstexteditor").val(this.parent.plainText);
+                this.$("#bmstexteditor").val(this.app.decodeHTML(this.parent.plainText,true));
                 this.$(".textdiv").hide();
               }
               else{

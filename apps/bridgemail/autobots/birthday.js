@@ -52,7 +52,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                         if (!that.messageLabel) {
                             that.messageLabel = 'Subject line goes here ...';
                         }
-
+                        that.object = that.model.get('actionData');
                         that.campNum = that.model.get('actionData')[0]['campNum.encode'];
                         that.fieldName = that.model.get('actionData')[0]['fieldName'];
                         that.dateFormat = that.model.get('actionData')[0]['dateFormat'];
@@ -501,10 +501,12 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     //}
                     //else{
                     var that = this;
-                    if(that.editable == false)
-                         that.editable = true;
-                     else
-                         that.editable = false;
+                    var isEdit = true;
+                        if (that.status == "D"){
+                           isEdit = true;
+                       }else{
+                           isEdit = false;
+                       }
                     var dialog_width = $(document.documentElement).width() - 50;
                     var dialog_height = $(document.documentElement).height() - 162;
                     var dialog_object = {title: this.messageLabel,
@@ -518,7 +520,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     var dialog = this.app.showDialog(dialog_object);
                     this.app.showLoading("Loading Settings...", dialog.getBody());
                     require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
-                        var sPage = new settingPage({page: this, dialog: dialog, editable: that.editable, type: "autobots", campNum: this.campNum});
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "autobots", campNum: this.campNum});
                         dialog.getBody().html(sPage.$el);
                         dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
                         sPage.init();
