@@ -40,6 +40,28 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         this.nextAction();
                     }
                 },
+                getCaption:function(){
+                    var caption = ""; 
+                    switch (this.options.actionType) {
+                       case "E":
+                           if (this.options.botType == "B") {
+                                caption =  "Enter name for birthday bot";
+                            } else {
+                                caption = "Enter name for email bot";
+                            }
+                            break;
+                        case "SC":
+                            caption = "Enter name for score bot";
+                            break;
+                        case "A":
+                            caption = "Enter name for alert bot";
+                            break;
+                        case "TG":
+                            caption = "Enter name for tag bot";
+                            break;
+                    }
+                    return caption;
+                },
                 nextAction: function(ev) {
                     var that = this;
                     this.autobotName = $(this.el).find('#txtAutobotName').val();
@@ -62,6 +84,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                 },
                 chooseAutobotType: function(botId) {
                     this.botId = botId;
+                    this.options.listing.fetchBots(0,botId);
+                    //this.getAutobotModel(botId) ;
+                    return;
                     switch (this.options.actionType) {
                         case "E":
                             $(this.el).remove();
@@ -387,7 +412,27 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         }
                         var m = new Backbone.Model(autobot);
                         that.model = m;
+                        return m;
 
+
+                    });
+                },
+                 getAutobotModel: function(botId) {
+                    
+                    var that = this;
+                    var bms_token = that.options.app.get('bms_token');
+                    var url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + bms_token + "&type=get&botId=" + botId;
+                    jQuery.getJSON(url, function(tsv, state, xhr) {
+                        var autobot = jQuery.parseJSON(xhr.responseText);
+                        if (that.options.app.checkError(autobot)) {
+                            return false;
+                        }
+                        var m = new Backbone.Model(autobot);
+                         
+                          require(["autobots/autobots_tile", ], function(Tile) {
+                          var mPage = new Tile({model: m, app: that.options.app, page: that});;
+                          mPage.editAutobot(botId);
+                        });
 
                     });
                 },

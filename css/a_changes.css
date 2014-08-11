@@ -3306,7 +3306,7 @@ ul#autobots_search_menu li a {
     top: 230px !important;
     transform: rotate(180deg);
 }
-
+.icon.extra { background: url("../img/extra.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
 
 
 

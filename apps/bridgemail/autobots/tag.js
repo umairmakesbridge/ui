@@ -228,6 +228,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     } else {
                         this.mainTags = tags;
                     }
+                    this.options.refer.getAutobotById(this.botId);
                 },
                 saveTagAutobot: function(close) {
                     if (this.status != "D") {
@@ -264,10 +265,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                     if (!close) {
                                         that.options.refer.getAutobotById(that.botId);
                                         //that.options.dialog.hide();
-                                        if (typeof that.options.botType != "undefined") {
-                                            if (typeof that.options.refer.options.listing != "undefined")
-                                                that.options.refer.options.listing.fetchBots();
-                                        }
+                                        
                                     }
                                 }
                                 else {

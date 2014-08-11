@@ -85,7 +85,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .view-tags':'viewTags',
                     'click .view-targets':'viewTargets',
                     'click .nurture-tracks' : 'nurtureTracks',
-                    'click .autobots-gallery':'autoBots'
+                    'click .autobots-gallery':'autoBots',
+                    'click .new-emailbot':'newAutobot',
+                    'click .new-birthdaybot':'newAutobot',
+                    'click .new-tagbot':'newAutobot',
+                    'click .new-alertbot':'newAutobot',
+                    'click .new-scorebot':'newAutobot',
                     
 
                 },
@@ -149,6 +154,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                         $("#workspace .workspace").append(wp_view.$el);
                         //wp_view.initScroll(wp_view.$el);
+                        //this.addMoreTabs( wp_count+1);
                         wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         
                         
@@ -206,6 +212,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                         if (!workspace_li.hasClass("active")) {
                             this.activeWorkSpace(workspace_li,options);
+                        }else{
+                            if(workspace_li.data("viewObj") && workspace_li.data("viewObj").refreshWorkSpace){
+                                workspace_li.data("viewObj").refreshWorkSpace(options);
+                            }
                         }
                         //setTimeout(_.bind(this.app.fixCampaignInputStepOne, this), 400);
                     }
@@ -234,7 +244,6 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                 },
                 activeWorkSpace: function(obj,options) {
-
                     if (!obj.hasClass("active")) {
                         obj.removeClass("hover");
                         $(".ws-tabs li").removeClass('active');
@@ -254,7 +263,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 obj.data("viewObj").refreshWorkSpace(options);
                             }
                         }
-                    }
+                    } 
                 },
                 setTabDetails:function(params){
                     var wp_id = params.workspace_id ? params.workspace_id.split("_")[1]:"";
@@ -481,6 +490,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 autoBots:function(){
                     this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting'});
                 },
+                newAutobot:function(ev){
+                    if($(ev.target).prop('tagName') !="LI"){
+                        var type = $(ev.target).parents('li').data('type');
+                    } else{
+                        var type = $(ev.target).data('type');
+                    }
+                    
+                    this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting',params: {botType: type}});
+                },
                 salesforceCrm:function(){
                     this.addWorkSpace({
                         type:'',
@@ -563,6 +581,21 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                            dialog.getBody().html(mPage.$el);
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                       });
+                },
+                addMoreTabs:function(count){
+                    var tabHeight = $(".ws-tabs").height();
+                    var windowHeight = $( window ).height() -250;
+                    console.log('window height is here');
+                     if(tabHeight >= windowHeight){
+                        var liMore = $('#wp_li_0').before('<li class="li-more" id="wp_li_'+count+'"><a><span class="icon extra "></span></a><div class="detail"><div class="heading"></div><div class="subheading"> test</div><i class="closehover" title="Close Workspace"></i></div></li>');
+                        $("#wstabs").append(liMore);
+                        
+                    }else{
+                        if($("#wstabs").find(".li-more").length > 0){
+                            $("#wstabs").find(".li-more").remove();
+                        }
+                    }
+                   
                 }
 
             });
