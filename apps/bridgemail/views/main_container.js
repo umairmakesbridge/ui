@@ -85,7 +85,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .view-tags':'viewTags',
                     'click .view-targets':'viewTargets',
                     'click .nurture-tracks' : 'nurtureTracks',
-                    'click .autobots-gallery':'autoBots'
+                    'click .autobots-gallery':'autoBots',
+                    'click .new-emailbot':'newAutobot',
+                    'click .new-birthdaybot':'newAutobot',
+                    'click .new-tagbot':'newAutobot',
+                    'click .new-alertbot':'newAutobot',
+                    'click .new-scorebot':'newAutobot',
                     
 
                 },
@@ -207,6 +212,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                         if (!workspace_li.hasClass("active")) {
                             this.activeWorkSpace(workspace_li,options);
+                        }else{
+                            if(workspace_li.data("viewObj") && workspace_li.data("viewObj").refreshWorkSpace){
+                                workspace_li.data("viewObj").refreshWorkSpace(options);
+                            }
                         }
                         //setTimeout(_.bind(this.app.fixCampaignInputStepOne, this), 400);
                     }
@@ -235,7 +244,6 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                 },
                 activeWorkSpace: function(obj,options) {
-
                     if (!obj.hasClass("active")) {
                         obj.removeClass("hover");
                         $(".ws-tabs li").removeClass('active');
@@ -255,7 +263,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 obj.data("viewObj").refreshWorkSpace(options);
                             }
                         }
-                    }
+                    } 
                 },
                 setTabDetails:function(params){
                     var wp_id = params.workspace_id ? params.workspace_id.split("_")[1]:"";
@@ -481,6 +489,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 autoBots:function(){
                     this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting'});
+                },
+                newAutobot:function(ev){
+                    if($(ev.target).prop('tagName') !="LI"){
+                        var type = $(ev.target).parents('li').data('type');
+                    } else{
+                        var type = $(ev.target).data('type');
+                    }
+                    
+                    this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting',params: {botType: type}});
                 },
                 salesforceCrm:function(){
                     this.addWorkSpace({

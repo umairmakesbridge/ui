@@ -16,6 +16,14 @@ define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
                 initialize: function() {
                     this.template = _.template(template);
                     this.render();
+                    var that = this;
+                    if(this.options.type !==false){
+                      setTimeout(function(){
+                          that.selectAutobot();
+                      },200)
+                      
+                    } 
+                    
                 },
                 render: function() {
                     this.$el.html(this.template());
@@ -27,8 +35,17 @@ define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
                     $('.autobots-modal-in').remove();
                 },
                 selectAutobot:function(ev){
-                    var actionType = $(ev.target).parents('li').data('bot');
-                    var botType = $(ev.target).parents('li').data('type');
+                    var actionType = "";
+                    var botType = "";
+                    
+                    if(this.options.type !== false){
+                          actionType =   this.options.type == "EB"?"E":this.options.type;
+                          botType = this.options.type == "EB"?"B":"N";
+                    }else{    
+                          actionType = $(ev.target).parents('li').data('bot');
+                          botType = $(ev.target).parents('li').data('type');
+                    }
+                    
                     $('#new_autobot').html(new AutobotName({actionType:actionType,botType:botType,app:this.options.app,listing:this.options.listing}).el);
 
                 }

@@ -225,6 +225,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     } else {
                         this.mainTags = tags;
                     }
+                    this.options.refer.getAutobotById(this.botId);
                 },
                 msieversion: function() {
                     var ua = window.navigator.userAgent;
@@ -286,10 +287,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                                     if (!close) {
                                         that.options.refer.getAutobotById(that.botId);
                                         //that.options.dialog.hide();
-                                        if (typeof that.options.botType != "undefined") {
-                                            if (typeof that.options.refer.options.listing != "undefined")
-                                                that.options.refer.options.listing.fetchBots();
-                                        }
+                                       
                                     }
                                 }
                                 else {

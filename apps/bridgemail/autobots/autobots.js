@@ -43,10 +43,28 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.render();
                     this.getFiltersData();
                     this.getFormatsData();
+                    this.typeOfBots = false;
+                    
+                },
+                refreshWorkSpace:function(options){
+                    if(typeof options !="undefined"){
+                        if(typeof options.params != "undefined"){
+                            if(typeof options.params.botType != "undefined"){
+                                this.typeOfBots = options.params.botType;
+                                this.addNewAutobot();
+                            }
+                        }
+                        
+                        
+                    }
                 },
                 render: function() {
                     this.$el.html(this.template());
                     this.fetchBots();
+                    if(typeof this.options.params !="undefined"){
+                        this.typeOfBots = this.options.params.botType;
+                        this.addNewAutobot();
+                    }
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
                     this.autoLoadBotImages();
@@ -71,7 +89,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.sortText = html.html();
                     this.fetchBots();
                 },
-                fetchBots: function(offset) {
+                fetchBots: function(offset,botId) {
                     var _data = {};
                     _data['type'] = this.type;
                     var that = this;
@@ -84,6 +102,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     } else {
                         this.offset = this.offset + this.offsetLength;
                     }
+                     if(botId){
+                        this.searchText = "";
+                        this.sortBy = "";
+                        this.total_fetch = 0;
+                        this.total = 0;
+                        this.offsetLength = 0;
+                        this.actionType = "";
+                        this.sortText = "";
+                    }
                     if (this.request)
                         this.request.abort();
                     var that = this;
@@ -93,6 +120,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     } else {
                         _data['actionType'] = this.actionType;
                     }
+                   
                     if (this.searchText) {
                         _data['searchText'] = this.searchText;
                     }
@@ -123,6 +151,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                 that.$el.find(".thumbnails li:last").attr("data-load", "true");
                                 that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='"+that.options.app.get("path")+"img/loading.gif'></div></td>");
                                  
+                            } 
+                            if(botId){
+                                that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
                             }
                             that.app.showLoading(false, that.$el);
                             
@@ -255,12 +286,13 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     });
                 },
                 addNewAutobot: function() {
-                    $("body #new_autobot").remove();
+                     $("body #new_autobot").remove();
                     $("body .autobots-modal-in").remove();
                     $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
                     $("body").append("<div id='new_autobot' style='width: 950px;  top: 120px;left:50%' class='modal in'></div>");
-                    $("body #new_autobot").html(new Choosebot({app: this.app, listing: this}).el);
+                    $("body #new_autobot").html(new Choosebot({app: this.app, listing: this,type:this.typeOfBots}).el);
                     $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
+                    this.typeOfBots = false;
                 },
                 showTiles: function(ev) {
                     this.isTiles = true;

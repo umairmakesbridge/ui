@@ -1462,6 +1462,12 @@ margin: 10px 0 0;
 .n_targets {   background: url("../img/n_targets.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .n_tags {   background: url("../img/n_tags.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .n_cloudimport {   background: url("../img/cloudimport.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.n_tagbot {   background: url("../img/tagbot_t.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.n_emailbot {   background: url("../img/emailbot_t.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.n_scorebot{   background: url("../img/scorebot_t.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.n_alertbot {   background: url("../img/alertbot_t.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.auto_gallery {   background: url("../img/botsgallery.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.n_birthdaybot {   background: url("../img/bdaybot_t.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 .messageerror{
     background-color: #FCAEAE;
