@@ -67,6 +67,16 @@ function (template,contactsView,icheck,chosen) {
                //this.loadTemplates();
                 if(this.options.prevFlag==='C')
                     this.loadContact();
+                if(this.options.isText && this.options.isText=="Y"){
+                    this.$("#choose_soruce").hide();
+                    this.$(".messagebox").show();
+                    this.$(".selection-boxes").css({"width":"347px","height":"35px"})
+                    
+                }
+                else{
+                    this.$(".messagebox").hide();
+                    this.$("#choose_soruce").show();
+                }
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             attachEvents:function(){
@@ -101,6 +111,9 @@ function (template,contactsView,icheck,chosen) {
                    }else{
                       this.html='N';
                    }*/
+                    if(this.options.isText &&  this.options.isText=='Y'){
+                        this.html = 'N';
+                    }
                   var frame = this.options.frameSrc+"&html="+this.html+"&original="+this.original;
                   /*Check if Contact is selected or not*/
                    if(this.subNum !== null){

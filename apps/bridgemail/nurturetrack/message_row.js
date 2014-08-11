@@ -209,7 +209,7 @@ function (template) {
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(templatePreview){
-                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
+                var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:this.camp_json.isTextOnly}); // isText to Dynamic
                  dialog.getBody().html(tmPr.$el);
                  tmPr.init();
                },this));

@@ -18,7 +18,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     "mouseover .sumry": 'showButtons',
                     "mouseout .sumry": "hideButtons",
                     "click .small-edit":"editMessage",
-                    "click #preivew_bot":"previewCampaign",
+                    "click #preivew_bot":"previewCampaign"
                     
                 },
                 initialize: function() {
@@ -136,7 +136,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
                     var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.campNum});
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.campNum,isText:this.camp_json.isTextOnly});
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));

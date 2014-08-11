@@ -172,7 +172,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
                     var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
-                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: this.campNum});
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: this.campNum,isText:this.camp_json.isTextOnly});
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));
