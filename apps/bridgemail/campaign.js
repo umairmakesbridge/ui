@@ -1184,7 +1184,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
                  var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
-                        html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():tinyMCE.get('bmseditor_'+this.wp_id).getContent();
+                        html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
                         post_data['plainText'] = plain;
@@ -2061,7 +2061,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             break;
                          case 'html_editor':
                             this.setEditor();
-                            tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
                          break;
                          case 'copy_campaign':
                                this.getcampaignscopy();                              
@@ -2136,7 +2136,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 setEditor:function(){
                   this.bmseditor.showEditor(this.wp_id);                                       
-                  tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                  _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                   this.$("#bmstexteditor").val(this.states.step2.plainText);
                   this.$(".textdiv").hide();
                 },
@@ -2151,7 +2151,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         else{
                             this.$("#html_editor").click();
-                            tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
                         }
                     }
                     

@@ -57,6 +57,11 @@ if(userInfo == null) {
     <link rel="stylesheet" href="css/a_changes.css" rel="stylesheet" />        
     <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css" rel="stylesheet" />        
     
+    <link href="css/editorcss/skin.css" rel="stylesheet" />
+    <link href="css/editorcss/jquery.minicolors.css" rel="stylesheet" />
+    <link href="css/editorcss/style.css" rel="stylesheet" />
+    <link href="css/editorcss/editorstyle.css" rel="stylesheet" />
+    
     <script type="text/javascript" src="js/require.js" data-main="apps/bridgemail/main"></script>
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
@@ -72,7 +77,7 @@ if(userInfo == null) {
     <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce_old/tiny_mce.js"></script>
+    <script type="text/javascript" src="https://test.bridgemailsystem.com/tinymce_3/tiny_mce_old.js"></script>
 </head>
 <body>
     
