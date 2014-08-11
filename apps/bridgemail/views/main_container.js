@@ -149,6 +149,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                         $("#workspace .workspace").append(wp_view.$el);
                         //wp_view.initScroll(wp_view.$el);
+                        //this.addMoreTabs( wp_count+1);
                         wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         
                         
@@ -563,6 +564,21 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                            dialog.getBody().html(mPage.$el);
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
                       });
+                },
+                addMoreTabs:function(count){
+                    var tabHeight = $(".ws-tabs").height();
+                    var windowHeight = $( window ).height() -250;
+                    console.log('window height is here');
+                     if(tabHeight >= windowHeight){
+                        var liMore = $('#wp_li_0').before('<li class="li-more" id="wp_li_'+count+'"><a><span class="icon extra "></span></a><div class="detail"><div class="heading"></div><div class="subheading"> test</div><i class="closehover" title="Close Workspace"></i></div></li>');
+                        $("#wstabs").append(liMore);
+                        
+                    }else{
+                        if($("#wstabs").find(".li-more").length > 0){
+                            $("#wstabs").find(".li-more").remove();
+                        }
+                    }
+                   
                 }
 
             });
