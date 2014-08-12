@@ -705,13 +705,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
                 initStep2:function(){                    
-                    if(this.states.step2.htmlText){
-                        this.$("#html_editor").click();
-                    }
-                    else if(this.states.step2.plainText){
+                    if(this.states.step2.plainText){
                         this.$("#plain_text").click();
                         this.$("#plain-text").val(this.states.step2.plainText);
                     }
+                    else if(this.campobjData.editorType=="W"){
+                        this.$("#html_editor").click();
+                    }
+                    else if(this.campobjData.editorType=="MEE"){
+                        this.$("#html_editor_mee").click();
+                    }else if(this.campobjData.editorType=="H"){
+                        this.$("#html_code").click();
+                    }                    
                     var _height = $(window).height()-431;
                     var _width = this.$el.width()-24;
                     this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
@@ -1182,26 +1187,30 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                  var proceed = -1;
                  var html = "",plain="";                  
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
+                 var post_editor = {editorType:'W',type:"editorType",campNum:this.camp_id};
                  var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
                         html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
+                        post_editor['editorType'] = 'W';
                         post_data['plainText'] = plain;
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
                         post_data['htmlCode'] = html;
+                        post_editor['editorType'] = 'H';
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
-                        post_data['isCampaignText'] = 'Y';
+                        post_data['isCampaignText'] = 'Y';                        
                         //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
                      }                 
                      else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;
+                         post_editor['editorType'] = 'MEE';
                      }
                         
                  if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
@@ -1233,6 +1242,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                camp_obj.app.showAlert(step1_json[1],$("body"));
                             }
                    });
+                    $.post(URL,post_editor)
+                        .done(function(data) {
+                            
+                        });
                    proceed = 1
                  }  
                 return proceed;  
@@ -2083,10 +2096,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              this.app.showLoading(false,this.$("#area_html_editor_mee"));                             
                              this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
                          },this))*/
+                         var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                  
                             this.app.showLoading(false,this.$("#area_html_editor_mee")); 
-                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor")});                                    
-                            this.$("#mee_editor").setChange(this.states);
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:_html});                                    
+                            this.$("#mee_editor").setChange(this.states);                          
                         },this));
                     }
                 },

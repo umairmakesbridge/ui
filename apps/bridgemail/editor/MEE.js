@@ -7,7 +7,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         },
 			initialize: function () {    
                             this.app = this.options.app;
+                            this.leftMinus = 80;
+                            this.topMinus = 381;
                             this.BMSTOKEN = "BMS_REQ_TK="+this.app.get('bms_token');
+                            var mee_view =  this;
                             var predefinedControls = [
                                 {
                                     "type": "text",
@@ -74,7 +77,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     "html": "<table class='MEE_DYNAMICCONTENTCONTAINER container dynamicContentContainer'><tr><td><div id='basic' class='well main_blocker' style='max-width:44em;'><div class='block_head'><input type='text' class='txtVariationName' name='content_name' placeholder='Name Dynamic Variation' /> <input type='button' class='dcSaveButton' value='Save' />&nbsp;<img src='images/ico-edit1.png' /></div><div class='block_body'><div class='block_controls'><img class='addDynamicRule' src='images/add-btn.png' style='float: left';/><ul class='dcContents'></ul></div></div></td></tr><tr><td><ul class='sortable dcInternalContents' style='list-style: none;'></ul></td></tr></table>"
                                 }
                             ];
-
+                            if($("body").MakeBridgeEditor){
+                                this.render();         
+                                return;
+                            }
                             
                             $.fn.extend({
 
@@ -127,6 +133,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var formBlocksGlobal = "";
                                         var areaToDisplay = null;
                                         var selectedSocialLink = null;
+                                        var topMinus = mee_view.topMinus;
+                                        var leftMinus = mee_view.leftMinus;
 
 
 
@@ -4241,7 +4249,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //         $copy.css({"list-style":"none","width":$(this).outerWidth()});                        
                                                 //         return $copy;
                                                 //     },
-                                                appendTo: 'body',
+                                                appendTo: '.editorpanel',
                                                 //scroll: false,
                                                 //[M.Adnan] FOR DRAGGING
                                                 start: function (e, ui) {
@@ -5534,8 +5542,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             myElement.find("#linkTrack").data("linkObject", "image");
                                             myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                                             myElement.find("#imageToolbar").show();
-                                            myElement.find("#imageToolbar").css({ "margin-top": ($(event.target).parent().parent().offset().top), "margin-left": ($(event.target).parent().parent().offset().left) });
-
+                                            myElement.find("#imageToolbar").css({ "margin-top": ($(event.target).parent().parent().offset().top-topMinus), "margin-left": ($(event.target).parent().parent().offset().left-leftMinus) });
 
                                         }
 
@@ -5746,8 +5753,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             var left_minus = 15;      //static space to minus to show dialog on exact location
                                             var ele_offset = _ele.offset();                
                                             var ele_height =  _ele.height();
-                                            var top = ele_offset.top + ele_height +4;
-                                            var left = ele_offset.left-left_minus;  
+                                            var top = ele_offset.top + ele_height +4-topMinus;
+                                            var left = ele_offset.left-left_minus-leftMinus;  
 
                                             var li = "<ul>";
                                             li += "<li><a href='#' class='btn-green btnContentEditName'><i class='icon imgicons link linkOpen'></i></a></li>";
@@ -5765,8 +5772,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                               var left_minus = 15;      //static space to minus to show dialog on exact location
                                               var ele_offset = _ele.offset();                 
                                               var ele_height =  _ele.height();
-                                              var top = ele_offset.top + ele_height +4;
-                                              var left = ele_offset.left-left_minus;           
+                                              var top = ele_offset.top + ele_height +4-topMinus;
+                                              var left = ele_offset.left-left_minus-leftMinus;           
 
                                               if(type == "info") {
                                                 var li = "<a class='closebtn'></a>";
@@ -7347,7 +7354,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     jQuery.event.add(this, type, events[type][handler], events[type][handler].data);
                                 });
                             };
-                            
+                           
                             this.render();         
 			},
 
@@ -7401,12 +7408,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 ContentType: ""
                             };
 
-                            var _preDefinedHTML = "";
-
-
-
-                            var _preDefinedHTML = "TEMPLATE";
-
+                            var _preDefinedHTML = this.options.html;
 
                             var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
 
