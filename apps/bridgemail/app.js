@@ -455,9 +455,9 @@ define([
             showDialog:function(options){
                  options['app'] = this;
                 if(!this.isDialogExists){
-                    this.dialogArray.push(options.wrapDiv);
                     var dialog = new bmsDialog(options); 
                     this.dialogView = dialog;
+                    this.dialogArray.push(options);
                     $("body").append(dialog.$el);
                     dialog.show();   
                     this.isDialogExists = true;
@@ -607,15 +607,12 @@ define([
                 }
             },
             appendDialogView : function(options){
-                this.dialogArray.push(options.wrapDiv);
+                this.dialogArray.push(options);
                var length = this.dialogArray.length;
-               var hideElement = this.dialogArray[length-2];
-               // Assign values
-               this.dialogView.optionObj[options.wrapDiv] = options;
+               var hideElement = 'dialogWrap-'+(length-1);
                
-               console.log(this.dialogView.optionObj);
-               this.dialogView.dialogHeader(this.dialogView.optionObj[options.wrapDiv]);
-               this.dialogView.dialogFooter(this.dialogView.optionObj[options.wrapDiv]);
+               this.dialogView.dialogHeader(options);
+               this.dialogView.dialogFooter(options);
                // Hide Previous and show new 
                this.dialogView.$el.find($('.'+hideElement)).hide();
                this.dialogView.$el.find('.backbtn').show(); 

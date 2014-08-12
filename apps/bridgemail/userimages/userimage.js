@@ -139,10 +139,13 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
+                    
                     this.showTags();
-                    if (this.options.fromDialog)
+                    if (this.options.fromDialog){
                         this.$el.find(".select-image").show();
+                    }
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    
                 },
                 showTags: function() {
                     var that = this;
@@ -218,11 +221,17 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     /// });
 
                     dialog.$el.find('.tagscont').append(this.SplitCommaTagsWithoutCross(this.model.get('tags'))).css('margin-left', '48px');
-                    dialog.$el.find('.pointy').remove();
+                    dialog.$el.find('.pointy').hide();
                     dialog.$el.find("camp_header .icon").css("margin", "0px");
                     dialog.$el.find('.dialog-title').addClass('images-preview');
-                    var img = "<img id='img1' src= '"+this.model.get("originalURL") + "'>";
-                    dialog.getBody().html(img);
+                    if(dialog.$el.find('.c-current-status').length > 0){
+                        dialog.$el.find('.c-current-status').hide();
+                    }
+                    var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog
+                    var wrapelement = 'dialogWrap-'+dialogArrayLength; // New Dialog
+                   
+                    var img = "<img id='img1' src= '"+this.model.get("originalURL") + "' class='"+wrapelement+"'>";
+                    dialog.getBody().append(img);
                     this.showLoadingWheel(true, dialog.$el.find(".images-preview"));
                     $('#img1').load(function() {
                         that.showLoadingWheel(false, dialog.$el.find(".images-preview"));
@@ -270,7 +279,12 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                         this.options._select_page.useImage($(ev.target).data('url'));
                     }
                     $('.modal-open .custom_popup').remove();
-                    this._dialog.hide();
+                    if(this.options.isClose){
+                        this._dialog.hide();
+                    }
+                    else{
+                    this._dialog.showPrevious();
+                    }
                 },
                 // Update header count when delete called inside success for deletion.
                 updateCount: function() {

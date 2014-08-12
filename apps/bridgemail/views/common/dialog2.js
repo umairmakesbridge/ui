@@ -18,15 +18,15 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                          },
 			initialize: function () {
 				this.template = _.template(template);
-                                this.optionObj = {};
+                               // this.optionObj = {};
                                 this.app = this.options.app;
                                 this.option = this.options;
-                                this.optionObj[this.options.wrapDiv] = this.option;
+                                //this.optionObj[this.options.wrapDiv] = this.option;
                                 
 				this.render();
 			},
 			render: function () {
-                             console.log(this.optionObj);
+                             //console.log(this.optionObj);
                              this.$el.html(this.template({}));              
                              this.dialogHeader();                           
                              //this.$el.css(this.option.css ? this.option.css:{});
@@ -58,10 +58,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                     }
                                 }
                              }
-                             if(this.option.headerIcon){
-                                 this.$(".header-icon").addClass(this.option.headerIcon).show();
-                                 this.$(".modal-header .c-name").addClass("header-icon");
-                             }
+                            
                              if(this.option.overlay){
                                 
                                  this.doubleBlackOut(this.option.overlay);
@@ -90,12 +87,28 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             this.$el.css(this.option.css ? this.option.css:{});
                             this.$(".modal-body").css(this.option.bodyCss ? this.option.bodyCss:{}); 
                             this.$(".dialog-title").html(this.option.title?this.option.title:'');
+                             
                             if(this.option.headerEditable){
                                  this.$(".modal-header").removeClass("ws-notags").addClass('header-editable-highlight');
+                                 this.$('.pointy a.copy').remove();
+                                 this.$('.pointy').html('<a class="icon edit"></a><a class="icon copy"></a><a class="icon delete"></a>');
+                                 
                              }else{
                                  this.$(".modal-header").removeClass("header-editable-highlight").addClass('ws-notags');
                                  this.$("#dialog-title span").unbind( "click" );
                              }
+                             
+                              if(this.option.headerIcon){
+                                 this.$('#dialog-title i').removeAttr('class');
+                                 this.$("#dialog-title i").addClass('icon left header-icon '+this.option.headerIcon).show();
+                                 this.$(".modal-header .c-name").addClass("header-icon");
+                             }
+                             if(this.option.tagRegen){
+                                     this.$('.tagscont').html('').show();
+                                 }
+                                 if(this.option.reattach){
+                                            this.reattachEvents();
+                                        }
                            
                         },
                         dialogFooter: function(options){
@@ -169,19 +182,28 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                         },
                         showPrevious : function(){
                             var length = this.app.dialogArray.length;
-                            var showElement = this.app.dialogArray[length-2];
-                            var removeElement = this.app.dialogArray.pop();
-                            $('.'+removeElement).remove();
-                            delete this.optionObj[removeElement];
-                            $('.'+showElement).show();
-                           this.dialogHeader(this.optionObj[showElement]);
-                           this.dialogFooter(this.optionObj[showElement]);
-                           //this.saveCallBack(this.optionObj[showElement].saveCallBack);
+                            var showElement = length-1;
+                            var removeElement = length;
+                            this.app.dialogArray.pop();
+                            $('.dialogWrap-'+removeElement).remove();
+                            //delete this.optionObj[removeElement];
+                            $('.dialogWrap-'+showElement).show();
+                            this.dialogHeader(this.app.dialogArray[showElement-1]);
+                            this.dialogFooter(this.app.dialogArray[showElement-1]);
+                            this.saveCallBack(this.app.dialogArray[showElement-1].saveCall);
                            //this.render(this.optionObj[showElement]);
                             var newLength = this.app.dialogArray.length;
                             if(newLength === 1){
                                 this.$('.backbtn').hide();
                             }
+                        },
+                        reattachEvents : function(){
+                           
+                            var length = this.app.dialogArray.length;
+                            var showElement = length-1;
+                            var currentview = this.app.dialogArray[showElement].currentView;
+                            currentview.ReattachEvents();
+                            
                         }
                         
 		});

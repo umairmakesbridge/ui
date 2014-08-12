@@ -16,7 +16,7 @@ function (template,highlighter) {
             events: {
                'click .copy-camp':'copyCampaign',
                'click  a.campname':'previewCampaign',
-               "click .preview-camp":'previewCampaign',
+               "click .preview-camp-copy":'previewCampaign',
                'click .taglink':'tagClick',
                'click .delete-camp':'deleteCampaginDialoge',
                'click .report':'reportShow'
@@ -136,7 +136,12 @@ function (template,highlighter) {
                                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                                 require(["common/templatePreview"],_.bind(function(templatePreview){
                                 var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:'N'}); // isText to Dynamic
-                                 dialog.getBody().html(tmPr.$el);
+                                 dialog.getBody().append(tmPr.$el);
+                                 this.app.showLoading(false, tmPr.$el.parent());
+                                 dialog.$el.find('#dialog-title .preview').remove();
+                                 var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                                 tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+
                                  tmPr.init();
                                },this));
                     },

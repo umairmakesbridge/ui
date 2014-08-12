@@ -212,7 +212,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                         success:function(data){
                            
                          _.each(data.models, function(model){
-                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page,callBack:that.callBack});
+                           var viewImage = new viewUserImage({model: model,'app':that.app,fromDialog:that.fromDialog,_dialog:that._select_dialog,_select_page:that._select_page,callBack:that.callBack,parent:that,isClose:that.options.isClose});
                            that.$el.find('.thumbnails').append(viewImage.el);
                            that.listenTo(viewImage, 'tagclick', that.searchTag);
                          });
@@ -294,8 +294,10 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 
                 var headerSet = this.$el.parents(".modal").find(".camp_header .tcount").text();
                 this.$el.parents(".modal").find('.dialog-title').addClass('images-preview').css("margin-left","5px");
-                this.$el.parents(".modal").find('#dialog-title .pointy').remove();
-                
+                this.$el.parents(".modal").find('#dialog-title .pointy').html('');
+                this.$el.parents('.modal').find(".modal-header .edited  h2 a.preview").remove();
+                this.$el.parents(".modal").find("#dialog-title span").removeAttr('data-original-title');
+                this.$el.parents(".modal").find("#dialog-title span").unbind( "click" );
 
                 //this.$el.parents(".modal").find('#dialog-title').append("<span class='icon fav'></span>");
                 
@@ -458,6 +460,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                 },
                 useImage:function(url){
                     this.$el.find(".search-control").val(url);
+                },
+                ReattachEvents: function(){
+                   this.$el.parents('.modal').find('.c-current-status').show();
                 }
         });    
 });
