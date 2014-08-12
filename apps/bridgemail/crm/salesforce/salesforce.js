@@ -277,9 +277,14 @@ define(['text!crm/salesforce/html/salesforce.html'],
                                 page:this,
                                 dialog:dialog
                            })                        
-                           dialog.getBody().html(this.newImport_page.$el);                           
+                           dialog.getBody().append(this.newImport_page.$el);
+                           this.app.showLoading(false, this.newImport_page.$el.parent());
                            dialog.getBody().addClass("dialog-wizard")
                            dialog.saveCallBack(_.bind(this.newImport_page.startImport,this.newImport_page));
+                           var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                           this.newImport_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                           this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(this.newImport_page.startImport,this.newImport_page); // New Dialog
+
                            this.myimports_page.loadImport(json);
                     },this));                   
                 }

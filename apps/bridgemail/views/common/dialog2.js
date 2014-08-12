@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                 this.hide();
                             },
                             'click .innew-window':'popoutWindow',
-                            'click .backbtn':'showPrevious'
+                            'click .dialog-backbtn':'showPrevious'
                          },
 			initialize: function () {
 				this.template = _.template(template);

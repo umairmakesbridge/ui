@@ -241,8 +241,11 @@ define(['text!crm/netsuite/html/netsuite.html'],
                                 page:this,
                                 dialog:dialog
                            })                        
-                           dialog.getBody().html(this.newImport_page.$el);                           
-                           dialog.getBody().addClass("dialog-wizard")
+                           dialog.getBody().append(this.newImport_page.$el);
+                           this.app.showLoading(false, this.newImport_page.$el.parent());
+                           var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                           this.newImport_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                           dialog.getBody().addClass("dialog-wizard");
                            dialog.saveCallBack(_.bind(this.newImport_page.startImport,this.newImport_page));
                            this.myimports_page.loadImport(json);
                     },this));                   
