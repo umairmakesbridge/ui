@@ -1053,12 +1053,12 @@
       return isError
   },
   saveFilters:function(){
-      var filters_post = ""
+      var filters_post = {}
       var _target = this.$element;
       var self = this;
       var total_rows = _target.find(".filter-div ._row");
-      filters_post +="&count="+ total_rows.length
-      filters_post +="&applyRuleCount="+ _target.find(".all-any .btn.active").attr("rule")
+      filters_post["count"] = total_rows.length
+      filters_post["applyRuleCount"]= _target.find(".all-any .btn.active").attr("rule")
       
       if(this.validate(total_rows)){return false}
       
@@ -1066,90 +1066,90 @@
           var N = i+1
           var filter = $(total_rows[i])
           if($(total_rows[i]).hasClass("score")){
-               filters_post +="&"+N+".filterType=S"
-               filters_post +="&"+N+".scoreRule="+filter.find(".condtion-box").val()
-               filters_post +="&"+N+".scoreValue="+filter.find(".scoreValue").val()
+               filters_post[N+".filterType"]="S"
+               filters_post[N+".scoreRule"]=filter.find(".condtion-box").val()
+               filters_post[N+".scoreValue"]=filter.find(".scoreValue").val()
                if($(total_rows[i]).find(".condtion-box").val()=="incmore"){
-                    filters_post +="&"+N+".scoreRange="+filter.find(".scoreRange").val()
+                    filters_post[N+".scoreRange"]=filter.find(".scoreRange").val()
                }
           }
           else if($(total_rows[i]).hasClass("list")){
-              filters_post +="&"+N+".filterType=L"
-              filters_post +="&"+N+".listNumbers="+filter.find(".check-list:checked").map(function(){ return $(this).val()}).get().join()
-              filters_post +="&"+N+".subscribed="+filter.find(".member-box").val()
-              filters_post +="&"+N+".match="+filter.find(".match-box").val()
+              filters_post[N+".filterType"]="L"
+              filters_post[N+".listNumbers"]=filter.find(".check-list:checked").map(function(){ return $(this).val()}).get().join()
+              filters_post[N+".subscribed"]=filter.find(".member-box").val()
+              filters_post[N+".match"]=filter.find(".match-box").val()
           }
           else if($(total_rows[i]).hasClass("email")){
-              filters_post +="&"+N+".filterType=E"
-              filters_post +="&"+N+".emailCampType="+filter.find(".campaign-source").val()
-              filters_post +="&"+N+".emailFilterBy="+filter.find(".filter-by").val()
-              filters_post +="&"+N+".campaignNumber="+filter.find(".campaign-list").val()
+              filters_post[N+".filterType"]="E"
+              filters_post[N+".emailCampType"]=filter.find(".campaign-source").val()
+              filters_post[N+".emailFilterBy"]=filter.find(".filter-by").val()
+              filters_post[N+".campaignNumber"]=filter.find(".campaign-list").val()
               if(filter.find(".campaign-list").val()!=="-1" && filter.find(".filter-by").val()=="CK"){
-                filters_post +="&"+N+".articleNumber="+filter.find(".campaign-url").val()
+                filters_post[N+".articleNumber"]=filter.find(".campaign-url").val()
               }
               var emailTimeSpan = filter.find(".emailTimeSpan").val()
-              filters_post +="&"+N+".isEmailTimeSpan="+ ((emailTimeSpan!=="-1") ?"Y":"N")
+              filters_post[N+".isEmailTimeSpan"]= ((emailTimeSpan!=="-1") ?"Y":"N")
               if(emailTimeSpan!=="-1"){
-                  filters_post +="&"+N+".emailTimeSpan="+ emailTimeSpan
+                  filters_post[N+".emailTimeSpan"]=emailTimeSpan
               }
               var emailFreq = filter.find(".emailFreq").val()
-              filters_post +="&"+N+".isEmailFreq="+ ((emailFreq!=="-1") ?"Y":"N")
+              filters_post[N+".isEmailFreq"]=((emailFreq!=="-1") ?"Y":"N")
               if(emailTimeSpan!=="-1"){
-                  filters_post +="&"+N+".emailFreq="+ emailFreq
+                  filters_post[N+".emailFreq"]=emailFreq
               }
           }
           else if($(total_rows[i]).hasClass("web")){
-              filters_post +="&"+N+".filterType=W"
-              filters_post +="&"+N+".webFilterBy="+filter.find(".filter-box").val()
+              filters_post[N+".filterType"]="W"
+              filters_post[N+".webFilterBy"]=filter.find(".filter-box").val()
               if(filter.find(".filter-box").val()=="PU"){
-                filters_post +="&"+N+".webURL="+filter.find(".pagelink-box").val()
+                filters_post[N+".webURL"]=filter.find(".pagelink-box").val()
               }
               else if(filter.find(".filter-box").val()=="LF"){
-                  filters_post +="&"+N+".linkIDFilterNum="+filter.find(".linkfilter-box").val()
+                  filters_post[N+".linkIDFilterNum"]=filter.find(".linkfilter-box").val()
               }
               else if(filter.find(".filter-box").val()=="PT"){
-                  filters_post +="&"+N+".linkFilterGroupId="+filter.find(".pagetype-box").val()
+                  filters_post[N+".linkFilterGroupId"]=filter.find(".pagetype-box").val()
               }
               var webTimeSpan = filter.find(".webTimeSpan").val()
-              filters_post +="&"+N+".isWebTimeSpan=" + ((webTimeSpan!=="-1")?"Y":"N")
+              filters_post[N+".isWebTimeSpan"]= ((webTimeSpan!=="-1")?"Y":"N")
               if(webTimeSpan!=="-1"){
-                  filters_post +="&"+N+".webTimeSpan="+ webTimeSpan
+                  filters_post[N+".webTimeSpan"]=webTimeSpan
               }              
               var webFreq = filter.find(".webFreq").val()
-              filters_post +="&"+N+".isWebFreq=" + ((webFreq!=="-1")?"Y":"N")
+              filters_post[N+".isWebFreq"]= ((webFreq!=="-1")?"Y":"N")
               if(webFreq!=="-1"){
-                  filters_post +="&"+N+".webFreq="+ webFreq
+                  filters_post[N+".webFreq"]= webFreq
               }
           }
           else if($(total_rows[i]).hasClass("form")){
-              filters_post +="&"+N+".filterType=F"
-              filters_post +="&"+N+".formId="+filter.find(".forms-box").val()
+              filters_post[N+".filterType"]="F"
+              filters_post[N+".formId"]= filter.find(".forms-box").val()
               var formTimeSpan = filter.find(".formTimeSpan").val()
-              filters_post +="&"+N+".isFormTimeSpan=" + ((formTimeSpan!=="-1")?"Y":"N")
+              filters_post[N+".isFormTimeSpan"]= ((formTimeSpan!=="-1")?"Y":"N")
               if(formTimeSpan!=="-1"){
-                  filters_post +="&"+N+".formTimeSpan="+ formTimeSpan
+                  filters_post[N+".formTimeSpan"]= formTimeSpan
               }
           }
           else if($(total_rows[i]).hasClass("filter")){
-              filters_post +="&"+N+".filterType=P"                              
-              filters_post +="&"+N+".fieldName="+ filter.find(".fields").val()
-              filters_post +="&"+N+".rule="+ filter.find(".selectbox.rules").val()
+              filters_post[N+".filterType"]="P"                              
+              filters_post[N+".fieldName"]= filter.find(".fields").val()
+              filters_post[N+".rule"]= filter.find(".selectbox.rules").val()
               var rule_val = filter.find(".selectbox.rules").val()
               if(rule_val=="dr" || rule_val=="prior" || rule_val=="after" || rule_val=="dayof" || rule_val=="birthday" || rule_val=="pbday"){
-                filters_post +="&"+N+".dateFormat="+ filter.find(".selectbox.formats").val()
+                filters_post[N+".dateFormat"]= filter.find(".selectbox.formats").val()
                 if(rule_val=="prior" || rule_val=="after" || rule_val=="pbday"){
-                    filters_post +="&"+N+".gap="+ filter.find(".gap").val()
+                    filters_post[N+".gap"]= filter.find(".gap").val()
                 }
                 if(rule_val=="dr"){
-                  filters_post +="&"+N+".matchValue="+ filter.find(".matchValue").val()   
+                  filters_post[N+".matchValue"]= filter.find(".matchValue").val()   
                 }
               }
               else{
-                  filters_post +="&"+N+".matchValue="+ filter.find(".matchValue").val()              
+                  filters_post[N+".matchValue"]= filter.find(".matchValue").val()              
               }
                             
               if(filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}"){
-                   filters_post +="&"+N+".listNum="+filter.find(".sub-date-container").attr("list_id")
+                   filters_post[N+".listNum"]=filter.find(".sub-date-container").attr("list_id")
               }
           }
       }

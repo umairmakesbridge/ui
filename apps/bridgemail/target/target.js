@@ -180,8 +180,10 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                         }
                         camp_obj.app.showLoading("Saving Target...", camp_obj.$el.parents('.modal'));
                         this.dialog.$el.find(".btn-save").addClass("saveing-blue");
-                        var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token') + post_data;
-                        $.post(URL, {type: 'update', filterNumber: target_id})
+                        var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token');
+                        post_data["type"]="update";
+                        post_data["filterNumber"]=target_id;
+                        $.post(URL, post_data)
                                 .done(function(data) {
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents('.modal'));
                                     camp_obj.dialog.$el.find(".btn-save").removeClass("saveing-blue");
