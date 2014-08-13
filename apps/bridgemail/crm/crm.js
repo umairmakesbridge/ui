@@ -63,16 +63,16 @@ define(['text!crm/html/crm.html','app'],
                 });
             },
             loadHighRiseCRM:function(e){
-                 var tile = $.getObj(e,"li");
+                var tile = $.getObj(e,"li");
                 if(tile.find(".loading").length>0){
                     return false;
                 }
-                app.mainContainer.addWorkSpace({
+                app.mainContainer.addWorkSpace({ 
                     type:'',
-                    title:'NetSuite',
-                    url : 'crm/netsuite/netsuite',
-                    workspace_id: 'crm_netsuite',
-                    tab_icon:'netsuite',
+                    title:'Highrise',
+                    url:'crm/highrise/highrise',
+                    workspace_id: 'crm_highrise',
+                    tab_icon:'highrises',
                     sub_title:'Connection With Apps'
                 });
             },
