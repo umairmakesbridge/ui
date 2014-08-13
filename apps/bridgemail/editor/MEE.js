@@ -5773,7 +5773,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                               var ele_offset = _ele.offset();                 
                                               var ele_height =  _ele.height();
                                               var top = ele_offset.top + ele_height +4-topMinus;
-                                              var left = ele_offset.left-left_minus-leftMinus;           
+                                              var left = ele_offset.left-left_minus-leftMinus-24;           
 
                                               if(type == "info") {
                                                 var li = "<a class='closebtn'></a>";
@@ -6280,10 +6280,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 }
                                                 isElementClicked = false;
                                             });
-
+                                            
                                             //Building Blocks Drop Area:
                                             InitializeBuildingBlockDroppableArea();
-
+                                            myElement.find(".builder-panel").css("height",($(window).height()-20)+"px");
+                                            myElement.find("#contentAreaDiv").scroll();
+                                            myElement.find("#imageTitleDialog").hide();                                            
+                                            myElement.find(".accordian").accordion({ 
+                                                heightStyle: "fill",                                                
+                                                collapsible: true,
+                                                clearStyle: true
+                                            });
+                                            myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()-30)+"px");
                                             //Load building blocks from service:
                                             _LoadBuildingBlocks();
                                             //////////
@@ -6299,10 +6307,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 _LoadFormBlocks();
                                             }
 
-
-                                            myElement.find("#contentAreaDiv").scroll();
-                                            myElement.find("#imageTitleDialog").hide();
-                                            myElement.find(".accordian").accordion({ heightStyle: "fill" });
 
                                             //TODO Styles
 
@@ -7094,8 +7098,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             _searchFormBlocks();
                                         });
 
-                                        myElement.find('.MenuCallBackSave').click(function () {
-                                            _saveCallBackMethod();
+                                        myElement.find('.MenuCallBackSave').click(function (obj) {
+                                            options.saveCallBack(obj);
                                         });
 
                                         var _LastSelectedBuildingBlock = null;
@@ -7357,7 +7361,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                            
                             this.render();         
 			},
-
 			render: function () {
                             var BMSTOKEN = this.BMSTOKEN;
                             this._$el = this.options._el;                            
@@ -7411,7 +7414,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var _preDefinedHTML = this.options.html;
 
                             var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
-
                             var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
 
 
@@ -7426,6 +7428,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 formWizURL: _formWizURL,
                                 formDeleteURL: _formDeleteURL ,
                                 sessionIDFromServer: ""+BMSTOKEN+"",
+                                saveCallBack:  this.options.saveClick,
                                 OnDropElementOnBuildingBlock: function (args) {
 
                                     //Save to Server

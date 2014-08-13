@@ -33,13 +33,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
                       'click .preview-camp':'previewCampaignstep4',
                       'click .prev-iframe-campaign':'htmlTextClick',
-                      'click .save-step2': function(obj){
-                            var button = $.getObj(obj,"a");
-                            if(!button.hasClass("saving")){
-                                this.saveStep2(false);
-                                button.addClass("saving");
-                            }                                                                
-                      },
+                      'click .save-step2': 'saveForStep2',
                       'click .editorbtnshow':function(){
                           this.$(".textdiv").hide();
                           this.$(".editor_box").show();                          
@@ -721,6 +715,35 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var _width = this.$el.width()-24;
                     this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
                     this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
+                    
+                },
+                initScroll:function(el){
+            
+                    this.$win=$(window)
+                    ,this.$nav = this.$('.editortoolbar')
+                    ,this.$tools = $('.editortools')                    
+                    ,this.container = $("#container")
+                    , this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
+                    , this.isFixed = 0;
+
+                    this.processScroll=_.bind(function(){                                                       
+                      if(this.$("#area_html_editor_mee").css("display")!=="none"){  
+                        var i, scrollTop = this.$win.scrollTop();
+                        if (scrollTop >= this.navTop && !this.isFixed) {
+                          this.isFixed = 1
+                          this.$nav.addClass('editor-toptoolbar-fixed');
+                          this.$nav.css("width",this.$(".editorpanel").width());
+                          this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                        } else if (scrollTop <= this.navTop && this.isFixed) {
+                          this.isFixed = 0
+                          this.$nav.removeClass('editor-toptoolbar-fixed');
+                          this.$nav.css("width","100%");
+                          this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                        }
+                      }
+                    },this);
+                    this.processScroll();
+                    this.$win.on('scroll', this.processScroll);                                
                 },
                 initStep3:function(){
                     if(this.states.step3.recipientType)
@@ -1182,6 +1205,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     return proceed;
                 },
+                saveForStep2:function(obj){                  
+                    var button = $.getObj(obj,"a");
+                    if(!button.hasClass("saving")){
+                        this.saveStep2(false);
+                        button.addClass("saving");
+                    }                                                                                      
+                },
                 saveStep2:function(gotoNext){                 
                  var camp_obj = this; 
                  var proceed = -1;
@@ -1222,7 +1252,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         .done(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
                             camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
-                            camp_obj.$(".save-step2").removeClass("saving");
+                            camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving");
                             if(step1_json[0]!=="err"){
                                 camp_obj.app.showMessge("Step 2 saved successfully!");
                                 if(selected_li=="plain_text"){
@@ -2097,12 +2127,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
                          },this))*/
                          var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
-                         require(["editor/MEE"],_.bind(function(MEE){                  
-                            this.app.showLoading(false,this.$("#area_html_editor_mee")); 
-                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:''});                                    
+                         require(["editor/MEE"],_.bind(function(MEE){                                              
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this)});                                    
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
+                            this.initScroll();
+                            this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                         },this));
+                        
                     }
                 },
                 getcampaignscopy:function(){

@@ -233,7 +233,7 @@ a:hover, a:focus { text-decoration:none; outline:none;}
 	margin-bottom:0;
 	background:#a9c2d5;	
     font-weight: bold;
-    line-height: 24px;
+    line-height: 27px;
     margin-top: 5px;
     min-height: 0;
     padding: 5px 5px 5px 10px;
@@ -1964,7 +1964,7 @@ border-top:10px solid  #03d3ff;
 
 
 
-.scrollarea { max-height:1000px; overflow-y:scroll; overflow-x:hidden; min-height: 800px;}
+.scrollarea {overflow-y:scroll; overflow-x:hidden;}
 
 
 
@@ -2086,7 +2086,15 @@ ul.socialbtns li .radiopanelinput.checked {
      background:#fff;
  }
 
-
+ .editor-toptoolbar-fixed{
+     position: fixed;
+     top:0px;     
+     z-index: 1000;
+ }
+ .editor-lefttoolbar-fixed{
+     position: fixed;
+     top:0px;     
+ }
 
 
 
