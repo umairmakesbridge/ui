@@ -3275,3 +3275,8 @@ text-align:center;
 .auto-botthumb{
     min-width: 242px;
 }
+.adjust-time,.modal-body .adjust-time{
+    width:242px !important;
+    float: none;
+}
+
