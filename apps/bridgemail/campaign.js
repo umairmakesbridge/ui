@@ -33,13 +33,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       'keyup #campaign_from_email_input':'fromEmailDefaultFieldHide',
                       'click .preview-camp':'previewCampaignstep4',
                       'click .prev-iframe-campaign':'htmlTextClick',
-                      'click .save-step2': function(obj){
-                            var button = $.getObj(obj,"a");
-                            if(!button.hasClass("saving")){
-                                this.saveStep2(false);
-                                button.addClass("saving");
-                            }                                                                
-                      },
+                      'click .save-step2': 'saveForStep2',
                       'click .editorbtnshow':function(){
                           this.$(".textdiv").hide();
                           this.$(".editor_box").show();                          
@@ -705,17 +699,51 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
                 initStep2:function(){                    
-                    if(this.states.step2.htmlText){
-                        this.$("#html_editor").click();
-                    }
-                    else if(this.states.step2.plainText){
+                    if(this.states.step2.plainText){
                         this.$("#plain_text").click();
                         this.$("#plain-text").val(this.app.decodeHTML(this.states.step2.plainText,true));
                     }
+                    else if(this.campobjData.editorType=="W"){
+                        this.$("#html_editor").click();
+                    }
+                    else if(this.campobjData.editorType=="MEE"){
+                        this.$("#html_editor_mee").click();
+                    }else if(this.campobjData.editorType=="H"){
+                        this.$("#html_code").click();
+                    }                    
                     var _height = $(window).height()-431;
                     var _width = this.$el.width()-24;
                     this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
                     this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
+                    
+                },
+                initScroll:function(el){
+            
+                    this.$win=$(window)
+                    ,this.$nav = this.$('.editortoolbar')
+                    ,this.$tools = $('.editortools')                    
+                    ,this.container = $("#container")
+                    , this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
+                    , this.isFixed = 0;
+
+                    this.processScroll=_.bind(function(){                                                       
+                      if(this.$("#area_html_editor_mee").css("display")!=="none"){  
+                        var i, scrollTop = this.$win.scrollTop();
+                        if (scrollTop >= this.navTop && !this.isFixed) {
+                          this.isFixed = 1
+                          this.$nav.addClass('editor-toptoolbar-fixed');
+                          this.$nav.css("width",this.$(".editorpanel").width());
+                          this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                        } else if (scrollTop <= this.navTop && this.isFixed) {
+                          this.isFixed = 0
+                          this.$nav.removeClass('editor-toptoolbar-fixed');
+                          this.$nav.css("width","100%");
+                          this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                        }
+                      }
+                    },this);
+                    this.processScroll();
+                    this.$win.on('scroll', this.processScroll);                                
                 },
                 initStep3:function(){
                     if(this.states.step3.recipientType)
@@ -1177,31 +1205,42 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                     return proceed;
                 },
+                saveForStep2:function(obj){                  
+                    var button = $.getObj(obj,"a");
+                    if(!button.hasClass("saving")){
+                        this.saveStep2(false);
+                        button.addClass("saving");
+                    }                                                                                      
+                },
                 saveStep2:function(gotoNext){                 
                  var camp_obj = this; 
                  var proceed = -1;
                  var html = "",plain="";                  
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
+                 var post_editor = {editorType:'W',type:"editorType",campNum:this.camp_id};
                  var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
-                        html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():tinyMCE.get('bmseditor_'+this.wp_id).getContent();
+                        html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
+                        post_editor['editorType'] = 'W';
                         post_data['plainText'] = plain;
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
                         post_data['htmlCode'] = html;
+                        post_editor['editorType'] = 'H';
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
-                        post_data['isCampaignText'] = 'Y';
+                        post_data['isCampaignText'] = 'Y';                        
                         //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
                      }                 
                      else if(selected_li=="html_editor_mee"){
-                         html =this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").getMEEHTML();
+                         html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;
+                         post_editor['editorType'] = 'MEE';
                      }
                         
                  if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
@@ -1213,7 +1252,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         .done(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
                             camp_obj.app.showLoading(false,camp_obj.$el.parents(".ws-content"));
-                            camp_obj.$(".save-step2").removeClass("saving");
+                            camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving");
                             if(step1_json[0]!=="err"){
                                 camp_obj.app.showMessge("Step 2 saved successfully!");
                                 if(selected_li=="plain_text"){
@@ -1233,6 +1272,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                camp_obj.app.showAlert(step1_json[1],$("body"));
                             }
                    });
+                    $.post(URL,post_editor)
+                        .done(function(data) {
+                            
+                        });
                    proceed = 1
                  }  
                 return proceed;  
@@ -1919,6 +1962,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var URL = "/pms/io/netsuite/setData/?BMS_REQ_TK="+this.app.get('bms_token');                        
                     this.$("#save_results_sf").addClass("saving");
                     $.post(URL, { campNum: camp_id,nsCampaignID: this.$("#ns_campaigns_combo").val() , add:'Y',type:"addToNetsuite","campaignType":"N"})
+
                     .done(function(data) {                            
                         camp_obj.$("#save_results_ns").removeClass("saving");
                         camp_obj.states.step1.hasResultToSalesCampaign = true;
@@ -2040,7 +2084,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
+                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
@@ -2061,7 +2105,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             break;
                          case 'html_editor':
                             this.setEditor();
-                            tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.states.step2.htmlText,true));                                 
                          break;
                          case 'copy_campaign':
                                this.getcampaignscopy();                              
@@ -2079,10 +2123,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));
                          this.$("#mee_editor").attr("src","MEE/index.jsp?BMS_REQ_TK="+this.app.get('bms_token'));
                          this.states.step2.meeEditor = true;
-                         this.$("#mee_editor").load(_.bind(function(){
+                         /* this.$("#mee_editor").load(_.bind(function(){
                              this.app.showLoading(false,this.$("#area_html_editor_mee"));                             
                              this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
-                         },this))
+                         },this))*/
+                         var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
+                         require(["editor/MEE"],_.bind(function(MEE){                                              
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this)});                                    
+                            this.$("#mee_editor").setChange(this.states);                
+                            this.setMEE(_html);
+                            this.initScroll();
+                            this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                        },this));
+                        
                     }
                 },
                 getcampaignscopy:function(){
@@ -2133,27 +2186,28 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                   this.bmseditor.showEditor(this.wp_id);                                       
                   tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                   this.$("#bmstexteditor").val(this.app.decodeHTML(this.states.step2.plainText,true));
+
                   this.$(".textdiv").hide();
                 },
                 setEditorHTML:function(tsv, state, xhr){
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                       /* if(html_json.isEasyEditorCompatible=="Y"){
+                        if(html_json.isEasyEditorCompatible=="Y"){
                             this.$("#html_editor_mee").click();
                             this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
                             this.states.editor_change = true;                           
                         }
-                        else{*/
+                        else{
                             this.$("#html_editor").click();
-                            tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                        //}
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                        }
                     }
                     
                 },
                 setMEE:function(html){
-                   if( this.states.step2.meeLoaded  && this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML){
-                        this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setMEEHTML(html);                        
+                   if(this.$("#mee_editor").setMEEHTML){
+                        this.$("#mee_editor").setMEEHTML(html);                        
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);

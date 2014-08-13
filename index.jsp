@@ -56,11 +56,17 @@ String _path = "/pms/alpha/";
     <link rel="stylesheet" href="<%= _path %>css/dash.css" rel="stylesheet" />
     <link rel="stylesheet" href="<%= _path %>css/a_changes.css" rel="stylesheet" />        
     <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css" rel="stylesheet" />        
+    
+    <link href="<%= _path %>css/editorcss/skin.css" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/jquery.minicolors.css" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/style.css" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/editorstyle.css" rel="stylesheet" />
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
         var _path = '<%= _path %>'
     </script>
     <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
+
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
@@ -75,7 +81,7 @@ String _path = "/pms/alpha/";
     <!--[if lt IE 9]>
           <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    <script type="text/javascript" src="https://test.bridgemailsystem.com/tiny_mce_old/tiny_mce.js"></script>
+    <script type="text/javascript" src="https://test.bridgemailsystem.com/tinymce_3/tiny_mce_old.js"></script>
 </head>
 <body>
     

@@ -36,7 +36,11 @@
            'bms-mergefields':'../shared/mergefields',
            'jquery.customScroll':'../shared/libs/jquery.mCustomScrollbar',
            'datetimepicker':'../shared/libs/jquery.datetimepicker',
-           'jquery.isotope':'../shared/libs/jquery.isotope'
+           'jquery.isotope':'../shared/libs/jquery.isotope',
+           'mee-helper': '../shared/editor_common',
+           'mincolors':'../shared/libs/jquery.minicolors',
+           'tinymce':'../shared/libs/tinymce/tinymce',
+           'tinymce-jquery':'../shared/libs/tinymce/tinymce_jquery'
        },
         shim: {
                 backbone: {

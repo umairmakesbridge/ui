@@ -12,7 +12,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/editor.html'],
                             'click .editorbtn':function(){
                                 this.$el.hide();
                                 this.$el.prev().show();
-                                this.$el.prev().find("textarea").val(tinyMCE.get('bmseditor_'+this.editor_id).getContent());
+                                this.$el.prev().find("textarea").val(_tinyMCE.get('bmseditor_'+this.editor_id).getContent());
                             }
                         },
 			initialize: function () {                            
@@ -29,7 +29,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/editor.html'],
 			},
                         initEditor:function(options){
                             var editor = this;
-                            tinyMCE.init({
+                            _tinyMCE.init({
                                 // General options
                                 mode : "exact",
                                 elements : "bmseditor_"+options.id,
