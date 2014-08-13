@@ -2099,8 +2099,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                  
                             this.app.showLoading(false,this.$("#area_html_editor_mee")); 
-                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:_html});                                    
-                            this.$("#mee_editor").setChange(this.states);                          
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:''});                                    
+                            this.$("#mee_editor").setChange(this.states);                
+                            this.setMEE(_html);
                         },this));
                     }
                 },
