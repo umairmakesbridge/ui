@@ -15,7 +15,10 @@ function (template,Mapping,bmsSearch) {
                                              this.campview.tags = tags.substring(0,tags.length-1);
                                                 this.campview.updateTags();
                                                 if(curview.options.dialog){
-                                                   curview.options.dialog.hide();
+                                                    if(curview.options.type==="autobots"){
+                                                        curview.options.dialog.showPrevious();
+                                                    }else
+                                                    {curview.options.dialog.hide();}
                                                 }
                                                 
                                          }else{

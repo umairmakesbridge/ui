@@ -3116,13 +3116,19 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:true,
                                     headerIcon : '_graphics',
+                                    tagRegen:true,
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                          //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
                      this.options.app.showLoading("Loading...",dialog.getBody());
                      require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
                          var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
-                         dialog.getBody().html(mPage.$el);
+                         dialog.getBody().append(mPage.$el);
+                         that.app.showLoading(false, mPage.$el.parent());
+                         var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         that.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         that.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                         // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
                        // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
                          //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));

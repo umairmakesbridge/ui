@@ -153,7 +153,13 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var that = this;
                     require(["target/recipients_targets"], _.bind(function(page) {
                         var targetsPage = new page({page: this, dialog: dialog, editable: that.editable, type: "autobots", showUseButton: true});
-                        dialog.getBody().html(targetsPage.$el);
+                        dialog.getBody().append(targetsPage.$el);
+                        this.app.showLoading(false, targetsPage.$el.parent());
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        targetsPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        dialog.$el.find('.modal-header .cstatus').remove();
+                        dialog.$el.find('.modal-footer').find('.btn-play').hide();
+
                     }, this));
 
                 },
@@ -382,7 +388,14 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     this.options.app.showLoading("Loading Tags...", dialog1.getBody());
                     require(["tags/tags"], _.bind(function(page) {
                         var Tags = new page({tags: that.tags, app: that.options.app, camp: that, dialog: dialog1, editable: true, type: "autobots"});
-                        dialog1.getBody().html(Tags.$el);
+                        dialog1.getBody().append(Tags.$el);
+                        this.app.showLoading(false, Tags.$el.parent());
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        Tags.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(Tags.saveTags, Tags); // New Dialog
+                        dialog1.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
+                        dialog1.$el.find('.modal-footer').find('.btn-play').hide();
+                        dialog1.$el.find('.modal-header .cstatus').remove();
                         // Tags.init();                         
                         dialog1.saveCallBack(_.bind(Tags.saveTags, Tags));
                         //  targetsPage.createRecipients(this.targetsModelArray);
@@ -520,7 +533,12 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         //that.options.refer.pauseAutobot('dialog',that.botId);
                     });
                     btnSave.find('span').html("Pause");
-                }
+                },
+                ReattachEvents: function(){
+                   console.log('Attach events for tag bot'); 
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
+               }
 
             });
         });

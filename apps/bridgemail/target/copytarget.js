@@ -62,7 +62,7 @@ function (template) {
 										  }
                     				 });									
 								}
-								copydialog.hide();
+								copydialog.showPrevious();
 								campview.loadTargets();
 							}
 						});

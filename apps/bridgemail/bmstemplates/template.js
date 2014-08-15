@@ -31,7 +31,7 @@ function (template,icheck,bmstags) {
                this.page = this.options.template;
                this.modelTemplate = this.options.rowtemplate;
                this.dialog = this.options.dialog;
-               this.template_id = this.page.template_id;               
+               this.template_id = this.page.template_id;   
                this.$('input.checkpanel').iCheck({
                     checkboxClass: 'checkpanelinput',
                     insert: '<div class="icheck_line-icon"></div>'
@@ -48,7 +48,8 @@ function (template,icheck,bmstags) {
                this.imageval = null;
                this.$('#file_control').attr('title','');
                this.head_action_bar = this.modal.find(".modal-header .edited  h2");
-               var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;;  
+               this.head_action_bar.find(".preview").remove();
+               var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                this.head_action_bar.find(".edit").hide();
                var copyIconTemplate = this.head_action_bar.find(".copy");
                copyIconTemplate.attr('data-original-title','Copy template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
@@ -82,7 +83,7 @@ function (template,icheck,bmstags) {
                 // Merge Field Abdullah 
                 this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin',placeholder_text:'Merge Tags'});
                 copyIconTemplate.click(_.bind(function(e){                                     
-                     this.page.copyTemplate(self);
+                    this.options.rowtemplate.copyTemplate();
                },this));  
                previewIconTemplate.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
@@ -96,8 +97,12 @@ function (template,icheck,bmstags) {
                     var preview_iframe = "https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+this.template_id;
                     require(["common/templatePreview"],_.bind(function(templatePreview){
                            var tmPr =  new templatePreview({frameSrc:preview_iframe,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.template_id});
-                            dialog.getBody().html(tmPr.$el);
+                            dialog.getBody().append(tmPr.$el);
+                            this.app.showLoading(false, tmPr.$el.parent());
                             tmPr.init();
+                            var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                             tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                            dialog.$el.find('#dialog-title .preview').remove();
                           },this));
 //                    dialog.getBody().html(preview_iframe);                                         
                     e.stopPropagation();     
@@ -143,7 +148,7 @@ function (template,icheck,bmstags) {
             */
             loadTemplate:function(o,txt){
                var _this = this;
-          
+               
                this.app.showLoading("Loading Template...",this.$el);                                  
                var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=get&templateNumber="+this.template_id;
                 this.getTemplateCall = jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -155,7 +160,7 @@ function (template,icheck,bmstags) {
                         }
                          
                         _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title","Click to rename").addClass("showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                  
+                        _this.app.dialogArray[_this.app.dialogArray.length-1].title=template_json.name;
                         //_this.$("textarea").val(_this.app.decodeHTML(template_json.htmlText,true));
                         if(tinyMCE.get('bmseditor_template')){
                             tinyMCE.get('bmseditor_template').setContent(_this.app.decodeHTML(template_json.htmlText,true));                                 
@@ -184,6 +189,7 @@ function (template,icheck,bmstags) {
                             _this.iThumbnail.find("h4").hide();
                             _this.iThumbnail.find("img").attr("src",_this.app.decodeHTML(template_json.thumbURL)).show();                                                        
                         }
+                        _this.app.dialogArray[_this.app.dialogArray.length-1].tags = template_json.tags;
                         _this.tagDiv.tags({app:_this.app,
                             url:'/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK='+_this.app.get('bms_token'),
                             params:{type:'tags',templateNumber:_this.template_id,tags:''}
@@ -441,13 +447,19 @@ function (template,icheck,bmstags) {
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:true,
                                     headerIcon : '_graphics',
+                                    tagRegen:true,
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                          //// var _options = {_select:true,_dialog:dialog,_page:this}; // options pass to
                      this.app.showLoading("Loading...",dialog.getBody());
                      require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                     
                          var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
-                         dialog.getBody().html(mPage.$el);
+                         var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                         dialog.getBody().append(mPage.$el);
+                         that.app.showLoading(false, mPage.$el.parent());
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         that.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         that.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                         // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
                        // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
                          //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
@@ -488,6 +500,82 @@ function (template,icheck,bmstags) {
                     this.modelTemplate.model.set("isMobile",this.dataObj.isMobile);
                     this.modelTemplate.model.set("categoryID",this.dataObj.categoryID);
                     
-                }
+                },
+                ReattachEvents: function(){
+                    var copyIconTemplate = this.head_action_bar.find(".copy");
+                    var _this = this;
+                    var dialogArrayLength = this.app.dialogArray.length;
+                    this.head_action_bar.find('.preview').remove();
+                    var previewIconTemplate = $('<a class="icon preview showtooltip" data-original-title="Preview template"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    this.head_action_bar = this.modal.find(".modal-header .edited  h2");
+                    this.head_action_bar.append(previewIconTemplate);
+                     this.dialog.$(".pointy").show();
+                    if(this.dialog.$el.find('.c-current-status').length > 0){
+                        this.dialog.$el.find('.c-current-status').remove();
+                    }
+                   copyIconTemplate.click(_.bind(function(e){                                     
+                        // this.rowtemplate.copyTemplate(this);
+                        this.app.dialogArray[dialogArrayLength-1].copyCall(this);
+                     },this));
+                    
+                    this.dialog.$(".pointy .edit").click(_.bind(function(){
+                    this.showHideTargetTitle(true);
+                    },this));
+               
+                    this.dialog.$("#dialog-title span").click(_.bind(function(obj){
+                    this.showHideTargetTitle(true);
+                    },this));
+               
+                     this.dialog.$(".savebtn").click(_.bind(function(obj){
+                        this.saveTemplateName(obj)
+                      },this));
+               
+                    this.dialog.$(".cancelbtn").click(_.bind(function(obj){
+                     if(this.template_id){
+                       this.showHideTargetTitle();
+                    }
+                    },this));
+                    this.dialog.$(".pointy .delete").click(_.bind(function(obj){
+                        var _this = this;                    
+                        this.app.showAlertDetail({heading:'Confirm Deletion',
+                        detail:"Are you sure you want to delete this template?",                                                
+                            callback: _.bind(function(){													
+                                    _this.deleteTemplate();
+                            },_this)},
+                    _this.dialog.$el);                         
+                
+                    },this));
+                    this.tagDiv.tags({app:this.app,
+                            url:'/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK='+this.app.get('bms_token'),
+                            params:{type:'tags',templateNumber:this.template_id,tags:''}
+                            ,showAddButton:true,                            
+                            tags: this.app.dialogArray[this.app.dialogArray.length-1].tags,
+                             fromDialog:this.dialog.$el,
+                            callBack:_.bind(this.newTags,this),
+                            typeAheadURL:"/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=allTemplateTags"
+                         });
+                   previewIconTemplate.click(_.bind(function(e){                                     
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-162;
+                    var dialog = this.app.showDialog({title:'Template Preview',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                              headerEditable:false,
+                              headerIcon : 'dlgpreview',
+                              bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                    });
+                    var preview_iframe = "https://"+this.app.get("preview_domain")+"/pms/events/viewtemp.jsp?templateNumber="+this.template_id;
+                    require(["common/templatePreview"],_.bind(function(templatePreview){
+                           var tmPr =  new templatePreview({frameSrc:preview_iframe,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.template_id});
+                            dialog.getBody().append(tmPr.$el);
+                            this.app.showLoading(false, tmPr.$el.parent());
+                            tmPr.init();
+                            var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                             tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                            dialog.$el.find('#dialog-title .preview').remove();
+                          },this));
+//                    dialog.getBody().html(preview_iframe);                                         
+                    e.stopPropagation();     
+               },this));  
+                },
         });
 });

@@ -147,7 +147,12 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
 
                     require(["target/recipients_targets"], _.bind(function(page) {
                         var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "autobots", showUseButton: true});
-                        dialog.getBody().html(targetsPage.$el);
+                        dialog.getBody().append(targetsPage.$el);
+                        this.app.showLoading(false, targetsPage.$el.parent());
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        targetsPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        dialog.$el.find('.modal-header .cstatus').remove();
+                        dialog.$el.find('.modal-footer').find('.btn-play').hide();
                     }, this));
 
                 },
@@ -495,6 +500,13 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 }
                             });
+                },
+                ReattachEvents: function(){
+                   //console.log('Attach events for Score bot'); 
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
+                   this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
+                   this.showTags();
                 }
 
             });

@@ -306,6 +306,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     require(["target/newtarget"], function(newtargetPage) {
                         var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
                         dialog.getBody().append(mPage.$el);
+                        mPage.$el.addClass('dialogWrap-'+camp_obj.app.dialogArray.length);
                         camp_obj.app.showLoading(false, mPage.$el.parent());
                         dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
                         dialog.$el.find('#target_name').focus();

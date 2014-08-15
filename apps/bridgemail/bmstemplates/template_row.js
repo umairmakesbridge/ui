@@ -169,7 +169,11 @@ function (template,highlighter,tagView) {
                          });
                          require(["common/templatePreview"],_.bind(function(templatePreview){
                            var tmPr =  new templatePreview({frameSrc:srcUrl,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.model.get('templateNumber.encode')});
-                            dialog.getBody().html(tmPr.$el);
+                            dialog.getBody().append(tmPr.$el);
+                            this.app.showLoading(false, tmPr.$el.parent());
+                             var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                             tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                            dialog.$el.find('#dialog-title .preview').remove();
                             tmPr.init();
                           },this));                              
                 },
@@ -186,7 +190,12 @@ function (template,highlighter,tagView) {
                         this.app.showLoading("Loading...",__dialog.getBody());
                         require(["bmstemplates/copytemplate"],_.bind(function(copyTemplatePage){                                     
                                 var mPage = new copyTemplatePage({templ:self,template_id:this.model.get('templateNumber.encode'),_current:this,app:this.app,templatesDialog:__dialog});
-                                __dialog.getBody().html(mPage.$el);
+                                __dialog.getBody().append(mPage.$el);
+                                this.app.showLoading(false, mPage.$el.parent());
+                                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                                mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTemplate,mPage); // New Dialog
+                                __dialog.$el.find('#dialog-title .preview').remove();
                                 __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
                         },this));
                 },
@@ -205,14 +214,24 @@ function (template,highlighter,tagView) {
                     headerEditable:true,
                     headerIcon : 'template',
                     bodyCss:{"min-height":dialog_height+"px"},
+                    tagRegen:true,
                     buttons: {saveBtn:{text:'Save'} }
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["bmstemplates/template"],function(templatePage){
                     var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self});
-                    dialog.getBody().html(mPage.$el);
+                    var dialogArrayLength = self.app.dialogArray.length; // New Dialog
+                    dialog.getBody().append(mPage.$el);
+                    mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                    self.app.showLoading(false, mPage.$el.parent());
                     mPage.init();
+                    mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
+                    self.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                    self.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                    self.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTemplateCall,mPage); // New Dialog
+                    self.app.dialogArray[dialogArrayLength-1].copyCall=_.bind(self.copyTemplate,self); // New Dialog
+                    self.app.dialogArray[dialogArrayLength-1].tags= mPage.jsonTag; // New Dialog
                     }); 
                     this.parent.callTemplates(this.parent.offset);
                 },
