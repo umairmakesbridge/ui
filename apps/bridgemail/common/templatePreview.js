@@ -66,8 +66,9 @@ function (template,contactsView,icheck,chosen) {
                     this.$("#campaign-prev-select").chosen();
                     
                     // IFrame Loaded Successfully 
+                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="z-index: 111; left: 2.7%;"></div>')
                     this.$( "#email-template-iframe" ).load(_.bind(function() {
-                       this.$('.loading-wheel').hide();
+                       this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
                     },this));
                //this.loadTemplates();
                 if(this.options.prevFlag==='C')
