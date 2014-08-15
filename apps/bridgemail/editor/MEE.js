@@ -135,7 +135,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var selectedSocialLink = null;
                                         var topMinus = mee_view.topMinus;
                                         var leftMinus = mee_view.leftMinus;
-
+                                        var $element = null;
 
 
                                         var dialogForTextColor = true;
@@ -387,8 +387,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             else {
                                                                 $element.css("width", 48 - TotalBorderTopBottom + "px");   
                                                             }
-                                                        }
-                                                        // undoManager.registerAction(mainContentHtmlGrand.html());  
+                                                        }                                                        
                                                         makeCloneAndRegister();
                                                     }
                                                 });
@@ -415,8 +414,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             myElement.find(".aligncol #bottom").addClass("active");
                                                             myElement.find(".aligncol #bottom").siblings().removeClass("active");
                                                         }
-
-                                                        // undoManager.registerAction(mainContentHtmlGrand.html());  
                                                         makeCloneAndRegister();
                                                     }
                                                 });
@@ -803,8 +800,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         SetBackgroundColor($(this).data("selectedColor"));
                                                     });
 
-                                                    templateColors.append(li);
-                                                    //undoManager.registerAction(mainContentHtmlGrand.html());
+                                                    templateColors.append(li);                                                    
                                                     makeCloneAndRegister();
                                                 }
 
@@ -842,8 +838,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     }).css("background-color", hex);
                                                 }
 
-                                                SelectedElementForStyle.css("background-color", hex);
-                                                // undoManager.registerAction(mainContentHtmlGrand.html());
+                                                SelectedElementForStyle.css("background-color", hex);                                             
                                             }
                                         }
                                         InitializeStyleControls();
@@ -929,14 +924,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 args.DynamicContent = new DynamicContents();
                                                 args.DynamicContent = content;
 
-                                                if (options.OnSaveDynamicRules != null) {
-                                                    //alert(args.DynamicVariation.DynamicVariationID);
-                                                    //alert(args.DynamicContent.DynamicContentID);
+                                                if (options.OnSaveDynamicRules != null) {                                                 
                                                     options.OnSaveDynamicRules(args);
                                                 }
-
-                                                //var existingContent = args.DynamicContent;
-                                                //existingContent.ListOfDynamicRules = listOfDynamicRules;
 
                                                 args.clickedLi.data("content", args.DynamicContent);
 
@@ -950,15 +940,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 if (args.DynamicVariation != null) {
 
-                                                    args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);
-                                                    //var txtVariationName = args.predefinedControl.Html.find(".txtVariationName");
-                                                    //txtVariationName.val(args.DynamicVariation.Label);
-
-                                                    //dcInternalContents = args.predefinedControl.Html.find(".dcInternalContents");
-
+                                                    args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);                                                    
                                                     var dcContents = args.predefinedControl.Html.find(".dcContents");
-                                                    //txtVariationName.data("isUpdate", true);
-                                                    //txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
 
                                                     if (args.DynamicVariation.ListOfDynamicContents.length > 0) {
                                                         $.each(args.DynamicVariation.ListOfDynamicContents, function (i, variation) {
@@ -1015,9 +998,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             var PopulateRulesWindow = function (args) {
                                                 if (args.DynamicContent != null) {
 
-                                                    //Main values
-                                                    //dcRuleLabel.val(args.DynamicContent.Label);
-
                                                     oInitDestroyEvents.InitAll(dcInternalContents);
 
                                                     //Rules
@@ -1071,36 +1051,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
 
-                                                dcRulesManageDialog.dialog({
-                                                    //height: 350,
+                                                dcRulesManageDialog.dialog({                                                    
                                                     width: 850,
-                                                    position:[left,top],
-                                                    // left:left,
-                                                    modal: true/*,
-                                                    buttons: [
-                                                         {
-                                                             text: "Close",
-                                                             "class": 'btn-gray',
-                                                             click: function () {
-
-                                                                 $(this).dialog('destroy');
-                                                             },
-
-                                                         },
-
-                                                         {
-                                                             text: "Save",
-                                                             "class": 'btn-green',
-                                                             click: function () {
-
-                                                                 args.dcRulesDialog = $(this);
-
-                                                                 SaveRuleWindow(args);
-
-                                                                 $(this).dialog('destroy');
-                                                             }
-                                                         }
-                                                    ]*/
+                                                    position:[left,top],                                                    
+                                                    modal: true
                                                 }).dialog("open");
 
                                                 myElement.find(".ui-dialog-buttonpane").hide();
@@ -1145,34 +1099,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var left = ele_offset.left-left_minus;  
 
                                                     OpenRulesWindow(args, top, left);
-
-
-                                                    //if (args.clickedLi.data("content") != null)
-                                                    //{
-                                                    //    args.DynamicContent = args.clickedLi.data("content");
-
-
-                                                    //    if (args.DynamicContent.ListOfDynamicRules == null) {
-                                                    //        alert("new case");
-                                                    //        args.IsUpdate = false;
-                                                    //    }
-                                                    //    else
-                                                    //    {
-
-                                                    //    }
-
-
-                                                    //}
-
-
-                                                    //if (args.clickedLi.data("content") != null)
-                                                    //{
-
-                                                    //}
-                                                    //else
-                                                    //{
-
-                                                    //}
 
 
                                                 });
@@ -1298,14 +1224,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 args.predefinedControl.Html.find(".dcContents").on("click", "li", (function (event) { //&&
 
                                                     event.stopPropagation();
-
-                                                    //saving content in previous selected content.
-                                                    //if(args.clickedLi != null) {
-                                                    //    args.DynamicContent = args.clickedLi.data("content");
-                                                    //    args.DynamicContent.internalContents = dcInternalContents.html();
-                                                    //}
-
-                                                    //Show window for rules:
                                                     args.clickedLi = $(this);
                                                     args.IsUpdate = false;
 
@@ -1348,41 +1266,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     args.clickedLi.siblings().removeClass("active");
                                                     args.clickedLi.addClass("active");
 
-
-
-
-
-                                                    //if (args.clickedLi.data("content") != null) {
-                                                    //    args.IsUpdate = true;
-                                                    //    args.DynamicContent = args.clickedLi.data("content");
-
-                                                    //    PopulateRulesWindow(args);
-                                                    //}
-
-                                                    //if (args.DynamicContent.Label != "Default") {
-                                                    //    OpenRulesWindow(args);
-                                                    //}
-
                                                 }));
-
-
-
-
-
-                                                //var RePopulateContentNames = function (args) {
-                                                //    var dcContents = args.predefinedControl.Html.find(".dcContents li");
-                                                //    dcContents.each(function (i, o) {
-                                                //        var content = $(o).data("content");
-                                                //        if (content != null) {
-
-                                                //            $(o).find("span:first").html(content.Label);
-
-                                                //        }
-                                                //    });
-                                                //}
-
-
-
 
                                                 var dcContentNameWindow = args.predefinedControl.Html.find(".dcContentName");
                                                 dcContentNameWindow.find(".btnCancelContent").click(function (event) {
@@ -1432,13 +1316,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                     dcContentNameWindow.toggle();
 
-                                                    //Get window for rules:  
-                                                    //args.IsUpdate = false;
-                                                    //dcRuleLabel.val("");
-                                                    //dcRulesContainer.html("");
-
-                                                    //OpenRulesWindow(args);
-
                                                 });
 
                                             }
@@ -1487,10 +1364,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         //listOfDynamicBlocksHtml.append(block);
 
                                                         ulDynamicBlocks.append(block);
-
-                                                        //block.find(".imageicons").draggable({ disabled: true });
-                                                        //InitializeMainDraggableControls(block);
-                                                        //ulDynamicBlocks.append(block);
 
                                                     }
 
@@ -1679,17 +1552,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                                 $.each(dynamicBlockFieldsFromService, function (i, obj) {
 
-                                                    //Assigning unique ID here:
-                                                    //obj[0].ID = "buildingBlock" + count;
-                                                    //console.log("DC Fiedl:" + obj);
                                                     if (obj[2] == "true") {
                                                         listOfDynamicBlockFieldssHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
                                                     }
-                                                    //Initialize with default draggable:
-                                                    //InitializeMainDraggableControls(block);
-
-                                                    //listOfDynamicBlockFieldssHtml.append(block);
-
 
                                                 });
                                                 //console.log(listOfDynamicBlocksHtml);
@@ -1723,17 +1588,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                                 $.each(dynamicBlockRuleConditionsFromService, function (i, obj) {
 
-                                                    //Assigning unique ID here:
-                                                    //obj[0].ID = "buildingBlock" + count;
-                                                    // console.log("DC Fiedl:" + obj[1]);
-
                                                     listOfDynamicBlockRuleConditionsHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
-
-                                                    //Initialize with default draggable:
-                                                    //InitializeMainDraggableControls(block);
-
-                                                    //listOfDynamicBlockFieldssHtml.append(block);
-
 
                                                 });
                                                 //console.log(listOfDynamicBlocksHtml);
@@ -1768,17 +1623,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                                 $.each(dynamicBlockFormatsFromService, function (i, obj) {
 
-                                                    //Assigning unique ID here:
-                                                    //obj[0].ID = "buildingBlock" + count;
-                                                    //console.log("DC Fiedl:" + obj);
-
                                                     listOfDynamicBlockFormatsHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
-
-                                                    //Initialize with default draggable:
-                                                    //InitializeMainDraggableControls(block);
-
-                                                    //listOfDynamicBlockFieldssHtml.append(block);
-
 
                                                 });
                                                 //console.log(listOfDynamicBlocksHtml);
@@ -1875,9 +1720,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                                 $.each(personalizeTagsFromService, function (i, obj) {
 
-                                                    //Assigning unique ID here:
-                                                    //obj[0].ID = "buildingBlock" + count;
-                                                    //console.log("DC Fiedl:" + obj);
                                                     var entry = {
                                                         text: $('<div/>').html(obj[1]).text(),
                                                         value: obj[0]
@@ -1927,11 +1769,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
 
-                                                var divHtmlPreview = previeCodeTabs.find(".divHtmlPreview");
-                                                // var mainTableClone = myElement.find(".mainTable").clone();
-
-                                                // oInitDestroyEvents.DestroyPluginsEvents(mainTableClone);
-                                                // var cleanCode = CleanCode(mainTableClone.outerHTML());
+                                                var divHtmlPreview = previeCodeTabs.find(".divHtmlPreview");                                                
 
                                                 divHtmlPreview.html(outputHTML);
                                                 divHtmlCode.val(outputHTML);
@@ -1964,34 +1802,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
                                             oHtml.find(".MEE_ELEMENT").addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
-                                            oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");
-                                            // oHtml.find(".MEE_DOCUMENT_CONTENTS").addClass("mainContentHtmlGrand").removeClass("MEE_DOCUMENT_CONTENTS");
-                                            // oHtml.find(".MEE_CONTENTS").addClass("mainContentHtml sortable").removeClass("MEE_CONTENTS");
-
-                                            // oHtml.find(".MEE_IMAGECONTENT").addClass("myImage").removeClass("MEE_IMAGECONTENT");
-                                            // // oHtml.find(".MEE_TEXTCONTENT").addClass("mainContentHtml sortable").removeClass("MEE_CONTENTS");
-                                            // oHtml.find(".MEE_IMAGE").addClass("imageHandlingClass resizable clickEvent ui-resizable").removeClass("MEE_IMAGE");
-                                            // oHtml.find(".MEE_TEXT").addClass("textcontent").removeClass("MEE_TEXT");
-
-
-
-
-
-                                            // if(oHtml.hasClass("MEE_DROPPABLE")) {
-                                            //     oHtml.addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");;
-                                            // }
-                                            // else {
-                                            //     oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");;;
-                                            // }
+                                            oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");                                           
 
                                             var RevertCommonLi = function (element) {
 
-                                                //Remove Empty Element
-                                                // if (element.isEmpty()) {
-                                                //     element.remove();
-                                                //     return;
-                                                // }
-                                                //console.log("li method called...")
                                                 var newElement = $("<li>");
                                                 newElement.html(element.html());
 
@@ -2008,19 +1822,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     newElement.attr("style", elementStyle);
                                                 }
 
-
-                                                //Remove Class
-                                                // newElement.removeClass();
                                                 element.replaceWith(newElement);
                                             }
 
                                             var RevertCommonUl = function (element) {
-
-                                                //Remove Empty Element
-                                                // if (element.isEmpty()) {
-                                                //     element.remove();
-                                                //     return;
-                                                // }
 
                                                 var newElement = $("<ul>");
                                                 newElement.html(element.html());
@@ -2181,31 +1986,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 args.droppedElement.html(oControl.Html);
 
-
-                                                // var dv = new DynamicVariation();
-                                                // dv.DynamicVariationID = "v123";
-                                                // dv.IsUpdate = false;
-                                                // dv.Label = "adnan123"
-
-                                                // var dc = new DynamicContents();
-                                                // dc.Label = "Default";
-                                                // dc.DynamicContentID = "c123";
-                                                // dc.IsDefault = true;
-                                                // dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                // dv.ListOfDynamicContents.push(dc);
-
-
-                                                // var dc = new DynamicContents();
-                                                // dc.Label = "dc 123";
-                                                // dc.DynamicContentID = "c123";
-                                                // dc.IsDefault = false;
-                                                // dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                // dv.ListOfDynamicContents.push(dc);
-
-                                                // args.DynamicVariation = dv;
-                                                                        //alert("dummy");
-
-                                                // args.ID = variation_ID;  
                                                 args.ID = keyword;                                          
                                                 args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
 
@@ -2227,27 +2007,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var newParent = $("<ul class='sortable'/>");
                                                     li.parent().children().wrapAll(newParent);
 
-                                                    // var liParent = li.parent();
-                                                    // console.log(liParent);
-                                                    // var lis = li.children();
-                                                    // console.log(lis);
-                                                    // var parent = $("<ul class='sortable'/>");
-                                                    // lis.wrapAll(parent);
-
-
-                                                    // var siblings = li.siblings("li");
-                                                    // if(siblings.parent().is("ul")) {
-
-                                                    // }
-                                                    // else {
-                                                    //     //siblings.push(li);
-                                                    //     var parent = $("<ul/>");
-                                                    //     li.wrap(parent);
-                                                    //     siblings.wrapAll(parent);
-                                                    // }
-
-                                                    // li.wrap("<ul></ul>");
-                                                    console.log("li without ul exist");
 
                                                 }
 
@@ -2262,11 +2021,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         function CleanCode (html) {
 
                                             var oHtml = $(html);                    
-
-                                            //DestroyPluginsEvents(oHtml);
-                                            //oHtml.removeClass("mainTable");
+                                            
                                             oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("visibility");
-                                            //oHtml.find("td").removeClass("mainContentHtmlGrand");
                                             oHtml.find(".csHaveData").removeClass("csHaveData ui-draggable ui-droppable").addClass("MEE_ELEMENT");
                                             oHtml.find(".mainContentHtmlGrand").removeClass("mainContentHtmlGrand").addClass("MEE_DOCUMENT_CONTENTS");
                                             oHtml.find(".mainContentHtml").removeClass("mainContentHtml sortable").addClass("MEE_CONTENTS");
@@ -2315,9 +2071,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             oHtml.find(".dynamicContentContainer").each(function (index, object) {
                                                 var variation = $(object);                        
                                                 var keyword = variation.attr("keyword");
-                                                // variation.removeAttr("keyword");
-                                                // variation.removeAttr("keyword");
-
+                                                
                                                 variation.addClass("DYNAMIC_VARIATION");
                                                 variation.removeClass("dynamicContentContainer");
                                                 variation.removeClass("container");
@@ -2382,11 +2136,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         InitializePreviewControls();
                                         //=============================================================================
 
-
-
-
-
-                                        //â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘
                                         // [Muhammad.Adnan] --------------- DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) ------------ //            
 
 
@@ -2432,12 +2181,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             //Initialize Plugins Event
                                             this.InitializePluginsEvents = function (element) {
-                                                //alert("im calling");
-
-                                                // element.find("img.imageHandlingClass").resizable({
+                                                
                                                 element.find(".resizableImage").resizable({
-                                                    //containment: 'parent'
-                                                    // handles: "se,sw"
+                                                    
                                                 });
 
                                                 element.find("div.textcontent").each(function (index, element) {
@@ -2451,10 +2197,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                                             toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
 
-                                                            // link_list: [
-                                                            // { title: 'My page 1', value: 'http://www.tinymce.com' },
-                                                            // { title: 'My page 2', value: 'http://www.moxiecode.com' }
-                                                            // ],
                                                             setup: function (editor) {
                                                                 editor.on("mouseDown", function(e) {                                           
                                                                     selectedLinkFromTinyMCE = e.target;
@@ -2484,18 +2226,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                                         dialogForTextColor = true;
                                                                         myElement.find(".modalDialog").show();
-                                                                        myElement.find("#ColorPickerpop").show();
-                                                                        // $(".modalDialog").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
-
-                                                                        // $("#ColorPickerpop").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
+                                                                        myElement.find("#ColorPickerpop").show();                                                                        
 
                                                                         var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                                         var selectedFontColor = myElement.find(".selectedFontColor");
@@ -2563,28 +2294,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                         dialogForTextColor = false;
                                                                         myElement.find(".modalDialog").show();
                                                                         myElement.find("#ColorPickerpop").show();
-                                                                        // $(".modalDialog").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
-
-                                                                        // $(".mycolorFontPicker").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
-                                                                        // $(".fontDialogButtons").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
-
-                                                                        // $(".fontDialogTitle").mousedown(function(e){
-                                                                        //     e.stopPropagation();
-                                                                        //     e.preventDefault();
-                                                                        //     return false;
-                                                                        // });
 
                                                                         var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                                         var selectedFontColor = myElement.find(".selectedFontColor");
@@ -2659,18 +2368,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                         this.value('');
                                                                     },
                                                                     values: personalizedTagsGlobal,
-                                                                    /*[{ text: 'Personalize', value: '' },
-                                                                    { text: 'Email', value: '@EMAIL@' },
-                                                                    { text: 'First Name', value: '@First Name@' },
-                                                                    { text: 'Full Name', value: '@Full Name@' },
-                                                                    { text: 'Gender', value: '@Gender@' },
-                                                                    { text: 'Last Name', value: '@Last Name@' },
-                                                                    { text: 'Post Code', value: '@Post Code@' },
-                                                                    { text: 'Sender Address', value: '@Sender Address@' }
-                                                                    ],*/
+                                                                    
                                                                     onPostRender: function () {
-                                                                        // Select the second item by default
-                                                                        // this.value('');
+                                                                    
                                                                     }
                                                                 });
                                                             },
@@ -2770,14 +2470,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                          myTextLink = "<a class='MEE_LINK' href='" + linkValue + "' style='text-decoration:underline;'>" + areaToDisplay.find("textarea.linkTextArea").val() + "</a>";
                                                          postBackupLink = linkValue;
 
-                                                        // if (areaToDisplay.find("#newAnchortext").val().startsWith("http://")) {
-                                                        // myTextLink = "<a class='MEE_LINK' href='" + areaToDisplay.find("#newAnchortext").val() + "' style='text-decoration:underline;'>" + areaToDisplay.find("textarea.linkTextArea").val() + "</a>";
-                                                        //     postBackupLink = areaToDisplay.find("#newAnchortext").val();
-                                                        // }
-                                                        // else {
-                                                        // myTextLink = "<a href='" + "http://" + areaToDisplay.find("#newAnchortext").val() + "' style='text-decoration:underline;'>" + areaToDisplay.find("textarea.linkTextArea").val() + "</a>";
-                                                        //     postBackupLink = "http://" + areaToDisplay.find("#newAnchortext").val();
-                                                        // }
                                                     }
 
 
@@ -2837,24 +2529,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                 e.stopPropagation();
                                                                 myElement.find(".topHandlers").remove();
 
-                                                                //console.log("value of IsStyleActivated:" + IsStyleActivated);
                                                                 if (!IsStyleActivated) {
-
-                                                                    // console.log("On Initializing mouse events..");
-
-                                                                    //23 is height of topHandlers;
-                                                                    // var topMeasure = $(this).offset().top - 23
-
-                                                                    // var leftMeasure = $(this).offset().left;
-
-                                                                    // myobject.css({
-                                                                    //     top: topMeasure,
-                                                                    //     left: leftMeasure + $(this).width() - 70,
-                                                                    //     "border-top": "1px solid #2486dc",
-                                                                    //     "border-left": "1px solid #2486dc",
-                                                                    //     "border-right": "1px solid #2486dc"
-                                                                    // });
-
                                                                     //Assign DELETE functionality here
                                                                     InitializeDeleteButtonOnElement(myobject);
 
@@ -2873,15 +2548,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                 $(this).removeClass("hover");
                                                             }
                                                         });
-
-                                                        //args.droppedElement.hover(function (event) {
-                                                        //    //$(this).prepend(myobject);
-
-                                                        //}, function (event) {
-
-                                                        //    //$(this).find(myobject).remove();
-
-                                                        //});
 
                                                         return oHtml;
                                                     }
@@ -2987,16 +2653,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                     this.InitializeClickEvent(oHtml);
                                                     var activeTab = myElement.find("#tabs").tabs("option", "active");
-                                                    //console.log('Active Tab:'+ activeTab);
-                                                    // var tabName = activeTab.attr('aria-controls');
-
-
-                                                    // if(activeTab == 0) {
-                                                    //     InitializeElementsForStyle(false);
-                                                    // }
-                                                    // else {
-                                                    //     InitializeElementsForStyle(true);
-                                                    // }
 
                                                 }
                                             }
@@ -3069,8 +2725,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 var myParent = $(this).closest(".csHaveData");
                                                 var droppable = CreateDroppableWithAllFunctions();
                                                 myParent.before(droppable);
-
-                                                //new InitializeAndDestroyEvents().DestroyPluginsEvents(myParent);                
+           
                                                 oInitDestroyEvents.DestroyPluginsEvents(myParent);
                                                 var duplicateElement = myParent.clone();
                                                 oInitDestroyEvents.InitAll(myParent, false);
@@ -3085,16 +2740,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 args.predefinedControl = oControl;
                                                 args.droppedElement = oControl.Html;
 
-                                                oInitDestroyEvents.InitAll(oControl.Html, false);
-                                                //InitializeAllEvents(args);
-                                                // InitializeAllEvents(oControl.Html, false);
-                                                //ReInitializeDragDropHoverAll(args.droppedElement);
-
-
-                                                //InitializeImageDroppedEvent(oControl.Html);
-
-                                                //InitializeClickEvent(args);
-
+                                                oInitDestroyEvents.InitAll(oControl.Html, false);                                                
 
                                                 droppable.before(args.droppedElement);
 
@@ -3103,8 +2749,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 OnNewElementDropped(args);
 
-                                                //myElement.find(".sortable").removeAttr("style");
-                                                //myElement.find(".myDroppable").removeInlineStyle("height");
                                                 makeCloneAndRegister();
                                             });
                                         }
@@ -3443,13 +3087,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         }
 
                                         function SetElementSize(args) {
-                                            //var args = {
-                                            //    droppedElement: $(this),
-                                            //    event: event,
-                                            //    ui: ui,
-                                            //    predefinedControl: Html, Type
-                                            //};
-
                                             //Controlling here Width of Container
                                             if (args.predefinedControl != null) {
                                                 var parentWidth = 100;
@@ -3559,10 +3196,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         //Element recieving from controls panel:
                                                     else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
 
-                                                        //INSERT DROPPABLE BEFORE AND AFTER            
-                                                        // $(this).before(CreateDroppableWithAllFunctions());
-                                                        // $(this).after(CreateDroppableWithAllFunctions());
-                                                        ///////
 
                                                         $(this).addClass("csHaveData");
 
@@ -3591,25 +3224,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             console.log(buildingBlocksGlobal);
                                                             var bb = undefined;
                                                             $.each(buildingBlocksGlobal, function (i, obj) {
-                                                                // var bBlock = Enumerable.From(buildingBlocksGlobal)
-                                                                //             .Where(function(o){
-                                                                //                             return (Enumerable.From(o[0])
-                                                                //                                 .Where("x => x.ID == '" + controlID + "'").Any());
-
-
-                                                                //             }).FirstOrDefault();
-                                                                console.log(obj[0]);
-
-                                                                // var bb = bBlock;
-                                                                //var abb = Enumerable.From(obj[0]).Where(function(x) { x.ID == '" + controlID + "'").FirstOrDefault();
+                                                                                                                                
                                                                 if (obj[0].ID == controlID) {
                                                                     bb = obj[0];
-                                                                }
-                                                                // console.log("abb:"+abb);
-                                                                // if(abb != undefined) {
-                                                                // bb = abb
-                                                                // }
-
+                                                                }                                                                
 
                                                             });
                                                             console.log("BB:" + bb);
@@ -3623,20 +3241,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                 console.log(oControl);
 
                                                                 args.predefinedControl = oControl;
-
-                                                                //-------------- Initialize Again all nested controls after dropped-------------------//:
-                                                                //ReInitializeDragDropHoverAll(oControl.Html);
-                                                                //Droppable:
-                                                                //oControl.Html.find(".myDroppable").each(function (i, o) {
-                                                                //    CreateDroppableWithAllFunctions(o);
-                                                                //});
-
-                                                                ////Moving Handlers - Mouse Hover
-                                                                //oControl.Html.find(".csHaveData").each(function (i, o) {
-                                                                //    InitializeElementWithDraggable($(o));
-                                                                //    InitializeMouseHover($(o));
-                                                                //});
-
+                                                    
                                                                 //////////////////////////////////////////////////////////////////////////////////////////
 
                                                                 //InitializeAllEvents(args.droppedElement);
@@ -3667,26 +3272,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                                             if (args.formContents != undefined) {
-                                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
-                                                                // var fContents = args.formContents.replace("http://", "https://");
+                                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
                                                                var fContents = args.formContents;
-                                                                //alert(fContents);
-                                                                //var preview_iframe = $("<iframe class=\"email-iframe\" style=\"frameborder=\"0\" ></iframe>");
-                                                                //element.html(preview_iframe);
-
-                                                                // var decodeHTML = $('<div/>').html(fContents).text();
-                                                                // alert(decodeHTML);
-                                                                // alert($(decodeHTML).attr("src"));
-                                                                // var scriptSrc = $(decodeHTML).attr("src");
-                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\""+ fContents +"\" frameborder=\"0\" onload='setTimeout(resizeIFrame(this), 10000);'></iframe><br style='clear:both;' /></div>");
-                                                                //preview_iframe.html(decodeHTML);
-                                                                // preview_iframe.attr(
-                                                                //         "src", "data:text/html;charset=utf-8," + 
-                                                                //         "<html>" + decodeHTML +"</html>");
-
-
-                                                                // preview_iframe.contents().find('body').html(decodeHTML);
-
+                                                              
+                                                               var preview_iframe = $("<div style='overflow:hidden;height:auto;'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\""+ fContents +"\" frameborder=\"0\" onload='setTimeout(resizeIFrame(this), 10000);'></iframe><br style='clear:both;' /></div>");
+                                                                
                                                                 oControl.Html = preview_iframe;
                                                                 //oControl.Html.addClass("container");
                                                                 oControl.Type = "formBlock";
@@ -3696,25 +3286,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                                 args.predefinedControl = oControl;
 
-
-                                                                //-------------- Initialize Again all nested controls after dropped-------------------//:
-                                                                //ReInitializeDragDropHoverAll(oControl.Html);
-                                                                //Droppable:
-                                                                //oControl.Html.find(".myDroppable").each(function (i, o) {
-                                                                //    CreateDroppableWithAllFunctions(o);
-                                                                //});
-
-                                                                ////Moving Handlers - Mouse Hover
-                                                                //oControl.Html.find(".csHaveData").each(function (i, o) {
-                                                                //    InitializeElementWithDraggable($(o));
-                                                                //    InitializeMouseHover($(o));
-                                                                //});
-
-                                                                //////////////////////////////////////////////////////////////////////////////////////////
-
-                                                                //InitializeAllEvents(args.droppedElement);
-
-                                                                //Place predefined html into dropped area.
                                                                 args.droppedElement.html(oControl.Html);
 
                                                                 oInitDestroyEvents.InitAll(args.droppedElement);
@@ -3792,8 +3363,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                         oInitDestroyEvents.InitAll(args.droppedElement);
 
                                                                     }
-
-                                                                    //options.OnExistingDynamicControlDropped(args);
                                                                 }
                                                             }
                                                             else {
@@ -3855,8 +3424,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                                             args.DynamicVariation.Label = txtVariationName.val();
 
-                                                                            //args.DynamicVariation.DynamicVariationID = "999";
-
                                                                             txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
 
                                                                         }
@@ -3873,104 +3440,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                     dcContentVariationWindow.hide();
 
                                                                 });
-
-
-
-
-                                                               /* myElement.find(".DCNameDialog").dialog({
-                                                                    width: 500,
-                                                                    modal: true,
-                                                                    buttons: [
-                                                                        {
-                                                                            text: "Cancel",
-                                                                            "class": 'btn-gray',
-                                                                            click: function () {
-                                                                                $(this).dialog('destroy');
-                                                                                DeleteElement(args.droppedElement);
-                                                                            }
-                                                                        }, {
-
-                                                                            text: "Ok",
-                                                                            "class": 'btn-green',
-                                                                            click: function () {
-
-                                                                                //args.ID = ui.draggable.data("id");
-
-                                                                                var txtVariationName = $(this).find(".txtPlaceHolder");
-
-                                                                                if (txtVariationName.isEmpty())
-                                                                                {
-                                                                                    alert("Please enter dynamic control name.");
-
-                                                                                }
-                                                                                else {
-
-                                                                                    //args.predefinedControl.Html.find(".dcName span:first").html(txtVariationName.val());
-
-                                                                                    args.DynamicVariation = new DynamicVariation();
-                                                                                    args.DynamicVariation.Label = txtVariationName.val();
-                                                                                    args.DynamicVariation.isUpdate = false;
-                                                                                    var dc = new DynamicContents();
-                                                                                    var listOfDC = new Array();
-                                                                                    listOfDC.push(dc);
-                                                                                    args.DynamicVariation.ListOfDynamicContents = listOfDC;
-
-
-                                                                                    //dummy
-                                                                                    if (false) {
-
-                                                                                            args.DynamicVariation = variation;
-                                                                                            args.DynamicVariation.Label = "Im Test Variation";
-                                                                                            args.DynamicVariation.DynamicVariationID = "v123";
-
-                                                                                            alert(args.DynamicVariation.DynamicVariationID);
-
-
-                                                                                    }
-                                                                                    else {
-                                                                                        if (options.OnDynamicControlSave != null) {
-
-                                                                                            //alert(args.DynamicVariation.Label);
-                                                                                            options.OnDynamicControlSave(args.DynamicVariation);
-
-
-                                                                                            alert("Successfully Saved");
-                                                                                        }
-
-
-                                                                                        args.DynamicVariation = loadDynamicVariationFromServer(args.DynamicVariation.DynamicVariationID);
-
-                                                                                        args.DynamicVariation.Label = txtVariationName.val();
-
-                                                                                        //args.DynamicVariation.DynamicVariationID = "999";
-
-                                                                                        txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
-
-                                                                                    }
-
-                                                                                    _LoadDynamicBlocks();
-
-                                                                                    InitializeDynamicControl(args);
-
-                                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-                                                                                }
-
-
-                                                                                $(this).dialog('destroy');
-
-
-
-
-
-
-                                                                            }
-                                                                        }
-                                                                    ]
-                                                                }).dialog("open");
-
-                                                                */
 
                                                             }
 
@@ -4002,37 +3471,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                                                 oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                //InitializeAllEvents(args.droppedElement);
-
-
-                                                                //Get Dyanmic Content Drop Area
-                                                                //if (args.droppedElement.parents(".dcInternalContents:first").length > 0) { //%%
-
-
-                                                                //    var dcInternal = args.droppedElement.parents(".dcInternalContents:first");
-                                                                //    var dcClickedContainer = args.droppedElement.parents(".dynamicContentContainer:first");
-
-                                                                //    if (dcClickedContainer.find("li.active").length > 0) {
-
-
-
-                                                                //        var cInternalData = dcInternal.clone(true);
-
-                                                                //        //oInitDestroyEvents.DestroyPluginsEvents(cInternalData);
-
-                                                                //        dcClickedContainer.find("li.active:first").data("dcInternalData", cInternalData);
-                                                                //    }
-
-                                                                //    //alert(dcInternal.find(".active:first").outerHTML());
-                                                                //    //dcInternal.find(".active:first").data("dcInternalData", dcInternal);
-
-
-
-
-                                                                //    //dcInternal.data("dcInternalData", dcInternal);
-
-                                                                //    //alert(dcInternal.find(".active:first").data("dcInternalData").outerHTML());
-                                                                //}
+                                                               
 
 
                                                             }
@@ -4049,23 +3488,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                         OnNewElementDropped(args);
 
-
-
-                                                        //Work on control - CONTROL ONLY
-                                                        //InitializeImageDroppedEvent(oControl.Html); //$$
-
-                                                        //Work on control - CONTROL ONLY
-                                                        //InitializeClickEvent(oControl.Html); //##
-
-
-                                                        //Work on container - DROPPED ELEMENT
-                                                        //InitializeMouseHover(args.droppedElement);
-
-
-
-                                                        //undoManager.registerAction(mainContentHtmlGrand.html());
-
-                                                        //var regObj = new RegisterObject(null, $(this), $(event.target).parent(), "Drop",$(this).index());
 
                                                     }
 
@@ -4156,9 +3578,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 droppableElement = CreateDroppableWithAllFunctions();
 
                                                 if (IsFirstDroppableElement) {
-                                                    //droppableElement.css({
-                                                    //    height: "100%"
-                                                    //});
+                                                    
 
                                                     droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic'> DROP HERE </div>");
                                                 }
@@ -4166,15 +3586,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 sender.append(droppableElement);
                                             }
 
-                                            //listOfElements.each(function (index) {
-                                            //    var element = $(this);
-                                            //    if (index == 0)
-                                            //    {
-                                            //        element.before(CreateDroppableWithAllFunctions());
-                                            //    }
-
-                                            //    element.after(CreateDroppableWithAllFunctions());
-                                            //});
+                                            
                                         }
 
                                         var RemoveDroppables = function (container) {
@@ -4243,12 +3655,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 cursorAt: {
                                                     top: -7,
                                                     left: -7
-                                                },
-                                                // revert: "invalid" ,
-                                                // helper: function(){
-                                                //         $copy.css({"list-style":"none","width":$(this).outerWidth()});                        
-                                                //         return $copy;
-                                                //     },
+                                                },                                                
                                                 appendTo: '.editorpanel',
                                                 //scroll: false,
                                                 //[M.Adnan] FOR DRAGGING
@@ -4286,18 +3693,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                         });
 
-                                                        //var mainContent = myElement.find(".mainContentHtml");
-                                                        //alert(mainContent.height());
-
-                                                        //var lastDropabble = myElement.find(".myDroppable:last-child");
-                                                        //lastDropabble.css({
-                                                        //    height: "100%"                                
-                                                        //});
-
                                                     }
-
-                                                    //$(".imageContainer")
-                                                    //myElement.find(".imageContainer").InitializeWithDropable();
+                                                   
                                                 },
 
                                                 stop: function (e, ui) {
@@ -4329,40 +3726,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var addBBDialog = myElement.find(".buildingBlock_name");
                                                     addBBDialog.dialog({
                                                         width: 270,
-                                                        modal: true/*,
-                                                        buttons: [
-                                                            {
-                                                                text: "Cancel",
-                                                                click: function () {
-                                                                    $(this).dialog('destroy');
-
-                                                                }
-                                                            }, {
-                                                                text: "Ok",
-                                                                click: function () {
-                                                                    //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
-                                                                    //args.buildingDialogBox = $(this);
-
-                                                                    var buildingBlock = new Object();
-                                                                    buildingBlock.Name = $(this).find(".txtPlaceHolder").val();
-
-                                                                    oInitDestroyEvents.DestroyPluginsEvents(args.ui.draggable);
-
-                                                                    buildingBlock.Html = args.ui.draggable.clone();
-
-                                                                    oInitDestroyEvents.InitializePluginsEvents(args.ui.draggable);
-
-                                                                    args.buildingBlock = buildingBlock;
-
-                                                                    $(this).dialog('destroy');
-
-                                                                    _OnDropElementOnBuildingBlock(args);
-
-
-
-                                                                }
-                                                            }
-                                                        ]*/
+                                                        modal: true
                                                     }).dialog("open");
                                                     addBBDialog.find(".ui-dialog-buttonpane").hide();
                                                     addBBDialog.find(".addBBClose").click(function () {
@@ -4390,8 +3754,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 }
                                             });
                                         }
-                                        // ------------------------------------------------------------------------------------------------------------------//
-                                        //â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘â–‘
+                                        // ------------------------------------------------------------------------------------------------------------------//                                       
 
                                         function InitializeBuildingBlockUpdatePopup() {
                                             myElement.find('.buildingBlock_name_edit').dialog({
@@ -4557,9 +3920,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
 
-                                            //areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                            //$("#rightPanelArea").data("tabClicked", "hyperlink");
-                                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A HYPERLINK (STANDARD LINK URL)</p><br /><br /><form name='submit_url' action='#' method='post' enctype='multipart/form-data'><label><p>text</p></label><textarea id='linkTextArea' class='text-areaLinkGUI'></textarea><br /><br /><br /><label><p>link (url)</p></label><input type='text' class='textLinkGUI' id='linkHyperLinkURL' maxlength='200' /><br /><br /><label><p>LINK NAME (FOR TRACKING)</p></label><input type='text' id='linkName' class='textLinkGUI' maxlength='200' /><p><input type='checkbox' id='dont-track'  /><label><span>DO NOT TRACK THIS LINK</span></label></p><br /><br /><br /></form>";
+                                            
                                             if (myElement.find("#linkTrack").data("linkObject") == "image") {
                                                 var elem = myElement.find("#imageDataSavingObject").data("myWorkingObject");
                                                 if ($(elem).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
@@ -4608,14 +3969,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             myElement.find("#rightPanelArea").html(areaToDisplay);
                                             if (myElement.find("#linkTrack").data("linkObject") != "image") {
                                                 areaToDisplay.show();
-                                                areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                                // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
-                                                //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                                // } else {
-                                                //     console.log("2. SomeLink set here");
-
-                                                //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
-                                                // }
+                                                areaToDisplay.find("div.textAreaDivfortextLink").show();                                               
                                                 areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
                                             }
                                             else {
@@ -4647,13 +4001,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if (myElement.find("#linkTrack").data("linkObject") != "image") {
                                                 areaToDisplay.show();
                                                 areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                                // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
-                                                //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                                // } else {
-                                                //     console.log("3. SomeLink set here");
-
-                                                //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
-                                                // }
+                                               
                                                 areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
                                             }
                                             else {
@@ -4683,13 +4031,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if (myElement.find("#linkTrack").data("linkObject") != "image") {
                                                 areaToDisplay.show();
                                                 areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                                // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
-                                                //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                                // } else {
-                                                //     console.log("4. SomeLink set here");
-
-                                                //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
-                                                // }
+                                               
                                                 areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
                                             }
                                             else {
@@ -4719,13 +4061,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if (myElement.find("#linkTrack").data("linkObject") != "image") {
                                                 areaToDisplay.show();
                                                 areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                                // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
-                                                //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                                // } else {
-                                                //     console.log("5. SomeLink set here");
-
-                                                //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
-                                                // }
+                                                
                                                 areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
                                             }
                                             else {
@@ -4831,8 +4167,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 // alert("You clicked " + this.value);
                                                 selectedSocialLink = this.value;
                                             });
-                                            //areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                            //document.getElementById("rightPanelArea").innerHTML = "<p>New # Anchor</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'></textarea><br/><br><label><p>Anchor Name:</p></Label><input type='text' class='textLinkGUI' maxlength='200'/>";
+                                            
                                         });
 
                                         // ============== End Sohaib Nadeem ==============/////
@@ -4986,11 +4321,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                         areaToDisplay.find("div.linkImagePreview").show();
                                                         areaToDisplay.find("div.textAreaDivfortextLink").hide();
-                                                        // var anchorLinkParts = prevLink.split("?");
-                                                        // var subjectLine = anchorLinkParts[1].split("=")[1];
-                                                        // areaToDisplay.find("input.linkHyperLinkURL").val(anchorLinkParts[0]);
-                                                        // areaToDisplay.find("input.linkName").val(subjectLine);
-
+                                                       
                                                         initializeiCheck(areaToDisplay);
 
                                                         myElement.find('input[name="social"]').on('ifClicked', function (event) {
@@ -5090,11 +4421,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         areaToDisplay.show();
 
                                                         areaToDisplay.find("div.linkImagePreview").show();
-                                                        areaToDisplay.find("div.textAreaDivfortextLink").hide();
-                                                        // var anchorLinkParts = prevLink.split("?");
-                                                        // var subjectLine = anchorLinkParts[1].split("=")[1];
-                                                        // areaToDisplay.find("input.linkHyperLinkURL").val(anchorLinkParts[0]);
-                                                        // areaToDisplay.find("input.linkName").val(subjectLine);
+                                                        areaToDisplay.find("div.textAreaDivfortextLink").hide();                                                       
 
                                                         initializeiCheck(areaToDisplay);
 
@@ -5184,15 +4511,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         //[Muhammad.Adnan] - Exposed Functions by CORE Code.
                                         function OnNewElementDropped(args) {
-                                            //var args = {
-                                            //    droppedElement: $(this),
-                                            //    event: event,
-                                            //    ui: ui,
-                                            //    predefinedControl: (Html, Type)
-                                            //};
-
-
-
+                                            
                                             if (args.predefinedControl != null) {
 
                                                 if (args.predefinedControl.Type == "copied" || args.predefinedControl.Type == "buildingBlock") {
@@ -5271,11 +4590,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                         areaToDisplay.find("div.linkImagePreview").show();
                                                         areaToDisplay.find("div.textAreaDivfortextLink").hide();
-                                                        // var anchorLinkParts = prevLink.split("?");
-                                                        // var subjectLine = anchorLinkParts[1].split("=")[1];
-                                                        // areaToDisplay.find("input.linkHyperLinkURL").val(anchorLinkParts[0]);
-                                                        // areaToDisplay.find("input.linkName").val(subjectLine);
-
+                                                        
                                                         initializeiCheck(areaToDisplay);
 
                                                         myElement.find('input[name="social"]').on('ifClicked', function (event) {
@@ -5305,11 +4620,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         areaToDisplay.show();
 
                                                         areaToDisplay.find("div.linkImagePreview").show();
-                                                        areaToDisplay.find("div.textAreaDivfortextLink").hide();
-                                                        // var anchorLinkParts = prevLink.split("?");
-                                                        // var subjectLine = anchorLinkParts[1].split("=")[1];
-                                                        // areaToDisplay.find("input.linkHyperLinkURL").val(anchorLinkParts[0]);
-                                                        // areaToDisplay.find("input.linkName").val(subjectLine);
+                                                        areaToDisplay.find("div.textAreaDivfortextLink").hide();                                                       
 
                                                         initializeiCheck(areaToDisplay);
 
@@ -5376,11 +4687,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                         areaToDisplay.find("div.linkImagePreview").show();
                                                         areaToDisplay.find("div.textAreaDivfortextLink").hide();
-                                                        // var anchorLinkParts = prevLink.split("?");
-                                                        // var subjectLine = anchorLinkParts[1].split("=")[1];
-                                                        // areaToDisplay.find("input.linkHyperLinkURL").val(anchorLinkParts[0]);
-                                                        // areaToDisplay.find("input.linkName").val(subjectLine);
-
+                                                        
                                                         initializeiCheck(areaToDisplay);
 
                                                         myElement.find('input[name="social"]').on('ifClicked', function (event) {
@@ -5505,38 +4812,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         var OnImageDropped = function (args) {
 
-                                            //var args = {
-                                            //    droppedElement: $(this),
-                                            //    event: event,
-                                            //    ui: ui,
-                                            //    predefinedControl: (Html, Type)
-                                            //};
-                                            //var htmlToPlace = "<div width='100%' ><div class='myHandle'><img src='images/move_handle.png' /></div><table width='100%'><tr><td width='100%'><div id='onlyImage' class='myImage'><img style='height:200px; width:200px;' class='imageHandlingClass resizable' src='"+ (args.droppedElement.find("img").attr("src")) +"' style='display:block;' /></div></td></tr></table></div>";
+                                            
                                             var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + args.ui.draggable.find("img").attr("src") + "' style='display:block;' /></div></div>");
 
                                             // htmlToPlace.find("img.imageHandlingClass").resizable({
                                             htmlToPlace.find(".resizableImage").resizable({
-                                                //containment: 'parent'
-                                                // handles: "n, e, s, w, ne, se, sw, nw "
-                                            });
-
-                                            //$("#imageToolbar").data("objectType", args.predefinedControl.Type);
-
+                                            
+                                            });                                            
                                             args.droppedElement.html(htmlToPlace);
                                             makeCloneAndRegister();
 
                                         }
 
                                         var OnClickedOnElement = function (event) {
-
-                                            //var args = {
-                                            //    droppedElement: $(this),
-                                            //    event: event,
-                                            //    ui: ui,
-                                            //    predefinedControl: (Html, Type)
-                                            //};
-                                            //myElement.find("#imageToolbar").data("objectType", args.predefinedControl.Type);
-
 
                                             myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
                                             myElement.find("#linkTrack").data("linkObject", "image");
@@ -5547,17 +4835,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         }
 
                                         var _OnDropElementOnBuildingBlock = function (args) {
-                                            //var args = {
-                                            //    droppedElement: $(this)                
-                                            //    buildingBlock,
-                                            //    event: event,
-                                            //    ui: ui
-                                            //};              
+                                            
                                             // ===================== Sohaib ==========================
                                             // Before making a building block uninitialize image resizable
-                                            //alert(args.buildingBlock.Html);
-                                            //args.buildingBlock.Html.find("img.imageHandlingClass").resizable("destroy");
-                                            //alert(args.buildingBlock.Html.html());
+                                            
                                             if (options.OnDropElementOnBuildingBlock != null) {
                                                 //Call overridden Method here: will use when exposing properties to developer
                                                 options.OnDropElementOnBuildingBlock(args);
@@ -5650,80 +4931,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                           " </div>" +
                                                                        //actionButtons.html() +
                                                                      "</li>");
-
-                                                        //var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                        //              "<i class='icon myblck'></i> " +
-                                                        //              "<span class='font_75'>" + obj[0].name + "</span>" +
-                                                        //              "</li>");
-
-
-                                                        // block.find(".imgicons.edit").click(function () {
-                                                        //     var parentLi = $(this).closest(".draggableControl");
-                                                        //     var editBox = parentLi.find(".editBox");
-                                                        //     var bbName = parentLi.find(".bbName");
-                                                        //     editBox.find(".txtBlockName").val(bbName.text());
-
-                                                        //     editBox.show();
-
-                                                        //     var closeBtn = editBox.find(".closebtn");
-                                                        //     closeBtn.click(function () {
-                                                        //         editBox.hide();
-                                                        //     });
-
-                                                        //     var saveBtn = editBox.find(".btnSave");
-                                                        //     saveBtn.click(function () {
-                                                        //         var txtBlockName = editBox.find(".txtBlockName");
-
-                                                        //         var args = new Object();
-                                                        //         args.BlockName = txtBlockName.val();
-                                                        //         args.BlockID = parentLi.data("id");
-
-                                                        //         //Call overridden Method here: will use when exposing properties to developer
-                                                        //         // if (options.OnBuildingBlockSave != null) {
-                                                        //         //     options.OnBuildingBlockSave(args);
-
-                                                        //         //     parentLi.find(".bbName").text(args.BlockName);
-                                                        //         //     alert("Saved successfully");
-                                                        //         // }
-                                                        //         if (options.OnEditBuildingBlock != null) {
-                                                        //             options.OnEditBuildingBlock(args);
-
-                                                        //             parentLi.find(".bbName").text(args.BlockName);
-                                                        //             console.log("Saved successfully");
-                                                        //         }
-                                                        //     });
-
-                                                        // });
-
-                                                        // block.find(".imgicons.delete").click(function () {
-                                                        //     var parentLi = $(this).closest(".draggableControl");
-
-                                                        //     var delBox = parentLi.find(".delBox");
-                                                        //     delBox.show();
-
-                                                        //     var btnDelete = delBox.find(".btnDelete");
-                                                        //     btnDelete.click(function () {
-
-                                                        //         var args = new Object();
-                                                        //         args.BlockID = parentLi.data("id");
-
-                                                        //         //Call overridden Method here: will use when exposing properties to developer
-                                                        //         if (options.OnDeleteBuildingBlock != null) {
-                                                        //             options.OnDeleteBuildingBlock(args);
-
-                                                        //             parentLi.remove();
-                                                        //             console.log("Deleted Successfully");
-                                                        //         }
-
-
-                                                        //     });
-
-                                                        //     var closeBtn = delBox.find(".closebtn");
-                                                        //     closeBtn.click(function () {
-                                                        //         delBox.hide();
-                                                        //     });
-
-                                                        // });
+                                                       
 
                                                         //Initialize with default draggable:
                                                         InitializeMainDraggableControls(block);
@@ -5905,80 +5113,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                           " </div>" +
                                                                        //actionButtons.html() +
                                                                      "</li>");
-
-                                                    //var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                    //              "<i class='icon myblck'></i> " +
-                                                    //              "<span class='font_75'>" + obj[0].name + "</span>" +
-                                                    //              "</li>");
-
-
-                                                    // block.find(".imgicons.edit").click(function () {
-                                                    //     var parentLi = $(this).closest(".draggableControl");
-                                                    //     var editBox = parentLi.find(".editBox");
-                                                    //     var bbName = parentLi.find(".bbName");
-                                                    //     editBox.find(".txtBlockName").val(bbName.text());
-
-                                                    //     editBox.show();
-
-                                                    //     var closeBtn = editBox.find(".closebtn");
-                                                    //     closeBtn.click(function () {
-                                                    //         editBox.hide();
-                                                    //     });
-
-                                                    //     var saveBtn = editBox.find(".btnSave");
-                                                    //     saveBtn.click(function () {
-                                                    //         var txtBlockName = editBox.find(".txtBlockName");
-
-                                                    //         var args = new Object();
-                                                    //         args.BlockName = txtBlockName.val();
-                                                    //         args.BlockID = parentLi.data("id");
-
-                                                    //         //Call overridden Method here: will use when exposing properties to developer
-                                                    //         // if (options.OnBuildingBlockSave != null) {
-                                                    //         //     options.OnBuildingBlockSave(args);
-
-                                                    //         //     parentLi.find(".bbName").text(args.BlockName);
-                                                    //         //     alert("Saved successfully");
-                                                    //         // }
-                                                    //         if (options.OnEditBuildingBlock != null) {
-                                                    //             options.OnEditBuildingBlock(args);
-
-                                                    //             parentLi.find(".bbName").text(args.BlockName);
-                                                    //             console.log("Saved successfully");
-                                                    //         }
-                                                    //     });
-
-                                                    // });
-
-                                                    // block.find(".imgicons.delete").click(function () {
-                                                    //     var parentLi = $(this).closest(".draggableControl");
-
-                                                    //     var delBox = parentLi.find(".delBox");
-                                                    //     delBox.show();
-
-                                                    //     var btnDelete = delBox.find(".btnDelete");
-                                                    //     btnDelete.click(function () {
-
-                                                    //         var args = new Object();
-                                                    //         args.BlockID = parentLi.data("id");
-
-                                                    //         //Call overridden Method here: will use when exposing properties to developer
-                                                    //         if (options.OnDeleteBuildingBlock != null) {
-                                                    //             options.OnDeleteBuildingBlock(args);
-
-                                                    //             parentLi.remove();
-                                                    //             console.log("Deleted Successfully");
-                                                    //         }
-
-
-                                                    //     });
-
-                                                    //     var closeBtn = delBox.find(".closebtn");
-                                                    //     closeBtn.click(function () {
-                                                    //         delBox.hide();
-                                                    //     });
-
-                                                    // });
+                                                    
 
                                                     //Initialize with default draggable:
                                                     InitializeMainDraggableControls(block);
@@ -5991,11 +5126,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                     count++;
                                                 });
-
-                                                // var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                                // ulBuildingBlocks.empty();
-                                                // //console.log(listOfBuildingBlocksHtml);
-                                                // ulBuildingBlocks.append(listOfBuildingBlocksHtml);
+                                                
 
                                                 buildingBlocksGlobal = buildingBlocksFromService;
 
@@ -6133,14 +5264,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                           "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
                                                                           "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
                                                                           " </div>" +
-                                                                     "</li>");
-
-                                                    //var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                    //              "<i class='icon myblck'></i> " +
-                                                    //              "<span class='font_75'>" + obj[0].name + "</span>" +
-                                                    //              "</li>");
-
-
+                                                                     "</li>");                                                  
 
 
 
@@ -6154,17 +5278,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                     count++;
                                                 });
-
-                                                // var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                                // ulBuildingBlocks.empty();
-                                                // //console.log(listOfBuildingBlocksHtml);
-                                                // ulBuildingBlocks.append(listOfBuildingBlocksHtml);
-
                                                 formBlocksGlobal = formBlocksFromService;
 
-                                            }
-                                               ///////
-
+                                            }                                               
 
                                         }
 
@@ -6200,33 +5316,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                           " </div>" +
                                                                          "</li>");
 
-                                                        //var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                        //              "<i class='icon myblck'></i> " +
-                                                        //              "<span class='font_75'>" + obj[0].name + "</span>" +
-                                                        //              "</li>");
-
-
-
-
-
                                                         //Initialize with default draggable:
                                                         InitializeMainDraggableControls(block);
 
                                                         // listOfBuildingBlocksHtml.append(block);
                                                         ulFormBlocks.append(block);
 
-
-
-                                                        //count++;
                                                     }
                                                 });
                                                 myElement.find("#FBResultDiv").html(counter + " records Found");
-                                                myElement.find("#FBResultDiv").show();
-
-                                                // var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                                // ulBuildingBlocks.empty();
-                                                // //console.log(listOfBuildingBlocksHtml);
-                                                // ulBuildingBlocks.append(listOfBuildingBlocksHtml);
+                                                myElement.find("#FBResultDiv").show();                                               
 
                                                 formBlocksGlobal = formBlocksFromService;
 
@@ -6246,24 +5345,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if (options.CallBackSaveMethod != null) {
                                                 var templateHTML = mainContentHtmlGrand.html();
                                                 var mainHTMLELE = myElement.find(".mainContentHtml");
-                                                var constructedHTML = $(mainHTMLELE.outerHTML());
-                                                console.log("HTML going for cleanup:"+ constructedHTML.outerHTML());
-                                                var cleanedupHTML = CleanCode(constructedHTML).html();
-                                                console.log("HTML after cleanup:"+ cleanedupHTML);
+                                                var constructedHTML = $(mainHTMLELE.outerHTML());                                                
+                                                var cleanedupHTML = CleanCode(constructedHTML).html();                                                
                                                 var outputter = $("<div></div>");
                                                 outputter.wrapInner(cleanedupHTML);
 
-                                                var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
-                                                console.log("OutputHTML:"+ outputHTML);
-                                                //console.log("Reconstructed HTML:\n"+ reConstructCode(outputHTML).html());
+                                                var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                                                
                                                 options.CallBackSaveMethod(templateHTML, outputHTML);
                                                 alert("Template has been successfully saved on Server.");
                                             }
                                         };
-
+                                        var showStyle= false;
                                         function InitializeControls() {
-
-                                            console.log("InitializeControls called..");
+                                            
                                             //Muhammad.Adnan
                                             //Main Draggable Controls
                                             var draggableControls = myElement.find(".draggableControl");
@@ -6272,9 +5366,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             //Click on overall element:
                                             myElement.click(function () {
 
-                                                if (!isElementClicked) {
-                                                    //Will hide here floating elements:
-
+                                                if (!isElementClicked) {                                               
                                                     //Sohaib 
                                                     RemovePopups();
                                                 }
@@ -6284,6 +5376,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             //Building Blocks Drop Area:
                                             InitializeBuildingBlockDroppableArea();
                                             myElement.find(".builder-panel").css("height",($(window).height()-20)+"px");
+                                            myElement.find(".style-panel").css("height",($(window).height()-62)+"px");
                                             myElement.find("#contentAreaDiv").scroll();
                                             myElement.find("#imageTitleDialog").hide();                                            
                                             myElement.find(".accordian").accordion({ 
@@ -6325,6 +5418,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 if ($(this).hasClass("style-tab")) {
                                                     myElement.find('.builder-panel').hide();
                                                     myElement.find('.style-panel').show();
+                                                    if(showStyle===false){
+                                                        myElement.find(".style-panel .accordian").accordion("refresh");
+                                                        myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                                        showStyle = true;
+                                                    }
                                                     InitializeElementsForStyle(true);
                                                 }
 
@@ -6363,24 +5461,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 width: 900
                                             });
 
-                                            // if(firstTime && options.preDefinedHTML != null && options.preDefinedHTML != "" ) {
-
-                                            //     console.log("PRE-DEFINED HTML:" + options.preDefinedHTML);
-                                            //     mainContentHtmlGrand.html(options.preDefinedHTML);
-                                            //     firstTime = false;
-                                            //     InitializeControls();
-
-                                            // }
-                                            // firstTime = false;
-
                                         }
 
                                         InitializeControls();
 
                                         //---------------------------------------------------------------------------------//
-
-                                        // [Sarmad.Ali] --------------- IMAGE LIBRARY ------------ //            
-
+                                        
                                         //Image Parameters for Ajax Request for LoadImages in Image Library
                                         var _imageAjaxParameters = null;
                                         if (options.ImagesAjaxProperties != null) {
@@ -6415,11 +5501,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             LoadImagesInLibrary();
                                         }
-
                                         // ------------------ End Load Images --------------//
 
                                         // ------------------ Start Image Search --------------//
-
                                         var _searchImagesAjaxParameters = null;
                                         if (options.SearchImagesProperties != null) {
                                             _searchImagesAjaxParameters = new Object();
@@ -6598,12 +5682,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             args.BlockID = element.data("id");
 
                                             //Call overridden Method here: will use when exposing properties to developer
-                                            // if (options.OnBuildingBlockSave != null) {
-                                            //     options.OnBuildingBlockSave(args);
-
-                                            //     parentLi.find(".bbName").text(args.BlockName);
-                                            //     alert("Saved successfully");
-                                            // }
                                             if (options.OnEditBuildingBlock != null) {
                                                 options.OnEditBuildingBlock(args);
                                                 _LoadBuildingBlocks(args);
@@ -6641,8 +5719,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 options.OnEditDynamicVariation(args);
 
                                                 _LoadDynamicBlocks(args);
-                                                //parentLi.find(".bbName").text(args.BlockName);
-                                                console.log("Saved successfully");
                                             }
                                             myElement.find(".DCEditDialog").hide();
 
@@ -6658,8 +5734,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if (options.OnDeleteDynamicVariation != null) {
                                                 options.OnDeleteDynamicVariation(args);
 
-                                                _LoadDynamicBlocks(args);
-                                                console.log("Deleted Successfully");
+                                                _LoadDynamicBlocks(args);                                            
                                             }
 
                                             myElement.find(".DCDeleteDialog").hide();
@@ -6746,16 +5821,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             }
                                         }
 
-                                        myElement.find(".closeImagePreview").click(function () {
-                                            // var element = $(this);
-                                            // var action = element.data("action");
-                                            // if (action === "NewWindow") {
-                                            //     closeimgPreview();
-                                            //     openinnewTab(element.data("imgurl"));
-                                            // }
-                                            // if (action === "CloseWindow") {
-                                                closeimgPreview();
-                                            // }
+                                        myElement.find(".closeImagePreview").click(function () {                                            
+                                            closeimgPreview();                                            
                                             return false;
                                         });
 
@@ -6851,8 +5918,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 myElement.find('.DCDeleteDialog').hide();
                                                 myElement.find('.DCEditDialog').hide();
 
-
-                                                // element.siblings('.del-window').show();
                                                 var imageObj = imageListGlobal[0][index][0];
 
                                                 showBox(element, imageObj, "delete");
@@ -6868,8 +5933,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 myElement.find('.DCDeleteDialog').hide();
                                                 myElement.find('.DCEditDialog').hide();
 
-
-                                                // element.siblings('.del-window').show();
                                                 var bbObj = buildingBlocksGlobal[index][0];
 
                                                 showBox(element, bbObj, "bbdel");
@@ -6884,8 +5947,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 myElement.find('.DCDeleteDialog').hide();
                                                 myElement.find('.DCEditDialog').hide();
 
-
-                                                // element.siblings('.del-window').show();
                                                 var bbObj = buildingBlocksGlobal[index][0];
 
                                                 showBox(element, bbObj, "bbedit");
@@ -6900,8 +5961,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 myElement.find('.DCDeleteDialog').hide();
                                                 myElement.find('.DCEditDialog').hide();
 
-
-                                                // element.siblings('.del-window').show();
                                                 var dcObj = dynamicBlocksGlobal[index][0];
 
                                                 showBox(element, dcObj, "dcdel");
@@ -6916,8 +5975,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 myElement.find('.DCDeleteDialog').hide();
                                                 myElement.find('.DCEditDialog').hide();
 
-
-                                                // element.siblings('.del-window').show();
                                                 var dcObj = dynamicBlocksGlobal[index][0];
 
                                                 showBox(element, dcObj, "dcedit");
@@ -6953,9 +6010,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             }
 
                                             var url = options.formWizURL;
-                                            url = url + formPara;
-                                            console.log("URL:"+ url);
-                                            //launch new window using 'url'.
+                                            url = url + formPara;                                            
                                             window.open(url);
                                          }
 
@@ -6966,35 +6021,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             if(formId != '') {
                                                 formPara = "&mformId="+formId;
                                             }
-
                                             var url = options.formDeleteURL;
-
-                                            url = url + formPara + "&delete=true";
-                                            console.log("URL:"+ url);
+                                            url = url + formPara + "&delete=true";                                            
 
                                             window.open(url);
-                                        }
-
-                                        // ------------------ End Image Handlers --------------//
-
-                                        //$(".ulBuildingBlocks").on("click", "li", function () {
-                                        //    _LastSelectedBuildingBlock = $(this);
-                                        //    UnSelectAllBlocks();
-                                        //    $(this).css("background", "#429bf9");
-                                        //});
-
-                                        //$(".ulDynamicBlocks").on("click", "li", function () {
-                                        //    _LastSelectedDynamicBuildingBlock = $(this);
-                                        //    UnSelectAllDynamicBlocks();
-                                        //    $(this).css("background", "#429bf9");
-                                        //});
+                                        }                                        
 
                                         myElement.find(".editBB").click(function () {
                                             if (_LastSelectedBuildingBlock != null) {
                                                 var name = _LastSelectedBuildingBlock.children("span").text();
                                                 myElement.find(".editBlockInputName").val(name);
-                                                InitializeBuildingBlockUpdatePopup();
-                                                //_LastSelectedBuildingBlock = null;
+                                                InitializeBuildingBlockUpdatePopup();                                                
                                             }
                                             else {
                                                 alert("Please Select a Block First");
@@ -7009,27 +6046,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     // Delete Block Server Call
                                                     var args = {
                                                         buildingBlock: null
-                                                    };
-
-                                                    //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
-                                                    //args.buildingDialogBox = $(this);
+                                                    };                                                    
 
                                                     var buildingBlock = new Object();
-                                                    //buildingBlock.Name = $(this).find(".txtPlaceHolder").val();
                                                     buildingBlock.Id = _LastSelectedBuildingBlock.data("id");
                                                     args.buildingBlock = buildingBlock;
-                                                    //$(this).dialog('destroy');
                                                     _OnDeleteBuildingBlock(args);
                                                     _LastSelectedBuildingBlock = null;
-                                                    UnSelectAllDynamicBlocks();
-                                                    //_LastSelectedBuildingBlock = null;
+                                                    UnSelectAllDynamicBlocks();                                                    
                                                 }
                                                 else {
                                                     _LastSelectedBuildingBlock = null;
                                                     UnSelectAllDynamicBlocks();
-                                                }
-                                                //myElement.find(".editBlockInputName").val(name);
-                                                //InitializeBuildingBlockUpdatePopup();
+                                                }                                                
                                             }
                                             else {
                                                 alert("Please Select a Block First");
@@ -7059,25 +6088,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         buildingBlock: null
                                                     };
 
-                                                    //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
-                                                    //args.buildingDialogBox = $(this);
-
-                                                    var dynamicVariation = new Object();
-                                                    //buildingBlock.Name = $(this).find(".txtPlaceHolder").val();
+                                                    var dynamicVariation = new Object();                                                    
                                                     dynamicVariation.Id = _LastSelectedDynamicBuildingBlock.data("id");
-                                                    args.dynamicVariation = dynamicVariation;
-                                                    //$(this).dialog('destroy');
+                                                    args.dynamicVariation = dynamicVariation;                                                    
                                                     _OnDeleteDynamicVariation(args);
                                                     _LastSelectedDynamicBuildingBlock = null;
-                                                    UnSelectAllDynamicBlocks();
-                                                    //_LastSelectedBuildingBlock = null;
+                                                    UnSelectAllDynamicBlocks();                                                    
                                                 }
                                                 else {
                                                     _LastSelectedDynamicBuildingBlock = null;
                                                     UnSelectAllDynamicBlocks();
-                                                }
-                                                //myElement.find(".editBlockInputName").val(name);
-                                                //InitializeBuildingBlockUpdatePopup();
+                                                }                                                
                                                 return false;
                                             }
                                             else {
@@ -7107,15 +6128,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         function UnSelectAllBlocks() {
                                             myElement.find('.ulBuildingBlocks li').each(function () {
-                                                $(this).css("background", "#71737a");
-                                                //$(this).removeClass("del-active");
+                                                $(this).css("background", "#71737a");                                                
                                             });
                                         }
 
                                         function UnSelectAllDynamicBlocks() {
                                             myElement.find('.ulDynamicBlocks li').each(function () {
-                                                $(this).css("background", "#71737a");
-                                                //$(this).removeClass("del-active");
+                                                $(this).css("background", "#71737a");                                                
                                             });
                                         }
 
@@ -7123,30 +6142,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             e.stopPropagation();
                                             e.preventDefault();
                                             console.log("drag enter called..");
-                                            myElement.find(".divBuildingBlockLoadingImages").show();
-                                            //return;
-                                            // this.$element.addClass('file-border');
+                                            myElement.find(".divBuildingBlockLoadingImages").show();                                            
                                         });
 
-                                        myElement.find("#HTML5FileUploader").on("dragover", function (e) {
-                                            //console.log("drag over called..");
+                                        myElement.find("#HTML5FileUploader").on("dragover", function (e) {                                            
                                             e.stopPropagation();
-                                            e.preventDefault();
-                                            //console.log("drag over called..");
-
-                                            //$(".divBuildingBlockLoadingImages").hide();
-                                            // this.$element.addClass('file-border');
-                                            //return false;
+                                            e.preventDefault();                                            
                                         });
 
 
 
                                         myElement.find("#HTML5FileUploader").on("dragleave", function (e) {
                                             e.stopPropagation();
-                                            e.preventDefault();
-                                            //console.log("drag leave called..");
-                                            //$(".divBuildingBlockLoadingImages").hide();
-                                            // this.$element.addClass('file-border');
+                                            e.preventDefault();                                            
                                         });
 
 
@@ -7221,10 +6229,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             var total = event.total;
                                                             if (event.lengthComputable) {
                                                                 percent = Math.ceil(position / total * 100);
-                                                            }
-                                                             // if(_this.module == "Image"){
-                                                             //   $('#templi_'+data_id+' #progress div').css('width',percent+"%") 
-                                                             //  }
+                                                            }                                                             
                                                         }, false);
                                                     }
                                                     return xhrobj;
@@ -7236,10 +6241,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 cache: false,
                                                 async: false,
                                                 data: formData,
-                                                success: function(data){
-                                                     console.log("successfully uploaded image...");
-                                                    //_this.app.showLoading(false,_this.$element);
-                                                    // $('#templi_'+data_id).remove();
+                                                success: function(data){                                                     
                                                     LoadImagesInLibrary();  
                                                 }
                                                 ,
@@ -7253,9 +6255,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         function resizeIFrame (frame) {
                                             var iFrame = $(frame);
                                             console.log('ResizeIFrame Calle...' + iFrame.contents().find("body").height());
-                                            var iframe_height = iFrame.contents().find("body").height()+30;
-
-                                            // $(this).height( $(this).contents().find("body").height() );
+                                            var iframe_height = iFrame.contents().find("body").height()+30;                                            
                                             iFrame.height(iframe_height);
 
                                         }
@@ -7482,20 +6482,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 OnEditBuildingBlock: function (args) {
 
                                     //Save to Server
-                                    if (args != null) {
-                                        //args.buildingBlock.Name; 
-                                        //args.buildingBlock.Html;                                                                                
-                                        // var URL = "/pms/io/publish/saveEditorData/?&type=renameBlock";
-                                        // $.post(URL, {
-                                        //    blockId: args.buildingBlock.Id,
-                                        //    name: args.buildingBlock.Name,
-                                        //    type: "renameBlock"
-                                        // })
-                                        // .done(function (data) {
-                                        //    console.log("RenameBuilding block success:" + data);
-                                        //    // your code go here. 
-                                        // });
-
+                                    if (args != null) {                                        
                                         $.ajax({
                                             url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=renameBlock&name=" + args.BlockName + "&blockId=" + args.BlockID,
                                             //data: "{ name: 'test', html: args.buildingBlock.Name }",
@@ -7530,12 +6517,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             dataType: "json",
                                             cache: false,
                                             async: false,
-                                            success: function (e) {
-                                            //console.log("delete building block success:" + e);
-                                            //LoadBuildingBlocks();
+                                            success: function (e) {                                            
                                             },
-                                            error: function (e) {
-                                            //console.log("delete building block failed:" + e);
+                                            error: function (e) {                                            
                                             }
 
                                         });
@@ -7686,14 +6670,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         dataType: "json",
                                         cache: false,
                                         async: false,
-                                        success: function (ec) {
-                                        //console.log("Delete Dynamic Content success:"+ ec);  
-                                        //console.log("Dynamic number Content is:" + ec[1]);
-
+                                        success: function (ec) {                                        
 
                                         },
-                                        error: function (e) {
-                                        //console.log("Delete Dynamic Content failed:"+ e);
+                                        error: function (e) {                                        
                                         }
                                     }); 
                                 },
@@ -7706,21 +6686,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
 
                                     $.ajax({                                    
-                                        url: contentURL,
-                                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                        url: contentURL,                                        
                                         type: "POST",
                                         contentType: "application/json; charset=latin1",
                                         dataType: "json",
                                         cache: false,
                                         async: true,
-                                        success: function (ec) {
-                                        //console.log("Update Dynamic  Content success:"+ ec);  
-                                        //console.log("Dynamic number Content is:" + ec[1]);
-
+                                        success: function (ec) {                                        
 
                                         },
-                                        error: function (e) {
-                                        //console.log("update Dynamic  Content failed:"+ e);
+                                        error: function (e) {                                        
                                         }
                                     }); 
                                 },
