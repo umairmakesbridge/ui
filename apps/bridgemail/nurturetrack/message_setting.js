@@ -143,7 +143,11 @@ function (template) {
                     require(["campaigns/campaign_body"],_.bind(function(page){    
                          this.app.showLoading(false,this.$bodyInner);                    
                          this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
-                         this.$bodyInner.append(this.messagebody_page.$el);         
+                         this.$bodyInner.append(this.messagebody_page.$el); 
+                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         this.messagebody_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].currentView = this.messagebody_page; // New Dialog
                          this.messagebody_page.init();
                      },this));
                  }

@@ -61,7 +61,7 @@ function (template,contactsView,icheck,chosen) {
                     this.$('.show-original').on('ifUnchecked',_.bind(function(event){
                         this.setiFrameSrc();
                     },this));
-                    
+                    this.$el.parents('.modal').find('#dialog-title .dialog-title').removeAttr('data-original-title')
                     /* Chosen Plugin dropdown*/
                     this.$("#campaign-prev-select").chosen();
                //this.loadTemplates();
