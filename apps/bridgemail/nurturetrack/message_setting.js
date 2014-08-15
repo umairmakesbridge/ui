@@ -220,6 +220,10 @@ function (template) {
                     var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     this.head_action_bar.append(previewIconMessage);
                     previewIconMessage.click(_.bind(this.previewCampaign,this)); 
+                    if(this.options.type == "autobots"){
+                         this.dialog.$el.find('.modal-header .cstatus').remove();
+                         this.dialog.$el.find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                    }
                 }
             
             

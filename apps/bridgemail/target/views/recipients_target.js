@@ -128,7 +128,12 @@ function (template) {
                            self.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
                             dialog.$el.find('#target_name').focus();    
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
-                          
+                          //Autobots
+                          if(self.options.type == "autobots_listing"){
+                              dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
+                              dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                              dialog.$el.find('.modal-header .cstatus').remove();
+                          }
                       });
                        
                 },
@@ -216,7 +221,11 @@ function (template) {
                     objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
-                   
+                   //Autobots
+                          if(that.options.type == "autobots_listing"){
+                              dialog.$el.find('.modal-header .cstatus').remove();
+                              dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                          }
                 });
            }
             ,
@@ -254,7 +263,7 @@ function (template) {
                     this.$el.fadeOut("fast",_.bind(function(){
                         if(that.options.type == "autobots"){
                             that.parent.options.page.addToCol2(this.model);
-                            that.options.dialog.hide();
+                            that.options.dialog.showPrevious();
                         }else{
                             this.parent.addToCol2(this.model);    
                             this.$el.hide();

@@ -218,8 +218,12 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["target/newtarget"], function(newtargetPage) {
                         var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
-                        dialog.getBody().html(mPage.$el);
+                        dialog.getBody().append(mPage.$el);
+                        camp_obj.app.showLoading(false, mPage.$el.parent());
+                        var dialogArrayLength = camp_obj.app.dialogArray.length; // New Dialog
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                         dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
+                        camp_obj.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.createTarget, mPage); // New Dialog
                         dialog.$el.find('#target_name').focus();
                     });
                 },

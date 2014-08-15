@@ -427,29 +427,40 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     require([files], function(Alert) {
                         var mPage = new Alert({refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model});
                         dialog.getBody().html(mPage.$el);
+                        console.log('Ok start From here for bot : ' + that.model.get('actionType'));
+                        var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+
                         switch (that.model.get('actionType')) {
                             case "E":
                                 if (that.model.get('botType') == "B") {
                                     dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
+                                    that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBirthDayAutobot, mPage); // New Dialog
+
                                 } else {
                                     dialog.saveCallBack(_.bind(mPage.saveEmailAutobot, mPage));
+                                    that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveEmailAutobot, mPage); // New Dialog
                                 }
                                 break;
                             case "SC":
                                 dialog.saveCallBack(_.bind(mPage.saveScoreAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveScoreAutobot, mPage); // New Dialog
                                 break;
                             case "A":
                                 dialog.saveCallBack(_.bind(mPage.saveAlertAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveAlertAutobot, mPage); // New Dialog
                                 break;
                             case "TG":
                                 dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
                                 break;
                         }
                             var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
                             dialog.getFooter().append(btn);
                             //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
                         that.options.app.showLoading(false, dialog.getBody());
-
+                        that.options.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        that.options.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                     });
                 },
                 getTags: function() {

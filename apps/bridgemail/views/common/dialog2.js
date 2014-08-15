@@ -52,11 +52,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                         this.$(".modal-footer .btn-close span").html(this.option.buttons.closeBtn.text);
                                     }
                                 }
-                                if(this.option.buttons.playBtn){
+                                /*if(this.option.buttons.playBtn){
                                     if(this.option.buttons.playBtn.text){
                                         this.$(".modal-footer .btn-play span").html(this.option.buttons.playBtn.text);
                                     }
-                                }
+                                }*/
                              }
                             
                              if(this.option.overlay){
@@ -125,7 +125,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                         this.$(".modal-footer .btn-save i").removeClass("save").addClass(this.option.buttons.saveBtn.btnicon);
                                     }
                                 }
-                                 
+                                if(this.option.buttons.playBtn){
+                                    if(this.option.buttons.playBtn.text){
+                                        this.$(".modal-footer .btn-play span").html(this.option.buttons.playBtn.text);
+                                    }
+                                } 
                             }else{
                                 this.$(".modal-footer .btn-save").hide();
                             }
@@ -169,6 +173,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                         getBody:function(){
                             return this.$(".modal-body");
                         },
+                        getFooter:function(){
+                            return this.$(".modal-footer");
+                        },
                         saveCallBack:function(save){
                             this.saveCall = save;
                         },
@@ -194,7 +201,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                            //this.render(this.optionObj[showElement]);
                             var newLength = this.app.dialogArray.length;
                             if(newLength === 1){
-                                this.$('.backbtn').hide();
+                                this.$('.dialog-backbtn').hide();
                             }
                         },
                         reattachEvents : function(){
