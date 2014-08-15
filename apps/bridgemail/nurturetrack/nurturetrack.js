@@ -317,7 +317,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     var dialog_object ={title:'Select Targets',
                         css:{"width":"1200px","margin-left":"-600px"},
                         bodyCss:{"min-height":"423px"},
-                        wrapDiv : 'select-target-view',
+                        saveCall : '',
                         headerIcon : 'targetw'                        
                       }
                      if(this.editable){
@@ -328,10 +328,13 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     this.app.showLoading("Loading Targets...",dialog.getBody());                                  
                     require(["target/selecttarget"],_.bind(function(page){                                     
                          var targetsPage = new page({page:this,dialog:dialog,editable:this.editable});
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          dialog.getBody().html(targetsPage.$el);
                          targetsPage.$el.find('.step2-lists').css({'top':'0'});
                          targetsPage.$el.find('.step2-lists span').css({'left':'70px'});
-                         targetsPage.init();                         
+                         targetsPage.init();
+                         targetsPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(targetsPage.saveCall,targetsPage); // New Dialog
                          dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
                          targetsPage.createRecipients(this.targetsModelArray);
                     },this));
@@ -543,13 +546,18 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                                     css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                     headerEditable:true,
                                     headerIcon : '_graphics',
+                                    tagRegen:true,
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });                        
                      this.app.showLoading("Loading...",dialog.getBody());
                      require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                                              
-                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
-                         dialog.getBody().html(mPage.$el);
-                        
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this),isClose:true});
+                         dialog.getBody().append(mPage.$el);
+                         this.app.showLoading(false, mPage.$el.parent());
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                      },this));
                      
                 },

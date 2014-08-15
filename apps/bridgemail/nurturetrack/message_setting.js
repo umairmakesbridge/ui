@@ -75,9 +75,14 @@ function (template) {
                 this.app.showLoading("Loading Message HTML...",dialog.getBody());									
                 var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
                 require(["common/templatePreview"],_.bind(function(MessagePreview){
+
                 var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:this.camp_json.isTextOnly}); // isText to Dynamic
-                 dialog.getBody().html(tmPr.$el);
+                 dialog.getBody().append(tmPr.$el);
+                 this.app.showLoading(false, tmPr.$el.parent());
                  tmPr.init();
+                 var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                 tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                 dialog.$el.find('#dialog-title .preview').remove();
                },this));
             },
             init:function(){
@@ -139,7 +144,11 @@ function (template) {
                     require(["campaigns/campaign_body"],_.bind(function(page){    
                          this.app.showLoading(false,this.$bodyInner);                    
                          this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
-                         this.$bodyInner.append(this.messagebody_page.$el);         
+                         this.$bodyInner.append(this.messagebody_page.$el); 
+                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         this.messagebody_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].currentView = this.messagebody_page; // New Dialog
                          this.messagebody_page.init();
                      },this));
                  }
@@ -209,6 +218,17 @@ function (template) {
                 },
                 resizeStep1:function(){
                     this.step1_page.setFromNameField();
+                },
+                ReattachEvents: function(){
+                    this.dialog.$el.find("#dialog-title i").hide();
+                    this.dialog.$el.find("#dialog-title .preview").remove();
+                    var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    this.head_action_bar.append(previewIconMessage);
+                    previewIconMessage.click(_.bind(this.previewCampaign,this)); 
+                    if(this.options.type == "autobots"){
+                         this.dialog.$el.find('.modal-header .cstatus').remove();
+                         this.dialog.$el.find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                    }
                 }
             
             

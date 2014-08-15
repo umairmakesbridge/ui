@@ -104,8 +104,12 @@ function (template) {
                     require(["crm/netsuite/after_filter"],function(afterFilter){                                                
                         var recipient_obj = self.recipientDetial?self.recipientDetial:self.parent.editImport;
                         var afilter = new afterFilter({camp:self,savedObject:recipient_obj,type:filter_type});
+                        
                         afilter.$el.css("margin","10px 0px");
-                        dialog.getBody().html(afilter.$el);
+                        dialog.getBody().append(afilter.$el);
+                        self.app.showLoading(false, afilter.$el.parent());
+                        var dialogArrayLength = self.app.dialogArray.length; // New Dialog
+                         afilter.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                         dialog.saveCallBack(_.bind(afilter.saveFilter,afilter,dialog,_.bind(self.saveFilter,self)));
                     });                     
                     

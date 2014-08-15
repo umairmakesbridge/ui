@@ -61,9 +61,15 @@ function (template,contactsView,icheck,chosen) {
                     this.$('.show-original').on('ifUnchecked',_.bind(function(event){
                         this.setiFrameSrc();
                     },this));
-                    
+                    this.$el.parents('.modal').find('#dialog-title .dialog-title').removeAttr('data-original-title')
                     /* Chosen Plugin dropdown*/
                     this.$("#campaign-prev-select").chosen();
+                    
+                    // IFrame Loaded Successfully 
+                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="z-index: 111; left: 2.7%;"></div>')
+                    this.$( "#email-template-iframe" ).load(_.bind(function() {
+                       this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
+                    },this));
                //this.loadTemplates();
                 if(this.options.prevFlag==='C')
                     this.loadContact();
@@ -79,6 +85,7 @@ function (template,contactsView,icheck,chosen) {
                 }
                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
+            
             attachEvents:function(){
                 
                 

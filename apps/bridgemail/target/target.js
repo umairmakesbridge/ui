@@ -62,6 +62,32 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                     }, this));
 
                 },
+                ReattachEvents: function(){
+                    this.dialog.$(".pointy .edit").click(_.bind(function() {
+                        this.showHideTargetTitle(true);
+                    }, this));
+                    this.dialog.$(".pointy .copy").click(_.bind(function() {
+                        this.copyTarget();
+                    }, this));
+                    this.dialog.$(".pointy .delete").click(_.bind(function(obj) {
+                        var curview = this;
+                        var app = this.options.camp.app;
+                        var appMsgs = app.messages[0];
+                        app.showAlertDetail({heading: 'Confirm Deletion',
+                            detail: appMsgs.CAMPS_delete_confirm_error,
+                            callback: _.bind(function() {
+                                curview.deleteTarget();
+                            }, curview)},
+                        curview.$el);
+                    }, this));
+
+                    this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
+                        this.showHideTargetTitle(true);
+                    }, this));
+                    this.dialog.$(".savebtn").click(_.bind(function(obj) {
+                        this.saveTarget(obj)
+                    }, this));
+                },
                 saveTarget: function(obj) {
                     var camp_obj = this;
                     var campview = this.options.camp;
@@ -224,7 +250,11 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["target/copytarget"], function(copytargetPage) {
                         var mPage = new copytargetPage({camp: camp_obj, app: camp_obj.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit'});
-                        dialog.getBody().html(mPage.$el);
+                        var dialogArrayLength = curview.app.dialogArray.length; // New Dialog
+                        dialog.getBody().append(mPage.$el);
+                        curview.app.showLoading(false, mPage.$el.parent());
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        curview.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTarget,mPage); // New Dialog
                         dialog.saveCallBack(_.bind(mPage.copyTarget, mPage));
                     });
                 },
@@ -242,6 +272,8 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                             camp_obj.target_id = selected_target["filterNumber.encode"];
                             
                             camp_obj.dialog.$("#dialog-title span").html(selected_target.name);
+                            camp_obj.app.dialogArray[camp_obj.app.dialogArray.length-1].title= selected_target.name; // New Dialog
+                            camp_obj.targetTitle = selected_target.name;
                             camp_obj.showHideTargetTitle(false);
                             camp_obj.dialog.$(".modal-header .tagscont").tags({app: camp_obj.app,
                                 url: '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + camp_obj.app.get('bms_token'),

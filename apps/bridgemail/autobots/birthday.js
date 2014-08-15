@@ -137,7 +137,13 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + this.campNum;
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.campNum,isText:this.camp_json.isTextOnly});
-                        dialog.getBody().html(tmPr.$el);
+                        dialog.getBody().append(tmPr.$el);
+                        tmPr.app.showLoading(false, tmPr.$el.parent());
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         dialog.$el.find('.modal-header .cstatus').remove();
+                         dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                         dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
                         tmPr.init();
                     }, this));
 //                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
@@ -519,8 +525,17 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.app.showLoading("Loading Settings...", dialog.getBody());
                     require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
                         var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "autobots", campNum: this.campNum});
-                        dialog.getBody().html(sPage.$el);
+                        dialog.getBody().append(sPage.$el);
+                        this.app.showLoading(false, sPage.$el.parent());
                         dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New Dialog
+                        this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(sPage.saveCall,sPage); // New Dialog
+                        dialog.$el.find('.modal-header .cstatus').remove();
+                        dialog.$el.find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                        dialog.$el.find('.modal-footer').find('.btn-blue').hide();
                         sPage.init();
                     }, this));
                     // }
@@ -641,6 +656,13 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                 },
                 hideButtons: function() {
                     this.$el.find(".show-btn").hide();
+                },
+                ReattachEvents: function(){
+                   //console.log('Attach events for alert bot'); 
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                   this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
+                   this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
+                   this.showTags();
                 }
             });
         });

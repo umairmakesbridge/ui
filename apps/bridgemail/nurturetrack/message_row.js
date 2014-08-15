@@ -188,8 +188,14 @@ function (template) {
                 this.app.showLoading("Loading Settings...",dialog.getBody());
                 require(["nurturetrack/message_setting"],_.bind(function(settingPage){
                     var sPage = new settingPage({page:this,dialog:dialog,editable:this.editable});    
-                    dialog.getBody().html(sPage.$el);
+                    dialog.getBody().append(sPage.$el);
+                    this.app.showLoading(false, sPage.$el.parent());
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
+                    var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                    sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                    this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                    this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New Dialog
+                    this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(sPage.saveCall,sPage); // New Dialog
                     sPage.init();
                 },this));      
                 }
@@ -356,8 +362,13 @@ function (template) {
                          });                        
                      this.app.showLoading("Loading...",dialog.getBody());
                      require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                                              
-                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
-                         dialog.getBody().html(mPage.$el);
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this),isClose:true});
+                         dialog.getBody().append(mPage.$el);
+                         this.app.showLoading(false, mPage.$el.parent());
+                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                         
                      },this));                    
                      

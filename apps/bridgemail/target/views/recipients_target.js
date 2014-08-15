@@ -104,7 +104,7 @@ function (template) {
                     }else{
                         isEditable = false;
                     }
-                    console.log(isEditable);
+                    //console.log(isEditable);
                     var t_id = target_id?target_id:"";
                     var dialog_title = target_id ? "Edit Target" : "";
                     var dialog_width = $(document.documentElement).width()-60;
@@ -120,11 +120,20 @@ function (template) {
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
+                           var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
-                            self.app.showLoading(false, mPage.$el.parent());
+                           mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                           self.app.showLoading(false, mPage.$el.parent());
+                           self.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                           self.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
                             dialog.$el.find('#target_name').focus();    
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
-                          
+                          //Autobots
+                          if(self.options.type == "autobots_listing"){
+                              dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
+                              dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                              dialog.$el.find('.modal-header .cstatus').remove();
+                          }
                       });
                        
                 },
@@ -154,9 +163,12 @@ function (template) {
                       this.app.showLoading("Loading...",dialog.getBody());                               
                       require(["target/target"],function(targetPage){                                     
                            var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
+                           var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                                dialog.getBody().append(mPage.$el);
                                 self.app.showLoading(false, mPage.$el.parent());
+                               mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                                dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                               self.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTargetFilter,mPage); // New Dialog
                            mPage.$el.find('.addfilter').hide();
                            mPage.$el.find('#c_c_target .filter-div').append('<div class="block-mask"></div>');
                       });
@@ -203,11 +215,17 @@ function (template) {
                 this.app.showLoading("Loading...",dialog.getBody());
                 require(["recipientscontacts/rcontacts"],function(Contacts){
                   var objContacts = new Contacts({app:that.app,listNum:listNum,type:'target',dialogHeight:dialog_height});
+                  var dialogArrayLength = that.app.dialogArray.length; // New Dialog
                     dialog.getBody().append(objContacts.$el);
                     that.app.showLoading(false, objContacts.$el.parent());
+                    objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     objContacts.$el.find('#contacts_close').remove();
                     objContacts.$el.find('.temp-filters').removeAttr('style');
-                   
+                   //Autobots
+                          if(that.options.type == "autobots_listing"){
+                              dialog.$el.find('.modal-header .cstatus').remove();
+                              dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                          }
                 });
            }
             ,
@@ -245,7 +263,7 @@ function (template) {
                     this.$el.fadeOut("fast",_.bind(function(){
                         if(that.options.type == "autobots"){
                             that.parent.options.page.addToCol2(this.model);
-                            that.options.dialog.hide();
+                            that.options.dialog.showPrevious();
                         }else{
                             this.parent.addToCol2(this.model);    
                             this.$el.hide();

@@ -66,11 +66,12 @@ function (template,highlighter) {
                 this.$el.parents('#tblcontacts').find('.use-preview-btn').show();
                 
                 if(this.options.isCamPreview){
-                    this.parent.$el.find('#contact-search').val(this.getFullName());
+                    this.parent.$el.find('#contact-search').val(this.app.decodeHTML(this.getFullName()));
                     this.parent.$el.find('.stats_listing').hide();
+                     this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                     this.$el.parents('#camp-prev-contact-search').css('background','none');
                 }else{
-                    this.$el.parents('.modal-body').find('.contact-name').text(this.getFullName());
+                    this.$el.parents('.modal-body').find('.contact-name').text(this.app.decodeHTML(this.getFullName()));
                     this.$el.parents('.modal-body').find('#contact-name-prev').show();
                     this.parent.$el.parent().hide();
                 }
