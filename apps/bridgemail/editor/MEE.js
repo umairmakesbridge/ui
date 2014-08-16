@@ -5576,9 +5576,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         //Callback handler for form submit event
                                         myElement.find("#form1").submit(function (e) {
-
                                             var formObj = $(this);
-                                            var formURL = formObj.attr("action");
+                                            var formURL = "/pms/io/publish/saveImagesData/?"+options._BMSTOKEN+"&type=add";
                                             var formData = new FormData(this);
                                             $.ajax({
                                                 url: formURL,
@@ -5656,7 +5655,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         myElement.on("click", "i.newwin", function () {
                                             var element = $(this);
-                                            url = element.data("url");;
+                                            url = element.data("url");
                                             console.log("newWin button clicked.");
                                             window.open(url);
                                             myElement.find(".alertButtons").hide();
@@ -6362,7 +6361,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             this.render();         
 			},
 			render: function () {
-                            var BMSTOKEN = this.BMSTOKEN;
+                            var BMSTOKEN = this.BMSTOKEN;                            
                             this._$el = this.options._el;                            
                             if (typeof String.prototype.startsWith != 'function') {
                              // see below for better implementation!
@@ -6429,6 +6428,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 formDeleteURL: _formDeleteURL ,
                                 sessionIDFromServer: ""+BMSTOKEN+"",
                                 saveCallBack:  this.options.saveClick,
+                                _BMSTOKEN:BMSTOKEN,
                                 OnDropElementOnBuildingBlock: function (args) {
 
                                     //Save to Server
