@@ -174,7 +174,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     if (typeof this.model != "undefined")
                         tags = this.model.get('tags');
                     this.modal.find('.modal-header').removeClass('ws-notags');
-                    this.tagDiv = this.modal.find(".tagscont");
+                    this.tagDiv = this.modal.find(".modal-header .tagscont");
                     var labels = this.getStatus();
                     this.head_action_bar = this.modal.find(".modal-header .edited  h2");
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
@@ -530,6 +530,12 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                    this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
                    this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
                    this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
+                   this.dialog.$("#dialog-title span").attr('data-original-title','Click here to name');
+                   this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
+                        if (this.status != "D")
+                            return false;
+                        this.showHideTargetTitle(true);
+                    }, this));
                    this.showTags();
                 }
 

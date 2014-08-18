@@ -643,6 +643,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                    this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
                    this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
                    this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
+                   this.dialog.$("#dialog-title span").attr('data-original-title','Click here to name');
+                    this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
+                        if (this.status != "D")
+                            return false;
+                        this.showHideTargetTitle(true);
+                    }, this));
                    this.showTags();
                 }
 

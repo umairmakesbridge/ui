@@ -219,6 +219,7 @@ function (template,editorView) {
                 ReattachEvents: function(){
                    this.$el.parents('.modal').find('.c-current-status').remove();
                    this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
+                   this.$el.parents('.modal').find('#dialog-title i').hide();
                 }
             
         });

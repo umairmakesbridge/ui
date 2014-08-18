@@ -96,6 +96,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                              }else{
                                  this.$(".modal-header").removeClass("header-editable-highlight").addClass('ws-notags');
                                  this.$("#dialog-title span").unbind( "click" );
+                                 if(this.option.isAutobot===true){
+                                     this.$('.pointy').html('<a class="icon edit"></a><a class="icon copy"></a><a class="icon delete"></a>');
+                                 }
                              }
                              
                               if(this.option.headerIcon){
