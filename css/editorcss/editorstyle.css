@@ -2092,6 +2092,6 @@ ul.socialbtns li .radiopanelinput.checked {
      top:0px;     
      z-index: 10;
  }
-
-
-
+ .MEE_EDITOR .editorbox.editor-panel-fixed{
+     padding-top:60px;
+ }

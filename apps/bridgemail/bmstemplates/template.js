@@ -162,8 +162,8 @@ function (template,icheck,bmstags) {
                         _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title","Click to rename").addClass("showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                         _this.app.dialogArray[_this.app.dialogArray.length-1].title=template_json.name;
                         //_this.$("textarea").val(_this.app.decodeHTML(template_json.htmlText,true));
-                        if(tinyMCE.get('bmseditor_template')){
-                            tinyMCE.get('bmseditor_template').setContent(_this.app.decodeHTML(template_json.htmlText,true));                                 
+                        if(_tinyMCE.get('bmseditor_template')){
+                            _tinyMCE.get('bmseditor_template').setContent(_this.app.decodeHTML(template_json.htmlText,true));                                 
                         }
                         else{
                             _this.editorContent = _this.app.decodeHTML(template_json.htmlText,true);
@@ -254,7 +254,7 @@ function (template,icheck,bmstags) {
                                  isReturnPath:isReturnPath,
                                  isMobile:isMobile,
                                  categoryID:this.$(".cat").text(),
-                                 templateHtml:tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
+                                 templateHtml:_tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
                         };
                 _this.app.showLoading("Updating Template...",this.$el.parents('.modal'));   
                 $.post(URL,this.dataObj )
@@ -272,7 +272,7 @@ function (template,icheck,bmstags) {
             },
             initEditor:function(){
                 var _this = this;                
-                tinyMCE.init({
+                _tinyMCE.init({
                     // General options
                     mode : "exact",
                     elements : "bmseditor_template",
@@ -360,7 +360,7 @@ function (template,icheck,bmstags) {
                                   _this.$("#bmseditor_template_ifr").css("height",(editor_heigt)+"px");
                                   _this.$("#bmseditor_template_tbl").css("height",(editor_heigt-100)+"px");
                                   if(_this.editorContent){
-                                        tinyMCE.get('bmseditor_template').setContent(_this.editorContent);           
+                                        _tinyMCE.get('bmseditor_template').setContent(_this.editorContent);           
                                   }
                             })
                     }

@@ -721,8 +721,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
             
                     this.$win=$(window)
                     ,this.$nav = this.$('.editortoolbar')
-                    ,this.$tools = $('.editortools')                    
+                    ,this.$tools = this.$('.editortools')                    
                     ,this.container = $("#container")
+                    ,this.$editorarea =this.$('.editorbox')
                     , this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
                     , this.isFixed = 0;
 
@@ -734,11 +735,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.$nav.addClass('editor-toptoolbar-fixed');
                           this.$nav.css("width",this.$(".editorpanel").width());
                           this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                          this.$editorarea.addClass('editor-panel-fixed');                        
                         } else if (scrollTop <= this.navTop && this.isFixed) {
                           this.isFixed = 0
                           this.$nav.removeClass('editor-toptoolbar-fixed');
                           this.$nav.css("width","100%");
                           this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                          this.$editorarea.removeClass('editor-panel-fixed');                        
                         }
                       }
                     },this);
