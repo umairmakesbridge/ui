@@ -327,9 +327,18 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     this.options.app.showLoading("Loading...", dialog.getBody());
                     require(["autobots/clone_autobot"], _.bind(function(autobot) {
                         var mPage = new autobot({page: this, copydialog: dialog});
-                        dialog.getBody().html(mPage.$el);
+                        dialog.getBody().append(mPage.$el);
+                        this.options.app.showLoading(false, mPage.$el.parent());
+                         var dialogArrayLength = this.options.app.dialogArray.length; // New Dialog
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyAutobot, mPage); // New Dialog
                         mPage.init();
                         dialog.saveCallBack(_.bind(mPage.copyAutobot, mPage));
+                        dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                        dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
+                        this.options.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        this.options.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                        dialog.$el.find('.modal-header .cstatus').remove();
                     }, this));
                 },
                 getAutobotById: function(where, id) {
@@ -419,6 +428,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         css: {"width": dialog_width + "%", "margin-left": "-" + (dialog_width / 2) + "%", "top": "20px"},
                         headerEditable: false,
                         headerIcon: 'bot',
+                        isAutobot : true,
                         buttons: {saveBtn: {text: 'Save'}},
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
