@@ -3200,6 +3200,15 @@ text-align:center;
     @media screen and (min-width:0\0) {  
        .saving span{ padding : 18px 15px; }
     }  
+    
+   /* FIXES FOR SALES FORCE */
+   .modal .modal-header .c-name h2 span{
+       float:none;
+   }
+   .modal .salesforce_campaigns .radiopanelinput span{
+       float:none;
+   }
+    
 /*
 -------------- ENDS HERE ----------
 */

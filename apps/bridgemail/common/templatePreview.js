@@ -66,7 +66,7 @@ function (template,contactsView,icheck,chosen) {
                     this.$("#campaign-prev-select").chosen();
                     
                     // IFrame Loaded Successfully 
-                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="z-index: 111; left: 2.1%;margin-left:0px;"></div>')
+                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>')
                     this.$( "#email-template-iframe" ).load(_.bind(function() {
                        this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
                     },this));
