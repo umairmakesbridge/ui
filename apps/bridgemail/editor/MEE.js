@@ -142,6 +142,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var selectedLinkFromTinyMCE = null;
                                         var imageListGlobal = null;
                                         var returnData = null;
+                                        var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth;
 
 
                                         var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
@@ -5569,7 +5570,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         myElement.find("#myUploadFile").change(function (e) {
                                             myElement.find("#form1").submit();
-                                            LoadImagesInLibrary();
+                                            //LoadImagesInLibrary();
                                             return true;
                                         });
 
@@ -5589,7 +5590,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 processData: false,
                                                 success: function (data, textStatus, jqXHR) {
                                                     console.log("Image Upload success:" + e);
-                                                    LoadImagesInLibrary();
+                                                    var result = jQuery.parseJSON(data);
+                                                    if(result.success){
+                                                        LoadImagesInLibrary();
+                                                    }
+                                                    else{
+                                                        options._app.showAlert(result.err1,$("body"));
+                                                    }
                                                 },
                                                 error: function (jqXHR, textStatus, errorThrown) {
                                                     console.log("Image Upload failed:" + e);
@@ -6428,6 +6435,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 formDeleteURL: _formDeleteURL ,
                                 sessionIDFromServer: ""+BMSTOKEN+"",
                                 saveCallBack:  this.options.saveClick,
+                                _app:this.app,
                                 _BMSTOKEN:BMSTOKEN,
                                 OnDropElementOnBuildingBlock: function (args) {
 

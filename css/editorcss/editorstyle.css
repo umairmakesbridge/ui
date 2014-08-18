@@ -42,12 +42,12 @@ a,
 	
 	
 }
-.btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i, .tagscont ul li > a i {
+.btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i,.MEE_EDITOR .tagscont ul li > a i {
 	-webkit-border-radius:  2px 2px;
 	-moz-border-radius: 2px 2px ;
 	border-radius:  2px 2px;
 }
-.btn-gray span, .btn-blue span, .btn-green span, .btn-red span, .btn-yellow span, .tagscont ul li > a span {
+.btn-gray span, .btn-blue span, .btn-green span, .btn-red span, .btn-yellow span, .MEE_EDITOR .tagscont ul li > a span {
 	display: inline-block;
 	padding: 0 15px;
 	float:left;
@@ -117,20 +117,16 @@ a,
 
 /* -------------------------------------------- */
 
-ul,
-ol {
+.MEE_EDITOR ul,
+.MEE_EDITOR ol {
   margin: 0;
   padding:0;
   list-style:outside none;
   
 }
-html,
-body { background:#e9edf6; width:100%; height:100%;  min-height: 500px;  
- }
-
-a { color:#01AEEE; outline:0; }
-a:hover, a:focus { text-decoration:none; outline:none;}
-.caret {
+.MEE_EDITOR a { color:#01AEEE; outline:0; }
+.MEE_EDITOR a:hover, .MEE_EDITOR a:focus { text-decoration:none; outline:none;}
+.MEE_EDITOR .caret {
     border-left: 4px solid rgba(0, 0, 0, 0);
     border-right: 4px solid rgba(0, 0, 0, 0);
     border-top: 4px solid #000000;
@@ -1940,7 +1936,7 @@ border-top:10px solid  #03d3ff;
 .mainContentHtmlGrand > .sortable > li.csDynamicData .topHandlers { top:-2px;}
 
 
-.builder-panel .ui-accordion .ui-accordion-content
+.builder-panel .ui-accordion .ui-accordion-content,.style-panel .ui-accordion .ui-accordion-content
 {
     padding:0px;
 /*	  overflow-x: hidden;
