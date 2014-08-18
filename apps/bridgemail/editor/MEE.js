@@ -142,7 +142,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var selectedLinkFromTinyMCE = null;
                                         var imageListGlobal = null;
                                         var returnData = null;
-                                        var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth;
+                                        var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth,TotalBorderTopBottom,TotalBorderLeftRight;
 
 
                                         var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
