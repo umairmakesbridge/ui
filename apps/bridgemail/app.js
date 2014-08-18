@@ -616,7 +616,7 @@ define([
                // Hide Previous and show new 
                this.dialogView.$el.find($('.'+hideElement)).hide();
                this.dialogView.$el.find('.backbtn').show(); 
-              console.log(this.dialogArray);
+              //console.log(this.dialogArray);
               return this.dialogView;
             }
 	});
