@@ -2187,7 +2187,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 setEditor:function(){
                   this.bmseditor.showEditor(this.wp_id);                                       
-                  tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                  _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                   this.$("#bmstexteditor").val(this.app.decodeHTML(this.states.step2.plainText,true));
 
                   this.$(".textdiv").hide();
