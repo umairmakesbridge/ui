@@ -187,14 +187,14 @@ function (template) {
                 var dialog = this.app.showDialog(dialog_object);                        
                 this.app.showLoading("Loading Settings...",dialog.getBody());
                 require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                    var sPage = new settingPage({page:this,dialog:dialog,editable:this.editable});    
+                    var sPage = new settingPage({page:this,dialog:dialog,editable:this.editable,triggerOrder:this.triggerOrder});    
                     dialog.getBody().append(sPage.$el);
                     this.app.showLoading(false, sPage.$el.parent());
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
                     var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                     sPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                     this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
-                    this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New Dialog
+                    this.app.dialogArray[dialogArrayLength-1].currentView = sPage; // New dialog
                     this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(sPage.saveCall,sPage); // New Dialog
                     sPage.init();
                 },this));      

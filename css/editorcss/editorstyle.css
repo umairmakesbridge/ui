@@ -78,7 +78,7 @@ a,
 .btn-blue:hover {
 	background:#00a1dd;
 }
-.btn-green {
+.MEE_EDITOR .btn-green {
 	background: none repeat scroll 0 0 #94CF1E;
 }
 .btn-green i {
@@ -1463,9 +1463,9 @@ height: 72px;
 
 /* --------------------------------------- */
 
-a.saving { background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E; min-width:80px; }
+.MEE_EDITOR a.saving { background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E; min-width:80px; }
 
-a.saving span {
+.MEE_EDITOR a.saving span {
     background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E;
     display: block;
     float: none;
@@ -2092,6 +2092,6 @@ ul.socialbtns li .radiopanelinput.checked {
      top:0px;     
      z-index: 10;
  }
- .MEE_EDITOR .editorbox.editor-panel-fixed{
-     padding-top:60px;
- }
+
+
+

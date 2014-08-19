@@ -220,6 +220,18 @@ function (template,editorView) {
                    this.$el.parents('.modal').find('.c-current-status').remove();
                    this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
                    this.$el.parents('.modal').find('#dialog-title i').hide();
+                   this.$el.parents('.modal').find("#dialog-title i").hide();
+                   this.$el.parents('.modal').find("#dialog-title .preview").remove();
+                   var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                   this.$el.parents('.modal').find(".modal-header .edited  h2").append(previewIconMessage);
+                   previewIconMessage.click(_.bind(this.parent.previewCampaign,this.parent));
+                   this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
+                   if(this.parent.type == "autobots"){
+                          this.$el.parents('.modal').find('.modal-header .cstatus').remove();
+                          this.$el.parents('.modal').find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                          this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
+                    } 
+                    
                 }
             
         });
