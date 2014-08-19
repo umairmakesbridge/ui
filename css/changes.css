@@ -783,7 +783,7 @@ input[type="text"].search-template{
 }
 .saving {
     background: url("../img/greenloader.gif") no-repeat scroll 24px center #94CF1E;
-    font-size: 0;
+    font-size: 0 !important;
     line-height: 35px;
     min-height: 20px;
     text-indent: -999em;
@@ -3203,10 +3203,10 @@ text-align:center;
     
    /* FIXES FOR SALES FORCE */
    .modal .modal-header .c-name h2 span{
-       float:none;
+      /* float:none;*/
    }
    .modal .salesforce_campaigns .radiopanelinput span{
-       float:none;
+      /* float:none;*/
    }
     
 /*
