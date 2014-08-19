@@ -2123,23 +2123,20 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 loadMEE:function(){
                     if(!this.states.step2.meeEditor){
-                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));
-                         this.$("#mee_editor").attr("src","MEE/index.jsp?BMS_REQ_TK="+this.app.get('bms_token'));
-                         this.states.step2.meeEditor = true;
-                         /* this.$("#mee_editor").load(_.bind(function(){
-                             this.app.showLoading(false,this.$("#area_html_editor_mee"));                             
-                             this.$("#mee_editor")[0].contentWindow.$(".myMakeBridge").setChange(this.states);
-                         },this))*/
-                         var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
+                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
+                         this.states.step2.meeEditor = true;               
+                         setTimeout(_.bind(this.setMEEView,this),100);                        
+                    }
+                },
+                setMEEView:function(){
+                        var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                                              
                             var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this)});                                    
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
                             this.initScroll();
                             this.app.showLoading(false,this.$("#area_html_editor_mee")); 
-                        },this));
-                        
-                    }
+                        },this));  
                 },
                 getcampaignscopy:function(){
                     // Abdullah 

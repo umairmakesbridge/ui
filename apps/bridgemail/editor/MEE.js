@@ -2271,7 +2271,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             // tinyEnableElement.tinymce().destroy();
 
                                             //Remove here all attributes that inserted by tinymce except class
-                                            var whitelist = ["class"];
+                                            var whitelist = ["class","style"];
                                             tinyEnableElement.each(function () {
                                                 var attributes = this.attributes;
                                                 var i = attributes.length;
@@ -5596,12 +5596,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find("#tabs").tabs({
                                     activate: function (event, ui) {
                                         if (ui.newPanel.attr("id") == "tabs-1") {
-
                                             InitializeElementsForStyle(false);
-
                                         }
                                         else {
-
                                             InitializeElementsForStyle(true);
                                         }
                                     }
@@ -5923,7 +5920,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
                                 var imageId = element.data("id");
                                 var tags = "";
-                                tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
+                                var tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
                                 $.each(tagsContainer, function (index, value) {
                                     if (index == 0)
                                         tags += $(this).find("span").text();

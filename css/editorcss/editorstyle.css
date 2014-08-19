@@ -947,7 +947,7 @@ ul.b-blocks > li.newblock:hover  i.plus { background-position:0 bottom; }
 /* ---------------------- */
 
 
-.mainContentHtmlGrand > .sortable > li.csHaveData { border:1px dotted #a9c2d5 !important; border-top:10px solid  #a9c2d5 !important;  position:relative; /*min-height:80px;*/ z-index:99;  /*margin: 5px;*/ cursor:move;
+.mainContentHtmlGrand > .sortable > li.csHaveData { border:1px dotted #a9c2d5 !important; border-top:10px solid  #a9c2d5 !important;  position:relative; /*min-height:80px;*/ z-index:99;  /*margin: 5px; cursor:move;*/
 -webkit-border-radius: 2px 2px ;
 	-moz-border-radius:  2px 2px ;
 	border-radius:  2px 2px; }
