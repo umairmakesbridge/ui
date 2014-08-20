@@ -14,7 +14,6 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 events: {
                     'click .show-sent-views': 'showPageViews',
                     'click .show-pending-views': 'showPageViews',
-                    
                     "click .delete": "deleteAutobot",
                     "click .play": "playAutobot",
                     "click .pause": "pauseAutobot",

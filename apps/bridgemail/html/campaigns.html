@@ -3,7 +3,7 @@
         <h2 id="total_templates"><strong class="badge">0</strong> <b></b> Campaigns</h2>
         <div style=" " class="srt-div">
           <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a>
-          <div class="template-filter">
+          <!--<div class="template-filter">
             <ul id="template_search_menu" class="breadcrumb">
             <li class="showtooltip active" data-original-title="Show all campaigns"><a search="A" class="stattype" tabindex="-1">All</a></li>
               <li class="showtooltip" data-original-title="Click to view sent"><a search="C" class="stattype sent" tabindex="-1">Sent</a></li>
@@ -11,7 +11,18 @@
               <li class="showtooltip" data-original-title="Click to view scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
               <li class="showtooltip" data-original-title="Click to view draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
             </ul>
-          </div>
+          </div>-->
+          <div class="template-filter_expand right" id="autobots"> <strong class="sort left">Filter</strong>
+                <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+
+                <ul id="template_search_menu" class="breadcrumb template_search_menu" style="display: none; right: 37.5%;">
+                   <li class="showtooltip active" data-original-title="Show all campaigns"><a search="A" class="stattype" tabindex="-1">All</a></li>
+              <li class="showtooltip" data-original-title="Click to view sent"><a search="C" class="stattype sent" tabindex="-1">Sent</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="P" class="stattype pending" tabindex="-1">Pending</a></li>
+              <li class="showtooltip" data-original-title="Click to view scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
+                </ul>
+            </div>
           <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
             <input type="text" id="daterange" placeholder="Select date" />
             <a style="" id="clearcal" class="close-icon"></a>
