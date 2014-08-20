@@ -39,8 +39,7 @@
            'jquery.isotope':'../shared/libs/jquery.isotope',
            'mee-helper': '../shared/editor_common',
            'mincolors':'../shared/libs/jquery.minicolors',
-           'tinymce':'../shared/libs/tinymce/tinymce',
-           'tinymce-jquery':'../shared/libs/tinymce/tinymce_jquery'
+           'tinymce':'../shared/libs/tinymce/tinymce.min'
        },
         shim: {
                 backbone: {

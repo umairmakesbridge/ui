@@ -1,4 +1,4 @@
-define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-ui','mee-helper','tinymce','tinymce-jquery','mincolors'],
+define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-ui','mee-helper','tinymce','mincolors'],
     function ($,Backbone,_, template) {
         'use strict';
         return Backbone.View.extend({			                                                                                               
@@ -2267,7 +2267,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var tinyEnableElement = $(element);
 
                                         //Avoid memory leak here
-                                        if (tinyEnableElement.tinymce() != undefined) {
+                                        if (tinyEnableElement.hasClass("textcontent")) {
                                             // tinyEnableElement.tinymce().destroy();
 
                                             //Remove here all attributes that inserted by tinymce except class
@@ -2297,7 +2297,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
 
                                     element.find("div.textcontent").each(function (index, element) {
-                                        if ($(element).tinymce() == undefined) {
+                                        //if ($(element).tinymce() == undefined) {
                                             tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
@@ -2495,7 +2495,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 statusbar: false,
                                                 object_resizing: false
                                             });
-                                        }
+                                        //}
                                     });
                                 }
                                 ////
