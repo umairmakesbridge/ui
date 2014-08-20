@@ -1368,8 +1368,11 @@ ul.dd-menu li.active  a:after {
 .wtab-highrises{
     background:url("../img/hr-icon30.png") no-repeat scroll center center;
 }
-#higrise-icon-mapping {
-    background: url('../img/hrricon.png') no-repeat scroll 8px 23px transparent;
+.wtab-google{
+    background:url("../img/hr-icon40.png") no-repeat scroll center center;
+}
+#google_mapping {
+    background: url('../img/ggicon.png') no-repeat scroll 8px 23px transparent;
 }
 
 .xdsoft_datetimepicker{

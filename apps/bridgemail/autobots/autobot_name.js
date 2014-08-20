@@ -134,8 +134,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                                 var _json = jQuery.parseJSON(data);
                                 that.options.app.showLoading(false, $("#new_autobot"));
                                 if (_json[0] !== "err") {
-                                    that.campNum = _json[1];
-                                    that.chooseAutobotType(_json[1]);
+                                    that.chooseAutobotType(_json[2]);
                                     that.closeAutobot();
                                 }
                                 else {
