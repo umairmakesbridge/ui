@@ -29,6 +29,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     }
                                     camp_obj.$el.find('.stattype').parent().removeClass('active');
                                     target.parent().addClass('active');
+                                    var html = target.clone();
+                                    $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());
                                     var type = target.attr("search");
                                      var fromDate = "";
                                     var toDate = "";
@@ -77,7 +79,8 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     this.$el.find('#daterange').click();
                                     return false;
                             },
-                            "click .cstats .closebtn":"closeChart"
+                            "click .cstats .closebtn":"closeChart",
+                             "click .sortoption_expand": "toggleSortOption",
 			},			
 			
 			createCampaign: function()
@@ -115,15 +118,19 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                         {
                                                 case "C":
                                                         camp_obj.$el.find('.sent').parent().addClass('active');
+                                                        camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.sent').text());
                                                         break;
                                                 case "P":
                                                         camp_obj.$el.find('.pending').parent().addClass('active');
+                                                        camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.pending').text());
                                                         break;
                                                 case "S":
                                                         camp_obj.$el.find('.scheduled').parent().addClass('active');
+                                                        camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.scheduled').text());
                                                         break;
                                                 case "D":
                                                         camp_obj.$el.find('.draft').parent().addClass('active');
+                                                        camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.draft').text());
                                                         break;
                                         }						
                                     }
@@ -162,7 +169,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                                             $(this).addClass('active');							
                                             });
                                     }
-                                 
+                                    
                                     camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));				
                                     if(schDates != ''){
                                             this.toDate = toDate;
@@ -180,7 +187,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                             this.searchTxt = '';
                                         }
                                     this.total_fetch = 0;
-                                   
+                                     
                                     this.getallcampaigns();
                             }
 			},
@@ -241,6 +248,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             this.tagDiv.hide();    
 			},
 			getallcampaigns: function (fcount,filterObj) {
+                            this.$el.find("#template_search_menu").hide();
                             if(!fcount){
                             this.offset = 0;
                             this.app.showLoading("Loading Campaigns...",this.$("#target-camps"));
@@ -500,7 +508,10 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                             return false;
                         }
                         event.preventDefault();
-                   }
+                   },
+                toggleSortOption: function(ev) {
+                    $(this.el).find("#template_search_menu").slideToggle();
+                }
                         
 		});
 });
