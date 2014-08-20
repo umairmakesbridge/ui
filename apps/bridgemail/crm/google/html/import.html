@@ -1,0 +1,35 @@
+ 
+<div class="ui-accordion highrise-radio">
+    <h3 class="ui-accordion-header" role="tab" id="hImportAll">
+        <input type="radio" class="radiopanel " value="importall" name="options_hr">
+        <span class="left"> Import all Google contacts</span> 
+
+
+    </h3>
+</div> 
+
+<div  class="tags-accordion  highrise-radio">
+    <h3 class="ui-accordion-header" aria-controls="pn" style="padding:2px;"> 
+        
+        <input type="radio" class="radiopanel" value="sheet" name="options_hr" id="">
+        <span class="left">Import Google Speardsheets  </span> 
+        <div id="highrise-group-search" class="input-append search" style="margin:2px 0px 0px 0px;">   
+        
+    </h3>
+    
+     <div class="accordion-body" id="panel_0">
+         <div id="hrTagsList" class="filter-row filter-menu fields single-row" style="margin: 0px;">
+              <select id="ddlspreadsheet">
+                 <option> Select spreadsheet </option>
+                <% _.each(this.options.spreadSheet,function(elems,idx){
+                   _.each(elems,function(elem,idx){%>
+                   <option value="<%=elem.id%>"> <%=elem.title%></option>
+                        
+                   <%})})%>
+            </select>
+            <select id="ddlworksheet" style="display: none;">
+               
+            </select>
+         </div>
+     </div>
+</div>    

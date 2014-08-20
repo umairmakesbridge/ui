@@ -1,3 +1,4 @@
+
 /* 
  * Name:  Notification Views
  * Date: 04 June 2014
@@ -434,6 +435,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                         });
 
                     });
-                },
+                }
             });
         });
+

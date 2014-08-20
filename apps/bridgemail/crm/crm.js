@@ -62,15 +62,16 @@ define(['text!crm/html/crm.html','app'],
                     sub_title:'Connection With Apps'
                 });
             },
-            loadHighRiseCRM:function(e){
-                var tile = $.getObj(e,"li");
+
+           loadHighRiseCRM:function(e){
+                 var tile = $.getObj(e,"li");
                 if(tile.find(".loading").length>0){
                     return false;
                 }
                 app.mainContainer.addWorkSpace({ 
                     type:'',
                     title:'Highrise',
-                    url:'crm/highrise/highrise',
+                    url : 'crm/highrise/highrise',
                     workspace_id: 'crm_highrise',
                     tab_icon:'highrises',
                     sub_title:'Connection With Apps'
@@ -79,7 +80,7 @@ define(['text!crm/html/crm.html','app'],
             loadGoogleCRM:function(e){
                 var tile = $.getObj(e,"li");
                 if(tile.find(".loading").length>0){
-                    return false;
+                   // return false;
                 }
                 app.mainContainer.addWorkSpace({ 
                     type:'',
@@ -182,17 +183,17 @@ define(['text!crm/html/crm.html','app'],
                 
             },
             checkGoogleStatus: function(){                                
-                var highrise_setting = this.app.getAppData("google");
+                var google = this.app.getAppData("google");
                 this.app.showLoading("...",this.$(".google-tile"));
-                if(!highrise_setting || highrise_setting[0] == "err" || highrise_setting.isHighriseUser=="N")
+                if(!google || google[0] == "err" || google.isGoogleUser=="N")
                 {                        
                     this.app.getData({
-                        "URL":"/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
-                        "key":"highrise",
+                        "URL":"/pms/io/google/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"google",
                         callback:_.bind(function(){
-                            this.app.showLoading(false,this.$(".highrise-tile"));
-                            var ns = this.app.getAppData("highrise");
-                            if(ns[0]=="err" || ns.isHighriseUser=="N"){
+                            this.app.showLoading(false,this.$(".google-tile"));
+                            var google = this.app.getAppData("google");
+                            if(google[0]=="err" || google.isGoogleUser=="N"){
                                 this.$(".google-tile").addClass("incomplete");
                             }
                             else{
