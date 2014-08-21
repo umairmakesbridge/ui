@@ -2101,7 +2101,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 oHtml.find("li").each(function(i, e){
 
                                     var li = $(e);
-                                    if(li.parent()[0].nodeName == "UL") {
+                                    if(li.parent()[0].nodeName == "UL" || li.parent()[0].nodeName == "OL") {
 
                                     }
                                     else {
@@ -2217,15 +2217,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     element.replaceWith(newElement);
                                 }
 
-                                oHtml.find("ul").each(function () {
-                                    RemoveCommon($(this));
+                                oHtml.find("ul").each(function () {  
+                                    if($(this).hasClass("sortable")){
+                                        RemoveCommon($(this));
+                                    }
                                 });
                                 oHtml.find("li").each(function () {
-                                    RemoveCommon($(this));
+                                    if($(this).hasClass("MEE_DROPPABLE") || $(this).hasClass("MEE_ELEMENT") || $(this).hasClass("MEE_CONTENTS")){ 
+                                        RemoveCommon($(this));
+                                    }
                                 });
 
                                 oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
-
                                     $(this).find("ul").each(function () {
                                         RemoveCommon($(this));
                                     });
