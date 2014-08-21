@@ -84,10 +84,10 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             if(options){
                                  this.option =options;
                              }
+                            this.$('#dialog-title').html('<i class="icon left header-icon" style="display:none"></i><span class="dialog-title"></span><div class="pointy"><a class="icon edit"></a><a class="icon copy"></a><a class="icon delete"></a></div>');
                             this.$el.css(this.option.css ? this.option.css:{});
                             this.$(".modal-body").css(this.option.bodyCss ? this.option.bodyCss:{}); 
                             this.$(".dialog-title").html(this.option.title?this.option.title:'');
-                             
                             if(this.option.headerEditable){
                                  this.$(".modal-header").removeClass("ws-notags").addClass('header-editable-highlight');
                                  this.$('.pointy a.copy').remove();
