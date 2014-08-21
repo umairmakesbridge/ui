@@ -34,6 +34,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
 
                     this.$el.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.showTagsTemplate();
+                    
                 },
                 showTagsTemplate:function(){
                  this.tmPr =  new tagView(
@@ -46,7 +47,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                     rowElement: this.$el,
                                     tags:this.model.get('tags')});
                       this.$el.find('.t-scroll').append(this.tmPr.$el);
-                      
+                     
                 } ,
                 getStatus: function() {
                     if (this.model.get('status') == "D")
