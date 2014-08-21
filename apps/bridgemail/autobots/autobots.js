@@ -166,10 +166,25 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                      that.$el.find("#tblAutobots tbody").find('#tr_loading').remove();
                                      that.$el.find(".footer-loading").hide();
                                 }
-                        }})
+                                if (that.searchText) {
+                                     that.$el.find(".thumbnails li").each(function(){
+                                        $(this).find('h3 a').highlight($.trim(that.searchText));
+                                        $(this).find(".t-scroll a").each(function(){
+                                            $(this).highlight($.trim(that.searchText));
+                                        })
+                                    });
+                                     that.$el.find("#tblAutobots tbody tr").each(function() {
+                                         $(this).find('td h3 a').highlight($.trim(that.searchText));
+                                          $(this).find(".tagscont ul li").each(function(){
+                                            $(this).find('.tag').highlight($.trim(that.searchText));
+                                        })
+                                    });
+                                }        
+                                   
+                        }});
                     
 
-                },
+                } ,
                 searchAutobots: function(ev) {
                     this.searchText = '';
                     this.searchTags = '';

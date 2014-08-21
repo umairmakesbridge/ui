@@ -48,10 +48,10 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
                         that.filterNumber = that.model.get('filterNumber.encode');
-                        if (that.status == "D"){
+                        if (that.status == "D") {
                             that.editable = false;
-                              $('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
-                         }else{
+                            $('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                        } else {
                             that.editable = true;
                         }
                         that.mainTags = "";
@@ -108,14 +108,14 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             this.showHideTargetTitle();
                         }
                     }, this));
-                    
+
                     this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
                     this.$el.find("#txtRecurPeriod").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "100px", disable_search: "true"});
                     this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
                     this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                     this.$el.find('#wrap_email').mergefields({autobot:true,app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
+                    this.$el.find('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
                     this.$el.find('#merge_field_plugin').css('width', '72%!important');
                     this.$el.find("#txtRecurTimes").ForceNumericOnly();
                 },
@@ -152,9 +152,9 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         var targetsPage = new page({page: this, dialog: dialog, editable: true, type: "autobots", showUseButton: true});
                         dialog.getBody().append(targetsPage.$el);
                         this.app.showLoading(false, targetsPage.$el.parent());
-                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                         targetsPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                         dialog.$el.find('.modal-header .cstatus').remove();
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        targetsPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        dialog.$el.find('.modal-header .cstatus').remove();
                         dialog.$el.find('.modal-footer').find('.btn-play').hide();
 
                     }, this));
@@ -176,16 +176,22 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     this.modal.find('.modal-header').removeClass('ws-notags');
                     this.tagDiv = this.modal.find(".modal-header .tagscont");
                     var labels = this.getStatus();
+                    var that = this;
                     this.head_action_bar = this.modal.find(".modal-header .edited  h2");
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
+                    this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
+                    this.head_action_bar.find(".percent").on('click', function(ev) {
+                        that.showPercentage(ev);
+                    });    
                     this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
                     this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
+
                     if (this.status == "D") {
                         this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
                     } else {
                         this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
                     }
-                    var that = this;
+                    
                     if (this.status != "D") {
                         this.head_action_bar.find(".delete").hide();
                     }
@@ -202,7 +208,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     this.modal = $(".modal");
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                         that.options.refer.playAutobot('dialog', that.botId);
-                     })
+                    })
                     this.head_action_bar.find(".copy").on('click', function() {
                         that.options.refer.cloneAutobot('dialog', that.botId);
                     });
@@ -217,7 +223,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         params: {type: 'tags', botId: this.botId, tags: ''}
                         , showAddButton: true,
                         tags: tags,
-                        fromDialog:this.dialog.$el,
+                        fromDialog: this.dialog.$el,
                         callBack: _.bind(this.newTags, this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
@@ -251,7 +257,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     var recurType = this.$el.find("#ddlRecurType").val();
                     if (this.$el.find("#ddlendless").val() == "1") {
                         var recurTimes = this.$el.find("#txtRecurTimes").val();
-                       
+
                     } else {
                         var recurTimes = 0;
                     }
@@ -276,9 +282,9 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         })
 
                         return;
-                    }else{
+                    } else {
                         that.options.app.hideError({
-                            control: $(that.el).find('.uid-container') 
+                            control: $(that.el).find('.uid-container')
                         })
                     }
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, alertMessage: alertmessages, alertEmails: alertemails};
@@ -293,7 +299,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                                     if (!close) {
                                         that.options.refer.getAutobotById(that.botId);
                                         //that.options.dialog.hide();
-                                       
+
                                     }
                                 }
                                 else {
@@ -347,7 +353,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         });
                         if (that.status != "D")
                             that.disableAllEvents();
-                        
+
                     }
                     if (save) {
                         this.saveTargets()
@@ -525,21 +531,101 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                                 }
                             });
                 },
-                ReattachEvents: function(){
-                   //console.log('Attach events for Alert bot'); 
-                   this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
-                   this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
-                   this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
-                   this.dialog.$("#dialog-title span").attr('data-original-title','Click here to name');
-                   this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
+                ReattachEvents: function() {
+                    //console.log('Attach events for Alert bot'); 
+                    this.$el.parents('.modal').find('.modal-footer').find('.btn-save').addClass('btn-green').removeClass('btn-blue');
+                    this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
+                    this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
+                    this.dialog.$("#dialog-title span").attr('data-original-title', 'Click here to name');
+                    this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
                         if (this.status != "D")
                             return false;
                         this.showHideTargetTitle(true);
                     }, this));
-                   this.showTags();
-                }
+                    this.showTags();
+                },
+                showPercentage: function(ev) {
+                    this.modal = $('.modal');
+                    this.head_action_bar = this.modal.find(".modal-header .edited");
+                    this.head_action_bar.find(".pstats").remove();
+                    var str = "<div class='pstats' style='display:block;'>";
+                    str = str + "<ul>";
+                    if (this.model.get('sentCount') == "0") {
+                        str = str + "<li class='sent'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></li>";
+                    } else {
+                        str = str + "<li class='sent  '><a class='showtooltip show-sent' data-original-title='Click to view contacts'><strong >" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span >Sent</span></a></li>";
+                    }
+                    if (this.model.get('pendingCount') == "0") {
+                        str = str + "<li  class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
+                    } else {
+                        str = str + "<li class='pending'><a class='showtooltip  show-pending'  data-original-title='Click to view contacts'><strong  >" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
+                    }
+                    str = str + "</ul>";
+                    str = str + "</div>";
+                    str = $(str);
+                    var that = this;
+                    $(ev.target).parents(".percent_stats").append(str);
+                    this.head_action_bar.find(".pstats ul a.show-pending").on('click', function(e) {
+                        that.showPendingPopulation();
+                    });
+                    this.head_action_bar.find(".pstats ul a.show-sent").on('click', function(e) {
+                        that.showSentPopulation();
+                    });
+                },
+                showSentPopulation: function(ev) {
+                    var that = this;
+                    var sentAt = "Sent at";
+                    var status = "C";
+                    var dialog_title = this.model.get("label") + " - Sent Population";
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({
+                        title: dialog_title,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'population',
+                        wrapDiv: 'rcontacts-view',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
 
+                    var botId = this.model.get('botId.encode');
+                    that.options.app.showLoading('Loading Contacts....', dialog.getBody());
+                    require(["recipientscontacts/rcontacts"], function(Contacts) {
+                        var objContacts = new Contacts({sentAt: sentAt, status: status, app: that.options.app, botId: botId, type: 'autobots', dialogHeight: dialog_height});
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent())
+                        var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                    });
+                },
+                showPendingPopulation: function() {
+                    var that = this;
+                    var status = "P";
+                    var sentAt = "Scheduled for";
+                    var dialog_title = this.model.get("label") + " - Pending Population";
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({
+                        title: dialog_title,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'population',
+                        wrapDiv: 'rcontacts-view',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
 
+                    var botId = this.model.get('botId.encode');
+                    that.options.app.showLoading('Loading Contacts....', dialog.getBody());
+                    require(["recipientscontacts/rcontacts"], function(Contacts) {
+                        var objContacts = new Contacts({sentAt: sentAt, status: status, app: that.options.app, botId: botId, type: 'autobots', dialogHeight: dialog_height});
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent())
+                         var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                    });
+                },
             });
         });
 

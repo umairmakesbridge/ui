@@ -1691,6 +1691,7 @@ position:relative;
     width: 20px;
  	background: url("../img/percent.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+
 .percent_stats:hover  .percent{background: url("../img/percent2.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
 .percent_stats:hover div.pstats { display:block;}
 
@@ -2541,11 +2542,24 @@ top: 14px;
 .autobots .thumbnail .caption  .percent_stats div.pstats li.sent {  background: none repeat scroll 0 0 #57B1EF;}
 .autobots .thumbnail .caption  .percent_stats div.pstats li.pending {  background: none repeat scroll 0 0 #389FE7;}
 .autobots .thumbnail .caption  .percent_stats div.pstats li span {  padding: 0;  width: 100%; }
-
-
-
-
-
+.camp_header .percent_stats .percent {
+    height: 20px;
+    width: 20px;
+ 	background: url("../img/percent-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.camp_header .percent_stats {
+    margin: 4px 0 0 5px;
+}
+.camp_header   .percent_stats div.pstats {  left: -139px;}
+.camp_header   .percent_stats div.pstats:after {  left: 142px;}
+.camp_header   .percent_stats div.pstats,
+.camp_header   .percent_stats div.pstats ul { width:300px; }
+.camp_header   .percent_stats div.pstats li { margin:0; width:50%;}
+.camp_header   .percent_stats div.pstats li a{width:100%; background:none;}
+.camp_header  .percent_stats div.pstats li a:hover { color:#fff; opacity:0.8;}
+.camp_header   .percent_stats div.pstats li.sent {  background: none repeat scroll 0 0 #57B1EF;}
+.camp_header   .percent_stats div.pstats li.pending {  background: none repeat scroll 0 0 #389FE7;}
+.camp_header   .percent_stats div.pstats li span {  padding: 0;  width: 100%; }
 
 .icon.bot { background: url("../img/bot-w.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
 

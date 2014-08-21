@@ -186,6 +186,10 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                     }
                     this.head_action_bar.find(".copy").addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
                     this.head_action_bar.find(".delete").addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
+                    this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
+                    this.head_action_bar.find(".percent").on('click', function(ev) {
+                        that.showPercentage(ev);
+                    });  
                     this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
                         if (that.status == "D") {
@@ -511,6 +515,90 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                         this.showHideTargetTitle(true);
                     }, this));
                    this.showTags();
+                },
+                showPercentage: function(ev) {
+                    this.modal = $('.modal');
+                    this.head_action_bar = this.modal.find(".modal-header .edited");
+                    this.head_action_bar.find(".pstats").remove();
+                    var str = "<div class='pstats' style='display:block;'>";
+                    str = str + "<ul>";
+                    if (this.model.get('sentCount') == "0") {
+                        str = str + "<li class='sent'><strong>" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span>Sent</span></li>";
+                    } else {
+                        str = str + "<li class='sent  '><a class='showtooltip show-sent' data-original-title='Click to view contacts'><strong >" + this.options.app.addCommas(this.model.get('sentCount')) + "</strong><span >Sent</span></a></li>";
+                    }
+                    if (this.model.get('pendingCount') == "0") {
+                        str = str + "<li  class='pending'><strong>" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></li>";
+                    } else {
+                        str = str + "<li class='pending'><a class='showtooltip  show-pending'  data-original-title='Click to view contacts'><strong  >" + this.options.app.addCommas(this.model.get('pendingCount')) + "</strong><span>Pending</span></a></li>";
+                    }
+                    str = str + "</ul>";
+                    str = str + "</div>";
+                    str = $(str);
+                    var that = this;
+                    $(ev.target).parents(".percent_stats").append(str);
+                    this.head_action_bar.find(".pstats ul a.show-pending").on('click', function(e) {
+                        that.showPendingPopulation();
+                    });
+                    this.head_action_bar.find(".pstats ul a.show-sent").on('click', function(e) {
+                        that.showSentPopulation();
+                    });
+                },
+                showSentPopulation: function(ev) {
+                    var that = this;
+                    var sentAt = "Sent at";
+                    var status = "C";
+                    var dialog_title = this.model.get("label") + " - Sent Population";
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({
+                        title: dialog_title,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'population',
+                        wrapDiv: 'rcontacts-view',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
+
+                    var botId = this.model.get('botId.encode');
+                    that.options.app.showLoading('Loading Contacts....', dialog.getBody());
+                    require(["recipientscontacts/rcontacts"], function(Contacts) {
+                        var objContacts = new Contacts({sentAt: sentAt, status: status, app: that.options.app, botId: botId, type: 'autobots', dialogHeight: dialog_height});
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent())
+                        var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+
+                    });
+                },
+                showPendingPopulation: function() {
+                    var that = this;
+                    var status = "P";
+                    var sentAt = "Scheduled for";
+                    var dialog_title = this.model.get("label") + " - Pending Population";
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = that.options.app.showDialog({
+                        title: dialog_title,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'population',
+                        wrapDiv: 'rcontacts-view',
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
+                    });
+
+                    var botId = this.model.get('botId.encode');
+                    that.options.app.showLoading('Loading Contacts....', dialog.getBody());
+                    require(["recipientscontacts/rcontacts"], function(Contacts) {
+                        var objContacts = new Contacts({sentAt: sentAt, status: status, app: that.options.app, botId: botId, type: 'autobots', dialogHeight: dialog_height});
+                        dialog.getBody().append(objContacts.$el);
+                        that.app.showLoading(false, objContacts.$el.parent())
+                        var dialogArrayLength = that.app.dialogArray.length; // New Dialog
+                        objContacts.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+
+                    });
                 }
 
             });
