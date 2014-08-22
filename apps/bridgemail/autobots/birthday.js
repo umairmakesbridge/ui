@@ -667,6 +667,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                    this.$el.parents('.modal').find('.modal-footer').find('.btn-play').show();
                    this.$el.parents('.modal').find('.modal-header .preview,.cstatus').remove();
                    this.dialog.$("#dialog-title span").attr('data-original-title','Click here to name');
+                   var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                   this.$el.parents('.modal').find('.modal-footer').append(btn);
                     this.dialog.$("#dialog-title span").click(_.bind(function(obj) {
                         if (this.status != "D")
                             return false;
