@@ -332,6 +332,7 @@ function (Wizard,template,moment) {
                     var post_data = {type:'import',synchType:'crm',listNumber:this.listNumber};
                     var that = this;
                     this.app.showLoading("Starting Import...",this.$el);  
+                    console.log(this.Import_page.getImportData());
                     $.extend(post_data,this.Import_page.getImportData());
                     var import_type = this.$(".step3 input[name='options_import']:checked").val();  
                     if(import_type=="I"){
