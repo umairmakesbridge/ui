@@ -1,7 +1,18 @@
 <h2 class="header-list">
             <a class="refresh_btn showtooltip" data-original-title="Refresh listing" style="margin: -2px 2px;"><i>Refresh</i></a>
-            <span id="copy_no_of_camps"><strong class="badge">0</strong> <b> </b> Campaigns</span>        
+            <span id="copy_no_of_camps"><strong class="badge">0</strong> <b> </b> Campaigns</span> 
             <div id="copycampsearch" class="input-append search">         
+            </div>
+            <div class="template-filter_expand right" id="autobots" style="position: relative;"> <strong class="sort left">Filter</strong>
+                <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse" style="position: relative;"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:0px; right:10px; margin: 16px 0 0 8px;"> </b></span>
+
+                <ul id="template_search_menu" class="breadcrumb template_search_menu" style="display: none; right: 0;top:41px;">
+                   <li class="showtooltip active" data-original-title="Show all campaigns"><a search="A" class="stattype" tabindex="-1">All</a></li>
+              <li class="showtooltip" data-original-title="Click to view sent"><a search="C" class="stattype sent" tabindex="-1">Sent</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="P" class="stattype pending" tabindex="-1">Pending</a></li>
+              <li class="showtooltip" data-original-title="Click to view scheduled"><a search="S" class="stattype scheduled" tabindex="-1">Scheduled</a></li>
+              <li class="showtooltip" data-original-title="Click to view draft"><a search="D" class="stattype draft" tabindex="-1">Draft</a></li>
+                </ul>
             </div>
         </h2>
         <div class="clearfix"></div>

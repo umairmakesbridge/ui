@@ -543,6 +543,10 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         this.showHideTargetTitle(true);
                     }, this));
                     this.showTags();
+                    if (this.status != "D"){
+                            this.disableAllEvents();
+                            this.$el.parents('.modal').find('.modal-footer').find('.btn-save').removeClass('btn-green')
+                        }
                 },
                 showPercentage: function(ev) {
                     this.modal = $('.modal');

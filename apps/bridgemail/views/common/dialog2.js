@@ -118,6 +118,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             if(options){
                                  this.option =options;
                              }
+                             this.$('.modal-footer').html('<a class="btn-gray left backbtn dialog-backbtn" style="display: none;"><i class="icon back left"></i><span>Back</span></a><a class="btn-gray btn-close right"><span>Close</span><i class="icon cross"></i></a><a style="display:none;" class="btn btn-blue btn-save right"><span>Save Target</span><i class="icon save"></i></a>');
                              if(this.option.buttons){
                                 if(this.option.buttons.saveBtn){ 
                                     this.$(".modal-footer .btn-save").show();
@@ -198,13 +199,15 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             $('.dialogWrap-'+removeElement).remove();
                             //delete this.optionObj[removeElement];
                             $('.dialogWrap-'+showElement).show();
-                            this.dialogHeader(this.app.dialogArray[showElement-1]);
                             this.dialogFooter(this.app.dialogArray[showElement-1]);
+                            this.dialogHeader(this.app.dialogArray[showElement-1]);
                             this.saveCallBack(this.app.dialogArray[showElement-1].saveCall);
                            //this.render(this.optionObj[showElement]);
                             var newLength = this.app.dialogArray.length;
                             if(newLength === 1){
                                 this.$('.dialog-backbtn').hide();
+                            }else{
+                                this.$('.dialog-backbtn').show();
                             }
                         },
                         reattachEvents : function(){
