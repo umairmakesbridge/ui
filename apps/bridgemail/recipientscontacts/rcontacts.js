@@ -95,11 +95,6 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                             _.each(contacts.models, function(model) {
                                 that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
                             });
-                            if (typeof that.options.sentAt != "undefined") {
-                                that.$el.parents('.modal').find('#dialog-title .cstatus').remove();
-                                that.$el.parents('.modal').find('#dialog-title .percent_stats').remove();
-                            }
-
                             if (that.searchText != '') {
                                 that.showSearchFilters(that.searchText, that.options.app.addCommas(that.objRContacts.total), that.searchText);
                             } else {

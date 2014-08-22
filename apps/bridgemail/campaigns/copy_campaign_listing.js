@@ -11,7 +11,9 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
             /**
              * Attach events on elements in view.
             */            
-            events: {				
+            events: {	
+                "click .sortoption_expand": "toggleSortOption",
+                "click .stattype":"filterCampaign"
             },
             /**
              * Initialize view - backbone .
@@ -105,6 +107,7 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                                 this.$(".notfound").remove();
                             }
                             _data['bucket'] = 20;
+                            _data['status'] = this.status;
                             this.campaigns_request = this.campaignCollection.fetch({data: _data,
                                 success: _.bind(function(data1,collection) {
                                 // Display items
@@ -215,14 +218,27 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                               
                 var _text = parseInt(count)<="1"?"Campaign":"Campaigns";
                 var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong>';
-               
+                var status = "All";
                 if(this.searchTxt){
                     this.$("#copy_no_of_camps").html(text_count+_text+" found containing text '<b>"+this.searchTxt+"</b>'");
                 }
                 else{
                     this.$("#copy_no_of_camps").html(text_count+_text);
-                }     
+                }  
                 
+                if(this.status){
+                    if(this.status === "C")
+                            status = "Sent";
+                    else if(this.status === "P")
+                            status = "Pending";
+                    else if(this.status === "S")
+                            status = "Scheduled";
+                     else if(this.status === "D")
+                            status = "Draft";
+                      else
+                            status = "All";
+                     this.$("#copy_no_of_camps").html(text_count+status+" "+_text);
+                }
             },
             keyvalid:function(event){
                         var regex = new RegExp("^[A-Z,a-z,0-9]+$");
@@ -237,7 +253,44 @@ function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollect
                             return false;
                         }
                         event.preventDefault();
-                   }
+                   },
+                toggleSortOption: function(ev) {
+                    $(this.el).find("#template_search_menu").slideToggle();
+                },
+                filterCampaign: function(obj){					
+                                    var camp_obj = this;
+                                    var appMsgs = this.app.messages[0];
+                                    var target = $.getObj(obj,"a");
+                                    var prevStatus = this.searchTxt;
+                                    if(target.parent().hasClass('active')){
+                                        return false;
+                                    }
+                                    camp_obj.$el.find('.stattype').parent().removeClass('active');
+                                    target.parent().addClass('active');
+                                    var html = target.clone();
+                                    $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());
+                                    var type = target.attr("search");
+                                    
+                                    //camp_obj.$el.find("#target-camps .bmsgrid").remove();
+                                    
+                                    camp_obj.app.showLoading("Loading Campaigns...",camp_obj.$("#target-camps"));
+                                    this.status = type;
+                                    if(this.status !== prevStatus){
+                                            this.$el.find('#list-search').val('');
+                                            this.$el.find('#clearsearch').hide();
+                                            this.type = 'listNormalCampaigns';
+                                            this.searchTxt = '';
+                                        }
+                                    //var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+camp_obj.app.get('bms_token')+"&type=listNormalCampaigns&offset=0&status="+type+"&"+dateURL;				
+                                    //console.log(URL);
+                                    
+                                    var filterObj = {status:type};
+                                    this.total_fetch = 0;
+                                    this.$el.find("#template_search_menu").hide();
+                                    this.fetchCampaigns(0,filterObj);
+                                   
+                    
+                }
         });
     
 })

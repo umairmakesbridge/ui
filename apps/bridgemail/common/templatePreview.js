@@ -99,7 +99,8 @@ function (template,contactsView,icheck,chosen) {
                 }
              },
             setiFrameSrc:function(){ // HTML & Text Tab Click
-                    /*Check show Orginal*/
+                    var newFrameheight = '';
+                /*Check show Orginal*/
                     if(this.$('.show-original').is(':checked')){    
                          this.original = 'Y';
                      }else{
@@ -126,7 +127,11 @@ function (template,contactsView,icheck,chosen) {
                    if(this.subNum !== null){
                       frame+="&snum="+this.subNum; 
                    }
-                  this.$('#email-template-iframe').attr('src',frame).css('height',this.options.frameHeight-48);
+                  if(this.options.isText === "Y")
+                      newFrameheight = this.options.frameHeight - 85;
+                  else
+                      newFrameheight = this.options.frameHeight - 170;
+                  this.$('#email-template-iframe').attr('src',frame).css('height',newFrameheight);
             },
             loadPrevTemplates: function(){
                 if(this.options.prevFlag==='T'){

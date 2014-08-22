@@ -2382,6 +2382,7 @@ input[type='file'] {
     height: 34px;
     width: 16px;
 }
+
 ul.ddlist {
     background: none repeat scroll 0 0 #314E5B;
     border-radius: 0 0 2px 2px;
@@ -3241,6 +3242,10 @@ ul#template_search_menu li a {
     line-height: 20px;
     padding: 3px 15px 5px;
     text-shadow: none;
+    text-align: left;
+}
+.sortoption_expand {
+    text-align: left;
 }
 
 ul#template_search_menu li {

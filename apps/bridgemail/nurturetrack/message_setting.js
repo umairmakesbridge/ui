@@ -229,7 +229,7 @@ function (template) {
                     previewIconMessage.click(_.bind(this.previewCampaign,this)); 
                     if(this.options.type == "autobots"){
                          this.dialog.$el.find('.modal-header .cstatus').remove();
-                         this.dialog.$el.find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                        // this.dialog.$el.find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
                     }
                 }
             
