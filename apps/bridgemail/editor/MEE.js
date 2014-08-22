@@ -1955,27 +1955,33 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var imgWidth = imageElem.inlineStyle("width");
 
                                         imageElem.css("height", "100%");
-                                        imageElem.css("width", "100%");
-
+                                        imageElem.css("width", "100%");                                        
                                         if(imgHeight == "") {
-                                            imgHeight = "200px";
+                                            imgHeight = "200px";  
+                                            
                                         }
                                         if(imgWidth == "") {
-                                            imgWidth = "200px";
+                                            imgWidth = "200px";                                            
                                         }
+                                        
+                                        var _containerStyle = elem.attr("style")?elem.attr("style"):"float:none";
+                                        var _imageStyle = imageElem.attr("isStyleSet")?imageElem.attr("style"):"height:"+imgHeight+";width:"+imgWidth;
+                                        elem.removeAttr("style");
+                                        imageElem.attr("style","width:100%;height:100%");
                                         
                                         var imgOutHtml = "";
                                         if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
 
                                             imgOutHtml = imageElem.parent().outerHTML();
-
                                         }
                                         else {                            
                                             imgOutHtml = imageElem.outerHTML();
-
                                         }
-                                        var newHtml = "<div class='myImage' style='float:none;' align='"+ alignVal +"'><div class='resizableImage' style='height:"+imgHeight+";width:"+ imgWidth +"'>" + imgOutHtml + "</div></div>";
+                                        
+                                        
+                                        var newHtml = "<div class='myImage' style='"+_containerStyle+"' align='"+ alignVal +"'><div class='resizableImage' style='"+_imageStyle+"'>" + imgOutHtml + "</div></div>";
                                         elem.html(newHtml);
+                                        elem.find(".resizableImage").css({"width":imgWidth,"height":imgHeight});
 
                                     }
                                     else {
@@ -2138,7 +2144,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     if(img.length){
                                         img.css("width", resizableImg.inlineStyle("width"));
                                         img.css("height", resizableImg.inlineStyle("height"));
-
+                                        if(resizableImg.attr("style")){
+                                            img.attr("isStyleSet","true");
+                                            img.attr("style",resizableImg.attr("style"));
+                                        }
+                                        else{
+                                            img.removeAttr("isStyleSet");
+                                        }
                                         img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
 
                                         if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
@@ -2151,6 +2163,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                         imageContainer.attr("align", myImage.attr("align") );
+                                        if(myImage.attr("style")){
+                                            imageContainer.attr("style", myImage.attr("style") );
+                                        }
                                     }
                                 });
 
