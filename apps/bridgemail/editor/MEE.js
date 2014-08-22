@@ -316,7 +316,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     oInitDestroyEvents.InitAll(mainObj, true);
                                 }
                             });
-                            mainContentHtmlGrand.mouseup(function(){
+                            mainContentHtmlGrand.mouseup(function(){                                
                                 changFlag.editor_change = true;
                             })
 
@@ -1830,7 +1830,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
 
 
-                            //Muhammad Adnan --------------------- Code Preview ---------------------------//
+                            //--------------------- Code Preview ---------------------------//
 
                             function InitializePreviewControls() {
                                 var lnkPreviewCode = myElement.find(".MenuCallPreview");
@@ -1888,8 +1888,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                             function reConstructCode(html) {
-
-
                                 var oHtml = $(html);
 
                                 oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
@@ -1941,11 +1939,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     element.replaceWith(newElement);
                                 }
 
-
-
-
-
-
                                 oHtml.find(".MEE_ITEM").each(function (i, e) {    
                                     var elem = $(e);
 
@@ -1970,8 +1963,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         if(imgWidth == "") {
                                             imgWidth = "200px";
                                         }
-                                        //var html = elem.html();
-
+                                        
                                         var imgOutHtml = "";
                                         if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
 
@@ -1987,9 +1979,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     }
                                     else {
-                                        elem.removeClass("MEE_ITEM")
-                                        var html = elem.html();                            
-                                        var newHtml = "<div class='textcontent'>" + html + "</div>";
+                                        elem.removeClass("MEE_ITEM").addClass("textcontent");                                                                                                          
                                         elem.html(newHtml);
                                     }
 
@@ -2012,12 +2002,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 });
                                 oHtml.find(".myDroppable").each(function () {
                                     RevertCommonLi($(this));
-                                });
-                                //oHtml.find("div .sortable").each(function () { RevertCommonUl($(this)); });
+                                });                                
 
-                                oHtml.find("table").each(function () {
-
-                                    //oHtml.find(".container .sortable").each(function () { RevertCommonUl($(this)); });
+                                oHtml.find("table").each(function () {                                   
                                     oHtml.find(".container .sortable .csHaveData").each(function () {
                                         RevertCommonLi($(this));
                                     });
@@ -2140,6 +2127,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 oHtml.find("div.ui-resizable-se").remove();                       
 
                                 oHtml.find(".space").removeInlineStyle("background");
+                                oHtml.find("*").removeInlineStyle("outline");
 
                                 //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
                                 oHtml.find(".drapableImageContainer").each(function (index, object) {
@@ -2147,26 +2135,23 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var img = imageContainer.find("img");
                                     var resizableImg = imageContainer.find(".resizableImage");
                                     var myImage = imageContainer.find(".myImage");                        
+                                    if(img.length){
+                                        img.css("width", resizableImg.inlineStyle("width"));
+                                        img.css("height", resizableImg.inlineStyle("height"));
 
-                                    img.css("width", resizableImg.inlineStyle("width"));
-                                    img.css("height", resizableImg.inlineStyle("height"));
+                                        img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
 
-                                    img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
+                                        if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
+                                            imageContainer.html(img.parent().outerHTML());
+                                        }
+                                        else {
+                                            imageContainer.html(img.outerHTML());
 
-                                    if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
+                                        }
 
-                                        imageContainer.html(img.parent().outerHTML());
-
+                                        imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
+                                        imageContainer.attr("align", myImage.attr("align") );
                                     }
-                                    else {
-
-                                        imageContainer.html(img.outerHTML());
-
-                                    }
-
-                                    imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
-                                    imageContainer.attr("align", myImage.attr("align") );
-
                                 });
 
 
@@ -2249,13 +2234,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             InitializePreviewControls();
                             //=============================================================================
 
-                            // [Muhammad.Adnan] --------------- DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) ------------ //            
-
-
+                            // --------------- DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) ------------ //            
 
                             function InitializeAndDestroyEvents() {
-
-
 
                                 //Destroy plugin events all event
                                 this.DestroyPluginsEvents = function (element) {
@@ -6506,8 +6487,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 };
 
                 jQuery.fn.inlineStyle = function (prop) {
-                    var value;
-                    value = this.prop("style")[$.camelCase(prop)];
+                    var value="";
+                    if(this.length){
+                        value = this.prop("style")[$.camelCase(prop)];
+                    }
                     return value;
                 };
 
