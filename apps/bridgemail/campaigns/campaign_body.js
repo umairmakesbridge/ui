@@ -118,8 +118,8 @@ function (template,editorView) {
 
             },
             setContents:function(){
-              if(_tinyMCE.get('bmseditor_'+this.wp_id)){
-                _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));   
+              if(tinyMCE.get('bmseditor_'+this.wp_id)){
+                tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));   
               }
               else{
                   setTimeout(_.bind(this.setContents,this),200);
@@ -165,9 +165,9 @@ function (template,editorView) {
                 }
             },
             setEditor:function(){
-              if(_tinyMCE && _tinyMCE.get('bmseditor_'+this.wp_id))  {
+              if(tinyMCE && tinyMCE.get('bmseditor_'+this.wp_id))  {
                 this.bmseditor.showEditor(this.wp_id);                                       
-                _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                 this.$("#bmstexteditor").val(this.app.decodeHTML(this.parent.plainText,true));
                 this.$(".textdiv").hide();
               }
@@ -179,7 +179,7 @@ function (template,editorView) {
                 this.app.showLoading(false,this.$el);
                 var html_json = jQuery.parseJSON(xhr.responseText);
                 if(html_json.htmlText){
-                    _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                    tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
                 }
             },
             TryDialog:function(){
@@ -228,7 +228,7 @@ function (template,editorView) {
                    this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
                    if(this.parent.type == "autobots"){
                           this.$el.parents('.modal').find('.modal-header .cstatus').remove();
-                          this.$el.parents('.modal').find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                          //this.$el.parents('.modal').find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
                           this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
                     } 
                     
