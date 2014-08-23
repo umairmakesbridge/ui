@@ -542,6 +542,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             return false;
                         this.showHideTargetTitle(true);
                     }, this));
+                    
                     this.showTags();
                 },
                 showPercentage: function(ev) {
