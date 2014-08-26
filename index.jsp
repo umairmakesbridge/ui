@@ -26,7 +26,7 @@ if(userInfo == null) {
 %><jsp:forward page="../InvalidAccess.jsp"/><%
   return;
 }
-String _path = "/pms/path/";
+String _path = "/pms/beta/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,28 +39,28 @@ String _path = "/pms/path/";
     <meta name="author" content="">    
     <link rel="shortcut icon" href="img/favicon.ico">
     
-    <link href="<%= _path %>css/bootstrap.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/icons.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/style.css?bust=1.36" rel="stylesheet" type="text/css" >  
-    <link rel="stylesheet" href="<%= _path %>css/isotope.css?bust=1.36" rel="stylesheet" />    
-    <link href="<%= _path %>css/bmsgrid.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/jquery-ui.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/calendar.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/custom_2.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/chosen.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/changes.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/skins/lightgray/skin.min.css?bust=1.36" rel="stylesheet">
-    <link href="<%= _path %>css/tan_changes.css?bust=1.36" rel="stylesheet" type="text/css" >
-    <link rel="stylesheet" href="<%= _path %>css/ui.daterangepicker.css?bust=1.36" type="text/css" />
-    <link rel="stylesheet" href="<%= _path %>css/animate.css?bust=1.36" type="text/css" />
-    <link rel="stylesheet" href="<%= _path %>css/dash.css?bust=1.36" rel="stylesheet" />
-    <link rel="stylesheet" href="<%= _path %>css/a_changes.css?bust=1.36" rel="stylesheet" />        
-    <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css?bust=1.36" rel="stylesheet" />        
+    <link href="<%= _path %>css/bootstrap.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/icons.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/style.css?bust=1.362" rel="stylesheet" type="text/css" >  
+    <link rel="stylesheet" href="<%= _path %>css/isotope.css?bust=1.362" rel="stylesheet" />    
+    <link href="<%= _path %>css/bmsgrid.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/jquery-ui.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/calendar.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/custom_2.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/chosen.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/changes.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link href="<%= _path %>css/skins/lightgray/skin.min.css?bust=1.362" rel="stylesheet">
+    <link href="<%= _path %>css/tan_changes.css?bust=1.362" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" href="<%= _path %>css/ui.daterangepicker.css?bust=1.362" type="text/css" />
+    <link rel="stylesheet" href="<%= _path %>css/animate.css?bust=1.362" type="text/css" />
+    <link rel="stylesheet" href="<%= _path %>css/dash.css?bust=1.362" rel="stylesheet" />
+    <link rel="stylesheet" href="<%= _path %>css/a_changes.css?bust=1.362" rel="stylesheet" />        
+    <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css?bust=1.362" rel="stylesheet" />        
     
-    <link href="<%= _path %>css/editorcss/skin.css?bust=1.36" rel="stylesheet" />
-    <link href="<%= _path %>css/editorcss/jquery.minicolors.css?bust=1.36" rel="stylesheet" />
-    <link href="<%= _path %>css/editorcss/style.css?bust=1.36" rel="stylesheet" />
-    <link href="<%= _path %>css/editorcss/editorstyle.css?bust=1.36" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/skin.css?bust=1.362" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/jquery.minicolors.css?bust=1.362" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/style.css?bust=1.362" rel="stylesheet" />
+    <link href="<%= _path %>css/editorcss/editorstyle.css?bust=1.362" rel="stylesheet" />
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
         var _path = '<%= _path %>'

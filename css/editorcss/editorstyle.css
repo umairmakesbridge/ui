@@ -42,6 +42,12 @@ a,
 	
 	
 }
+.MEE_EDITOR a.disabled
+{
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+}
+
 .btn-gray i, .btn-blue i, .btn-green i, .btn-red i, .btn-yellow i,.MEE_EDITOR .tagscont ul li > a i {
 	-webkit-border-radius:  2px 2px;
 	-moz-border-radius: 2px 2px ;
@@ -63,6 +69,11 @@ a,
 .btn-gray i {
 	background-color: #7996a8 !important;
 }
+.disabled.btn-gray i:hover {background-color: #7996a8 !important;}
+.disabled.btn-gray:hover {
+	background: none repeat scroll 0 0 #91abbc;
+}
+
 .btn-gray i:hover {background-color: #607c8e !important;}
 
 .btn-gray:hover {

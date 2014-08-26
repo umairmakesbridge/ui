@@ -87,43 +87,44 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                     MakeBridgeEditor: function (options) {
 
-                        var MakeBridgeUndoRedoManager = function () {
+                        var MakeBridgeUndoRedoManager = function (opts) {
     
                             var undoRedoIndex = -1;
                             var undoRedoStack = new Array();    
                             var isRedoEnable = false;
                             var isUndoPerformed = false;
+                            var _view = opts.view;
 
                             this.registerAction = MakeBridgeUndoRedoManager_RegisterAction;
-                            this.undo = MakeBridgeUndoRedoManager_Undo;
-                            this.redo = MakeBridgeUndoRedoManager_Redo;
+                            this._undo = MakeBridgeUndoRedoManager_Undo;
+                            this._redo = MakeBridgeUndoRedoManager_Redo;
 
                             function MakeBridgeUndoRedoManager_RegisterAction(obj) { // Save HTML before performing any action
 
                                 if (isUndoPerformed) { // While performing undo redo if any new action performed then clear the stack
                                     var initObj = undoRedoStack[undoRedoIndex];
                                     var size = undoRedoStack.length;
-                                    var counter = size - (undoRedoIndex +1);
-                                    //console.log("counter for pop:"+counter);
-                                    for (i = 0;i < counter;i++){
+                                    var counter = size - (undoRedoIndex +1);                                    
+                                    for (var i = 0;i < counter;i++){
                                         undoRedoStack.pop();
-                                    }
-                                    //undoRedoStack = [];
-                                    //undoRedoIndex = -1;
-                                    // Now Enter the first state of mainTable in the stack as we do on load of MakeBridgeEditor
-                                    //UndoStackPush(initObj);
+                                    }                                    
                                     isUndoPerformed = false;
+                                }                         
+                                console.log("Register action=" +undoRedoStack.length +"--Index="+undoRedoIndex);
+                                if(undoRedoStack.length==0){
+                                    _view.find(".undo_li a.btn-gray").addClass("disabled");
+                                    _view.find(".redo_li a.btn-gray").addClass("disabled");
                                 }
-                                UndoStackPush(obj);
-                                //console.log(undoRedoStack);
-                                //console.log("Index of Stack in Register:"+undoRedoIndex);
+                                else if(undoRedoStack.length==1){
+                                    _view.find(".undo_li a.btn-gray").removeClass("disabled");
+                                    _view.find(".redo_li a.btn-gray").addClass("disabled");
+                                }
+                                
+                                UndoStackPush(obj);                                
                             }
 
                             function MakeBridgeUndoRedoManager_Undo() { // On press undo return previous index saved html
-
-                                var myObj = UndoStackPop();
-                                //console.log("Index of Stack after Undo:"+undoRedoIndex);
-
+                                var myObj = UndoStackPop();                               
                                 return myObj;
                             }
 
@@ -137,9 +138,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             function UndoStackPop() {
 
                                 if (undoRedoIndex >= 0) {
-                                    isUndoPerformed = true;
+                                    isUndoPerformed = true;              
                                     undoRedoIndex--;
-                                    var obj = undoRedoStack[undoRedoIndex];
+                                    console.log("undo action=" +undoRedoStack.length +"--Index="+undoRedoIndex);
+                                    if(undoRedoStack.length>1 && undoRedoIndex==0){
+                                        _view.find(".undo_li a.btn-gray").addClass("disabled");
+                                        _view.find(".redo_li a.btn-gray").removeClass("disabled");
+                                    }
+                                    else{
+                                        _view.find(".undo_li a.btn-gray").removeClass("disabled");
+                                        _view.find(".redo_li a.btn-gray").removeClass("disabled");
+                                    }
+                                    var obj = undoRedoStack[undoRedoIndex];                                    
                                     return obj;
                                 } else {
                                     return null;
@@ -149,15 +159,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             function MakeBridgeUndoRedoManager_Redo() { // on Press Redu increase index and send the stack Element
 
                                 if (isUndoPerformed && undoRedoStack.length > (undoRedoIndex +1) ) {
-
-                                    undoRedoIndex++;
-                                    //console.log("Index of Stack after Redo:"+undoRedoIndex);
-
+                                    undoRedoIndex++;        
+                                    console.log("Redo action=" +undoRedoStack.length+"--Index="+undoRedoIndex);
+                                    if(undoRedoIndex < undoRedoStack.length-1){
+                                        _view.find(".undo_li a.btn-gray").removeClass("disabled");
+                                        _view.find(".redo_li a.btn-gray").removeClass("disabled");
+                                    }
+                                    else{
+                                        _view.find(".undo_li a.btn-gray").removeClass("disabled");
+                                        _view.find(".redo_li a.btn-gray").addClass("disabled");
+                                    }
                                     return undoRedoStack[undoRedoIndex];
                                 }
-                                else {
-                                    //console.log("Index of Stack after Redo -else:"+undoRedoIndex);
-
+                                else {                                    
                                     return null;
                                 }
                             }
@@ -168,7 +182,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         this.each(function () {
                             var $this = $(this);                
-                            var undoManager = new MakeBridgeUndoRedoManager();
+                            var undoManager = new MakeBridgeUndoRedoManager({view:$this});
 
                             //Getting View with the help of Backbone:
                             var MainHtmlView = Backbone.View.extend({
@@ -215,6 +229,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var leftMinus = mee_view.leftMinus;
                             var $element = null;
                             var emailWidth = "600px";
+                            var undoredo = true;
 
 
                             var dialogForTextColor = true;
@@ -287,33 +302,49 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 mainTable.find("div.ui-resizable-s").remove();
                                 mainTable.find("div.ui-resizable-se").remove();
                                 mainTable.find("div.textcontent").removeClass('mce-content-body');
-
-                                undoManager.registerAction(mainTable);
+                                undoManager.registerAction(mainTable);                                
                                 return false;
-                            }
-                            //undoManager.registerAction();
-                            makeCloneAndRegister();
+                            }                            
+                            
 
                             //Bind Undo redo Functionality 
-                            myElement.find(".undo").click(function () {
-                                var replaceObj = undoManager.undo();
-                                //undoManager.registerAction(myElement.find(".mainTable").html());
+                            myElement.find(".undo_li").click(function () {                                
+                                if($(this).find("a").hasClass("disabled")){
+                                    return false;
+                                }
+                                var replaceObj = undoManager._undo();                                                                
                                 if (replaceObj != null) {
+                                    var contentObj = myElement.find(".content");                                    
+                                    contentObj.html(replaceObj.outerHTML());
                                     var mainObj = myElement.find(".mainTable");
-                                    mainObj.html(replaceObj.html());
-                                    mainObj.find("div.textcontent").css('visibility', 'visible');
-
+                                    mainObj.find("div.textcontent").css('visibility', 'visible');                                    
                                     oInitDestroyEvents.InitAll(mainObj, true);
-
+                                    undoredo = true;
+                                    if(myElement.find(".style-tab").hasClass("active")){
+                                        InitializeElementsForStyle(true);
+                                    }
+                                    else{
+                                        RemoveAllOutline();
+                                    }
                                 }
                             });
-                            myElement.find(".redo").click(function () {
-                                var replaceObj = undoManager.redo();
+                            myElement.find(".redo_li").click(function () {
+                                if($(this).find("a").hasClass("disabled")){
+                                    return false;
+                                }
+                                var replaceObj = undoManager._redo();                                
                                 if (replaceObj != null) {
+                                    var contentObj = myElement.find(".content");                                    
+                                    contentObj.html(replaceObj.outerHTML());
                                     var mainObj = myElement.find(".mainTable");
-                                    mainObj.html(replaceObj.html());
-                                    mainObj.find("div.textcontent").css('visibility', 'visible');
+                                    mainObj.find("div.textcontent").css('visibility', 'visible');                                    
                                     oInitDestroyEvents.InitAll(mainObj, true);
+                                    undoredo = true;
+                                    if(myElement.find(".style-tab").hasClass("active")){
+                                        InitializeElementsForStyle(true);
+                                    }else{
+                                        RemoveAllOutline();
+                                    }
                                 }
                             });
                             mainContentHtmlGrand.mouseup(function(){                                
@@ -337,15 +368,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             $.fn.setMEEHTML = function(html) {
                                 options.preDefinedHTML = html;
-                                oHtml = reConstructCode(options.preDefinedHTML);                
-
-                                oInitDestroyEvents.InitAll(oHtml);
-
-                                var mainObj = myElement.find(".mainContentHtml");
-                                oInitDestroyEvents.InitAll(mainObj);                                        
+                                oHtml = reConstructCode(options.preDefinedHTML);                                                
+                                var mainObj = myElement.find(".mainContentHtml");                                
                                 mainObj.html(oHtml);                    
                                 IsStyleActivated = false;
-                                oInitDestroyEvents.InitAll(mainObj);
+                                oInitDestroyEvents.InitAll(mainObj);                                
+                                makeCloneAndRegister();
                             };
                                                     
 
@@ -366,10 +394,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 else {
                                     oInitDestroyEvents.DestroyPluginsEvents(myElement);
                                     IsStyleActivated = true;
-                                                
-                                    if(eventsApplied===false){
-                                        myElement.find(".ddlBackgroundLayers").chosen();
-                                        //Selection
+                                    if(undoredo===true){
+                                      //Selection
                                         myElement.find(".csHaveData td, .csHaveData div").click(function (event) {
                                             if (IsStyleActivated) {
                                                 event.stopPropagation(); //Stop bubbling
@@ -424,7 +450,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             }
                                         });
-                                        //////////////////////
+                                        undoredo = false;
+                                    }
+                                    //////////////////////
+                                                
+                                    if(eventsApplied===false){
+                                        myElement.find(".ddlBackgroundLayers").chosen();
+                                      
 
                                         //Border
                                         myElement.find(".sBorderLine").click(function () {
@@ -434,18 +466,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 $element = myElement.find(".borderControl .ved-edge-inner");
                                                 var box_height = Number($element.height());
                                                 var box_width = Number($element.width());
-
-
-
-                                                var type = $(this).data("type").toLowerCase();
-
+                                                var type = $(this).data("type").toLowerCase();                                                
                                                 if ($(this).hasClass("borderselected")) {
-
                                                     //$(this).removeClass("active");
                                                     SelectedElementForStyle.removeInlineStyle("border-" + type);
                                                     myElement.find("#"+type+"Border").removeClass('borderselected');
                                                     $element.css("border-"+type, "none");    
-
                                                 }
                                                 else {
 
@@ -468,17 +494,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     else {
                                                         $element.css("width", 48 - TotalBorderTopBottom + "px");   
                                                     }
-                                                }                                                        
+                                                }                                                
                                                 makeCloneAndRegister();
                                             }
+                                            
                                         });
                                         //////////////////////
                                         //Vertical Align
                                         myElement.find(".sVerticalAlign").click(function () {
 
-                                            if (SelectedElementForStyle != null) {
-
-
+                                            if (SelectedElementForStyle != null) {                                                
                                                 if ($(this).attr("id") == "top") {
                                                     SelectedElementForStyle.css("vertical-align", "top");
                                                     myElement.find(".aligncol #top").addClass("active");
@@ -495,7 +520,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     myElement.find(".aligncol #bottom").addClass("active");
                                                     myElement.find(".aligncol #bottom").siblings().removeClass("active");
                                                 }
-                                                makeCloneAndRegister();
+                                                makeCloneAndRegister();                                                
                                             }
                                         });
                                         //////////////////////
@@ -542,7 +567,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         //Email Width
                                         myElement.find(".btnContainerSize").click(function () {
                                             var value = $(this).data("value");                            
-                                            myElement.find(".mainTable").css("width", value + "px");
+                                            myElement.find(".mainTable").css("width", value + "px");                                            
                                             if (value == "700") {
                                                 myElement.find("input#700").addClass("active");
                                                 myElement.find("input#700").siblings().removeClass("active");
@@ -2296,7 +2321,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
 
                                     element.find("div.textcontent").each(function (index, element) {
-                                        //if ($(element).tinymce() == undefined) {
+                                        
                                             tinymce.init({
                                                 selector: "div.textcontent",
                                                 inline: true,
@@ -2306,11 +2331,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                                 toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
 
-                                                setup: function (editor) {
-                                                    editor.on("mouseDown", function(e) {                                           
-                                                        selectedLinkFromTinyMCE = e.target;
-                                                    //editor.selection.select(e.target);
-                                                    });
+                                                setup: function (editor) {                                                   
+                                                    if ($("#"+editor.id).data('tinymce') == undefined) {
+                                                        $("#"+editor.id).data('tinymce',true);
+                                                        editor.on("mouseDown", function(e) {                                           
+                                                            selectedLinkFromTinyMCE = e.target;
+                                                        //editor.selection.select(e.target);
+                                                        });                                                    
+                                                        editor.on("AddUndo", function(e) {                                                                                                   
+                                                            console.log('Undo Level added');
+                                                        });                                                    
+                                                        
+                                                    }
                                                     editor.addButton('LinksButton', {
                                                         type: 'button',
                                                         title: 'Links',
@@ -2756,8 +2788,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 this.DestroyPluginsEvents(oHtml);
                                             }
                                         }
-
-
                                         this.InitializePluginsEvents(oHtml);
 
                                         this.ReInitializeDragDropHoverAll(oHtml);
@@ -2858,7 +2888,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     droppable.before(args.droppedElement);
 
                                     myElement.find(".topHandlers").remove();
-                                    RemoveDroppables(myElement);
+                                    RemoveDroppables(myElement,true);
 
                                     OnNewElementDropped(args);
 
@@ -3710,14 +3740,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             
                             }
 
-                            var RemoveDroppables = function (container) {
+                            var RemoveDroppables = function (container,undo) {
                                 container.find(".myDroppable:not(.csHaveData)").invisible();
 
                                 //Remove height from destination's parent and source's parent (.sortable UL)
                                 //Releted to last element dropped full height:
                                 myElement.find(".sortable").removeAttr("style");
                                 myElement.find(".myDroppable").removeInlineStyle("height");
-                                makeCloneAndRegister();
+                                if(!undo){
+                                    makeCloneAndRegister();
+                                }
                             ///////
                             }
 
