@@ -176,7 +176,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                 },
                 deactivateCall: function(tId) {
                     this.app.showLoading("Deleting Import...", this.$el);
-                    var URL = "/pms/io/highrise/setData/?BMS_REQ_TK=" + this.app.get('bms_token');
+                    var URL = "/pms/io/google/setData/?BMS_REQ_TK=" + this.app.get('bms_token');
                     $.post(URL, {type: 'delete', tId: tId, synchType: "crm"})
                             .done(_.bind(function(data) {
                                 this.app.showLoading(false, this.$el);

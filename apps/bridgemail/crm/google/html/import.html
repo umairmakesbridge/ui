@@ -12,27 +12,33 @@
     <h3 class="ui-accordion-header" aria-controls="pn" style="padding:2px;"> 
 
         <input type="radio" class="radiopanel" value="sheet" name="options_hr" id="">
-        <span class="left">Import Google Speardsheets  </span> 
+        <span class="left">Import Google spreadsheet </span> 
         <div id="highrise-group-search" class="input-append search" style="margin:2px 0px 0px 0px;">   
 
     </h3>
 
     <div class="accordion-body" id="panel_0" style="min-height: 100px!important; padding:20px 0px 0px 20px">
-        <select id="ddlspreadsheet" class="nosearch">
-            <option> Select spreadsheet </option>
-            <% _.each(this.options.spreadSheet,function(elems,idx){
-            _.each(elems,function(elem,idx){%>
-            <option value="<%=elem.id%>"> <%=elem.title%></option>
+        <div class="uid-container" style="display:inline-block;">
+            <select id="ddlspreadsheet" class="nosearch">
+                <option> Select spreadsheet </option>
+                <% _.each(this.options.spreadSheet,function(elems,idx){
+                _.each(elems,function(elem,idx){%>
+                <option value="<%=elem.id%>"> <%=elem.title%></option>
 
-            <%})})%>
-        </select>
-        <select id="ddlworksheet" style="display: none;" class="nosearch">
+                <%})})%>
+            </select>
+        </div>
+        <div class="uid-container" style="display:inline-block; position: relative;">
+            <select id="ddlworksheet" style="display: none;" class="nosearch">
 
-        </select>
-        <div class="bmsgrid" id="sampletable" style="overflow: inherit; position: inherit; display:none;">
-          
+            </select>
+        </div>
+        <div>
+            <div class="bmsgrid" id="sampletable" style="overflow: inherit; position: inherit; display:none;">
+
+            </div>
+
         </div>
 
-    </div>
-
-</div>    
+    </div>    
+</div>

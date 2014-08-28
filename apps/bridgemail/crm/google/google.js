@@ -19,8 +19,8 @@ define(['text!crm/google/html/google.html'],
                    this.$(".messagebox").css({"width":"260px", "margin-left":"46px","padding-right":"0"})
                    this.$(".messagebox p").html("Create, view and edit your existing imports.");  
                 }else{
-                   this.$(".messagebox").css({"width":"365px", "margin-left":"-10px","padding-right":"0"})
-                   this.$(".messagebox p").html("Provide API token, User ID, and map fields you wish to import.");
+                   this.$(".messagebox").css({"width":"490px", "margin-left":"-70px","padding-right":"0"})
+                   this.$(".messagebox p").html("Authorize access to your Google app account, and map fields you wish to import.");
                 }
            },
             initialize: function () {                    
@@ -40,12 +40,12 @@ define(['text!crm/google/html/google.html'],
             checkGoogleStatus: function(){                                
                 var google = this.app.getAppData("google");
                 this.loadSetupArea();  
-                return;
+                 
                 this.app.showLoading("Checking google status...",this.$el);
                 if(!google || google[0] == "err" || google.isGoogleUser=="N")
                 {                        
                     this.app.getData({
-                        "URL":"/pms/io/google/setup//?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "URL":"/pms/io/google/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                         "key":"google",
                         callback:_.bind(function(){
                             this.app.showLoading(false,this.$el);
@@ -67,7 +67,7 @@ define(['text!crm/google/html/google.html'],
                 }
                 else{
                      this.app.showLoading(false,this.$el);                            
-                     this.highriseSetup = true;
+                     this.googleSetup = true;
                      this.showHeader();
                      this.$(".netsuite-imports").click();                                            
                 }
@@ -84,7 +84,7 @@ define(['text!crm/google/html/google.html'],
                 this.newExportArea = this.$("#netsuite-new-export");
                 this.newImport_page = null;
                 this.myimports_page = null;
-                this.highriseSetup = false;
+                this.googleSetup = false;
             },
             /**
              * Intialize workspace when it is rendered and ready. 
@@ -100,11 +100,11 @@ define(['text!crm/google/html/google.html'],
                 </div>');
                 this.current_ws.find(".camp_header .tagscont").remove();                
                 this.current_ws.find(".camp_header .edited").append(header_part);                
-                var that = this;
+                var that = this; 
                 var URL = "/pms/io/google/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=stats";                    
                 jQuery.getJSON(URL,_.bind(function(tsv, state, xhr){
                     var _count = jQuery.parseJSON(xhr.responseText);
-                    that.peopleCount = _count.peopleCount;
+                    that.peopleCount = _count.contactCount;
                     if(_count.synchCount!=="0"){
                         this.current_ws.find(" .camp_header .syncing").html('<span class="syncingicon"></span> <span class="sync_count">'+_count.synchCount+'</span> synchs running');
                     }                                        
@@ -115,6 +115,7 @@ define(['text!crm/google/html/google.html'],
                 },this))
             },
               updateCount:function(c){
+                  this.myimports_page.getMyImports();
                 var count = parseInt(this.current_ws.find(".camp_header .sync_count")[0].innerHTML); 
                 this.current_ws.find(".camp_header .sync_count").html(count+c);
             },

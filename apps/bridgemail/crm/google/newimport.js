@@ -14,6 +14,7 @@ function (Wizard,template,moment) {
                     this.Import_page = null;
                     this.count = 0;
                     this.spreadSheets = null;
+                    this.mapping = null;
                     this.editImport = null;
                     this.newList = null;
                     this.isFilterChange = false;
@@ -133,6 +134,7 @@ function (Wizard,template,moment) {
                 },
                 initStep3:function(){
                     var _this = this;
+                    
                     this.dialog.$(".modal-footer .btn-save").show();
                     this.$(".step3 .summary-accordion").accordion({ active: 1, collapsible: false});  
                     this.$('.summary-accordion h3').trigger('click');
@@ -140,6 +142,15 @@ function (Wizard,template,moment) {
                         radioClass: 'radiopanelinput',
                         insert: '<div class="icheck_radio-icon"></div>'
                     });
+                   var whichOption =  this.Import_page.getImportData();
+                     if(whichOption['filterType'] == 'sheet'){
+                         this.$(".wizard-steps.step3 .col1").hide();
+                         this.$(".wizard-steps.step3 .col2").css('width','99%');
+                    }else{
+                         this.$(".wizard-steps.step3 .col1").show();
+                         this.$(".wizard-steps.step3 .col2").css('width','48%');
+                    }
+                    
                     this.$('.step3 input.radiopanel').on('ifChecked', function(event){                                                                                     
                             var icheck_val = $(this).attr("value");
                             if(icheck_val!=="S"){
@@ -234,12 +245,27 @@ function (Wizard,template,moment) {
                 saveStep2:function(){
                   var proceed =-1;
                   var valid = this.Import_page.getImportData();
-                   
+                  var whichOption =  this.Import_page.getImportData();
+                  if(whichOption['filterType'] == 'sheet'){
+                 if(this.Import_page.mapPage){      
+                    var mapping = this.Import_page.mapPage.mapAndImport();
+                }else{
+                    this.app.showAlert("Please select worksheet.",$("body"),{fixed:true});
+                    return false;
+                } 
+                    
+                        if(mapping == false){
+                             return false;
+                        }else{
+                          this.mapping = mapping;
+                          return mapping;
+                        } 
+                 }
                   if(valid == 0){
                       return 0;
                   }
-                  if(valid !==0 && this.isFilterChange == false){
-                        this.Import_page.saveFilter('highrise',true);
+                  if(valid !==0){
+                        this.Import_page.saveFilter('google',true);
                         proceed = 0;
                     }
                     
@@ -327,13 +353,32 @@ function (Wizard,template,moment) {
                         }
                     },this));
                 },
+                getMappingData:function(){
+                     var data = {};
+                     var whichOption =  this.Import_page.getImportData();
+                     if(whichOption['filterType'] == 'all'){
+                         return data;
+                     }
+                    var maps = this.mapping.split("&");
+                    var result = "";
+                    _.each(maps,function(key,value){
+                       if(key){
+                        var res = key.split("=");
+                         result = result + res[0]+":"+res[1]+",";
+                     }
+                    });
+                    data['mappingFields'] = result;
+                  return data;
+                },
                 startImport:function(){                    
                     var URL = "/pms/io/google/setData/?BMS_REQ_TK="+this.app.get('bms_token');
                     var post_data = {type:'import',synchType:'crm',listNumber:this.listNumber};
                     var that = this;
-                    this.app.showLoading("Starting Import...",this.$el);  
-                    console.log(this.Import_page.getImportData());
+                    this.app.showLoading("Starting Import...",this.$el); 
+                    
+                    $.extend(post_data,this.getMappingData());
                     $.extend(post_data,this.Import_page.getImportData());
+                    
                     var import_type = this.$(".step3 input[name='options_import']:checked").val();  
                     if(import_type=="I"){
                         post_data['frequency']=import_type;
@@ -375,10 +420,11 @@ function (Wizard,template,moment) {
                         that.app.showLoading(false,this.$el);     
                         var _json = jQuery.parseJSON(data); 
                         if(_json[0]!=="err"){
-                             
+                             that.parent.loadMyImportsArea();
                                 if(that.tId){
                                     that.app.showMessge("Your import has been successfully updated.");
-                                }
+                                     
+                                 }
                                 else{
                                     that.app.showMessge("Your import has been successfully created.");
                                     that.parent.updateCount(1);
@@ -388,9 +434,8 @@ function (Wizard,template,moment) {
                                      that.dialog.hide();
                                 }
                                
-                                //this.parent.$(".netsuite-imports").click();                               
-                                that.parent.myimports_page.getMyImports();
-                             
+                                 this.parent.$(".netsuite-imports").click();                               
+                                 
                         }
                         else{
                             that.app.showAlert(_json[1],$("body"),{fixed:true}); 

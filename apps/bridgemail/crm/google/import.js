@@ -17,9 +17,13 @@
                     this.template = _.template(template);
                     this.hrObject = null;
                     this.recipientDetial = null;
+                    this.url_getMapping = "/pms/output/workflow/getMetaData.jsp";
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
+                    this.map_feilds = null;
+                    this.mapPage = null;
                     this.render();
+                    this.importLists();
                     this.countLoaded = false;
                 },
                 render: function() {
@@ -27,6 +31,7 @@
                         this.recipientDetial = this.options.edit;
                     }
                     this.$el.html(this.template({}));
+                     this.$(":radio[value=importall]").iCheck('check');
                     this.app.showLoading("Loading Data...", this.$el);
                     this.initControl();
                     this.$(".ui-accordion").accordion({header: "h3", collapsible: false, active: true});
@@ -35,6 +40,7 @@
                 },
                 initControl: function() {
                     var google = this.app.getAppData("google");
+                    console.log(this.parent.options.page);
                     if (typeof this.parent.options.page != "undefined")
                         this.googleCount = this.parent.options.page.peopleCount;
                     //this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.parent.options.page.peopleCount+"</strong></div>");
@@ -58,12 +64,23 @@
                         type: 'worksheetList',
                         spreadsheetId: selected
                     }
+                    $(this.el).find(".uid-container").append('<div class="loading-wheel combo"></div>');
+                   $(this.el).find("#ddlworksheet").html("<option value='-1'>Loading...</option>").prop("disabled",true).trigger("chosen:updated");
+                                      
                     var that = this;
-                    if (that.$("#ddlworksheet_chosen").length > 0)
-                        that.$("#ddlworksheet_chosen").remove();
+                    if (!that.$("#ddlworksheet_chosen").length){
+                        that.$("#ddlworksheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px", disable_search: "true"});
+                    }
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {
                                 that.app.showLoading(false, that.parent.$el);
+                                if(json.spreadsheetId == "Select spreadsheet"){
+                                   
+                                   $('.loading-wheel').remove();
+                                    that.$el.find("#ddlworksheet").html("<option value='-1'>Select spreadsheet</option>");
+                                    that.$("#ddlworksheet").prop("disabled",false).trigger("chosen:updated");
+                                     return false;
+                                }
                                 var sheet = json.worksheetList[0];
                                 var options = "<option value='0'>Select worksheet</option>";
                                 _.each(sheet, function(elems, idx) {
@@ -71,11 +88,11 @@
                                         options = options + "<option value='" + elem.id + "'>" + elem.title + "</option>";
                                     });
                                 });
+                                $('.loading-wheel').remove();
                                 that.$el.find("#ddlworksheet").html(options);
-                                if (that.$el.find("#ddlworksheet").css('display') == 'none') {
-                                    that.$el.find("#ddlworksheet").removeAttr('style');
-                                }
-                                that.$("#ddlworksheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px", disable_search: "true"});
+                                 
+                                that.$("#ddlworksheet").prop("disabled",false).trigger("chosen:updated");
+                                
 
                             }))
 
@@ -86,38 +103,56 @@
                     var that = this;
                     that.$el.find('#sampletable').html();
                     that.$el.find('#sampletable').hide('fast');
+                    that.$el.find('#sampletable').html("<div id='googleloading' style='padding-left:15px; display:inline-block; margin-top:30px; margin-left:48%; text-align:center;'><img src='"+this.app.get("path")+"img/loading.gif'></div>");
+                    that.$el.find('#sampletable').show('fast');
                     $.extend(data, this.getSampleData());
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {
-                                //this.showSampleData(json);
+                                var _googleData = json.sampleData[0];
+                                var _googleDataArray = [];
+                                _.each(_googleData,function(elem,idx){
+                                     var _google = [];
+                                    _.each(elem[0],function(key,value){
+                                        _google.push(key);
+                                    });
+                                    _googleDataArray.push(_google);
+                                }); 
                                 that.$('#panel_0').css('height', '');
                                 require(["crm/google/google_data"], _.bind(function(mapdataPage) {
                                         that.$el.find('#sampletable').show('fast');
-                                        var mapPage = new mapdataPage({csv:that, app: that.app, rows: json.sampleData});
-                                        console.log(mapPage.$el);
-                                         that.$el.find('#sampletable').html(mapPage.$el);
+                                        that.mapPage = new mapdataPage({csv:that, app: that.app, rows:_googleDataArray});
+                                        that.$el.find('#sampletable').html(that.mapPage.$el);
                                 }));
 
 
                             }))
                         },
+                        importLists:function(){
+                            var that = this;
+                                var mapURL = this.url_getMapping + "?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=upload_map_fields";
+                                jQuery.getJSON(mapURL, _.bind(function(tsv, state, xhr) {
+                                    if (xhr && xhr.responseText){
+                                        that.map_feilds = jQuery.parseJSON(xhr.responseText);
+                                    }
+                                }));
+                        },
                         setGoogleData: function() {
-                            if (this.parent.editImport || (this.parent.Import_page != null)) {
+                            if (this.parent.editImport || (this.parent.Import_page)) {
                                 var recipient_obj;
                                 if (this.parent.editImport) {
                                     recipient_obj = this.parent.editImport;
                                 } else {
                                     recipient_obj = this.parent.Import_page.options.edit;
-                                }
+                                } 
                                 console.log(recipient_obj);
                                 if (recipient_obj.filterType === "sheet") {
-                                    this.$(":radio[value=importall]").iCheck('check');
+                                    this.$(":radio[value=sheet]").iCheck('check');
                                     this.$('#panel_0').slideDown();
+                                    this.$(":radio[value=importall]").iCheck('uncheck');
+                                } else {
+                                    this.$(":radio[value=importall]").iCheck('check');
                                 }
-                            } else {
-                                this.$(":radio[value=importall]").iCheck('check');
                             }
-
                             this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" + this.googleCount + "</strong></div>");
 
                             this.app.showLoading(false, this.$el);
@@ -125,8 +160,11 @@
                         saveFilter: function(flag, goToNext) {
 
                             var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
-                            var data = {};
-                            $.extend(data, this.getImportData());
+                             var data = {
+                                type:'contactSample',
+                                tId:this.parent.tId,
+                                filterType:'all'
+                            }
                             this.app.showLoading("Fetching Count...", this.parent.$el);
                             $.getJSON(URL, data)
                                     .done(_.bind(function(json) {
@@ -159,8 +197,7 @@
 
                                 //Case (filterType = term) 
                                 //Required fields:  term    [makesbridge]
-                            }
-                            console.log(post_data);
+                            } 
                             return post_data;
 
                         },
@@ -179,8 +216,7 @@
 
                                 //Case (filterType = term) 
                                 //Required fields:  term    [makesbridge]
-                            }
-                            console.log(post_data);
+                            } 
                             return post_data;
 
                         },
@@ -211,7 +247,8 @@
                             });
                         },
                         drawSampleData: function(data) {
-                            this.parent.$(".highrise-sample-data").children().remove();
+                            console.log(data)
+                            this.parent.$(".google-sample-data").children().remove();
                             var that = this;
                             this.$el.find(".managefilter .badge").hide();
                             var table_html = '<table cellspacing="0" cellpadding="0" border="0"><thead></thead><tbody></tbody></table>';
@@ -222,10 +259,10 @@
                             //this.parent.$("#customer_accordion .highrise-count").html(total).show();
                             var tableObj = null;
                             var table_row = "", table_head = "";
-                            if (data.recordList) {
+                            if (data.sampleData) {
                                 var found = false;
 
-                                _.each(data.recordList[0], function(val, key) {
+                                _.each(data.sampleData[0], function(val, key) {
 
                                     if (parseInt(key.substring(key.length - 1)) == 1) {
                                         tableObj = $(table_html);
@@ -239,7 +276,7 @@
 
                                         table_head += "</tr>"
                                         tableObj.find("thead").append(table_head);
-                                        this.parent.$(".highrise-sample-data").append(tableObj);
+                                        this.parent.$(".google-sample-data").append(tableObj);
                                     }
                                     else {
                                         table_row = "<tr>";

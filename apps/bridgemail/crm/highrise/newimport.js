@@ -156,6 +156,7 @@ function (Wizard,template,moment) {
                     this.$("#year-select").html(yearHTML);  
                     if(this.editImport){
                         this.$(".frequency-type").val(this.editImport.frequency);
+                        this.$(".step3 .frequency-type").change();
                         if(this.editImport.day){
                             if(this.editImport.frequency=="O" || this.editImport.frequency=="T"){
                                 var _day = this.editImport.day.split(",");
@@ -201,7 +202,7 @@ function (Wizard,template,moment) {
                             _this.$(".step3 .date-row .month-year").show();
                         }
                     })
-                    this.$(".step3 .frequency-type").change();
+                    
                     this.fetchServerTime();                    
                 },
                 stepsCall:function(step){

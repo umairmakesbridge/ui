@@ -4,7 +4,8 @@ define(['text!crm/google/html/login.html'],
             return Backbone.View.extend({
                 events: {
                     "click .setEmail": 'checkEmptyEmail',
-                    "click #btnGoogleLogin": 'getStarted'
+                    "click #btnGoogleLogin": 'getStarted' 
+                  
                 },
                 initialize: function() {
                     var app =  this.options.app ? this.options.app : this.options.page.app;
@@ -32,13 +33,16 @@ define(['text!crm/google/html/login.html'],
                     this.dialog = this.options.dialog;
                     this.parent = this.options.page ? this.options.page : null;
                     this.layout = this.options.layout ? this.options.layout : '';
-
+                    var that = this;
                     this.isAuthorize = this.options.isAuthorize ? this.options.isAuthorize : false;
-
+                    this.$el.find('').on('click',function(){
+                        that.getStarted();
+                    })
                     this.$el.html(this.template({layout: this.layout, isAuthorize: this.isAuthorize}));
                     
                 },
                 getStarted: function() {
+                    console.log('57 -- 000');
                     var that = this;
                     var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getAuthenticationUrl";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
