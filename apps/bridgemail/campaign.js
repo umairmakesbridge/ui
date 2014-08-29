@@ -86,9 +86,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showInfo(this.$el.find('#lblFromemail'),appMsgs.CAMP_femail_info);
                     this.app.showInfo(this.$el.find('#lblFromname'),appMsgs.CAMP_fname_info);
                     this.app.showInfo(this.$el.find('#lblReplyto'),appMsgs.CAMP_replyto_info);
-                    /*Campaign Merge Fields*/
-                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace'},placeholder_text:'Enter subject'});
-                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
+                    
+                },
+                initMergeFields: function() {
+                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace',isrequest:true},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                     this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'workspace'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
                     this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});
                     
@@ -132,6 +133,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             iconsource: 'target'
                      });
                      this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                     /*Campaign Merge Fields*/
+                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
                      
                 },
                 stepsCall:function(step){

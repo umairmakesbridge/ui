@@ -23,6 +23,7 @@
             this.app = this.options.app;
             this.$mergefieldWrap = $(this.options.dialog); // Dialog Box
             this.$topScroll = null; 
+            this.isRequest = 0;
             //this.mappingInit()     
             if (this.$element) {
                 this.template = $(this.options.template)   // Input Template                       
@@ -30,7 +31,7 @@
             }
         },
         showMergeField: function(options) {
-            
+            this.isRequest = parseInt(this.isRequest) + 1;
             var id = this.options.elementID;
             if(id==="campaign_from_email"){
                 this.template.find('#input-wrap-plugin').attr( "style", "" );
@@ -51,7 +52,7 @@
                 }else{
                     this.template.css({'width': '325px'});
                 }
-                this.template.find('input').attr({'style': 'width:72%'});
+                this.template.find('input').attr({'style': 'width:75.2%'});
             }
             if (id == "campaign_from_name" || id == "campaign_reply_to") {
                 this.$element.css('width','100%');
@@ -69,7 +70,18 @@
             this.$element.append(this.template);
             }
             //options.app.fixCampaignInputStepOne();
+            if(this.configs.isrequest){
+                this.requestMergeData(options);
+            }else{
+                this.generateMergeTag();
+            }
             
+            if (this.options.placeholder_text) {
+               this.template.find("input").attr("placeholder", this.options.placeholder_text)
+            }
+
+        },
+        requestMergeData : function(options){
             if (!options.app.getAppData("mergetags")) {                             
                 options.app.getData({
                     "URL": "/pms/io/getMetaData/?BMS_REQ_TK=" + options.app.get('bms_token') + "&type=merge_tags",
@@ -80,15 +92,12 @@
             else {
                 this.generateMergeTag();
             }
-            if (this.options.placeholder_text) {
-               this.template.find("input").attr("placeholder", this.options.placeholder_text)
-            }
-
         },
         generateMergeTag: function() {
             var _this = this;
+            
             var mergeFields_data = this.options.app.getAppData("mergetags");
-
+           // this.options.app.setAppData('mergetags',mergeFields_data);
             _this.mergeTags['basic'] = [];
             _this.mergeTags['custom'] = [];
             _this.mergeTags['salesRep'] = [];
@@ -125,6 +134,9 @@
                     return 0;
                 return a1 > b1 ? 1 : -1;
             });
+            if(this.options.mergeFieldsCallback){
+                this.options.mergeFieldsCallback();
+            }
             this.createMergeTagField();
 
         },
@@ -412,6 +424,7 @@
         app: null,
         addCallBack: null,
         placeholder_text: '',
+        mergeFieldsCallback:null,
         config: {basicFields: true, salesForce: false, customFields: true, links: false, emailType: false},
         dialog: '<div id="merge-field-plug-wrap" class="dropdown-menu mergefields sort-options custom_popup" style="width:390px;">\
             <h2>Merge Fields<div class="input-append search"> <span class="icon list"></span>\
