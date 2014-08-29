@@ -49,7 +49,7 @@ define(['text!crm/google/html/google.html'],
                         "key":"google",
                         callback:_.bind(function(){
                             this.app.showLoading(false,this.$el);
-                            var google = this.app.getAppData("highrise");
+                            var google = this.app.getAppData("google");
                             if(google[0]=="err" || google.isGoogleUser=="N"){
                                 this.loadSetupArea();  
                             }
@@ -127,7 +127,7 @@ define(['text!crm/google/html/google.html'],
                 var li = $.getObj(obj,"li");
                 if(!li.hasClass("selected")){    
                     if(this.googleSetup===false){
-                        this.app.showAlert("Please enter login settings for netsuite.",this.$el,{fixed:true});
+                        this.app.showAlert("Please enter login settings for google.",this.$el,{fixed:true});
                         return false;
                     }
                     var titleName = li[0].className;

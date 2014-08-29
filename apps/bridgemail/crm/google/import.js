@@ -20,10 +20,13 @@
                     this.url_getMapping = "/pms/output/workflow/getMetaData.jsp";
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
+                    this.worksheetId = "";
                     this.map_feilds = null;
+                    this.dbMappingField = "";
                     this.mapPage = null;
-                    this.render();
                     this.importLists();
+                    this.render();
+                    
                     this.countLoaded = false;
                 },
                 render: function() {
@@ -39,8 +42,7 @@
                     this.$("#ddlspreadsheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px", disable_search: "true"});
                 },
                 initControl: function() {
-                    var google = this.app.getAppData("google");
-                    console.log(this.parent.options.page);
+                    var google = this.app.getAppData("google"); 
                     if (typeof this.parent.options.page != "undefined")
                         this.googleCount = this.parent.options.page.peopleCount;
                     //this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" +this.parent.options.page.peopleCount+"</strong></div>");
@@ -49,7 +51,7 @@
                         insert: '<div class="icheck_radio-icon"></div>'
                     });
                     var camp_obj = this;
-
+                    
                     this.setGoogleData();
                     this.app.showLoading(false, this.$el);
                     this.$('#panel_0').css('min-height:100px!important');
@@ -58,13 +60,17 @@
                 loadWorksheet: function(ev) {
                     this.$(":radio[value=sheet]").iCheck('check');
                     this.$('#panel_0').slideDown();
-                    var selected = $(ev.target).val();
+                     if(typeof ev.type !="undefined"){
+                        var selected = $(ev.target).val();
+                    }else{
+                        var selected = ev;
+                    }
                     var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     var data = {
                         type: 'worksheetList',
                         spreadsheetId: selected
                     }
-                    $(this.el).find(".uid-container").append('<div class="loading-wheel combo"></div>');
+                    $(this.el).find(".container1").append('<div class="loading-wheel combo"></div>');
                    $(this.el).find("#ddlworksheet").html("<option value='-1'>Loading...</option>").prop("disabled",true).trigger("chosen:updated");
                                       
                     var that = this;
@@ -90,6 +96,10 @@
                                 });
                                 $('.loading-wheel').remove();
                                 that.$el.find("#ddlworksheet").html(options);
+                                if(that.worksheetId !=""){
+                                     that.$("#ddlworksheet").val(that.worksheetId);
+                                     that.getSampleDataForArrangments();
+                                }
                                  
                                 that.$("#ddlworksheet").prop("disabled",false).trigger("chosen:updated");
                                 
@@ -100,6 +110,7 @@
                 getSampleDataForArrangments: function(ev) {
                     var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     var data = {};
+                   
                     var that = this;
                     that.$el.find('#sampletable').html();
                     that.$el.find('#sampletable').hide('fast');
@@ -108,6 +119,7 @@
                     $.extend(data, this.getSampleData());
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {
+                                if(typeof json.sampleData != "undefined"){
                                 var _googleData = json.sampleData[0];
                                 var _googleDataArray = [];
                                 _.each(_googleData,function(elem,idx){
@@ -117,14 +129,18 @@
                                     });
                                     _googleDataArray.push(_google);
                                 }); 
-                                that.$('#panel_0').css('height', '');
+                                 that.$('#panel_0').css('height', '');
                                 require(["crm/google/google_data"], _.bind(function(mapdataPage) {
                                         that.$el.find('#sampletable').show('fast');
-                                        that.mapPage = new mapdataPage({csv:that, app: that.app, rows:_googleDataArray});
+                                        that.mapPage = new mapdataPage({csv:that, app: that.app, rows:_googleDataArray,mappingFields:that.dbMappingField});
                                         that.$el.find('#sampletable').html(that.mapPage.$el);
                                 }));
-
-
+                            }else{
+                                that.$('#panel_0').css('height', '');
+                                that.$el.find('#sampletable').show('fast');
+                                that.$el.find('#sampletable').css('margin-left:auto; text-align:center; width:100%;margin-top:20px;');
+                                 that.$el.find('#sampletable').html("No Data found!");
+                            }
                             }))
                         },
                         importLists:function(){
@@ -144,11 +160,17 @@
                                 } else {
                                     recipient_obj = this.parent.Import_page.options.edit;
                                 } 
-                                console.log(recipient_obj);
                                 if (recipient_obj.filterType === "sheet") {
                                     this.$(":radio[value=sheet]").iCheck('check');
                                     this.$('#panel_0').slideDown();
                                     this.$(":radio[value=importall]").iCheck('uncheck');
+                                    if(recipient_obj.spreadsheetId){
+                                        this.$el.find("#ddlspreadsheet").val(recipient_obj.spreadsheetId);
+                                        this.worksheetId = recipient_obj.worksheetId;
+                                        this.dbMappingField = recipient_obj.mappingFields;
+                                        this.loadWorksheet(recipient_obj.spreadsheetId);
+                                        
+                                    }
                                 } else {
                                     this.$(":radio[value=importall]").iCheck('check');
                                 }
@@ -246,8 +268,7 @@
                                 cols.eq(from).detach().insertBefore(cols.eq(to));
                             });
                         },
-                        drawSampleData: function(data) {
-                            console.log(data)
+                        drawSampleData: function(data) { 
                             this.parent.$(".google-sample-data").children().remove();
                             var that = this;
                             this.$el.find(".managefilter .badge").hide();

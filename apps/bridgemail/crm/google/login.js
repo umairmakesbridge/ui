@@ -41,8 +41,7 @@ define(['text!crm/google/html/login.html'],
                     this.$el.html(this.template({layout: this.layout, isAuthorize: this.isAuthorize}));
                     
                 },
-                getStarted: function() {
-                    console.log('57 -- 000');
+                getStarted: function() { 
                     var that = this;
                     var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getAuthenticationUrl";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {

@@ -117,7 +117,7 @@ function (template,chosen,addbox) {
                         /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
-				app.showAlert('Match your Google Worksheet columns to fields. Columns that you do not match will not be uploaded',el);
+				app.showAlert('Match your Google Worksheet columns to fields. Columns that you do not match will not be extracted',el);
 				isValid = false;
 			}
                         else{
@@ -275,7 +275,7 @@ function (template,chosen,addbox) {
 									mappingHTML +="<td width='30px' class='td_footer lastrow'>&nbsp;</td>";
 								}
 								else{
-									var cbox = (f<=cols)?curview.mapCombo(f):"&nbsp;";
+									var cbox = (f<=cols)?curview.mapCombo(f,this.options.mappingFields):"&nbsp;";
 									mappingHTML +="<td width='25%' class='td_footer lastrow'>"+cbox+"</td>";
 								}
 							}
@@ -312,8 +312,17 @@ function (template,chosen,addbox) {
                         return true;
                     //curview.$el.find('.btn-close').click();
             },
-		mapCombo: function(num) {
-			var campview = this.options.camp;						
+		mapCombo: function(num,fields) {
+                    fields = fields.split(',');
+                    var col = "col_"+num;
+                    console.log(fields);
+                    var item = "";
+                    _.each(fields,function(key,value){
+                        var ar = key.split(":");
+                        if(ar[0] == col)
+                            item = ar[1];
+                    })
+                    	var campview = this.options.camp;						
 			var csvupload = campview?campview.states.step3.csvupload:this.csv;
 			var map_feilds = csvupload.map_feilds;
 			
@@ -325,11 +334,16 @@ function (template,chosen,addbox) {
 			{
 				for(var x=0;x<map_feilds.length;x++){
 					var sel ="";
+                                        var selected = "";
+                                        if(item !="" && item !="0"){
+                                            if(map_feilds[x][0] == item)
+                                               selected = "selected = selected";
+                                        }
 					if(map_feilds[x][2]=='true'){
-						optgroupbasic += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+						optgroupbasic += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+" "+selected+">"+map_feilds[x][1]+"</option>";
 					}
 					else{
-					   optgroupcustom += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+					   optgroupcustom += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+" "+selected+">"+map_feilds[x][1]+"</option>";
 					}
 				}
 			}

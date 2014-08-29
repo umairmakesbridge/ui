@@ -183,8 +183,10 @@ function (Wizard,template,moment) {
                         }
                         else if(freq_val=="T"){
                            _this.$(".step3 .week-days-row").show();
+                           if(!_this.editImport || _this.editImport['frequency']!=="T"){
                            _this.$(".step3 .s-days button.selected").removeClass("selected");
                            _this.$(".step3 .s-days button:first-child").addClass("selected");
+                       }
                            _this.$(".step3 .s-days button").unbind("click").click(function(){
                                $(this).parent().find(".selected").removeClass("selected");
                                $(this).addClass("selected");
