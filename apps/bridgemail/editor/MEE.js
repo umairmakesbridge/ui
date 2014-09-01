@@ -5110,7 +5110,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                                 myElement.find("#imageToolbar").show();
                                 myElement.find("#imageToolbar").css({
-                                    "margin-top": ($(event.target).parent().parent().offset().top-topMinus), 
+                                    "margin-top": ($(event.target).parent().parent().offset().top-topMinus-31), 
                                     "margin-left": ($(event.target).parent().parent().offset().left-leftMinus)
                                 });
 
