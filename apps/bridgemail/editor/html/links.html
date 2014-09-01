@@ -1,0 +1,253 @@
+<div class="left_columnLinkGUI flLinkGUI">
+    <div id="cssmenuLinkGUI">
+        <ul>
+            <li class="homeLinkGUI selected">
+                <a >
+                    <i class="icon homelink"></i><span>Hyperlink</span>
+                </a>
+            </li>
+            <li class="emailLinkGUI ">
+                <a  id="emailLinkGUI">
+                    <i class="icon emaillink"></i><span>Email</span>
+                </a>
+            </li>
+            <li class="forwardToFriendLinkGUI" style="display:none">
+                <a >
+                    <i class="icon frwrdfriend"></i><span>Forward to a Friend</span>
+                </a>
+            </li>
+            <li class="unsubscribeLinkGUI" style="display:none">
+                <a  class="noimage">
+                    <i class="icon unsubslink"></i><span>Unsubscribe</span>
+                </a>
+            </li>
+            <li class="viewInBrowserLinkGUI"  style="display:none">
+                <a  class="noimage">
+                    <i class="icon vbrsrlink"></i><span>View in Browser</span>
+                </a>
+            </li>
+            <li class="newAnchorLinkGUI"  style="display:none">
+                <a  class="noimage">
+                    <i class="icon newanchlink"></i><span>New # anchor</span>
+                </a>
+            </li>
+            <li class="newSocialLinkGUI"  style="display:none">
+                <a  class="noimage">
+                    <i class="icon sociallink"></i><span>Social</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="right_columnLinkGUI frLinkGUI" id="rightPanelArea">
+    <div class="addyHyperLinkDiv" style="display:block">
+
+        <h4>Add a Hyperlink (Standard Link URL)</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+            <br>
+            <label>Link (URL) </label>
+
+            <div class="input-append" >
+                <div class="inputcont ">
+                    <input type="text" class="header-info linkHyperLinkURL" placeholder="Type link here">
+                </div>
+
+                <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle">
+                    Existing Link <span class="caret"></span>
+                </button>
+
+                <div class="existinglinksdd">
+                    <div id="copycampsearch" class="input-append search">
+                        <span class="icon link"></span>
+                        <input type="text" id="copy-camp-search" placeholder="Search links" class="search-control show-image">
+                        <a class="close-icon" id="clearsearch" style="display:none"></a>
+                        <div class="btn-group">
+                            <button tabindex="-1" class="searchbtn" id="searchbtn">
+                                <span class="icon-search icon-white"> </span>
+                            </button>
+                        </div>
+                    </div>
+                    <ul class="linkresults">
+                        <li data-option-array-index="0" style="" class="result-selected">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
+                        <li data-option-array-index="1" style="" class="">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
+                        <li data-option-array-index="2" style="" class="">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <a href="" target="_new" class="visitlink">
+                <i class="icon preview"></i>
+            </a>
+            <br>
+
+            <label>Link Name (For Tracking)</label>
+            <input type="text" maxlength="200" class="textLinkGUI linkName">
+            <br>
+            <div class="inputlabel">
+                <input type="checkbox" id="dont-track">
+                <label>
+                    <span>Do not track this link</span>
+                </label>
+            </div>
+
+            <br>
+
+
+        </form>
+    </div>
+    <div class="addEmailLinkDiv" style="display:none;">
+        <h4>Add a link to an email address</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+            <br>
+
+            <label>Email address</label>
+            <input type="text" maxlength="200" class="textLinkGUI" id="emailLinkName"/>
+            <br>
+            <label>Email subject</label>
+            <input type="text" maxlength="200" class="textLinkGUI" id="emailLinkSubject"/>
+            <br>
+
+        </form>
+    </div>
+    <div class="addFrwdToFrndLinkDiv" style="display:none;">
+        <h4>Add a 'Forward to a friend' link</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+
+        </form>
+    </div>
+    <div class="addUnsubscribeLinkDiv" style="display:none;">
+        <h4>Add an unsubscribe link</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+            <br>
+        </form>
+    </div>
+    <div class="addViewinBrowserLinkDiv" style="display:none;">
+        <h4>Add a "Can't read email" link</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+            <br>
+
+        </form>
+    </div>
+    <div class="addNewAnchorLinkDiv" style="display:none;">
+        <h4>New # anchor</h4>
+
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+            <div class="textAreaDivfortextLink" style="display:none;" >
+                <label>Text</label>
+                <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+                </textarea>
+            </div>
+            <div class="linkImagePreview" style="display:none;">
+                <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+            </div>
+            <!--input type="text" maxlength="200" class="textLinkGUI" id="newAnchortext"/>
+            <p>* Note that the anchor will be inserted at the beginning of the selected text </p-->
+            <br>
+
+            <label>Anchor name</label>
+            <input type="text" id="newAnchortext" class="textLinkGUI" maxlength="200">
+
+            <em class="note">* Note that the anchor will be inserted at the beginning of the selected text</em>
+
+            <br>
+
+        </form>
+    </div>
+    <div class="addDoubleOptLinkDiv" style="display:none;"></div>
+    <div class="addSafeSenderLinkDiv" style="display:none;"></div>
+    <div id="linkTrack" style="display:none;"></div>
+    <div class="addNewSocialLinkDiv" style="display:none;">
+        <h4>Social</h4>
+        <ul class="socialbtns">
+            <li class="facebook btnunchecked">
+                <input type="radio" id="campaign_fb" class="radiopanel" value="facebook" name="social" />
+                <label for="campaign_fb"><span class="social-icon fb"></span><strong>Facebook</strong></label>
+            </li>
+            <li class="twitter">
+                <input type="radio" id="campaign_twitter"  class="radiopanel" value="twitter" name="social" />
+                <label for="campaign_twitter"><span class="social-icon tw"></span><strong>Twitter</strong></label>
+            </li>
+            <li class="linkedin">
+                <input type="radio" id="campaign_linkedin"  class="radiopanel" value="linkedin" name="social" />
+                <label for="campaign_linkedin"><span class="social-icon in"></span><strong>Linkedin</strong></label>
+            </li>
+            <li class="pinterest">
+                <input type="radio" id="campaign_pintrest"  class="radiopanel" value="pintrest" name="social" />
+                <label for="campaign_pintrest"><span class="social-icon pi"></span><strong>Pinterest</strong></label>
+            </li>
+            <li class="googleplus">
+                <input type="radio" id="campaign_gplus"  class="radiopanel" value="googleplus" name="social" />
+                <label for="campaign_gplus"><span class="social-icon gp"></span><strong>Google Plus</strong></label>
+            </li>
+        </ul>
+        <br class="clearfix"/><br/><br>
+        <div class="textAreaDivfortextLink" style="display:none;" >
+            <label>Text</label>
+            <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
+
+            </textarea>
+        </div>
+        <div class="linkImagePreview" style="display:none;">
+            <img style="width:60px;max-height:100%;max-width:100%;vertical-align:top;">
+        </div>
+
+
+        <br/>            
+    </div>
+
+</div>
+
+
+

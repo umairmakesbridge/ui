@@ -228,14 +228,14 @@ $( ".lc-accord .advncfilter " ).click(function() {
                 radioClass: 'radioinput'
               });
 			  
-			   parent.find('input.checkpanel').iCheck({
-                checkboxClass: 'checkpanelinput',
-				insert: '<div class="icheck_line-icon"></div>'
+              parent.find('input.checkpanel').iCheck({
+                    checkboxClass: 'checkpanelinput',
+                    insert: '<div class="icheck_line-icon"></div>'
               });
 			  
-			    parent.find('input.radiopanel').iCheck({
-				radioClass: 'radiopanelinput',
-				insert: '<div class="icheck_radio-icon"></div>'
+              parent.find('input.radiopanel').iCheck({
+                    radioClass: 'radiopanelinput',
+                    insert: '<div class="icheck_radio-icon"></div>'
               });
 			  
 			   $( "ul.socialbtns li label " ).click(function() {

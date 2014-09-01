@@ -188,8 +188,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var MainHtmlView = Backbone.View.extend({
                                 my_template: _.template(template),
                                 //el:'#myTags',
-                                initialize: function () {
-                                    //The "render()" function will load our template into the view's "el" property using jQuery below :)
+                                initialize: function () {                                    
                                     this.render();
                                 },
 
@@ -302,11 +301,22 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 mainTable.find("div.ui-resizable-s").remove();
                                 mainTable.find("div.ui-resizable-se").remove();
                                 mainTable.find("div.textcontent").removeClass('mce-content-body');
-                                undoManager.registerAction(mainTable);                                
+                                undoManager.registerAction(mainTable);  
+                                resizeHeight();
                                 return false;
-                            }                            
+                            }   
                             
-
+                            function resizeHeight(){
+                                var ul_container = myElement.find(".mainContentHtml");
+                                var main_container = myElement.find(".editorbox");
+                                if(ul_container.height()>800){
+                                    main_container.css("height",(ul_container.height()+200)+"px");
+                                }
+                                else{
+                                    main_container.css("height","1000px");
+                                }
+                            }
+                            
                             //Bind Undo redo Functionality 
                             myElement.find(".undo_li").click(function () {                                
                                 if($(this).find("a").hasClass("disabled")){
@@ -325,7 +335,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                     else{
                                         RemoveAllOutline();
+                                        var editorfocused = myElement.find("div.textcontent.mce-edit-focus");
+                                        if(editorfocused.length){
+                                            tinymce.get(editorfocused.attr("id")).focus();
+                                        }
                                     }
+                                    resizeHeight();
+                                    
                                 }
                             });
                             myElement.find(".redo_li").click(function () {
@@ -344,7 +360,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         InitializeElementsForStyle(true);
                                     }else{
                                         RemoveAllOutline();
+                                        var editorfocused = myElement.find("div.textcontent.mce-edit-focus");
+                                        if(editorfocused.length){
+                                            tinymce.get(editorfocused.attr("id")).focus();
+                                        }
                                     }
+                                    resizeHeight();
                                 }
                             });
                             mainContentHtmlGrand.mouseup(function(){                                
@@ -1496,7 +1517,38 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
                             ///////
                             }
-
+                            var _LoadContentBlocks = function(){
+                                 $.ajax({
+                                    url: "/pms/io/publish/getEditorData/?"+options._BMSTOKEN+"&type=listBlocks&isAdmin=Y",
+                                    data: "{}",
+                                    type: "POST",
+                                    contentType: "application/json; charset=latin1",
+                                    dataType: "json",
+                                    cache: false,
+                                    async: true,
+                                    success: function (e) {
+                                        if(e.count != "0") {
+                                            var contentBlocks = e.blocks[0];
+                                            contentBlocksGlobal = e.blocks[0];
+                                            var ulContentBlocks = myElement.find(".content-block");
+                                              ulContentBlocks.empty();
+                                            $.each(contentBlocks, function (i, obj) {
+                                                var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
+                                                    "<i class='icon cblock'></i> " +
+                                                    "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +                                                    
+                                                    "</li>");
+                                                InitializeMainDraggableControls(block);
+                                                ulContentBlocks.append(block);
+                                                
+                                            });
+                                            
+                                        }                                        
+                                    },
+                                    error: function (e) {
+                                    
+                                    }
+                                });
+                            }
                             var _LoadDynamicBlocks = function (args) {
 
                                 if (args == null) {
@@ -1854,63 +1906,58 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             }
 
-
+                            function setHTML(dialog){
+                                myElement.setMEEHTML(dialog.getBody().find(".divHtmlCode").val().replace(/\n/g,""));
+                                dialog.hide();
+                            }
                             //--------------------- Code Preview ---------------------------//
 
                             function InitializePreviewControls() {
                                 var lnkPreviewCode = myElement.find(".MenuCallPreview");
-                                var divPreviewCode = myElement.find(".divPreviewCode");
-                                var divHtmlCode = myElement.find(".divHtmlCode");
-                                var previeCodeTabs = divPreviewCode.find("#previeCodeTabs");
+                                var divPreviewCode = myElement.find(".divPreviewCode");                                
 
-
-
-                                previeCodeTabs.tabs();
-
-
+                                //previeCodeTabs.tabs();
 
                                 lnkPreviewCode.click(function () {
-
-
-                                    //var templateHTML = mainContentHtmlGrand.html();
                                     var mainHTMLELE = myElement.find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
 
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
 
-                                    var outputter = $("<div></div>");
+                                    var outputter = $("<div style='margin:0px auto;width:"+emailWidth+"'></div>");
                                     outputter.wrapInner(cleanedupHTML);
 
-                                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
-
-
-
-
-                                    var divHtmlPreview = previeCodeTabs.find(".divHtmlPreview");                                                
-
-                                    divHtmlPreview.html(outputHTML);
-                                    divHtmlCode.val(outputHTML);
-
-                                    divPreviewCode.dialog({
-                                        width: 990,
-                                        height: 500,
-                                        modal: true,
-                                        buttons: [
-                                        {
-                                            text: "Close",
-                                            click: function () {
-                                                $(this).dialog('destroy');
-
-                                            }
-                                        }
-                                        ]
-                                    }).dialog("open");
+                                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                                                                                                                     
+                                    var dialog_width = $(document.documentElement).width()-60;
+                                    var dialog_height = $(document.documentElement).height()-182;
+                                    var dialog =  options._app.showDialog({title:'Code Preview',
+                                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},                                              
+                                              bodyCss:{"min-height":dialog_height+"px"},
+                                              headerEditable:false,
+                                              headerIcon : 'dlgpreview',
+                                              buttons: {saveBtn:{text:'Set'} }                                                                           
+                                        });  
+                                    var preview_html = '<div class="divPreviewCode"><ul  class="mapTab tabs-btns clearfix">';
+                                        preview_html += '<li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>';
+                                        preview_html += '<li><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';                                        
+                                        preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane active">';
+                                        preview_html += '<div class="divHtmlPreview" style="height:'+(dialog_height-48)+'px;overflow:auto"></div></div>';
+                                        preview_html += '<div id="htmlCode" class="tab-pane">';
+                                        preview_html += '<textarea style="font-size:12px;width:'+(dialog_width-46)+'px;height:'+(dialog_height-58)+'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
+                                        preview_html += '</div></div></div>';
+                                    preview_html = $(preview_html);    
+                                    dialog.getBody().html(preview_html); 
+                                    dialog.saveCallBack(_.bind(setHTML,this,dialog));
+                                    
+                                    dialog.getBody().find(".divHtmlPreview").html(outputHTML);
+                                    dialog.getBody().find(".divHtmlCode").val(outputHTML);                                    
+                                    
                                 });
 
 
                             };
 
-
+                            
 
                             function reConstructCode(html) {
                                 var oHtml = $(html);
@@ -2336,10 +2383,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         $("#"+editor.id).data('tinymce',true);
                                                         editor.on("mouseDown", function(e) {                                           
                                                             selectedLinkFromTinyMCE = e.target;
+                                                            
                                                         //editor.selection.select(e.target);
                                                         });                                                    
                                                         editor.on("AddUndo", function(e) {                                                                                                   
-                                                            console.log('Undo Level added');
+                                                            console.log('Undo Level added');                                                            
+                                                            if(editor.undoManager.hasUndo() || editor.undoManager.hasRedo()){
+                                                                console.log('in undo or redo check');
+                                                                makeCloneAndRegister();
+                                                            }
                                                         });                                                    
                                                         
                                                     }
@@ -2350,6 +2402,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         onClick: function (e) {
                                                             //editor.insertContent(this.value());
                                                             handleTextLink();
+                                                            //showLinkGUI();
                                                         },
 
                                                         onPostRender: function () {
@@ -2756,6 +2809,35 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     }
                                 }
+                                
+                                this.InitializeOnImageDroppedEvent = function (oHtml) {
+                                    if (oHtml != null) {
+
+                                        if (oHtml.find('.resizableImage').andSelf().filter('.resizableImage').length > 0) {
+
+                                            //Apply here Droppable Container:
+                                            oHtml.find('.resizableImage').andSelf().filter('.resizableImage').each(function (index, element) {
+
+                                                $(element).droppable({
+                                                    tolerance: "pointer",
+                                                    greedy: true,
+                                                    drop: function (event, ui) {
+                                                        //alert("dropped");
+                                                        //Only dropable for IMAGE TYPE
+                                                        if (ui.draggable.hasClass("droppedImage")) {                                                                                                                       
+
+                                                            $(this).find("img").attr("src",ui.draggable.find("img").attr("src"))
+                                                            makeCloneAndRegister();
+                                                            oInitDestroyEvents.InitializeClickEvent(oHtml);
+                                                        }
+                                                    }
+                                                });
+
+                                            });
+                                        }
+
+                                    }
+                                }
 
                                 //Check if Click-able event here in html, apply on click event:
                                 this.InitializeClickEvent = function (oHtml) {
@@ -2793,8 +2875,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         this.ReInitializeDragDropHoverAll(oHtml);
 
                                         this.InitializeImageDroppedEvent(oHtml);
+                                        this.InitializeOnImageDroppedEvent(oHtml);
 
                                         this.InitializeClickEvent(oHtml);
+                                        //stop click on images
+                                        if(oHtml != null){
+                                            oHtml.find(".myImage a").click(function(e){
+                                                e.preventDefault();
+                                                return false;
+                                            })
+                                        }
                                         var activeTab = myElement.find("#tabs").tabs("option", "active");
 
                                     }
@@ -2894,6 +2984,46 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     makeCloneAndRegister();
                                 });
+                            }
+                            function initializeiCheck(parent) {
+                                $('input').iCheck('destroy');
+                                $('input.checkpanel').iCheck('destroy');
+                                $('input.radiopanel').iCheck('destroy');
+
+                                parent.find('input').iCheck({
+                                    checkboxClass: 'checkinput',
+                                    radioClass: 'radioinput'
+                                });
+
+                                parent.find('input.checkpanel').iCheck({
+                                    checkboxClass: 'checkpanelinput',
+                                    insert: '<div class="icheck_line-icon"></div>'
+                                });
+
+                                parent.find('input.radiopanel').iCheck({
+                                    radioClass: 'radiopanelinput',
+                                    insert: '<div class="icheck_radio-icon"></div>'
+                                });
+
+                                $( "ul.socialbtns li label " ).click(function() {
+                                    $( this ).toggleClass( "btnchecked" );
+                                });
+
+
+                            }
+                            function showLinkGUI(){
+                                var dialog = options._app.showDialog({title:"Links GUI",
+                                        css:{"width":"780px","margin-left":"-390px"},
+                                        bodyCss:{"min-height":"320px"},                
+                                        headerIcon : 'link',
+                                        buttons: {saveBtn:{text:'Insert'} }                                                                           
+                                });
+                                options._app.showLoading("Loading...",dialog.getBody());
+                                require(["editor/links"],function(page){                                              
+                                    var linkDialogPage = new page({app:options._app,_el:myElement});                                                                        
+                                    dialog.getBody().html(linkDialogPage.$el);
+                                    dialog.saveCallBack(_.bind(linkDialogPage.insertLink,linkDialogPage,dialog));
+                                }); 
                             }
 
                             function handleTextLink () {
@@ -3345,9 +3475,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         //Element recieving from controls panel:
                                         else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
 
-
                                             $(this).addClass("csHaveData");
-
                                             var args = {
                                                 droppedElement: $(this),
                                                 event: event,
@@ -3360,7 +3488,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             var oControl = new Object();
                                             // -------------- Building Block Controls[Better way] --------------//
 
-                                            if (typeOfDraggingControl == "buildingBlock") {
+                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
                                                 //INSERT DROPPABLE BEFORE AND AFTER            
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
@@ -3372,13 +3500,22 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 console.log(buildingBlocksGlobal);
                                                 var bb = undefined;
-                                                $.each(buildingBlocksGlobal, function (i, obj) {
-                                                                                                                                
-                                                    if (obj[0].ID == controlID) {
-                                                        bb = obj[0];
-                                                    }                                                                
+                                                if(typeOfDraggingControl=="buildingBlock"){
+                                                    $.each(buildingBlocksGlobal, function (i, obj) {                                                                                                                                
+                                                        if (obj[0].ID == controlID) {
+                                                            bb = obj[0];
+                                                        }                                                                
 
-                                                });
+                                                    });
+                                                }
+                                                else{
+                                                    $.each(contentBlocksGlobal, function (i, obj) {                                                                                                                                
+                                                        if (obj[0]["blockId.encode"] == controlID) {
+                                                            bb = obj[0];
+                                                        }                                                                
+                                                    });                                                                                                        
+                                                }
+                                               
                                                 console.log("BB:" + bb);
                                                 if (bb != undefined) {
                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
@@ -3673,7 +3810,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         RemovePopups();
 
-                                        myElement.find(".content .sortable").each(function () {
+                                        myElement.find(".content .sortable").each(function (index) {
                                             //Exclude here dragging element (which is added by jqueryUI)
                                             var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
 
@@ -3681,7 +3818,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             InsertDroppableInEmpty($(this), firstLevelLiDroppable);
 
                                             //Last element FULL height
-                                            SetLastElementHeight($(this));
+                                           
+                                                SetLastElementHeight($(this));
+                                            
 
                                         });
 
@@ -3833,7 +3972,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         if (draggedControlType != "droppedImage") {
 
                                             var totalLiLength = myElement.find(".content .sortable li").length;
-                                            myElement.find(".content .sortable").each(function () {
+                                            myElement.find(".content .sortable").each(function (indx) {
 
                                                 var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
 
@@ -3843,8 +3982,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 }
 
                                                 InsertDroppableInEmpty($(this), firstLevelLiDroppable);
-
-                                                SetLastElementHeight($(this));
+                                                if(indx===0){
+                                                    SetLastElementHeight($(this));
+                                                }
 
                                             });
 
@@ -4332,11 +4472,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             // == Enabling ImageFunctionality before access 
                             var imageFunctionality = {
                                 leftAlign: function (myHtmlInstance, workingObject) {
-
-                                    console.log("Left Align Called with Object:");
-                                    console.log(workingObject);
-                                    $(workingObject).parent().parent().parent().parent().parent().find(".myImage").attr("align", "left");
-                                    var myObj = $(workingObject).parent().parent().parent().parent().parent();
+                                    $(workingObject).parents(".myImage");
+                                    var myObj = $(workingObject).parents(".myImage");
+                                    myObj.attr("align", "left");
                                     var seHandle = myObj.find(".ui-resizable-se");
                                     var swHandle = myObj.find(".ui-resizable-sw");
                                     if (swHandle.is(":visible")) {
@@ -4344,23 +4482,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                     seHandle.show();
                                 },
-                                centerAlign: function (myHtmlInstance, workingObject) {
-
-                                    console.log("Center Align Called with Object:");
-                                    console.log(workingObject);
-                                    $(workingObject).parent().parent().parent().parent().parent().find(".myImage").attr("align", "center");
-                                    $(workingObject).parent().parent().parent().parent().parent().find(".ui-resizable-se").show();
-                                    $(workingObject).parent().parent().parent().parent().parent().find(".ui-resizable-sw").show();
-                                //makeCloneAndRegister();
+                                centerAlign: function (myHtmlInstance, workingObject) {                                    
+                                    var myObj = $(workingObject).parents(".myImage");
+                                    myObj.attr("align", "center");                                    
+                                    myObj.find(".ui-resizable-se").show();
+                                    myObj.find(".ui-resizable-sw").show();                                
                                 },
                                 rightAlign: function (myHtmlInstance, workingObject) {
-
-                                    console.log("Right Align Called with Object:");
-                                    console.log(workingObject);
-                                    $(workingObject).parent().parent().parent().parent().parent().find(".myImage").attr("align", "right");
-                                    $(workingObject).parent().parent().parent().parent().parent().find("img.imageHandlingClass").css("overflow", "hidden");
-                                    var seHandle = $(workingObject).parent().parent().parent().parent().parent().find(".ui-resizable-se");
-                                    var swHandle = $(workingObject).parent().parent().parent().parent().parent().find(".ui-resizable-sw");
+                                    var myObj = $(workingObject).parents(".myImage");
+                                    myObj.attr("align", "right");                                                                        
+                                    myObj.find("img.imageHandlingClass").css("overflow", "hidden");
+                                    var seHandle = myObj.find(".ui-resizable-se");
+                                    var swHandle = myObj.find(".ui-resizable-sw");
                                     if (seHandle.is(":visible")) {
                                         seHandle.hide();
                                     }
@@ -4374,25 +4507,20 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             var isElementClicked = false;
                             var buildingBlocksGlobal = null;
+                            var contentBlocksGlobal = null;
 
 
-                            myElement.find(".ImageToolbarLeftAlignClass").click(function () {
-                                //DestroyPluginsEvents($(mainContentHtmlGrand.html()));
-                                //undoManager.registerAction(mainContentHtmlGrand.html());
-                                console.log("Left ALign clicked..");
+                            myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                                            
                                 imageFunctionality.leftAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
                             });
-                            myElement.find(".ImageToolbarCenterAlignClass").click(function () {
-
-                                console.log("Center ALign clicked..");
+                            myElement.find(".ImageToolbarCenterAlignClass").click(function () {                                
                                 imageFunctionality.centerAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
                             });
-                            myElement.find(".ImageToolbarRightAlignClass").click(function () {
-                                console.log("Right ALign clicked..");
+                            myElement.find(".ImageToolbarRightAlignClass").click(function () {                                
                                 imageFunctionality.rightAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
@@ -4400,6 +4528,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             myElement.find(".ImageToolbarLinkClass").click(function () {
                                 //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                                //showLinkGUI();
+                                //return false;
                                 myElement.find("div.LinkGUIComplete").show();
                                 myElement.find("#rightPanelArea").data("tabClicked", "hyperlink");
                                 myElement.find("li.emailLinkGUI").removeClass("selected");
@@ -4681,23 +4811,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                 }
 
-                                myElement.find(".ImageToolbarLeftAlignClass").click(function () {
-                                    //DestroyPluginsEvents($(mainContentHtmlGrand.html()));
-                                    //undoManager.registerAction(mainContentHtmlGrand.html());
-                                    console.log("Left ALign clicked..");
+                                myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                    
                                     imageFunctionality.leftAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
                                     return false;
                                 });
                                 myElement.find(".ImageToolbarCenterAlignClass").click(function () {
-
-                                    console.log("Center ALign clicked..");
                                     imageFunctionality.centerAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
                                     return false;
                                 });
-                                myElement.find(".ImageToolbarRightAlignClass").click(function () {
-                                    console.log("Right ALign clicked..");
+                                myElement.find(".ImageToolbarRightAlignClass").click(function () {                                    
                                     imageFunctionality.rightAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                     makeCloneAndRegister();
                                     return false;
@@ -5580,7 +5704,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //Load building blocks from service:
                                 _LoadBuildingBlocks();
                                 //////////
-
+                                _LoadContentBlocks();
                                 _LoadDynamicBlocks();
                                 _LoadDynamicBlockFields();
                                 _LoadDynamicBlockRuleConditions();
@@ -5782,6 +5906,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         console.log("Image Upload success:" + e);
                                         var result = jQuery.parseJSON(data);
                                         if(result.success){
+                                            options._app.showMessge("Image has been successfully uploaded.",$("body"));
                                             LoadImagesInLibrary();
                                         }
                                         else{
@@ -6448,12 +6573,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     cache: false,
                                     async: false,
                                     data: formData,
-                                    success: function(data){                                                     
+                                    success: function(data){    
+                                        options._app.showMessge("Image has been successfully uploaded.",$("body"));
                                         LoadImagesInLibrary();  
                                     }
                                     ,
-                                    error:function(){
-                                        console.log("Faild uploading image...");
+                                    error:function(){                                        
+                                        options._app.showAlert("Faild uploading image...",$("body"));
                                     }
                                 });
 
@@ -6624,7 +6750,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                 var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
                 var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
-
+                var _app= this.app;
 
                 this._$el.MakeBridgeEditor({
                     SaveImageTagsProperties: _saveImageTagsAjaxParameters,
@@ -6646,20 +6772,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         if (args.buildingBlock != null) {
                             //args.buildingBlock.Name; 
                             //args.buildingBlock.Html;
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=addBlock&name="+ args.buildingBlock.Name + "&html=" + encodeURIComponent(args.buildingBlock.Html.html()) ,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=utf-8",
-                                dataType: "json",
-                                cache: true,
-                                async: false,
-                                success: function (e) {
-
-                                }
-
-                            });
+                            var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN;
+                            var post_data = { name: args.buildingBlock.Name, html: args.buildingBlock.Html.html() ,type:"addBlock"};
+                            if(_app.get("user").userId==='admin'){
+                                post_data['isAdmin']='Y';
+                            }
+                            $.post(URL,post_data
+                                     )
+                                .done(function(data) {                                 
+                                    var _json = jQuery.parseJSON(data);
+                                   
+                           });
 
                         }
 
