@@ -76,7 +76,7 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                        } else {
                            if(that.$el.find(".div-load-more").length > 0)
                                that.$el.find(".div-load-more").remove();
-                            container.append("<div style='margin-right:50%; margin-top:10px; width:100% ; text-align:center' class='div-load-more'><img src='"+this.options.app.get("path")+"img/loading.gif'></div>"); 
+                            container.append("<div style='margin-right:50%; margin-top:10px; width:100% ; text-align:center' class='div-load-more'><img src='"+this.app.get("path")+"img/loading.gif'></div>"); 
                             this.offset = this.offset + this.offsetLength;
                     }
                     
