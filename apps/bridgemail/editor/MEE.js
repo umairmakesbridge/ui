@@ -2401,8 +2401,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         icon: 'link',
                                                         onClick: function (e) {
                                                             //editor.insertContent(this.value());
-                                                            handleTextLink();
-                                                            //showLinkGUI();
+                                                            //handleTextLink();
+                                                            showLinkGUI();
                                                         },
 
                                                         onPostRender: function () {
@@ -3011,7 +3011,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                             }
+                            //Load Link GUI and show in BMS dialog
                             function showLinkGUI(){
+                                //BMS dialog code
                                 var dialog = options._app.showDialog({title:"Links GUI",
                                         css:{"width":"780px","margin-left":"-390px"},
                                         bodyCss:{"min-height":"320px"},                
@@ -3019,6 +3021,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         buttons: {saveBtn:{text:'Insert'} }                                                                           
                                 });
                                 options._app.showLoading("Loading...",dialog.getBody());
+                                
                                 require(["editor/links"],function(page){                                              
                                     var linkDialogPage = new page({app:options._app,_el:myElement});                                                                        
                                     dialog.getBody().html(linkDialogPage.$el);
@@ -4528,8 +4531,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             myElement.find(".ImageToolbarLinkClass").click(function () {
                                 //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                //showLinkGUI();
-                                //return false;
+                                showLinkGUI();
+                                return false;
                                 myElement.find("div.LinkGUIComplete").show();
                                 myElement.find("#rightPanelArea").data("tabClicked", "hyperlink");
                                 myElement.find("li.emailLinkGUI").removeClass("selected");
