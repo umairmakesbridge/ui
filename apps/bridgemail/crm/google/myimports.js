@@ -4,7 +4,8 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
             return Backbone.View.extend({
                 className: 'clearfix',
                 events: {
-                    'click #addnew_import': 'newImport'
+                    'click #addnew_import': 'newImport',
+                    "click .refresh_btn":'getMyImports'
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -42,7 +43,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
 
                                     myimports_html += '<tr id="row_' + val.get("tId") + '">';
                                     var import_name = val.get("name") ? val.get("name") : val.get("listName");
-                                    myimports_html += '<td><div class="name-type"><h3><a id="editname_' + val.get("tId") + '" class="get-import">' + import_name + '</a>' + this.setStatus(val.get("status")) + '</h3></div></td>';
+                                    myimports_html += '<td><div class="name-type"><h3><a id="editname_' + val.get("tId") + '" class="get-import showtooltip" data-original-title="Click to edit">' + import_name + '</a>' + this.setStatus(val.get("status")) + '</h3></div></td>';
                                     myimports_html += '<td>';
                                     if (val.get("frequency") !== '') {
                                         myimports_html += '<img src="img/recurring2.gif"  class="recurring2img" alt=""/>';
@@ -80,12 +81,12 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                             else {
                                 this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
                             }
-
-
+                            this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         }, this),
                         error: function(collection, resp) {
 
                         }
+                        
                     });
 
                 },
@@ -110,8 +111,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                     var _date = moment(this.app.decodeHTML(val), 'YYYY-M-D H:m');
                     return _date.format("DD MMM, YYYY");
                 },
-                caluculateDays: function(days) {
-                    console.log(days);
+                caluculateDays: function(days) { 
                     var days = days.split(",");
                     var str = "";
 
@@ -176,7 +176,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                 },
                 deactivateCall: function(tId) {
                     this.app.showLoading("Deleting Import...", this.$el);
-                    var URL = "/pms/io/highrise/setData/?BMS_REQ_TK=" + this.app.get('bms_token');
+                    var URL = "/pms/io/google/setData/?BMS_REQ_TK=" + this.app.get('bms_token');
                     $.post(URL, {type: 'delete', tId: tId, synchType: "crm"})
                             .done(_.bind(function(data) {
                                 this.app.showLoading(false, this.$el);

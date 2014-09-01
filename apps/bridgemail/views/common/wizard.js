@@ -9,9 +9,13 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/wizard
                         events: {
                             'click a.backbtn':function(obj){
                                 this.back(obj);
+                                 obj.stopPropagation();
+                                obj.preventDefault();
                             },
                             'click a.nextbtn':function(obj){
                                 //this.next(obj); 
+                                 obj.stopPropagation();
+                                obj.preventDefault();
                                 this.validateStep();
                             },
                             'click ol.progressbar li':function(obj){

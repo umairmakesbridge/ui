@@ -156,6 +156,7 @@ function (Wizard,template,moment) {
                     this.$("#year-select").html(yearHTML);  
                     if(this.editImport){
                         this.$(".frequency-type").val(this.editImport.frequency);
+                        this.$(".step3 .frequency-type").change();
                         if(this.editImport.day){
                             if(this.editImport.frequency=="O" || this.editImport.frequency=="T"){
                                 var _day = this.editImport.day.split(",");
@@ -182,8 +183,10 @@ function (Wizard,template,moment) {
                         }
                         else if(freq_val=="T"){
                            _this.$(".step3 .week-days-row").show();
+                           if(!_this.editImport || _this.editImport['frequency']!=="T"){
                            _this.$(".step3 .s-days button.selected").removeClass("selected");
                            _this.$(".step3 .s-days button:first-child").addClass("selected");
+                       }
                            _this.$(".step3 .s-days button").unbind("click").click(function(){
                                $(this).parent().find(".selected").removeClass("selected");
                                $(this).addClass("selected");
@@ -201,7 +204,7 @@ function (Wizard,template,moment) {
                             _this.$(".step3 .date-row .month-year").show();
                         }
                     })
-                    this.$(".step3 .frequency-type").change();
+                    
                     this.fetchServerTime();                    
                 },
                 stepsCall:function(step){

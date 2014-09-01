@@ -21,13 +21,14 @@ function (template,crm_filters) {
                 },
                 initControl:function(){
                     this.$("#accordion_login").accordion({heightStyle: "fill",collapsible: true});                    
-                    this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true,active:1});
+                    this.$("#accordion_mapping").accordion({heightStyle: "fill",collapsible: true});
                     
                    this.$loginInner = this.$(".accordion_login-inner");                   
                    this.$mappingInner = this.$(".accordion_mapping-inner");
                    
                    /*Load login view for Netsuite*/
                    this.$loginInner.css({"min-height":"300px","position":"relative"});
+                   this.$mappingInner.css({"min-height":"445px","position":"relative"});
                    this.app.showLoading("Loading Login...",this.$loginInner)
                                                        
                     var google = this.app.getAppData("google");  
@@ -38,8 +39,6 @@ function (template,crm_filters) {
                        this.app.showLoading(false,this.$loginInner);
                        this.$loginInner.css("position","inherit");
                        var login_page = new page({page:this,layout:'col',isAuthorize:this.isAuthorize});
-                        console.log('why I m nt here');
-                       console.log(login_page.el + 'what is going on');
                        this.$loginInner.append(login_page.$el);                       
                    },this));
                    if(this.isAuthorize)

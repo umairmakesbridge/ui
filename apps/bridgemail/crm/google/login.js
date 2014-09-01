@@ -4,7 +4,8 @@ define(['text!crm/google/html/login.html'],
             return Backbone.View.extend({
                 events: {
                     "click .setEmail": 'checkEmptyEmail',
-                    "click #btnGoogleLogin": 'getStarted'
+                    "click #btnGoogleLogin": 'getStarted' 
+                  
                 },
                 initialize: function() {
                     var app =  this.options.app ? this.options.app : this.options.page.app;
@@ -12,7 +13,7 @@ define(['text!crm/google/html/login.html'],
                     this.template = _.template(template);
                     this.render();
                     var el = this.$el;
-
+                   
                     this.passwordChange = false;
                     app.showLoading('Loading Credentials', el);
                     if (google && google.isGoogleUser == "Y") {
@@ -32,13 +33,16 @@ define(['text!crm/google/html/login.html'],
                     this.dialog = this.options.dialog;
                     this.parent = this.options.page ? this.options.page : null;
                     this.layout = this.options.layout ? this.options.layout : '';
-
+                    var that = this;
                     this.isAuthorize = this.options.isAuthorize ? this.options.isAuthorize : false;
-
+                    this.$el.find('').on('click',function(){
+                        that.getStarted();
+                    })
+                     this.getUser();
                     this.$el.html(this.template({layout: this.layout, isAuthorize: this.isAuthorize}));
                     
                 },
-                getStarted: function() {
+                getStarted: function() { 
                     var that = this;
                     var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getAuthenticationUrl";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
@@ -51,6 +55,24 @@ define(['text!crm/google/html/login.html'],
                             var windowName = "popUp";
                             window.open(url, windowName, "width=600,height=920,scrollbars=yes");
 
+                        }
+
+                    });
+
+                },
+                 getUser: function() { 
+                    var that = this;
+                    var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getUser";
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(data)) {
+                            return false;
+                        } 
+                       
+                        if (data.name) {
+                            that.$el.find("#imguser").attr('src',data.picture);
+                           that.$el.find("#spnname").html(data.name);
+                           that.$el.find("#spnemail").html(data.email);
                         }
 
                     });

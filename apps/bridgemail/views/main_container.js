@@ -80,6 +80,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .crm-salesforce': 'salesforceCrm', 
                     'click .crm-netsuite': 'netsuiteCrm',
                     'click .crm-highrise':'highriseCrm' ,
+                    'click .crm-google':'googleCRM',
                     'click .create-target':'createTarget',
                     'click .view-lists':'viewLists',
                     'click .view-tags':'viewTags',
@@ -526,6 +527,16 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         url:'crm/highrise/highrise',
                         workspace_id: 'crm_highrise',
                         tab_icon:'highrises',
+                        sub_title:'Connection With Apps'
+                    });
+                },
+                 googleCRM:function(){
+                    this.addWorkSpace({ 
+                        type:'',
+                        title:'Google',
+                        url:'crm/google/google',
+                        workspace_id: 'crm_google',
+                        tab_icon:'google',
                         sub_title:'Connection With Apps'
                     });
                 },

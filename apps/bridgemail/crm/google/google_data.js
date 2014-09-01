@@ -82,92 +82,29 @@ function (template,chosen,addbox) {
 		   var listid = '';
 		   var isValid = true;
 		   var layout_map = '';
-		   var list_array = '';
-		   if(app.getAppData("lists"))			
-				list_array = app.getAppData("lists");
-		   if(actid == 'new')
-		   {
-                    if(el.find('#newlist').val() == '')
-                    {				  
-                           app.showError({
-                                   control:el.find('.list-container'),
-                                   message:appMsgs.MAPDATA_newlist_empty_error
-                           });
-                           isValid = false;				  
-                    }			   
-                    else
-                    {
-                        if(list_array != '')
-                        {
-                                var exists = false;					
-                                $.each(list_array.lists[0], function(index, val) { 
-                                        if(val[0].name == el.find('#newlist').val())
-                                        {
-                                                exists = true;
-                                                return;
-                                        }
-                                });
-                                if(exists)
-                                {
-                                        app.showError({
-                                                control:el.find('.list-container'),
-                                                message:appMsgs.MAPDATA_newlist_exists_error
-                                        });
-                                        isValid = false;
-                                }
-                                else
-                                {
-                                        newlist = el.find('#newlist').val();				  
-                                        app.hideError({control:el.find(".list-container")});
-                                }
-                        }					
-                    }
-		   }
-		   else if(actid == 'old')
-		   {
-			  if(el.find('#existing_lists').val() == '')
-			  {				  
-				  app.showError({
-					  control:el.find('.list-container'),
-					  message:appMsgs.MAPDATA_extlist_empty_error
-				  });
-				  isValid = false;
-			  }
-			  else
-			  {				  
-				  listid = el.find('#existing_lists').val();				  
-				  app.hideError({control:el.find(".list-container")});
-			  }
-		   }
-		   var email_addr = el.find('#alertemail').val();
-		   if(email_addr != '' && !app.validateEmail(email_addr))
-			{				
-				app.showError({
-					  control:el.find('.email-container'),
-					  message:appMsgs.MAPDATA_email_format_error
-				  });
-				isValid = false;
-			}
-			else
-			{				
-				app.hideError({control:el.find(".email-container")});
-			}		   
+		   var list_array = ''; 
 		   	var sel_lenght = el.find(".mapfields").length;
 			var prevVal = '';
 			var j=0;
 			var dup=0;
+                        var cols = '';
 			el.find(".mapfields").each(function(i,e){
 				var id = $(e).parent().find('.erroricon').attr('id');
-				if($(e).val()=='' && j == 0){
+                                if($(e).val()=='' && j == 0){
 					layout_map="";
 				}
 				else
 				{
 					if($(e).val() == "" || layout_map.indexOf($(e).val()) == -1)
 					{
-						layout_map+= $(e).val();
+                                             	layout_map+= $(e).val();
+                                                var col = $(e).val();
+                                                if($(e).val() == "" )
+                                                     col = 0;
+                                                cols+='col_'+(i+1)+'='+col+'&';
 					 	if(i<sel_lenght-1){
 							layout_map+=",";
+                                                        
 					 	}
 						j++;
 					}
@@ -180,7 +117,7 @@ function (template,chosen,addbox) {
                         /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
-				app.showAlert(appMsgs.MAPDATA_bmsfields_empty_error,el);
+				app.showAlert('Match your Google Worksheet columns to fields. Columns that you do not match will not be extracted',el);
 				isValid = false;
 			}
                         else{
@@ -202,48 +139,11 @@ function (template,chosen,addbox) {
                             app.showAlert(appMsgs.MAPDATA_bmsfields_duplicate_error,el);
                             isValid = false;						
 			}
-			  
-		   if(isValid)
-		   {					 
-			   var alertemail = el.find('#alertemail').val();
-			   app.showLoading("Uploading file",curview.$el);
-			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';                           
-			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:curview.fileName,layout:layout_map })
-			   .done(function(data) {
-				   var list_json = jQuery.parseJSON(data);						 
-				   if(list_json[0] == 'success')
-				   {					   
-					   
-                                           app.removeCache("lists");	
-                                           if(campview){
-                                                curview.removeFile();
-                                                campview.states.step3.recipientType = 'List';
-                                                campview.states.step3.recipientDetial = null;
-                                                campview.step3SaveCall({'recipientType':'List',"listNum":list_json[2],"csvflag":true});
-                                                 app.showLoading(false,mapview.$el);
-                                           }
-                                           else{
-                                               app.showLoading(false,curview.$el);
-                                               mapview.$el.hide();
-                                               mapview.$el.parents(".ws-content").find("#drop-files .middle").show();
-                                               mapview.$el.parents(".ws-content").find("#drop-files .middle #list_file_upload").parent().show();
-                                               mapview.$el.parents(".ws-content").find("#drop-files").show();
-                                               mapview.$el.parents(".ws-content").find(".csvpng").show();
-                                               mapview.$el.parents(".ws-content").find("#progress").remove();
-                                               mapview.csv.fileuploaded = false;
-                                               app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
-                                           }
-					  
-				   }
-				   else
-				   {					  
-					  app.showAlert(list_json[1],mapview.$el);
-					  return false;
-				   }				   
-			   });
-		   }
-		   else
-		   	return false;
+			   if(isValid == false)
+                            return isValid;
+                        else
+                            return cols;
+		   
 		},
 		checkCampStatus:function(){
 			var mapview = this;
@@ -317,8 +217,7 @@ function (template,chosen,addbox) {
 		   this.filllistsdropdown();
 		   curview.$el.find('.tabel-div').children().remove();
 		   var mappingHTML = curview.createMappingTable(curview.options.rows);
-                   console.log(curview.options.rows);
-		   curview.$el.find('.tabel-div').append(mappingHTML);
+                   curview.$el.find('.tabel-div').append(mappingHTML);
                    if(campview){
                     campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
                    }
@@ -350,8 +249,7 @@ function (template,chosen,addbox) {
 			var tcols = 4;
 			var cols = rows[0].length;
 			var tables_count = Math.ceil(cols/tcols);
-                        console.log(tables_count);
-                        console.log(rows);
+                        
 			var mappingHTML = "";
 			for(var t=0;t<tables_count;t++){
 				var oc = t*tcols;
@@ -377,7 +275,7 @@ function (template,chosen,addbox) {
 									mappingHTML +="<td width='30px' class='td_footer lastrow'>&nbsp;</td>";
 								}
 								else{
-									var cbox = (f<=cols)?curview.mapCombo(f):"&nbsp;";
+									var cbox = (f<=cols)?curview.mapCombo(f,this.options.mappingFields):"&nbsp;";
 									mappingHTML +="<td width='25%' class='td_footer lastrow'>"+cbox+"</td>";
 								}
 							}
@@ -414,8 +312,16 @@ function (template,chosen,addbox) {
                         return true;
                     //curview.$el.find('.btn-close').click();
             },
-		mapCombo: function(num) {
-			var campview = this.options.camp;						
+		mapCombo: function(num,fields) {
+                    fields = fields.split(',');
+                    var col = "col_"+num; 
+                    var item = "";
+                    _.each(fields,function(key,value){
+                        var ar = key.split(":");
+                        if(ar[0] == col)
+                            item = ar[1];
+                    })
+                    	var campview = this.options.camp;						
 			var csvupload = campview?campview.states.step3.csvupload:this.csv;
 			var map_feilds = csvupload.map_feilds;
 			
@@ -427,11 +333,16 @@ function (template,chosen,addbox) {
 			{
 				for(var x=0;x<map_feilds.length;x++){
 					var sel ="";
+                                        var selected = "";
+                                        if(item !="" && item !="0"){
+                                            if(map_feilds[x][0] == item)
+                                               selected = "selected = selected";
+                                        }
 					if(map_feilds[x][2]=='true'){
-						optgroupbasic += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+						optgroupbasic += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+" "+selected+">"+map_feilds[x][1]+"</option>";
 					}
 					else{
-					   optgroupcustom += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+">"+map_feilds[x][1]+"</option>";
+					   optgroupcustom += "<option class='select_option' value='"+map_feilds[x][0]+"' "+sel+" "+selected+">"+map_feilds[x][1]+"</option>";
 					}
 				}
 			}
