@@ -13,7 +13,7 @@ define(['text!crm/google/html/login.html'],
                     this.template = _.template(template);
                     this.render();
                     var el = this.$el;
-
+                   
                     this.passwordChange = false;
                     app.showLoading('Loading Credentials', el);
                     if (google && google.isGoogleUser == "Y") {
@@ -38,6 +38,7 @@ define(['text!crm/google/html/login.html'],
                     this.$el.find('').on('click',function(){
                         that.getStarted();
                     })
+                     this.getUser();
                     this.$el.html(this.template({layout: this.layout, isAuthorize: this.isAuthorize}));
                     
                 },
@@ -54,6 +55,24 @@ define(['text!crm/google/html/login.html'],
                             var windowName = "popUp";
                             window.open(url, windowName, "width=600,height=920,scrollbars=yes");
 
+                        }
+
+                    });
+
+                },
+                 getUser: function() { 
+                    var that = this;
+                    var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getUser";
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(data)) {
+                            return false;
+                        } 
+                       
+                        if (data.name) {
+                            that.$el.find("#imguser").attr('src',data.picture);
+                           that.$el.find("#spnname").html(data.name);
+                           that.$el.find("#spnemail").html(data.email);
                         }
 
                     });

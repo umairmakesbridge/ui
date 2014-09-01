@@ -314,8 +314,7 @@ function (template,chosen,addbox) {
             },
 		mapCombo: function(num,fields) {
                     fields = fields.split(',');
-                    var col = "col_"+num;
-                    console.log(fields);
+                    var col = "col_"+num; 
                     var item = "";
                     _.each(fields,function(key,value){
                         var ar = key.split(":");
