@@ -77,6 +77,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.template = _.template(template);
                     this.render();
                     this.firstTime = false;
+                    this.timeOut = false;
                     this.newMessages = null;
                   
                     
@@ -89,7 +90,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                      that.setIsActiveTab();
                       setInterval(function(){
                         if($('body').hasClass('visible') || $('body').attr('class') == undefined){
-                            that.updateNotfication()
+                            if(that.timeOut == false)
+                                that.updateNotfication()
                         }
                    },60000);
                     this.$('.sc-links .ddicon').mouseenter(_.bind(function(event) {
@@ -174,11 +176,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
                         if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
-                            var messageObj = {};
-                            messageObj["heading"] = "Session Expired" 
-                            messageObj["detail"] = "Your session has expired due to an extended period of inactivity. You will need to login again to access the requested information.";
-                            app.showLoginExpireAlert(messageObj,$("body"));							
-                            return false;
+                            that.timeOut = true;
                            }
                         if(app.checkError(data)){return false;}
                         if(that.newMessages < data[1] && that.firstTime == false){
