@@ -173,6 +173,13 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
+                        if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
+                            var messageObj = {};
+                            messageObj["heading"] = "Session Expired" 
+                            messageObj["detail"] = "Your session has expired due to an extended period of inactivity. You will need to login again to access the requested information.";
+                            app.showLoginExpireAlert(messageObj,$("body"));							
+                            return false;
+                           }
                         if(app.checkError(data)){return false;}
                         if(that.newMessages < data[1] && that.firstTime == false){
                             that.$el.find('.messagesbtn').addClass('swing');

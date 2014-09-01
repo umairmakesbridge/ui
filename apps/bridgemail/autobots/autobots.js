@@ -285,8 +285,8 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         var $header_part = $(header_part);
                         that.ws_header.find(".c-current-status").html($header_part);
                         that.ws_header.find(".c-current-status li a").on('click', function(ev) {
-                            if ($(this).text().split(" ")[0] == "0")
-                                return;
+                           // if ($(this).text().split(" ")[0] == "0")
+                             //   return;
                             that.sortBy = $(this).data('text');
                             that.sortText = $(this).text().split(" ")[1];
                             that.topClickEvent = true;
