@@ -4,7 +4,8 @@ function (template,MyImports,moment) {
         return Backbone.View.extend({                                
                 className:'clearfix',
                 events: {
-                    'click #addnew_import':'newImport'
+                    'click #addnew_import':'newImport',
+                    "click .refresh_btn":'getMyImports'
                  },
                 initialize: function () {
                     this.template = _.template(template);				
@@ -102,7 +103,7 @@ function (template,MyImports,moment) {
                     return statusHTML;
                 },
                  getDate:function(val,freq, days){
-                    console.log()
+                    
                     if(freq =="O"){
                          if(days != ""){
                               return this.caluculateDays(days);
