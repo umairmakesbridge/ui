@@ -1588,6 +1588,7 @@ z-index:99;
 	-webkit-border-radius: 2px;
 	-moz-border-radius:2px;
 	border-radius: 2px;
+   cursor: pointer;
 }
 #cssmenuLinkGUI li:hover { background:#7797AC;}
 #cssmenuLinkGUI li.selected {background: none repeat scroll 0 0 #97D61D;}

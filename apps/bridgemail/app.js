@@ -399,8 +399,7 @@ define([
               }
               return status;
             },
-            showTags: function(tags){
-				//alert(searchInputControl);
+            showTags: function(tags){				
                 var tag_array = tags.split(",");
                 var tag_html ="<ul>";
                 $.each(tag_array,function(key,val){
