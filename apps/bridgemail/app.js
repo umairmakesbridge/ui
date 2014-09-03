@@ -313,6 +313,28 @@ define([
                     });
                  }
              },
+             showAlertPopup:function(message,container){
+                 if(message){                                        
+                    var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete"><h3>'+message.heading+'</h3>';                    
+                    var btn = '<div class="btns"><a class="btn-red btn-ok"><span>Yes, '+message.text+'</span><i class="icon '+message.icon+'"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
+                    dialogHTML += '<p>'+message.detail+'</p>'+btn+'</div>';
+                    var dialog = $(dialogHTML);
+                    $(container).append(dialog);
+                    dialog.find(".btn-ok").click(function(){
+                        dialog.fadeOut("fast",function(){
+                           $(this).remove();
+                        });
+                        if(message.callback)
+                                message.callback();
+                    });		
+                    
+                    dialog.find(".btn-gray").click(function(){
+                       dialog.fadeOut("fast",function(){
+                           $(this).remove();
+                       })
+                    });
+                 }
+             },
              showLoginExpireAlert:function(message,container){
                  if(message){                                        
                     var dialogHTML = '<div class="overlay"><div class="messagebox caution"><h3>'+message.heading+'</h3>';                    

@@ -170,7 +170,7 @@ function (template,MyImports,moment) {
                             callback: _.bind(function(){													
                                     this.deactivateCall(tid.split("_")[1]);
                             },this)},
-                    this.$el);       
+                    $('body'));       
                 },
                 deactivateCall:function(tId){
                     this.app.showLoading("Deleting Import...",this.$el);

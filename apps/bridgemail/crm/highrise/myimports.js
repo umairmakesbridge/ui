@@ -113,7 +113,6 @@ function (template,MyImports,moment) {
                     return _date.format("DD MMM, YYYY");
                 },
                 caluculateDays:function(days){
-                    console.log(days);
                     var days = days.split(",");
                     var str = "";
                     
@@ -174,7 +173,7 @@ function (template,MyImports,moment) {
                             callback: _.bind(function(){													
                                     this.deactivateCall(tid.split("_")[1]);
                             },this)},
-                    this.$el);       
+                    $('body'));       
                 },
                 deactivateCall:function(tId){
                     this.app.showLoading("Deleting Import...",this.$el);

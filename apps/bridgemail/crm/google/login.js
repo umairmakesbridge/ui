@@ -4,8 +4,10 @@ define(['text!crm/google/html/login.html'],
             return Backbone.View.extend({
                 events: {
                     "click .setEmail": 'checkEmptyEmail',
-                    "click #btnGoogleLogin": 'getStarted' 
-                  
+                    "click #btnGoogleLogin": 'getStarted',
+                    "click #btnChangeLogin": 'changeLogin',
+                    "click #btnRevokeAccess":"revokeLogin"
+                     
                 },
                 initialize: function() {
                     var app =  this.options.app ? this.options.app : this.options.page.app;
@@ -53,13 +55,80 @@ define(['text!crm/google/html/login.html'],
                         if (urls[0] !== "err") {
                             var url = urls.authenticationURL;
                             var windowName = "popUp";
-                            window.open(url, windowName, "width=600,height=920,scrollbars=yes");
-
+                            var childWindow = window.open(url, windowName, "width=600,height=920,scrollbars=yes");
+                             var intervalID = window.setInterval(function(){
+                                if (childWindow && childWindow.closed) {
+                                    window.clearInterval(intervalID);
+                                    that.parent.parent.init(true);
+                                }
+                             },200);
+                            
                         }
 
                     });
 
                 },
+                 revokeLogin: function() { 
+                            this.app.showAlertPopup({heading: 'Revoke Access',
+                                detail: "By revoking access to your Google Account, all of your running imports will be deleted automatically.<br>Are you sure you want to revoke this account?",
+                                text:"Revoke",
+                                icon:"delete",
+                                callback: _.bind(function() {
+                                    this.procceedRevokeLogin();
+                                }, this)},
+                            $('body'));
+                    },
+               
+                  procceedRevokeLogin:function(){   
+                    var that = this;
+                    var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=revokeAccess";
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var urls = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(urls)) {
+                            return false;
+                        }
+                        if (urls[0] !== "err") {
+                             that.parent.parent.init(true);
+                            
+                        }
+
+                    });
+
+                },
+                 changeLogin: function() { 
+                            this.app.showAlertPopup({heading: 'Confirm Change',
+                                detail: "By changing your Google Account, all of your running imports will be deleted automatically.</br>Are you sure you want to perform this action?",
+                                text:"Change",
+                                icon:"edit",
+                                callback: _.bind(function() {
+                                    this.procceedChangeLogin();
+                                }, this)},
+                            $('body'));
+                    },
+               
+                  procceedChangeLogin:function(){   
+                    var that = this;
+                    var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getAuthenticationUrl";
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var urls = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(urls)) {
+                            return false;
+                        }
+                        if (urls[0] !== "err") {
+                            var url = urls.authenticationURL;
+                            var windowName = "popUp";
+                            var childWindow = window.open(url, windowName, "width=600,height=920,scrollbars=yes");
+                             var intervalID = window.setInterval(function(){
+                                if (childWindow && childWindow.closed) {
+                                    window.clearInterval(intervalID);
+                                    that.parent.parent.init(true);
+                                    
+                                }
+                             },200);
+                        }
+                    });
+
+                }, 
                  getUser: function() { 
                     var that = this;
                     var URL = "/pms/io/google/setup/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=getUser";
