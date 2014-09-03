@@ -26,8 +26,8 @@
             this.isRequest = 0;
             //this.mappingInit()     
             if (this.$element) {
-                this.template = $(this.options.template)   // Input Template                       
-                this.showMergeField(this.options);
+                this.template = $(this.options.template);   // Input Template                       
+                 this.showMergeField(this.options);
             }
         },
         showMergeField: function(options) {
@@ -70,18 +70,41 @@
             this.$element.append(this.template);
             }
             //options.app.fixCampaignInputStepOne();
-            if(this.configs.isrequest){
+            /*if(this.configs.isrequest){
                 this.requestMergeData(options);
             }else{
                 this.generateMergeTag();
-            }
-            
+            }*/
+            if(this.app.mergeRequest===1)
+                this.timeoutTrigger();
+            else{
+                    if(this.configs.isrequest){
+                    this.requestMergeData(options);
+                    }else{
+                        this.generateMergeTag();
+                    }
+               }
             if (this.options.placeholder_text) {
-               this.template.find("input").attr("placeholder", this.options.placeholder_text)
+               this.template.find("input").attr("placeholder", this.options.placeholder_text);
             }
 
         },
+        timeoutInit : function(){
+            setTimeout($.proxy(this.timeoutTrigger,this),500);
+        },
+        timeoutTrigger : function(){
+            if(this.app.mergeRequest===0){
+                if(this.configs.isrequest)
+                    this.requestMergeData(this.options);  
+                else
+                    this.generateMergeTag();
+            }
+            if(!this.options.app.getAppData("mergetags")){
+                this.timeoutInit();
+            }
+        },
         requestMergeData : function(options){
+            this.app.mergeRequest = 1;
             if (!options.app.getAppData("mergetags")) {                             
                 options.app.getData({
                     "URL": "/pms/io/getMetaData/?BMS_REQ_TK=" + options.app.get('bms_token') + "&type=merge_tags",
@@ -95,7 +118,7 @@
         },
         generateMergeTag: function() {
             var _this = this;
-            
+            this.app.mergeRequest = 0;
             var mergeFields_data = this.options.app.getAppData("mergetags");
            // this.options.app.setAppData('mergetags',mergeFields_data);
             _this.mergeTags['basic'] = [];
