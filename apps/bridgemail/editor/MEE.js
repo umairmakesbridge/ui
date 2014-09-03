@@ -228,7 +228,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var leftMinus = mee_view.leftMinus;
                             var $element = null;
                             var emailWidth = "600px";
-                            var undoredo = true;
+                            var undoredo = true;                            
 
 
                             var dialogForTextColor = true;
@@ -2382,19 +2382,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     if ($("#"+editor.id).data('tinymce') == undefined) {
                                                         $("#"+editor.id).data('tinymce',true);
                                                         editor.on("mouseDown", function(e) {                                           
-                                                            selectedLinkFromTinyMCE = e.target;
-                                                            
-                                                        //editor.selection.select(e.target);
+                                                            selectedLinkFromTinyMCE = e.target;                                                            
                                                         });                                                    
-                                                        editor.on("AddUndo", function(e) {                                                                                                   
-                                                            console.log('Undo Level added');                                                            
-                                                            if(editor.undoManager.hasUndo() || editor.undoManager.hasRedo()){
-                                                                console.log('in undo or redo check');
+                                                        editor.on("AddUndo", function(e) {                                                                                                                                                                                                                      
+                                                            if(editor.undoManager.hasUndo() || editor.undoManager.hasRedo()){                                                                
                                                                 makeCloneAndRegister();
                                                             }
-                                                        });                                                    
-                                                        
-                                                    }
+                                                        });  
+                                                    }                                                    
                                                     editor.addButton('LinksButton', {
                                                         type: 'button',
                                                         title: 'Links',
@@ -2402,6 +2397,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         onClick: function (e) {
                                                             //editor.insertContent(this.value());
                                                             //handleTextLink();
+                                                            myElement.find("#linkTrack").data("linkObject", "text");
                                                             showLinkGUI();
                                                         },
 
@@ -2484,7 +2480,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         tooltip: 'Text Background color',
                                                         icon: 'txtbg',
                                                         selectcmd: 'HiliteColor',
-
                                                         onClick: function (e) {
 
                                                             dialogForTextColor = false;
@@ -2576,7 +2571,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 toolbar_items_size: 'small',
                                                 menubar: false,
                                                 schema: "html5",                                                            
-                                                statusbar: false,
+                                                statusbar: true,
                                                 object_resizing: false
                                             });
                                         //}
@@ -3014,6 +3009,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             //Load Link GUI and show in BMS dialog
                             function showLinkGUI(){
                                 //BMS dialog code
+                                var lType = myElement.find("#linkTrack").data("linkObject");
+                                var divID = ""; 
+                                if(lType==="text"){
+                                    divID =  myElement.find("div.textcontent.mce-edit-focus").attr("id");                                    
+                                }
                                 var dialog = options._app.showDialog({title:"Links GUI",
                                         css:{"width":"780px","margin-left":"-390px"},
                                         bodyCss:{"min-height":"320px"},                
@@ -3021,9 +3021,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         buttons: {saveBtn:{text:'Insert'} }                                                                           
                                 });
                                 options._app.showLoading("Loading...",dialog.getBody());
-                                
+                                dialog.$el.css("z-index","99999");
+                                $(".modal-backdrop").css("z-index","99998");
                                 require(["editor/links"],function(page){                                              
-                                    var linkDialogPage = new page({app:options._app,_el:myElement});                                                                        
+                                    var linkDialogPage = new page({app:options._app,_el:myElement,dialog:dialog,linkType:lType,div:divID});                                                                        
                                     dialog.getBody().html(linkDialogPage.$el);
                                     dialog.saveCallBack(_.bind(linkDialogPage.insertLink,linkDialogPage,dialog));
                                 }); 

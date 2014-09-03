@@ -62,31 +62,13 @@
                     <input type="text" class="header-info linkHyperLinkURL" placeholder="Type link here">
                 </div>
 
-                <button tabindex="-1" data-toggle="dropdown" id="" class="btn dropdown-toggle">
+                <button id="existingLinkDrp" class="btn dropdown-toggle">
                     Existing Link <span class="caret"></span>
                 </button>
-
-                <div class="existinglinksdd">
-                    <div id="copycampsearch" class="input-append search">
-                        <span class="icon link"></span>
-                        <input type="text" id="copy-camp-search" placeholder="Search links" class="search-control show-image">
-                        <a class="close-icon" id="clearsearch" style="display:none"></a>
-                        <div class="btn-group">
-                            <button tabindex="-1" class="searchbtn" id="searchbtn">
-                                <span class="icon-search icon-white"> </span>
-                            </button>
-                        </div>
-                    </div>
-                    <ul class="linkresults">
-                        <li data-option-array-index="0" style="" class="result-selected">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
-                        <li data-option-array-index="1" style="" class="">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
-                        <li data-option-array-index="2" style="" class="">https://my.dotmailer.com/Campaigns/Step/EasyEditor.aspx?id=3644033</li>
-                    </ul>
-
-                </div>
+                
             </div>
 
-            <a href="" target="_new" class="visitlink">
+            <a target="_new" class="visitlink">
                 <i class="icon preview"></i>
             </a>
             <br>
@@ -109,7 +91,7 @@
     <div class="_addEmailLinkDiv tcontent" style="display:none;">
         <h4>Add a link to an email address</h4>
 
-        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+        <form enctype="multipart/form-data" name="submit_url">
             <div class="textAreaDivfortextLink" style="display:none;" >
                 <label>Text</label>
                 <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
@@ -246,8 +228,26 @@
 
         <br/>            
     </div>
-
 </div>
+
+<script type="text/template" id="existinglinks_template">
+  <div class="existinglinksdd" style="display:none;">
+    <div id="copycampsearch" class="input-append search" style="display:none">
+        <span class="icon link"></span>
+        <input type="text" id="copy-camp-search" placeholder="Search links" class="search-control show-image">
+        <a class="close-icon" id="clearsearch" style="display:none"></a>
+        <div class="btn-group">
+            <button tabindex="-1" class="searchbtn" id="searchbtn">
+                <span class="icon-search icon-white"> </span>
+            </button>
+        </div>
+    </div>
+    <ul class="linkresults">
+        
+    </ul>
+
+  </div>
+</script>
 
 
 

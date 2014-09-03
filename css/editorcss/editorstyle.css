@@ -1668,16 +1668,14 @@ z-index:99;
 }
 
 .existinglinksdd { 
-    background: none repeat scroll 0 0 #FFFFFF;
-	display:none;
+    background: none repeat scroll 0 0 #FFFFFF;    
     left: 0;
-	border: 2px solid #EAF4F9;
+    border: 2px solid #EAF4F9;
     position: absolute;
-	padding:5px;
+    padding:5px;
     top: 37px;
     width: 96%;
-    z-index: 1010;
-	max-height:300px;
+    z-index: 100000;	
 }
 
 .existinglinksdd .input-append {
@@ -1691,16 +1689,17 @@ z-index:99;
 }
 
 .existinglinksdd .search  input[type="text"] {
-    width: 334px;
+    width: 364px;
 }
 
 ul.linkresults {
     margin: 0;
-    max-height: 160px;
+    min-height: 75px;
+    max-height: 300px;
     overflow-x: hidden;
     overflow-y: auto; 
     position: relative;
-	width:100%;
+    width:100%;
 }
 ul.linkresults li {
     background: none repeat scroll 0 0 #EFF7FB;
@@ -1713,6 +1712,7 @@ ul.linkresults li {
     overflow: hidden;
     padding: 5px 10px;
     position: relative;
+    cursor: default;
 }
 ul.linkresults li.result-selected:after {
     background: url("../img/check.png") no-repeat scroll center center #97D61D;
