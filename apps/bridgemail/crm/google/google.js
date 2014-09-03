@@ -16,11 +16,11 @@ define(['text!crm/google/html/google.html'],
                     var li = $.getObj(obj, "li");
 
                     if (li.hasClass('netsuite-imports')) {
-                        this.$(".messagebox").css({"width": "260px", "margin-left": "46px", "padding-right": "0"})
-                        this.$(".messagebox p").html("Create, view and edit your existing imports.");
+                        this.$(".messagebox.info").css({"width": "260px", "margin-left": "46px", "padding-right": "0"})
+                        this.$(".messagebox.info p").html("Create, view and edit your existing imports.");
                     } else {
-                        this.$(".messagebox").css({"width": "490px", "margin-left": "-70px", "padding-right": "0"})
-                        this.$(".messagebox p").html("Authorize access to your Google app account, and map fields you wish to import.");
+                        this.$(".messagebox.info").css({"width": "490px", "margin-left": "-70px", "padding-right": "0"})
+                        this.$(".messagebox.info p").html("Authorize access to your Google app account, and map fields you wish to import.");
                     }
                 },
                 initialize: function() {
@@ -45,7 +45,7 @@ define(['text!crm/google/html/google.html'],
                                 this.app.showLoading(false, this.$el);
                                 var google = this.app.getAppData("google");
                                 if (google[0] == "err" || google.isGoogleUser == "N") {
-                                    
+                                         this.googleSetup = false;
                                         this.forceLoadSetupArea(google.isGoogleUser);
                                    
                                 }
@@ -60,6 +60,7 @@ define(['text!crm/google/html/google.html'],
                                 }
                             }, this),
                             errorCallback: _.bind(function() {
+                                this.googleSetup = false;
                                   this.app.showLoading(false, this.$el);
                                 this.forceLoadSetupArea();
                             }, this)
@@ -183,7 +184,7 @@ define(['text!crm/google/html/google.html'],
                             this.app.showLoading(false, this.setupArea);
                             this.setupArea.html(setup_page.$el);
                         }, this));
-                   
+                   this.loadMyImportsArea();
                 },
                 /**
                  * Load My Imports netsuite
