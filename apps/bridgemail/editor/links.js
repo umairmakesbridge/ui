@@ -203,7 +203,7 @@ function (template) {
                  var postBackupLink = "";
                  var myTextLink = "";
                  postBackupLink = this.getLink(); 
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("textarea.linkTextArea").val() + "</a>";
+                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -245,7 +245,8 @@ function (template) {
                  else if(selectedLink==this.systemLinks.socialGooglePlusLink){
                     socialLink = "googleplus";
                 }
-                this.$("input[name='"+socialLink+"']").iCheck("check");
+                this.$(".radiopanel:checked").prop("checked",false);
+                this.$("input[value='"+socialLink+"']").prop("checked",true);
                 
             },
             getSocialLinks:function(){
@@ -344,11 +345,13 @@ function (template) {
                 var anchors = this.editorEl.find(".csHaveData a");
                 var _array =  [];
                 var _a_href = "",showName="";
+                var merge_field_patt = null;
                 _.each(anchors,function(obj){
                     if($(obj).attr("href")){
                         _a_href = $(obj).attr("href"); 
                         showName = $.getUrlVar(_a_href,'campaignkw');
-                        if(_a_href !=="#" && $.trim(_a_href)!=="" && _a_href.startsWith("mailto:")==false){
+                        merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                        if(_a_href !=="#" && $.trim(_a_href)!=="" && _a_href.startsWith("mailto:")==false && merge_field_patt.test(_a_href)===false){
                             _array.push(_a_href.replace("?campaignkw="+showName,""));
                         }
                     }

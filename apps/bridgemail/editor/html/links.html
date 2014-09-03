@@ -26,7 +26,7 @@
                     <i class="icon vbrsrlink"></i><span>View in Browser</span>
                 </a>
             </li>
-            <li id="_addNewAnchorLink">
+            <li id="_addNewAnchorLink" style="display:none">
                 <a  class="noimage">
                     <i class="icon newanchlink"></i><span>New # anchor</span>
                 </a>
@@ -44,7 +44,7 @@
 
         <h4>Add a Hyperlink (Standard Link URL)</h4>
 
-        <form enctype="multipart/form-data" method="post" action="#" name="submit_url">
+        <form enctype="multipart/form-data" method="post" action="#" name="submit_url" style="margin:0px;">
             <div class="textAreaDivfortextLink" style="display:none;" >
                 <label>Text</label>
                 <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
@@ -73,25 +73,22 @@
             </a>
             <br>
 
-            <label>Link Name (For Tracking)</label>
+            <label>Link Name</label>
             <input type="text" maxlength="200" class="textLinkGUI linkName">
             <br>
-            <div class="inputlabel">
+            <div class="inputlabel" style="display:none">
                 <input type="checkbox" id="dont-track">
                 <label>
                     <span>Do not track this link</span>
                 </label>
             </div>
 
-            <br>
-
-
         </form>
     </div>
     <div class="_addEmailLinkDiv tcontent" style="display:none;">
         <h4>Add a link to an email address</h4>
 
-        <form enctype="multipart/form-data" name="submit_url">
+        <form enctype="multipart/form-data" name="submit_url" style="margin:0px;">
             <div class="textAreaDivfortextLink" style="display:none;" >
                 <label>Text</label>
                 <textarea style=" text-decoration: underline; color: rgb(0, 0, 0); color:#000;"  class="text-areaLinkGUI linkTextArea" >
