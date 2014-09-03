@@ -138,7 +138,7 @@
                             }else{
                                 that.$('#panel_0').css('height', '');
                                 that.$el.find('#sampletable').show('fast');
-                                that.$el.find('#sampletable').css('margin-left:auto; text-align:center; width:100%;margin-top:20px;');
+                                that.$el.find('#sampletable').css('margin-left:40%; text-align:center; width:100%;margin-top:20px;');
                                  that.$el.find('#sampletable').html("No Data found!");
                             }
                             }))

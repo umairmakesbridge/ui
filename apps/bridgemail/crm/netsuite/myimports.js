@@ -5,7 +5,8 @@ function (template,MyImports,moment) {
                 className:'clearfix',
                 events: {
                     'click #addnew_import':'newImport',
-                    'click .add-some':'newImport'
+                    'click .add-some':'newImport',
+                    "click .refresh_btn":'getMyImports'
                  },
                 initialize: function () {
                     this.template = _.template(template);				
@@ -52,8 +53,8 @@ function (template,MyImports,moment) {
                                 myimports_html += '<td>';
                                     if(val.get("status")=='S'){
                                         var daysDisplay = this.getDate(val.get("scheduledDate"),val.get("frequency"),val.get("day"));
-                                        myimports_html += '<div class="sched show"><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
-                                        myimports_html += '<div class="action"><a class="btn-red deactivate-import" id="deact_'+val.get("tId")+'"><span>Delete</span><i class="icon deactivate"></i></a><a class="btn-gray get-import" id="edit_'+val.get("tId")+'"><span>Edit</span><i class="icon edit"></i></a></div>';
+                                        myimports_html += '<div class="sched"><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
+                                        myimports_html += '<div class="slide-btns two s-clr3" style="width:;"><span class="icon setting"></span><div><a class="icon delete clr2  deactivate-import" id="deact_' + val.get("tId") + '"><span>Delete</span></a><a class="icon edit clr1 get-import" id="edit_' + val.get("tId") + '"><span>Edit</span> </a></div></div>';  
                                     }
                                 myimports_html += '</td>';
                               myimports_html += '</tr>';
@@ -169,7 +170,7 @@ function (template,MyImports,moment) {
                             callback: _.bind(function(){													
                                     this.deactivateCall(tid.split("_")[1]);
                             },this)},
-                    this.$el);       
+                    $('body'));       
                 },
                 deactivateCall:function(tId){
                     this.app.showLoading("Deleting Import...",this.$el);

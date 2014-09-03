@@ -117,7 +117,7 @@ function (template,chosen,addbox) {
                         /* Check if map data exists in Layout map */
 			if(layout_map == '' || layout_map.split(',').length < 1)
 			{
-				app.showAlert('Match your Google Worksheet columns to fields. Columns that you do not match will not be extracted',el);
+				app.showAlert(appMsgs.MAPDATA_bmsfields_email_error,el);
 				isValid = false;
 			}
                         else{
@@ -327,7 +327,8 @@ function (template,chosen,addbox) {
 			
 			var chtml="";
 			chtml +="<select class='mapfields "+ num +"' data-placeholder='Choose Field'>";
-			chtml +="<option value=''></option>";
+			chtml +="<option value=''>Choose Field</option>";
+                        chtml +="<option value=''></option>";
 			var optgroupbasic ="<optgroup class='select_group' label='Select Basic Fields'>", optgroupcustom ="<optgroup class='select_group' label='Select Custom Fields'>";
 			if(map_feilds)
 			{

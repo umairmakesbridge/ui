@@ -108,6 +108,7 @@ define(['text!crm/netsuite/html/netsuite.html'],
                 },this))
             },
               updateCount:function(c){
+                  this.myimports_page.getMyImports();
                 var count = parseInt(this.current_ws.find(".camp_header .sync_count")[0].innerHTML); 
                 this.current_ws.find(".camp_header .sync_count").html(count+c);
             },

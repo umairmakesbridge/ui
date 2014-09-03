@@ -10096,11 +10096,17 @@ input.search-control[type="text"] {
     background: url("../img/mbricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.nst > strong {
     background: url("../img/nsticon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.gl > strong {
+    background: url("../img/ggicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.hr > strong {
+    background: url("../img/hrricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.score span { color:#57b916; }
 
 .bmsgrid .colico.score.red span { color:#cc0000; } 
 .bmsgrid .colico.mbr > strong  b ,
 .bmsgrid .colico.sfr > strong  b,
+.bmsgrid .colico.gl > strong  b,
+.bmsgrid .colico.hr > strong  b,
 .bmsgrid .colico.nst > strong  b  {color:#6494AF;}	
 	
 	

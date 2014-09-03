@@ -14,6 +14,8 @@ function (template,crm_filters) {
                 render: function () {
                     this.app = this.options.page.app;
                     this.parent = this.options.page;
+                    this.isGoogle = this.options.isGoogle?this.options.isGoogle:false;
+                    
                     this.mappingLoaded = false;
                     this.$el.html(this.template({}));
                     this.initControl();                                       
@@ -27,18 +29,21 @@ function (template,crm_filters) {
                    this.$mappingInner = this.$(".accordion_mapping-inner");
                    
                    /*Load login view for Netsuite*/
-                   this.$loginInner.css({"min-height":"300px","position":"relative"});
+                   this.$loginInner.css({"min-height":"400px","position":"relative"});
                    this.$mappingInner.css({"min-height":"445px","position":"relative"});
                    this.app.showLoading("Loading Login...",this.$loginInner)
                                                        
                     var google = this.app.getAppData("google");  
-                    if(google && google.isGoogleUser=="Y"){
+                    var that = this;
+                    if(google && google.isGoogleUser=="Y" && this.isGoogle == false){
                          this.isAuthorize = true;                
-                    }  
+                    }  else{
+                        this.$("#accordion_mapping").hide();
+                    }
                    require(["crm/google/login"],_.bind(function(page){    
                        this.app.showLoading(false,this.$loginInner);
                        this.$loginInner.css("position","inherit");
-                       var login_page = new page({page:this,layout:'col',isAuthorize:this.isAuthorize});
+                       var login_page = new page({page:this,layout:'col',isAuthorize:that.isAuthorize});
                        this.$loginInner.append(login_page.$el);                       
                    },this));
                    if(this.isAuthorize)
