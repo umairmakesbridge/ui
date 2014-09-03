@@ -75,11 +75,11 @@
             }else{
                 this.generateMergeTag();
             }*/
-            if(this.app.mergeRequest===1)
+            if(this.app.mergeRequest===1 && this.configs.parallel==true)
                 this.timeoutTrigger();
             else{
                     if(this.configs.isrequest){
-                    this.requestMergeData(options);
+                        this.requestMergeData(options);
                     }else{
                         this.generateMergeTag();
                     }
