@@ -2119,3 +2119,6 @@ ul.socialbtns li .radiopanelinput.checked {
  ul.b-blocks > li > i.icon.cblock{
      background:url("../images/mblogo.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
+ ._addNewSocialLinkDiv .radiopanelinput .icheck_radio-icon{
+     margin:7px 0 0 7px !important;
+ }

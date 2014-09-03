@@ -1,4 +1,4 @@
-define(['text!editor/html/links.html'],
+define(['text!editor/html/links.html','jquery.icheck'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -49,6 +49,14 @@ function (template) {
                 }));    
                 this.showHyperLink();
                 
+                this.$('input.radiopanel').iCheck({
+                    radioClass: 'radiopanelinput',
+                    insert: '<div class="icheck_radio-icon"></div>'
+                });
+                this.$( "ul.socialbtns li label" ).click(function() {
+                    var _li = $(this).parents("li");
+                    _li.find("input.radiopanel").iCheck("check");
+                });
             },
             /**
              * Render Row view on page.
@@ -59,11 +67,15 @@ function (template) {
             _changeTab:function(e){
                 var obj = $.getObj(e,"li");
                 if(obj.hasClass("selected")==false){
-                    this.$("#cssmenuLinkGUI li.selected").removeClass("selected");
-                    obj.addClass("selected");
-                    this.$(".tcontent").hide();
-                    this.$("div."+obj.attr("id")+"Div").show();                    
+                     this.showSelectedTab(obj);               
                 }
+            },
+            showSelectedTab:function(obj){
+              this.$("#cssmenuLinkGUI li.selected").removeClass("selected");
+              obj.addClass("selected");
+              this.$(".tcontent").hide();
+              this.activeTab = obj.attr("id");
+              this.$("div."+obj.attr("id")+"Div").show();      
             },
             insertLink:function(dialog){
                 if (this.linkType == "image") {
@@ -78,7 +90,6 @@ function (template) {
                if (this.linkType == "image") { 
                 this.$("div.linkImagePreview").show();
                 this.$("div.textAreaDivfortextLink").hide();
-                this.activeTab = "_addHyperLink";
                 var imgObj = this.hiddenObj.is("img")?this.hiddenObj:this.hiddenObj.find("img");
                 this.$("img").attr("src", imgObj.attr("src"));                
                     if(imgObj.parent().is("a")){
@@ -88,8 +99,7 @@ function (template) {
                 else if(this.linkType == "text"){                    
                     // Selection is text from editor 
                     this.$("div.linkImagePreview").hide();
-                    this.$("div.textAreaDivfortextLink").show();
-                    this.activeTab = "_addHyperLink";
+                    this.$("div.textAreaDivfortextLink").show();                    
                     this.$("textarea.linkTextArea").val(tinyMCE.activeEditor.selection.getContent({
                         format: 'text'
                     }));
@@ -117,20 +127,67 @@ function (template) {
                 
             },
             showLinkDetails:function(anchorObj){                
-                var _a_href = anchorObj.attr("href");
-                var showName = $.getUrlVar(_a_href,'campaignkw');
-                if(showName){
-                    _a_href = _a_href.replace("?campaignkw="+showName,"");
+                var _a_href = anchorObj.attr("href").toLowerCase();
+                if(_a_href.startsWith("mailto:")){
+                    var showSubject = $.getUrlVar(_a_href,'subject');
+                    _a_href = _a_href.replace("?subject="+showSubject,"");
+                    _a_href = _a_href.replace("&subject="+showSubject,"");
+                    _a_href = _a_href.replace("mailto:","");
+                    this.$("#emailLinkName").val(_a_href);
+                    this.$("#emailLinkSubject").val(showSubject);
+                    this.showSelectedTab(this.$("#_addEmailLink"));                                   
                 }
-                this.$("input.linkHyperLinkURL").val(_a_href);
-                this.$(".visitlink").attr("href",_a_href);
-                this.$("input.linkName").val(showName);
+                else if(_a_href==this.systemLinks.fwdToFrndLink.toLowerCase()){
+                    this.showSelectedTab(this.$("#_addFrwdToFrndLink"));                                   
+                }
+                else if(_a_href==this.systemLinks.unsubLink.toLowerCase()){
+                    this.showSelectedTab(this.$("#_addUnsubscribeLink"));                                   
+                }
+                else if(_a_href==this.systemLinks.cantReadLink.toLowerCase()){
+                    this.showSelectedTab(this.$("#_addViewinBrowserLink"));                                   
+                }
+                else if(_a_href==this.systemLinks.socialFacebookLink.toLowerCase() ||
+                        _a_href==this.systemLinks.socialTwitterLink.toLowerCase() ||
+                        _a_href==this.systemLinks.socialLinkedInLink.toLowerCase() ||
+                        _a_href==this.systemLinks.socialPintrestLink.toLowerCase() ||
+                        _a_href==this.systemLinks.socialGooglePlusLink.toLowerCase()){
+                    this.setSocialRadio(_a_href.toUpperCase());    
+                    this.showSelectedTab(this.$("#_addNewSocialLink"));  
+                }
+                else{
+                    //handle hyper link population
+                    var showName = $.getUrlVar(_a_href,'campaignkw');
+                    if(showName){
+                        _a_href = _a_href.replace("?campaignkw="+showName,"");
+                    }
+                    this.$("input.linkHyperLinkURL").val(_a_href);
+                    this.$(".visitlink").attr("href",_a_href);
+                    this.$("input.linkName").val(showName);
+                }
+            },
+            getLink:function(){
+                var myLink;
+                if(this.activeTab == "_addHyperLink"){
+                   myLink = this.getURL();                
+                } else if(this.activeTab == "_addEmailLink"){
+                   myLink = this.getEmail(); 
+                } else if(this.activeTab == "_addFrwdToFrndLink"){
+                    myLink = this.systemLinks.fwdToFrndLink; 
+                }
+                else if(this.activeTab == "_addUnsubscribeLink"){
+                    myLink = this.systemLinks.unsubLink; 
+                }
+                else if(this.activeTab == "_addViewinBrowserLink"){
+                    myLink = this.systemLinks.cantReadLink; 
+                }
+                else if(this.activeTab == "_addNewSocialLink"){
+                    myLink = this.getSocialLinks(); 
+                }
+                return myLink;
             },
             attachLinkToImg:function(){
-                var myImageLink = "";                
-                if(this.activeTab == "_addHyperLink"){
-                   myImageLink = this.getURL();
-                }
+                var myImageLink = ""; 
+                myImageLink = this.getLink();                
                 //Add link to editor
                 if (myImageLink != "" && myImageLink != null) {
                     var imgObj = this.hiddenObj.is("img")?this.hiddenObj:this.hiddenObj.find("img");
@@ -145,10 +202,8 @@ function (template) {
             attachLinkToText:function(){
                  var postBackupLink = "";
                  var myTextLink = "";
-                 if(this.activeTab == "_addHyperLink"){
-                   postBackupLink = this.getURL();  
-                   myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("textarea.linkTextArea").val() + "</a>";
-                 }
+                 postBackupLink = this.getLink(); 
+                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -156,7 +211,7 @@ function (template) {
                  }*/
                     
                 if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {                    
-                    this.tiny_editor_selection.getNode().setAttribute("href", myTextLink);
+                    this.tiny_editor_selection.getNode().setAttribute("href", postBackupLink);
                 }
                 else {                    
                     this.tiny_editor_selection.setContent(myTextLink);
@@ -172,6 +227,46 @@ function (template) {
                 else{
                     this.$(".visitlink").removeAttr("href");
                 }
+            },
+             setSocialRadio:function(selectedLink){                
+                var socialLink = "";
+                if(selectedLink==this.systemLinks.socialFacebookLink){
+                    socialLink = "facebook";
+                }
+                 else if(selectedLink==this.systemLinks.socialTwitterLink){
+                    socialLink = "twitter";
+                }
+                 else if(selectedLink==this.systemLinks.socialLinkedInLink){
+                    socialLink = "linkedin";
+                }
+                 else if(selectedLink==this.systemLinks.socialPintrestLink){
+                    socialLink = "pintrest";
+                }
+                 else if(selectedLink==this.systemLinks.socialGooglePlusLink){
+                    socialLink = "googleplus";
+                }
+                this.$("input[name='"+socialLink+"']").iCheck("check");
+                
+            },
+            getSocialLinks:function(){
+                var selectedLink =  this.$(".radiopanel:checked");
+                var socialLink = "";
+                if(selectedLink.val()=="facebook"){
+                    socialLink = this.systemLinks.socialFacebookLink;
+                }
+                 else if(selectedLink.val()=="twitter"){
+                    socialLink = this.systemLinks.socialTwitterLink;
+                }
+                 else if(selectedLink.val()=="linkedin"){
+                    socialLink = this.systemLinks.socialLinkedInLink;
+                }
+                 else if(selectedLink.val()=="pintrest"){
+                    socialLink = this.systemLinks.socialPintrestLink;
+                }
+                 else if(selectedLink.val()=="googleplus"){
+                    socialLink = this.systemLinks.socialGooglePlusLink;
+                }
+                return socialLink;
             },
             getURL:function(noName){
                     var link = "";
@@ -194,6 +289,21 @@ function (template) {
                        }
                    }
                    return link;
+            },
+            getEmail:function(){
+                var link = "";
+                var emailLink = $.trim(this.$("#emailLinkName").val());
+                var emailSubject = $.trim(this.$("#emailLinkSubject").val());
+                var emailSubjectStr = emailSubject ?("?subject="+emailSubject):"";
+                if(emailLink){
+                    if (emailLink.startsWith("mailto:")){
+                        link = emailLink+emailSubjectStr;
+                    }
+                    else{
+                        link = "mailto:"+emailLink+emailSubjectStr;
+                    }
+                }
+                return link;
             },
             showExistingLinks:function(e){
                 var existingLinkDiv = $(".existinglinksdd");
@@ -238,7 +348,7 @@ function (template) {
                     if($(obj).attr("href")){
                         _a_href = $(obj).attr("href"); 
                         showName = $.getUrlVar(_a_href,'campaignkw');
-                        if(_a_href !=="#" && $.trim(_a_href)!==""){
+                        if(_a_href !=="#" && $.trim(_a_href)!=="" && _a_href.startsWith("mailto:")==false){
                             _array.push(_a_href.replace("?campaignkw="+showName,""));
                         }
                     }
