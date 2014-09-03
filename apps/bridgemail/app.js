@@ -88,6 +88,8 @@ define([
                                 this.dialogView = '';
                                 // Dialog Array
                                 this.dialogArray = [];
+                                // Merge Tag
+                                this.mergeRequest = 0;
                                 //attaching main container in body                                
                                 $('body').append(this.mainContainer.$el);
                                 $('body').append(this.mainContainer.footer.$el);

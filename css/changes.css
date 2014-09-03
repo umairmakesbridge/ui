@@ -3214,6 +3214,7 @@ ul#template_search_menu {
     border-radius: 0 2px 2px 0;
     line-height: 18px;
     padding: 8px 5px 3px;
+    background: #F8FDFF !important;
 }
 ul#template_search_menu {
     display: block;
