@@ -45,6 +45,7 @@ define(['text!crm/google/html/google.html'],
                                 this.app.showLoading(false, this.$el);
                                 var google = this.app.getAppData("google");
                                 if (google[0] == "err" || google.isGoogleUser == "N") {
+                                    
                                         this.forceLoadSetupArea(google.isGoogleUser);
                                    
                                 }
@@ -171,6 +172,7 @@ define(['text!crm/google/html/google.html'],
                     }
                 },
                  forceLoadSetupArea: function(isGoogle) {
+                     this.states.setup = true;
                         this.setupArea.html('');
                         this.app.showLoading("Loading Setup...", this.setupArea);
                         require(["crm/google/setup_step"], _.bind(function(page) {
