@@ -99,6 +99,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         _this.$(".s-date").html(create_date.date());
                         _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
                         _this.sub_fields = _json;
+                        _this.$('.score span').html(_json.score);
                         _this.showTags();
                         _this.showFields();
                     })

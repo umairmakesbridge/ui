@@ -75,15 +75,16 @@
             }else{
                 this.generateMergeTag();
             }*/
-            if(this.app.mergeRequest===1 && this.configs.parallel==true)
+            /*if(this.app.mergeRequest===1)
                 this.timeoutTrigger();
             else{
                     if(this.configs.isrequest){
-                        this.requestMergeData(options);
+                    this.requestMergeData(options);
                     }else{
                         this.generateMergeTag();
                     }
-               }
+               }*/
+            this.requestMergeData(options);
             if (this.options.placeholder_text) {
                this.template.find("input").attr("placeholder", this.options.placeholder_text);
             }
@@ -104,7 +105,7 @@
             }
         },
         requestMergeData : function(options){
-            this.app.mergeRequest = 1;
+            //this.app.mergeRequest = 1;
             if (!options.app.getAppData("mergetags")) {                             
                 options.app.getData({
                     "URL": "/pms/io/getMetaData/?BMS_REQ_TK=" + options.app.get('bms_token') + "&type=merge_tags",
@@ -118,7 +119,7 @@
         },
         generateMergeTag: function() {
             var _this = this;
-            this.app.mergeRequest = 0;
+            //this.app.mergeRequest = 0;
             var mergeFields_data = this.options.app.getAppData("mergetags");
            // this.options.app.setAppData('mergetags',mergeFields_data);
             _this.mergeTags['basic'] = [];
@@ -157,9 +158,11 @@
                     return 0;
                 return a1 > b1 ? 1 : -1;
             });
-            if(this.options.mergeFieldsCallback){
+
+            /*if(this.options.mergeFieldsCallback){
                 this.options.mergeFieldsCallback();
-            }
+            }*/
+
             this.createMergeTagField();
 
         },
