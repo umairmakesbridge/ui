@@ -179,10 +179,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                         }
-
+                        var mee = this;
                         this.each(function () {
                             var $this = $(this);                
-                            var undoManager = new MakeBridgeUndoRedoManager({view:$this});
+                            var undoManager = new MakeBridgeUndoRedoManager({
+                                view:$this
+                            });
 
                             //Getting View with the help of Backbone:
                             var MainHtmlView = Backbone.View.extend({
@@ -416,7 +418,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     oInitDestroyEvents.DestroyPluginsEvents(myElement);
                                     IsStyleActivated = true;
                                     if(undoredo===true){
-                                      //Selection
+                                        //Selection
                                         myElement.find(".csHaveData td, .csHaveData div").click(function (event) {
                                             if (IsStyleActivated) {
                                                 event.stopPropagation(); //Stop bubbling
@@ -1517,7 +1519,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             ///////
                             }
                             var _LoadContentBlocks = function(){
-                                 $.ajax({
+                                $.ajax({
                                     url: "/pms/io/publish/getEditorData/?"+options._BMSTOKEN+"&type=listBlocks&isAdmin=Y",
                                     data: "{}",
                                     type: "POST",
@@ -1530,10 +1532,23 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             var contentBlocks = e.blocks[0];
                                             contentBlocksGlobal = e.blocks[0];
                                             var ulContentBlocks = myElement.find(".content-block");
-                                              ulContentBlocks.empty();
+                                            ulContentBlocks.empty();
+                                            var imageMapping = {"69059b7ef840f0c74a814ec9237b6ec":"columnImageWithText",
+                                                                "5fd0b37cd7dbbb00f97ba6ce92bf5add":"BannerPlusText",
+                                                                "c45147dee729311ef5b5c3003946c48f":"Button",
+                                                                "eb160de1de89d9058fcb0b968dbbbd68":"footer",
+                                                                "5ef059938ba799aaa845e1c2e8a762bd":"FooterPlusLogo",
+                                                                "9b8619251a19057cff70779273e95aa6":"RightImagePlusText",
+                                                                "7e1cd7dca89a1678042477183b7ac3f":"logoCenter",
+                                                                "da4fb5c6e93e74d3df8527599fa62642":"logoPlusBanner",
+                                                                "4c56ff4ce4aaf9573aa5dff913df997a":"Paragraph",
+                                                                "202cb962ac59075b964b07152d234b70":"Social_Share",
+                                                                "1afa34a7f984eeabdbb0a7d494132ee5":"Testimonial",
+                                                                "42a0e188f5033bc65bf8d78622277c4e":"LeftImagePlusText"}
                                             $.each(contentBlocks, function (i, obj) {
+                                                var cssImage = imageMapping[obj[0]["blockId.checksum"]]?imageMapping[obj[0]["blockId.checksum"]]:"";
                                                 var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
-                                                    "<i class='icon cblock'></i> " +
+                                                    "<i class='icon cblock "+cssImage+"'></i> " +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +                                                    
                                                     "</li>");
                                                 InitializeMainDraggableControls(block);
@@ -1929,21 +1944,32 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                                                                                                                     
                                     var dialog_width = $(document.documentElement).width()-60;
                                     var dialog_height = $(document.documentElement).height()-182;
-                                    var dialog =  options._app.showDialog({title:'Code Preview',
-                                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},                                              
-                                              bodyCss:{"min-height":dialog_height+"px"},
-                                              headerEditable:false,
-                                              headerIcon : 'dlgpreview',
-                                              buttons: {saveBtn:{text:'Set'} }                                                                           
-                                        });  
-                                    var preview_html = '<div class="divPreviewCode"><ul  class="mapTab tabs-btns clearfix">';
-                                        preview_html += '<li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>';
-                                        preview_html += '<li><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';                                        
-                                        preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane active">';
-                                        preview_html += '<div class="divHtmlPreview" style="height:'+(dialog_height-48)+'px;overflow:auto"></div></div>';
-                                        preview_html += '<div id="htmlCode" class="tab-pane">';
-                                        preview_html += '<textarea style="font-size:12px;width:'+(dialog_width-46)+'px;height:'+(dialog_height-58)+'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
-                                        preview_html += '</div></div></div>';
+                                    var dialog =  options._app.showDialog({
+                                        title:'Code Preview',
+                                        css:{
+                                            "width":dialog_width+"px",
+                                            "margin-left":"-"+(dialog_width/2)+"px",
+                                            "top":"20px"
+                                        },                                              
+                                        bodyCss:{
+                                            "min-height":dialog_height+"px"
+                                            },
+                                        headerEditable:false,
+                                        headerIcon : 'dlgpreview',
+                                        buttons: {
+                                            saveBtn:{
+                                                text:'Set'
+                                            }
+                                        }                                                                           
+                                    });  
+                                var preview_html = '<div class="divPreviewCode"><ul  class="mapTab tabs-btns clearfix">';
+                                preview_html += '<li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>';
+                                preview_html += '<li><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';                                        
+                                preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane active">';
+                                preview_html += '<div class="divHtmlPreview" style="height:'+(dialog_height-48)+'px;overflow:auto"></div></div>';
+                                    preview_html += '<div id="htmlCode" class="tab-pane">';
+                                    preview_html += '<textarea style="font-size:12px;width:'+(dialog_width-46)+'px;height:'+(dialog_height-58)+'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
+                                    preview_html += '</div></div></div>';
                                     preview_html = $(preview_html);    
                                     dialog.getBody().html(preview_html); 
                                     dialog.saveCallBack(_.bind(setHTML,this,dialog));
@@ -1954,370 +1980,373 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 });
 
 
-                            };
+                        };
 
                             
 
-                            function reConstructCode(html) {
-                                var oHtml = $(html);
+                        function reConstructCode(html) {
+                            var oHtml = $(html);
 
-                                oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
-                                oHtml.find(".MEE_ELEMENT").addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
-                                oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");                                           
+                            oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("visibility", "hidden");
+                            oHtml.find(".MEE_ELEMENT").addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
+                            oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");                                           
 
-                                var RevertCommonLi = function (element) {
+                            var RevertCommonLi = function (element) {
 
-                                    var newElement = $("<li>");
-                                    newElement.html(element.html());
+                                var newElement = $("<li>");
+                                newElement.html(element.html());
 
 
-                                    //Assign Class
-                                    var elementClass = element.attr("class");
-                                    if (elementClass != null) {
-                                        newElement.attr("class", elementClass);
-                                    }
-
-                                    //Assign Style
-                                    var elementStyle = element.attr("style");
-                                    if (elementStyle != null) {
-                                        newElement.attr("style", elementStyle);
-                                    }
-
-                                    element.replaceWith(newElement);
+                                //Assign Class
+                                var elementClass = element.attr("class");
+                                if (elementClass != null) {
+                                    newElement.attr("class", elementClass);
                                 }
 
-                                var RevertCommonUl = function (element) {
-
-                                    var newElement = $("<ul>");
-                                    newElement.html(element.html());
-
-
-                                    //Assign Class
-                                    var elementClass = element.attr("class");
-                                    if (elementClass != null) {
-                                        newElement.attr("class", elementClass);
-                                    }
-
-                                    //Assign Style
-                                    var elementStyle = element.attr("style");
-                                    if (elementStyle != null) {
-                                        newElement.attr("style", elementStyle);
-                                    }
-
-
-                                    //Remove Class
-                                    // newElement.removeClass();
-                                    element.replaceWith(newElement);
+                                //Assign Style
+                                var elementStyle = element.attr("style");
+                                if (elementStyle != null) {
+                                    newElement.attr("style", elementStyle);
                                 }
 
-                                oHtml.find(".MEE_ITEM").each(function (i, e) {    
-                                    var elem = $(e);
+                                element.replaceWith(newElement);
+                            }
 
-                                    if(elem.find("img").length) {                        
-                                        var alignVal = elem.attr("align");
-                                        if(alignVal == undefined) {
-                                            alignVal = "left";
-                                        }
-                                        var imageElem = elem.find("img");
-                                        elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
-                                        imageElem.addClass("imageHandlingClass  resizable clickEvent");
-                                        var imgHeight = imageElem.inlineStyle("height");
+                            var RevertCommonUl = function (element) {
 
-                                        var imgWidth = imageElem.inlineStyle("width");
+                                var newElement = $("<ul>");
+                                newElement.html(element.html());
 
-                                        imageElem.css("height", "100%");
-                                        imageElem.css("width", "100%");                                        
-                                        if(imgHeight == "") {
-                                            imgHeight = "200px";  
+
+                                //Assign Class
+                                var elementClass = element.attr("class");
+                                if (elementClass != null) {
+                                    newElement.attr("class", elementClass);
+                                }
+
+                                //Assign Style
+                                var elementStyle = element.attr("style");
+                                if (elementStyle != null) {
+                                    newElement.attr("style", elementStyle);
+                                }
+
+
+                                //Remove Class
+                                // newElement.removeClass();
+                                element.replaceWith(newElement);
+                            }
+
+                            oHtml.find(".MEE_ITEM").each(function (i, e) {    
+                                var elem = $(e);
+
+                                if(elem.find("img").length) {                        
+                                    var alignVal = elem.attr("align");
+                                    if(alignVal == undefined) {
+                                        alignVal = "left";
+                                    }
+                                    var imageElem = elem.find("img");
+                                    elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
+                                    imageElem.addClass("imageHandlingClass  resizable clickEvent");
+                                    var imgHeight = imageElem.inlineStyle("height");
+
+                                    var imgWidth = imageElem.inlineStyle("width");
+
+                                    imageElem.css("height", "100%");
+                                    imageElem.css("width", "100%");                                        
+                                    if(imgHeight == "") {
+                                        imgHeight = "200px";  
                                             
-                                        }
-                                        if(imgWidth == "") {
-                                            imgWidth = "200px";                                            
-                                        }
-                                        
-                                        var _containerStyle = elem.attr("style")?elem.attr("style"):"float:none";
-                                        var _imageStyle = imageElem.attr("isStyleSet")?imageElem.attr("style"):"height:"+imgHeight+";width:"+imgWidth;
-                                        elem.removeAttr("style");
-                                        imageElem.attr("style","width:100%;height:100%");
-                                        
-                                        var imgOutHtml = "";
-                                        if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
-
-                                            imgOutHtml = imageElem.parent().outerHTML();
-                                        }
-                                        else {                            
-                                            imgOutHtml = imageElem.outerHTML();
-                                        }
-                                        
-                                        
-                                        var newHtml = "<div class='myImage' style='"+_containerStyle+"' align='"+ alignVal +"'><div class='resizableImage' style='"+_imageStyle+"'>" + imgOutHtml + "</div></div>";
-                                        elem.html(newHtml);
-                                        elem.find(".resizableImage").css({"width":imgWidth,"height":imgHeight});
-
                                     }
-                                    else {
-                                        elem.removeClass("MEE_ITEM").addClass("textcontent");                                                                                                          
-                                        elem.html(newHtml);
+                                    if(imgWidth == "") {
+                                        imgWidth = "200px";                                            
                                     }
+                                        
+                                    var _containerStyle = elem.attr("style")?elem.attr("style"):"float:none";
+                                    var _imageStyle = imageElem.attr("isStyleSet")?imageElem.attr("style"):"height:"+imgHeight+";width:"+imgWidth;
+                                    elem.removeAttr("style");
+                                    imageElem.attr("style","width:100%;height:100%");
+                                        
+                                    var imgOutHtml = "";
+                                    if(imageElem.parent().get( 0 ).tagName == 'a' || imageElem.parent().get( 0 ).tagName == 'A') {
 
-                                });
-
-                                oHtml.find(".container > tbody > tr > td").each(function (index, element) {
-                                    var elem = $(element);
-                                    var html = elem.html();
-                                    var newHtml = "<div class='sortable' style='list-style: none;'><div class='csHaveData ui-draggable ui-droppable'>" + html + "</div></div>";
+                                        imgOutHtml = imageElem.parent().outerHTML();
+                                    }
+                                    else {                            
+                                        imgOutHtml = imageElem.outerHTML();
+                                    }
+                                        
+                                        
+                                    var newHtml = "<div class='myImage' style='"+_containerStyle+"' align='"+ alignVal +"'><div class='resizableImage' style='"+_imageStyle+"'>" + imgOutHtml + "</div></div>";
                                     elem.html(newHtml);
-
-                                });
-
-
-                                oHtml.find(".sortable").not(".container").each(function () {
-                                    RevertCommonUl($(this));
-                                });
-                                oHtml.find(".csHaveData").each(function () {
-                                    RevertCommonLi($(this));
-                                });
-                                oHtml.find(".myDroppable").each(function () {
-                                    RevertCommonLi($(this));
-                                });                                
-
-                                oHtml.find("table").each(function () {                                   
-                                    oHtml.find(".container .sortable .csHaveData").each(function () {
-                                        RevertCommonLi($(this));
+                                    elem.find(".resizableImage").css({
+                                        "width":imgWidth,
+                                        "height":imgHeight
                                     });
-                                    oHtml.find(".container .sortable .myDroppable").each(function () {
-                                        RevertCommonLi($(this));
-                                    });
-
-
-                                });
-
-                                var lengthHTML = oHtml.length;
-
-                                if(lengthHTML > 1) {
-                                    for(var i=1; i< lengthHTML; i++) {
-                                        var obj = $(oHtml[i]);
-
-                                        if(obj[0].nodeName == "DIV") {
-
-                                            if(obj.children().length > 1) {
-                                                var ht = obj.html();                                    
-
-                                                oHtml = $(ht);
-
-                                            }
-                                            else {
-                                                var ht = obj.html();                                    
-                                                var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
-                                                newHtml.append(obj);
-
-                                                oHtml = $(newHtml);
-
-                                            }
-
-                                        }
-
-                                        if(obj[0].nodeName == "TABLE") {                               
-                                            var ht = obj.html();                                
-                                            var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
-                                            newHtml.append(obj);                                
-                                            oHtml = $(newHtml);                                
-                                        }
-                                    }
 
                                 }
+                                else {
+                                    elem.removeClass("MEE_ITEM").addClass("textcontent");                                                                                                          
+                                    elem.html(newHtml);
+                                }
+
+                            });
+
+                            oHtml.find(".container > tbody > tr > td").each(function (index, element) {
+                                var elem = $(element);
+                                var html = elem.html();
+                                var newHtml = "<div class='sortable' style='list-style: none;'><div class='csHaveData ui-draggable ui-droppable'>" + html + "</div></div>";
+                                elem.html(newHtml);
+
+                            });
 
 
-                                oHtml.find(".DYNAMIC_VARIATION").each(function (index, object) {
-                                    var variation = $(object);                       
-                                    var variation_ID = variation.attr("id");
-                                    var keyword = variation.text();                        
-                                    variation.removeClass("DYNAMIC_VARIATION");
-                                    variation.addClass("dynamicContentContainer");
-                                    variation.addClass("container");
-                                    var oControl = new Object();
-                                    var args = {
-                                        droppedElement: $(this),
-                                        // event: event,
-                                        // ui: ui,
-                                        predefinedControl: null,
-                                        buildingBlock: null
-                                    };
-                                    var predefinedControl = myElement.find(".divDCTemplate").html();
-                                    // variation = $(predefinedControl);
-                                    // oControl.Html = variation;
-                                    oControl.Html = $(predefinedControl);
-                                    oControl.Type = predefinedControl.type;
-                                    args.predefinedControl = oControl;
+                            oHtml.find(".sortable").not(".container").each(function () {
+                                RevertCommonUl($(this));
+                            });
+                            oHtml.find(".csHaveData").each(function () {
+                                RevertCommonLi($(this));
+                            });
+                            oHtml.find(".myDroppable").each(function () {
+                                RevertCommonLi($(this));
+                            });                                
 
-                                    args.droppedElement.html(oControl.Html);
-
-                                    args.ID = keyword;                                          
-                                    args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
-
-
-                                    InitializeDynamicControl(args);
-
-                                    variation.replaceWith( args.predefinedControl.Html.clone(true, true));
-
+                            oHtml.find("table").each(function () {                                   
+                                oHtml.find(".container .sortable .csHaveData").each(function () {
+                                    RevertCommonLi($(this));
+                                });
+                                oHtml.find(".container .sortable .myDroppable").each(function () {
+                                    RevertCommonLi($(this));
                                 });
 
-                                oHtml.find("li").each(function(i, e){
 
-                                    var li = $(e);
-                                    if(li.parent()[0].nodeName == "UL" || li.parent()[0].nodeName == "OL") {
+                            });
+
+                            var lengthHTML = oHtml.length;
+
+                            if(lengthHTML > 1) {
+                                for(var i=1; i< lengthHTML; i++) {
+                                    var obj = $(oHtml[i]);
+
+                                    if(obj[0].nodeName == "DIV") {
+
+                                        if(obj.children().length > 1) {
+                                            var ht = obj.html();                                    
+
+                                            oHtml = $(ht);
+
+                                        }
+                                        else {
+                                            var ht = obj.html();                                    
+                                            var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
+                                            newHtml.append(obj);
+
+                                            oHtml = $(newHtml);
+
+                                        }
 
                                     }
-                                    else {
 
-                                        var newParent = $("<ul class='sortable'/>");
-                                        li.parent().children().wrapAll(newParent);
-
-
+                                    if(obj[0].nodeName == "TABLE") {                               
+                                        var ht = obj.html();                                
+                                        var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
+                                        newHtml.append(obj);                                
+                                        oHtml = $(newHtml);                                
                                     }
+                                }
 
-                                });
-
-                                return oHtml;
                             }
 
 
+                            oHtml.find(".DYNAMIC_VARIATION").each(function (index, object) {
+                                var variation = $(object);                       
+                                var variation_ID = variation.attr("id");
+                                var keyword = variation.text();                        
+                                variation.removeClass("DYNAMIC_VARIATION");
+                                variation.addClass("dynamicContentContainer");
+                                variation.addClass("container");
+                                var oControl = new Object();
+                                var args = {
+                                    droppedElement: $(this),
+                                    // event: event,
+                                    // ui: ui,
+                                    predefinedControl: null,
+                                    buildingBlock: null
+                                };
+                                var predefinedControl = myElement.find(".divDCTemplate").html();
+                                // variation = $(predefinedControl);
+                                // oControl.Html = variation;
+                                oControl.Html = $(predefinedControl);
+                                oControl.Type = predefinedControl.type;
+                                args.predefinedControl = oControl;
+
+                                args.droppedElement.html(oControl.Html);
+
+                                args.ID = keyword;                                          
+                                args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
 
 
-                            function CleanCode (html) {
+                                InitializeDynamicControl(args);
 
-                                var oHtml = $(html);                    
-                                            
-                                oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("visibility");
-                                oHtml.find(".csHaveData").removeClass("csHaveData ui-draggable ui-droppable").addClass("MEE_ELEMENT");
-                                oHtml.find(".mainContentHtmlGrand").removeClass("mainContentHtmlGrand").addClass("MEE_DOCUMENT_CONTENTS");
-                                oHtml.find(".mainContentHtml").removeClass("mainContentHtml sortable").addClass("MEE_CONTENTS");
+                                variation.replaceWith( args.predefinedControl.Html.clone(true, true));
 
-                                oHtml.find(".textcontent").removeAttr("id");
-                                oHtml.find(".textcontent").removeAttr("tabindex");
-                                oHtml.find(".textcontent").removeAttr("contenteditable");
-                                oHtml.find(".textcontent").removeAttr("spellcheck");
-                                oHtml.find(".textcontent").removeClass("mce-content-body").addClass("MEE_ITEM").removeClass("textcontent");
+                            });
 
-                                oHtml.find("div.ui-resizable-e").remove();
-                                oHtml.find("div.ui-resizable-s").remove();
-                                oHtml.find("div.ui-resizable-se").remove();                       
+                            oHtml.find("li").each(function(i, e){
 
-                                oHtml.find(".space").removeInlineStyle("background");
-                                oHtml.find("*").removeInlineStyle("outline");
+                                var li = $(e);
+                                if(li.parent()[0].nodeName == "UL" || li.parent()[0].nodeName == "OL") {
 
-                                //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
-                                oHtml.find(".drapableImageContainer").each(function (index, object) {
-                                    var imageContainer = $(object);
-                                    var img = imageContainer.find("img");
-                                    var resizableImg = imageContainer.find(".resizableImage");
-                                    var myImage = imageContainer.find(".myImage");                        
-                                    if(img.length){
-                                        img.css("width", resizableImg.inlineStyle("width"));
-                                        img.css("height", resizableImg.inlineStyle("height"));
-                                        if(resizableImg.attr("style")){
-                                            img.attr("isStyleSet","true");
-                                            img.attr("style",resizableImg.attr("style"));
-                                        }
-                                        else{
-                                            img.removeAttr("isStyleSet");
-                                        }
-                                        img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
+                                }
+                                else {
 
-                                        if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
-                                            imageContainer.html(img.parent().outerHTML());
-                                        }
-                                        else {
-                                            imageContainer.html(img.outerHTML());
-
-                                        }
-
-                                        imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
-                                        imageContainer.attr("align", myImage.attr("align") );
-                                        if(myImage.attr("style")){
-                                            imageContainer.attr("style", myImage.attr("style") );
-                                        }
-                                    }
-                                });
+                                    var newParent = $("<ul class='sortable'/>");
+                                    li.parent().children().wrapAll(newParent);
 
 
-                                oHtml.find(".dynamicContentContainer").each(function (index, object) {
-                                    var variation = $(object);                        
-                                    var keyword = variation.attr("keyword");
-                                                
-                                    variation.addClass("DYNAMIC_VARIATION");
-                                    variation.removeClass("dynamicContentContainer");
-                                    variation.removeClass("container");
-                                    var newDiv = $("<div></div>");
-                                    newDiv.addClass("DYNAMIC_VARIATION");
-                                    newDiv.attr("id", variation.attr("id"));
-                                    newDiv.html(keyword);
-                                    variation.replaceWith(newDiv);
-                                // variation.html(keyword);
-
-                                });
-                                //oHtml.find(".dynamicContentContainer").remove();
-                                oHtml.find("a").removeAttr("data-mce-href");
-                                //Remove Outline added by style
-                                oHtml.find("td").removeInlineStyle("outline");
-
-                                var RemoveCommon = function (element) {
-
-                                    //Remove Empty Element
-                                    if (element.isEmpty()) {
-                                        element.remove();
-                                        return;
-                                    }
-
-                                    var newElement = $("<div>");
-                                    newElement.html(element.html());
-
-                                    //Assign Style
-                                    var elementStyle = element.attr("style");
-                                    if (elementStyle != null) {
-                                        newElement.attr("style", elementStyle);
-                                    }
-
-                                    //Assign Class
-                                    var elementClass = element.attr("class");
-                                    if (elementClass != null) {
-                                        newElement.attr("class", elementClass);
-                                    }
-                                    //Remove Class
-                                    // newElement.removeClass();
-                                    element.replaceWith(newElement);
                                 }
 
-                                oHtml.find("ul").each(function () {  
-                                    if($(this).hasClass("sortable")){
-                                        RemoveCommon($(this));
+                            });
+
+                            return oHtml;
+                        }
+
+
+
+
+                        function CleanCode (html) {
+
+                            var oHtml = $(html);                    
+                                            
+                            oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("visibility");
+                            oHtml.find(".csHaveData").removeClass("csHaveData ui-draggable ui-droppable").addClass("MEE_ELEMENT");
+                            oHtml.find(".mainContentHtmlGrand").removeClass("mainContentHtmlGrand").addClass("MEE_DOCUMENT_CONTENTS");
+                            oHtml.find(".mainContentHtml").removeClass("mainContentHtml sortable").addClass("MEE_CONTENTS");
+
+                            oHtml.find(".textcontent").removeAttr("id");
+                            oHtml.find(".textcontent").removeAttr("tabindex");
+                            oHtml.find(".textcontent").removeAttr("contenteditable");
+                            oHtml.find(".textcontent").removeAttr("spellcheck");
+                            oHtml.find(".textcontent").removeClass("mce-content-body").addClass("MEE_ITEM").removeClass("textcontent");
+
+                            oHtml.find("div.ui-resizable-e").remove();
+                            oHtml.find("div.ui-resizable-s").remove();
+                            oHtml.find("div.ui-resizable-se").remove();                       
+
+                            oHtml.find(".space").removeInlineStyle("background");
+                            oHtml.find("*").removeInlineStyle("outline");
+
+                            //oHtml.find(".drapableImageContainer").addClass("MEE_ITEM").removeClass("drapableImageContainer");
+                            oHtml.find(".drapableImageContainer").each(function (index, object) {
+                                var imageContainer = $(object);
+                                var img = imageContainer.find("img");
+                                var resizableImg = imageContainer.find(".resizableImage");
+                                var myImage = imageContainer.find(".myImage");                        
+                                if(img.length){
+                                    img.css("width", resizableImg.inlineStyle("width"));
+                                    img.css("height", resizableImg.inlineStyle("height"));
+                                    if(resizableImg.attr("style")){
+                                        img.attr("isStyleSet","true");
+                                        img.attr("style",resizableImg.attr("style"));
                                     }
-                                });
-                                oHtml.find("li").each(function () {
-                                    if($(this).hasClass("MEE_DROPPABLE") || $(this).hasClass("MEE_ELEMENT") || $(this).hasClass("MEE_CONTENTS")){ 
-                                        RemoveCommon($(this));
+                                    else{
+                                        img.removeAttr("isStyleSet");
                                     }
+                                    img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");                        
+
+                                    if(img.parent().get( 0 ).tagName == 'a' || img.parent().get( 0 ).tagName == 'A') {
+                                        imageContainer.html(img.parent().outerHTML());
+                                    }
+                                    else {
+                                        imageContainer.html(img.outerHTML());
+
+                                    }
+
+                                    imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
+                                    imageContainer.attr("align", myImage.attr("align") );
+                                    if(myImage.attr("style")){
+                                        imageContainer.attr("style", myImage.attr("style") );
+                                    }
+                                }
+                            });
+
+
+                            oHtml.find(".dynamicContentContainer").each(function (index, object) {
+                                var variation = $(object);                        
+                                var keyword = variation.attr("keyword");
+                                                
+                                variation.addClass("DYNAMIC_VARIATION");
+                                variation.removeClass("dynamicContentContainer");
+                                variation.removeClass("container");
+                                var newDiv = $("<div></div>");
+                                newDiv.addClass("DYNAMIC_VARIATION");
+                                newDiv.attr("id", variation.attr("id"));
+                                newDiv.html(keyword);
+                                variation.replaceWith(newDiv);
+                            // variation.html(keyword);
+
+                            });
+                            //oHtml.find(".dynamicContentContainer").remove();
+                            oHtml.find("a").removeAttr("data-mce-href");
+                            //Remove Outline added by style
+                            oHtml.find("td").removeInlineStyle("outline");
+
+                            var RemoveCommon = function (element) {
+
+                                //Remove Empty Element
+                                if (element.isEmpty()) {
+                                    element.remove();
+                                    return;
+                                }
+
+                                var newElement = $("<div>");
+                                newElement.html(element.html());
+
+                                //Assign Style
+                                var elementStyle = element.attr("style");
+                                if (elementStyle != null) {
+                                    newElement.attr("style", elementStyle);
+                                }
+
+                                //Assign Class
+                                var elementClass = element.attr("class");
+                                if (elementClass != null) {
+                                    newElement.attr("class", elementClass);
+                                }
+                                //Remove Class
+                                // newElement.removeClass();
+                                element.replaceWith(newElement);
+                            }
+
+                            oHtml.find("ul").each(function () {  
+                                if($(this).hasClass("sortable")){
+                                    RemoveCommon($(this));
+                                }
+                            });
+                            oHtml.find("li").each(function () {
+                                if($(this).hasClass("MEE_DROPPABLE") || $(this).hasClass("MEE_ELEMENT") || $(this).hasClass("MEE_CONTENTS")){ 
+                                    RemoveCommon($(this));
+                                }
+                            });
+
+                            oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
+                                $(this).find("ul").each(function () {
+                                    RemoveCommon($(this));
                                 });
-
-                                oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
-                                    $(this).find("ul").each(function () {
-                                        RemoveCommon($(this));
-                                    });
-                                    $(this).find("li").each(function () {
-                                        RemoveCommon($(this));
-                                    });
+                                $(this).find("li").each(function () {
+                                    RemoveCommon($(this));
                                 });
+                            });
 
-                                oHtml.addClass("MEE_DOCUMENT");
-                                oHtml.removeClass("mainTable");
+                            oHtml.addClass("MEE_DOCUMENT");
+                            oHtml.removeClass("mainTable");
 
 
-                                // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");
+                            // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");
 
-                                return oHtml;
-                            };
+                            return oHtml;
+                        };
 
-                            InitializePreviewControls();
+                        InitializePreviewControls();
                             //=============================================================================
 
                             // --------------- DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) ------------ //            
@@ -2368,223 +2397,222 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     element.find("div.textcontent").each(function (index, element) {
                                         
-                                            tinymce.init({
-                                                selector: "div.textcontent",
-                                                inline: true,
-                                                theme: "modern",
-                                                skin_url: "editorcss/skin.css",
-                                                plugins: 'textcolor table anchor autolink advlist',
-                                                //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
+                                        tinymce.init({
+                                            selector: "div.textcontent",
+                                            inline: true,
+                                            theme: "modern",
+                                            skin_url: "editorcss/skin.css",
+                                            plugins: 'textcolor table anchor autolink advlist',
+                                            //script_url: '/scripts/libs/tinymce/tinymce.min.js',
+                                            toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
 
-                                                setup: function (editor) {                                                   
-                                                    if ($("#"+editor.id).data('tinymce') == undefined) {
-                                                        $("#"+editor.id).data('tinymce',true);
-                                                        editor.on("mouseDown", function(e) {                                           
-                                                            selectedLinkFromTinyMCE = e.target;                                                            
-                                                        });                                                    
-                                                        editor.on("AddUndo", function(e) {                                                                                                                                                                                                                      
-                                                            if(editor.undoManager.hasUndo() || editor.undoManager.hasRedo()){                                                                
-                                                                makeCloneAndRegister();
-                                                            }
-                                                        });  
-                                                        editor.on("mouseUp", function(e) {                                                                                                                                                                                                                      
-                                                            console.log(editor);
-                                                            console.log(e);
-                                                            var tiny_editor_selection = editor.selection;
-                                                            var currentNode = tiny_editor_selection.getNode();
-                                                            if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
-                                                                editor.selection.select(selectedLinkFromTinyMCE);
-                                                                var selected_element_range = tinyMCE.activeEditor.selection.getRng();
-                                                                showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
-                                                            }
-                                                        });  
-                                                    }                                                    
-                                                    editor.addButton('LinksButton', {
-                                                        type: 'button',
-                                                        title: 'Links',
-                                                        icon: 'link',
-                                                        onClick: function (e) {
-                                                            //editor.insertContent(this.value());
-                                                            //handleTextLink();
-                                                            myElement.find("#linkTrack").data("linkObject", "text");
-                                                            showLinkGUI();
-                                                        },
-
-                                                        onPostRender: function () {
-                                                        // Select the second item by default
-                                                        //this.value('');
+                                            setup: function (editor) {                                                   
+                                                if ($("#"+editor.id).data('tinymce') == undefined) {
+                                                    $("#"+editor.id).data('tinymce',true);
+                                                    editor.on("mouseDown", function(e) {                                           
+                                                        selectedLinkFromTinyMCE = e.target;                                                            
+                                                    });                                                    
+                                                    editor.on("AddUndo", function(e) {                                                                                                                                                                                                                      
+                                                        if(editor.undoManager.hasUndo() || editor.undoManager.hasRedo()){                                                                
+                                                            makeCloneAndRegister();
                                                         }
-                                                    });
-                                                    editor.addButton('foreTextColor', {
-                                                        type: 'button',
-                                                        tooltip: 'Text color',
-                                                        icon: 'txtcolor',
-                                                        //selectcmd: 'ForeColor',
+                                                    });  
+                                                    editor.on("mouseUp", function(e) {                                                                                                                                                                                                                      
+                                                        myElement.find(".alertButtons").hide();
+                                                        var tiny_editor_selection = editor.selection;
+                                                        var currentNode = tiny_editor_selection.getNode();
+                                                        if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
+                                                            editor.selection.select(selectedLinkFromTinyMCE);
+                                                            var selected_element_range = tinyMCE.activeEditor.selection.getRng();
+                                                            showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
+                                                        }
+                                                    });  
+                                                }                                                    
+                                                editor.addButton('LinksButton', {
+                                                    type: 'button',
+                                                    title: 'Links',
+                                                    icon: 'link',
+                                                    onClick: function (e) {
+                                                        //editor.insertContent(this.value());
+                                                        //handleTextLink();
+                                                        myElement.find("#linkTrack").data("linkObject", "text");
+                                                        showLinkGUI();
+                                                    },
 
-                                                        onClick: function (e) {
+                                                    onPostRender: function () {
+                                                    // Select the second item by default
+                                                    //this.value('');
+                                                    }
+                                                });
+                                                editor.addButton('foreTextColor', {
+                                                    type: 'button',
+                                                    tooltip: 'Text color',
+                                                    icon: 'txtcolor',
+                                                    //selectcmd: 'ForeColor',
 
-                                                            dialogForTextColor = true;
-                                                            myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();                                                                        
+                                                    onClick: function (e) {
 
-                                                            var divFontColorPicker = myElement.find(".divFontColorPicker");
-                                                            var selectedFontColor = myElement.find(".selectedFontColor");
-                                                            divFontColorPicker.minicolors({
-                                                                letterCase: 'uppercase',
-                                                                change: function (hex, opacity) {                                                       
-                                                                    //SetBackgroundColor(hex);
-                                                                    selectedFontColor.val(hex);
-                                                                //txtColorCode.val(hex);
-                                                                },
-                                                                inline: true
+                                                        dialogForTextColor = true;
+                                                        myElement.find(".modalDialog").show();
+                                                        myElement.find("#ColorPickerpop").show();                                                                        
+
+                                                        var divFontColorPicker = myElement.find(".divFontColorPicker");
+                                                        var selectedFontColor = myElement.find(".selectedFontColor");
+                                                        divFontColorPicker.minicolors({
+                                                            letterCase: 'uppercase',
+                                                            change: function (hex, opacity) {                                                       
+                                                                //SetBackgroundColor(hex);
+                                                                selectedFontColor.val(hex);
+                                                            //txtColorCode.val(hex);
+                                                            },
+                                                            inline: true
 
 
-                                                            });
+                                                        });
 
-                                                            if (myColorsFromServiceGlobal == "") {
-                                                                _LoadMyColors();
-                                                            }
-                                                            var myFontColors = myElement.find(".myFontColors");                                                
+                                                        if (myColorsFromServiceGlobal == "") {
+                                                            _LoadMyColors();
+                                                        }
+                                                        var myFontColors = myElement.find(".myFontColors");                                                
 
-                                                            myFontColors.empty();
-                                                            myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
-                                                            myFontColors.append("<li style='background-color:#000000;' data-color='#000000'></li>");
+                                                        myFontColors.empty();
+                                                        myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
+                                                        myFontColors.append("<li style='background-color:#000000;' data-color='#000000'></li>");
 
-                                                            myFontColors.append(ulMyColors.html());
+                                                        myFontColors.append(ulMyColors.html());
 
-                                                            myFontColors.find("li").click(function () {                                                    
-                                                                selectedFontColor.val($(this).data("color"));
+                                                        myFontColors.find("li").click(function () {                                                    
+                                                            selectedFontColor.val($(this).data("color"));
 
-                                                            });
+                                                        });
 
-                                                            //editor.focus();
-                                                            myElement.find('#fontDialogCancelButtonID').click(function () {
-                                                                myElement.find("#ColorPickerpop").hide();
-                                                                myElement.find(".modalDialog").hide();
+                                                        //editor.focus();
+                                                        myElement.find('#fontDialogCancelButtonID').click(function () {
+                                                            myElement.find("#ColorPickerpop").hide();
+                                                            myElement.find(".modalDialog").hide();
 
-                                                            });
-                                                            myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
-                                                                if(dialogForTextColor) {
-                                                                    var selectedText = tinyMCE.activeEditor.selection.getContent({
-                                                                        format: 'text'
-                                                                    });                                                        
-                                                                    var selectedFontColor = myElement.find(".selectedFontColor");
-                                                                    var selectedColor = selectedFontColor.val();                                                        
-                                                                    if (selectedColor != "") {
-                                                                        var result = editor.execCommand('ForeColor', false, selectedColor);                                                           
-                                                                    // var changedText = "<span style='color:"+ selectedColor +";'>" + selectedText+"</span>";
-                                                                    // tinyMCE.activeEditor.selection.setContent(changedText);
-                                                                    }
-
-                                                                    myElement.find("#ColorPickerpop").hide();
-                                                                    myElement.find(".modalDialog").hide();
+                                                        });
+                                                        myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
+                                                            if(dialogForTextColor) {
+                                                                var selectedText = tinyMCE.activeEditor.selection.getContent({
+                                                                    format: 'text'
+                                                                });                                                        
+                                                                var selectedFontColor = myElement.find(".selectedFontColor");
+                                                                var selectedColor = selectedFontColor.val();                                                        
+                                                                if (selectedColor != "") {
+                                                                    var result = editor.execCommand('ForeColor', false, selectedColor);                                                           
+                                                                // var changedText = "<span style='color:"+ selectedColor +";'>" + selectedText+"</span>";
+                                                                // tinyMCE.activeEditor.selection.setContent(changedText);
                                                                 }
 
-                                                            });
-                                                        }
-
-                                                    });
-                                                    editor.addButton('backTextColor', {
-                                                        type: 'button',
-                                                        tooltip: 'Text Background color',
-                                                        icon: 'txtbg',
-                                                        selectcmd: 'HiliteColor',
-                                                        onClick: function (e) {
-
-                                                            dialogForTextColor = false;
-                                                            myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();
-
-                                                            var divFontColorPicker = myElement.find(".divFontColorPicker");
-                                                            var selectedFontColor = myElement.find(".selectedFontColor");
-                                                            divFontColorPicker.minicolors({
-                                                                letterCase: 'uppercase',
-                                                                change: function (hex, opacity) {                                                        
-                                                                    //SetBackgroundColor(hex);
-                                                                    selectedFontColor.val(hex);
-                                                                //txtColorCode.val(hex);
-                                                                },
-                                                                click: function() {
-
-                                                                },
-                                                                inline: true
-
-
-
-
-                                                            });
-
-                                                            //divFontColorPicker.css("z-index", "99999");
-
-                                                            if (myColorsFromServiceGlobal == "") {
-                                                                _LoadMyColors();
-                                                            }
-                                                            var myFontColors = myElement.find(".myFontColors");
-
-
-                                                            myFontColors.empty();
-                                                            myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
-                                                            myFontColors.append("<li style='background-color:#000000;' data-color='#000000'></li>");
-
-
-                                                            myFontColors.append(ulMyColors.html());
-
-                                                            myFontColors.find("li").click(function () {                                                   
-                                                                selectedFontColor.val($(this).data("color"));
-
-                                                            });
-
-                                                            //editor.focus();
-                                                            myElement.find('#fontDialogCancelButtonID').click(function () {
                                                                 myElement.find("#ColorPickerpop").hide();
                                                                 myElement.find(".modalDialog").hide();
+                                                            }
 
-                                                            });
-                                                            myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
-                                                                if(!dialogForTextColor) {                                                
-                                                                    var selectedText = tinyMCE.activeEditor.selection.getContent({
-                                                                        format: 'text'
-                                                                    });                                                        
+                                                        });
+                                                    }
 
-                                                                    var selectedFontColor = myElement.find(".selectedFontColor");
-                                                                    var selectedColor = selectedFontColor.val();                                                        
-                                                                    if (selectedColor != "") {
-                                                                        var result = editor.execCommand('HiliteColor', false, selectedColor);                                                            
-                                                                    }
+                                                });
+                                                editor.addButton('backTextColor', {
+                                                    type: 'button',
+                                                    tooltip: 'Text Background color',
+                                                    icon: 'txtbg',
+                                                    selectcmd: 'HiliteColor',
+                                                    onClick: function (e) {
 
-                                                                    myElement.find(".modalDialog").hide();
-                                                                    myElement.find("#ColorPickerpop").hide();
+                                                        dialogForTextColor = false;
+                                                        myElement.find(".modalDialog").show();
+                                                        myElement.find("#ColorPickerpop").show();
+
+                                                        var divFontColorPicker = myElement.find(".divFontColorPicker");
+                                                        var selectedFontColor = myElement.find(".selectedFontColor");
+                                                        divFontColorPicker.minicolors({
+                                                            letterCase: 'uppercase',
+                                                            change: function (hex, opacity) {                                                        
+                                                                //SetBackgroundColor(hex);
+                                                                selectedFontColor.val(hex);
+                                                            //txtColorCode.val(hex);
+                                                            },
+                                                            click: function() {
+
+                                                            },
+                                                            inline: true
+
+
+
+
+                                                        });
+
+                                                        //divFontColorPicker.css("z-index", "99999");
+
+                                                        if (myColorsFromServiceGlobal == "") {
+                                                            _LoadMyColors();
+                                                        }
+                                                        var myFontColors = myElement.find(".myFontColors");
+
+
+                                                        myFontColors.empty();
+                                                        myFontColors.append("<li style='background-color:#ffffff;' data-color='#ffffff'></li>");
+                                                        myFontColors.append("<li style='background-color:#000000;' data-color='#000000'></li>");
+
+
+                                                        myFontColors.append(ulMyColors.html());
+
+                                                        myFontColors.find("li").click(function () {                                                   
+                                                            selectedFontColor.val($(this).data("color"));
+
+                                                        });
+
+                                                        //editor.focus();
+                                                        myElement.find('#fontDialogCancelButtonID').click(function () {
+                                                            myElement.find("#ColorPickerpop").hide();
+                                                            myElement.find(".modalDialog").hide();
+
+                                                        });
+                                                        myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
+                                                            if(!dialogForTextColor) {                                                
+                                                                var selectedText = tinyMCE.activeEditor.selection.getContent({
+                                                                    format: 'text'
+                                                                });                                                        
+
+                                                                var selectedFontColor = myElement.find(".selectedFontColor");
+                                                                var selectedColor = selectedFontColor.val();                                                        
+                                                                if (selectedColor != "") {
+                                                                    var result = editor.execCommand('HiliteColor', false, selectedColor);                                                            
                                                                 }
-                                                            });
-                                                        }
 
-                                                    });
+                                                                myElement.find(".modalDialog").hide();
+                                                                myElement.find("#ColorPickerpop").hide();
+                                                            }
+                                                        });
+                                                    }
 
-                                                    editor.addButton('mybutton123', {
-                                                        type: 'listbox',
-                                                        title: 'Personalize',
-                                                        text: 'Personalize',
-                                                        icon: false,
-                                                        onselect: function (e) {
-                                                            editor.insertContent(this.value());
-                                                            this.value('');
-                                                        },
-                                                        values: personalizedTagsGlobal,
+                                                });
+
+                                                editor.addButton('mybutton123', {
+                                                    type: 'listbox',
+                                                    title: 'Personalize',
+                                                    text: 'Personalize',
+                                                    icon: false,
+                                                    onselect: function (e) {
+                                                        editor.insertContent(this.value());
+                                                        this.value('');
+                                                    },
+                                                    values: personalizedTagsGlobal,
                                                                     
-                                                        onPostRender: function () {
+                                                    onPostRender: function () {
                                                                     
-                                                        }
-                                                    });
-                                                },
-                                                //theme_modern_buttons2: "exapmle Mybutton",
-                                                toolbar_items_size: 'small',
-                                                menubar: false,
-                                                schema: "html5",                                                            
-                                                statusbar: true,
-                                                object_resizing: false
-                                            });
-                                        //}
+                                                    }
+                                                });
+                                            },
+                                            //theme_modern_buttons2: "exapmle Mybutton",
+                                            toolbar_items_size: 'small',
+                                            menubar: false,
+                                            schema: "html5",                                                            
+                                            statusbar: true,
+                                            object_resizing: false
+                                        });
+                                    //}
                                     });
                                 }
                                 ////
@@ -2897,1567 +2925,1033 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 if(lType==="text"){
                                     divID =  myElement.find("div.textcontent.mce-edit-focus").attr("id");                                    
                                 }
-                                var dialog = options._app.showDialog({title:"Links GUI",
-                                        css:{"width":"780px","margin-left":"-390px"},
-                                        bodyCss:{"min-height":"325px"},                
-                                        headerIcon : 'link',
-                                        buttons: {saveBtn:{text:'Insert'} }                                                                           
+                                var dialog = options._app.showDialog({
+                                    title:"Links GUI",
+                                    css:{
+                                        "width":"780px",
+                                        "margin-left":"-390px"
+                                    },
+                                    bodyCss:{
+                                        "min-height":"325px"
+                                    },                
+                                    headerIcon : 'link',
+                                    buttons: {
+                                        saveBtn:{
+                                            text:'Insert'
+                                        }
+                                    }                                                                           
                                 });
-                                options._app.showLoading("Loading...",dialog.getBody());
-                                dialog.$el.css("z-index","99999");
-                                $(".modal-backdrop").css("z-index","99998");
-                                require(["editor/links"],function(page){                                              
-                                    var linkDialogPage = new page({app:options._app,_el:myElement,dialog:dialog,linkType:lType,div:divID});                                                                        
-                                    dialog.getBody().html(linkDialogPage.$el);
-                                    dialog.saveCallBack(_.bind(linkDialogPage.insertLink,linkDialogPage,dialog));
-                                }); 
-                            }
+                            options._app.showLoading("Loading...",dialog.getBody());
+                            dialog.$el.css("z-index","99999");
+                            $(".modal-backdrop").css("z-index","99998");
+                            require(["editor/links"],function(page){                                              
+                                var linkDialogPage = new page({
+                                    app:options._app,
+                                    _el:myElement,
+                                    dialog:dialog,
+                                    linkType:lType,
+                                    div:divID
+                                });                                                                        
+                                dialog.getBody().html(linkDialogPage.$el);
+                                dialog.saveCallBack(_.bind(linkDialogPage.insertLink,linkDialogPage,dialog));
+                            }); 
+                        }
 
                             
 
-                            function SetElementSize(args) {
-                                //Controlling here Width of Container
-                                if (args.predefinedControl != null) {
-                                    var parentWidth = 100;
-                                    //var parentWidth = args.droppedElement.width();
-                                    var perTDwidth = 0;
-                                    switch (args.predefinedControl.Type) {
-                                        case "oneColumnContainer":
-                                            //do nothing
-                                            break;
-                                        case "twoColumnContainer":
-                                            perTDwidth = (parentWidth / 2) + "%";
-                                            args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
-                                                $(element).width(perTDwidth);
-                                            });
-                                            break;
-                                        case "threeColumnContainer":
-                                            perTDwidth = (parentWidth / 3) + "%";
-                                            args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
-                                                $(element).width(perTDwidth);
-                                            });
-                                            break;
-                                        case "fourColumnContainer":
-                                            perTDwidth = (parentWidth / 4) + "%";
-                                            args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
-                                                $(element).width(perTDwidth);
-                                            });
-                                            break;
-                                        default:
+                        function SetElementSize(args) {
+                            //Controlling here Width of Container
+                            if (args.predefinedControl != null) {
+                                var parentWidth = 100;
+                                //var parentWidth = args.droppedElement.width();
+                                var perTDwidth = 0;
+                                switch (args.predefinedControl.Type) {
+                                    case "oneColumnContainer":
+                                        //do nothing
+                                        break;
+                                    case "twoColumnContainer":
+                                        perTDwidth = (parentWidth / 2) + "%";
+                                        args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
+                                            $(element).width(perTDwidth);
+                                        });
+                                        break;
+                                    case "threeColumnContainer":
+                                        perTDwidth = (parentWidth / 3) + "%";
+                                        args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
+                                            $(element).width(perTDwidth);
+                                        });
+                                        break;
+                                    case "fourColumnContainer":
+                                        perTDwidth = (parentWidth / 4) + "%";
+                                        args.droppedElement.find(".container > tbody > tr > td").each(function (index, element) {
+                                            $(element).width(perTDwidth);
+                                        });
+                                        break;
+                                    default:
 
-                                    }
                                 }
-
                             }
 
-
-
-                            //Elements Dropping
-                            function InitializeWithDropable(sender) {
-
-                                //if (draggingUI != null) {
-                                //    alert("")
-                                //}
-
-                                sender.droppable({
-                                    tolerance: "pointer",
-                                    greedy: true,
-                                    drop: function (event, ui) {
-
-                                        //makeCloneAndRegister();
-                                        //only allowed to drag controls from controls panel
-                                        if (!$(this).hasClass("myDroppable") || ui.draggable.data("type") === "droppedImage") {
-                                            //DO NOTHING
-                                            return;
-                                        }
-
-                                        if ($(this).css("visibility") == "hidden") {
-                                            //DO NOTHING
-                                            return;
-                                        }
-
-                                        //MUST REMOVE IN ORDER TO WORK PROPER
-                                        $(this).removeAttr("style");
+                        }
 
 
 
-                                        if (IsFirstDroppableElement) {
-                                            //remove height here:
-                                            //$(this).removeAttr("style");
-                                            IsFirstDroppableElement = false;
-                                        }
+                        //Elements Dropping
+                        function InitializeWithDropable(sender) {
 
-                                        //Once dropped Delete myDroppable class here and Remove functionality of Droppable here                                
-                                        $(this).removeClass("myDroppable");
+                            //if (draggingUI != null) {
+                            //    alert("")
+                            //}
 
-                                        //Dragging and Dropping between elements
-                                        if (ui.draggable.hasClass("csHaveData")) {
+                            sender.droppable({
+                                tolerance: "pointer",
+                                greedy: true,
+                                drop: function (event, ui) {
 
-                                            //handling DC into DC MOVE
-                                            if(ui.draggable.hasClass("csDynamicData")) {
-                                                if($(this).parent().hasClass("dcInternalContents")) {
-                                                    console.log("Dropping DC in DC");
-                                                    return;
-                                                }
-                                                else {
-                                                    console.log("Dropping DC in Container");   
-                                                }
+                                    //makeCloneAndRegister();
+                                    //only allowed to drag controls from controls panel
+                                    if (!$(this).hasClass("myDroppable") || ui.draggable.data("type") === "droppedImage") {
+                                        //DO NOTHING
+                                        return;
+                                    }
+
+                                    if ($(this).css("visibility") == "hidden") {
+                                        //DO NOTHING
+                                        return;
+                                    }
+
+                                    //MUST REMOVE IN ORDER TO WORK PROPER
+                                    $(this).removeAttr("style");
+
+
+
+                                    if (IsFirstDroppableElement) {
+                                        //remove height here:
+                                        //$(this).removeAttr("style");
+                                        IsFirstDroppableElement = false;
+                                    }
+
+                                    //Once dropped Delete myDroppable class here and Remove functionality of Droppable here                                
+                                    $(this).removeClass("myDroppable");
+
+                                    //Dragging and Dropping between elements
+                                    if (ui.draggable.hasClass("csHaveData")) {
+
+                                        //handling DC into DC MOVE
+                                        if(ui.draggable.hasClass("csDynamicData")) {
+                                            if($(this).parent().hasClass("dcInternalContents")) {
+                                                console.log("Dropping DC in DC");
+                                                return;
                                             }
-
-                                            //Add class to newly "SWAPED" elment - will use to delete droppable from container etc;
-                                            $(this).addClass("csHaveData");
-
-                                            //INSERT AND REMOVE DROPPABLES HERE                            
-                                            ui.draggable.next(".myDroppable").remove();
-
-                                            if ($(this).prev(".myDroppable").length == 0) {
-                                                $(this).before(CreateDroppableWithAllFunctions());
+                                            else {
+                                                console.log("Dropping DC in Container");   
                                             }
-
-                                            if ($(this).next(".myDroppable").length == 0) {
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                            }
-                                            /////////////////////////////////////
-
-                                            $(this).replaceWith(ui.draggable);
-
                                         }
-                                        //Element recieving from controls panel:
-                                        else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
 
-                                            $(this).addClass("csHaveData");
-                                            var args = {
-                                                droppedElement: $(this),
-                                                event: event,
-                                                ui: ui,
-                                                predefinedControl: null,
-                                                buildingBlock: null
-                                            };
+                                        //Add class to newly "SWAPED" elment - will use to delete droppable from container etc;
+                                        $(this).addClass("csHaveData");
 
-                                            var typeOfDraggingControl = ui.draggable.data("type");
-                                            var oControl = new Object();
-                                            // -------------- Building Block Controls[Better way] --------------//
+                                        //INSERT AND REMOVE DROPPABLES HERE                            
+                                        ui.draggable.next(".myDroppable").remove();
 
-                                            if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
+                                        if ($(this).prev(".myDroppable").length == 0) {
+                                            $(this).before(CreateDroppableWithAllFunctions());
+                                        }
 
-                                                var controlID = ui.draggable.data("id");
-                                                console.log(controlID);
-                                                //need to apply each for this and then search on each [0]
+                                        if ($(this).next(".myDroppable").length == 0) {
+                                            $(this).after(CreateDroppableWithAllFunctions());
+                                        }
+                                        /////////////////////////////////////
 
-                                                console.log(buildingBlocksGlobal);
-                                                var bb = undefined;
-                                                if(typeOfDraggingControl=="buildingBlock"){
-                                                    $.each(buildingBlocksGlobal, function (i, obj) {                                                                                                                                
-                                                        if (obj[0].ID == controlID) {
-                                                            bb = obj[0];
-                                                        }                                                                
+                                        $(this).replaceWith(ui.draggable);
 
-                                                    });
-                                                }
-                                                else{
-                                                    $.each(contentBlocksGlobal, function (i, obj) {                                                                                                                                
-                                                        if (obj[0]["blockId.encode"] == controlID) {
-                                                            bb = obj[0];
-                                                        }                                                                
-                                                    });                                                                                                        
-                                                }
+                                    }
+                                    //Element recieving from controls panel:
+                                    else {   //Add class to newly entered element from control panel - will use to delete droppable from container etc;
+
+                                        $(this).addClass("csHaveData");
+                                        var args = {
+                                            droppedElement: $(this),
+                                            event: event,
+                                            ui: ui,
+                                            predefinedControl: null,
+                                            buildingBlock: null
+                                        };
+
+                                        var typeOfDraggingControl = ui.draggable.data("type");
+                                        var oControl = new Object();
+                                        // -------------- Building Block Controls[Better way] --------------//
+
+                                        if (typeOfDraggingControl == "buildingBlock" || typeOfDraggingControl == "contentBlock") {
+                                            //INSERT DROPPABLE BEFORE AND AFTER            
+                                            $(this).before(CreateDroppableWithAllFunctions());
+                                            $(this).after(CreateDroppableWithAllFunctions());
+                                            ///////
+
+                                            var controlID = ui.draggable.data("id");
+                                            console.log(controlID);
+                                            //need to apply each for this and then search on each [0]
+
+                                            console.log(buildingBlocksGlobal);
+                                            var bb = undefined;
+                                            if(typeOfDraggingControl=="buildingBlock"){
+                                                $.each(buildingBlocksGlobal, function (i, obj) {                                                                                                                                
+                                                    if (obj[0].ID == controlID) {
+                                                        bb = obj[0];
+                                                    }                                                                
+
+                                                });
+                                            }
+                                            else{
+                                                $.each(contentBlocksGlobal, function (i, obj) {                                                                                                                                
+                                                    if (obj[0]["blockId.encode"] == controlID) {
+                                                        bb = obj[0];
+                                                    }                                                                
+                                                });                                                                                                        
+                                            }
                                                
-                                                console.log("BB:" + bb);
-                                                if (bb != undefined) {
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
-                                                    var decodeHTML = $('<div/>').html(bb.html).text();
-                                                    oControl.Html = $(decodeHTML);
-                                                    oControl.Type = "buildingBlock";
-                                                    oControl.ID = bb.ID;
+                                            console.log("BB:" + bb);
+                                            if (bb != undefined) {
+                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
+                                                var decodeHTML = $('<div/>').html(bb.html).text();
+                                                oControl.Html = $(decodeHTML);
+                                                oControl.Type = "buildingBlock";
+                                                oControl.ID = bb.ID;
 
-                                                    console.log(oControl);
+                                                console.log(oControl);
 
-                                                    args.predefinedControl = oControl;
-                                                    
-                                                    //////////////////////////////////////////////////////////////////////////////////////////
-
-                                                    //InitializeAllEvents(args.droppedElement);
-
-                                                    //Place predefined html into dropped area.
-                                                    args.droppedElement.html(oControl.Html);
-
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-                                                }
-                                            }
-                                            else if (typeOfDraggingControl == "formBlock") {
-
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                var controlID = ui.draggable.data("id");
-                                                console.log(controlID);
-                                                //need to apply each for this and then search on each [0]
-                                                args.FormId = controlID;
-                                                if(options.LoadFormContents != null) {
-                                                    options.LoadFormContents(args);
-                                                }
-
-
-
-                                                if (args.formContents != undefined) {
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                    var fContents = args.formContents;
-                                                              
-                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\""+ fContents +"\" frameborder=\"0\" onload='setTimeout(resizeIFrame(this), 10000);'></iframe><br style='clear:both;' /></div>");
-                                                                
-                                                    oControl.Html = preview_iframe;
-                                                    //oControl.Html.addClass("container");
-                                                    oControl.Type = "formBlock";
-                                                    oControl.ID = args.FormId;
-
-                                                    console.log(oControl);
-
-                                                    args.predefinedControl = oControl;
-
-                                                    args.droppedElement.html(oControl.Html);
-
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-                                                }
-                                            }
-                                            else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
-
-                                                if($(this).parent().hasClass("dcInternalContents")) {
-                                                    console.log("Dropping DC in DC");
-                                                    return;
-                                                }
-                                                else {
-                                                    console.log("Dropping DC in Container");   
-                                                }
-
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                $(this).addClass("csDynamicData ");
-
-                                                var isNew = ui.draggable.data("isnew");
-                                                var predefinedControl = myElement.find(".divDCTemplate").html();
-                                                oControl.Html = $(predefinedControl);
-                                                oControl.Type = predefinedControl.type;
                                                 args.predefinedControl = oControl;
+                                                    
+                                                //////////////////////////////////////////////////////////////////////////////////////////
+
+                                                //InitializeAllEvents(args.droppedElement);
+
+                                                //Place predefined html into dropped area.
                                                 args.droppedElement.html(oControl.Html);
 
-                                                if (!isNew) {
-
-                                                    //Call overridden Method here: will use when exposing properties to developer
-                                                    if (options.OnExistingDynamicControlDropped != null) {
-
-                                                        if (ui.draggable.data("isdummy") != null) {
-                                                            //Contruct here dummy variation:
-                                                            var dv = new DynamicVariation();
-                                                            dv.DynamicVariationID = "v123";
-                                                            dv.IsUpdate = false;
-                                                            dv.Label = "adnan123"
-
-                                                            var dc = new DynamicContents();
-                                                            dc.Label = "Default";
-                                                            dc.DynamicContentID = "c123";
-                                                            dc.IsDefault = true;
-                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                            dv.ListOfDynamicContents.push(dc);
+                                                oInitDestroyEvents.InitAll(args.droppedElement);
 
 
-                                                            var dc = new DynamicContents();
-                                                            dc.Label = "dc 123";
-                                                            dc.DynamicContentID = "c123";
-                                                            dc.IsDefault = false;
-                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
-                                                            dv.ListOfDynamicContents.push(dc);
+                                            }
+                                        }
+                                        else if (typeOfDraggingControl == "formBlock") {
 
-                                                            args.DynamicVariation = dv;
-                                                            //alert("dummy");
+                                            //INSERT DROPPABLE BEFORE AND AFTER            
+                                            $(this).before(CreateDroppableWithAllFunctions());
+                                            $(this).after(CreateDroppableWithAllFunctions());
+                                            ///////
+
+                                            var controlID = ui.draggable.data("id");
+                                            console.log(controlID);
+                                            //need to apply each for this and then search on each [0]
+                                            args.FormId = controlID;
+                                            if(options.LoadFormContents != null) {
+                                                options.LoadFormContents(args);
+                                            }
 
 
-                                                            InitializeDynamicControl(args);
-                                                            oInitDestroyEvents.InitAll(args.droppedElement);
 
-                                                        }
-                                                        else {
+                                            if (args.formContents != undefined) {
+                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                var fContents = args.formContents;
+                                                              
+                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\""+ fContents +"\" frameborder=\"0\" onload='setTimeout(resizeIFrame(this), 10000);'></iframe><br style='clear:both;' /></div>");
+                                                                
+                                                oControl.Html = preview_iframe;
+                                                //oControl.Html.addClass("container");
+                                                oControl.Type = "formBlock";
+                                                oControl.ID = args.FormId;
 
-                                                            // args.ID = ui.draggable.data("id");
-                                                            args.ID = ui.draggable.data("keyword");
+                                                console.log(oControl);
 
-                                                            args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+                                                args.predefinedControl = oControl;
 
-                                                            InitializeDynamicControl(args);
-                                                            oInitDestroyEvents.InitAll(args.droppedElement);
+                                                args.droppedElement.html(oControl.Html);
 
-                                                        }
+                                                oInitDestroyEvents.InitAll(args.droppedElement);
+
+
+                                            }
+                                        }
+                                        else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
+
+                                            if($(this).parent().hasClass("dcInternalContents")) {
+                                                console.log("Dropping DC in DC");
+                                                return;
+                                            }
+                                            else {
+                                                console.log("Dropping DC in Container");   
+                                            }
+
+                                            //INSERT DROPPABLE BEFORE AND AFTER            
+                                            $(this).before(CreateDroppableWithAllFunctions());
+                                            $(this).after(CreateDroppableWithAllFunctions());
+                                            ///////
+
+                                            $(this).addClass("csDynamicData ");
+
+                                            var isNew = ui.draggable.data("isnew");
+                                            var predefinedControl = myElement.find(".divDCTemplate").html();
+                                            oControl.Html = $(predefinedControl);
+                                            oControl.Type = predefinedControl.type;
+                                            args.predefinedControl = oControl;
+                                            args.droppedElement.html(oControl.Html);
+
+                                            if (!isNew) {
+
+                                                //Call overridden Method here: will use when exposing properties to developer
+                                                if (options.OnExistingDynamicControlDropped != null) {
+
+                                                    if (ui.draggable.data("isdummy") != null) {
+                                                        //Contruct here dummy variation:
+                                                        var dv = new DynamicVariation();
+                                                        dv.DynamicVariationID = "v123";
+                                                        dv.IsUpdate = false;
+                                                        dv.Label = "adnan123"
+
+                                                        var dc = new DynamicContents();
+                                                        dc.Label = "Default";
+                                                        dc.DynamicContentID = "c123";
+                                                        dc.IsDefault = true;
+                                                        dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
+                                                        dv.ListOfDynamicContents.push(dc);
+
+
+                                                        var dc = new DynamicContents();
+                                                        dc.Label = "dc 123";
+                                                        dc.DynamicContentID = "c123";
+                                                        dc.IsDefault = false;
+                                                        dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
+                                                        dv.ListOfDynamicContents.push(dc);
+
+                                                        args.DynamicVariation = dv;
+                                                        //alert("dummy");
+
+
+                                                        InitializeDynamicControl(args);
+                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+
+                                                    }
+                                                    else {
+
+                                                        // args.ID = ui.draggable.data("id");
+                                                        args.ID = ui.draggable.data("keyword");
+
+                                                        args.DynamicVariation = loadDynamicVariationFromServer(args.ID);
+
+                                                        InitializeDynamicControl(args);
+                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+
                                                     }
                                                 }
-                                                else {
-
-
-
-                                                    var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
-                                                    dcContentVariationWindow.show();
-                                                    dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
-                                                        event.stopPropagation();
-                                                        DeleteElement(args.droppedElement);
-                                                        dcContentNameWindow.hide();
-                                                    });
-                                                    dcContentVariationWindow.find(".btnSaveVariation").click(function () {
-
-                                                        var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
-
-                                                        if (txtVariationName.isEmpty())
-                                                        {
-                                                            alert("Please enter dynamic control name.");
-
-                                                        }
-                                                        else {
-
-                                                            //args.predefinedControl.Html.find(".dcName span:first").html(txtVariationName.val());
-
-                                                            args.DynamicVariation = new DynamicVariation();
-                                                            args.DynamicVariation.Label = txtVariationName.val();
-                                                            args.DynamicVariation.isUpdate = false;
-                                                            var dc = new DynamicContents();
-                                                            var listOfDC = new Array();
-                                                            listOfDC.push(dc);
-                                                            args.DynamicVariation.ListOfDynamicContents = listOfDC;
-
-
-                                                            //dummy
-                                                            if (false) {
-
-                                                                args.DynamicVariation = variation;
-                                                                args.DynamicVariation.Label = "Im Test Variation";
-                                                                args.DynamicVariation.DynamicVariationID = "v123";
-
-                                                                alert(args.DynamicVariation.DynamicVariationID);
-
-
-                                                            }
-                                                            else {
-                                                                if (options.OnDynamicControlSave != null) {
-
-                                                                    //alert(args.DynamicVariation.Label);
-                                                                    options.OnDynamicControlSave(args.DynamicVariation);
-
-
-                                                                //alert("Successfully Saved");
-                                                                }
-
-
-                                                                args.DynamicVariation = loadDynamicVariationFromServer(args.DynamicVariation.DynamicVariationCode);
-
-                                                                args.DynamicVariation.Label = txtVariationName.val();
-
-                                                                txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
-
-                                                            }
-
-                                                            _LoadDynamicBlocks();
-
-                                                            InitializeDynamicControl(args);
-
-                                                            oInitDestroyEvents.InitAll(args.droppedElement);
-
-
-                                                        }
-
-                                                        dcContentVariationWindow.hide();
-
-                                                    });
-
-                                                }
-
-                                            //Work on control - CONTROL ONLY
-                                            //ReInitializeDragDropHoverAll(oControl.Html);
-
-
                                             }
                                             else {
 
-                                                //INSERT DROPPABLE BEFORE AND AFTER            
-                                                $(this).before(CreateDroppableWithAllFunctions());
-                                                $(this).after(CreateDroppableWithAllFunctions());
-                                                ///////
-
-                                                // -------------- Predefined Controls[Better way] --------------//
-                                                var predefinedControl = Enumerable.From(predefinedControls).Where("x => x.type == '" + typeOfDraggingControl + "'").FirstOrDefault();
-                                                if (predefinedControl != undefined) {
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
-
-                                                    oControl.Html = $(predefinedControl.html);
-                                                    oControl.Type = predefinedControl.type;
-
-                                                    args.predefinedControl = oControl;
-
-                                                    //Place predefined html into dropped area.
-                                                    //console.log("HTML:"+ oControl.HTML);
-                                                    args.droppedElement.html(oControl.Html);
 
 
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-                                                               
+                                                var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
+                                                dcContentVariationWindow.show();
+                                                dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
+                                                    event.stopPropagation();
+                                                    DeleteElement(args.droppedElement);
+                                                    dcContentNameWindow.hide();
+                                                });
+                                                dcContentVariationWindow.find(".btnSaveVariation").click(function () {
+
+                                                    var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
+
+                                                    if (txtVariationName.isEmpty())
+                                                    {
+                                                        alert("Please enter dynamic control name.");
+
+                                                    }
+                                                    else {
+
+                                                        //args.predefinedControl.Html.find(".dcName span:first").html(txtVariationName.val());
+
+                                                        args.DynamicVariation = new DynamicVariation();
+                                                        args.DynamicVariation.Label = txtVariationName.val();
+                                                        args.DynamicVariation.isUpdate = false;
+                                                        var dc = new DynamicContents();
+                                                        var listOfDC = new Array();
+                                                        listOfDC.push(dc);
+                                                        args.DynamicVariation.ListOfDynamicContents = listOfDC;
 
 
-                                                }
+                                                        //dummy
+                                                        if (false) {
+
+                                                            args.DynamicVariation = variation;
+                                                            args.DynamicVariation.Label = "Im Test Variation";
+                                                            args.DynamicVariation.DynamicVariationID = "v123";
+
+                                                            alert(args.DynamicVariation.DynamicVariationID);
+
+
+                                                        }
+                                                        else {
+                                                            if (options.OnDynamicControlSave != null) {
+
+                                                                //alert(args.DynamicVariation.Label);
+                                                                options.OnDynamicControlSave(args.DynamicVariation);
+
+
+                                                            //alert("Successfully Saved");
+                                                            }
+
+
+                                                            args.DynamicVariation = loadDynamicVariationFromServer(args.DynamicVariation.DynamicVariationCode);
+
+                                                            args.DynamicVariation.Label = txtVariationName.val();
+
+                                                            txtVariationName.data("variationID", args.DynamicVariation.DynamicVariationID);
+
+                                                        }
+
+                                                        _LoadDynamicBlocks();
+
+                                                        InitializeDynamicControl(args);
+
+                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+
+
+                                                    }
+
+                                                    dcContentVariationWindow.hide();
+
+                                                });
 
                                             }
 
-                                            //
-
-                                            //Controlling ELEMENT resizing here [Containers]
-                                            //Work on control - CONTROL ONLY
-                                            SetElementSize(args); //$$
-                                            ////////////////////////////////////
-
-
-                                            OnNewElementDropped(args);
+                                        //Work on control - CONTROL ONLY
+                                        //ReInitializeDragDropHoverAll(oControl.Html);
 
 
                                         }
+                                        else {
+
+                                            //INSERT DROPPABLE BEFORE AND AFTER            
+                                            $(this).before(CreateDroppableWithAllFunctions());
+                                            $(this).after(CreateDroppableWithAllFunctions());
+                                            ///////
+
+                                            // -------------- Predefined Controls[Better way] --------------//
+                                            var predefinedControl = Enumerable.From(predefinedControls).Where("x => x.type == '" + typeOfDraggingControl + "'").FirstOrDefault();
+                                            if (predefinedControl != undefined) {
+                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.
+
+                                                oControl.Html = $(predefinedControl.html);
+                                                oControl.Type = predefinedControl.type;
+
+                                                args.predefinedControl = oControl;
+
+                                                //Place predefined html into dropped area.
+                                                //console.log("HTML:"+ oControl.HTML);
+                                                args.droppedElement.html(oControl.Html);
+
+
+                                                oInitDestroyEvents.InitAll(args.droppedElement);
+                                                               
+
+
+                                            }
+
+                                        }
+
+                                        //
+
+                                        //Controlling ELEMENT resizing here [Containers]
+                                        //Work on control - CONTROL ONLY
+                                        SetElementSize(args); //$$
+                                        ////////////////////////////////////
+
+
+                                        OnNewElementDropped(args);
+
 
                                     }
-                                });
 
-                                return sender;
-                            }
+                                }
+                            });
 
-                            //Elements DRAGGING - for swapping elements:
-                            function InitializeElementWithDraggable(object) {
+                            return sender;
+                        }
 
-                                object.draggable({
-                                    helper: function(event, ui) {
-                                        return $(this).clone().css({
-                                            width: $(this).width()
-                                            });
+                        //Elements DRAGGING - for swapping elements:
+                        function InitializeElementWithDraggable(object) {
 
-                                    },
-                                    handle: ".myHandle",
-                                    cursor: "crosshair",
-                                    cursorAt: {
-                                        top: -7,
-                                        left: -7
-                                    },
+                            object.draggable({
+                                helper: function(event, ui) {
+                                    return $(this).clone().css({
+                                        width: $(this).width()
+                                    });
 
-                                    //[M.Adnan] FOR DRAGGING
-                                    start: function (e, ui) {
+                                },
+                                handle: ".myHandle",
+                                cursor: "crosshair",
+                                cursorAt: {
+                                    top: -7,
+                                    left: -7
+                                },
 
-                                        //Show DRAG HERE Div here
-                                        myElement.find(".divBuildingBlockLoading").show();
+                                //[M.Adnan] FOR DRAGGING
+                                start: function (e, ui) {
 
-                                        ShowDroppables(myElement);
+                                    //Show DRAG HERE Div here
+                                    myElement.find(".divBuildingBlockLoading").show();
 
-                                        RemovePopups();
+                                    ShowDroppables(myElement);
 
-                                        myElement.find(".content .sortable").each(function (index) {
-                                            //Exclude here dragging element (which is added by jqueryUI)
-                                            var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
+                                    RemovePopups();
+
+                                    myElement.find(".content .sortable").each(function (index) {
+                                        //Exclude here dragging element (which is added by jqueryUI)
+                                        var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
 
 
-                                            InsertDroppableInEmpty($(this), firstLevelLiDroppable);
+                                        InsertDroppableInEmpty($(this), firstLevelLiDroppable);
 
-                                            //Last element FULL height
+                                        //Last element FULL height
                                            
-                                                SetLastElementHeight($(this));
+                                        SetLastElementHeight($(this));
                                             
 
-                                        });
+                                    });
 
-                                        //Hide imediate next and previos droppable containers
-                                        //e.target get original element.
-                                        $(e.target).next(".myDroppable").invisible();
-                                        $(e.target).prev(".myDroppable").invisible();
-                                    },
+                                    //Hide imediate next and previos droppable containers
+                                    //e.target get original element.
+                                    $(e.target).next(".myDroppable").invisible();
+                                    $(e.target).prev(".myDroppable").invisible();
+                                },
 
-                                    stop: function (e, ui) {
+                                stop: function (e, ui) {
 
-                                        myElement.find(".divBuildingBlockLoading").hide();
+                                    myElement.find(".divBuildingBlockLoading").hide();
 
-                                        //Remove all Droppables places here.
-                                        RemoveDroppables(myElement);
-                                    }
-                                });
+                                    //Remove all Droppables places here.
+                                    RemoveDroppables(myElement);
+                                }
+                            });
 
-                                return object;
+                            return object;
+                        }
+
+                        function CreateDroppableWithAllFunctions(object) {
+
+                            var d1;
+                            if (object == null) {
+                                d1 = CreateDroppable();
+                            }
+                            else {
+                                d1 = $(object);
                             }
 
-                            function CreateDroppableWithAllFunctions(object) {
+                            var d1WithDraggable = InitializeElementWithDraggable(d1);
+                            var d1WithDroppable = InitializeWithDropable(d1WithDraggable);
 
-                                var d1;
-                                if (object == null) {
-                                    d1 = CreateDroppable();
-                                }
-                                else {
-                                    d1 = $(object);
-                                }
+                            return d1WithDroppable;
+                        }
 
-                                var d1WithDraggable = InitializeElementWithDraggable(d1);
-                                var d1WithDroppable = InitializeWithDropable(d1WithDraggable);
+                        var InsertDroppableInEmpty = function (sender, listOfElements) {
+                            var liLength = listOfElements.size();
 
-                                return d1WithDroppable;
-                            }
+                            //Placing highlighter into "Container" here  
+                            if (liLength == 0) {
 
-                            var InsertDroppableInEmpty = function (sender, listOfElements) {
-                                var liLength = listOfElements.size();
+                                var droppableElement = null;
+                                droppableElement = CreateDroppableWithAllFunctions();
 
-                                //Placing highlighter into "Container" here  
-                                if (liLength == 0) {
-
-                                    var droppableElement = null;
-                                    droppableElement = CreateDroppableWithAllFunctions();
-
-                                    if (IsFirstDroppableElement) {
+                                if (IsFirstDroppableElement) {
                                                     
 
-                                        droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic'> DROP HERE </div>");
-                                    }
-
-                                    sender.append(droppableElement);
+                                    droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic'> DROP HERE </div>");
                                 }
+
+                                sender.append(droppableElement);
+                            }
 
                                             
+                        }
+
+                        var RemoveDroppables = function (container,undo) {
+                            container.find(".myDroppable:not(.csHaveData)").invisible();
+
+                            //Remove height from destination's parent and source's parent (.sortable UL)
+                            //Releted to last element dropped full height:
+                            myElement.find(".sortable").removeAttr("style");
+                            myElement.find(".myDroppable").removeInlineStyle("height");
+                            if(!undo){
+                                makeCloneAndRegister();
                             }
+                        ///////
+                        }
 
-                            var RemoveDroppables = function (container,undo) {
-                                container.find(".myDroppable:not(.csHaveData)").invisible();
+                        var ShowDroppables = function (container) {
+                            container.find(".myDroppable:not(.csHaveData)").visible();
+                        }
 
-                                //Remove height from destination's parent and source's parent (.sortable UL)
-                                //Releted to last element dropped full height:
-                                myElement.find(".sortable").removeAttr("style");
-                                myElement.find(".myDroppable").removeInlineStyle("height");
-                                if(!undo){
-                                    makeCloneAndRegister();
+                        var RemovePopups = function () {
+                            myElement.find("#imageToolbar").hide();
+                        }
+
+                        var IsFirstDroppableElement = false;
+
+                        //Last Element get full height here
+                        var SetLastElementHeight = function (element) {
+
+                            // Get parent element height and apply to UL (.sortable)
+                            var parentHeight = element.parent().height();
+                            element.height(parentHeight);
+
+                            //Get first level children in UL here:
+                            var firstLevelAllLi = element.children("li:not(.ui-draggable-dragging)");
+                            var firstLevelAllLiLength = firstLevelAllLi.length;
+                            var hightExcludingLast = 0;
+
+                            firstLevelAllLi.each(function (index, element) {
+
+                                if (index != firstLevelAllLiLength - 1) {
+                                    hightExcludingLast += $(this).outerHeight();
+
                                 }
-                            ///////
-                            }
+                                else {
+                                    //Get Last element here
+                                    var lastDroppableHeight = parentHeight - hightExcludingLast
+                                    if (lastDroppableHeight > 0) {
+                                        lastDroppableHeight = lastDroppableHeight - 2;
+                                    }
 
-                            var ShowDroppables = function (container) {
-                                container.find(".myDroppable:not(.csHaveData)").visible();
-                            }
+                                    $(this).height(lastDroppableHeight);
+                                }
+                            });
+                        }
 
-                            var RemovePopups = function () {
-                                myElement.find("#imageToolbar").hide();
-                            }
+                        //---------------------  MAIN DRAGGABLE--------------------------//
 
-                            var IsFirstDroppableElement = false;
 
-                            //Last Element get full height here
-                            var SetLastElementHeight = function (element) {
+                        function InitializeMainDraggableControls(elementToApply) {
+                            elementToApply.draggable({
+                                helper: function(event, ui) {
+                                    return $(this).clone().css({
+                                        width: $(this).width()
+                                    });
 
-                                // Get parent element height and apply to UL (.sortable)
-                                var parentHeight = element.parent().height();
-                                element.height(parentHeight);
+                                },
+                                cursor: "crosshair",
+                                // containment: "parent",
+                                // stack: ".myDroppable",
+                                cursorAt: {
+                                    top: -7,
+                                    left: -7
+                                },                                                
+                                appendTo: '.editorpanel',
+                                //scroll: false,
+                                //[M.Adnan] FOR DRAGGING
+                                start: function (e, ui) {
 
-                                //Get first level children in UL here:
-                                var firstLevelAllLi = element.children("li:not(.ui-draggable-dragging)");
-                                var firstLevelAllLiLength = firstLevelAllLi.length;
-                                var hightExcludingLast = 0;
+                                    //Disable for droppedImage here
+                                    if (ui.helper.data("type") === "droppedImage") {
+                                        return;
+                                    }
+                                    //////////////
+                                    // $this.wrapInner("<ul class='b-blocks'></ul>");
+                                    console.log(ui.helper);
+                                    ui.helper.wrap("<ul class='b-blocks'></ul>");
+                                    ShowDroppables(myElement);
 
-                                firstLevelAllLi.each(function (index, element) {
+                                    RemovePopups();
 
-                                    if (index != firstLevelAllLiLength - 1) {
-                                        hightExcludingLast += $(this).outerHeight();
+                                    var draggedControlType = ui.helper.data("type");
+
+                                    if (draggedControlType != "droppedImage") {
+
+                                        var totalLiLength = myElement.find(".content .sortable li").length;
+                                        myElement.find(".content .sortable").each(function (indx) {
+
+                                            var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
+
+                                            if (totalLiLength == 0 && firstLevelLiDroppable.length == 0) {
+                                                //For first time dropping element                                
+                                                IsFirstDroppableElement = true;
+                                            }
+
+                                            InsertDroppableInEmpty($(this), firstLevelLiDroppable);
+                                            if(indx===0){
+                                                SetLastElementHeight($(this));
+                                            }
+
+                                        });
 
                                     }
-                                    else {
-                                        //Get Last element here
-                                        var lastDroppableHeight = parentHeight - hightExcludingLast
-                                        if (lastDroppableHeight > 0) {
-                                            lastDroppableHeight = lastDroppableHeight - 2;
-                                        }
-
-                                        $(this).height(lastDroppableHeight);
-                                    }
-                                });
-                            }
-
-                            //---------------------  MAIN DRAGGABLE--------------------------//
-
-
-                            function InitializeMainDraggableControls(elementToApply) {
-                                elementToApply.draggable({
-                                    helper: function(event, ui) {
-                                        return $(this).clone().css({
-                                            width: $(this).width()
-                                            });
-
-                                    },
-                                    cursor: "crosshair",
-                                    // containment: "parent",
-                                    // stack: ".myDroppable",
-                                    cursorAt: {
-                                        top: -7,
-                                        left: -7
-                                    },                                                
-                                    appendTo: '.editorpanel',
-                                    //scroll: false,
-                                    //[M.Adnan] FOR DRAGGING
-                                    start: function (e, ui) {
-
-                                        //Disable for droppedImage here
-                                        if (ui.helper.data("type") === "droppedImage") {
-                                            return;
-                                        }
-                                        //////////////
-                                        // $this.wrapInner("<ul class='b-blocks'></ul>");
-                                        console.log(ui.helper);
-                                        ui.helper.wrap("<ul class='b-blocks'></ul>");
-                                        ShowDroppables(myElement);
-
-                                        RemovePopups();
-
-                                        var draggedControlType = ui.helper.data("type");
-
-                                        if (draggedControlType != "droppedImage") {
-
-                                            var totalLiLength = myElement.find(".content .sortable li").length;
-                                            myElement.find(".content .sortable").each(function (indx) {
-
-                                                var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
-
-                                                if (totalLiLength == 0 && firstLevelLiDroppable.length == 0) {
-                                                    //For first time dropping element                                
-                                                    IsFirstDroppableElement = true;
-                                                }
-
-                                                InsertDroppableInEmpty($(this), firstLevelLiDroppable);
-                                                if(indx===0){
-                                                    SetLastElementHeight($(this));
-                                                }
-
-                                            });
-
-                                        }
                                                    
-                                    },
+                                },
 
-                                    stop: function (e, ui) {
+                                stop: function (e, ui) {
 
-                                        //INSERT Dropable along with dragged element:
+                                    //INSERT Dropable along with dragged element:
 
-                                        //Remove all Droppables places here.
-                                        RemoveDroppables(myElement);
+                                    //Remove all Droppables places here.
+                                    RemoveDroppables(myElement);
 
+                                }
+                            });
+                        }
+                        mee.addUpdateContentBlock = function(){
+                            
+                        }
+                        //---------------------  BUILDING BLOCKS--------------------------//
+                        var InitializeBuildingBlockDroppableArea = function () {
+
+                            myElement.find(".buildingBlockDroppableOverlay").droppable({
+                                tolerance: "pointer",
+                                accept: ".csHaveData",
+                                drop: function (event, ui) {
+
+                                    var args = {
+                                        droppedElement: $(this),
+                                        buildingBlock: null,
+                                        event: event,
+                                        ui: ui
+                                    };
+                                    
+                                    var addBBDialog = myElement.find(".buildingBlock_name");
+                                    addBBDialog.dialog({
+                                        width: 270,
+                                        modal: true
+                                    }).dialog("open");
+                                    addBBDialog.find(".ui-dialog-buttonpane").hide();
+                                    addBBDialog.find(".addBBClose").click(function () {
+                                        console.log(addBBDialog);
+                                        addBBDialog.dialog("destroy");
+                                    });
+                                    addBBDialog.find(".addBBSave").click(function () {
+                                        console.log("Going to call AddBBSave");
+                                        var buildingBlock = new Object();
+                                        buildingBlock.Name = addBBDialog.find(".txtPlaceHolder").val();
+
+                                        oInitDestroyEvents.DestroyPluginsEvents(args.ui.draggable);
+
+                                        buildingBlock.Html = args.ui.draggable.clone();
+
+                                        oInitDestroyEvents.InitializePluginsEvents(args.ui.draggable);
+
+                                        args.buildingBlock = buildingBlock;
+
+                                        addBBDialog.dialog('destroy');
+
+                                        _OnDropElementOnBuildingBlock(args);
+
+                                    });
+                                }
+                            });
+                        }
+                        // ------------------------------------------------------------------------------------------------------------------//                                       
+
+                        function InitializeBuildingBlockUpdatePopup() {
+                            myElement.find('.buildingBlock_name_edit').dialog({
+                                width: 500,
+                                modal: true,
+                                buttons: [
+                                {
+                                    text: "Cancel",
+                                    click: function () {
+                                        $(this).dialog('destroy');
+                                        _LastSelectedBuildingBlock = null;
+                                        UnSelectAllBlocks();
                                     }
-                                });
-                            }
-
-                            //---------------------  BUILDING BLOCKS--------------------------//
-                            var InitializeBuildingBlockDroppableArea = function () {
-
-                                myElement.find(".buildingBlockDroppableOverlay").droppable({
-                                    tolerance: "pointer",
-                                    accept: ".csHaveData",
-                                    drop: function (event, ui) {
-
+                                }, {
+                                    text: "Ok",
+                                    click: function () {
                                         var args = {
-                                            droppedElement: $(this),
-                                            buildingBlock: null,
-                                            event: event,
-                                            ui: ui
+                                            buildingBlock: null
                                         };
 
-                                        var addBBDialog = myElement.find(".buildingBlock_name");
-                                        addBBDialog.dialog({
-                                            width: 270,
-                                            modal: true
-                                        }).dialog("open");
-                                        addBBDialog.find(".ui-dialog-buttonpane").hide();
-                                        addBBDialog.find(".addBBClose").click(function () {
-                                            console.log(addBBDialog);
-                                            addBBDialog.dialog("destroy");
-                                        });
-                                        addBBDialog.find(".addBBSave").click(function () {
-                                            console.log("Going to call AddBBSave");
-                                            var buildingBlock = new Object();
-                                            buildingBlock.Name = addBBDialog.find(".txtPlaceHolder").val();
+                                        //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
+                                        //args.buildingDialogBox = $(this);
 
-                                            oInitDestroyEvents.DestroyPluginsEvents(args.ui.draggable);
-
-                                            buildingBlock.Html = args.ui.draggable.clone();
-
-                                            oInitDestroyEvents.InitializePluginsEvents(args.ui.draggable);
-
-                                            args.buildingBlock = buildingBlock;
-
-                                            addBBDialog.dialog('destroy');
-
-                                            _OnDropElementOnBuildingBlock(args);
-
-                                        });
-                                    }
-                                });
-                            }
-                            // ------------------------------------------------------------------------------------------------------------------//                                       
-
-                            function InitializeBuildingBlockUpdatePopup() {
-                                myElement.find('.buildingBlock_name_edit').dialog({
-
-                                    width: 500,
-                                    modal: true,
-                                    buttons: [
-                                    {
-                                        text: "Cancel",
-                                        click: function () {
-                                            $(this).dialog('destroy');
-                                            _LastSelectedBuildingBlock = null;
-                                            UnSelectAllBlocks();
-                                        }
-                                    }, {
-                                        text: "Ok",
-                                        click: function () {
-                                            var args = {
-                                                buildingBlock: null
-                                            };
-
-                                            //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
-                                            //args.buildingDialogBox = $(this);
-
-                                            var buildingBlock = new Object();
-                                            buildingBlock.Name = $(this).find(".txtPlaceHolder").val();
-                                            buildingBlock.Id = _LastSelectedBuildingBlock.data("id");
-                                            args.buildingBlock = buildingBlock;
-                                            $(this).dialog('destroy');
-                                            _OnEditBuildingBlock(args);
-                                            _LastSelectedBuildingBlock = null;
-                                            UnSelectAllBlocks();
-                                        }
-                                    }
-                                    ]
-                                });
-                            }
-
-                            function InitializeDynamicBuildingBlockUpdatePopup() {
-                                myElement.find('.dynamicBuildingBlock_name_edit').dialog({
-
-                                    width: 500,
-                                    modal: true,
-                                    buttons: [
-                                    {
-                                        text: "Cancel",
-                                        click: function () {
-                                            $(this).dialog('destroy');
-                                            _LastSelectedDynamicBuildingBlock = null;
-                                            UnSelectAllDynamicBlocks();
-                                        }
-                                    }, {
-                                        text: "Ok",
-                                        click: function () {
-                                            var args = {
-                                                buildingBlock: null
-                                            };
-
-                                            //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
-                                            //args.buildingDialogBox = $(this);
-
-                                            var dynamicVariation = new Object();
-                                            dynamicVariation.Name = $(this).find(".txtPlaceHolder").val();
-                                            dynamicVariation.Id = _LastSelectedDynamicBuildingBlock.data("id");
-                                            args.dynamicVariation = dynamicVariation;
-                                            $(this).dialog('destroy');
-                                            _OnEditDynamicVariation(args);
-                                            _LastSelectedDynamicBuildingBlock = null;
-                                            UnSelectAllDynamicBlocks();
-                                        }
-                                    }
-                                    ]
-                                });
-                            }
-
-                            // ============ Sohaib Nadeem ===============
-                            // registering link gui events
-                            var linkObjectType = null;
-                            var imageObjectControl = null;
-                            var tiny_editor = null;
-                            var tiny_editor_selection = null;
-                            var selected_element_range = null;
-
-
-                            myElement.find("li.emailLinkGUI").click(function () {
-                                myElement.find("#rightPanelArea").data("tabClicked", "mailto");
-                                myElement.find("li.emailLinkGUI").addClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-                                //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
-                                //$("div.overlay").show();
-                                areaToDisplay = null;
-                                if (myElement.find("div.addEmailLinkDiv").length > 1) {
-                                    myElement.find("div.addEmailLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addEmailLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                areaToDisplay.show();
-
-                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
-                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                //tiny_editor = $("#currTinyMCE").data("myTinyMCE");
-
-                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
-
-                                if (myElement.find("#linkTrack").data("linkObject") == "image") {
-                                    var elem = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                    if ($(elem).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
-                                        var previousLink = $(elem).parent().parent().parent().parent().find("a").data("link");
-                                        if (previousLink.search("mailto") == -1) {
-                                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A HYPERLINK (STANDARD LINK URL)</p><form name='submit_url' action='#' method='post' enctype='multipart/form-data'><label><p>text</p></label><textarea class='text-areaLinkGUI'></textarea><label><p>link (url)</p></label><input type='text' class='textLinkGUI' id='linkHyperLinkURL' maxlength='200' /><label><p>LINK NAME (FOR TRACKING)</p></label><input type='text' class='textLinkGUI' maxlength='200' /><p><input type='checkbox' id='dont-track'  /><label><span>DO NOT TRACK THIS LINK</span></label></p><br /><br /><br /></form>";
-                                            //$("#linkHyperLinkURL").val(previousLink);
-                                            var index1 = previousLink.search("com");
-                                            var value = previousLink.substring(0, (index1 + 3));
-                                            myElement.find("#linkHyperLinkURL").val(value);
-                                            index1 = previousLink.search("campaignkw=");
-                                            value = previousLink.substring((index1 + 11), previousLink.length);
-                                            myElement.find("#linkName").val(value);
-                                        } else {
-                                            //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
-                                            var index1 = previousLink.search("com");
-                                            var value = previousLink.substring(7, (index1 + 3));
-                                            myElement.find("#emailAddText").val(value);
-                                            index1 = previousLink.search("subject=");
-                                            value = previousLink.substring((index1 + 8), previousLink.length);
-                                            myElement.find("#emailSubjText").val(value);
-                                        }
+                                        var buildingBlock = new Object();
+                                        buildingBlock.Name = $(this).find(".txtPlaceHolder").val();
+                                        buildingBlock.Id = _LastSelectedBuildingBlock.data("id");
+                                        args.buildingBlock = buildingBlock;
+                                        $(this).dialog('destroy');
+                                        _OnEditBuildingBlock(args);
+                                        _LastSelectedBuildingBlock = null;
+                                        UnSelectAllBlocks();
                                     }
                                 }
+                                ]
                             });
-                            myElement.find("li.homeLinkGUI").click(function () {
+                        }
 
-                                myElement.find("#rightPanelArea").data("tabClicked", "hyperlink");
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").addClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+                        function InitializeDynamicBuildingBlockUpdatePopup() {
+                            myElement.find('.dynamicBuildingBlock_name_edit').dialog({
 
+                                width: 500,
+                                modal: true,
+                                buttons: [
+                                {
+                                    text: "Cancel",
+                                    click: function () {
+                                        $(this).dialog('destroy');
+                                        _LastSelectedDynamicBuildingBlock = null;
+                                        UnSelectAllDynamicBlocks();
+                                    }
+                                }, {
+                                    text: "Ok",
+                                    click: function () {
+                                        var args = {
+                                            buildingBlock: null
+                                        };
 
-                                areaToDisplay = null;
-                                if (myElement.find("div.addyHyperLinkDiv").length > 1) {
-                                    myElement.find("div.addyHyperLinkDiv")[1].remove();
+                                        //var txtPlaceHolder = $(this).find(".txtPlaceHolder");
+                                        //args.buildingDialogBox = $(this);
+
+                                        var dynamicVariation = new Object();
+                                        dynamicVariation.Name = $(this).find(".txtPlaceHolder").val();
+                                        dynamicVariation.Id = _LastSelectedDynamicBuildingBlock.data("id");
+                                        args.dynamicVariation = dynamicVariation;
+                                        $(this).dialog('destroy');
+                                        _OnEditDynamicVariation(args);
+                                        _LastSelectedDynamicBuildingBlock = null;
+                                        UnSelectAllDynamicBlocks();
+                                    }
                                 }
-                                areaToDisplay = myElement.find("div.addyHyperLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                areaToDisplay.show();
+                                ]
+                            });
+                        }
 
-                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
-                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                //tiny_editor = $("#currTinyMCE").data("myTinyMCE");
+                        // ============ Sohaib Nadeem ===============
+                        // registering link gui events                            
+                        var tiny_editor_selection = null;
+                            
+                        //Code removed No 2
 
-                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
+                            
 
+                        // ============== End Sohaib Nadeem ==============/////
+
+
+                        // ============== Sohaib Nadeem =====================///
+                        // == Enabling ImageFunctionality before access 
+                        var imageFunctionality = {
+                            leftAlign: function (myHtmlInstance, workingObject) {
+                                $(workingObject).parents(".myImage");
+                                var myObj = $(workingObject).parents(".myImage");
+                                myObj.attr("align", "left");
+                                var seHandle = myObj.find(".ui-resizable-se");
+                                var swHandle = myObj.find(".ui-resizable-sw");
+                                if (swHandle.is(":visible")) {
+                                    swHandle.hide();
+                                }
+                                seHandle.show();
+                            },
+                            centerAlign: function (myHtmlInstance, workingObject) {                                    
+                                var myObj = $(workingObject).parents(".myImage");
+                                myObj.attr("align", "center");                                    
+                                myObj.find(".ui-resizable-se").show();
+                                myObj.find(".ui-resizable-sw").show();                                
+                            },
+                            rightAlign: function (myHtmlInstance, workingObject) {
+                                var myObj = $(workingObject).parents(".myImage");
+                                myObj.attr("align", "right");                                                                        
+                                myObj.find("img.imageHandlingClass").css("overflow", "hidden");
+                                var seHandle = myObj.find(".ui-resizable-se");
+                                var swHandle = myObj.find(".ui-resizable-sw");
+                                if (seHandle.is(":visible")) {
+                                    seHandle.hide();
+                                }
+                                swHandle.show();
+                            },
+                            setImageTitle: function (workingObject) {
+                                openImageTitleDialog(workingObject);
+                            }
+                        }
+                        //========================= End Sohaib Nadeem =====================////
+
+                        var isElementClicked = false;
+                        var buildingBlocksGlobal = null;
+                        var contentBlocksGlobal = null;
+
+
+                        myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                                            
+                            imageFunctionality.leftAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                            makeCloneAndRegister();
+                            return false;
+                        });
+                        myElement.find(".ImageToolbarCenterAlignClass").click(function () {                                
+                            imageFunctionality.centerAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                            makeCloneAndRegister();
+                            return false;
+                        });
+                        myElement.find(".ImageToolbarRightAlignClass").click(function () {                                
+                            imageFunctionality.rightAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                            makeCloneAndRegister();
+                            return false;
+                        });
+
+                        myElement.find(".ImageToolbarLinkClass").click(function () {
+                            //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                            showLinkGUI();                                                                
+                            makeCloneAndRegister();
+                            return false;
+                        });
+                        myElement.find(".ImageToolbarTitleSetClass").click(function () {
+
+                            imageFunctionality.setImageTitle(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
+                            makeCloneAndRegister();
+                            return false;
+                        });
+
+
+                        //[Muhammad.Adnan] - Exposed Functions by CORE Code.
+                        function OnNewElementDropped(args) {
                                             
-                                if (myElement.find("#linkTrack").data("linkObject") == "image") {
-                                    var elem = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                    if ($(elem).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
-                                        var previousLink = $(elem).parent().parent().parent().parent().find("a").data("link");
-                                        if (previousLink.search("mailto") == -1) {
-                                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A HYPERLINK (STANDARD LINK URL)</p><form name='submit_url' action='#' method='post' enctype='multipart/form-data'><label><p>text</p></label><textarea class='text-areaLinkGUI'></textarea><label><p>link (url)</p></label><input type='text' class='textLinkGUI' id='linkHyperLinkURL' maxlength='200' /><label><p>LINK NAME (FOR TRACKING)</p></label><input type='text' class='textLinkGUI' maxlength='200' /><p><input type='checkbox' id='dont-track'  /><label><span>DO NOT TRACK THIS LINK</span></label></p><br /><br /><br /></form>";
-                                            //$("#linkHyperLinkURL").val(previousLink);
-                                            var index1 = previousLink.search("com");
-                                            var value = previousLink.substring(0, (index1 + 3));
-                                            myElement.find("#linkHyperLinkURL").val(value);
-                                            index1 = previousLink.search("campaignkw=");
-                                            value = previousLink.substring((index1 + 11), previousLink.length);
-                                            myElement.find("#linkName").val(value);
-                                        } else {
-                                            //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
-                                            var index1 = previousLink.search("com");
-                                            var value = previousLink.substring(7, (index1 + 3));
-                                            myElement.find("#emailAddText").val(value);
-                                            index1 = previousLink.search("subject=");
-                                            value = previousLink.substring((index1 + 8), previousLink.length);
-                                            myElement.find("#emailSubjText").val(value);
-                                        }
-                                    }
+                            if (args.predefinedControl != null) {
+
+                                if (args.predefinedControl.Type == "copied" || args.predefinedControl.Type == "buildingBlock") {
+
+                                    //alert(args.predefinedControl.Html.html());
+                                    oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
                                 }
 
-                            });
-                            myElement.find("li.forwardToFriendLinkGUI").click(function () {
+                                if ((args.predefinedControl.Type == "text") || (args.predefinedControl.Type == "textWithImage") || (args.predefinedControl.Type == "imageWithText")) {
 
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").addClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "frwdToFrnd");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addFrwdToFrndLinkDiv").length > 1) {
-                                    myElement.find("div.addFrwdToFrndLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addFrwdToFrndLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
-                                    areaToDisplay.show();
-                                    areaToDisplay.find("div.textAreaDivfortextLink").show();                                               
-                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
-                                }
-                                else {
-                                    areaToDisplay.hide();
-                                }
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Forward to a Friend</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Forward This Email</textarea>";
-                            });
-
-                            myElement.find("li.unsubscribeLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").addClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "unsubscribe");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addUnsubscribeLinkDiv").length > 1) {
-                                    myElement.find("div.addUnsubscribeLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addUnsubscribeLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
-                                    areaToDisplay.show();
-                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                               
-                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
-                                }
-                                else {
-                                    areaToDisplay.hide();
-                                }
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD an Unsubscribe Link </p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Want to unsubscribe or change your details?</textarea>";
-                            });
-                            myElement.find("li.viewInBrowserLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").addClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "brwoserView");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addViewinBrowserLinkDiv").length > 1) {
-                                    myElement.find("div.addViewinBrowserLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addViewinBrowserLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
-                                    areaToDisplay.show();
-                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                               
-                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
-                                }
-                                else {
-                                    areaToDisplay.hide();
-                                }
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Can't read email Link</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Can't read this email Properly?</textarea>";
-                            });
-                            myElement.find("li.doubleOptLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").addClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "doubleOptLink");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addDoubleOptLinkDiv").length > 1) {
-                                    myElement.find("div.addDoubleOptLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addDoubleOptLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
-                                    areaToDisplay.show();
-                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                                
-                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
-                                }
-                                else {
-                                    areaToDisplay.hide();
-                                }
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Double opt-in Link</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>To confirm your email address, click here</textarea>";
-                            });
-                            myElement.find("li.safeSenderLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").addClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "safeSender");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addSafeSenderLinkDiv").length > 1) {
-                                    myElement.find("div.addSafeSenderLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addSafeSenderLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
-                                    areaToDisplay.show();
-                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
-                                    // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
-                                    //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                                    // } else {
-                                    //     console.log("6. SomeLink set here");
-
-                                    //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
-                                    // }
-                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
-                                }
-                                else {
-                                    areaToDisplay.hide();
-                                }
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Safe Sender Message to your Email</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>To guarantee delivery of this email please add $CAMPAIGNFROMEMAIL$ to your address book and safe senders list.</textarea>";
-                            });
-                            myElement.find("li.newAnchorLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").addClass("selected");
-                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "newAnchor");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addNewAnchorLinkDiv").length > 1) {
-                                    myElement.find("div.addNewAnchorLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addNewAnchorLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                areaToDisplay.show();
-                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
-                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                // tiny_editor = $("#currTinyMCE").data("myTinyMCE");
-
-                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
-
-                            //areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
-                            //document.getElementById("rightPanelArea").innerHTML = "<p>New # Anchor</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'></textarea><br/><br><label><p>Anchor Name:</p></Label><input type='text' class='textLinkGUI' maxlength='200'/>";
-                            });
-
-                            myElement.find("li.newSocialLinkGUI").click(function () {
-
-                                myElement.find("li.emailLinkGUI").removeClass("selected");
-                                myElement.find("li.homeLinkGUI").removeClass("selected");
-                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
-                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
-                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
-                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
-                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
-                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
-                                myElement.find("li.newSocialLinkGUI").addClass("selected");
-
-                                myElement.find("#rightPanelArea").data("tabClicked", "social");
-                                areaToDisplay = null;
-                                if (myElement.find("div.addNewSocialLinkDiv").length > 1) {
-                                    myElement.find("div.addNewSocialLinkDiv")[1].remove();
-                                }
-                                areaToDisplay = myElement.find("div.addNewSocialLinkDiv").clone(false);
-                                myElement.find("#rightPanelArea").html(areaToDisplay);
-                                areaToDisplay.show();
-                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
-                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
-                                // tiny_editor = $("#currTinyMCE").data("myTinyMCE");
-
-                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
-                                //areaToDisplay.find('input[name="social"]').iCheck("destroy");
-                                initializeiCheck(areaToDisplay);
-
-                                myElement.find('input[name="social"]').on('ifClicked', function (event) {
-                                    // alert("You clicked " + this.value);
-                                    selectedSocialLink = this.value;
-                                });
-                                            
-                            });
-
-                            // ============== End Sohaib Nadeem ==============/////
-
-
-                            // ============== Sohaib Nadeem =====================///
-                            // == Enabling ImageFunctionality before access 
-                            var imageFunctionality = {
-                                leftAlign: function (myHtmlInstance, workingObject) {
-                                    $(workingObject).parents(".myImage");
-                                    var myObj = $(workingObject).parents(".myImage");
-                                    myObj.attr("align", "left");
-                                    var seHandle = myObj.find(".ui-resizable-se");
-                                    var swHandle = myObj.find(".ui-resizable-sw");
-                                    if (swHandle.is(":visible")) {
-                                        swHandle.hide();
-                                    }
-                                    seHandle.show();
-                                },
-                                centerAlign: function (myHtmlInstance, workingObject) {                                    
-                                    var myObj = $(workingObject).parents(".myImage");
-                                    myObj.attr("align", "center");                                    
-                                    myObj.find(".ui-resizable-se").show();
-                                    myObj.find(".ui-resizable-sw").show();                                
-                                },
-                                rightAlign: function (myHtmlInstance, workingObject) {
-                                    var myObj = $(workingObject).parents(".myImage");
-                                    myObj.attr("align", "right");                                                                        
-                                    myObj.find("img.imageHandlingClass").css("overflow", "hidden");
-                                    var seHandle = myObj.find(".ui-resizable-se");
-                                    var swHandle = myObj.find(".ui-resizable-sw");
-                                    if (seHandle.is(":visible")) {
-                                        seHandle.hide();
-                                    }
-                                    swHandle.show();
-                                },
-                                setImageTitle: function (workingObject) {
-                                    openImageTitleDialog(workingObject);
+                                    oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
                                 }
                             }
-                            //========================= End Sohaib Nadeem =====================////
 
-                            var isElementClicked = false;
-                            var buildingBlocksGlobal = null;
-                            var contentBlocksGlobal = null;
-
-
-                            myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                                            
+                            myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                    
                                 imageFunctionality.leftAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
                             });
-                            myElement.find(".ImageToolbarCenterAlignClass").click(function () {                                
+                            myElement.find(".ImageToolbarCenterAlignClass").click(function () {
                                 imageFunctionality.centerAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
                             });
-                            myElement.find(".ImageToolbarRightAlignClass").click(function () {                                
+                            myElement.find(".ImageToolbarRightAlignClass").click(function () {                                    
                                 imageFunctionality.rightAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                                 makeCloneAndRegister();
                                 return false;
                             });
-
-                            myElement.find(".ImageToolbarLinkClass").click(function () {
-                                //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                showLinkGUI();                                                                
-                                makeCloneAndRegister();
-                                return false;
-                            });
-                            myElement.find(".ImageToolbarTitleSetClass").click(function () {
-
-                                imageFunctionality.setImageTitle(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                makeCloneAndRegister();
-                                return false;
-                            });
-
-
-                            //[Muhammad.Adnan] - Exposed Functions by CORE Code.
-                            function OnNewElementDropped(args) {
-                                            
-                                if (args.predefinedControl != null) {
-
-                                    if (args.predefinedControl.Type == "copied" || args.predefinedControl.Type == "buildingBlock") {
-
-                                        //alert(args.predefinedControl.Html.html());
-                                        oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
-                                    }
-
-                                    if ((args.predefinedControl.Type == "text") || (args.predefinedControl.Type == "textWithImage") || (args.predefinedControl.Type == "imageWithText")) {
-
-                                        oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
-                                    }
-                                }
-
-                                myElement.find(".ImageToolbarLeftAlignClass").click(function () {                                    
-                                    imageFunctionality.leftAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                    makeCloneAndRegister();
-                                    return false;
-                                });
-                                myElement.find(".ImageToolbarCenterAlignClass").click(function () {
-                                    imageFunctionality.centerAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                    makeCloneAndRegister();
-                                    return false;
-                                });
-                                myElement.find(".ImageToolbarRightAlignClass").click(function () {                                    
-                                    imageFunctionality.rightAlign(myElement, myElement.find("#imageDataSavingObject").data("myWorkingObject"));
-                                    makeCloneAndRegister();
-                                    return false;
-                                });
                                 
 
-                            }
+                        }
 
-                            var OnImageDropped = function (args) {
+                        var OnImageDropped = function (args) {
 
                                             
-                                var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + args.ui.draggable.find("img").attr("src") + "' style='display:block;' /></div></div>");
+                            var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + args.ui.draggable.find("img").attr("src") + "' style='display:block;' /></div></div>");
 
-                                // htmlToPlace.find("img.imageHandlingClass").resizable({
-                                htmlToPlace.find(".resizableImage").resizable({
+                            // htmlToPlace.find("img.imageHandlingClass").resizable({
+                            htmlToPlace.find(".resizableImage").resizable({
                                             
-                                    });                                            
-                                args.droppedElement.html(htmlToPlace);
-                                makeCloneAndRegister();
+                                });                                            
+                            args.droppedElement.html(htmlToPlace);
+                            makeCloneAndRegister();
 
-                            }
+                        }
 
-                            var OnClickedOnElement = function (event) {
+                        var OnClickedOnElement = function (event) {
 
-                                myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
-                                myElement.find("#linkTrack").data("linkObject", "image");
-                                myElement.find("#imageToolbar").addClass("imageToolbar-menu");
-                                myElement.find("#imageToolbar").show();
-                                myElement.find("#imageToolbar").css({
-                                    "margin-top": ($(event.target).parent().parent().offset().top-topMinus-31), 
-                                    "margin-left": ($(event.target).parent().parent().offset().left-leftMinus)
-                                });
-
-                            }
-
-                            var _OnDropElementOnBuildingBlock = function (args) {
-                                            
-                                // ===================== Sohaib ==========================
-                                // Before making a building block uninitialize image resizable
-                                            
-                                if (options.OnDropElementOnBuildingBlock != null) {
-                                    //Call overridden Method here: will use when exposing properties to developer
-                                    options.OnDropElementOnBuildingBlock(args);
-                                }
-
-                                //Load Building Blocks
-                                _LoadBuildingBlocks(args);
-
-                            }
-
-                            var _OnEditBuildingBlock = function (args) {
-                                if (options.OnEditBuildingBlock != null) {
-                                    //Call overridden Method here: will use when exposing properties to developer
-                                    options.OnEditBuildingBlock(args);
-                                }
-
-                                _LoadBuildingBlocks(args);
-                            }
-
-                            var _OnDeleteBuildingBlock = function (args) {
-                                if (options.OnDeleteBuildingBlock != null) {
-                                    //Call overridden Method here: will use when exposing properties to developer
-                                    options.OnDeleteBuildingBlock(args);
-                                }
-
-                                _LoadBuildingBlocks(args);
-                            }
-
-                            var _OnEditDynamicVariation = function (args) {
-                                console.log("Going to edit Dynamic Variation...");
-                                if (options.OnEditDynamicVariation != null) {
-                                    //Call overridden Method here: will use when exposing properties to developer
-                                    options.OnEditDynamicVariation(args);
-                                }
-
-                                _LoadDynamicBlocks(args);
-                            }
-
-                            var _OnDeleteDynamicVariation = function (args) {
-                                if (options.OnDeleteDynamicVariation != null) {
-                                    //Call overridden Method here: will use when exposing properties to developer
-                                    options.OnDeleteDynamicVariation(args);
-                                }
-
-                                _LoadDynamicBlocks(args);
-                            }
-
-                            myElement.find("input#searchBB").keyup(function (e) {
-                                if(e.which == 13){
-                                    console.log("enter pressed");
-                                    _searchBuildingBlocks();
-                                }
-
+                            myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
+                            myElement.find("#linkTrack").data("linkObject", "image");
+                            myElement.find("#imageToolbar").addClass("imageToolbar-menu");
+                            myElement.find("#imageToolbar").show();
+                            myElement.find("#imageToolbar").css({
+                                "margin-top": ($(event.target).parent().parent().offset().top-topMinus-31), 
+                                "margin-left": ($(event.target).parent().parent().offset().left-leftMinus)
                             });
 
-                            myElement.find("input#searchForm").keyup(function (e) {
-                                if(e.which == 13){
-                                    console.log("enter pressed");
-                                    _searchFormBlocks();
-                                }
+                        }
 
-                            });
-
-
-                            var _searchBuildingBlocks = function (args) {
-
-
-
-                                var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                ulBuildingBlocks.empty();
-                                var buildingBlocksFromService = buildingBlocksGlobal;
-                                var textForSearch = myElement.find("input#searchBB").val();
-                                var counter = 0;
-                                if(textForSearch != null && textForSearch != "") {
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(buildingBlocksFromService, function (i, obj) {
-
-                                        //Assigning unique ID here:
-                                        obj[0].ID = obj[0]["blockId.encode"];
-                                        var label = obj[0].name;
-                                        if(label.startsWith(textForSearch)) {
-                                            counter++;
-                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                                "<i class='icon myblck'></i> " +
-                                                "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
-                                                "<div class='imageicons' > " +
-                                                "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
-                                                "<i class='imgicons delete right action' data-actiontype='bbdel'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
-                                                " </div>" +
-                                                //actionButtons.html() +
-                                                "</li>");
-                                                       
-
-                                            //Initialize with default draggable:
-                                            InitializeMainDraggableControls(block);
-
-                                            // listOfBuildingBlocksHtml.append(block);
-                                            ulBuildingBlocks.append(block);
-
-                                            block.find(".imageicons").draggable({
-                                                disabled: true
-                                            });
-
-
-                                        //count++;
-                                        }                        
-                                    });
-                                    myElement.find("#BBResultDiv").html(counter + " records Found");
-                                    myElement.find("#BBResultDiv").show();
-
-                                }
-                                else {
-                                    _LoadBuildingBlocks();
-                                    myElement.find("#BBResultDiv").hide();
-                                }
-                            ///////
-                            }
-
-                            var showAlertButtons = function(obj, url){
-                                var _ele  = $(obj); //element which is clicked
-                                var left_minus = 15;      //static space to minus to show dialog on exact location
-                                var ele_offset = _ele.offset();                
-                                var ele_height =  _ele.height();
-                                var top = ele_offset.top + ele_height +4-topMinus;
-                                var left = ele_offset.left-left_minus-leftMinus;  
-                                var url_string = "",showClass="disabled";
-                                url = _ele.attr("href");
-                                var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
-                                if(url !=="#" && $.trim(url)!=="" && url.startsWith("mailto:")==false && merge_field_patt.test(url)===false){
-                                    url_string = "href='"+url+"'";
-                                    showClass ="";
-                                }
-                                var li = "<ul>";
-                                li += "<li><a href='#' class='btn-green btnContentEditName'><i class='icon imgicons link linkOpen'></i></a></li>";
-                                li += "<li><a target='_new' "+url_string+" class='btn-blue btnContentDelete "+showClass+"'><i class='icon newwin' data-url='"+ url +"'></i></a></li>";
-                                li += "</ul>";
-
-                                myElement.find(".alertButtons").html(li);
-                                myElement.find(".alertButtons").css({
-                                    "left":left+"px",
-                                    "top":top+"px"
-                                    }).show();
-                                console.log("left:"+left+"px, top:"+top+"px");
-                            }
-
-
-                            var showBox = function(obj, imageObj, type){
-                                var _ele  = obj; //element which is clicked
-                                var left_minus = 15;      //static space to minus to show dialog on exact location
-                                var ele_offset = _ele.offset();                 
-                                var ele_height =  _ele.height();
-                                var top = ele_offset.top + ele_height +4-topMinus;
-                                var left = ele_offset.left-left_minus-leftMinus-24;           
-
-                                if(type == "info") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h4>" + imageObj.fileName + "</h4>";
-                                    li += "<h5><em>Size: </em>" + imageObj.height + " x " + imageObj.width + "</h5>";
-                                    li += "<h5><em>Created on: </em>" + imageObj.updationDate + "</h5>";
-                                    myElement.find(".info-windowDiv").html(li);
-                                    myElement.find(".info-windowDiv").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "link") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h4>Image URL</h4>";
-                                    li += "<input type='text' placeholder='Image URL' class='left tginput' style='width: 202px;' value='" + imageObj.originalURL + "'>";
-                                    myElement.find(".link-windowDiv").html(li);
-                                    myElement.find(".link-windowDiv").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "tag") {
-                                    var tagsArr = imageObj.tags.split(',');
-                                    var li = "<a class='closebtn /*closebtn-imgtag*/' data-id='" + imageObj["imageId.encode"] + "'></a>";
-                                    li += "<div class='tagscont'>";
-                                    li += "<ul>";
-                                    for (var i = 0; i < tagsArr.length; i++) {
-                                        if(tagsArr[i] != ""){
-                                            li += "<li><a class='tag' href='#.'><span>" + tagsArr[i] + "</span><i class='icon cross remove-tag'></i></a></li>";
-                                        }
-                                    }
-                                    li += "</ul></div>";
-                                    li += "<input type='text' placeholder='Add tag' class='left tginput' id='addTagsToImage'>";
-                                    li += "<a class='btn-green left addtag' data-id='" + imageObj["imageId.encode"] + "'><span>Add</span><i class='icon plus'></i></a>";
-                                    myElement.find(".tag-windowDiv").html(li);
-                                    myElement.find(".tag-windowDiv").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "delete") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Image?</h5>";
-                                    li += "<a class='btn-red left confirm-del' data-id='" + imageObj["imageId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
-                                    myElement.find(".del-windowDiv").html(li);
-                                    myElement.find(".del-windowDiv").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "bbdel") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
-                                    li += "<a class='btn-red left confirm-del btnDeleteBB' data-id='" + imageObj["blockId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
-                                    myElement.find(".BBDeleteDialog").html(li);
-                                    myElement.find(".BBDeleteDialog").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "bbedit") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h5 style='padding-bottom: 10px;'>Edit Block Name</h5>";
-                                    li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='"+ imageObj.name+"'>";
-                                    li += "<a class='btn-green left btnSaveBB'  data-id='" + imageObj["blockId.encode"] + "'>";
-                                    li += "<span>Save</span><i class='icon save'></i> ";
-                                    li += "</a> ";
-
-
-                                    myElement.find(".BBEditDialog").html(li);
-                                    myElement.find(".BBEditDialog").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "dcdel") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
-                                    li += "<a class='btn-red left confirm-del btnDeleteDC' data-id='" + imageObj["dynamicNumber.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
-                                    myElement.find(".DCDeleteDialog").html(li);
-                                    myElement.find(".DCDeleteDialog").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-                                else if(type == "dcedit") {
-                                    var li = "<a class='closebtn'></a>";
-                                    li += "<h5 style='padding-bottom: 10px;'>Edit Dynamic Content Name</h5>";
-                                    li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='"+ imageObj.label+"'>";
-                                    li += "<a class='btn-green left btnSaveDC'  data-id='" + imageObj["dynamicNumber.encode"] + "'>";
-                                    li += "<span>Save</span><i class='icon save'></i> ";
-                                    li += "</a> ";
-
-
-                                    myElement.find(".DCEditDialog").html(li);
-                                    myElement.find(".DCEditDialog").css({
-                                        "left":left+"px",
-                                        "top":top+"px"
-                                        }).show();
-                                }
-
-
-                            // console.log("left:"+left+"px, top:"+top+"px");
-                            // this.dialog.css({"left":left+"px","top":top+"px"}).show();
-
-                            }
-
-
-
-
-                            var _LoadBuildingBlocks = function (args) {
-
-                                if (args == null) {
-                                    args = new Object();
-                                }
-
+                        var _OnDropElementOnBuildingBlock = function (args) {
+                                            
+                            // ===================== Sohaib ==========================
+                            // Before making a building block uninitialize image resizable
+                                            
+                            if (options.OnDropElementOnBuildingBlock != null) {
                                 //Call overridden Method here: will use when exposing properties to developer
-                                if (options.LoadBuildingBlocks != null) {
-                                    options.LoadBuildingBlocks(args);
-                                }
+                                options.OnDropElementOnBuildingBlock(args);
+                            }
+
+                            //Load Building Blocks
+                            mee._LoadBuildingBlocks(args);
+
+                        }
+
+                        var _OnEditBuildingBlock = function (args) {
+                            if (options.OnEditBuildingBlock != null) {
+                                //Call overridden Method here: will use when exposing properties to developer
+                                options.OnEditBuildingBlock(args);
+                            }
+
+                            mee._LoadBuildingBlocks(args);
+                        }
+
+                        var _OnDeleteBuildingBlock = function (args) {
+                            if (options.OnDeleteBuildingBlock != null) {
+                                //Call overridden Method here: will use when exposing properties to developer
+                                options.OnDeleteBuildingBlock(args);
+                            }
+
+                            mee._LoadBuildingBlocks(args);
+                        }
+
+                        var _OnEditDynamicVariation = function (args) {
+                            console.log("Going to edit Dynamic Variation...");
+                            if (options.OnEditDynamicVariation != null) {
+                                //Call overridden Method here: will use when exposing properties to developer
+                                options.OnEditDynamicVariation(args);
+                            }
+
+                            _LoadDynamicBlocks(args);
+                        }
+
+                        var _OnDeleteDynamicVariation = function (args) {
+                            if (options.OnDeleteDynamicVariation != null) {
+                                //Call overridden Method here: will use when exposing properties to developer
+                                options.OnDeleteDynamicVariation(args);
+                            }
+
+                            _LoadDynamicBlocks(args);
+                        }
+
+                        myElement.find("input#searchBB").keyup(function (e) {
+                            if(e.which == 13){
+                                console.log("enter pressed");
+                                _searchBuildingBlocks();
+                            }
+
+                        });
+
+                        myElement.find("input#searchForm").keyup(function (e) {
+                            if(e.which == 13){
+                                console.log("enter pressed");
+                                _searchFormBlocks();
+                            }
+
+                        });
 
 
-                                var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                ulBuildingBlocks.empty();
+                        var _searchBuildingBlocks = function (args) {
 
+                            var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
+                            ulBuildingBlocks.empty();
+                            var buildingBlocksFromService = buildingBlocksGlobal;
+                            var textForSearch = myElement.find("input#searchBB").val();
+                            var counter = 0;
+                            if(textForSearch != null && textForSearch != "") {
 
+                                //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
+                                $.each(buildingBlocksFromService, function (i, obj) {
 
-
-
-                                //Getting building blocks from provided block:
-                                if (args.buildingBlocks != null) {
-
-                                    var count = 1;
-                                    // var listOfBuildingBlocksHtml = $();
-                                    var buildingBlocksFromService = args.buildingBlocks;
-                                    var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                    ulBuildingBlocks.empty();
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(buildingBlocksFromService, function (i, obj) {
-
-                                        //Assigning unique ID here:
-                                        obj[0].ID = obj[0]["blockId.encode"];
-
-
+                                    //Assigning unique ID here:
+                                    obj[0].ID = obj[0]["blockId.encode"];
+                                    var label = obj[0].name;
+                                    if(label.startsWith(textForSearch)) {
+                                        counter++;
                                         var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                             "<i class='icon myblck'></i> " +
                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
@@ -4467,7 +3961,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             " </div>" +
                                             //actionButtons.html() +
                                             "</li>");
-                                                    
+                                                       
 
                                         //Initialize with default draggable:
                                         InitializeMainDraggableControls(block);
@@ -4480,141 +3974,408 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
 
 
-                                        count++;
-                                    });
-                                                
+                                    //count++;
+                                    }                        
+                                });
+                                myElement.find("#BBResultDiv").html(counter + " records Found");
+                                myElement.find("#BBResultDiv").show();
 
-                                    buildingBlocksGlobal = buildingBlocksFromService;
+                            }
+                            else {
+                                mee._LoadBuildingBlocks();
+                                myElement.find("#BBResultDiv").hide();
+                            }
+                        ///////
+                        }
 
-                                }
-                                else {
-                                    //Insert dummy data here
-                                    for (var i = 0; i < 20; i++) {
+                        var showAlertButtons = function(obj, url){
+                            var _ele  = $(obj); //element which is clicked
+                            var left_minus = 15;      //static space to minus to show dialog on exact location
+                            var ele_offset = _ele.offset();                
+                            var ele_height =  _ele.height();
+                            var top = ele_offset.top + ele_height +4-topMinus;
+                            var left = ele_offset.left-left_minus-leftMinus;  
+                            var url_string = "",showClass="disabled";
+                            url = _ele.attr("href");
+                            var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                            if(url !=="#" && $.trim(url)!=="" && url.startsWith("mailto:")==false && merge_field_patt.test(url)===false){
+                                url_string = "href='"+url+"'";
+                                showClass ="";
+                            }
+                            var li = "<ul>";
+                            li += "<li><a href='#' class='btn-green btnContentEditName'><i class='icon imgicons link linkOpen'></i></a></li>";
+                            li += "<li><a target='_new' "+url_string+" class='btn-blue btnContentDelete "+showClass+"'><i class='icon newwin' data-url='"+ url +"'></i></a></li>";
+                            li += "</ul>";
 
-                                        var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock'  data-type='buildingBlock' data-id='" + i + "'>" +
-                                            "<i class='icon myblck'></i> " +
-                                            "<a href='#'> <span class='font_75 bbName'>" + i + "</span></a>" +
-                                            actionButtons.html() +
-                                            "</li>");
-
-                                        block.find(".imgicons.edit").click(function () {
-                                            var parentLi = $(this).closest(".draggableControl");
-                                            var editBox = parentLi.find(".editBox");
-                                            var bbName = parentLi.find(".bbName");
-                                            editBox.find(".txtBlockName").val(bbName.text());
-
-                                            editBox.show();
-
-                                            var closeBtn = editBox.find(".closebtn");
-                                            closeBtn.click(function () {
-                                                editBox.hide();
-                                            });
-
-                                            var saveBtn = editBox.find(".btnSave");
-                                            saveBtn.click(function () {
-                                                var txtBlockName = editBox.find(".txtBlockName");
-
-                                                var args = new Object();
-                                                args.BlockName = txtBlockName.val();
-                                                args.BlockID = parentLi.data("id");
-
-                                                //Call overridden Method here: will use when exposing properties to developer
-                                                if (options.OnBuildingBlockSave != null) {
-                                                    options.OnBuildingBlockSave(args);
-
-                                                    parentLi.find(".bbName").text(args.BlockName);
-                                                    alert("Saved successfully");
-                                                }
-                                            });
-
-                                        });
-
-                                        block.find(".imgicons.delete").click(function () {
-                                            var parentLi = $(this).closest(".draggableControl");
-
-                                            var delBox = parentLi.find(".delBox");
-                                            delBox.show();
-
-                                            var btnDelete = delBox.find(".btnDelete");
-                                            btnDelete.click(function () {
-
-                                                var args = new Object();
-                                                args.BlockID = parentLi.data("id");
-
-                                                //Call overridden Method here: will use when exposing properties to developer
-                                                if (options.OnBuildingBlockDelete != null) {
-                                                    options.OnBuildingBlockDelete(args);
-
-                                                    parentLi.remove();
-                                                    alert("Deleted Successfully");
-                                                }
+                            myElement.find(".alertButtons").html(li);
+                            myElement.find(".alertButtons").css({
+                                "left":left+"px",
+                                "top":top+"px"
+                            }).show();
+                            console.log("left:"+left+"px, top:"+top+"px");
+                        }
 
 
-                                            });
+                        var showBox = function(obj, imageObj, type){
+                            var _ele  = obj; //element which is clicked
+                            var left_minus = 15;      //static space to minus to show dialog on exact location
+                            var ele_offset = _ele.offset();                 
+                            var ele_height =  _ele.height();
+                            var top = ele_offset.top + ele_height +4-topMinus;
+                            var left = ele_offset.left-left_minus-leftMinus-24;           
 
-                                            var closeBtn = delBox.find(".closebtn");
-                                            closeBtn.click(function () {
-                                                delBox.hide();
-                                            });
-
-                                        });
-
-                                        //Initialize with default draggable:
-                                        InitializeMainDraggableControls(block);
-
-                                        // listOfBuildingBlocksHtml.append(block);
-                                        ulBuildingBlocks.append(block);
-
-                                        block.find(".imageicons").draggable({
-                                            disabled: true
-                                        });
-
-
+                            if(type == "info") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h4>" + imageObj.fileName + "</h4>";
+                                li += "<h5><em>Size: </em>" + imageObj.height + " x " + imageObj.width + "</h5>";
+                                li += "<h5><em>Created on: </em>" + imageObj.updationDate + "</h5>";
+                                myElement.find(".info-windowDiv").html(li);
+                                myElement.find(".info-windowDiv").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "link") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h4>Image URL</h4>";
+                                li += "<input type='text' placeholder='Image URL' class='left tginput' style='width: 202px;' value='" + imageObj.originalURL + "'>";
+                                myElement.find(".link-windowDiv").html(li);
+                                myElement.find(".link-windowDiv").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "tag") {
+                                var tagsArr = imageObj.tags.split(',');
+                                var li = "<a class='closebtn /*closebtn-imgtag*/' data-id='" + imageObj["imageId.encode"] + "'></a>";
+                                li += "<div class='tagscont'>";
+                                li += "<ul>";
+                                for (var i = 0; i < tagsArr.length; i++) {
+                                    if(tagsArr[i] != ""){
+                                        li += "<li><a class='tag' href='#.'><span>" + tagsArr[i] + "</span><i class='icon cross remove-tag'></i></a></li>";
                                     }
-                                ///////
                                 }
+                                li += "</ul></div>";
+                                li += "<input type='text' placeholder='Add tag' class='left tginput' id='addTagsToImage'>";
+                                li += "<a class='btn-green left addtag' data-id='" + imageObj["imageId.encode"] + "'><span>Add</span><i class='icon plus'></i></a>";
+                                myElement.find(".tag-windowDiv").html(li);
+                                myElement.find(".tag-windowDiv").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "delete") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Image?</h5>";
+                                li += "<a class='btn-red left confirm-del' data-id='" + imageObj["imageId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
+                                myElement.find(".del-windowDiv").html(li);
+                                myElement.find(".del-windowDiv").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "bbdel") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
+                                li += "<a class='btn-red left confirm-del btnDeleteBB' data-id='" + imageObj["blockId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
+                                myElement.find(".BBDeleteDialog").html(li);
+                                myElement.find(".BBDeleteDialog").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "bbedit") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h5 style='padding-bottom: 10px;'>Edit Block Name</h5>";
+                                li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='"+ imageObj.name+"'>";
+                                li += "<a class='btn-green left btnSaveBB'  data-id='" + imageObj["blockId.encode"] + "'>";
+                                li += "<span>Save</span><i class='icon save'></i> ";
+                                li += "</a> ";
 
-                                myElement.find("#DCResultDiv").hide();
+
+                                myElement.find(".BBEditDialog").html(li);
+                                myElement.find(".BBEditDialog").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "dcdel") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
+                                li += "<a class='btn-red left confirm-del btnDeleteDC' data-id='" + imageObj["dynamicNumber.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
+                                myElement.find(".DCDeleteDialog").html(li);
+                                myElement.find(".DCDeleteDialog").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
+                            }
+                            else if(type == "dcedit") {
+                                var li = "<a class='closebtn'></a>";
+                                li += "<h5 style='padding-bottom: 10px;'>Edit Dynamic Content Name</h5>";
+                                li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='"+ imageObj.label+"'>";
+                                li += "<a class='btn-green left btnSaveDC'  data-id='" + imageObj["dynamicNumber.encode"] + "'>";
+                                li += "<span>Save</span><i class='icon save'></i> ";
+                                li += "</a> ";
+
+
+                                myElement.find(".DCEditDialog").html(li);
+                                myElement.find(".DCEditDialog").css({
+                                    "left":left+"px",
+                                    "top":top+"px"
+                                }).show();
                             }
 
 
+                        // console.log("left:"+left+"px, top:"+top+"px");
+                        // this.dialog.css({"left":left+"px","top":top+"px"}).show();
+
+                        }
+
+
+
+
+                        mee._LoadBuildingBlocks = function (args) {
+
+                            if (args == null) {
+                                args = new Object();
+                            }
+
+                            //Call overridden Method here: will use when exposing properties to developer
+                            if (options.LoadBuildingBlocks != null) {
+                                options.LoadBuildingBlocks(args);
+                            }
+
+
+                            var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
+                            ulBuildingBlocks.empty();
 
 
 
 
 
-                            /// For Forms handling
+                            //Getting building blocks from provided block:
+                            if (args.buildingBlocks != null) {
 
-                            var _LoadFormBlocks = function (args) {
+                                var count = 1;
+                                // var listOfBuildingBlocksHtml = $();
+                                var buildingBlocksFromService = args.buildingBlocks;
+                                var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
+                                ulBuildingBlocks.empty();
 
-                                if (args == null) {
-                                    args = new Object();
+                                //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
+                                $.each(buildingBlocksFromService, function (i, obj) {
+
+                                    //Assigning unique ID here:
+                                    obj[0].ID = obj[0]["blockId.encode"];
+
+
+                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                        "<i class='icon myblck'></i> " +
+                                        "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
+                                        "<div class='imageicons' > " +
+                                        "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
+                                        "<i class='imgicons delete right action' data-actiontype='bbdel'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
+                                        " </div>" +
+                                        //actionButtons.html() +
+                                        "</li>");
+                                                    
+
+                                    //Initialize with default draggable:
+                                    InitializeMainDraggableControls(block);
+
+                                    // listOfBuildingBlocksHtml.append(block);
+                                    ulBuildingBlocks.append(block);
+
+                                    block.find(".imageicons").draggable({
+                                        disabled: true
+                                    });
+
+
+                                    count++;
+                                });
+                                                
+
+                                buildingBlocksGlobal = buildingBlocksFromService;
+
+                            }
+                            else {
+                                //Insert dummy data here
+                                for (var i = 0; i < 20; i++) {
+
+                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock'  data-type='buildingBlock' data-id='" + i + "'>" +
+                                        "<i class='icon myblck'></i> " +
+                                        "<a href='#'> <span class='font_75 bbName'>" + i + "</span></a>" +
+                                        actionButtons.html() +
+                                        "</li>");
+
+                                    block.find(".imgicons.edit").click(function () {
+                                        var parentLi = $(this).closest(".draggableControl");
+                                        var editBox = parentLi.find(".editBox");
+                                        var bbName = parentLi.find(".bbName");
+                                        editBox.find(".txtBlockName").val(bbName.text());
+
+                                        editBox.show();
+
+                                        var closeBtn = editBox.find(".closebtn");
+                                        closeBtn.click(function () {
+                                            editBox.hide();
+                                        });
+
+                                        var saveBtn = editBox.find(".btnSave");
+                                        saveBtn.click(function () {
+                                            var txtBlockName = editBox.find(".txtBlockName");
+
+                                            var args = new Object();
+                                            args.BlockName = txtBlockName.val();
+                                            args.BlockID = parentLi.data("id");
+
+                                            //Call overridden Method here: will use when exposing properties to developer
+                                            if (options.OnBuildingBlockSave != null) {
+                                                options.OnBuildingBlockSave(args);
+
+                                                parentLi.find(".bbName").text(args.BlockName);
+                                                alert("Saved successfully");
+                                            }
+                                        });
+
+                                    });
+
+                                    block.find(".imgicons.delete").click(function () {
+                                        var parentLi = $(this).closest(".draggableControl");
+
+                                        var delBox = parentLi.find(".delBox");
+                                        delBox.show();
+
+                                        var btnDelete = delBox.find(".btnDelete");
+                                        btnDelete.click(function () {
+
+                                            var args = new Object();
+                                            args.BlockID = parentLi.data("id");
+
+                                            //Call overridden Method here: will use when exposing properties to developer
+                                            if (options.OnBuildingBlockDelete != null) {
+                                                options.OnBuildingBlockDelete(args);
+
+                                                parentLi.remove();
+                                                alert("Deleted Successfully");
+                                            }
+
+
+                                        });
+
+                                        var closeBtn = delBox.find(".closebtn");
+                                        closeBtn.click(function () {
+                                            delBox.hide();
+                                        });
+
+                                    });
+
+                                    //Initialize with default draggable:
+                                    InitializeMainDraggableControls(block);
+
+                                    // listOfBuildingBlocksHtml.append(block);
+                                    ulBuildingBlocks.append(block);
+
+                                    block.find(".imageicons").draggable({
+                                        disabled: true
+                                    });
+
+
                                 }
+                            ///////
+                            }
 
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.LoadFormBlocks != null) {
-                                    options.LoadFormBlocks(args);
-                                }
-
-
-                                var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
-                                ulFormBlocks.empty();
+                            myElement.find("#DCResultDiv").hide();
+                        }
 
 
 
-                                //Getting formBlocks from provided block:
-                                if (args.formBlocks != null) {
-
-                                    var count = 1;
-                                    var formBlocksFromService = args.formBlocks;
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(formBlocksFromService, function (i, obj) {
-
-                                        //Assigning unique ID here:
-                                        obj[0].ID = obj[0]["formId.encode"];
 
 
+
+
+                        /// For Forms handling
+
+                        var _LoadFormBlocks = function (args) {
+
+                            if (args == null) {
+                                args = new Object();
+                            }
+
+                            //Call overridden Method here: will use when exposing properties to developer
+                            if (options.LoadFormBlocks != null) {
+                                options.LoadFormBlocks(args);
+                            }
+
+
+                            var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
+                            ulFormBlocks.empty();
+
+
+
+                            //Getting formBlocks from provided block:
+                            if (args.formBlocks != null) {
+
+                                var count = 1;
+                                var formBlocksFromService = args.formBlocks;
+
+                                //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
+                                $.each(formBlocksFromService, function (i, obj) {
+
+                                    //Assigning unique ID here:
+                                    obj[0].ID = obj[0]["formId.encode"];
+
+
+                                    var block = $("<li class='draggableControl ui-draggable droppedFormBlock' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
+                                        "<i class='icon myblck'></i> " +
+                                        "<span class='font_75 bbName'>" + obj[0].name + "</span>" +
+                                        "<div class='imageicons' > " +
+                                        "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
+                                        "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
+                                        " </div>" +
+                                        "</li>");                                                  
+
+
+
+                                    //Initialize with default draggable:
+                                    InitializeMainDraggableControls(block);
+
+                                    // listOfBuildingBlocksHtml.append(block);
+                                    ulFormBlocks.append(block);
+
+
+
+                                    count++;
+                                });
+                                formBlocksGlobal = formBlocksFromService;
+
+                            }                                               
+
+                        }
+
+
+
+
+                        /// For Forms handling
+
+                        var _searchFormBlocks = function (args) {
+
+                            var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
+                            ulFormBlocks.empty();
+                            var formBlocksFromService = formBlocksGlobal;
+                            var textForSearch = myElement.find("input#searchForm").val();
+                            var counter = 0;
+                            if(textForSearch != null && textForSearch != "") {
+                                //console.log("TextforSearch:"+textForSearch);
+                                //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
+                                $.each(formBlocksFromService, function (i, obj) {
+
+                                    //Assigning unique ID here:
+                                    obj[0].ID = obj[0]["formId.encode"];
+                                    var label = obj[0].name;
+                                    //console.log("formLabel:"+label);
+                                    if(label.startsWith(textForSearch)) {
+                                        counter++;
                                         var block = $("<li class='draggableControl ui-draggable droppedFormBlock' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                             "<i class='icon myblck'></i> " +
                                             "<span class='font_75 bbName'>" + obj[0].name + "</span>" +
@@ -4622,9 +4383,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
                                             "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
                                             " </div>" +
-                                            "</li>");                                                  
-
-
+                                            "</li>");
 
                                         //Initialize with default draggable:
                                         InitializeMainDraggableControls(block);
@@ -4632,1353 +4391,1412 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         // listOfBuildingBlocksHtml.append(block);
                                         ulFormBlocks.append(block);
 
+                                    }
+                                });
+                                myElement.find("#FBResultDiv").html(counter + " records Found");
+                                myElement.find("#FBResultDiv").show();                                               
 
-
-                                        count++;
-                                    });
-                                    formBlocksGlobal = formBlocksFromService;
-
-                                }                                               
-
-                            }
-
-
-
-
-                            /// For Forms handling
-
-                            var _searchFormBlocks = function (args) {
-
-                                var ulFormBlocks = myElement.find(".formDroppable .ulFormBlocks");
-                                ulFormBlocks.empty();
-                                var formBlocksFromService = formBlocksGlobal;
-                                var textForSearch = myElement.find("input#searchForm").val();
-                                var counter = 0;
-                                if(textForSearch != null && textForSearch != "") {
-                                    //console.log("TextforSearch:"+textForSearch);
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(formBlocksFromService, function (i, obj) {
-
-                                        //Assigning unique ID here:
-                                        obj[0].ID = obj[0]["formId.encode"];
-                                        var label = obj[0].name;
-                                        //console.log("formLabel:"+label);
-                                        if(label.startsWith(textForSearch)) {
-                                            counter++;
-                                            var block = $("<li class='draggableControl ui-draggable droppedFormBlock' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
-                                                "<i class='icon myblck'></i> " +
-                                                "<span class='font_75 bbName'>" + obj[0].name + "</span>" +
-                                                "<div class='imageicons' > " +
-                                                "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
-                                                "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='"+ i +"' data-id='" + obj[0]["formId.encode"] + "'></i> " +
-                                                " </div>" +
-                                                "</li>");
-
-                                            //Initialize with default draggable:
-                                            InitializeMainDraggableControls(block);
-
-                                            // listOfBuildingBlocksHtml.append(block);
-                                            ulFormBlocks.append(block);
-
-                                        }
-                                    });
-                                    myElement.find("#FBResultDiv").html(counter + " records Found");
-                                    myElement.find("#FBResultDiv").show();                                               
-
-                                    formBlocksGlobal = formBlocksFromService;
-
-                                }
-                                else {
-                                    _LoadFormBlocks();
-                                    myElement.find("#FBResultDiv").hide();
-                                }
-                            ///////
-
+                                formBlocksGlobal = formBlocksFromService;
 
                             }
+                            else {
+                                _LoadFormBlocks();
+                                myElement.find("#FBResultDiv").hide();
+                            }
+                        ///////
+
+
+                        }
 
 
 
-                            var _saveCallBackMethod = function () {
-                                if (options.CallBackSaveMethod != null) {
-                                    var templateHTML = mainContentHtmlGrand.html();
-                                    var mainHTMLELE = myElement.find(".mainContentHtml");
-                                    var constructedHTML = $(mainHTMLELE.outerHTML());                                                
-                                    var cleanedupHTML = CleanCode(constructedHTML).html();                                                
-                                    var outputter = $("<div></div>");
-                                    outputter.wrapInner(cleanedupHTML);
+                        var _saveCallBackMethod = function () {
+                            if (options.CallBackSaveMethod != null) {
+                                var templateHTML = mainContentHtmlGrand.html();
+                                var mainHTMLELE = myElement.find(".mainContentHtml");
+                                var constructedHTML = $(mainHTMLELE.outerHTML());                                                
+                                var cleanedupHTML = CleanCode(constructedHTML).html();                                                
+                                var outputter = $("<div></div>");
+                                outputter.wrapInner(cleanedupHTML);
 
-                                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                                                
-                                    options.CallBackSaveMethod(templateHTML, outputHTML);
-                                    alert("Template has been successfully saved on Server.");
-                                }
-                            };
-                            var showStyle= false;
-                            function InitializeControls() {
+                                var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();                                                
+                                options.CallBackSaveMethod(templateHTML, outputHTML);
+                                alert("Template has been successfully saved on Server.");
+                            }
+                        };
+                        var showStyle= false;
+                        function InitializeControls() {
                                             
-                                //Muhammad.Adnan
-                                //Main Draggable Controls
-                                var draggableControls = myElement.find(".draggableControl");
-                                InitializeMainDraggableControls(draggableControls);
+                            //Muhammad.Adnan
+                            //Main Draggable Controls
+                            var draggableControls = myElement.find(".draggableControl");
+                            InitializeMainDraggableControls(draggableControls);
 
-                                //Click on overall element:
-                                myElement.click(function () {
+                            //Click on overall element:
+                            myElement.click(function () {
 
-                                    if (!isElementClicked) {                                               
-                                        //Sohaib 
-                                        RemovePopups();
-                                    }
-                                    isElementClicked = false;
-                                });
+                                if (!isElementClicked) {                                               
+                                    //Sohaib 
+                                    RemovePopups();
+                                }
+                                isElementClicked = false;
+                            });
                                             
-                                //Building Blocks Drop Area:
-                                InitializeBuildingBlockDroppableArea();
-                                myElement.find(".builder-panel").css("height",($(window).height()-20)+"px");
-                                myElement.find(".style-panel").css("height",($(window).height()-62)+"px");
-                                //myElement.find(".editorbox").css("min-height",($(window).height()-100)+"px");
-                                myElement.find("#contentAreaDiv").scroll();
-                                myElement.find("#imageTitleDialog").hide();                                            
-                                myElement.find(".accordian").accordion({ 
-                                    heightStyle: "fill",                                                
-                                    collapsible: true,
-                                    clearStyle: true
-                                });
-                                myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()-30)+"px");
-                                //Load building blocks from service:
-                                _LoadBuildingBlocks();
-                                //////////
-                                _LoadContentBlocks();
-                                _LoadDynamicBlocks();
-                                _LoadDynamicBlockFields();
-                                _LoadDynamicBlockRuleConditions();
-                                _LoadDynamicBlockFormats();
-                                _LoadPersonalizeTags();
+                            //Building Blocks Drop Area:
+                            InitializeBuildingBlockDroppableArea();
+                            myElement.find(".builder-panel").css("height",($(window).height()-20)+"px");
+                            myElement.find(".style-panel").css("height",($(window).height()-62)+"px");
+                            //myElement.find(".editorbox").css("min-height",($(window).height()-100)+"px");
+                            myElement.find("#contentAreaDiv").scroll();
+                            myElement.find("#imageTitleDialog").hide();                                            
+                            myElement.find(".accordian").accordion({ 
+                                heightStyle: "fill",                                                
+                                collapsible: true,
+                                clearStyle: true
+                            });
+                            myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()-30)+"px");
+                            //Load building blocks from service:
+                            mee._LoadBuildingBlocks();
+                            //////////
+                            _LoadContentBlocks();
+                            _LoadDynamicBlocks();
+                            _LoadDynamicBlockFields();
+                            _LoadDynamicBlockRuleConditions();
+                            _LoadDynamicBlockFormats();
+                            _LoadPersonalizeTags();
 
 
-                                if(options.landingPage) {
-                                    _LoadFormBlocks();
+                            if(options.landingPage) {
+                                _LoadFormBlocks();
+                            }
+
+
+                            //TODO Styles
+
+                            myElement.find('.tabs').click(function () {
+                                var $this = $(this);
+                                var $tabs = myElement.find('.tabs');
+
+                                $tabs.removeClass('active');
+                                $this.addClass('active');
+                                if ($(this).hasClass("builder-tab")) {
+                                    myElement.find('.builder-panel').show();
+                                    myElement.find('.style-panel').hide();
+                                    InitializeElementsForStyle(false);
+
                                 }
-
-
-                                //TODO Styles
-
-                                myElement.find('.tabs').click(function () {
-                                    var $this = $(this);
-                                    var $tabs = myElement.find('.tabs');
-
-                                    $tabs.removeClass('active');
-                                    $this.addClass('active');
-                                    if ($(this).hasClass("builder-tab")) {
-                                        myElement.find('.builder-panel').show();
-                                        myElement.find('.style-panel').hide();
-                                        InitializeElementsForStyle(false);
-
+                                if ($(this).hasClass("style-tab")) {
+                                    myElement.find('.builder-panel').hide();
+                                    myElement.find('.style-panel').show();
+                                    if(showStyle===false){
+                                        myElement.find(".style-panel .accordian").accordion("refresh");
+                                        myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                        showStyle = true;
                                     }
-                                    if ($(this).hasClass("style-tab")) {
-                                        myElement.find('.builder-panel').hide();
-                                        myElement.find('.style-panel').show();
-                                        if(showStyle===false){
-                                            myElement.find(".style-panel .accordian").accordion("refresh");
-                                            myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
-                                            showStyle = true;
-                                        }
-                                        InitializeElementsForStyle(true);
-                                    }
-
-                                });
-
-                                myElement.find("#tabs").click(function () {
-                                    $(this).toggleClass("active");
-                                });
-
-                                myElement.find("#tabs").tabs({
-                                    activate: function (event, ui) {
-                                        if (ui.newPanel.attr("id") == "tabs-1") {
-                                            InitializeElementsForStyle(false);
-                                        }
-                                        else {
-                                            InitializeElementsForStyle(true);
-                                        }
-                                    }
-                                });
-
-                                $(myElement).tooltip();
-
-
-                                myElement.find("#dialog-Preview").dialog({
-                                    autoOpen: false,
-                                    modal: true,
-                                    buttons: {
-
-                                        Cancel: function () {
-                                            $(this).dialog("close");
-                                        }
-                                    },
-                                    width: 900
-                                });
-
-                            }
-
-                            InitializeControls();
-
-                            //---------------------------------------------------------------------------------//
-                                        
-                            //Image Parameters for Ajax Request for LoadImages in Image Library
-                            var _imageAjaxParameters = null;
-                            if (options.ImagesAjaxProperties != null) {
-                                _imageAjaxParameters = new Object();
-                                _imageAjaxParameters.Url = options.ImagesAjaxProperties.Url;
-                                _imageAjaxParameters.Data = options.ImagesAjaxProperties.Data;
-                                _imageAjaxParameters.DataType = options.ImagesAjaxProperties.DataType != "" ? options.ImagesAjaxProperties.DataType : "json";
-                                _imageAjaxParameters.Type = options.ImagesAjaxProperties.Type != "" ? options.ImagesAjaxProperties.Type : "POST";
-                                _imageAjaxParameters.ContentType = options.ImagesAjaxProperties.ContentType != "" ? options.ImagesAjaxProperties.ContentType : "application/json; charset=latin1";
-                            }
-
-                            if (_imageAjaxParameters != null) {
-
-                                var LoadImagesInLibrary = function () {
-                                    returnData = SendServerRequest(_imageAjaxParameters);
-                                    var obj = returnData;
-                                    if (obj != null && obj != undefined) {
-                                        imageListGlobal = obj.images;
-                                        var imagesHTML = getImagesMarkup(obj.images);
-                                        if (imagesHTML != "") {
-                                            var oImages = $(imagesHTML);
-
-                                            oImages.find(".draggableControl").andSelf().filter(".draggableControl").each(function (index, element) {
-                                                InitializeMainDraggableControls($(element));
-                                            });
-
-                                            myElement.find(".imageLib").html(oImages);
-
-                                        }
-                                    }
-                                }
-
-                                LoadImagesInLibrary();
-                            }
-                            // ------------------ End Load Images --------------//
-
-                            // ------------------ Start Image Search --------------//
-                            var _searchImagesAjaxParameters = null;
-                            if (options.SearchImagesProperties != null) {
-                                _searchImagesAjaxParameters = new Object();
-                                _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url;
-                                _searchImagesAjaxParameters.Data = options.SearchImagesProperties.Data;
-                                _searchImagesAjaxParameters.DataType = options.SearchImagesProperties.DataType != "" ? options.SearchImagesProperties.DataType : "json";
-                                _searchImagesAjaxParameters.Type = options.SearchImagesProperties.Type != "" ? options.SearchImagesProperties.Type : "POST";
-                                _searchImagesAjaxParameters.ContentType = options.SearchImagesProperties.ContentType != "" ? options.SearchImagesProperties.ContentType : "application/json; charset=latin1";
-                            }
-
-                            var SearchImages = function (searchText) {
-                                var data = {
-                                    searchText: searchText
-                                };
-                                _searchImagesAjaxParameters.Data = JSON.stringify(data);
-                                _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url + searchText;
-                                returnData = SendServerRequest(_searchImagesAjaxParameters);
-                                var obj = returnData;                
-                                if (obj != null && obj != undefined) {
-                                    imageListGlobal = obj.images;
-                                    myElement.find(".imageLib").html(getImagesMarkup(obj.images));
-                                    myElement.find("#ILResultDiv").html(obj.count + " records Found.");
-                                    myElement.find("#ILResultDiv").show();
-                                }
-                            };
-
-                            myElement.find("input#searchImg").keyup(function (e) {
-                                if(e.which == 13){
-                                    //console.log("enter pressed");
-                                    var searchText = myElement.find(".searchimg-text").val();
-                                    if(searchText == "") {
-                                        LoadImagesInLibrary();
-                                        myElement.find("#ILResultDiv").hide();
-                                    }
-                                    else {
-                                        SearchImages(searchText);
-                                    }
-                                    myElement.find(".searchimg-text").val("");
-                                    return false;
+                                    InitializeElementsForStyle(true);
                                 }
 
                             });
 
-                            myElement.find(".search-img").click(function () {
+                            myElement.find("#tabs").click(function () {
+                                $(this).toggleClass("active");
+                            });
+
+                            myElement.find("#tabs").tabs({
+                                activate: function (event, ui) {
+                                    if (ui.newPanel.attr("id") == "tabs-1") {
+                                        InitializeElementsForStyle(false);
+                                    }
+                                    else {
+                                        InitializeElementsForStyle(true);
+                                    }
+                                }
+                            });
+
+                            $(myElement).tooltip();
+
+
+                            myElement.find("#dialog-Preview").dialog({
+                                autoOpen: false,
+                                modal: true,
+                                buttons: {
+
+                                    Cancel: function () {
+                                        $(this).dialog("close");
+                                    }
+                                },
+                                width: 900
+                            });
+
+                        }
+
+                        InitializeControls();
+
+                        //---------------------------------------------------------------------------------//
+                                        
+                        //Image Parameters for Ajax Request for LoadImages in Image Library
+                        var _imageAjaxParameters = null;
+                        if (options.ImagesAjaxProperties != null) {
+                            _imageAjaxParameters = new Object();
+                            _imageAjaxParameters.Url = options.ImagesAjaxProperties.Url;
+                            _imageAjaxParameters.Data = options.ImagesAjaxProperties.Data;
+                            _imageAjaxParameters.DataType = options.ImagesAjaxProperties.DataType != "" ? options.ImagesAjaxProperties.DataType : "json";
+                            _imageAjaxParameters.Type = options.ImagesAjaxProperties.Type != "" ? options.ImagesAjaxProperties.Type : "POST";
+                            _imageAjaxParameters.ContentType = options.ImagesAjaxProperties.ContentType != "" ? options.ImagesAjaxProperties.ContentType : "application/json; charset=latin1";
+                        }
+
+                        if (_imageAjaxParameters != null) {
+
+                            var LoadImagesInLibrary = function () {
+                                returnData = SendServerRequest(_imageAjaxParameters);
+                                var obj = returnData;
+                                if (obj != null && obj != undefined) {
+                                    imageListGlobal = obj.images;
+                                    var imagesHTML = getImagesMarkup(obj.images);
+                                    if (imagesHTML != "") {
+                                        var oImages = $(imagesHTML);
+
+                                        oImages.find(".draggableControl").andSelf().filter(".draggableControl").each(function (index, element) {
+                                            InitializeMainDraggableControls($(element));
+                                        });
+
+                                        myElement.find(".imageLib").html(oImages);
+
+                                    }
+                                }
+                            }
+
+                            LoadImagesInLibrary();
+                        }
+                        // ------------------ End Load Images --------------//
+
+                        // ------------------ Start Image Search --------------//
+                        var _searchImagesAjaxParameters = null;
+                        if (options.SearchImagesProperties != null) {
+                            _searchImagesAjaxParameters = new Object();
+                            _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url;
+                            _searchImagesAjaxParameters.Data = options.SearchImagesProperties.Data;
+                            _searchImagesAjaxParameters.DataType = options.SearchImagesProperties.DataType != "" ? options.SearchImagesProperties.DataType : "json";
+                            _searchImagesAjaxParameters.Type = options.SearchImagesProperties.Type != "" ? options.SearchImagesProperties.Type : "POST";
+                            _searchImagesAjaxParameters.ContentType = options.SearchImagesProperties.ContentType != "" ? options.SearchImagesProperties.ContentType : "application/json; charset=latin1";
+                        }
+
+                        var SearchImages = function (searchText) {
+                            var data = {
+                                searchText: searchText
+                            };
+                            _searchImagesAjaxParameters.Data = JSON.stringify(data);
+                            _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url + searchText;
+                            returnData = SendServerRequest(_searchImagesAjaxParameters);
+                            var obj = returnData;                
+                            if (obj != null && obj != undefined) {
+                                imageListGlobal = obj.images;
+                                myElement.find(".imageLib").html(getImagesMarkup(obj.images));
+                                myElement.find("#ILResultDiv").html(obj.count + " records Found.");
+                                myElement.find("#ILResultDiv").show();
+                            }
+                        };
+
+                        myElement.find("input#searchImg").keyup(function (e) {
+                            if(e.which == 13){
+                                //console.log("enter pressed");
                                 var searchText = myElement.find(".searchimg-text").val();
                                 if(searchText == "") {
                                     LoadImagesInLibrary();
+                                    myElement.find("#ILResultDiv").hide();
                                 }
                                 else {
                                     SearchImages(searchText);
                                 }
                                 myElement.find(".searchimg-text").val("");
                                 return false;
-                            });
-
-                            // ------------------ End Image Search --------------//
-
-                            // ------------------ Start Image upload --------------//
-
-                            myElement.find(".uploadFile").click(function () {
-                                console.log("upload file clicked.");
-                                myElement.find("#myUploadFile").click();
-                                return false;
-                            });
-
-                            myElement.find("#myUploadFile").change(function (e) {
-                                myElement.find("#form1").submit();
-                                //LoadImagesInLibrary();
-                                return true;
-                            });
-
-
-                            //Callback handler for form submit event
-                            myElement.find("#form1").submit(function (e) {
-                                var formObj = $(this);
-                                var formURL = "/pms/io/publish/saveImagesData/?"+options._BMSTOKEN+"&type=add";
-                                var formData = new FormData(this);
-                                $.ajax({
-                                    url: formURL,
-                                    type: 'POST',
-                                    data: formData,
-                                    mimeType: "multipart/form-data",
-                                    contentType: false,
-                                    cache: false,
-                                    processData: false,
-                                    success: function (data, textStatus, jqXHR) {
-                                        console.log("Image Upload success:" + e);
-                                        var result = jQuery.parseJSON(data);
-                                        if(result.success){
-                                            options._app.showMessge("Image has been successfully uploaded.",$("body"));
-                                            LoadImagesInLibrary();
-                                        }
-                                        else{
-                                            options._app.showAlert(result.err1,$("body"));
-                                        }
-                                    },
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        console.log("Image Upload failed:" + e);
-                                    }
-                                });
-                                e.preventDefault(); //Prevent Default action.
-
-                            });
-
-                            // ------------------ End Image upload --------------//
-
-                            // ------------------ Start Image Delete --------------//
-
-                            var _deleteImageAjaxParameter = null;
-                            if (options.DeleteImageProperties != null) {
-                                _deleteImageAjaxParameter = new Object();
-                                _deleteImageAjaxParameter.Url = options.DeleteImageProperties.Url;
-                                _deleteImageAjaxParameter.Data = options.DeleteImageProperties.Data;
-                                _deleteImageAjaxParameter.DataType = options.DeleteImageProperties.DataType != "" ? options.DeleteImageProperties.DataType : "json";
-                                _deleteImageAjaxParameter.Type = options.DeleteImageProperties.Type != "" ? options.DeleteImageProperties.Type : "POST";
-                                _deleteImageAjaxParameter.ContentType = options.DeleteImageProperties.ContentType != "" ? options.DeleteImageProperties.ContentType : "application/json; charset=latin1";
                             }
 
-                            var DeleteImage = function (imageId) {
-                                _deleteImageAjaxParameter.Url = options.DeleteImageProperties.Url + imageId;
-                                returnData = SendServerRequest(_deleteImageAjaxParameter);
+                        });
+
+                        myElement.find(".search-img").click(function () {
+                            var searchText = myElement.find(".searchimg-text").val();
+                            if(searchText == "") {
                                 LoadImagesInLibrary();
                             }
-
-                            myElement.on("click", "a.confirm-del", function () {
-                                var obj = $(this);
-                                var imageId = obj.data("id");
-                                obj.parent().hide();
-                                DeleteImage(imageId);
-                                return false;
-                            });
-
-                            // ------------------ End Image Delete --------------//
-
-                            // ---------------- Start Image Tags ---------------//
-
-                            var _saveImageTagsAjaxParameters = null;
-                            if (options.SaveImageTagsProperties != null) {
-                                _saveImageTagsAjaxParameters = new Object();
-                                _saveImageTagsAjaxParameters.Url = options.SaveImageTagsProperties.Url;
-                                _saveImageTagsAjaxParameters.Data = options.SaveImageTagsProperties.Data;
-                                _saveImageTagsAjaxParameters.DataType = options.SaveImageTagsProperties.DataType != "" ? options.SaveImageTagsProperties.DataType : "json";
-                                _saveImageTagsAjaxParameters.Type = options.SaveImageTagsProperties.Type != "" ? options.SaveImageTagsProperties.Type : "POST";
-                                _saveImageTagsAjaxParameters.ContentType = options.SaveImageTagsProperties.ContentType != "" ? options.SaveImageTagsProperties.ContentType : "application/json; charset=latin1";
+                            else {
+                                SearchImages(searchText);
                             }
-
-                            var SaveImageTags = function (tags, imageId) {
-                                if (tags != null && imageId != null) {
-                                    var data = {
-                                        imageId: imageId, 
-                                        tags: tags
-                                    };
-                                    var jsonData = JSON.stringify(data);
-                                    _saveImageTagsAjaxParameters.Data = jsonData;
-                                    _saveImageTagsAjaxParameters.Url = options.SaveImageTagsProperties.Url + imageId + "&tags=" + tags;
-                                    returnData = SendServerRequest(_saveImageTagsAjaxParameters);
-                                    LoadImagesInLibrary();
-                                }
-                            }
-                            myElement.on("click", "i.newwin", function () {                                
-                                var url = $(this).parent().attr("href");
-                                var showName = $.getUrlVar(url,'campaignkw');
-                                window.open(url.replace("?campaignkw="+showName,""));
-                                myElement.find(".alertButtons").hide();
-                            });
-
-                            myElement.on("click", "i.linkOpen", function () {
-                                myElement.find("#linkTrack").data("linkObject", "text");
-                                showLinkGUI();
-                                myElement.find(".alertButtons").hide();                                
-                            });
-
-                            myElement.on("click", "a.btnSaveBB", function () {
-                                var element = $(this);
-                                var txtBlockName = element.siblings("input.tginput");
-                                var args = new Object();
-                                args.BlockName = txtBlockName.val();
-                                args.BlockID = element.data("id");
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.OnEditBuildingBlock != null) {
-                                    options.OnEditBuildingBlock(args);
-                                    _LoadBuildingBlocks(args);
-                                    //parentLi.find(".bbName").text(args.BlockName);
-                                    console.log("Saved successfully");
-                                }
-                                myElement.find(".BBEditDialog").hide();
-                            });
-
-                            myElement.on("click", "a.btnDeleteBB", function () {
-                                var element = $(this);
-
-                                var args = new Object();
-                                args.BlockID = element.data("id");
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.OnDeleteBuildingBlock != null) {
-                                    options.OnDeleteBuildingBlock(args);
-                                    _LoadBuildingBlocks(args);
-                                    console.log("Deleted Successfully");
-                                }
-
-                                myElement.find(".BBDeleteDialog").hide();
-
-                            });
-
-                            myElement.on("click", "a.btnSaveDC", function () {
-                                var element = $(this);
-                                var txtBlockName = element.siblings("input.tginput");
-                                var args = new Object();
-                                args.DCName = txtBlockName.val();
-                                args.DCID =  element.data("id");
-
-                                if (options.OnEditDynamicVariation != null) {
-                                    options.OnEditDynamicVariation(args);
-
-                                    _LoadDynamicBlocks(args);
-                                }
-                                myElement.find(".DCEditDialog").hide();
-
-                            });
-
-                            myElement.on("click", "a.btnDeleteDC", function () {
-                                var element = $(this);
-
-                                var args = new Object();
-                                args.DCID = element.data("id");
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.OnDeleteDynamicVariation != null) {
-                                    options.OnDeleteDynamicVariation(args);
-
-                                    _LoadDynamicBlocks(args);                                            
-                                }
-
-                                myElement.find(".DCDeleteDialog").hide();
-
-                            });
-
-                            myElement.on("click", "a.addtag", function () {
-                                var element = $(this);
-                                var tagscontainer = element.siblings("div.tagscont").children("ul");
-                                var inputElement = element.siblings("input.tginput");
-                                var strtag = inputElement.val();
-                                if (strtag != "") {
-                                    tagscontainer.append("<li><a class='tag' href='#.'><span>" + strtag + "</span><i class='icon cross remove-tag'></i></a> </li>");
-                                    inputElement.val("");
-                                }
-                                var imageId = element.data("id");
-                                var tags = "";
-                                var tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
-                                $.each(tagsContainer, function (index, value) {
-                                    if (index == 0)
-                                        tags += $(this).find("span").text();
-                                    else
-                                        tags += "," + $(this).find("span").text();
-                                });
-                                if (imageId != null && tags != "") {
-                                    SaveImageTags(tags, imageId);
-                                }
-
-                            });
-
-
-                            myElement.on("keyup", "#addTagsToImage", function (e) {
-                                //console.log("Tags input key up");
-                                if(e.which == 13){
-                                    //console.log("enter pressed");
-                                    myElement.find("a.addtag").click();
-                                }
-
-                            });
-
-                            myElement.on("click", "i.remove-tag", function () {
-                                var element = $(this);
-                                element.parent().parent().remove();
-                                return false;
-                            });
-
-                            myElement.on("click", "a.closebtn-imgtag", function () {
-                                console.log("tags close button pressed..");
-                                var element = $(this);
-                                var imageId = element.data("id");
-                                var tags = "";
-                                var tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
-                                $.each(tagsContainer, function (index, value) {
-                                    if (index == 0)
-                                        tags += $(this).find("span").text();
-                                    else
-                                        tags += "," + $(this).find("span").text();
-                                });
-                                if (imageId != null && tags != "") {
-                                    SaveImageTags(tags, imageId);
-                                }
-                                return false;
-                            });
-
-
-                            // ----------------End Image Tags ---------------//
-
-                            // ----------------Start Image Preview ---------------//
-
-                            var ShowImagePreview = function (args) {
-                                if (args != null && args != undefined) {
-                                    var imagePreviewContainer = myElement.find('.imgpreview-container');
-                                    imagePreviewContainer.find("h2").children("span").text(args.Name);
-                                    imagePreviewContainer.find("div.modal-body").children("img").attr('src', args.URL);
-                                    var actionsList = imagePreviewContainer.find("ul#more-tool-actions").children();
-                                    $.each(actionsList, function () {
-                                        var action = $(this).children("a");
-                                        var actionType = action.data("action");
-                                        if (actionType === "NewWindow") {
-                                            action.data("imgurl", args.URL);
-                                        }
-                                    });
-                                    imagePreviewContainer.show();
-                                }
-                            }
-
-                            myElement.find(".closeImagePreview").click(function () {                                            
-                                closeimgPreview();                                            
-                                return false;
-                            });
-
-                            function openinnewTab(url) {
-                                var win = window.open(url, '_blank');
-                                win.focus();
-                            }
-
-                            function closeimgPreview() {
-                                var window = myElement.find('.imgpreview-container');
-                                window.find("div.modal-body").children("img").attr('src', '');
-                                window.hide();
-                            }
-
-                            // ----------------End Image Tags ---------------//
-
-                            // ------------------ Start Image Handlers --------------//
-
-                            myElement.on("click", "i,action", function () {
-                                var element = $(this);
-                                var type = element.data("actiontype");
-                                var imgid = element.data("id");
-                                var imgurl = element.data("url");
-                                var imgname = element.data("name");
-                                var index = element.data("index");
-
-                                var imageParams = {
-                                    ID: imgid,
-                                    URL: imgurl,
-                                    Name: imgname
-                                };
-
-
-                                if (type === "imageInfo") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-
-                                    var imageObj = imageListGlobal[0][index][0];
-
-                                    // var fileName = imageObj.fileName;
-                                    // console.log("FileName extracted for image is:"+fileName);
-                                    showBox(element, imageObj, "info");
-                                }
-                                else if (type === "imageLink") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-
-                                    // element.siblings('.link-window').show();
-                                    var imageObj = imageListGlobal[0][index][0];
-
-                                    showBox(element, imageObj, "link");
-                                }
-                                else if (type === "imagePreview") {
-                                    ShowImagePreview(imageParams);
-                                }
-                                else if (type === "imageTag") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-
-                                    // element.siblings('.tag-window').show();
-                                    var imageObj = imageListGlobal[0][index][0];
-
-                                    showBox(element, imageObj, "tag");
-                                }
-                                else if (type === "imageDelete") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-                                    var imageObj = imageListGlobal[0][index][0];
-
-                                    showBox(element, imageObj, "delete");
-                                }
-
-                                else if (type === "bbdel") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-                                    var bbObj = buildingBlocksGlobal[index][0];
-
-                                    showBox(element, bbObj, "bbdel");
-                                }
-                                else if (type === "bbedit") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-                                    var bbObj = buildingBlocksGlobal[index][0];
-
-                                    showBox(element, bbObj, "bbedit");
-                                }
-                                else if (type === "dcdel") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-                                    var dcObj = dynamicBlocksGlobal[index][0];
-
-                                    showBox(element, dcObj, "dcdel");
-                                }
-                                else if (type === "dcedit") {
-                                    myElement.find('.info-windowDiv').hide();
-                                    myElement.find('.link-windowDiv').hide();
-                                    myElement.find('.tag-windowDiv').hide();
-                                    myElement.find('.del-windowDiv').hide();
-                                    myElement.find('.BBDeleteDialog').hide();
-                                    myElement.find('.BBEditDialog').hide();
-                                    myElement.find('.DCDeleteDialog').hide();
-                                    myElement.find('.DCEditDialog').hide();
-
-                                    var dcObj = dynamicBlocksGlobal[index][0];
-
-                                    showBox(element, dcObj, "dcedit");
-                                }
-                                else if (type === "fbedit") {
-                                    console.log("Calling loadForm method with id:"+ imgid);
-                                    loadForm(imgid);
-                                }
-                                else if (type === "fbdel") {
-                                    console.log("Calling deleteForm method with id:"+ imgid);
-                                    deleteForm(imgid);
-                                }
-                                return false;
-                            });
-
-                            myElement.on("click", "a.closebtn", function () {
-                                var element = $(this);
-                                element.parent().hide();
-                                return false;
-                            });
-
-                            myElement.find(".addNewFormLink").click(function() {
-
-                                loadForm('');
-
-                            });
-
-                            function loadForm(formId){
-
-                                var formPara = ""; 
-                                if(formId != '') {
-                                    formPara = "&formId="+formId;
-                                }
-
-                                var url = options.formWizURL;
-                                url = url + formPara;                                            
-                                window.open(url);
-                            }
-
-
-                            function deleteForm(formId){
-
-                                var formPara = ""; 
-                                if(formId != '') {
-                                    formPara = "&mformId="+formId;
-                                }
-                                var url = options.formDeleteURL;
-                                url = url + formPara + "&delete=true";                                            
-
-                                window.open(url);
-                            }                                        
-
-                            myElement.find(".editBB").click(function () {
-                                if (_LastSelectedBuildingBlock != null) {
-                                    var name = _LastSelectedBuildingBlock.children("span").text();
-                                    myElement.find(".editBlockInputName").val(name);
-                                    InitializeBuildingBlockUpdatePopup();                                                
-                                }
-                                else {
-                                    alert("Please Select a Block First");
-                                }
-                            });
-
-                            myElement.find(".deleteBB").click(function () {
-                                if (_LastSelectedBuildingBlock != null) {
-                                    var id = _LastSelectedBuildingBlock.data("id");
-                                    var isDel = confirm("Are you sure you want to delete this Block");
-                                    if (isDel) {
-                                        // Delete Block Server Call
-                                        var args = {
-                                            buildingBlock: null
-                                        };                                                    
-
-                                        var buildingBlock = new Object();
-                                        buildingBlock.Id = _LastSelectedBuildingBlock.data("id");
-                                        args.buildingBlock = buildingBlock;
-                                        _OnDeleteBuildingBlock(args);
-                                        _LastSelectedBuildingBlock = null;
-                                        UnSelectAllDynamicBlocks();                                                    
-                                    }
-                                    else {
-                                        _LastSelectedBuildingBlock = null;
-                                        UnSelectAllDynamicBlocks();
-                                    }                                                
-                                }
-                                else {
-                                    alert("Please Select a Block First");
-                                }
-                            });
-
-                            myElement.find(".editDBB").click(function () {
-                                if (_LastSelectedDynamicBuildingBlock != null) {
-                                    var name = _LastSelectedDynamicBuildingBlock.children("span").text();
-                                    myElement.find(".editdynamicBlockInputName").val(name);
-                                    InitializeDynamicBuildingBlockUpdatePopup();
-                                    return false;
-                                }
-                                else {
-                                    alert("Please Select a Block First");
-                                    return false;
-                                }
-                            });
-
-                            myElement.find(".deleteDBB").click(function () {
-                                if (_LastSelectedDynamicBuildingBlock != null) {
-                                    var id = _LastSelectedDynamicBuildingBlock.data("id");
-                                    var isDel = confirm("Are you sure you want to delete this Block");
-                                    if (isDel) {
-                                        // Delete Block Server Call
-                                        var args = {
-                                            buildingBlock: null
-                                        };
-
-                                        var dynamicVariation = new Object();                                                    
-                                        dynamicVariation.Id = _LastSelectedDynamicBuildingBlock.data("id");
-                                        args.dynamicVariation = dynamicVariation;                                                    
-                                        _OnDeleteDynamicVariation(args);
-                                        _LastSelectedDynamicBuildingBlock = null;
-                                        UnSelectAllDynamicBlocks();                                                    
-                                    }
-                                    else {
-                                        _LastSelectedDynamicBuildingBlock = null;
-                                        UnSelectAllDynamicBlocks();
-                                    }                                                
-                                    return false;
-                                }
-                                else {
-                                    alert("Please Select a Block First");
-                                    return false;
-                                }
-                            });
-
-                            myElement.find('.searchDCLink').click(function (){
-                                _searchDynamicBlocks();
-                            });
-
-                            myElement.find('.searchBBLink').click(function (){
-                                _searchBuildingBlocks();
-                            });
-
-                            myElement.find('.searchFormLink').click(function (){
-                                _searchFormBlocks();
-                            });
-
-                            myElement.find('.MenuCallBackSave').click(function (obj) {
-                                options.saveCallBack(obj);
-                            });
-
-                            var _LastSelectedBuildingBlock = null;
-                            var _LastSelectedDynamicBuildingBlock = null;
-
-                            function UnSelectAllBlocks() {
-                                myElement.find('.ulBuildingBlocks li').each(function () {
-                                    $(this).css("background", "#71737a");                                                
-                                });
-                            }
-
-                            function UnSelectAllDynamicBlocks() {
-                                myElement.find('.ulDynamicBlocks li').each(function () {
-                                    $(this).css("background", "#71737a");                                                
-                                });
-                            }
-
-                            myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
-                                e.stopPropagation();
-                                e.preventDefault();
-                                console.log("drag enter called..");
-                                myElement.find(".divBuildingBlockLoadingImages").show();                                            
-                            });
-
-                            myElement.find("#HTML5FileUploader").on("dragover", function (e) {                                            
-                                e.stopPropagation();
-                                e.preventDefault();                                            
-                            });
-
-
-
-                            myElement.find("#HTML5FileUploader").on("dragleave", function (e) {
-                                e.stopPropagation();
-                                e.preventDefault();                                            
-                            });
-
-
-
-
-                            myElement.find("#HTML5FileUploader").on("drop", function (e) {
-                                console.log("drop called..");
-                                e.stopPropagation();
-                                e.preventDefault();
-                                var files = e.originalEvent.dataTransfer.files;        
-                                // console.log("Dropped Files Are:"+ files);
-
-                                // console.log(files);
-                                handleFileUpload(files);
-                                myElement.find(".divBuildingBlockLoadingImages").hide();
-                            // this.$element.addClass('file-border');
-                            });
-
-                            var handleFileUpload = function(files) {
-                                for (var i = 0; i < files.length; i++) {
-                                    if(validateIfImage(files[i])){
-                                        var fd = new FormData();
-                                        fd.append('fileName', files[i]);
-                                        this.name = files[i];
-                                        sendFileToServer(fd);
-                                    }
-                                }
-                            }
-
-                            var validateIfImage = function(file){
-                                var isImage = true;
-                                if(file.type.indexOf("image")<0){
-                                    //this.app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
-                                    isImage = false
-                                }
-                                return isImage;
-                            }
-
-                            function addNewRule() {
-
-                                var ruleTemplate = $(myElement.find(".dcRuleRowTemplate").html());        
-
-                                ruleTemplate.find(".firstChosen").chosen({
-                                    width:"224px"
-                                });
-                                ruleTemplate.find(".secondChosen").chosen({
-                                    disable_search_threshold: 10 , 
-                                    width:"180px"
-                                });
-                                ruleTemplate.find(".thirdChosen").chosen({
-                                    disable_search_threshold: 10 , 
-                                    width:"150px"
-                                });
-
-                                //Delete Event
-                                ruleTemplate.find(".delete").click(function () {
-                                    ruleTemplate.remove();
-                                });
-                                ////////////////////////////////////
-
-                                myElement.find(".dynamic_inputs_list").append(ruleTemplate);
-
-
-                            }
-
-
-
-                            var sendFileToServer = function(formData){
-                                var uploadURL = myElement.find("#form1").attr("action"); 
-                                console.log("URL To post is:"+ uploadURL);
-                                var _this = this;
-                                var data_id = 0;
-                                var jqXHR = $.ajax({
-                                    xhr: function() {
-                                        var xhrobj = $.ajaxSettings.xhr();
-                                        if (xhrobj.upload) {
-                                            xhrobj.upload.addEventListener('progress', function(event) {
-                                                var percent = 0;
-                                                var position = event.loaded || event.position;
-                                                var total = event.total;
-                                                if (event.lengthComputable) {
-                                                    percent = Math.ceil(position / total * 100);
-                                                }                                                             
-                                            }, false);
-                                        }
-                                        return xhrobj;
-                                    },
-                                    url: uploadURL,
-                                    type: "POST",
-                                    contentType:false,
-                                    processData: false,
-                                    cache: false,
-                                    async: false,
-                                    data: formData,
-                                    success: function(data){    
+                            myElement.find(".searchimg-text").val("");
+                            return false;
+                        });
+
+                        // ------------------ End Image Search --------------//
+
+                        // ------------------ Start Image upload --------------//
+
+                        myElement.find(".uploadFile").click(function () {
+                            console.log("upload file clicked.");
+                            myElement.find("#myUploadFile").click();
+                            return false;
+                        });
+
+                        myElement.find("#myUploadFile").change(function (e) {
+                            myElement.find("#form1").submit();
+                            //LoadImagesInLibrary();
+                            return true;
+                        });
+
+
+                        //Callback handler for form submit event
+                        myElement.find("#form1").submit(function (e) {
+                            var formObj = $(this);
+                            var formURL = "/pms/io/publish/saveImagesData/?"+options._BMSTOKEN+"&type=add";
+                            var formData = new FormData(this);
+                            $.ajax({
+                                url: formURL,
+                                type: 'POST',
+                                data: formData,
+                                mimeType: "multipart/form-data",
+                                contentType: false,
+                                cache: false,
+                                processData: false,
+                                success: function (data, textStatus, jqXHR) {
+                                    console.log("Image Upload success:" + e);
+                                    var result = jQuery.parseJSON(data);
+                                    if(result.success){
                                         options._app.showMessge("Image has been successfully uploaded.",$("body"));
-                                        LoadImagesInLibrary();  
+                                        LoadImagesInLibrary();
                                     }
-                                    ,
-                                    error:function(){                                        
-                                        options._app.showAlert("Faild uploading image...",$("body"));
+                                    else{
+                                        options._app.showAlert(result.err1,$("body"));
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    console.log("Image Upload failed:" + e);
+                                }
+                            });
+                            e.preventDefault(); //Prevent Default action.
+
+                        });
+
+                        // ------------------ End Image upload --------------//
+
+                        // ------------------ Start Image Delete --------------//
+
+                        var _deleteImageAjaxParameter = null;
+                        if (options.DeleteImageProperties != null) {
+                            _deleteImageAjaxParameter = new Object();
+                            _deleteImageAjaxParameter.Url = options.DeleteImageProperties.Url;
+                            _deleteImageAjaxParameter.Data = options.DeleteImageProperties.Data;
+                            _deleteImageAjaxParameter.DataType = options.DeleteImageProperties.DataType != "" ? options.DeleteImageProperties.DataType : "json";
+                            _deleteImageAjaxParameter.Type = options.DeleteImageProperties.Type != "" ? options.DeleteImageProperties.Type : "POST";
+                            _deleteImageAjaxParameter.ContentType = options.DeleteImageProperties.ContentType != "" ? options.DeleteImageProperties.ContentType : "application/json; charset=latin1";
+                        }
+
+                        var DeleteImage = function (imageId) {
+                            _deleteImageAjaxParameter.Url = options.DeleteImageProperties.Url + imageId;
+                            returnData = SendServerRequest(_deleteImageAjaxParameter);
+                            LoadImagesInLibrary();
+                        }
+
+                        myElement.on("click", "a.confirm-del", function () {
+                            var obj = $(this);
+                            var imageId = obj.data("id");
+                            obj.parent().hide();
+                            DeleteImage(imageId);
+                            return false;
+                        });
+
+                        // ------------------ End Image Delete --------------//
+
+                        // ---------------- Start Image Tags ---------------//
+
+                        var _saveImageTagsAjaxParameters = null;
+                        if (options.SaveImageTagsProperties != null) {
+                            _saveImageTagsAjaxParameters = new Object();
+                            _saveImageTagsAjaxParameters.Url = options.SaveImageTagsProperties.Url;
+                            _saveImageTagsAjaxParameters.Data = options.SaveImageTagsProperties.Data;
+                            _saveImageTagsAjaxParameters.DataType = options.SaveImageTagsProperties.DataType != "" ? options.SaveImageTagsProperties.DataType : "json";
+                            _saveImageTagsAjaxParameters.Type = options.SaveImageTagsProperties.Type != "" ? options.SaveImageTagsProperties.Type : "POST";
+                            _saveImageTagsAjaxParameters.ContentType = options.SaveImageTagsProperties.ContentType != "" ? options.SaveImageTagsProperties.ContentType : "application/json; charset=latin1";
+                        }
+
+                        var SaveImageTags = function (tags, imageId) {
+                            if (tags != null && imageId != null) {
+                                var data = {
+                                    imageId: imageId, 
+                                    tags: tags
+                                };
+                                var jsonData = JSON.stringify(data);
+                                _saveImageTagsAjaxParameters.Data = jsonData;
+                                _saveImageTagsAjaxParameters.Url = options.SaveImageTagsProperties.Url + imageId + "&tags=" + tags;
+                                returnData = SendServerRequest(_saveImageTagsAjaxParameters);
+                                LoadImagesInLibrary();
+                            }
+                        }
+                        myElement.on("click", "i.newwin", function () {                                
+                            var url = $(this).parent().attr("href");
+                            var showName = $.getUrlVar(url,'campaignkw');
+                            window.open(url.replace("?campaignkw="+showName,""));
+                            myElement.find(".alertButtons").hide();
+                        });
+
+                        myElement.on("click", "i.linkOpen", function () {
+                            myElement.find("#linkTrack").data("linkObject", "text");
+                            showLinkGUI();
+                            myElement.find(".alertButtons").hide();                                
+                        });
+                        myElement.find(".alertButtons").mousedown(function(e){
+                            e.stopPropagation();
+                            return false;
+                        })
+
+                        myElement.on("click", "a.btnSaveBB", function () {
+                            var element = $(this);
+                            var txtBlockName = element.siblings("input.tginput");
+                            var args = new Object();
+                            args.BlockName = txtBlockName.val();
+                            args.BlockID = element.data("id");
+
+                            //Call overridden Method here: will use when exposing properties to developer
+                            if (options.OnEditBuildingBlock != null) {
+                                options.OnEditBuildingBlock(args);
+                                mee._LoadBuildingBlocks(args);
+                                //parentLi.find(".bbName").text(args.BlockName);
+                                console.log("Saved successfully");
+                            }
+                            myElement.find(".BBEditDialog").hide();
+                        });
+
+                        myElement.on("click", "a.btnDeleteBB", function () {
+                            var element = $(this);
+
+                            var args = new Object();
+                            args.BlockID = element.data("id");
+
+                            //Call overridden Method here: will use when exposing properties to developer
+                            if (options.OnDeleteBuildingBlock != null) {
+                                options.OnDeleteBuildingBlock(args);
+                                mee._LoadBuildingBlocks(args);
+                                console.log("Deleted Successfully");
+                            }
+
+                            myElement.find(".BBDeleteDialog").hide();
+
+                        });
+
+                        myElement.on("click", "a.btnSaveDC", function () {
+                            var element = $(this);
+                            var txtBlockName = element.siblings("input.tginput");
+                            var args = new Object();
+                            args.DCName = txtBlockName.val();
+                            args.DCID =  element.data("id");
+
+                            if (options.OnEditDynamicVariation != null) {
+                                options.OnEditDynamicVariation(args);
+
+                                _LoadDynamicBlocks(args);
+                            }
+                            myElement.find(".DCEditDialog").hide();
+
+                        });
+
+                        myElement.on("click", "a.btnDeleteDC", function () {
+                            var element = $(this);
+
+                            var args = new Object();
+                            args.DCID = element.data("id");
+
+                            //Call overridden Method here: will use when exposing properties to developer
+                            if (options.OnDeleteDynamicVariation != null) {
+                                options.OnDeleteDynamicVariation(args);
+
+                                _LoadDynamicBlocks(args);                                            
+                            }
+
+                            myElement.find(".DCDeleteDialog").hide();
+
+                        });
+
+                        myElement.on("click", "a.addtag", function () {
+                            var element = $(this);
+                            var tagscontainer = element.siblings("div.tagscont").children("ul");
+                            var inputElement = element.siblings("input.tginput");
+                            var strtag = inputElement.val();
+                            if (strtag != "") {
+                                tagscontainer.append("<li><a class='tag' href='#.'><span>" + strtag + "</span><i class='icon cross remove-tag'></i></a> </li>");
+                                inputElement.val("");
+                            }
+                            var imageId = element.data("id");
+                            var tags = "";
+                            var tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
+                            $.each(tagsContainer, function (index, value) {
+                                if (index == 0)
+                                    tags += $(this).find("span").text();
+                                else
+                                    tags += "," + $(this).find("span").text();
+                            });
+                            if (imageId != null && tags != "") {
+                                SaveImageTags(tags, imageId);
+                            }
+
+                        });
+
+
+                        myElement.on("keyup", "#addTagsToImage", function (e) {
+                            //console.log("Tags input key up");
+                            if(e.which == 13){
+                                //console.log("enter pressed");
+                                myElement.find("a.addtag").click();
+                            }
+
+                        });
+
+                        myElement.on("click", "i.remove-tag", function () {
+                            var element = $(this);
+                            element.parent().parent().remove();
+                            return false;
+                        });
+
+                        myElement.on("click", "a.closebtn-imgtag", function () {
+                            console.log("tags close button pressed..");
+                            var element = $(this);
+                            var imageId = element.data("id");
+                            var tags = "";
+                            var tagsContainer = element.siblings("div.tagscont").children("ul").children("li");
+                            $.each(tagsContainer, function (index, value) {
+                                if (index == 0)
+                                    tags += $(this).find("span").text();
+                                else
+                                    tags += "," + $(this).find("span").text();
+                            });
+                            if (imageId != null && tags != "") {
+                                SaveImageTags(tags, imageId);
+                            }
+                            return false;
+                        });
+
+
+                        // ----------------End Image Tags ---------------//
+
+                        // ----------------Start Image Preview ---------------//
+
+                        var ShowImagePreview = function (args) {
+                            if (args != null && args != undefined) {
+                                var imagePreviewContainer = myElement.find('.imgpreview-container');
+                                imagePreviewContainer.find("h2").children("span").text(args.Name);
+                                imagePreviewContainer.find("div.modal-body").children("img").attr('src', args.URL);
+                                var actionsList = imagePreviewContainer.find("ul#more-tool-actions").children();
+                                $.each(actionsList, function () {
+                                    var action = $(this).children("a");
+                                    var actionType = action.data("action");
+                                    if (actionType === "NewWindow") {
+                                        action.data("imgurl", args.URL);
                                     }
                                 });
+                                imagePreviewContainer.show();
+                            }
+                        }
 
+                        myElement.find(".closeImagePreview").click(function () {                                            
+                            closeimgPreview();                                            
+                            return false;
+                        });
+
+                        function openinnewTab(url) {
+                            var win = window.open(url, '_blank');
+                            win.focus();
+                        }
+
+                        function closeimgPreview() {
+                            var window = myElement.find('.imgpreview-container');
+                            window.find("div.modal-body").children("img").attr('src', '');
+                            window.hide();
+                        }
+
+                        // ----------------End Image Tags ---------------//
+
+                        // ------------------ Start Image Handlers --------------//
+
+                        myElement.on("click", "i,action", function () {
+                            var element = $(this);
+                            var type = element.data("actiontype");
+                            var imgid = element.data("id");
+                            var imgurl = element.data("url");
+                            var imgname = element.data("name");
+                            var index = element.data("index");
+
+                            var imageParams = {
+                                ID: imgid,
+                                URL: imgurl,
+                                Name: imgname
+                            };
+
+
+                            if (type === "imageInfo") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+
+                                var imageObj = imageListGlobal[0][index][0];
+
+                                // var fileName = imageObj.fileName;
+                                // console.log("FileName extracted for image is:"+fileName);
+                                showBox(element, imageObj, "info");
+                            }
+                            else if (type === "imageLink") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+
+                                // element.siblings('.link-window').show();
+                                var imageObj = imageListGlobal[0][index][0];
+
+                                showBox(element, imageObj, "link");
+                            }
+                            else if (type === "imagePreview") {
+                                ShowImagePreview(imageParams);
+                            }
+                            else if (type === "imageTag") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+
+                                // element.siblings('.tag-window').show();
+                                var imageObj = imageListGlobal[0][index][0];
+
+                                showBox(element, imageObj, "tag");
+                            }
+                            else if (type === "imageDelete") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+                                var imageObj = imageListGlobal[0][index][0];
+
+                                showBox(element, imageObj, "delete");
                             }
 
-                            function resizeIFrame (frame) {
-                                var iFrame = $(frame);
-                                console.log('ResizeIFrame Calle...' + iFrame.contents().find("body").height());
-                                var iframe_height = iFrame.contents().find("body").height()+30;                                            
-                                iFrame.height(iframe_height);
+                            else if (type === "bbdel") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
 
+                                var bbObj = buildingBlocksGlobal[index][0];
+
+                                showBox(element, bbObj, "bbdel");
+                            }
+                            else if (type === "bbedit") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+                                var bbObj = buildingBlocksGlobal[index][0];
+
+                                showBox(element, bbObj, "bbedit");
+                            }
+                            else if (type === "dcdel") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+                                var dcObj = dynamicBlocksGlobal[index][0];
+
+                                showBox(element, dcObj, "dcdel");
+                            }
+                            else if (type === "dcedit") {
+                                myElement.find('.info-windowDiv').hide();
+                                myElement.find('.link-windowDiv').hide();
+                                myElement.find('.tag-windowDiv').hide();
+                                myElement.find('.del-windowDiv').hide();
+                                myElement.find('.BBDeleteDialog').hide();
+                                myElement.find('.BBEditDialog').hide();
+                                myElement.find('.DCDeleteDialog').hide();
+                                myElement.find('.DCEditDialog').hide();
+
+                                var dcObj = dynamicBlocksGlobal[index][0];
+
+                                showBox(element, dcObj, "dcedit");
+                            }
+                            else if (type === "fbedit") {
+                                console.log("Calling loadForm method with id:"+ imgid);
+                                loadForm(imgid);
+                            }
+                            else if (type === "fbdel") {
+                                console.log("Calling deleteForm method with id:"+ imgid);
+                                deleteForm(imgid);
+                            }
+                            return false;
+                        });
+
+                        myElement.on("click", "a.closebtn", function () {
+                            var element = $(this);
+                            element.parent().hide();
+                            return false;
+                        });
+
+                        myElement.find(".addNewFormLink").click(function() {
+
+                            loadForm('');
+
+                        });
+
+                        function loadForm(formId){
+
+                            var formPara = ""; 
+                            if(formId != '') {
+                                formPara = "&formId="+formId;
                             }
 
+                            var url = options.formWizURL;
+                            url = url + formPara;                                            
+                            window.open(url);
+                        }
+
+
+                        function deleteForm(formId){
+
+                            var formPara = ""; 
+                            if(formId != '') {
+                                formPara = "&mformId="+formId;
+                            }
+                            var url = options.formDeleteURL;
+                            url = url + formPara + "&delete=true";                                            
+
+                            window.open(url);
+                        }                                        
+
+                        myElement.find(".editBB").click(function () {
+                            if (_LastSelectedBuildingBlock != null) {
+                                var name = _LastSelectedBuildingBlock.children("span").text();
+                                myElement.find(".editBlockInputName").val(name);
+                                InitializeBuildingBlockUpdatePopup();                                                
+                            }
+                            else {
+                                alert("Please Select a Block First");
+                            }
+                        });
+
+                        myElement.find(".deleteBB").click(function () {
+                            if (_LastSelectedBuildingBlock != null) {
+                                var id = _LastSelectedBuildingBlock.data("id");
+                                var isDel = confirm("Are you sure you want to delete this Block");
+                                if (isDel) {
+                                    // Delete Block Server Call
+                                    var args = {
+                                        buildingBlock: null
+                                    };                                                    
+
+                                    var buildingBlock = new Object();
+                                    buildingBlock.Id = _LastSelectedBuildingBlock.data("id");
+                                    args.buildingBlock = buildingBlock;
+                                    _OnDeleteBuildingBlock(args);
+                                    _LastSelectedBuildingBlock = null;
+                                    UnSelectAllDynamicBlocks();                                                    
+                                }
+                                else {
+                                    _LastSelectedBuildingBlock = null;
+                                    UnSelectAllDynamicBlocks();
+                                }                                                
+                            }
+                            else {
+                                alert("Please Select a Block First");
+                            }
+                        });
+
+                        myElement.find(".editDBB").click(function () {
+                            if (_LastSelectedDynamicBuildingBlock != null) {
+                                var name = _LastSelectedDynamicBuildingBlock.children("span").text();
+                                myElement.find(".editdynamicBlockInputName").val(name);
+                                InitializeDynamicBuildingBlockUpdatePopup();
+                                return false;
+                            }
+                            else {
+                                alert("Please Select a Block First");
+                                return false;
+                            }
+                        });
+
+                        myElement.find(".deleteDBB").click(function () {
+                            if (_LastSelectedDynamicBuildingBlock != null) {
+                                var id = _LastSelectedDynamicBuildingBlock.data("id");
+                                var isDel = confirm("Are you sure you want to delete this Block");
+                                if (isDel) {
+                                    // Delete Block Server Call
+                                    var args = {
+                                        buildingBlock: null
+                                    };
+
+                                    var dynamicVariation = new Object();                                                    
+                                    dynamicVariation.Id = _LastSelectedDynamicBuildingBlock.data("id");
+                                    args.dynamicVariation = dynamicVariation;                                                    
+                                    _OnDeleteDynamicVariation(args);
+                                    _LastSelectedDynamicBuildingBlock = null;
+                                    UnSelectAllDynamicBlocks();                                                    
+                                }
+                                else {
+                                    _LastSelectedDynamicBuildingBlock = null;
+                                    UnSelectAllDynamicBlocks();
+                                }                                                
+                                return false;
+                            }
+                            else {
+                                alert("Please Select a Block First");
+                                return false;
+                            }
+                        });
+
+                        myElement.find('.searchDCLink').click(function (){
+                            _searchDynamicBlocks();
+                        });
+
+                        myElement.find('.searchBBLink').click(function (){
+                            _searchBuildingBlocks();
+                        });
+
+                        myElement.find('.searchFormLink').click(function (){
+                            _searchFormBlocks();
+                        });
+
+                        myElement.find('.MenuCallBackSave').click(function (obj) {
+                            options.saveCallBack(obj);
+                        });
+
+                        var _LastSelectedBuildingBlock = null;
+                        var _LastSelectedDynamicBuildingBlock = null;
+
+                        function UnSelectAllBlocks() {
+                            myElement.find('.ulBuildingBlocks li').each(function () {
+                                $(this).css("background", "#71737a");                                                
+                            });
+                        }
+
+                        function UnSelectAllDynamicBlocks() {
+                            myElement.find('.ulDynamicBlocks li').each(function () {
+                                $(this).css("background", "#71737a");                                                
+                            });
+                        }
+
+                        myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            console.log("drag enter called..");
+                            myElement.find(".divBuildingBlockLoadingImages").show();                                            
+                        });
+
+                        myElement.find("#HTML5FileUploader").on("dragover", function (e) {                                            
+                            e.stopPropagation();
+                            e.preventDefault();                                            
+                        });
 
 
 
-                            function copyEvents(source, destination) {
-                                // Get source events
-                                var events = source.data('events');
-                                if(events != undefined) {
-                                    // Iterate through all event types
-                                    $.each(events, function(eventType, eventArray) {
-                                        // Iterate through every bound handler
-                                        $.each(eventArray, function(index, event) {
-                                            // Take event namespaces into account
-                                            var eventToBind = event.namespace.length > 0
-                                            ? (event.type + '.' + event.namespace)
-                                            : (event.type);
+                        myElement.find("#HTML5FileUploader").on("dragleave", function (e) {
+                            e.stopPropagation();
+                            e.preventDefault();                                            
+                        });
 
-                                            // Bind event
-                                            destination.bind(eventToBind, event.data, event.handler);
-                                        });
-                                    });
+
+
+
+                        myElement.find("#HTML5FileUploader").on("drop", function (e) {
+                            console.log("drop called..");
+                            e.stopPropagation();
+                            e.preventDefault();
+                            var files = e.originalEvent.dataTransfer.files;        
+                            // console.log("Dropped Files Are:"+ files);
+
+                            // console.log(files);
+                            handleFileUpload(files);
+                            myElement.find(".divBuildingBlockLoadingImages").hide();
+                        // this.$element.addClass('file-border');
+                        });
+
+                        var handleFileUpload = function(files) {
+                            for (var i = 0; i < files.length; i++) {
+                                if(validateIfImage(files[i])){
+                                    var fd = new FormData();
+                                    fd.append('fileName', files[i]);
+                                    this.name = files[i];
+                                    sendFileToServer(fd);
                                 }
                             }
+                        }
 
+                        var validateIfImage = function(file){
+                            var isImage = true;
+                            if(file.type.indexOf("image")<0){
+                                //this.app.showAlert("Please select a image with extension jpeg,jpg,png or gif.",$("body"),{fixed:true})
+                                isImage = false
+                            }
+                            return isImage;
+                        }
+
+                        function addNewRule() {
+
+                            var ruleTemplate = $(myElement.find(".dcRuleRowTemplate").html());        
+
+                            ruleTemplate.find(".firstChosen").chosen({
+                                width:"224px"
+                            });
+                            ruleTemplate.find(".secondChosen").chosen({
+                                disable_search_threshold: 10 , 
+                                width:"180px"
+                            });
+                            ruleTemplate.find(".thirdChosen").chosen({
+                                disable_search_threshold: 10 , 
+                                width:"150px"
+                            });
+
+                            //Delete Event
+                            ruleTemplate.find(".delete").click(function () {
+                                ruleTemplate.remove();
+                            });
+                            ////////////////////////////////////
+
+                            myElement.find(".dynamic_inputs_list").append(ruleTemplate);
+
+
+                        }
+
+
+
+                        var sendFileToServer = function(formData){
+                            var uploadURL = myElement.find("#form1").attr("action"); 
+                            console.log("URL To post is:"+ uploadURL);
+                            var _this = this;
+                            var data_id = 0;
+                            var jqXHR = $.ajax({
+                                xhr: function() {
+                                    var xhrobj = $.ajaxSettings.xhr();
+                                    if (xhrobj.upload) {
+                                        xhrobj.upload.addEventListener('progress', function(event) {
+                                            var percent = 0;
+                                            var position = event.loaded || event.position;
+                                            var total = event.total;
+                                            if (event.lengthComputable) {
+                                                percent = Math.ceil(position / total * 100);
+                                            }                                                             
+                                        }, false);
+                                    }
+                                    return xhrobj;
+                                },
+                                url: uploadURL,
+                                type: "POST",
+                                contentType:false,
+                                processData: false,
+                                cache: false,
+                                async: false,
+                                data: formData,
+                                success: function(data){    
+                                    options._app.showMessge("Image has been successfully uploaded.",$("body"));
+                                    LoadImagesInLibrary();  
+                                }
+                                ,
+                                error:function(){                                        
+                                    options._app.showAlert("Faild uploading image...",$("body"));
+                                }
+                            });
+
+                        }
+
+                        function resizeIFrame (frame) {
+                            var iFrame = $(frame);
+                            console.log('ResizeIFrame Calle...' + iFrame.contents().find("body").height());
+                            var iframe_height = iFrame.contents().find("body").height()+30;                                            
+                            iFrame.height(iframe_height);
+
+                        }
+
+
+
+
+                        function copyEvents(source, destination) {
+                            // Get source events
+                            var events = source.data('events');
+                            if(events != undefined) {
+                                // Iterate through all event types
+                                $.each(events, function(eventType, eventArray) {
+                                    // Iterate through every bound handler
+                                    $.each(eventArray, function(index, event) {
+                                        // Take event namespaces into account
+                                        var eventToBind = event.namespace.length > 0
+                                        ? (event.type + '.' + event.namespace)
+                                        : (event.type);
+
+                                        // Bind event
+                                        destination.bind(eventToBind, event.data, event.handler);
+                                    });
+                                });
+                            }
+                        }
+
+
+                    });
+                }
+
+
+            });
+
+
+
+
+        jQuery.fn.visible = function () {
+            return this.css('visibility', 'visible');
+        };
+
+        jQuery.fn.invisible = function () {
+            return this.css('visibility', 'hidden');
+        };
+
+        jQuery.fn.visibilityToggle = function () {
+            return this.css('visibility', function (i, visibility) {
+                return (visibility == 'visible') ? 'hidden' : 'visible';
+            });
+        };
+
+        jQuery.fn.removeInlineStyle = function (property) {
+
+            if (property == null)
+                return this.removeAttr('style');
+
+            var proporties = property.split(/\s+/);
+
+            return this.each(function () {
+                var remover =
+                this.style.removeProperty   // modern browser
+                || this.style.removeAttribute   // old browser (ie 6-8)
+                || jQuery.noop;  //eventual
+
+                for (var i = 0 ; i < proporties.length ; i++)
+                    remover.call(this.style, proporties[i]);
+
+            });
+        };
+
+        jQuery.fn.inlineStyle = function (prop) {
+            var value="";
+            if(this.length){
+                value = this.prop("style")[$.camelCase(prop)];
+            }
+            return value;
+        };
+
+        jQuery.fn.isEmpty = function () {
+
+            var el = this;
+
+            if ($.trim(el.html()) == true || $.trim(el.html()) === "&nbsp;") {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+
+        jQuery.event.copy = function (from, to) {
+            from = from.jquery ? from : jQuery(from);
+            to = to.jquery ? to : jQuery(to);
+
+            var events = from[0].events || jQuery.data(from[0], "events") || jQuery._data(from[0], "events");
+            if (!from.length || !to.length || !events) return;
+
+            return to.each(function () {
+                for (var type in events)
+                    for (var handler in events[type])
+                        jQuery.event.add(this, type, events[type][handler], events[type][handler].data);
+            });
+        };
+                           
+        this.render();         
+        },
+        render: function () {
+            var BMSTOKEN = this.BMSTOKEN;                            
+            this._$el = this.options._el;                            
+            if (typeof String.prototype.startsWith != 'function') {
+                // see below for better implementation!
+                String.prototype.startsWith = function (str) {
+                    return this.indexOf(str) == 0;
+                };
+            }
+
+            var _imageAjaxParameters = {
+                Url: "/pms/io/publish/getImagesData/?"+BMSTOKEN+"&type=list&offset=0",
+                Data: "",
+                DataType: "",
+                Type: "",
+                ContentType: ""
+            };
+
+            var _AddimageAjaxParameters = {
+                Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=add",
+                Data: "",
+                DataType: "",
+                Type: "",
+                ContentType: ""
+            };
+
+            var _searchImagesAjaxParameters = {
+                Url: "/pms/io/publish/getImagesData/?"+BMSTOKEN+"&type=search&offset=0&searchText=",
+                Data: "",
+                DataType: "",
+                Type: "",
+                ContentType: ""
+            };
+
+            var _saveImageTagsAjaxParameters = {
+                Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=tags&imageId=",
+                Data: "",
+                DataType: "",
+                Type: "",
+                ContentType: ""
+            };
+
+            var _deleteImageAjaxParameter = {
+                Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=delete&imageId=",
+                Data: "",
+                DataType: "",
+                Type: "",
+                ContentType: ""
+            };
+
+            var _preDefinedHTML = this.options.html;
+
+            var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
+            var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
+            var _app= this.app;
+
+            this._$el.MakeBridgeEditor({
+                SaveImageTagsProperties: _saveImageTagsAjaxParameters,
+                DeleteImageProperties: _deleteImageAjaxParameter,
+                ImagesAjaxProperties: _imageAjaxParameters,
+                SearchImagesProperties: _searchImagesAjaxParameters,
+                AddImageProperties: _AddimageAjaxParameters,
+                preDefinedHTML: _preDefinedHTML,
+                landingPage: false,
+                formWizURL: _formWizURL,
+                formDeleteURL: _formDeleteURL ,
+                sessionIDFromServer: ""+BMSTOKEN+"",
+                saveCallBack:  this.options.saveClick,
+                _app:this.app,
+                _BMSTOKEN:BMSTOKEN,
+                OnDropElementOnBuildingBlock: function (args) {
+
+                    //Save to Server
+                    if (args.buildingBlock != null) {
+                        //args.buildingBlock.Name; 
+                        //args.buildingBlock.Html;
+                        var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN;
+                        var post_data = {
+                            name: args.buildingBlock.Name, 
+                            html: args.buildingBlock.Html.html() ,
+                            type:"addBlock"
+                        };
+                        if(_app.get("user").userId==='admin'){
+                            post_data['isAdmin']='Y';
+                        }
+                        $.post(URL,post_data
+                            )
+                        .done(function(data) {                                 
+                            var _json = jQuery.parseJSON(data);
+                                   
+                        });
+
+                    }
+
+
+                },
+                LoadTemplate: function (args) {
+
+                },
+                LoadBuildingBlocks: function (args) {
+                    //GetBuildingBlocks
+
+                    $.ajax({
+                        url: "/pms/io/publish/getEditorData/?"+BMSTOKEN+"&type=listBlocks",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            if(e.count != "0") {
+                                args.buildingBlocks = e.blocks[0];
+                            //console.log("GetBuildingBlocks success:"+ e);
+                            }
+                        },
+                        error: function (e) {
+                        //console.log("GetBuildingBlocks Failed:"+ e);
+                        }
+                    });
+                },
+                OnEditBuildingBlock: function (args) {
+
+                    //Save to Server
+                    if (args != null) {                                        
+                        $.ajax({
+                            url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=renameBlock&name=" + args.BlockName + "&blockId=" + args.BlockID,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                            type: "POST",
+                            contentType: "application/json; charset=latin1",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (e) {
+                            //console.log("RenameBuilding success:" + e);
+                            //LoadBuildingBlocks();
+                            },
+                            error: function (e) {
+                            //console.log("RenameBuilding failed:" + e);
+                            }
+
+                        });
+
+                    }
+
+
+                },
+                OnDeleteBuildingBlock: function (args) {
+                    if (args != null) {
+                        console.log(args.BlockID);
+
+                        $.ajax({
+                            url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=deleteBlock&blockId=" + args.BlockID,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                            type: "POST",
+                            contentType: "application/json; charset=latin1",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (e) {                                            
+                            },
+                            error: function (e) {                                            
+                            }
 
                         });
                     }
+                },
 
 
-                });
+                LoadMyColors: function (args) {
+                    //GetBuildingBlocks
 
-
-
-
-                jQuery.fn.visible = function () {
-                    return this.css('visibility', 'visible');
-                };
-
-                jQuery.fn.invisible = function () {
-                    return this.css('visibility', 'hidden');
-                };
-
-                jQuery.fn.visibilityToggle = function () {
-                    return this.css('visibility', function (i, visibility) {
-                        return (visibility == 'visible') ? 'hidden' : 'visible';
+                    $.ajax({
+                        url: "/pms/io/publish/getEditorData/?"+BMSTOKEN+"&type=listColors",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.myColors = e.colors;
+                        //console.log("MyColors success:" + e.colors);
+                        },
+                        error: function (e) {
+                        //console.log("MyColors Failed:" + e);
+                        }
                     });
-                };
+                },
 
-                jQuery.fn.removeInlineStyle = function (property) {
-
-                    if (property == null)
-                        return this.removeAttr('style');
-
-                    var proporties = property.split(/\s+/);
-
-                    return this.each(function () {
-                        var remover =
-                        this.style.removeProperty   // modern browser
-                        || this.style.removeAttribute   // old browser (ie 6-8)
-                        || jQuery.noop;  //eventual
-
-                        for (var i = 0 ; i < proporties.length ; i++)
-                            remover.call(this.style, proporties[i]);
-
-                    });
-                };
-
-                jQuery.fn.inlineStyle = function (prop) {
-                    var value="";
-                    if(this.length){
-                        value = this.prop("style")[$.camelCase(prop)];
-                    }
-                    return value;
-                };
-
-                jQuery.fn.isEmpty = function () {
-
-                    var el = this;
-
-                    if ($.trim(el.html()) == true || $.trim(el.html()) === "&nbsp;") {
-                        return true;
+                OnColorAdded: function (args) {						
+                    var saveColors = "";
+                    if (args.myColorsFromServiceGlobal == "") {
+                        saveColors = args.AddedColor;
                     }
                     else {
-                        return false;
+                        saveColors = args.myColorsFromServiceGlobal + "," + args.AddedColor;
                     }
+                    //console.log("Color list to be added:" + saveColors);
 
-                }
+                    saveColors = encodeURIComponent(saveColors);
+                    //console.log("Color list to be added after encoded:" + saveColors);
+                    var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=saveColors&colors=" + saveColors ;
+                    $.post(URL)
+                    .done(function (data) {
+                        //console.log("Insert My Color success:" + data);
+                        // your code go here. 
+                        });
 
-                jQuery.event.copy = function (from, to) {
-                    from = from.jquery ? from : jQuery(from);
-                    to = to.jquery ? to : jQuery(to);
+                },
+                OnSaveDynamicContent: function (args)
+                {
 
-                    var events = from[0].events || jQuery.data(from[0], "events") || jQuery._data(from[0], "events");
-                    if (!from.length || !to.length || !events) return;
+                    var content = args.DynamicContent;
+                    var dynamicNumber = content.DynamicVariationID;
+                    var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
+                    $.ajax({                                    
+                        url: contentURL,
+                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (ec) {
+                        //console.log("Insert Dynamic Variation Content success:"+ ec);  
+                        //console.log("Dynamic number Content is:" + ec[1]);
 
-                    return to.each(function () {
-                        for (var type in events)
-                            for (var handler in events[type])
-                                jQuery.event.add(this, type, events[type][handler], events[type][handler].data);
+                        },
+                        error: function (e) {
+                        //console.log("Insert Dynamic Variation Content failed:"+ e);
+                        }
                     });
-                };
-                           
-                this.render();         
-            },
-            render: function () {
-                var BMSTOKEN = this.BMSTOKEN;                            
-                this._$el = this.options._el;                            
-                if (typeof String.prototype.startsWith != 'function') {
-                    // see below for better implementation!
-                    String.prototype.startsWith = function (str) {
-                        return this.indexOf(str) == 0;
-                    };
-                }
 
-                var _imageAjaxParameters = {
-                    Url: "/pms/io/publish/getImagesData/?"+BMSTOKEN+"&type=list&offset=0",
-                    Data: "",
-                    DataType: "",
-                    Type: "",
-                    ContentType: ""
-                };
+                },
+                OnSaveDynamicRules: function (args)
+                {
+                    var content = args.DynamicContent;
+                    var dynamicNumber = content.DynamicVariationID;
+                    var dynamicNumberContent = content.DynamicContentID;
+                    var rules = content.ListOfDynamicRules;
+                    var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
+                    for (var j = 0; j < rules.length; j++) {
+                        var rule = rules[j];
+                        //contentRuleURL += "&"+ j +".spanInDays=";
+                        contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
+                        contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
+                        contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
+                        contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
+                    //contentRuleURL += "&"+ j +".listNumber=";
+                    } 
+                    $.ajax({                                    
+                        url: contentRuleURL,
+                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                        //console.log("Insert Dynamic Variation Content Rule success:"+ e);  
 
-                var _AddimageAjaxParameters = {
-                    Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=add",
-                    Data: "",
-                    DataType: "",
-                    Type: "",
-                    ContentType: ""
-                };
-
-                var _searchImagesAjaxParameters = {
-                    Url: "/pms/io/publish/getImagesData/?"+BMSTOKEN+"&type=search&offset=0&searchText=",
-                    Data: "",
-                    DataType: "",
-                    Type: "",
-                    ContentType: ""
-                };
-
-                var _saveImageTagsAjaxParameters = {
-                    Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=tags&imageId=",
-                    Data: "",
-                    DataType: "",
-                    Type: "",
-                    ContentType: ""
-                };
-
-                var _deleteImageAjaxParameter = {
-                    Url: "/pms/io/publish/saveImagesData/?"+BMSTOKEN+"&type=delete&imageId=",
-                    Data: "",
-                    DataType: "",
-                    Type: "",
-                    ContentType: ""
-                };
-
-                var _preDefinedHTML = this.options.html;
-
-                var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
-                var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
-                var _app= this.app;
-
-                this._$el.MakeBridgeEditor({
-                    SaveImageTagsProperties: _saveImageTagsAjaxParameters,
-                    DeleteImageProperties: _deleteImageAjaxParameter,
-                    ImagesAjaxProperties: _imageAjaxParameters,
-                    SearchImagesProperties: _searchImagesAjaxParameters,
-                    AddImageProperties: _AddimageAjaxParameters,
-                    preDefinedHTML: _preDefinedHTML,
-                    landingPage: false,
-                    formWizURL: _formWizURL,
-                    formDeleteURL: _formDeleteURL ,
-                    sessionIDFromServer: ""+BMSTOKEN+"",
-                    saveCallBack:  this.options.saveClick,
-                    _app:this.app,
-                    _BMSTOKEN:BMSTOKEN,
-                    OnDropElementOnBuildingBlock: function (args) {
-
-                        //Save to Server
-                        if (args.buildingBlock != null) {
-                            //args.buildingBlock.Name; 
-                            //args.buildingBlock.Html;
-                            var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN;
-                            var post_data = { name: args.buildingBlock.Name, html: args.buildingBlock.Html.html() ,type:"addBlock"};
-                            if(_app.get("user").userId==='admin'){
-                                post_data['isAdmin']='Y';
-                            }
-                            $.post(URL,post_data
-                                     )
-                                .done(function(data) {                                 
-                                    var _json = jQuery.parseJSON(data);
-                                   
-                           });
-
+                        },
+                        error: function (e) {
+                        //console.log("Insert Dynamic Variation Rule failed:"+ e);
                         }
+                    });
+
+                },
+                OnUpdateDynamicContent: function (args)
+                {
+                    var content = args.DynamicContent;
+                    var dynamicNumber = content.DynamicVariationID;
+                    var dynamicNumberContent = content.DynamicContentID;
+
+                    var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
+
+                    $.ajax({                                    
+                        url: contentURL,
+                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (ec) {
+                        //console.log("Update Dynamic Variation Content success:"+ ec);  
+                        //console.log("Dynamic number Content is:" + ec[1]);
 
 
-                    },
-                    LoadTemplate: function (args) {
+                        },
+                        error: function (e) {
+                        //console.log("Insert Dynamic Variation Content failed:"+ e);
+                        }
+                    }); 
+                },
+                OnDeleteDynamicContent: function (args)
+                {
+                    var content = args.DynamicContent;
+                    var dynamicNumber = content.DynamicVariationID;
+                    var dynamicNumberContent = content.DynamicContentID;
 
-                    },
-                    LoadBuildingBlocks: function (args) {
-                        //GetBuildingBlocks
+                    var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=deleteContent&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent;
+
+                    $.ajax({                                    
+                        url: contentURL,
+                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (ec) {                                        
+
+                        },
+                        error: function (e) {                                        
+                        }
+                    }); 
+                },
+                OnDynamicContentSwap: function (args)
+                {
+                    var content = args.DynamicContent;
+                    var dynamicNumber = content.DynamicVariationID;
+                    var dynamicNumberContent = content.DynamicContentID;
+
+                    var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
+
+                    $.ajax({                                    
+                        url: contentURL,                                        
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: true,
+                        success: function (ec) {                                        
+
+                        },
+                        error: function (e) {                                        
+                        }
+                    }); 
+                },
+                OnDynamicControlSave: function (variation)
+                {
+                    console.log("isUPdate on saving:" + variation.IsUpdate);                       
+                    console.log("Variation ID on saving:" + variation.DynamicVariationID);
+                    console.log("Variation Name on saving:" + variation.Label);
+                    console.log(variation);
+
+                    if(variation.IsUpdate){
 
                         $.ajax({
-                            url: "/pms/io/publish/getEditorData/?"+BMSTOKEN+"&type=listBlocks",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                if(e.count != "0") {
-                                    args.buildingBlocks = e.blocks[0];
-                                //console.log("GetBuildingBlocks success:"+ e);
-                                }
-                            },
-                            error: function (e) {
-                            //console.log("GetBuildingBlocks Failed:"+ e);
-                            }
-                        });
-                    },
-                    OnEditBuildingBlock: function (args) {
-
-                        //Save to Server
-                        if (args != null) {                                        
-                            $.ajax({
-                                url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=renameBlock&name=" + args.BlockName + "&blockId=" + args.BlockID,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                //console.log("RenameBuilding success:" + e);
-                                //LoadBuildingBlocks();
-                                },
-                                error: function (e) {
-                                //console.log("RenameBuilding failed:" + e);
-                                }
-
-                            });
-
-                        }
-
-
-                    },
-                    OnDeleteBuildingBlock: function (args) {
-                        if (args != null) {
-                            console.log(args.BlockID);
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=deleteBlock&blockId=" + args.BlockID,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {                                            
-                                },
-                                error: function (e) {                                            
-                                }
-
-                            });
-                        }
-                    },
-
-
-                    LoadMyColors: function (args) {
-                        //GetBuildingBlocks
-
-                        $.ajax({
-                            url: "/pms/io/publish/getEditorData/?"+BMSTOKEN+"&type=listColors",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.myColors = e.colors;
-                            //console.log("MyColors success:" + e.colors);
-                            },
-                            error: function (e) {
-                            //console.log("MyColors Failed:" + e);
-                            }
-                        });
-                    },
-
-                    OnColorAdded: function (args) {						
-                        var saveColors = "";
-                        if (args.myColorsFromServiceGlobal == "") {
-                            saveColors = args.AddedColor;
-                        }
-                        else {
-                            saveColors = args.myColorsFromServiceGlobal + "," + args.AddedColor;
-                        }
-                        //console.log("Color list to be added:" + saveColors);
-
-                        saveColors = encodeURIComponent(saveColors);
-                        //console.log("Color list to be added after encoded:" + saveColors);
-                        var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=saveColors&colors=" + saveColors ;
-                        $.post(URL)
-                        .done(function (data) {
-                            //console.log("Insert My Color success:" + data);
-                            // your code go here. 
-                            });
-
-                    },
-                    OnSaveDynamicContent: function (args)
-                    {
-
-                        var content = args.DynamicContent;
-                        var dynamicNumber = content.DynamicVariationID;
-                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
-                        $.ajax({                                    
-                            url: contentURL,
-                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (ec) {
-                            //console.log("Insert Dynamic Variation Content success:"+ ec);  
-                            //console.log("Dynamic number Content is:" + ec[1]);
-
-                            },
-                            error: function (e) {
-                            //console.log("Insert Dynamic Variation Content failed:"+ e);
-                            }
-                        });
-
-                    },
-                    OnSaveDynamicRules: function (args)
-                    {
-                        var content = args.DynamicContent;
-                        var dynamicNumber = content.DynamicVariationID;
-                        var dynamicNumberContent = content.DynamicContentID;
-                        var rules = content.ListOfDynamicRules;
-                        var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
-                        for (var j = 0; j < rules.length; j++) {
-                            var rule = rules[j];
-                            //contentRuleURL += "&"+ j +".spanInDays=";
-                            contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
-                            contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
-                            contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
-                            contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
-                        //contentRuleURL += "&"+ j +".listNumber=";
-                        } 
-                        $.ajax({                                    
-                            url: contentRuleURL,
+                            url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ variation.Label + "&dynamicNumber=" + variation.DynamicVariationID ,
                             //data: "{ name: 'test', html: args.buildingBlock.Name }",
                             type: "POST",
                             contentType: "application/json; charset=latin1",
@@ -5986,518 +5804,419 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             cache: false,
                             async: false,
                             success: function (e) {
-                            //console.log("Insert Dynamic Variation Content Rule success:"+ e);  
-
+                                console.log("Rename Dynamic Variation success:"+ e);
+                            //LoadBuildingBlocks();
                             },
                             error: function (e) {
-                            //console.log("Insert Dynamic Variation Rule failed:"+ e);
+                                console.log("Rename Dynamic Variation failed:"+ e);
                             }
+
                         });
-
-                    },
-                    OnUpdateDynamicContent: function (args)
-                    {
-                        var content = args.DynamicContent;
-                        var dynamicNumber = content.DynamicVariationID;
-                        var dynamicNumberContent = content.DynamicContentID;
-
-                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
-
-                        $.ajax({                                    
-                            url: contentURL,
-                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (ec) {
-                            //console.log("Update Dynamic Variation Content success:"+ ec);  
-                            //console.log("Dynamic number Content is:" + ec[1]);
-
-
-                            },
-                            error: function (e) {
-                            //console.log("Insert Dynamic Variation Content failed:"+ e);
+                        var dynamicNumber = variation.DynamicVariationID;
+                        var contents = variation.ListOfDynamicContents;
+                        for (var i = 0; i < contents.length; i++) {
+                            var content = contents[i];
+                            var contentNumber = content.DynamicContentID;
+                            console.log(content);
+                            console.log("ContentNumebr:"+contentNumber);
+                            var contentURL = "";
+                            if(contentNumber != 0) {
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + contentNumber;
                             }
-                        }); 
-                    },
-                    OnDeleteDynamicContent: function (args)
-                    {
-                        var content = args.DynamicContent;
-                        var dynamicNumber = content.DynamicVariationID;
-                        var dynamicNumberContent = content.DynamicContentID;
-
-                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=deleteContent&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent;
-
-                        $.ajax({                                    
-                            url: contentURL,
-                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (ec) {                                        
-
-                            },
-                            error: function (e) {                                        
+                            else {
+                                contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents=&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
                             }
-                        }); 
-                    },
-                    OnDynamicContentSwap: function (args)
-                    {
-                        var content = args.DynamicContent;
-                        var dynamicNumber = content.DynamicVariationID;
-                        var dynamicNumberContent = content.DynamicContentID;
 
-                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
-
-                        $.ajax({                                    
-                            url: contentURL,                                        
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: true,
-                            success: function (ec) {                                        
-
-                            },
-                            error: function (e) {                                        
-                            }
-                        }); 
-                    },
-                    OnDynamicControlSave: function (variation)
-                    {
-                        console.log("isUPdate on saving:" + variation.IsUpdate);                       
-                        console.log("Variation ID on saving:" + variation.DynamicVariationID);
-                        console.log("Variation Name on saving:" + variation.Label);
-                        console.log(variation);
-
-                        if(variation.IsUpdate){
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ variation.Label + "&dynamicNumber=" + variation.DynamicVariationID ,
+                            $.ajax({                                    
+                                url: contentURL,
                                 //data: "{ name: 'test', html: args.buildingBlock.Name }",
                                 type: "POST",
                                 contentType: "application/json; charset=latin1",
                                 dataType: "json",
                                 cache: false,
                                 async: false,
-                                success: function (e) {
-                                    console.log("Rename Dynamic Variation success:"+ e);
-                                //LoadBuildingBlocks();
-                                },
-                                error: function (e) {
-                                    console.log("Rename Dynamic Variation failed:"+ e);
-                                }
+                                success: function (ec) {
+                                    console.log("Update Dynamic Variation Content success:"+ ec);  
+                                    //console.log("Dynamic number Content is:" + ec[1]);
+                                    if(contentNumber == 0){
+                                        contentNumber = ec[1];
+                                    }
+                                    var rules = content.ListOfDynamicRules;
+                                    var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + contentNumber + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
+                                    for (var j = 0; j < rules.length; j++) {
+                                        var rule = rules[j];
+                                        //contentRuleURL += "&"+ j +".spanInDays=";
+                                        contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
+                                        contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
+                                        contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
+                                        contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
+                                    //contentRuleURL += "&"+ j +".listNumber=";
+                                    } 
+                                    $.ajax({                                    
+                                        url: contentRuleURL,
+                                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                        type: "POST",
+                                        contentType: "application/json; charset=latin1",
+                                        dataType: "json",
+                                        cache: false,
+                                        async: false,
+                                        success: function (e) {
+                                            console.log("Update Dynamic Variation Content Rule success:"+ e);  
 
-                            });
-                            var dynamicNumber = variation.DynamicVariationID;
-                            var contents = variation.ListOfDynamicContents;
-                            for (var i = 0; i < contents.length; i++) {
-                                var content = contents[i];
-                                var contentNumber = content.DynamicContentID;
-                                console.log(content);
-                                console.log("ContentNumebr:"+contentNumber);
-                                var contentURL = "";
-                                if(contentNumber != 0) {
-                                    contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + contentNumber;
-                                }
-                                else {
-                                    contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents=&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
-                                }
-
-                                $.ajax({                                    
-                                    url: contentURL,
-                                    //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                    type: "POST",
-                                    contentType: "application/json; charset=latin1",
-                                    dataType: "json",
-                                    cache: false,
-                                    async: false,
-                                    success: function (ec) {
-                                        console.log("Update Dynamic Variation Content success:"+ ec);  
-                                        //console.log("Dynamic number Content is:" + ec[1]);
-                                        if(contentNumber == 0){
-                                            contentNumber = ec[1];
+                                        },
+                                        error: function (e) {
+                                            console.log("Update Dynamic Variation Rule failed:"+ e);
                                         }
-                                        var rules = content.ListOfDynamicRules;
-                                        var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + contentNumber + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
-                                        for (var j = 0; j < rules.length; j++) {
-                                            var rule = rules[j];
-                                            //contentRuleURL += "&"+ j +".spanInDays=";
-                                            contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
-                                            contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
-                                            contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
-                                            contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
-                                        //contentRuleURL += "&"+ j +".listNumber=";
-                                        } 
+                                    });
+
+
+                                },
+                                error: function (e) {
+                                    console.log("Insert Dynamic Variation Content failed:"+ e);
+                                }
+                            });
+                        }
+                    }
+                    else {
+
+                        var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=new&contentType=H&label=" + variation.Label ;
+
+                        $.ajax({
+                            url: URL,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                            type: "POST",
+                            contentType: "application/json; charset=latin1",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (e) {
+                                console.log("Insert Dynamic Variation success:"+ e);
+                                //var results = e.split(",");
+                                console.log("Dynamic number is:" + e[1]);
+
+                                var dynamicNumber = e[1];
+                                if(dynamicNumber != "err") {  
+                                    variation.DynamicVariationID = dynamicNumber;  
+                                    var contents = variation.ListOfDynamicContents;
+                                    for (var i = 0; i < contents.length; i++) {
+                                        var content = contents[i];
+                                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
                                         $.ajax({                                    
-                                            url: contentRuleURL,
+                                            url: contentURL,
                                             //data: "{ name: 'test', html: args.buildingBlock.Name }",
                                             type: "POST",
                                             contentType: "application/json; charset=latin1",
                                             dataType: "json",
                                             cache: false,
                                             async: false,
-                                            success: function (e) {
-                                                console.log("Update Dynamic Variation Content Rule success:"+ e);  
+                                            success: function (ec) {
+                                                console.log("Insert Dynamic Variation Content success:"+ ec);  
+                                                console.log("Dynamic number Content is:" + ec[1]);
+                                                var dynamicNumberContent = ec[1];
+                                                if(dynamicNumberContent != "err") {    
+                                                    var rules = content.ListOfDynamicRules;
+                                                    var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
+                                                    for (var j = 0; j < rules.length; j++) {
+                                                        var rule = rules[j];
+                                                        //contentRuleURL += "&"+ j +".spanInDays=";
+                                                        contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
+                                                        contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
+                                                        contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
+                                                        contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
+                                                    //contentRuleURL += "&"+ j +".listNumber=";
+                                                    } 
+                                                    $.ajax({                                    
+                                                        url: contentRuleURL,
+                                                        //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                                        type: "POST",
+                                                        contentType: "application/json; charset=latin1",
+                                                        dataType: "json",
+                                                        cache: false,
+                                                        async: false,
+                                                        success: function (e) {
+                                                            console.log("Insert Dynamic Variation Content Rule success:"+ e);  
 
+                                                        },
+                                                        error: function (e) {
+                                                            console.log("Insert Dynamic Variation Rule failed:"+ e);
+                                                        }
+                                                    });
+
+                                                }                      
                                             },
                                             error: function (e) {
-                                                console.log("Update Dynamic Variation Rule failed:"+ e);
+                                                console.log("Insert Dynamic Variation Content failed:"+ e);
                                             }
                                         });
-
-
-                                    },
-                                    error: function (e) {
-                                        console.log("Insert Dynamic Variation Content failed:"+ e);
-                                    }
-                                });
+                                    }    
+                                }                           
+                            },
+                            error: function (e) {
+                                console.log("Insert Dynamic Variation failed:"+ e);
                             }
-                        }
-                        else {
 
-                            var URL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=new&contentType=H&label=" + variation.Label ;
+                        });
+                    }
 
-                            $.ajax({
-                                url: URL,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    console.log("Insert Dynamic Variation success:"+ e);
-                                    //var results = e.split(",");
-                                    console.log("Dynamic number is:" + e[1]);
-
-                                    var dynamicNumber = e[1];
-                                    if(dynamicNumber != "err") {  
-                                        variation.DynamicVariationID = dynamicNumber;  
-                                        var contents = variation.ListOfDynamicContents;
-                                        for (var i = 0; i < contents.length; i++) {
-                                            var content = contents[i];
-                                            var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
-                                            $.ajax({                                    
-                                                url: contentURL,
-                                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                                type: "POST",
-                                                contentType: "application/json; charset=latin1",
-                                                dataType: "json",
-                                                cache: false,
-                                                async: false,
-                                                success: function (ec) {
-                                                    console.log("Insert Dynamic Variation Content success:"+ ec);  
-                                                    console.log("Dynamic number Content is:" + ec[1]);
-                                                    var dynamicNumberContent = ec[1];
-                                                    if(dynamicNumberContent != "err") {    
-                                                        var rules = content.ListOfDynamicRules;
-                                                        var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
-                                                        for (var j = 0; j < rules.length; j++) {
-                                                            var rule = rules[j];
-                                                            //contentRuleURL += "&"+ j +".spanInDays=";
-                                                            contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
-                                                            contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
-                                                            contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
-                                                            contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
-                                                        //contentRuleURL += "&"+ j +".listNumber=";
-                                                        } 
-                                                        $.ajax({                                    
-                                                            url: contentRuleURL,
-                                                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                                            type: "POST",
-                                                            contentType: "application/json; charset=latin1",
-                                                            dataType: "json",
-                                                            cache: false,
-                                                            async: false,
-                                                            success: function (e) {
-                                                                console.log("Insert Dynamic Variation Content Rule success:"+ e);  
-
-                                                            },
-                                                            error: function (e) {
-                                                                console.log("Insert Dynamic Variation Rule failed:"+ e);
-                                                            }
-                                                        });
-
-                                                    }                      
-                                                },
-                                                error: function (e) {
-                                                    console.log("Insert Dynamic Variation Content failed:"+ e);
-                                                }
-                                            });
-                                        }    
-                                    }                           
-                                },
-                                error: function (e) {
-                                    console.log("Insert Dynamic Variation failed:"+ e);
-                                }
-
-                            });
-                        }
-
-                    },
-                    OnEditDynamicVariation: function (args) {
-                        //Save to Server
-                        if (args.DCID != null) {
-                            console.log("Block Id:" + args.DCID);
-                            console.log("Block Name:" + args.DCName);
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ args.DCName + "&dynamicNumber=" + args.DCID ,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    console.log("Rename Dynamic Variation success:"+ e);
-                                //LoadBuildingBlocks();
-                                },
-                                error: function (e) {
-                                    console.log("Rename Dynamic Variation failed:"+ e);
-                                }
-
-                            });
-
-                        }
-
-
-                    },
-                    OnDynamicVariationName: function (variation) {
-                        //Save to Server
-                        if (variation != null) {
-                            console.log("Block Id:" + variation.DynamicVariationID);
-                            console.log("Block Name:" + variation.Label);
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ variation.Label + "&dynamicNumber=" + variation.DynamicVariationID ,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    console.log("Rename Dynamic Variation success:"+ e);
-                                //LoadBuildingBlocks();
-                                },
-                                error: function (e) {
-                                    console.log("Rename Dynamic Variation failed:"+ e);
-                                }
-
-                            });
-
-                        }
-
-
-                    },
-                    OnDeleteDynamicVariation: function (args) {
-                        if (args != null) {
-                            console.log(args.DCID);
-
-                            $.ajax({
-                                url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=delete&dynamicNumber=" + args.DCID ,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    console.log("delete dynamicVariation success:"+ e);
-                                //LoadBuildingBlocks();
-                                },
-                                error: function (e) {
-                                    console.log("delete dynamicVariation failed:"+ e);
-                                }
-
-                            });
-                        }
-                    },
-                    LoadDynamicBlocks: function (args) {
-                        //GetDynamicBlocks
+                },
+                OnEditDynamicVariation: function (args) {
+                    //Save to Server
+                    if (args.DCID != null) {
+                        console.log("Block Id:" + args.DCID);
+                        console.log("Block Name:" + args.DCName);
 
                         $.ajax({
-                            url: "/pms/io/publish/getDynamicVariation/?"+BMSTOKEN+"&type=list",
-                            data: "{}",
+                            url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ args.DCName + "&dynamicNumber=" + args.DCID ,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
                             type: "POST",
                             contentType: "application/json; charset=latin1",
                             dataType: "json",
                             cache: false,
                             async: false,
                             success: function (e) {
-                                if (e.variations != undefined) {
-                                    args.dynamicBlocks = e.variations[0];
-                                //console.log("GetDynamicBlocks success:" + e.data);
-                                }
+                                console.log("Rename Dynamic Variation success:"+ e);
+                            //LoadBuildingBlocks();
                             },
                             error: function (e) {
-                                console.log("GetDynamicBlocks Failed:" + e);
+                                console.log("Rename Dynamic Variation failed:"+ e);
                             }
+
                         });
-                    },
-                    LoadDynamicBlockFields: function (args) {
-                        //GetDynamicBlocks
-
-                        $.ajax({
-                            url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=fields_all",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.dynamicBlockFields = e;
-                            //console.log("LoadDynamicBlockFields success:" + e);
-
-                            },
-                            error: function (e) {
-                            //console.log("LoadDynamicBlockFields Failed:" + e);
-                            }
-                        });
-                    },
-                    LoadDynamicBlockRuleConditions: function (args) {
-                        //GetDynamicBlocks
-
-                        $.ajax({
-                            url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=rules",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.dynamicBlockRuleConditions = e;
-                            //console.log("LoadDynamicBlockRuleConditions success:" + e);
-
-                            },
-                            error: function (e) {
-                                console.log("LoadDynamicBlockRuleConditions Failed:" + e);
-                            }
-                        });
-                    },
-                    LoadDynamicBlockFormats: function (args) {
-                        //GetDynamicBlocks
-
-                        $.ajax({
-                            url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=formats",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.dynamicBlockFormats = e;
-                            //console.log("LoadDynamicBlockFormats success:" + e);
-
-                            },
-                            error: function (e) {
-                            //console.log("LoadDynamicBlockFormats Failed:" + e);
-                            }
-                        });
-                    },
-                    LoadPersonalizeTags: function (args) {
-                        //GetDynamicBlocks
-
-                        $.ajax({
-                            url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=merge_tags",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.personalizeTags = e;
-                            //console.log("LoadPersonalizeTags success:" + e);
-
-                            },
-                            error: function (e) {
-                            //console.log("LoadPersonalizeTags Failed:" + e);
-                            }
-                        });
-                    },
-                    CallBackSaveMethod: function (templateHTML, outputHTML) {
-                        console.log("TemplateHTML:" + templateHTML);
-                        console.log("OutputHTML:" + outputHTML);
-
-                        $.post('/pms/io/campaign/saveUserTemplate/?"+BMSTOKEN+"', 
-                        {
-                            type:'update',
-                            // templateNumber:'jbKw21Ps30Uu33Kr26ja',
-                            templateNumber:'BzAEqwsJp20In21Vr30Rk33BdTMyio',
-                            imageId:'',
-                            isFeatured:'N',
-                            isReturnPath:'N',
-                            isMobile:'N',
-                            categoryID:'',
-                            templateHtml:outputHTML
-                        }
-                        )
-                        .done(function(data) {                  
-                            console.log("Saving done with response:"+data);
-                        });
-
-                    },
-                    LoadFormBlocks: function (args) {
-                        //LoadFormBlocks
-
-                        $.ajax({
-                            url: "/pms/io/form/getSignUpFormData/?"+BMSTOKEN+"&type=list",
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                if(e.count != "0") {
-                                    args.formBlocks = e.forms[0];
-                                    console.log("LoadFormBlocks success:"+ e);
-                                }
-                            },
-                            error: function (e) {
-                                console.log("LoadFormBlocks Failed:"+ e);
-                            }
-                        });
-                    },
-                    LoadFormContents: function (args) {
-                        //LoadFormContents
-
-                        $.ajax({
-                            url: "/pms/io/form/getSignUpFormData/?"+BMSTOKEN+"&type=snippet&formId="+args.FormId,
-                            data: "{}",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                                args.formContents = e.formPreviewURL;
-                                console.log("LoadFormContents success:"+ e);
-
-                            },
-                            error: function (e) {
-                                console.log("LoadFormContents  Failed:"+ e);
-                            }
-                        });
-                    }, 
-                    OnExistingDynamicControlDropped: function () {
 
                     }
 
 
-                });
-            }
+                },
+                OnDynamicVariationName: function (variation) {
+                    //Save to Server
+                    if (variation != null) {
+                        console.log("Block Id:" + variation.DynamicVariationID);
+                        console.log("Block Name:" + variation.Label);
+
+                        $.ajax({
+                            url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=relabel&label="+ variation.Label + "&dynamicNumber=" + variation.DynamicVariationID ,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                            type: "POST",
+                            contentType: "application/json; charset=latin1",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (e) {
+                                console.log("Rename Dynamic Variation success:"+ e);
+                            //LoadBuildingBlocks();
+                            },
+                            error: function (e) {
+                                console.log("Rename Dynamic Variation failed:"+ e);
+                            }
+
+                        });
+
+                    }
+
+
+                },
+                OnDeleteDynamicVariation: function (args) {
+                    if (args != null) {
+                        console.log(args.DCID);
+
+                        $.ajax({
+                            url: "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=delete&dynamicNumber=" + args.DCID ,
+                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                            type: "POST",
+                            contentType: "application/json; charset=latin1",
+                            dataType: "json",
+                            cache: false,
+                            async: false,
+                            success: function (e) {
+                                console.log("delete dynamicVariation success:"+ e);
+                            //LoadBuildingBlocks();
+                            },
+                            error: function (e) {
+                                console.log("delete dynamicVariation failed:"+ e);
+                            }
+
+                        });
+                    }
+                },
+                LoadDynamicBlocks: function (args) {
+                    //GetDynamicBlocks
+
+                    $.ajax({
+                        url: "/pms/io/publish/getDynamicVariation/?"+BMSTOKEN+"&type=list",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            if (e.variations != undefined) {
+                                args.dynamicBlocks = e.variations[0];
+                            //console.log("GetDynamicBlocks success:" + e.data);
+                            }
+                        },
+                        error: function (e) {
+                            console.log("GetDynamicBlocks Failed:" + e);
+                        }
+                    });
+                },
+                LoadDynamicBlockFields: function (args) {
+                    //GetDynamicBlocks
+
+                    $.ajax({
+                        url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=fields_all",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.dynamicBlockFields = e;
+                        //console.log("LoadDynamicBlockFields success:" + e);
+
+                        },
+                        error: function (e) {
+                        //console.log("LoadDynamicBlockFields Failed:" + e);
+                        }
+                    });
+                },
+                LoadDynamicBlockRuleConditions: function (args) {
+                    //GetDynamicBlocks
+
+                    $.ajax({
+                        url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=rules",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.dynamicBlockRuleConditions = e;
+                        //console.log("LoadDynamicBlockRuleConditions success:" + e);
+
+                        },
+                        error: function (e) {
+                            console.log("LoadDynamicBlockRuleConditions Failed:" + e);
+                        }
+                    });
+                },
+                LoadDynamicBlockFormats: function (args) {
+                    //GetDynamicBlocks
+
+                    $.ajax({
+                        url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=formats",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.dynamicBlockFormats = e;
+                        //console.log("LoadDynamicBlockFormats success:" + e);
+
+                        },
+                        error: function (e) {
+                        //console.log("LoadDynamicBlockFormats Failed:" + e);
+                        }
+                    });
+                },
+                LoadPersonalizeTags: function (args) {
+                    //GetDynamicBlocks
+
+                    $.ajax({
+                        url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=merge_tags",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.personalizeTags = e;
+                        //console.log("LoadPersonalizeTags success:" + e);
+
+                        },
+                        error: function (e) {
+                        //console.log("LoadPersonalizeTags Failed:" + e);
+                        }
+                    });
+                },
+                CallBackSaveMethod: function (templateHTML, outputHTML) {
+                    console.log("TemplateHTML:" + templateHTML);
+                    console.log("OutputHTML:" + outputHTML);
+
+                    $.post('/pms/io/campaign/saveUserTemplate/?"+BMSTOKEN+"', 
+                    {
+                        type:'update',
+                        // templateNumber:'jbKw21Ps30Uu33Kr26ja',
+                        templateNumber:'BzAEqwsJp20In21Vr30Rk33BdTMyio',
+                        imageId:'',
+                        isFeatured:'N',
+                        isReturnPath:'N',
+                        isMobile:'N',
+                        categoryID:'',
+                        templateHtml:outputHTML
+                    }
+                    )
+                    .done(function(data) {                  
+                        console.log("Saving done with response:"+data);
+                    });
+
+                },
+                LoadFormBlocks: function (args) {
+                    //LoadFormBlocks
+
+                    $.ajax({
+                        url: "/pms/io/form/getSignUpFormData/?"+BMSTOKEN+"&type=list",
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            if(e.count != "0") {
+                                args.formBlocks = e.forms[0];
+                                console.log("LoadFormBlocks success:"+ e);
+                            }
+                        },
+                        error: function (e) {
+                            console.log("LoadFormBlocks Failed:"+ e);
+                        }
+                    });
+                },
+                LoadFormContents: function (args) {
+                    //LoadFormContents
+
+                    $.ajax({
+                        url: "/pms/io/form/getSignUpFormData/?"+BMSTOKEN+"&type=snippet&formId="+args.FormId,
+                        data: "{}",
+                        type: "POST",
+                        contentType: "application/json; charset=latin1",
+                        dataType: "json",
+                        cache: false,
+                        async: false,
+                        success: function (e) {
+                            args.formContents = e.formPreviewURL;
+                            console.log("LoadFormContents success:"+ e);
+
+                        },
+                        error: function (e) {
+                            console.log("LoadFormContents  Failed:"+ e);
+                        }
+                    });
+                }, 
+                OnExistingDynamicControlDropped: function () {
+
+                }
+
+
+            });
+        }
                         
                         
-        });
     });
+});

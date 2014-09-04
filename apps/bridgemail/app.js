@@ -147,6 +147,9 @@ define([
                            $(this).remove();
                        }) 
                     });
+                    $("body").mousedown(function(){
+                        $(".MEE_EDITOR .alertButtons").hide();
+                    })
                     
                     
                    var self = this;                                                                         

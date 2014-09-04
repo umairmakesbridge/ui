@@ -2122,3 +2122,39 @@ ul.socialbtns li .radiopanelinput.checked {
  ._addNewSocialLinkDiv .radiopanelinput .icheck_radio-icon{
      margin:7px 0 0 7px !important;
  }
+ ul.b-blocks > li > i.icon.cblock.columnImageWithText{
+      background:url("../images/blocks/2_column_image_with_headline.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.BannerPlusText{
+      background:url("../images/blocks/BannerPlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.Button{
+      background:url("../images/blocks/Button.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.footer{
+      background:url("../images/blocks/footer.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.FooterPlusLogo{
+      background:url("../images/blocks/FooterPlusLogo.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.RightImagePlusText{
+      background:url("../images/blocks/RightImagePlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.logoCenter{
+      background:url("../images/blocks/logo_center.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.logoPlusBanner{
+      background:url("../images/blocks/logoPlusBanner.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  ul.b-blocks > li > i.icon.cblock.Paragraph{
+      background:url("../images/blocks/Paragraph.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  ul.b-blocks > li > i.icon.cblock.Social_Share{
+      background:url("../images/blocks/Social_Share.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  ul.b-blocks > li > i.icon.cblock.Testimonial{
+      background:url("../images/blocks/Testimonial.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  ul.b-blocks > li > i.icon.cblock.LeftImagePlusText{
+      background:url("../images/blocks/LeftImagePlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }

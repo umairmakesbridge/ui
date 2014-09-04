@@ -12,7 +12,7 @@ String.prototype.replaceAll = function (find, replace) {
 
 ﻿//[ -------------------------  Sohaib -----------------------------------]
 
-
+////3
 
 // For Image Titling Dialog
 function openImageTitleDialog(uiElement) {
@@ -42,86 +42,6 @@ function openImageTitleDialog(uiElement) {
     $("#imageTitleDialog").dialog("open");
 }
 
-function attachLinkWithElement(workingObject, linkHtmlPage, selectedSocialLink) {    
-
-    var myImageLink = null;
-    if ($("#rightPanelArea").data("tabClicked") == "hyperlink") {
-        if ( (linkHtmlPage.find("input.linkHyperLinkURL").val()).startsWith("http://") )
-            myImageLink = linkHtmlPage.find("input.linkHyperLinkURL").val() + "?campaignkw=" + linkHtmlPage.find("input.linkName").val();
-        else
-            myImageLink = "http://" + linkHtmlPage.find("input.linkHyperLinkURL").val() + "?campaignkw=" + linkHtmlPage.find("input.linkName").val();
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "mailto") {
-        var myEmailId = linkHtmlPage.find("input.emailLinkName").val();
-        var myEmailSubject = linkHtmlPage.find("input.emailLinkSubject").val();
-        myImageLink = "mailto"+":" + myEmailId + "?subject=" + myEmailSubject;        
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "frwdToFrnd") {
-        // image do not have this type of link option
-        myImageLink = "";
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "unsubscribe") {
-        // image do not have this type of link option
-        myImageLink = "";
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "brwoserView") {
-        // image do not have this type of link option
-        myImageLink = "";
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "doubleOptLink") {
-        // image do not have this type of link option
-        myImageLink = "";
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "safeSender") {
-        // image do not have this type of link option
-        myImageLink = "";
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "newAnchor") {
-        if ((linkHtmlPage.find("#newAnchortext").val()).startsWith("http://"))
-            myImageLink = linkHtmlPage.find("#newAnchortext").val();
-        else
-            myImageLink = "http://" + linkHtmlPage.find("#newAnchortext").val();
-        //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
-    }
-    else if ($("#rightPanelArea").data("tabClicked") == "social") {
-
-        var linkValue = "";
-        if(selectedSocialLink == 'facebook') {
-            linkValue = socialFacebookLink;
-        }
-        else if(selectedSocialLink == 'twitter') {
-            linkValue = socialTwitterLink;
-        }
-        else if(selectedSocialLink == 'linkedin') {
-            linkValue = socialLinkedInLink;
-        }
-        else if(selectedSocialLink == 'pintrest') {
-            linkValue = socialPintrestLink;
-        }
-        else if(selectedSocialLink == 'googleplus') {
-            linkValue = socialGooglePlusLink;
-        }
-
-        myImageLink = linkValue;
-        //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
-    }
-
-    // Got the link value now going to set it for the image
-
-    if (myImageLink != "" && myImageLink != null) {
-        if ($(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
-            $(workingObject).parent().parent().parent().parent().find("a").attr("href", myImageLink);
-            //$(workingObject).parent().parent().parent().parent().find("a").attr("href", "#.");
-            //$(workingObject).parent().parent().parent().parent().find("a").data("link", myImageLink);
-        }
-        else {
-            $(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
-            //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='#.'></a>");
-            //$(workingObject).parent().parent().parent().parent().find("a").data("link", myImageLink);
-        }
-    }
-    
-}
 
 function enableTextOrImagePreview(linkObjectType, htmlAreaObject, imageControlObject, tiny_editor) {
     if (linkObjectType == "text") {

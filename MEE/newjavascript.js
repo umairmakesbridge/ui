@@ -465,3 +465,422 @@ myElement.find("a.closeIconLinkGui").click(function () {
     myElement.find("div.LinkGUIComplete").hide();
     areaToDisplay.remove();
 })
+
+////// No 2/////
+myElement.find("li.emailLinkGUI").click(function () {
+                                myElement.find("#rightPanelArea").data("tabClicked", "mailto");
+                                myElement.find("li.emailLinkGUI").addClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+                                //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
+                                //$("div.overlay").show();
+                                areaToDisplay = null;
+                                if (myElement.find("div.addEmailLinkDiv").length > 1) {
+                                    myElement.find("div.addEmailLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addEmailLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                areaToDisplay.show();
+
+                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
+                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                //tiny_editor = $("#currTinyMCE").data("myTinyMCE");
+
+                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
+
+                                if (myElement.find("#linkTrack").data("linkObject") == "image") {
+                                    var elem = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                    if ($(elem).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
+                                        var previousLink = $(elem).parent().parent().parent().parent().find("a").data("link");
+                                        if (previousLink.search("mailto") == -1) {
+                                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A HYPERLINK (STANDARD LINK URL)</p><form name='submit_url' action='#' method='post' enctype='multipart/form-data'><label><p>text</p></label><textarea class='text-areaLinkGUI'></textarea><label><p>link (url)</p></label><input type='text' class='textLinkGUI' id='linkHyperLinkURL' maxlength='200' /><label><p>LINK NAME (FOR TRACKING)</p></label><input type='text' class='textLinkGUI' maxlength='200' /><p><input type='checkbox' id='dont-track'  /><label><span>DO NOT TRACK THIS LINK</span></label></p><br /><br /><br /></form>";
+                                            //$("#linkHyperLinkURL").val(previousLink);
+                                            var index1 = previousLink.search("com");
+                                            var value = previousLink.substring(0, (index1 + 3));
+                                            myElement.find("#linkHyperLinkURL").val(value);
+                                            index1 = previousLink.search("campaignkw=");
+                                            value = previousLink.substring((index1 + 11), previousLink.length);
+                                            myElement.find("#linkName").val(value);
+                                        } else {
+                                            //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
+                                            var index1 = previousLink.search("com");
+                                            var value = previousLink.substring(7, (index1 + 3));
+                                            myElement.find("#emailAddText").val(value);
+                                            index1 = previousLink.search("subject=");
+                                            value = previousLink.substring((index1 + 8), previousLink.length);
+                                            myElement.find("#emailSubjText").val(value);
+                                        }
+                                    }
+                                }
+                            });
+                            myElement.find("li.homeLinkGUI").click(function () {
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "hyperlink");
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").addClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+
+                                areaToDisplay = null;
+                                if (myElement.find("div.addyHyperLinkDiv").length > 1) {
+                                    myElement.find("div.addyHyperLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addyHyperLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                areaToDisplay.show();
+
+                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
+                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                //tiny_editor = $("#currTinyMCE").data("myTinyMCE");
+
+                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
+
+                                            
+                                if (myElement.find("#linkTrack").data("linkObject") == "image") {
+                                    var elem = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                    if ($(elem).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
+                                        var previousLink = $(elem).parent().parent().parent().parent().find("a").data("link");
+                                        if (previousLink.search("mailto") == -1) {
+                                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A HYPERLINK (STANDARD LINK URL)</p><form name='submit_url' action='#' method='post' enctype='multipart/form-data'><label><p>text</p></label><textarea class='text-areaLinkGUI'></textarea><label><p>link (url)</p></label><input type='text' class='textLinkGUI' id='linkHyperLinkURL' maxlength='200' /><label><p>LINK NAME (FOR TRACKING)</p></label><input type='text' class='textLinkGUI' maxlength='200' /><p><input type='checkbox' id='dont-track'  /><label><span>DO NOT TRACK THIS LINK</span></label></p><br /><br /><br /></form>";
+                                            //$("#linkHyperLinkURL").val(previousLink);
+                                            var index1 = previousLink.search("com");
+                                            var value = previousLink.substring(0, (index1 + 3));
+                                            myElement.find("#linkHyperLinkURL").val(value);
+                                            index1 = previousLink.search("campaignkw=");
+                                            value = previousLink.substring((index1 + 11), previousLink.length);
+                                            myElement.find("#linkName").val(value);
+                                        } else {
+                                            //document.getElementById("rightPanelArea").innerHTML = "<div><p>ADD A Link To an email address</p><br /><br /><br /><Label><p>Email Address</p></Label><br /><input type='text' class='textLinkGUI' id='emailAddText' maxlength='200' /><br /><br /><Label><p>Email Subject</p></Label><br /><input type='text' class='textLinkGUI' id='emailSubjText' maxlength='200' /></div>";
+                                            var index1 = previousLink.search("com");
+                                            var value = previousLink.substring(7, (index1 + 3));
+                                            myElement.find("#emailAddText").val(value);
+                                            index1 = previousLink.search("subject=");
+                                            value = previousLink.substring((index1 + 8), previousLink.length);
+                                            myElement.find("#emailSubjText").val(value);
+                                        }
+                                    }
+                                }
+
+                            });
+                            myElement.find("li.forwardToFriendLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").addClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "frwdToFrnd");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addFrwdToFrndLinkDiv").length > 1) {
+                                    myElement.find("div.addFrwdToFrndLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addFrwdToFrndLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
+                                    areaToDisplay.show();
+                                    areaToDisplay.find("div.textAreaDivfortextLink").show();                                               
+                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
+                                }
+                                else {
+                                    areaToDisplay.hide();
+                                }
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Forward to a Friend</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Forward This Email</textarea>";
+                            });
+
+                            myElement.find("li.unsubscribeLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").addClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "unsubscribe");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addUnsubscribeLinkDiv").length > 1) {
+                                    myElement.find("div.addUnsubscribeLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addUnsubscribeLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
+                                    areaToDisplay.show();
+                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
+                                               
+                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
+                                }
+                                else {
+                                    areaToDisplay.hide();
+                                }
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD an Unsubscribe Link </p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Want to unsubscribe or change your details?</textarea>";
+                            });
+                            myElement.find("li.viewInBrowserLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").addClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "brwoserView");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addViewinBrowserLinkDiv").length > 1) {
+                                    myElement.find("div.addViewinBrowserLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addViewinBrowserLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
+                                    areaToDisplay.show();
+                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
+                                               
+                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
+                                }
+                                else {
+                                    areaToDisplay.hide();
+                                }
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Can't read email Link</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>Can't read this email Properly?</textarea>";
+                            });
+                            myElement.find("li.doubleOptLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").addClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "doubleOptLink");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addDoubleOptLinkDiv").length > 1) {
+                                    myElement.find("div.addDoubleOptLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addDoubleOptLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
+                                    areaToDisplay.show();
+                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
+                                                
+                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
+                                }
+                                else {
+                                    areaToDisplay.hide();
+                                }
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Double opt-in Link</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>To confirm your email address, click here</textarea>";
+                            });
+                            myElement.find("li.safeSenderLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").addClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "safeSender");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addSafeSenderLinkDiv").length > 1) {
+                                    myElement.find("div.addSafeSenderLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addSafeSenderLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                if (myElement.find("#linkTrack").data("linkObject") != "image") {
+                                    areaToDisplay.show();
+                                    areaToDisplay.find("div.textAreaDivfortextLink").show();
+                                    // if ($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }).trim() != "") {
+                                    //     areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
+                                    // } else {
+                                    //     console.log("6. SomeLink set here");
+
+                                    //     areaToDisplay.find("textarea.linkTextArea").val("Some Link");
+                                    // }
+                                    areaToDisplay.find("textarea.linkTextArea").val(tiny_editor);
+                                }
+                                else {
+                                    areaToDisplay.hide();
+                                }
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>ADD A Safe Sender Message to your Email</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'>To guarantee delivery of this email please add $CAMPAIGNFROMEMAIL$ to your address book and safe senders list.</textarea>";
+                            });
+                            myElement.find("li.newAnchorLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").addClass("selected");
+                                myElement.find("li.newSocialLinkGUI").removeClass("selected");
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "newAnchor");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addNewAnchorLinkDiv").length > 1) {
+                                    myElement.find("div.addNewAnchorLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addNewAnchorLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                areaToDisplay.show();
+                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
+                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                // tiny_editor = $("#currTinyMCE").data("myTinyMCE");
+
+                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
+
+                            //areaToDisplay.find("textarea.linkTextArea").val($("#currTinyMCE").data("myTinyMCE").getContent({ format: 'text' }));
+                            //document.getElementById("rightPanelArea").innerHTML = "<p>New # Anchor</p><br /><br /><label><p>Text:</p></Label><textarea class='text-areaLinkGUI'></textarea><br/><br><label><p>Anchor Name:</p></Label><input type='text' class='textLinkGUI' maxlength='200'/>";
+                            });
+
+                            myElement.find("li.newSocialLinkGUI").click(function () {
+
+                                myElement.find("li.emailLinkGUI").removeClass("selected");
+                                myElement.find("li.homeLinkGUI").removeClass("selected");
+                                myElement.find("li.forwardToFriendLinkGUI").removeClass("selected");
+                                myElement.find("li.unsubscribeLinkGUI").removeClass("selected");
+                                myElement.find("li.viewInBrowserLinkGUI").removeClass("selected");
+                                myElement.find("li.doubleOptLinkGUI").removeClass("selected");
+                                myElement.find("li.safeSenderLinkGUI").removeClass("selected");
+                                myElement.find("li.newAnchorLinkGUI").removeClass("selected");
+                                myElement.find("li.newSocialLinkGUI").addClass("selected");
+
+                                myElement.find("#rightPanelArea").data("tabClicked", "social");
+                                areaToDisplay = null;
+                                if (myElement.find("div.addNewSocialLinkDiv").length > 1) {
+                                    myElement.find("div.addNewSocialLinkDiv")[1].remove();
+                                }
+                                areaToDisplay = myElement.find("div.addNewSocialLinkDiv").clone(false);
+                                myElement.find("#rightPanelArea").html(areaToDisplay);
+                                areaToDisplay.show();
+                                linkObjectType = myElement.find("#linkTrack").data("linkObject");
+                                imageObjectControl = myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                                // tiny_editor = $("#currTinyMCE").data("myTinyMCE");
+
+                                enableTextOrImagePreview(linkObjectType, areaToDisplay, imageObjectControl, tiny_editor);
+                                //areaToDisplay.find('input[name="social"]').iCheck("destroy");
+                                initializeiCheck(areaToDisplay);
+
+                                myElement.find('input[name="social"]').on('ifClicked', function (event) {
+                                    // alert("You clicked " + this.value);
+                                    selectedSocialLink = this.value;
+                                });
+                                            
+                                            
+                                            
+                            });
+                            
+                            
+                            
+                            
+// 3/////
+function attachLinkWithElement(workingObject, linkHtmlPage, selectedSocialLink) {    
+
+    var myImageLink = null;
+    if ($("#rightPanelArea").data("tabClicked") == "hyperlink") {
+        if ( (linkHtmlPage.find("input.linkHyperLinkURL").val()).startsWith("http://") )
+            myImageLink = linkHtmlPage.find("input.linkHyperLinkURL").val() + "?campaignkw=" + linkHtmlPage.find("input.linkName").val();
+        else
+            myImageLink = "http://" + linkHtmlPage.find("input.linkHyperLinkURL").val() + "?campaignkw=" + linkHtmlPage.find("input.linkName").val();
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "mailto") {
+        var myEmailId = linkHtmlPage.find("input.emailLinkName").val();
+        var myEmailSubject = linkHtmlPage.find("input.emailLinkSubject").val();
+        myImageLink = "mailto"+":" + myEmailId + "?subject=" + myEmailSubject;        
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "frwdToFrnd") {
+        // image do not have this type of link option
+        myImageLink = "";
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "unsubscribe") {
+        // image do not have this type of link option
+        myImageLink = "";
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "brwoserView") {
+        // image do not have this type of link option
+        myImageLink = "";
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "doubleOptLink") {
+        // image do not have this type of link option
+        myImageLink = "";
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "safeSender") {
+        // image do not have this type of link option
+        myImageLink = "";
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "newAnchor") {
+        if ((linkHtmlPage.find("#newAnchortext").val()).startsWith("http://"))
+            myImageLink = linkHtmlPage.find("#newAnchortext").val();
+        else
+            myImageLink = "http://" + linkHtmlPage.find("#newAnchortext").val();
+        //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
+    }
+    else if ($("#rightPanelArea").data("tabClicked") == "social") {
+
+        var linkValue = "";
+        if(selectedSocialLink == 'facebook') {
+            linkValue = socialFacebookLink;
+        }
+        else if(selectedSocialLink == 'twitter') {
+            linkValue = socialTwitterLink;
+        }
+        else if(selectedSocialLink == 'linkedin') {
+            linkValue = socialLinkedInLink;
+        }
+        else if(selectedSocialLink == 'pintrest') {
+            linkValue = socialPintrestLink;
+        }
+        else if(selectedSocialLink == 'googleplus') {
+            linkValue = socialGooglePlusLink;
+        }
+
+        myImageLink = linkValue;
+        //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
+    }
+
+    // Got the link value now going to set it for the image
+
+    if (myImageLink != "" && myImageLink != null) {
+        if ($(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").parent().is("a")) {
+            $(workingObject).parent().parent().parent().parent().find("a").attr("href", myImageLink);
+            //$(workingObject).parent().parent().parent().parent().find("a").attr("href", "#.");
+            //$(workingObject).parent().parent().parent().parent().find("a").data("link", myImageLink);
+        }
+        else {
+            $(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
+            //$(workingObject).parent().parent().parent().parent().find("img.imageHandlingClass").wrap("<a href='#.'></a>");
+            //$(workingObject).parent().parent().parent().parent().find("a").data("link", myImageLink);
+        }
+    }
+    
+}
