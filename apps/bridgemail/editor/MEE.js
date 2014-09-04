@@ -2396,7 +2396,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
                                                                 editor.selection.select(selectedLinkFromTinyMCE);
                                                                 var selected_element_range = tinyMCE.activeEditor.selection.getRng();
-                                                                showAlertButtons($(currentNode), selectedLinkFromTinyMCE.href);
+                                                                showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
                                                             }
                                                         });  
                                                     }                                                    
@@ -4277,22 +4277,23 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             ///////
                             }
 
-                            var showAlertButtons =function(obj, url){
-                                var _ele  = url; //element which is clicked
+                            var showAlertButtons = function(obj, url){
+                                var _ele  = $(obj); //element which is clicked
                                 var left_minus = 15;      //static space to minus to show dialog on exact location
                                 var ele_offset = _ele.offset();                
                                 var ele_height =  _ele.height();
                                 var top = ele_offset.top + ele_height +4-topMinus;
                                 var left = ele_offset.left-left_minus-leftMinus;  
-                                var url_string = "";
-                                url = url.attr("href");
+                                var url_string = "",showClass="disabled";
+                                url = _ele.attr("href");
                                 var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                                 if(url !=="#" && $.trim(url)!=="" && url.startsWith("mailto:")==false && merge_field_patt.test(url)===false){
                                     url_string = "href='"+url+"'";
+                                    showClass ="";
                                 }
                                 var li = "<ul>";
                                 li += "<li><a href='#' class='btn-green btnContentEditName'><i class='icon imgicons link linkOpen'></i></a></li>";
-                                li += "<li><a target='_new' "+url_string+" class='btn-blue btnContentDelete'><i class='icon newwin' data-url='"+ url +"'></i></a></li>";
+                                li += "<li><a target='_new' "+url_string+" class='btn-blue btnContentDelete "+showClass+"'><i class='icon newwin' data-url='"+ url +"'></i></a></li>";
                                 li += "</ul>";
 
                                 myElement.find(".alertButtons").html(li);
@@ -5018,22 +5019,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     LoadImagesInLibrary();
                                 }
                             }
-
-
-                            myElement.on("click", "i.newwin", function () {
-                                var element = $(this);
-                                url = element.data("url");
-                                console.log("newWin button clicked.");
-                                window.open(url);
+                            myElement.on("click", "i.newwin", function () {                                
+                                var url = $(this).parent().attr("href");
+                                var showName = $.getUrlVar(url,'campaignkw');
+                                window.open(url.replace("?campaignkw="+showName,""));
                                 myElement.find(".alertButtons").hide();
                             });
 
                             myElement.on("click", "i.linkOpen", function () {
                                 myElement.find("#linkTrack").data("linkObject", "text");
                                 showLinkGUI();
-                                myElement.find(".alertButtons").hide();
-                                console.log("Open link button clicked.");
-
+                                myElement.find(".alertButtons").hide();                                
                             });
 
                             myElement.on("click", "a.btnSaveBB", function () {

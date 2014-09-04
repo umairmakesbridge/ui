@@ -148,6 +148,7 @@ define([
                        }) 
                     });
                     
+                    
                    var self = this;                                                                         
                    var content_height = ($('body').height()-90);                   
                    

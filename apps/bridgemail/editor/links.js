@@ -57,6 +57,7 @@ function (template) {
                     var _li = $(this).parents("li");
                     _li.find("input.radiopanel").iCheck("check");
                 });
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             /**
              * Render Row view on page.
