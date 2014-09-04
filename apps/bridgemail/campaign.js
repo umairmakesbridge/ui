@@ -89,6 +89,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 initMergeFields: function() {
+                     this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject'});
                     this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace',isrequest:true},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                     this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'workspace'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
                     this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});
@@ -134,8 +135,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      });
                      this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                      /*Campaign Merge Fields*/
-                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
-                     
+                    //this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
+                     this.initMergeFields();
                 },
                 stepsCall:function(step){
                     var proceed = -1;

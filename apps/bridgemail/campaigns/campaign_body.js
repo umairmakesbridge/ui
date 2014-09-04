@@ -57,10 +57,10 @@ function (template,editorView) {
             },
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
-                this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace',isrequest:true,parallel:true},elementID:'merge-field-editor',placeholder_text:'Merge tags',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
-                
+                this.initMergeFields();
             },
             initMergeFields: function() {
+                   this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace',isrequest:true,parallel:true},elementID:'merge-field-editor',placeholder_text:'Merge tags'});
                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand',placeholder_text:'Merge tags'});
                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge tags'});
                 },

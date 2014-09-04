@@ -61,8 +61,7 @@ function (template) {
                 this.$("#campaign_from_email_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$("#fromemail_default_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 /*Campaign Merge Fields*/
-                this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'dialog',isrequest:true,parallel:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
-                
+                this.initMergeFields();
                 
                 this.$("#campaign_unSubscribeType").chosen({no_results_text:'Oops, nothing found!', width: "290px",disable_search: "true"});
                 this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){                    
@@ -73,6 +72,7 @@ function (template) {
                                 
             },
             initMergeFields: function() {
+                   this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'dialog',isrequest:true,parallel:true},placeholder_text:'Enter subject'});
                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                    this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'dialog'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
                    this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 

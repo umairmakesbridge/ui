@@ -3253,6 +3253,22 @@ ul#template_search_menu li {
     display: block;
     margin: 2px 0 0;
 }
+
+
+/*==========Subscriber=========*/
+.score-buttons ul li:first-child {
+    background: none repeat scroll 0 0 #eaf3f8;
+}
+.score-buttons ul li .score {
+    background: none;
+    color: #80C000;
+}
+.score-buttons ul li .score span{
+    color: #80C000;
+}
+.score-buttons {
+    padding: 15px 0;
+}
 /*
 -------------- ENDS HERE ----------
 */
