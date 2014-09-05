@@ -576,6 +576,6 @@ function (template,icheck,bmstags) {
 //                    dialog.getBody().html(preview_iframe);                                         
                     e.stopPropagation();     
                },this));  
-                },
+             }
         });
 });

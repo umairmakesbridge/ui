@@ -1194,7 +1194,7 @@ ul.tabs-btns li.active a{
     display: block;
 }
 .saveing-blue {
-    background: url("../img/greenloader.gif") no-repeat scroll 25px center #01AEEE;
+    background: url("../img/greenloader.gif") no-repeat scroll 25px center #01AEEE !important;
     font-size: 0;
     line-height: 35px;
     min-height: 20px;

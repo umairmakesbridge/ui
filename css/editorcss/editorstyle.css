@@ -2158,3 +2158,25 @@ ul.socialbtns li .radiopanelinput.checked {
   ul.b-blocks > li > i.icon.cblock.LeftImagePlusText{
       background:url("../images/blocks/LeftImagePlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
+ .leftpanel{
+     float:left;
+     width:405px;
+     margin-left:10px;
+ }
+ .nurtureimg .block-image{
+     margin:0px;
+     width:152px;
+ }
+ .label-text{
+    color: #414f58;
+    cursor: default;    
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 12px 8px 10px 0;
+    position: relative;
+    width: 23%;
+ }
+ .add-block{
+     height:198px;
+ }
