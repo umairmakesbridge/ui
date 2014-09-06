@@ -124,6 +124,7 @@
                                 var _googleDataArray = [];
                                 _.each(_googleData,function(elem,idx){
                                      var _google = [];
+                                     
                                     _.each(elem[0],function(key,value){
                                         _google.push(key);
                                     });
@@ -175,7 +176,13 @@
                                     this.$(":radio[value=importall]").iCheck('check');
                                 }
                             }
-                            this.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" + this.googleCount + "</strong></div>");
+                            var that = this;
+                            var URL = "/pms/io/google/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=stats";
+                            jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
+                                var _count = jQuery.parseJSON(xhr.responseText);
+                                     that.$("#hImportAll").append("<div class='subscribers show' style='width:'><strong class='badge'>" + _count.contactCount + "</strong></div>");
+                            }, this));
+                            
 
                             this.app.showLoading(false, this.$el);
                         },

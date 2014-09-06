@@ -92,6 +92,10 @@ function (template,chosen,addbox) {
 				var id = $(e).parent().find('.erroricon').attr('id');
                                 if($(e).val()=='' && j == 0){
 					layout_map="";
+                                        var col = $(e).val();
+                                        if($(e).val() == "" )
+                                              col = 0;
+                                        cols+='col_'+(i+1)+'='+col+'&';
 				}
 				else
 				{
@@ -101,6 +105,7 @@ function (template,chosen,addbox) {
                                                 var col = $(e).val();
                                                 if($(e).val() == "" )
                                                      col = 0;
+                                                 
                                                 cols+='col_'+(i+1)+'='+col+'&';
 					 	if(i<sel_lenght-1){
 							layout_map+=",";
@@ -249,8 +254,7 @@ function (template,chosen,addbox) {
 			var tcols = 4;
 			var cols = rows[0].length;
 			var tables_count = Math.ceil(cols/tcols);
-                        
-			var mappingHTML = "";
+                        var mappingHTML = "";
 			for(var t=0;t<tables_count;t++){
 				var oc = t*tcols;
 				mappingHTML +="<table id='uploadslist' class='table'>";
