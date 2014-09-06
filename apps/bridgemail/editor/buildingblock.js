@@ -60,11 +60,11 @@ function (template) {
             */
             saveBlockCall:function(){
                 var btnObj= this.dialog.$(".btn-save");
-                if(btnObj.hasClass("saveing-blue")==false){
-                    btnObj.addClass("saveing-blue");
-                    this.$("#block_name").prop("disabled",true);
+                if(btnObj.hasClass("saveing-blue")==false){                    
                     var blockName = this.$("#block_name").val();
                     if($.trim(blockName)!==""){
+                        btnObj.addClass("saveing-blue");
+                        this.$("#block_name").prop("disabled",true);
                         this.app.hideError({control:this.$('.blockname-container')});
                         var buildingBlock = new Object();
                         buildingBlock.Name = blockName;

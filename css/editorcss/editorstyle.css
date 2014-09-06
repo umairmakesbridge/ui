@@ -2122,8 +2122,14 @@ ul.socialbtns li .radiopanelinput.checked {
  ._addNewSocialLinkDiv .radiopanelinput .icheck_radio-icon{
      margin:7px 0 0 7px !important;
  }
+ ul.b-blocks > li > i.icon.cblock.columnfeaturedarticles{
+      background:url("../images/blocks/2_column_featured_articles.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
  ul.b-blocks > li > i.icon.cblock.columnImageWithText{
       background:url("../images/blocks/2_column_image_with_headline.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.columnImageWithHeading{
+      background:url("../images/blocks/2_column_Image_and_Text.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
  ul.b-blocks > li > i.icon.cblock.BannerPlusText{
       background:url("../images/blocks/BannerPlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -2136,6 +2142,9 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  ul.b-blocks > li > i.icon.cblock.FooterPlusLogo{
       background:url("../images/blocks/FooterPlusLogo.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.ImageTextbutton{
+      background:url("../images/blocks/ImageTextbutton.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
  ul.b-blocks > li > i.icon.cblock.RightImagePlusText{
       background:url("../images/blocks/RightImagePlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -2158,6 +2167,9 @@ ul.socialbtns li .radiopanelinput.checked {
   ul.b-blocks > li > i.icon.cblock.LeftImagePlusText{
       background:url("../images/blocks/LeftImagePlusText.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
+  ul.b-blocks > li > i.icon.cblock.Useful_Links{
+      background:url("../images/blocks/Useful_Links.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ 
  .leftpanel{
      float:left;
      width:405px;

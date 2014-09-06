@@ -66,6 +66,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.rescheduled = false;
                     this.hidecalender = false;
                     this.campobjData = null;
+                    this.allowedUser = ['admin','jayadams'];  
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                         "step2":{"templates":false,htmlText:'',plainText:'',change:false},
@@ -134,6 +135,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             iconsource: 'target'
                      });
                      this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                     if(this.allowedUser.indexOf(this.app.get("user").userId)>-1){                       
+                       this.$("#html_editor_mee").show();
+                    }
                      /*Campaign Merge Fields*/
                     //this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
                      this.initMergeFields();
@@ -1241,7 +1245,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
-                        post_data['isCampaignText'] = 'Y';                        
+                        post_data['isCampaignText'] = 'Y';   
+                        post_data['htmlCode'] = '';
                         //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
                      }                 
                      else if(selected_li=="html_editor_mee"){
@@ -2091,7 +2096,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        this.$(".step2 .selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
+                        var slider_width = this.allowedUser.indexOf(this.app.get("user").userId)>-1?"840px":"700px";
+                        this.$(".step2 .selection-boxes").animate({width:slider_width,margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
                         });
@@ -2197,15 +2203,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                        if(html_json.isEasyEditorCompatible=="Y"){
-                            this.$("#html_editor_mee").click();
-                            this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
-                            this.states.editor_change = true;                           
-                        }
-                        else{
-                            this.$("#html_editor").click();
-                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                        }
+                        if(this.allowedUser.indexOf(this.app.get("user").userId)>-1){
+                          if(html_json.isEasyEditorCompatible=="Y"){
+                              this.$("#html_editor_mee").click();
+                              this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
+                              this.states.editor_change = true;                           
+                          }
+                          else{
+                              this.$("#html_editor").click();
+                              _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                          }
+                       }
+                       else{
+                           this.$("#html_editor").click();
+                          _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));       
+                       }
                     }
                     
                 },

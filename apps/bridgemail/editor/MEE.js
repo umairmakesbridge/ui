@@ -399,7 +399,110 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 makeCloneAndRegister();
                             };
                                                     
+                                                       
 
+                            ﻿//[ -------------------------  Sohaib -----------------------------------]
+
+                            ////3
+
+                            // For Image Titling Dialog
+                            function openImageTitleDialog(uiElement) {
+                                $("#imageTitleDialog").dialog({
+                                    closeOnEscape: false,
+                                    autoOpen: false,
+                                    modal: true,
+                                    //z-index: 500,
+                                    buttons: {
+                                        "Set Title": function () {
+
+                                            this.imageNewTitle = $("#imageTitleDialog").find("#imageTitleText").val().trim();
+                                            $(uiElement).parent().parent().parent().parent().find("img").attr("title", this.imageNewTitle);
+                                            $("#imageTitleDialog").dialog("close");
+
+                                        },
+                                        Cancel: function () {
+                                            $("#imageTitleDialog").dialog("close");
+
+                                        }
+                                    },
+
+                                    width: 450
+                                });
+
+                                $("#imageTitleDialog").find("#imageTitleText").val("");
+                                $("#imageTitleDialog").dialog("open");
+                            }
+                   
+
+
+                             //.................... Send Server Request ................................
+                            function SendServerRequest(requestProperties, errorCallBack) {
+                                var returnJson;
+
+                                $.ajax({
+                                    url: requestProperties.Url,
+                                    data: requestProperties.Data,
+                                    type: requestProperties.Type,
+                                    contentType: requestProperties.ContentType,
+                                    dataType: requestProperties.DataType,
+                                    cache: false,
+                                    async: false,
+                                    success: function (e) {
+                                        //console.log("Response Came:"+e);
+                                        returnJson = e;
+                                    },
+                                    error: errorCallBack
+                                });
+                                //console.log(returnJson);
+                                return returnJson;
+                            }
+                            // .................... Send Server Request ................................
+
+                            function filterImages(query, obj) {
+                                var new_obj = {}, total = 0, query = query.toLowerCase();
+                                for (var i in obj) {
+                                    var imageName = obj[i].Name.toLowerCase();
+                                    if (imageName == query) { new_obj[i] = obj[i]; total++; }
+                                }
+
+                                return new_obj;
+                            }
+
+                            function getImagesMarkup(obj) {
+                                var imagesMarkup = "";
+                                $.each(obj[0], function(index, val) {             
+                                    var tagsArr = val[0].tags.split(',');
+
+                                    var j = index + 1;
+                                    var li = "<li class='draggableControl ui-draggable droppedImage' data-type='droppedImage'>";
+
+                                        li += "<span class='img'>";
+                                        li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
+                                        li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
+                                        li += "<div class='imageicons'>";
+                                        li += "<i class='imgicons info action' data-actiontype='imageInfo' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                        li += "<i class='imgicons link action' data-actiontype='imageLink' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                        li += "<i class='imgicons preview action' data-actiontype='imagePreview' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "' data-url='" + val[0].originalURL + "' data-name='" + val[0].fileName + "'></i>";
+                                        li += "<i class='imgicons tag action' data-actiontype='imageTag' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                        li += "<i class='imgicons delete action' data-actiontype='imageDelete' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                        li += "</li>";
+                                    //li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' data-Id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /><label>+</label><br />";
+                                    //li += "<span class=' font_75'>" + val[0].fileName + "<img src='images/delete-ico.png' /></span></li>";
+                                    imagesMarkup = imagesMarkup + li;   
+                                })
+
+
+                              /*  for (var i = 0; i < obj.length; i++) {
+                                    var j = i + 1;
+                                    var li = "<li class='draggableControl droppedImage' data-type='droppedImage'>";
+
+                                    li += "<img title='" + obj[i].tags + "' src='images/upload-images/" + obj[i].thumbURL + "' data-Id='" + obj[i].imageId_encode + "' data-tags='" + obj[i].tags + "' data-name='" + obj[i].name + "' /><label>+</label><br />";
+                                    li += "<span class=' font_75'>" + obj[i].name + "<img src='images/delete-ico.png' /></span></li>";
+                                    imagesMarkup = imagesMarkup + li;
+                                }*/
+                                return imagesMarkup;
+                            }
+                            
                             function InitializeElementsForStyle(isActive) {
 
                                 if (!isActive) {
@@ -1533,18 +1636,24 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             contentBlocksGlobal = e.blocks[0];
                                             var ulContentBlocks = myElement.find(".content-block");
                                             ulContentBlocks.empty();
-                                            var imageMapping = {"69059b7ef840f0c74a814ec9237b6ec":"columnImageWithText",
-                                                                "5fd0b37cd7dbbb00f97ba6ce92bf5add":"BannerPlusText",
-                                                                "c45147dee729311ef5b5c3003946c48f":"Button",
-                                                                "eb160de1de89d9058fcb0b968dbbbd68":"footer",
-                                                                "5ef059938ba799aaa845e1c2e8a762bd":"FooterPlusLogo",
-                                                                "9b8619251a19057cff70779273e95aa6":"RightImagePlusText",
-                                                                "7e1cd7dca89a1678042477183b7ac3f":"logoCenter",
-                                                                "da4fb5c6e93e74d3df8527599fa62642":"logoPlusBanner",
-                                                                "4c56ff4ce4aaf9573aa5dff913df997a":"Paragraph",
-                                                                "202cb962ac59075b964b07152d234b70":"Social_Share",
-                                                                "1afa34a7f984eeabdbb0a7d494132ee5":"Testimonial",
-                                                                "42a0e188f5033bc65bf8d78622277c4e":"LeftImagePlusText"}
+                                            var imageMapping = {
+                                                                "c81e728d9d4c2f636f067f89cc14862c":"columnfeaturedarticles",
+                                                                "eccbc87e4b5ce2fe28308fd9f2a7baf3":"columnImageWithText",
+                                                                "a87ff679a2f3e71d9181a67b7542122c":"columnImageWithHeading",
+                                                                "e4da3b7fbbce2345d7772b0674a318d5":"BannerPlusText",
+                                                                "1679091c5a880faf6fb5e6087eb1b2dc":"Button",
+                                                                "8f14e45fceea167a5a36dedd4bea2543":"footer",
+                                                                "c9f0f895fb98ab9159f51fd0297e236d":"FooterPlusLogo",
+                                                                "45c48cce2e2d7fbdea1afc51c7c6ad26":"FooterPlusLogo",
+                                                                "d3d9446802a44259755d38e6d163e820":"ImageTextbutton",
+                                                                "6512bd43d9caa6e02c990b0a82652dca":"RightImagePlusText",
+                                                                "c20ad4d76fe97759aa27a0c99bff6710":"logoCenter",
+                                                                "c51ce410c124a10e0db5e4b97fc2af39":"logoPlusBanner",
+                                                                "aab3238922bcc25a6f606eb525ffdc56":"Paragraph",
+                                                                "c74d97b01eae257e44aa9d5bade97baf":"Social_Share",
+                                                                "70efdf2ec9b086079795c442636b55fb":"Testimonial",
+                                                                "9bf31c7ff062936a96d3c8bd1f8f2ff3":"LeftImagePlusText",
+                                                                "6f4922f45568161a8cdf4ad2299f6d23":"Useful_Links"}
                                             $.each(contentBlocks, function (i, obj) {
                                                 var cssImage = imageMapping[obj[0]["blockId.checksum"]]?imageMapping[obj[0]["blockId.checksum"]]:"";
                                                 var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
@@ -3600,14 +3709,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var dialog = options._app.showDialog({
                                     title:'Add Block',
                                     css:{
-                                        "width":"600px",
-                                        "margin-left":"-300px",
+                                        "width":"428px",
+                                        "margin-left":"-214px",
                                         "top":"20%"
                                     },
                                     headerEditable:false,
                                     headerIcon : 'template',
                                     bodyCss:{
-                                        "min-height":"210px"
+                                        "min-height":"160px"
                                         },                                    
                                     buttons: {
                                         saveBtn:{
@@ -5438,6 +5547,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                     for (var handler in events[type])
                         jQuery.event.add(this, type, events[type][handler], events[type][handler].data);
             });
+        };
+         ﻿//Extension Methods
+        jQuery.fn.outerHTML = function (s) {
+            return s
+                ? this.before(s).remove()
+                : jQuery("<p>").append(this.eq(0).clone()).html();
+        };
+
+        String.prototype.replaceAll = function (find, replace) {
+            var str = this;
+            return str.replace(new RegExp(find.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), replace);
         };
                            
         this.render();         

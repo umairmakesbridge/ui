@@ -121,8 +121,8 @@ function (template,editorView) {
 
             },
             setContents:function(){
-              if(tinyMCE.get('bmseditor_'+this.wp_id)){
-                tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));   
+              if(_tinyMCE.get('bmseditor_'+this.wp_id)){
+                _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText,true));   
               }
               else{
                   setTimeout(_.bind(this.setContents,this),200);
@@ -168,9 +168,9 @@ function (template,editorView) {
                 }
             },
             setEditor:function(){
-              if(tinyMCE && tinyMCE.get('bmseditor_'+this.wp_id))  {
+              if(_tinyMCE && _tinyMCE.get('bmseditor_'+this.wp_id))  {
                 this.bmseditor.showEditor(this.wp_id);                                       
-                tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                 this.$("#bmstexteditor").val(this.app.decodeHTML(this.parent.plainText,true));
                 this.$(".textdiv").hide();
               }
@@ -182,7 +182,7 @@ function (template,editorView) {
                 this.app.showLoading(false,this.$el);
                 var html_json = jQuery.parseJSON(xhr.responseText);
                 if(html_json.htmlText){
-                    tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                    _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
                 }
             },
             TryDialog:function(){
