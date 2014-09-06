@@ -390,11 +390,11 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     that.tags = that.tags.toString().split(',');
                     this.options.app.showLoading("Loading Tags...", dialog1.getBody());
                     require(["tags/tags"], _.bind(function(page) {
-                        var Tags = new page({tags: that.tags, app: that.options.app, camp: that, dialog: dialog1, editable: true, type: "autobots"});
+                        var Tags = new page({tags: that.tags, app: that.options.app, camp: that, dialog: dialog1, editable: true, type: "autobots",botId:that.botId});
                         dialog1.getBody().append(Tags.$el);
                         this.app.showLoading(false, Tags.$el.parent());
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                        Tags.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        Tags.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog,
                         this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(Tags.saveTags, Tags); // New Dialog
                         dialog1.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
                         dialog1.$el.find('.modal-footer').find('.btn-play').hide();

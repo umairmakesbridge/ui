@@ -199,7 +199,10 @@
                     self.dialog.find("#add_tag_btn").removeClass("saving") 
                     if(tag_json[0]=="success"){
                         self.options.tags = temp_tags;
-                        self.showTags();
+                        
+                        if(self.options.module !="rec_tag")
+                            self.showTags();
+                        
                         if(self.options.module == "Image" || self.options.module == "recipients")
                             self.options.callBack(temp_tags);
                     }
