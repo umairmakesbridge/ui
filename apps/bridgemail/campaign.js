@@ -66,7 +66,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.rescheduled = false;
                     this.hidecalender = false;
                     this.campobjData = null;
-                    this.allowedUser = ['admin','jayadams'];  
+                    this.allowedUser = ['admin','jayadams','demo'];  
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                         "step2":{"templates":false,htmlText:'',plainText:'',change:false},
