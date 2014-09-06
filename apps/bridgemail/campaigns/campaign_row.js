@@ -146,7 +146,7 @@ function (template,highlighter) {
                             });
                             this.app.showLoading("Loading...",dialog.getBody());
                             this.sub.total_fetch = 0;
-                           require(["copycampaign"],_.bind(function(copycampaignPage){                                     
+                           require(["campaigns/copycampaign"],_.bind(function(copycampaignPage){                                     
                                              var mPage = new copycampaignPage({camp:this.sub,camp_id:camp_id,app:this.app,copycampsdialog:dialog});
                                              dialog.getBody().html(mPage.$el);
                                              dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));

@@ -285,7 +285,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
                         workspace_id: 'campaign_' + camp_wsid,
-                        url: 'campaign',
+                        url: 'campaigns/campaign',
                         tab_icon: 'campaign',
                         params: {camp_id: camp_id},
                         wizard: {cssClass:'campaign_progress',rescheduled:reschedule,hidecalender:hidecalender,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
@@ -437,7 +437,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         buttons: {saveBtn: {text: 'Create Campaign'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
-                    require(["newcampaign"], function(newcampPage) {
+                    require(["campaigns/newcampaign"], function(newcampPage) {
                         var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         dialog.$("input").focus();
@@ -445,16 +445,16 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                 },
                 createTemplate: function() {
-                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
+                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
                 },
                 viewContacts: function() {
-                    this.addWorkSpace({type: '', title: 'Contacts',sub_title:'Listing', url: 'contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
+                    this.addWorkSpace({type: '', title: 'Contacts',sub_title:'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
                 },
                 campaignListing: function() {
-                    this.addWorkSpace({type: '', title: 'Campaigns',sub_title:'Listing', url: 'campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
+                    this.addWorkSpace({type: '', title: 'Campaigns',sub_title:'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
                 },
                 templateGallery: function() {
-                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
+                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
                 },
                 camapignReport: function() {
                     this.addWorkSpace({type: '', title: 'Reports',sub_title:'Analytic', url: 'reports/campaign_report', workspace_id: 'camp_reports', tab_icon: 'reports', noTags: true});

@@ -497,7 +497,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                               buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
                             });
                             this.options.app.showLoading("Loading...",dialog.getBody());
-                            require(["copycampaign"],function(copycampaignPage){                                     
+                            require(["campaigns/copycampaign"],function(copycampaignPage){                                     
                                              var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
                                              dialog.getBody().html(mPage.$el);
                                              dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));

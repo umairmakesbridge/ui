@@ -1,4 +1,4 @@
-define(['text!html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-tags'],
+define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-tags'],
         function(template, Mapping, bmsSearch,tags) {
             'use strict';
             return Backbone.View.extend({
