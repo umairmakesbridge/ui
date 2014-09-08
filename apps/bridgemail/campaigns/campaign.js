@@ -3137,7 +3137,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 if(camp_obj.app.checkError(rec_josn)){
                                      return false;
                                 }
-                                if(source_type=="highrise"){return rec_josn; }
+                                if(source_type=="highrise"){return rec_josn; 
+                                }
                                 camp_obj.states.step3.recipientDetial = rec_josn;
                                   
                                 if(rec_josn.type){ 
@@ -3873,15 +3874,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 
                 },
                 googleImport:function(){
-                   
+                   this.editImport=data;
                     var active_ws = this.$el.parents(".ws-content");
                       active_ws.find('#google_welcome').hide();
                     active_ws.find("#google_import_container").show();
                     active_ws.find("#google_import_container").html('');
                     var that = this;
                     this.app.showLoading("Loading Google...",this.$('#google_import_container'));                                  
-                    require(["crm/google/import"],_.bind(function(page){                                     
-                         this.objGooglePage = new page({page:this,spreadSheet:that.spreadSheets});
+                    require(["crm/google/import"],_.bind(function(page){   
+                         this.objGooglePage = new page({page:this,spreadSheet:that.spreadSheets,edit:that.states.step3.recipientDetial});
+                         that.Import_page =  this.objGooglePage;
                           active_ws.find("#google_import_container").html(this.objGooglePage.$el);
                          this.app.showLoading(false,this.$('#google_import_container')); 
                     },this));
