@@ -265,11 +265,17 @@ define([
              openModule:function(obj){
                  alert($(obj.target).attr("id"));
              },
-             showLoading:function(message, container){                 
+             showLoading:function(message, container,_styles){                 
+                 var divStyles="";
                  if(message){
                     message = message!==true?message:'Loading...';
                     $(container).find('.loading').remove();
-                    $(container).append('<div class="loading"><p>'+message+'</p></div>');
+                    if(_styles){
+                        _.each(_styles,function(val,key){
+                            divStyles +=key+":"+val+";"
+                        },this);
+                    }
+                    $(container).append('<div class="loading"><p style='+divStyles+'>'+message+'</p></div>');
                  }
                  else{
                      $(container).find(' > .loading').remove();

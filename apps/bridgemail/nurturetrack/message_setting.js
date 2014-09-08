@@ -171,7 +171,7 @@ function (template) {
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
-                        html= (this.messagebody_page.$(".textdiv").css("display")=="block")?this.messagebody_page.$("#htmlarea").val():tinyMCE.get('bmseditor_'+this.messagebody_page.wp_id).getContent();
+                        html= (this.messagebody_page.$(".textdiv").css("display")=="block")?this.messagebody_page.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.messagebody_page.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html; 
                         post_data['plainText'] = plain;                        

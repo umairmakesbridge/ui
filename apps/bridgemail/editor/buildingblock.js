@@ -50,7 +50,7 @@ function (template) {
             },
             init:function() {
                 if(this.editor._LastSelectedBuildingBlock){
-                    this.$("#block_name").val(this.editor._LastSelectedBuildingBlock.find(".bbName").text());
+                    this.$("#block_name").val(this.app.decodeHTML(this.editor._LastSelectedBuildingBlock["name"]));
                 }
                 this.$("#block_name").focus();
             }
@@ -71,12 +71,13 @@ function (template) {
                         if(!this.editor._LastSelectedBuildingBlock){
                             this._args.oInitDestroyEvents.DestroyPluginsEvents(this._args.args.ui.draggable);
                             buildingBlock.Html = this._args.args.ui.draggable.clone();
-                            this._args.oInitDestroyEvents.InitializePluginsEvents(this._args.args.ui.draggable);
+                            this._args.oInitDestroyEvents.InitializePluginsEvents(this._args.args.ui.draggable);                            
                         }
                         else{
-                            buildingBlock.Id = this.editor._LastSelectedBuildingBlock.data("id");                        
+                            buildingBlock.Id = this.editor._LastSelectedBuildingBlock["blockId.encode"];                        
+                            this._args.args = {};                            
                         }                        
-                        this._args.args.buildingBlock = buildingBlock;                        
+                        this._args.args.buildingBlock = buildingBlock;       
                         this.saveBlock(this._args.args);
                         //this.config.OnDropElementOnBuildingBlock(this._args.args,_.bind(this.saveBlock,this));
                     }

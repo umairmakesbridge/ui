@@ -1230,20 +1230,17 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                  var camp_obj = this; 
                  var proceed = -1;
                  var html = "",plain="";                  
-                 var post_data = {type: "saveStep2",campNum:this.camp_id}
-                 var post_editor = {editorType:'W',type:"editorType",campNum:this.camp_id};
+                 var post_data = {type: "saveStep2",campNum:this.camp_id}                 
                  var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                      if(selected_li=="html_editor"){
                         html= (this.$(".textdiv").css("display")=="block")?this.$("#htmlarea").val():_tinyMCE.get('bmseditor_'+this.wp_id).getContent();
                         plain = this.$("#bmstexteditor").val();
-                        post_data['htmlCode'] = html; 
-                        post_editor['editorType'] = 'W';
+                        post_data['htmlCode'] = html;                         
                         post_data['plainText'] = plain;
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
-                        post_data['htmlCode'] = html;
-                        post_editor['editorType'] = 'H';
+                        post_data['htmlCode'] = html;                        
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
@@ -1254,10 +1251,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      }                 
                      else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
-                         post_data['htmlCode'] = html;
-                         post_editor['editorType'] = 'MEE';
+                         post_data['htmlCode'] = html;                         
                      }
-                        
+                          
                  if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
                     if(typeof(gotoNext)==="undefined"){
                        this.app.showLoading("Saving Step 2...",this.$el.parents(".ws-content"));
@@ -1287,10 +1283,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                camp_obj.app.showAlert(step1_json[1],$("body"));
                             }
                    });
-                    $.post(URL,post_editor)
-                        .done(function(data) {
-                            
-                        });
+                  
                    proceed = 1
                  }  
                 return proceed;  
@@ -2134,7 +2127,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          default:
                          break;
                     }
-                    
+                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                    var post_editor = {editorType:'',type:"editorType",campNum:this.camp_id};
+                    var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
+                     if(selected_li=="html_editor"){                        
+                        post_editor['editorType'] = 'W';                        
+                     }else if(selected_li=="html_code"){                        
+                        post_editor['editorType'] = 'H';                        
+                     }                 
+                     else if(selected_li=="html_editor_mee"){                        
+                         post_editor['editorType'] = 'MEE';
+                     }
+                     if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
+                        this.campobjData.editorType = post_editor["editorType"];
+                        $.post(URL,post_editor)
+                         .done(function(data) {
+                         });
+                     }
                 },
                 loadMEE:function(){
                     if(!this.states.step2.meeEditor){

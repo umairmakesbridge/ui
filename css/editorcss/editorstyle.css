@@ -2169,7 +2169,7 @@ ul.socialbtns li .radiopanelinput.checked {
  }
   ul.b-blocks > li > i.icon.cblock.Useful_Links{
       background:url("../images/blocks/Useful_Links.png") no-repeat scroll center center rgba(0, 0, 0, 0);
- 
+  } 
  .leftpanel{
      float:left;
      width:405px;

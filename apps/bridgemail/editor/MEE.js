@@ -3709,14 +3709,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var dialog = options._app.showDialog({
                                     title:'Add Block',
                                     css:{
-                                        "width":"428px",
-                                        "margin-left":"-214px",
+                                        "width":"600px",
+                                        "margin-left":"-300px",
                                         "top":"20%"
                                     },
                                     headerEditable:false,
                                     headerIcon : 'template',
                                     bodyCss:{
-                                        "min-height":"160px"
+                                        "min-height":"210px"
                                         },                                    
                                     buttons: {
                                         saveBtn:{
@@ -4182,30 +4182,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }).show();
                             }
                             else if(type == "bbdel") {
-                                var li = "<a class='closebtn'></a>";
-                                li += "<h5 style='padding-bottom: 10px;'>Do you want to delete this Block?</h5>";
-                                li += "<a class='btn-red left confirm-del btnDeleteBB' data-id='" + imageObj["blockId.encode"] + "'><span>Delete</span><i class='icon delete'></i></a>";
-                                myElement.find(".BBDeleteDialog").html(li);
-                                myElement.find(".BBDeleteDialog").css({
-                                    "left":left+"px",
-                                    "top":top+"px"
-                                }).show();
+                                var element = $(obj).parents("li");
+                                var block_id = imageObj["blockId.encode"];
+                                options._app.showAlertDetail({heading:'Confirm Deletion',
+                                    detail:"Do you want to delete this Block?",                                                
+                                        callback: _.bind(function(){													
+                                             this.deleteBlock(element,block_id);   
+                                        },mee)},
+                                $("body"));                                                                                                                               
                             }
-                            else if(type == "bbedit") {
-                                //InitializeBuildingBlockUpdatePopup();
-                                var li = "<a class='closebtn'></a>";
-                                li += "<h5 style='padding-bottom: 10px;'>Edit Block Name</h5>";
-                                li += "<input type='text' placeholder='Image URL' class='left tginput txtBlockName' style='width: 202px; margin-bottom: 10px; dis' value='"+ imageObj.name+"'>";
-                                li += "<a class='btn-green left btnSaveBB'  data-id='" + imageObj["blockId.encode"] + "'>";
-                                li += "<span>Save</span><i class='icon save'></i> ";
-                                li += "</a> ";
-
-
-                                myElement.find(".BBEditDialog").html(li);
-                                myElement.find(".BBEditDialog").css({
-                                    "left":left+"px",
-                                    "top":top+"px"
-                                }).show();
+                            else if(type == "bbedit") {                                
+                                mee._LastSelectedBuildingBlock = imageObj;
+                                InitializeBuildingBlockUpdatePopup();                                
                             }
                             else if(type == "dcdel") {
                                 var li = "<a class='closebtn'></a>";
@@ -4240,7 +4228,26 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         }
 
 
-
+                        mee.deleteBlock = function(element,block_id){
+                            var URL = "/pms/io/publish/saveEditorData/?"+options._BMSTOKEN;
+                            var post_data = {
+                                type:"deleteBlock",
+                                blockId:block_id
+                            };                            
+                            $.post(URL,post_data)
+                            .done(function(data){
+                                var result = jQuery.parseJSON(data);
+                                if(result[0]=="success"){
+                                    element.fadeOut("slow",function(){
+                                        var obj = $(this);
+                                        obj.remove();
+                                    })
+                                }
+                                else{
+                                    options._app.showAlert(result[1],$("body"));
+                                }
+                            });
+                        }
 
                         mee._LoadBuildingBlocks = function (args) {
 
@@ -4249,159 +4256,55 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
 
                             //Call overridden Method here: will use when exposing properties to developer
-                            if (options.LoadBuildingBlocks != null) {
-                                options.LoadBuildingBlocks(args);
-                            }
-
-
                             var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                            ulBuildingBlocks.empty();
+                            ulBuildingBlocks.empty();                            
+                            options._app.showLoading("Loading blocks...", ulBuildingBlocks,{"width":"140px","margin-left":"-70px"});
+                            var URL = "/pms/io/publish/getEditorData/?"+options._BMSTOKEN+"&type=listBlocks";
+                            jQuery.getJSON(URL,  function(tsv, state, xhr){
+                                 var _json = jQuery.parseJSON(xhr.responseText);                                 
+                                //Getting building blocks from provided block:                                
+                                    var count = 1;
+                                    // var listOfBuildingBlocksHtml = $();
+                                    var buildingBlocksFromService = _json.blocks[0];
+                                    var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
+                                    ulBuildingBlocks.empty();
+
+                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
+                                    $.each(buildingBlocksFromService, function (i, obj) {
+
+                                        //Assigning unique ID here:
+                                        obj[0].ID = obj[0]["blockId.encode"];
 
 
+                                        var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                            "<i class='icon myblck'></i> " +
+                                            "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
+                                            "<div class='imageicons' > " +
+                                            "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
+                                            "<i class='imgicons delete right action' data-actiontype='bbdel'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
+                                            " </div>" +
+                                            //actionButtons.html() +
+                                            "</li>");
 
 
+                                        //Initialize with default draggable:
+                                        InitializeMainDraggableControls(block);
 
-                            //Getting building blocks from provided block:
-                            if (args.buildingBlocks != null) {
+                                        // listOfBuildingBlocksHtml.append(block);
+                                        ulBuildingBlocks.append(block);
 
-                                var count = 1;
-                                // var listOfBuildingBlocksHtml = $();
-                                var buildingBlocksFromService = args.buildingBlocks;
-                                var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
-                                ulBuildingBlocks.empty();
-
-                                //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                $.each(buildingBlocksFromService, function (i, obj) {
-
-                                    //Assigning unique ID here:
-                                    obj[0].ID = obj[0]["blockId.encode"];
-
-
-                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                        "<i class='icon myblck'></i> " +
-                                        "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
-                                        "<div class='imageicons' > " +
-                                        "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
-                                        "<i class='imgicons delete right action' data-actiontype='bbdel'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
-                                        " </div>" +
-                                        //actionButtons.html() +
-                                        "</li>");
-                                                    
-
-                                    //Initialize with default draggable:
-                                    InitializeMainDraggableControls(block);
-
-                                    // listOfBuildingBlocksHtml.append(block);
-                                    ulBuildingBlocks.append(block);
-
-                                    block.find(".imageicons").draggable({
-                                        disabled: true
-                                    });
-
-
-                                    count++;
-                                });
-                                                
-
-                                buildingBlocksGlobal = buildingBlocksFromService;
-
-                            }
-                            else {
-                                //Insert dummy data here
-                                for (var i = 0; i < 20; i++) {
-
-                                    var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock'  data-type='buildingBlock' data-id='" + i + "'>" +
-                                        "<i class='icon myblck'></i> " +
-                                        "<a href='#'> <span class='font_75 bbName'>" + i + "</span></a>" +
-                                        actionButtons.html() +
-                                        "</li>");
-
-                                    block.find(".imgicons.edit").click(function () {
-                                        var parentLi = $(this).closest(".draggableControl");
-                                        var editBox = parentLi.find(".editBox");
-                                        var bbName = parentLi.find(".bbName");
-                                        editBox.find(".txtBlockName").val(bbName.text());
-
-                                        editBox.show();
-
-                                        var closeBtn = editBox.find(".closebtn");
-                                        closeBtn.click(function () {
-                                            editBox.hide();
+                                        block.find(".imageicons").draggable({
+                                            disabled: true
                                         });
-
-                                        var saveBtn = editBox.find(".btnSave");
-                                        saveBtn.click(function () {
-                                            var txtBlockName = editBox.find(".txtBlockName");
-
-                                            var args = new Object();
-                                            args.BlockName = txtBlockName.val();
-                                            args.BlockID = parentLi.data("id");
-
-                                            //Call overridden Method here: will use when exposing properties to developer
-                                            if (options.OnBuildingBlockSave != null) {
-                                                options.OnBuildingBlockSave(args);
-
-                                                parentLi.find(".bbName").text(args.BlockName);
-                                                alert("Saved successfully");
-                                            }
-                                        });
-
+                                        count++;
                                     });
-
-                                    block.find(".imgicons.delete").click(function () {
-                                        var parentLi = $(this).closest(".draggableControl");
-
-                                        var delBox = parentLi.find(".delBox");
-                                        delBox.show();
-
-                                        var btnDelete = delBox.find(".btnDelete");
-                                        btnDelete.click(function () {
-
-                                            var args = new Object();
-                                            args.BlockID = parentLi.data("id");
-
-                                            //Call overridden Method here: will use when exposing properties to developer
-                                            if (options.OnBuildingBlockDelete != null) {
-                                                options.OnBuildingBlockDelete(args);
-
-                                                parentLi.remove();
-                                                alert("Deleted Successfully");
-                                            }
+                                    buildingBlocksGlobal = buildingBlocksFromService;                    
+                                    myElement.find("#DCResultDiv").hide();
+                            });
 
 
-                                        });
-
-                                        var closeBtn = delBox.find(".closebtn");
-                                        closeBtn.click(function () {
-                                            delBox.hide();
-                                        });
-
-                                    });
-
-                                    //Initialize with default draggable:
-                                    InitializeMainDraggableControls(block);
-
-                                    // listOfBuildingBlocksHtml.append(block);
-                                    ulBuildingBlocks.append(block);
-
-                                    block.find(".imageicons").draggable({
-                                        disabled: true
-                                    });
-
-
-                                }
-                            ///////
-                            }
-
-                            myElement.find("#DCResultDiv").hide();
+                            
                         }
-
-
-
-
-
-
-
                         /// For Forms handling
 
                         var _LoadFormBlocks = function (args) {
@@ -4874,16 +4777,26 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         myElement.on("click", "a.btnDeleteBB", function () {
                             var element = $(this);
+                            var block_id = element.data("id");
+                            //Call overridden Method here: will use when exposing properties to developer                            
+                            $.ajax({
+                                url: "/pms/io/publish/saveEditorData/?"+options._BMSTOKEN+"&type=deleteBlock&blockId=" +  block_id,
+                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                type: "POST",
+                                contentType: "application/json; charset=latin1",
+                                dataType: "json",
+                                cache: false,
+                                async: true,
+                                success: function (e) {       
+                                     myElement.find("[data-id='"+block_id+"']").fadeIn("fast",function(){
+                                         var obj = $(this);
+                                         obj.remove();
+                                     })
+                                },
+                                error: function (e) {                                            
+                                }
 
-                            var args = new Object();
-                            args.BlockID = element.data("id");
-
-                            //Call overridden Method here: will use when exposing properties to developer
-                            if (options.OnDeleteBuildingBlock != null) {
-                                options.OnDeleteBuildingBlock(args);
-                                mee._LoadBuildingBlocks(args);
-                                console.log("Deleted Successfully");
-                            }
+                            });                            
 
                             myElement.find(".BBDeleteDialog").hide();
 
@@ -5633,101 +5546,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 _app:this.app,
                 _BMSTOKEN:BMSTOKEN,
                 OnDropElementOnBuildingBlock: function (args,callBack) {
-
-                    //Save to Server
-                    if (args.buildingBlock != null) {
-                        //args.buildingBlock.Name; 
-                        //args.buildingBlock.Html;
-                        var URL = "/pms/io/publish/saveEditorData/?"+BMSTOKEN;
-                        var post_data = {
-                            name: args.buildingBlock.Name, 
-                            html: args.buildingBlock.Html.html() ,
-                            type:"addBlock"
-                        };
-                        if(_app.get("user").userId==='admin'){
-                            post_data['isAdmin']='Y';
-                        }
-                        $.post(URL,post_data
-                            )
-                        .done(callBack);
-
-                    }
-
-
                 },
                 LoadTemplate: function (args) {
 
                 },
-                LoadBuildingBlocks: function (args) {
-                    //GetBuildingBlocks
-
-                    $.ajax({
-                        url: "/pms/io/publish/getEditorData/?"+BMSTOKEN+"&type=listBlocks",
-                        data: "{}",
-                        type: "POST",
-                        contentType: "application/json; charset=latin1",
-                        dataType: "json",
-                        cache: false,
-                        async: false,
-                        success: function (e) {
-                            if(e.count != "0") {
-                                args.buildingBlocks = e.blocks[0];
-                            //console.log("GetBuildingBlocks success:"+ e);
-                            }
-                        },
-                        error: function (e) {
-                        //console.log("GetBuildingBlocks Failed:"+ e);
-                        }
-                    });
+                LoadBuildingBlocks: function (args) {                    
                 },
                 OnEditBuildingBlock: function (args) {
-
-                    //Save to Server
-                    if (args != null) {                                        
-                        $.ajax({
-                            url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=renameBlock&name=" + args.BlockName + "&blockId=" + args.BlockID,
-                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {
-                            //console.log("RenameBuilding success:" + e);
-                            //LoadBuildingBlocks();
-                            },
-                            error: function (e) {
-                            //console.log("RenameBuilding failed:" + e);
-                            }
-
-                        });
-
-                    }
-
-
                 },
-                OnDeleteBuildingBlock: function (args) {
-                    if (args != null) {
-                        console.log(args.BlockID);
-
-                        $.ajax({
-                            url: "/pms/io/publish/saveEditorData/?"+BMSTOKEN+"&type=deleteBlock&blockId=" + args.BlockID,
-                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: false,
-                            success: function (e) {                                            
-                            },
-                            error: function (e) {                                            
-                            }
-
-                        });
-                    }
+                OnDeleteBuildingBlock: function (args) {                   
                 },
-
-
                 LoadMyColors: function (args) {
                     //GetBuildingBlocks
 
