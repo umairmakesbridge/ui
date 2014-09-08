@@ -107,6 +107,40 @@
                             }))
 
                 },
+                 sortFactory:function(prop) {
+                    return function(a,b){ return a[prop].localeCompare(b[prop]); };
+                },
+                sortJson:function(myObj){
+                    var keys = [],
+                    k, i, len;
+
+                    for (k in myObj){
+                        if (myObj.hasOwnProperty(k)){
+                            keys.push(k);
+                        }
+                    }
+                     var reA = /[^a-zA-Z]/g;
+                    var reN = /[^0-9]/g;
+                    keys.sort(function(a,b){
+                            var aA = a.replace(reA, "");
+                            var bA = b.replace(reA, "");
+                            if(aA === bA) {
+                                var aN = parseInt(a.replace(reN, ""), 10);
+                                var bN = parseInt(b.replace(reN, ""), 10);
+                                return aN === bN ? 0 : aN > bN ? 1 : -1;
+                            } else {
+                                 return aA > bA ? 1 : -1;
+                            }
+                    });
+                      len = keys.length;
+                     var result = [];
+                    for (i = 0; i < len; i++)
+                    {
+                    k = keys[i];
+                    result.push(myObj[k]);
+                    }
+                    return result;
+                },
                 getSampleDataForArrangments: function(ev) {
                     var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     var data = {};
@@ -125,10 +159,11 @@
                                 _.each(_googleData,function(elem,idx){
                                      var _google = [];
                                      
-                                    _.each(elem[0],function(key,value){
+                                     var test =  that.sortJson(elem[0]);
+                                     _.each(elem[0],function(key,value){
                                         _google.push(key);
                                     });
-                                    _googleDataArray.push(_google);
+                                     _googleDataArray.push(test);
                                 }); 
                                  that.$('#panel_0').css('height', '');
                                 require(["crm/google/google_data"], _.bind(function(mapdataPage) {
@@ -154,13 +189,15 @@
                                 }));
                         },
                         setGoogleData: function() {
-                            if (this.parent.editImport || (this.parent.Import_page)) {
+                            if (this.parent.editImport || (this.parent.Import_page || this.parent.objGooglePage)) {
                                 var recipient_obj;
                                 if (this.parent.editImport) {
                                     recipient_obj = this.parent.editImport;
-                                } else {
+                                } else if(this.parent.objGooglePage) {
                                     recipient_obj = this.parent.Import_page.options.edit;
-                                } 
+                                } else{
+                                    recipient_obj = this.parent.objGooglePage.options.edit;
+                                }
                                 if (recipient_obj.filterType === "sheet") {
                                     this.$(":radio[value=sheet]").iCheck('check');
                                     this.$('#panel_0').slideDown();
