@@ -3127,6 +3127,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         URL = "/pms/io/netsuite/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";
                     }else if(source_type=="highrise"){
                         URL = "/pms/io/highrise/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";  
+                    }else if(source_type=="google"){
+                        URL = "/pms/io/google/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";  
                     }else{
                         URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=recipientType";
                     }
@@ -3137,8 +3139,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 if(camp_obj.app.checkError(rec_josn)){
                                      return false;
                                 }
-                                if(source_type=="highrise"){return rec_josn; 
-                                }
+                                if(source_type=="highrise"){return rec_josn; }
+                                if(source_type=="google"){return rec_josn; }
+                                
                                 camp_obj.states.step3.recipientDetial = rec_josn;
                                   
                                 if(rec_josn.type){ 
@@ -3180,7 +3183,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     }
                                     else if(source_type=="netsuite"){
                                         camp_obj.setNetSuiteData();
-                                    }
+                                    } 
                                 }
                                 camp_obj.states.step3.change = false;
                              }
@@ -3811,8 +3814,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var camp_obj = this;  
                         var google = this.app.getAppData("google");
                         this.app.showLoading("Checking Status...",this.$("#area_google_import"));  
-                        if(!google || google[0] == "err" || google.isGoogleUser=="N")
+                         if(!google || google[0] == "err" || google.isGoogleUser=="N")
                         {
+                            
                                 this.app.getData({
                                     "URL":"/pms/io/google/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
                                     "key":"google",
@@ -3821,10 +3825,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });
                         }
                         else{
-                            this.isAuthorize = true;
+                            
                             camp_obj.getWorksheet(this);
                         }
                         this.app.showLoading(false,this.$("#area_google_import"));  
+                },
+                checkGoogleStatus:function(){
+                    this.app.getData({
+                                    "URL":"/pms/io/google/setup/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                                    "key":"google",
+                                    "callback":_.bind(this.getWorksheet,this),
+                                    "errorCallback":_.bind(this.googleErrorCallBack,this),
+                    });
                 },
                 showWelcomeScreen:function(){
                     var active_ws = this.$el.parents(".ws-content");
@@ -3839,6 +3851,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 googleErrorCallBack:function(){
+                    var that = this;
                      var active_ws = this.$el.parents(".ws-content");
                     active_ws.find('#google_welcome').show();
                     active_ws.find("#google_welcome").find("#btnGoogleLogin").on('click',function(){
@@ -3863,7 +3876,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              var intervalID = window.setInterval(function(){
                                 if (childWindow && childWindow.closed) {
                                     window.clearInterval(intervalID);
-                                    that.getWorksheet();
+                                    that.showGoogle();
                                     //that.parent.parent.init(true);
                                 }
                              },200);
@@ -3874,34 +3887,57 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
 
                 },
                 googleImport:function(){
-                   this.editImport=data;
+                  
                     var active_ws = this.$el.parents(".ws-content");
-                      active_ws.find('#google_welcome').hide();
+                    active_ws.find('#google_welcome').hide();
                     active_ws.find("#google_import_container").show();
                     active_ws.find("#google_import_container").html('');
                     var that = this;
-                    this.app.showLoading("Loading Google...",this.$('#google_import_container'));                                  
-                    require(["crm/google/import"],_.bind(function(page){   
-                         this.objGooglePage = new page({page:this,spreadSheet:that.spreadSheets,edit:that.states.step3.recipientDetial});
-                         that.Import_page =  this.objGooglePage;
-                          active_ws.find("#google_import_container").html(this.objGooglePage.$el);
-                         this.app.showLoading(false,this.$('#google_import_container')); 
-                    },this));
+                    this.app.showLoading("Loading Google...",this.$('#google_import_container')); 
+                    var URL = "/pms/io/google/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&campNum="+this.camp_id+"&type=import";  
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                             that.app.showLoading(false,that.$el.parents(".ws-content"));                              
+                             if(xhr && xhr.responseText){                               
+                                var data = jQuery.parseJSON(xhr.responseText);   
+                                  
+                                      require(["crm/google/import"],_.bind(function(page){   
+                                        
+                                        that.objGooglePage = null;
+                                        that.objGooglePage = new page({page:that,spreadSheet:that.spreadSheets,edit:data});
+                                        active_ws.find("#google_import_container").html(that.objGooglePage.$el);
+                                        that.app.showLoading(false,that.$('#google_import_container')); 
+                                    },this));
+                                    }
+                                    if(that.app.checkError(data)){
+                                     return false;
+                                   }
+                        });
+                  
                     that.googleBindEvents();
-                }, getWorksheet: function() {
-                    var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
-                    var data = {
-                        type: 'spreadsheetList'
-                    }
-                     var that = this;
-                    $.getJSON(URL, data)
-                            .done(_.bind(function(json) {
-                                 that.spreadSheets = json.spreadsheetList[0];
-                                 that.googleImport();
-                              }, this))
-                            .fail(_.bind(function(jqxhr, textStatus, error) {
-                                console.log("Request Failed: " + err);
-                            }, this));
+                }, 
+                getWorksheet: function() {
+                        var google = this.app.getAppData("google");
+                         if(!google || google[0] == "err" || google.isGoogleUser=="N"){
+                            this.showWelcomeScreen();
+                            return;
+                        }
+                        this.isAuthorize = true;
+                         this.app.showLoading("Loading Google Data...",this.$('#google_import_container')); 
+                         var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
+                         var data = {
+                             type: 'spreadsheetList'
+                         }
+                          var that = this;
+                         $.getJSON(URL, data)
+                                 .done(_.bind(function(json) {
+                                      that.spreadSheets = json.spreadsheetList[0];
+                                      that.app.showLoading(false,that.$('#google_import_container')); 
+                                      that.googleImport();
+                                   }, this))
+                                 .fail(_.bind(function(jqxhr, textStatus, error) {
+                                     console.log("Request Failed: " + err);
+                                 }, this));
+                     
                 }, 
                 googleBindEvents:function(){
                    var that = this;
@@ -3917,7 +3953,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 });                              
                                 this.app.showLoading("Loading Mapping...",dialog.getBody());                                  
                                 require(["crm/google/mapping"],function(mappingPage){                                     
-                                     var mPage = new mappingPage({camp:that,app:that.app,dialog:dialog});
+                                     var mPage = new mappingPage({page:that,app:that.app,dialog:dialog});
                                      dialog.getBody().html(mPage.$el);
                                      dialog.saveCallBack(_.bind(mPage.saveCall,mPage));
                                      dialog.getBody().find('.bDiv').css('height','320px');
@@ -3934,9 +3970,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     });
                                 this.app.showLoading("Loading Login...",dialog.getBody());                                                                      
                                 require(["crm/google/login"],function(loginPage){                                        
-                                    var lPage = new loginPage({camp:that,app:that.app,dialog:dialog,isAuthorize:that.isAuthorize});
+                                    var lPage = new loginPage({page:that,app:that.app,dialog:dialog,isAuthorize:that.isAuthorize});
                                     dialog.getBody().html(lPage.$el);
-                                    dialog.getBody().find(".span12").css('width','600px');
+                                    dialog.getBody().find(".span6").css('width','100%');
+                                    dialog.getBody().find(".second-div").remove();
                                     
                                 })
                                 this.app.showLoading(false,dialog.getBody());
@@ -3990,7 +4027,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                       return 0;
                   }
                   if(valid !==0){
-                        this.objGooglePage.saveFilter('google',true);
+                        this.objGooglePage.saveFilter('google',false);
                         proceed = 0;
                     }
                     

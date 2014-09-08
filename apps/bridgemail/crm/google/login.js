@@ -59,7 +59,12 @@ define(['text!crm/google/html/login.html'],
                              var intervalID = window.setInterval(function(){
                                 if (childWindow && childWindow.closed) {
                                     window.clearInterval(intervalID);
-                                    that.parent.parent.init(true);
+                                    if(that.options.dialog){
+                                      that.parent.checkGoogleStatus();
+                                      that.options.dialog.hide();
+                                    }else{
+                                     that.parent.parent.init(true);
+                                    }
                                 }
                              },200);
                             
@@ -88,7 +93,12 @@ define(['text!crm/google/html/login.html'],
                             return false;
                         }
                         if (urls[0] !== "err") {
-                             that.parent.parent.init(true);
+                            if(that.options.dialog){
+                                      that.parent.checkGoogleStatus();
+                                      that.options.dialog.hide();
+                                    }else{
+                                     that.parent.parent.init(true);
+                                    }
                             
                         }
 
@@ -121,7 +131,12 @@ define(['text!crm/google/html/login.html'],
                              var intervalID = window.setInterval(function(){
                                 if (childWindow && childWindow.closed) {
                                     window.clearInterval(intervalID);
-                                    that.parent.parent.init(true);
+                                   if(that.options.dialog){
+                                      that.parent.checkGoogleStatus();
+                                      that.options.dialog.hide();
+                                    }else{
+                                     that.parent.parent.init(true);
+                                    }
                                     
                                 }
                              },200);

@@ -32,6 +32,7 @@
                 render: function() {
                     if (typeof this.options.edit != "undefined") {
                         this.recipientDetial = this.options.edit;
+                        console.log(this.recipientDetial + 'I am here inide');
                     }
                     this.$el.html(this.template({}));
                      this.$(":radio[value=importall]").iCheck('check');
@@ -189,14 +190,15 @@
                                 }));
                         },
                         setGoogleData: function() {
-                            if (this.parent.editImport || (this.parent.Import_page || this.parent.objGooglePage)) {
+                            if (this.parent.editImport || (this.parent.Import_page || typeof this.options.edit != "undefined")) {
                                 var recipient_obj;
+                                
                                 if (this.parent.editImport) {
                                     recipient_obj = this.parent.editImport;
-                                } else if(this.parent.objGooglePage) {
+                                } else if(typeof this.options.edit != "undefined"){
+                                    recipient_obj = this.options.edit;
+                                }else{
                                     recipient_obj = this.parent.Import_page.options.edit;
-                                } else{
-                                    recipient_obj = this.parent.objGooglePage.options.edit;
                                 }
                                 if (recipient_obj.filterType === "sheet") {
                                     this.$(":radio[value=sheet]").iCheck('check');
