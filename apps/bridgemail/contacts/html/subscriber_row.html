@@ -10,8 +10,8 @@
     <div class=" tagscont"> 
         <ul>
           <% _.each(model.get('tags').split(","),function(t){ %>  
-            <li><a  class="tag"><%- t %></a> </li>
-          <% })%>          
+            <li><a  class="tag"><%- this.app.decodeHTML(t) %></a> </li>
+          <% },this)%>          
         </ul>
       </div><!--   tagscont  --> 
        <div class="leftboxbtm" style="display:none">
