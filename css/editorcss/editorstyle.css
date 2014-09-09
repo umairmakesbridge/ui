@@ -266,10 +266,8 @@ a,
     position: relative;
 }
 
-.MEE_EDITOR .accordian-content {  background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #A9C2D5;
+.MEE_EDITOR .accordian-content {  background: none repeat scroll 0 0 #FFFFFF;    
 position:relative;
-
 -webkit-border-radius:  2px 2px;
 	-moz-border-radius: 2px 2px;
 	border-radius:  2px 2px; }
@@ -1743,7 +1741,7 @@ ul.linkresults li:hover { background:#dcf3fe; }
     position: absolute;
  right: -28px;
     top: 32px;
-    width: 65px;
+    width: 100px;
 	border:2px solid #BADAEC;	
     z-index: 999;
 	-webkit-border-radius: 2px;
@@ -1949,6 +1947,7 @@ border-top:10px solid  #03d3ff;
 .builder-panel .ui-accordion .ui-accordion-content,.style-panel .ui-accordion .ui-accordion-content
 {
     padding:0px;
+    border: 1px solid #A9C2D5;
 /*	  overflow-x: hidden;
   max-height: 300px;
     overflow-y: scroll;*/}
@@ -2080,7 +2079,8 @@ ul.socialbtns li .radiopanelinput.checked {
  
  
  .moredd i.icon.link {background-position: -300px 0px;}
-  .moredd i.icon.link:hover { opacity:1; }
+ .moredd i.icon.unlink {background-position: -330px 0px;}
+ .moredd i.icon.link:hover { opacity:1; }
  .moredd i.icon.newwin { background: url("../images/newwin.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
  
  
@@ -2191,4 +2191,7 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  .add-block{
      height:198px;
+ }
+ .content_containerLinkGUI .errortext{
+     right:3px;
  }

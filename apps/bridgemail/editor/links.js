@@ -28,7 +28,8 @@ function (template) {
                     this.dialog = this.options.dialog;
                     this.linkType = this.options.linkType;
                     this.textEditor = this.options.div;
-                    this.tiny_editor_selection = null;                    
+                    this.tiny_editor_selection = null;    
+                    this.app = this.options.app;
                     this.systemLinks={
                         "fwdToFrndLink":"{{BMS_TELL_A_FRIEND_URL}}",
                         "unsubLink":"{{BMS_UNSUBSCRIBE_URL}}",
@@ -79,13 +80,16 @@ function (template) {
               this.$("div."+obj.attr("id")+"Div").show();      
             },
             insertLink:function(dialog){
+                var imgLink = null;
                 if (this.linkType == "image") {
-                    this.attachLinkToImg();
+                    imgLink = this.attachLinkToImg();
                 }
                 else if (this.linkType == "text") {
-                    this.attachLinkToText();
-                }                
-                dialog.hide();                                
+                    imgLink = this.attachLinkToText();
+                }           
+                if(imgLink!==false){
+                    dialog.hide();      
+                }
             },
             showHyperLink:function(){
                if (this.linkType == "image") { 
@@ -167,7 +171,7 @@ function (template) {
                 }
             },
             getLink:function(){
-                var myLink;
+                var myLink = null;
                 if(this.activeTab == "_addHyperLink"){
                    myLink = this.getURL();                
                 } else if(this.activeTab == "_addEmailLink"){
@@ -199,6 +203,7 @@ function (template) {
                         imgObj.wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
                     }
                 }
+                return myImageLink;
             },
             attachLinkToText:function(){
                  var postBackupLink = "";
@@ -218,7 +223,7 @@ function (template) {
                     this.tiny_editor_selection.setContent(myTextLink);
                 }
                 //tinymce.activeEditor.focus();               
-                 
+                return postBackupLink;
             },
             previewLink:function(){
                 var link = this.getURL(true);
@@ -279,16 +284,29 @@ function (template) {
                         //set url without link name param
                         lineNameStr = "";
                     }
-                    if($.trim(_hyperlinkInput.val())!==""){
-                        if ( (_hyperlinkInput.val()).startsWith("http://")){
-                            link = _hyperlinkInput.val() + lineNameStr;
-                        }
-                        else if( (_hyperlinkInput.val()).startsWith("https://") ){
-                            link = _hyperlinkInput.val() + lineNameStr;
-                        }
-                        else{    
-                            link = "http://" + _hyperlinkInput.val() + lineNameStr;
+                    var url_val = $.trim(_hyperlinkInput.val());
+                    if(url_val!=="" && (/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url_val) ||url_val=="#" )){
+                        if(url_val!=="#"){ 
+                            if ( url_val.startsWith("http://")){
+                                link = url_val + lineNameStr;
+                            }
+                            else if( (url_val).startsWith("https://") ){
+                                link = url_val + lineNameStr;
+                            }
+                            else{    
+                                link = "http://" + url_val + lineNameStr;
+                           }
                        }
+                       else{
+                           link ="#";
+                       }
+                   }
+                   else{
+                       this.app.showError({
+                            control:this.$('.url-container'),
+                            message:'Please provide a valid URL.'
+                         });
+                       link = false;
                    }
                    return link;
             },
@@ -297,13 +315,20 @@ function (template) {
                 var emailLink = $.trim(this.$("#emailLinkName").val());
                 var emailSubject = $.trim(this.$("#emailLinkSubject").val());
                 var emailSubjectStr = emailSubject ?("?subject="+emailSubject):"";
-                if(emailLink){
+                if(emailLink && /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailLink)){
                     if (emailLink.startsWith("mailto:")){
                         link = emailLink+emailSubjectStr;
                     }
                     else{
                         link = "mailto:"+emailLink+emailSubjectStr;
                     }
+                }
+                else{
+                    this.app.showError({
+                            control:this.$('.email-container'),
+                            message:'Please provide a valid email address.'
+                         });
+                    link = false;
                 }
                 return link;
             },

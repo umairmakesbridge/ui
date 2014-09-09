@@ -402,38 +402,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                        
 
                             ﻿//[ -------------------------  Sohaib -----------------------------------]
-
-                            ////3
-
-                            // For Image Titling Dialog
-                            function openImageTitleDialog(uiElement) {
-                                $("#imageTitleDialog").dialog({
-                                    closeOnEscape: false,
-                                    autoOpen: false,
-                                    modal: true,
-                                    //z-index: 500,
-                                    buttons: {
-                                        "Set Title": function () {
-
-                                            this.imageNewTitle = $("#imageTitleDialog").find("#imageTitleText").val().trim();
-                                            $(uiElement).parent().parent().parent().parent().find("img").attr("title", this.imageNewTitle);
-                                            $("#imageTitleDialog").dialog("close");
-
-                                        },
-                                        Cancel: function () {
-                                            $("#imageTitleDialog").dialog("close");
-
-                                        }
-                                    },
-
-                                    width: 450
-                                });
-
-                                $("#imageTitleDialog").find("#imageTitleText").val("");
-                                $("#imageTitleDialog").dialog("open");
-                            }
-                   
-
+                            
 
                              //.................... Send Server Request ................................
                             function SendServerRequest(requestProperties, errorCallBack) {
@@ -3002,7 +2971,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                             function initializeiCheck(parent) {
                                 $('input').iCheck('destroy');
-                                $('input.checkpanel').iCheck('destroy');
+                                $('input.checkpanel').iCheck('destrimageToolbaroy');
                                 $('input.radiopanel').iCheck('destroy');
 
                                 parent.find('input').iCheck({
@@ -3706,8 +3675,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             });
                         }
                         mee.addUpdateContentBlock = function(args){
+                            var dialog_title = mee._LastSelectedBuildingBlock?"Edit Block":"Add Block";
                             var dialog = options._app.showDialog({
-                                    title:'Add Block',
+                                    title:dialog_title,
                                     css:{
                                         "width":"600px",
                                         "margin-left":"-300px",
@@ -3885,7 +3855,44 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 swHandle.show();
                             },
                             setImageTitle: function (workingObject) {
-                                openImageTitleDialog(workingObject);
+                                var dialog = options._app.showDialog({
+                                    title:'Set Title',
+                                    css:{
+                                        "width":"500px",
+                                        "margin-left":"-250px",
+                                        "top":"20%"
+                                    },
+                                    headerEditable:false,
+                                    headerIcon : 'template',
+                                    bodyCss:{
+                                        "min-height":"100px"
+                                        },                                    
+                                    buttons: {
+                                        saveBtn:{
+                                            text:'Set'
+                                        }
+                                    }
+                                });
+                                var _newTitleHTML = '<div class="row campname-container" style="margin-top: 24px;width:96%">'
+                                    _newTitleHTML += '<label style="width:20%;">Title:</label>'
+                                    _newTitleHTML += '<div class="inputcont" style="text-align:right;"><input type="text" id="image_title" placeholder="Enter title here" style="width:70%;" /></div>'
+                                    _newTitleHTML += '</div>';
+                                _newTitleHTML = $(_newTitleHTML) ;   
+                                dialog.saveCallBack(function(){
+                                    var title_text =_newTitleHTML.find("input#image_title").val();
+                                    if(title_text){
+                                        $(workingObject).attr("title",title_text);
+                                        dialog.hide();
+                                    }
+                                    else{
+                                        _newTitleHTML.find("input#image_title").focus();
+                                    }
+                                 });
+                                dialog.getBody().append(_newTitleHTML);
+                                if($(workingObject).attr("title")){
+                                    _newTitleHTML.find("input#image_title").val($(workingObject).attr("title"));
+                                }
+                                _newTitleHTML.find("input#image_title").focus();
                             }
                         }
                         //========================= End Sohaib Nadeem =====================////
@@ -3915,6 +3922,21 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             //imageFunctionality.openLinkGUI(myElement.find("#imageDataSavingObject").data("myWorkingObject"));
                             showLinkGUI();                                                                
                             makeCloneAndRegister();
+                            myElement.find("#imageToolbar").hide();
+                            return false;
+                        });
+                        myElement.find(".ImageToolbarUnLinkClass").click(function () {
+                            var selectObj =myElement.find("#imageDataSavingObject").data("myWorkingObject");
+                            if(selectObj){
+                                selectObj =$(selectObj);
+                                var imgObj = selectObj.is("img")?selectObj:selectObj.find("img");
+                                var _html = imgObj.clone(true);
+                                if(imgObj.parent().is("a")){                                    
+                                   imgObj.parent().replaceWith(_html);                                   
+                                }                        
+                             makeCloneAndRegister();   
+                            }                               
+                            myElement.find("#imageToolbar").hide();
                             return false;
                         });
                         myElement.find(".ImageToolbarTitleSetClass").click(function () {
@@ -3976,11 +3998,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         }
 
                         var OnClickedOnElement = function (event) {
-
                             myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
                             myElement.find("#linkTrack").data("linkObject", "image");
                             myElement.find("#imageToolbar").addClass("imageToolbar-menu");
                             myElement.find("#imageToolbar").show();
+                            if($(event.target).parent().prop("tagName").toLowerCase()=="a"){
+                                myElement.find("#imageToolbar").css("width","366px");
+                                myElement.find("#imageToolbar .ImageToolbarUnLinkClass").show();
+                            }
+                            else{
+                                myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
+                                myElement.find("#imageToolbar").css("width","310px");
+                            }
                             myElement.find("#imageToolbar").css({
                                 "margin-top": ($(event.target).parent().parent().offset().top-topMinus-31), 
                                 "margin-left": ($(event.target).parent().parent().offset().left-leftMinus)
@@ -4110,7 +4139,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 showClass ="";
                             }
                             var li = "<ul>";
-                            li += "<li><a href='#' class='btn-green btnContentEditName'><i class='icon imgicons link linkOpen'></i></a></li>";
+                            li += "<li><a class='btn-green'><i class='icon imgicons link linkOpen'></i></a></li>";
+                            li += "<li><a class='btn-red'><i class='icon imgicons unlink linkRemove'></i></a></li>";
                             li += "<li><a target='_new' "+url_string+" class='btn-blue btnContentDelete "+showClass+"'><i class='icon newwin' data-url='"+ url +"'></i></a></li>";
                             li += "</ul>";
 
@@ -4751,6 +4781,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         myElement.on("click", "i.linkOpen", function () {
                             myElement.find("#linkTrack").data("linkObject", "text");
                             showLinkGUI();
+                            myElement.find(".alertButtons").hide();                                
+                        });
+                        myElement.on("click", "i.linkRemove", function () {                            
+                            var selected_anchor = tinyMCE.activeEditor.selection.getNode();
+                            if(selected_anchor.tagName.toLowerCase()=="a"){
+                                var $selected_anchor= $(selected_anchor);
+                                var _html = $selected_anchor.html();
+                                $selected_anchor.replaceWith(_html);
+                            }
+                                
                             myElement.find(".alertButtons").hide();                                
                         });
                         myElement.find(".alertButtons").mousedown(function(e){

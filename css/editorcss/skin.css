@@ -1441,6 +1441,9 @@ font-style:normal
 	content:"\e011"
 }
 .mce-i-unlink:before {
+	content:"\e011"
+}
+.mce-i-unlink:before {
 	content:"\e012"
 }
 .mce-i-anchor:before {
@@ -1664,6 +1667,7 @@ div.mce-tinymce-inline {
 
 
 .mce-i-link {background-position: -300px -0px;}
+.mce-i-unlink {background-position: -330px -0px;}
 
 
 
