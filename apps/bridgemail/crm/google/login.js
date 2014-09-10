@@ -64,6 +64,7 @@ define(['text!crm/google/html/login.html'],
                                       that.options.dialog.hide();
                                     }else{
                                      that.parent.parent.init(true);
+                                     that.parent.parent.loadMyImportsArea();
                                     }
                                 }
                              },200);
@@ -75,7 +76,7 @@ define(['text!crm/google/html/login.html'],
                 },
                  revokeLogin: function() { 
                             this.app.showAlertPopup({heading: 'Revoke Access',
-                                detail: "By revoking access to your Google Account, all of your running imports will be deleted automatically.<br>Are you sure you want to revoke this account?",
+                                detail: "By revoking access to your Google Account, all of your running imports will be deleted automatically.<br><br>Are you sure you want to revoke this account?",
                                 text:"Revoke",
                                 icon:"delete",
                                 callback: _.bind(function() {
@@ -98,6 +99,7 @@ define(['text!crm/google/html/login.html'],
                                       that.options.dialog.hide();
                                     }else{
                                      that.parent.parent.init(true);
+                                     that.parent.parent.loadMyImportsArea();
                                     }
                             
                         }
@@ -107,7 +109,7 @@ define(['text!crm/google/html/login.html'],
                 },
                  changeLogin: function() { 
                             this.app.showAlertPopup({heading: 'Confirm Change',
-                                detail: "By changing your Google Account, all of your running imports will be deleted automatically.</br>Are you sure you want to perform this action?",
+                                detail: "By changing your Google Account, all of your running imports will be deleted automatically.</br></br>Are you sure you want to perform this action?",
                                 text:"Change",
                                 icon:"edit",
                                 callback: _.bind(function() {
@@ -136,6 +138,7 @@ define(['text!crm/google/html/login.html'],
                                       that.options.dialog.hide();
                                     }else{
                                      that.parent.parent.init(true);
+                                     that.parent.parent.loadMyImportsArea();
                                     }
                                     
                                 }

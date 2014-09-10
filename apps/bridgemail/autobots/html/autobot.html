@@ -3,6 +3,7 @@
         <%=this.getAutobotImage()%>
     </div>
 </td>
+
 <td width="100%"><div>
         <div class="name-type">
             <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>"><%=this.model.get('label')%></a><%=this.getStatus()%> 
@@ -15,6 +16,17 @@
                     <% })%>
                 </ul>
             </div>
+        </div>
+    </div>
+</td>
+<td width="90px"><div>
+        <div class="mail">
+             <% if(this.model.get('status')==='P' || this.model.get('status')==='Q'){  %>    
+                <img alt="" class="recurring2img showprogressnt" src="<%- this.options.app.get('path')%>img/recurring2.gif">
+                <div class="prgressbar" style="left:50%;margin-left:-40px">    
+                    <span style="width: 1px;" class="prgrss <%- this.model.get("botId.checksum")%>"> </span>
+                </div>
+            <% }  %>  
         </div>
     </div>
 </td>

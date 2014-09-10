@@ -415,32 +415,63 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     if (tags != '' && !$.isArray(tags)) {
                         tags = tags.toString().split(',');
                     }
-                    for (var i = 0; i < tags.length; i++) {
-
-                        str = str + "<li id='li_" + i + "' class='action' checksum='" + tags[i] + "'>";
-                        str = str + "<a style='min-width: 120px;' class='tag'><span>" + tags[i] + "</span></a>";
-                        //str = str + "<strong class='badge' style='line-height:35px!important;'>1</strong>";
-                        str = str + "<a class='btn-red move-row dont-use showtooltip' data-original-title='Click to remove this tag'>";
-                        str = str + "<span>Remove</span><i class='icon cross'></i></a>";
-                        str = str + "</li>";
-                    }
-                    str = str + "</ul>";
-                    
-                    str = str + "  <a  class='addtag add btn-green add-tag '  style='margin:4px 10px 0px;'>";
-                    str = str + "<span class='right'>Add Tag</span><i class='icon plus left'></i></a> ";
-                    str = str + "</div>";
+                    console.log(tags);
+                    var editTags = tags;
                     var that = this;
-                    this.$el.find("#divtags").html(str);
-                    this.$el.find("#divtags .dont-use").on('click', function() {
-                        if (that.options.model.get('status') != "D")
-                            return false;
-                        $(this).parents("li.action").remove();
-                    });
+                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=subscriberTagCountList";
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        if (xhr && xhr.responseText) {
+                            var tags_array = jQuery.parseJSON(xhr.responseText);
+                            var tags_html = '';
+                            if (tags_array[0] != 'err'){
+                                that.app.setAppData('tags', tags_array);
+                                     
+                                $.each(tags_array.tagList[0], function(key, val) {
+                                    console.log(($.inArray(val[0].tag, editTags)));
+                                    if ($.inArray(val[0].tag, editTags) != -1){
+                                            editTags = jQuery.grep(editTags, function(value) {
+                                            return value != val[0].tag;
+                                        });
+                                            
+                                        str = str + "<li id='li_" + key + "' class='action' checksum='" + val[0].tag + "'>";
+                                        str = str + "<a style='min-width: 120px;' class='tag'><span>" + val[0].tag  + "</span>";
+                                         str = str + "<strong class='badge' style='line-height:35px!important;'>"+val[0].subCount+"</strong></a>";
+                                        str = str + "<a class='btn-red move-row dont-use showtooltip' data-original-title='Click to remove this tag'>";
+                                        str = str + "<span>Remove</span><i class='icon cross'></i></a>";
+                                        str = str + "</li>";
+                                    }
+                                        
+                                });
+                                _.each(editTags,function(elem, idx){
+                                    if(elem !=""){
+                                        str = str + "<li id='li_" + elem + "' class='action' checksum='" + elem + "'>";
+                                        str = str + "<a style='min-width: 120px;' class='tag'><span>" + elem  + "</span>";
+                                        str = str + "<strong class='badge' style='line-height:35px!important;'>0</strong></a>";
+                                        str = str + "<a class='btn-red move-row dont-use showtooltip' data-original-title='Click to remove this tag'>";
+                                        str = str + "<span>Remove</span><i class='icon cross'></i></a>";
+                                        str = str + "</li>";
+                                    }
+                                })
+                                  
+                                    str = str + "</ul>";
 
-                    if (!firstTime && tags != "") {
-                        this.tags = tags.join(",");
-                        this.saveTagAutobot(true);
-                    }
+                                    str = str + "  <a  class='addtag add btn-green add-tag '  style='margin:4px 10px 0px;'>";
+                                    str = str + "<span class='right'>Add Tag</span><i class='icon plus left'></i></a> ";
+                                    str = str + "</div>";
+                                     that.$el.find("#divtags").html(str);
+                                    that.$el.find("#divtags .dont-use").on('click', function() {
+                                        if (that.options.model.get('status') != "D")
+                                            return false;
+                                        $(this).parents("li.action").remove();
+                                    });
+
+                                    if (!firstTime && tags != "") {
+                                        that.tags = tags.join(",");
+                                        that.saveTagAutobot(true);
+                                    }
+                            }
+                        }});
+                  
                 },
                 changeTargetText: function() {
                     if (this.targetsModel) {

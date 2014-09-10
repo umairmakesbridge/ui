@@ -40,7 +40,7 @@
                     this.initControl();
                     this.$(".ui-accordion").accordion({header: "h3", collapsible: false, active: true});
                     this.$('#panel_0').slideDown();
-                    this.$("#ddlspreadsheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px", disable_search: "true"});
+                    this.$("#ddlspreadsheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px"});
                 },
                 initControl: function() {
                     var google = this.app.getAppData("google"); 
@@ -76,7 +76,7 @@
                                       
                     var that = this;
                     if (!that.$("#ddlworksheet_chosen").length){
-                        that.$("#ddlworksheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px", disable_search: "true"});
+                        that.$("#ddlworksheet").chosen({no_results_text: 'Oops, nothing found!', width: "250px"});
                     }
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {

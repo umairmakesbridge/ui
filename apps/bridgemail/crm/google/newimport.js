@@ -48,15 +48,12 @@ function (Wizard,template,moment) {
                     this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
                     this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     this.getWorksheet();
-                    this.getLists();
-                    this.setHeaderDialog();
-                    this.showHideButton(false);
+                   
                                       
                 },                
                 getLists:function(){
                     if(!this.app.getAppData("lists")){
-                        this.app.showLoading("Loading Lists...",this.$(".bms-lists"));                                    
-                        this.app.getData({
+                         this.app.getData({
                             "URL":"/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all",
                             "key":"lists",
                             "callback":_.bind(this.createListTable,this)
@@ -555,6 +552,7 @@ function (Wizard,template,moment) {
                     }
                 },
                  getWorksheet: function() {
+                    this.app.showLoading("Loading Lists...",this.$(".bms-lists")); 
                     var URL = '/pms/io/google/getData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     var data = {
                         type: 'spreadsheetList'
@@ -562,9 +560,11 @@ function (Wizard,template,moment) {
                      var that = this;
                     $.getJSON(URL, data)
                             .done(_.bind(function(json) {
-                                that.app.showLoading(false, that.parent.$el);
-                                that.spreadSheets = json.spreadsheetList[0];
-                              }, this))
+                                 that.spreadSheets = json.spreadsheetList[0];
+                                 that.getLists();
+                                that.setHeaderDialog();
+                                that.showHideButton(false);
+                                          }, this))
                             .fail(_.bind(function(jqxhr, textStatus, error) {
                                 console.log("Request Failed: " + err);
                             }, this));

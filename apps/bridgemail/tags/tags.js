@@ -10,6 +10,8 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                     curview.$el.find(".col2 .rightcol li").each(function(i) {
                         tags += $(this).find("a:nth-child(1) span").text() + ',';
                     });
+                    
+                    
                     var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                     var  params = {type: 'tags', botId: this.options.botId}
                      $.post(URL, params)
@@ -35,6 +37,7 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                 },
                 loadTags: function() {
                     var app = this.app;
+                    var that = this;
                     var curview = this;
                     var campview = this.campview;
                     app.showLoading("Loading Tags...", curview.$el.find('.leftcol'));
@@ -69,9 +72,32 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                                     });
 
                                     var tags = curview.options.tags;
-
                                     for (var i = 0; i < tags.length; i++) {
-                                        curview.$el.find(".col1 li[checksum='" + tags[i] + "'] .move-row").click();
+                                        if(curview.$el.find(".col1 li[checksum='" + tags[i] + "'] .move-row").length  > 0){
+                                          curview.$el.find(".col1 li[checksum='" + tags[i] + "'] .move-row").click();
+                                        }else if(tags[i] !="" ){
+                                             
+                                         var tags_html =  '<li class="action new-added"  checksum="' + tags[i] + '"><a class="tag"><span>' + tags[i] + '</span><strong class="badge">0</strong></a> <a style="display: inline;" class="move-row btn-red class-remove"><i class="icon back left"></i><span>Remove</span></a></li>';
+                                        that.$el.find(".col2 .rightcol ul").append(tags_html);
+                                        that.$el.find(".col2 .rightcol ul li .class-remove").on('click',function(){
+                                        $(this).parents('li.action').remove();
+                                        var maintags = '';
+                                       
+                                        
+                                        that.$el.find(".col2 .rightcol li").each(function(i) {
+                                        maintags += $(this).find("a:nth-child(1) span").text() + ',';
+                                        });
+                                        var post_data = {botId: that.options.botId, type: "update",actionTags: maintags};
+                                        var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + that.app.get('bms_token');
+
+                                        $.post(URL, post_data)
+                                        .done(function(data) {
+
+                                        });
+
+                                        });
+                                       
+                                        }
                                     }
                                 } else {
                                     campview.$el.find("#area_choose_tags").removeData("mapping");
@@ -95,23 +121,12 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                         movingElement: 'li',
                         iconsource: 'tags'
                     });
-                    this.$el.find('div#tagsrecpssearch').searchcontrol({
-                        id: 'tag-recps-search',
-                        width: '210px',
-                        height: '25px',
-                        placeholder: 'Search recipient tags',
-                        gridcontainer: 'tagsrecpslist ul',
-                        showicon: 'yes',
-                        movingElement: 'li',
-                        iconsource: 'tags'
-                    });
+                    
                     if (this.$el.find('#tagsrecpslist ul li').length == 0)
                         this.$el.find('#tag-recps-search').attr('disabled', 'disabled');
                     else
                         this.$el.find('#tag-recps-search').attr('disabled', '');
-                    
-                    console.log(this.options.botId);
-                    this.$(".template-tag").tags({app: this.options.app,
+                     this.$(".template-tag").tags({app: this.options.app,
                        url: "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token'),
                         params: {type: 'tags', actionTags: '', botId: this.options.botId}
                         , showAddButton: true,

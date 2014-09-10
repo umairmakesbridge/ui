@@ -32,6 +32,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.ws_header = "";
                     this.total_fetch = 0;
                     this.total = 0;
+                    this.checkStatus = [];
                     this.offsetLength = 0;
                     this.actionType = "";
                     this.sortText = "";
@@ -136,6 +137,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                 var autoBotTiles = new AutobotTile({model: model, app: that.options.app, page: that});
                                 that.$el.find(".thumbnails").append(autoBotTiles.el)
                                 autoBotTiles.tmPr.trimTags();
+                                 if(model.get("status")=="P" || model.get("status")=="Q"){                                
+                                        that.callDispenseStats(model.get("botId.encode"),model.get("botId.checksum"),true);
+                                 }
                             })
                             that.$el.find('.tag').on('click', function() {
                                 var html = $(this).html();
@@ -144,6 +148,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                 that.$el.find('#clearsearch').show();
                                 that.fetchBots();
                             });
+                            
                             that.offsetLength = data.length;
                             that.total_fetch = that.total_fetch + data.length;
                             if (that.total_fetch < parseInt(that.objAutobots.total)) {
@@ -388,7 +393,43 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                that.basicFormats = data;
                           }
                       }).fail(function() { console.log( "error in basic fields" ); });    
+                },
+                  dispenseStats:function(){
+                      var that = this;
+                        if(this.checkStatus.length){
+                            for(var i=0;i<this.checkStatus.length;i++){
+                                var URL = '/pms/io/trigger/getAutobotData/?type=dispenseStats&botId='+this.checkStatus[i].id+'&BMS_REQ_TK='+this.app.get('bms_token')
+                                 jQuery.getJSON(URL,  _.bind(function(_i, state, xhr){                                                        
+                                    var _json = state;   
+                                    if(this.app.checkError(_json)){
+                                        return false;
+                                    }
+                                    if(this.$("."+this.checkStatus[_i].checksum).length){
+                                        that.$("."+this.checkStatus[_i].checksum).css("width",_json.percentageDone+"%");
+                                        if(_json.dispensing == "N"){
+                                            if(that.checkStatus[_i].length > 0){
+                                                that.checkStatus[_i].splice(i,1);
+                                            }   
+                                            that.fetchBots()
+                                        }
+                                    }  else{
+                                        clearTimeout(that.dispenseTimeout);
+                                    }
+                                 },this,i));
+                            }
+                        }
+                     this.dispenseTimeout = setTimeout(_.bind(this.dispenseStats,this),1000*30);
+            },
+            callDispenseStats:function(id,checksum,immediate){
+                this.checkStatus.push({"checksum":checksum,"id":id});
+                clearTimeout(this.dispenseTimeout);                
+                if(immediate){
+                    this.dispenseStats();
                 }
+                else{
+                    this.dispenseTimeout = setTimeout(_.bind(this.dispenseStats,this),1000*30);
+                }
+            } 
                
             });
         });

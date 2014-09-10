@@ -3972,7 +3972,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 require(["crm/google/login"],function(loginPage){                                        
                                     var lPage = new loginPage({page:that,app:that.app,dialog:dialog,isAuthorize:that.isAuthorize});
                                     dialog.getBody().html(lPage.$el);
-                                    dialog.getBody().find(".span6").css('width','100%');
+                                    dialog.getBody().find(".span6").css({'width':'100%','margin-left':'5%'});
                                     dialog.getBody().find(".second-div").remove();
                                     
                                 })
