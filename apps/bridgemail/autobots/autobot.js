@@ -23,6 +23,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 },
                 initialize: function() {
                     this.template = _.template(template);
+                    this.parent = this.options.page;
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
@@ -193,8 +194,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot played.");
-                                    that.getAutobotById(where, botId);
-                                    that.options.page.topCounts();
+                                     that.parent.fetchBots();
 
                                 }
                             });
@@ -223,8 +223,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
-                                    that.getAutobotById(where, botId);
-                                    that.options.page.topCounts();
+                                    that.parent.fetchBots();
                                 }
                             });
                 },

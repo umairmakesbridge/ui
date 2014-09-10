@@ -25,6 +25,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                 },
                 initialize: function() {
                     this.template = _.template(template);
+                    this.parent = this.options.page;
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
@@ -280,9 +281,11 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot played.");
-                                    that.getAutobotById(where, botId);
-                                    that.options.page.topCounts();
-
+                                   // that.getAutobotById(where, botId);
+                                   // 
+                                    //that.parent.callDispenseStats(that.model.get('botId.encode'),that.model.get("botId.checksum"),true);
+                                   // that.options.page.topCounts();
+                                   that.parent.fetchBots();
                                 }
                             });
                 },
@@ -307,8 +310,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
-                                    that.getAutobotById(where, botId);
-                                    that.options.page.topCounts();
+                                    that.parent.fetchBots();
                                 }
                             });
                 },
@@ -479,6 +481,21 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     return  this.model.get('tags').split(",");//this.model.get('actionData')[0].actionTags.split(",");
 
 
+                },
+                showProgress:function(){
+               //   xxx.bridgemailsystem.com/pms/io/trigger/getAutobotData/?type=dispenseStats&botId=xxx
+
+//[returns]:
+
+//{
+  //  "totalCount": "100",
+   // "pendingCount": "30",
+   // "percentageDone": "70" ##70% done.
+//}
+
+//Birth Day bot
+//&fieldName= STRING
+///&dateFormat= STRING (e.g. YYYY/MM/DD)  
                 },
                 autoLoadBotImages:function(){
                  var preLoadArray = [this.options.app.get("path")+'img/trans_gray.png',this.options.app.get("path")+'img/recurring.gif',this.options.app.get("path")+'img/loading.gif',this.options.app.get("path")+'img/spinner-medium.gif',this.options.app.get("path")+'img/greenloader.gif',this.options.app.get("path")+'img/loader.gif']
