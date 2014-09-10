@@ -135,9 +135,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             iconsource: 'target'
                      });
                      this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                     if(this.allowedUser.indexOf(this.app.get("user").userId)>-1){                       
-                       this.$("#html_editor_mee").show();
-                    }
+                     this.$("#html_editor_mee").show();
+                    
                      /*Campaign Merge Fields*/
                     //this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject',mergeFieldsCallback:_.bind(this.initMergeFields,this)});
                      this.initMergeFields();
@@ -2094,7 +2093,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
                     if(this.$(".step2 #choose_soruce li.selected").length==0){
-                        var slider_width = this.allowedUser.indexOf(this.app.get("user").userId)>-1?"840px":"700px";
+                        var slider_width = "840px";
                         this.$(".step2 .selection-boxes").animate({width:slider_width,margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
                             camp_obj.step2SlectSource(target_li);
@@ -2217,7 +2216,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
-                        if(this.allowedUser.indexOf(this.app.get("user").userId)>-1){
+                        
                           if(html_json.isEasyEditorCompatible=="Y"){
                               this.$("#html_editor_mee").click();
                               this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
@@ -2226,12 +2225,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           else{
                               this.$("#html_editor").click();
                               _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                          }
-                       }
-                       else{
-                           this.$("#html_editor").click();
-                          _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));       
-                       }
+                          }                      
                     }
                     
                 },

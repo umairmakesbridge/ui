@@ -1585,6 +1585,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             ulContentBlocks.empty();
                                             var imageMapping = {
                                                                 "c81e728d9d4c2f636f067f89cc14862c":"columnfeaturedarticles",
+                                                                "b6d767d2f8ed5d21a44b0e5886680cb9":"columnfeaturedarticles",
                                                                 "eccbc87e4b5ce2fe28308fd9f2a7baf3":"columnImageWithText",
                                                                 "a87ff679a2f3e71d9181a67b7542122c":"columnImageWithHeading",
                                                                 "e4da3b7fbbce2345d7772b0674a318d5":"BannerPlusText",
@@ -4245,7 +4246,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //Getting building blocks from provided block:                                
                                     var count = 1;
                                     // var listOfBuildingBlocksHtml = $();
-                                    var buildingBlocksFromService = _json.blocks[0];
+                                    var buildingBlocksFromService = _json.blocks?_json.blocks[0]:{};
                                     var ulBuildingBlocks = myElement.find(".buildingBlockDroppable .ulBuildingBlocks");
                                     ulBuildingBlocks.empty();
 
