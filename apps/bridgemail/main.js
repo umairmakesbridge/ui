@@ -2,8 +2,8 @@
    'use strict';
     require.config({  
        deps: ['main'], 
-       waitSeconds:300,
-       urlArgs: "bust=1.371" ,
+       waitSeconds:400,
+       urlArgs: "bust=1.372" ,
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
