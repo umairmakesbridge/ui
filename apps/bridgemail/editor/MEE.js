@@ -230,7 +230,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var leftMinus = mee_view.leftMinus;
                             var $element = null;
                             var emailWidth = "600px";
-                            var undoredo = true;                            
+                            var undoredo = true;                    
+                            var _offset = 0;
 
 
                             var dialogForTextColor = true;
@@ -426,25 +427,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 return returnJson;
                             }
                             // .................... Send Server Request ................................
-
-                            function filterImages(query, obj) {
-                                var new_obj = {}, total = 0, query = query.toLowerCase();
-                                for (var i in obj) {
-                                    var imageName = obj[i].Name.toLowerCase();
-                                    if (imageName == query) { new_obj[i] = obj[i]; total++; }
-                                }
-
-                                return new_obj;
-                            }
+                            
 
                             function getImagesMarkup(obj) {
                                 var imagesMarkup = "";
                                 $.each(obj[0], function(index, val) {             
                                     var tagsArr = val[0].tags.split(',');
-
                                     var j = index + 1;
                                     var li = "<li class='draggableControl ui-draggable droppedImage' data-type='droppedImage'>";
-
                                         li += "<span class='img'>";
                                         li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
                                         li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
@@ -454,21 +444,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         li += "<i class='imgicons preview action' data-actiontype='imagePreview' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "' data-url='" + val[0].originalURL + "' data-name='" + val[0].fileName + "'></i>";
                                         li += "<i class='imgicons tag action' data-actiontype='imageTag' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
                                         li += "<i class='imgicons delete action' data-actiontype='imageDelete' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
-                                        li += "</li>";
-                                    //li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' data-Id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /><label>+</label><br />";
-                                    //li += "<span class=' font_75'>" + val[0].fileName + "<img src='images/delete-ico.png' /></span></li>";
+                                        li += "</li>";                                    
                                     imagesMarkup = imagesMarkup + li;   
-                                })
-
-
-                              /*  for (var i = 0; i < obj.length; i++) {
-                                    var j = i + 1;
-                                    var li = "<li class='draggableControl droppedImage' data-type='droppedImage'>";
-
-                                    li += "<img title='" + obj[i].tags + "' src='images/upload-images/" + obj[i].thumbURL + "' data-Id='" + obj[i].imageId_encode + "' data-tags='" + obj[i].tags + "' data-name='" + obj[i].name + "' /><label>+</label><br />";
-                                    li += "<span class=' font_75'>" + obj[i].name + "<img src='images/delete-ico.png' /></span></li>";
-                                    imagesMarkup = imagesMarkup + li;
-                                }*/
+                                })                            
                                 return imagesMarkup;
                             }
                             
@@ -2969,32 +2947,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     makeCloneAndRegister();
                                 });
                             }
-                            function initializeiCheck(parent) {
-                                $('input').iCheck('destroy');
-                                $('input.checkpanel').iCheck('destrimageToolbaroy');
-                                $('input.radiopanel').iCheck('destroy');
-
-                                parent.find('input').iCheck({
-                                    checkboxClass: 'checkinput',
-                                    radioClass: 'radioinput'
-                                });
-
-                                parent.find('input.checkpanel').iCheck({
-                                    checkboxClass: 'checkpanelinput',
-                                    insert: '<div class="icheck_line-icon"></div>'
-                                });
-
-                                parent.find('input.radiopanel').iCheck({
-                                    radioClass: 'radiopanelinput',
-                                    insert: '<div class="icheck_radio-icon"></div>'
-                                });
-
-                                $( "ul.socialbtns li label " ).click(function() {
-                                    $( this ).toggleClass( "btnchecked" );
-                                });
-
-
-                            }
+                           
                             //Load Link GUI and show in BMS dialog
                             function showLinkGUI(){
                                 //BMS dialog code
@@ -3664,10 +3617,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                    
                                 },
 
-                                stop: function (e, ui) {
-
-                                    //INSERT Dropable along with dragged element:
-
+                                stop: function (e, ui) {                                  
                                     //Remove all Droppables places here.
                                     RemoveDroppables(myElement);
 
@@ -4576,6 +4526,26 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         //---------------------------------------------------------------------------------//
                                         
                         //Image Parameters for Ajax Request for LoadImages in Image Library
+                        
+                        
+                        mee.liveLoading = function(){
+                            var $w = $(window);
+                            var th = 100;
+                            var inview = myElement.find(".imageLib li:last-child").filter(function() {
+                                var $e = $(this),
+                                    wt = $w.scrollTop(),
+                                    wb = wt + $w.height(),
+                                    et = $e.offset().top,
+                                    eb = et + $e.height();
+                                return eb >= wt - th && et <= wb + th;
+                              });
+                            if(inview.length && inview.attr("data-load")){
+                               inview.removeAttr("data-load");
+                               myElement.find(".footer-loading").show();
+                               LoadImagesInLibrary(20); 
+                            }  
+                        }
+                        myElement.find(".images-accordion").scroll(_.bind(mee.liveLoading,mee));
                         var _imageAjaxParameters = null;
                         if (options.ImagesAjaxProperties != null) {
                             _imageAjaxParameters = new Object();
@@ -4588,7 +4558,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         if (_imageAjaxParameters != null) {
 
-                            var LoadImagesInLibrary = function () {
+                            var LoadImagesInLibrary = function (offset) {
+                                if(offset){
+                                      _offset = _offset + offset;
+                                     _imageAjaxParameters.Url = "/pms/io/publish/getImagesData/?"+options._BMSTOKEN+"&type=list&offset="+_offset;
+                                }
+                                else{
+                                    myElement.find(".imageLib").children().remove();
+                                }
                                 returnData = SendServerRequest(_imageAjaxParameters);
                                 var obj = returnData;
                                 if (obj != null && obj != undefined) {
@@ -4596,13 +4573,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var imagesHTML = getImagesMarkup(obj.images);
                                     if (imagesHTML != "") {
                                         var oImages = $(imagesHTML);
-
                                         oImages.find(".draggableControl").andSelf().filter(".draggableControl").each(function (index, element) {
                                             InitializeMainDraggableControls($(element));
                                         });
-
-                                        myElement.find(".imageLib").html(oImages);
-
+                                        myElement.find(".imageLib").append(oImages);
+                                        
+                                        if(myElement.find(".imageLib li").length<parseInt(returnData.totalCount)){
+                                            myElement.find(".imageLib li:last-child").attr("data-load","true");
+                                        }
+                                        myElement.find(".footer-loading").hide();
                                     }
                                 }
                             }
@@ -4678,8 +4657,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         });
 
                         myElement.find("#myUploadFile").change(function (e) {
-                            myElement.find("#form1").submit();
-                            //LoadImagesInLibrary();
+                            myElement.find("#form1").submit();                            
                             return true;
                         });
 
