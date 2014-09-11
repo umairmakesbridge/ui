@@ -110,6 +110,7 @@
                 options.app.getData({
                     "URL": "/pms/io/getMetaData/?BMS_REQ_TK=" + options.app.get('bms_token') + "&type=merge_tags",
                     "key": "mergetags",
+                    "isAsyncFalse":true,
                     "callback": $.proxy(this.generateMergeTag, this)
                 });
             }

@@ -34,22 +34,22 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                 {
                     "type": "spacer5",
-                    "html": "<div style='height:5px; background:url(images/spacer.png);'></div>"
+                    "html": "<div style='height:5px' class='spacer-ele'></div>"
                 },
 
                 {
                     "type": "spacer10",
-                    "html": "<div style='height:10px; background:url(images/spacer.png);'></div>"
+                    "html": "<div style='height:10px' class='spacer-ele'></div>"
                 },
 
                 {
                     "type": "spacer15",
-                    "html": "<div style='height:15px; background:url(images/spacer.png);'></div>"
+                    "html": "<div style='height:15px;' class='spacer-ele'></div>"
                 },
 
                 {
                     "type": "spacer20",
-                    "html": "<div style='height:20px; background:url(images/spacer.png);'> </div>"
+                    "html": "<div style='height:20px;' class='spacer-ele'> </div>"
                 },
 
                 {
@@ -937,7 +937,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     ulMyColors.find("li").click(function () {                           
                                         SetBackgroundColor($(this).data("color"));
-
+                                        makeCloneAndRegister();
                                     });
 
 
@@ -963,8 +963,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 });
 
                                 templateColors.children().first().click(function () {
-
                                     SetBackgroundColor(null);
+                                    
                                 });
 
 
@@ -2686,7 +2686,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             var myobject = $(topHandlersHTML);
 
                                             oHtml.on({
-                                                mouseenter: function (e) {
+                                                mouseover: function (e) {
                                                     e.stopPropagation();
                                                     myElement.find(".topHandlers").remove();
 
@@ -2695,10 +2695,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         InitializeDeleteButtonOnElement(myobject);
 
                                                         //Assign COPY functionality here
-                                                        InitializeCopyButtonOnElement(myobject);
-
+                                                        InitializeCopyButtonOnElement(myobject);                                                            
                                                         $(this).prepend(myobject);
                                                         $(this).addClass("hover");
+                                                        $(this).parents(".csHaveData").removeClass("hover");
                                                     }
 
                                                 },
@@ -3355,10 +3355,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             }
 
-                                        //Work on control - CONTROL ONLY
-                                        //ReInitializeDragDropHoverAll(oControl.Html);
-
-
                                         }
                                         else {
 
@@ -3430,7 +3426,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 start: function (e, ui) {
 
                                     //Show DRAG HERE Div here
-                                    myElement.find(".divBuildingBlockLoading").show();
+                                    myElement.find(".divBuildingBlockLoading").parent().height();
+                                    var _height = myElement.find(".divBuildingBlockLoading").parent().height()-30;
+                                    var _scrollTop = myElement.find(".divBuildingBlockLoading").parent().scrollTop();
+                                    myElement.find(".divBuildingBlockLoading").show().css({"top":_scrollTop+"px","height":_height+"px"});
 
                                     ShowDroppables(myElement);
 

@@ -951,22 +951,33 @@ ul.b-blocks > li.newblock:hover  i.plus { background-position:0 bottom; }
 
 /* ---------------------- */
 
-
+div.csHaveData{
+    position:relative;
+}
 .mainContentHtmlGrand > .sortable > li.csHaveData { border:1px dotted #a9c2d5 !important; border-top:10px solid  #a9c2d5 !important;  position:relative; /*min-height:80px;*/ z-index:99;  /*margin: 5px; cursor:move;*/
 -webkit-border-radius: 2px 2px ;
 	-moz-border-radius:  2px 2px ;
 	border-radius:  2px 2px; }
-.mainContentHtmlGrand > .sortable > li.csHaveData.hover {border:1px solid #03d3ff !important; border-top:10px solid  #03d3ff !important; z-index:990;
-border-top:10px solid  #03d3ff; 
+.mainContentHtmlGrand > .sortable > li.csHaveData.hover{border:1px solid #03d3ff !important; border-top:10px solid  #03d3ff !important; z-index:990;
 -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
 	-moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.8);
 	box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
 	}
-	 
+div.csHaveData.hover{       
+    z-index:990;
+    -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.9);
+	-moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.9);
+	box-shadow:0 0px 8px rgba(3, 211, 255, 0.9);
+}	
+div.csHaveData.hover > :nth-child(2)
+{
+    outline:1px solid #03d3ff !important;
+}
 	
 .mainContentHtmlGrand > .sortable > li.csHaveData > .topHandlers { /*top:-10px; display:none;*/ top:-10px; }
 	
-.mainContentHtmlGrand > .sortable > li.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
+.mainContentHtmlGrand > .sortable > li.csHaveData.hover  > .topHandlers,
+div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
 
 
 .mainContentHtmlGrand > .sortable > li.csHaveData.csContblock { border:1px dotted #a9c2d5; cursor:default; }
@@ -1505,7 +1516,7 @@ position:absolute; left:0; top:0;
   height: 90%;
     left: 0;
 	 cursor: default;
-    padding: 6% 5% !important;
+    padding: 15px 5% !important;
 	width:90%; 
 	display:block;
 z-index:99;
@@ -1515,7 +1526,7 @@ z-index:99;
 	border-radius: 2px; }
 
 .dropblockpanel  .blockdrop {   background:none;
- height: 98%;
+ height: 100%;
  position:relative;
  color:#fff;
   border: 1px dashed  rgba(255, 255, 255, 0.5);
@@ -1544,7 +1555,7 @@ z-index:99;
 
 
 .c-name h2 i.icon.link { background:url("../images/link.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);}
-
+.spacer-ele{background:url("../images/_spacer.png") repeat transparent;}
 
 
 
@@ -1948,6 +1959,7 @@ border-top:10px solid  #03d3ff;
 {
     padding:0px;
     border: 1px solid #A9C2D5;
+    position: relative;
 /*	  overflow-x: hidden;
   max-height: 300px;
     overflow-y: scroll;*/}

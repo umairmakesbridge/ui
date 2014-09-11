@@ -470,8 +470,12 @@ define([
                 delete cache[key];
             },
             getData:function(data){
-              var app = this;                                
-              jQuery.getJSON(data.URL,  function(tsv, state, xhr){
+              var app = this;  
+              $.ajax({
+                dataType: "json",
+                url: data.URL,            
+                async:data.isAsyncFalse ?false:true,
+                success: function(tsv, state, xhr){
                     if(xhr && xhr.responseText){
                          var salesforce = jQuery.parseJSON(xhr.responseText);                                
                          if(app.checkError(salesforce)){
@@ -483,7 +487,8 @@ define([
 			if(data.callback)
                            data.callback();
                     }
-                }).fail(function() { console.log( "error in "+data.key+" fields" ); });                  
+                }
+              });           
             },
             showDialog:function(options){
                  options['app'] = this;
