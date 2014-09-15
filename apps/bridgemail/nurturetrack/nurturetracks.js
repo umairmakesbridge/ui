@@ -32,6 +32,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.template = _.template(template);		
                //
                this.tracksRequest = new tracksCollection();                              
+               this.tracksRequestBMS = new tracksCollection();     
                this.offset = 0;               
                this.searchTxt = '';
                this.tagTxt = '';
@@ -297,7 +298,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 }                
                 this.$("#total_bms_tracks").hide();
                 this.makesbridge_tracks = true;
-                this.tracks_bms_request = this.tracksRequest.fetch({data:_data,remove: remove_cache,
+                this.tracks_bms_request = this.tracksRequestBMS.fetch({data:_data,remove: remove_cache,
                     success: _.bind(function (collection, response) {                                
                         // Display items
                         if(this.app.checkError(response)){

@@ -964,10 +964,7 @@ div.csHaveData{
 	box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
 	}
 div.csHaveData.hover{       
-    z-index:990;
-    -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.9);
-	-moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.9);
-	box-shadow:0 0px 8px rgba(3, 211, 255, 0.9);
+    z-index:990;   
 }	
 div.csHaveData.hover > :nth-child(2)
 {
@@ -2182,6 +2179,18 @@ ul.socialbtns li .radiopanelinput.checked {
   ul.b-blocks > li > i.icon.cblock.Useful_Links{
       background:url("../images/blocks/Useful_Links.png") no-repeat scroll center center rgba(0, 0, 0, 0);
   } 
+  
+  ul.b-blocks > li > i.icon.cblock._3imagecolumn{
+      background:url("../images/blocks/3_image_column.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  ul.b-blocks > li > i.icon.cblock._Text2Button{
+      background:url("../images/blocks/Text_+_2_Button.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+ ul.b-blocks > li > i.icon.cblock.PortfolioPlusButton{
+      background:url("../images/blocks/PortfolioPlusButton.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
+  
+    
  .leftpanel{
      float:left;
      width:405px;
@@ -2206,4 +2215,8 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  .content_containerLinkGUI .errortext{
      right:3px;
+ }
+ .MEE_EDITOR .search .close-icon{
+     right:28px;
+     margin-top:-7px;
  }

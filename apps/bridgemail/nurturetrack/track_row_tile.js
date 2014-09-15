@@ -19,7 +19,7 @@ function (template,moment,highlighter,tagView) {
               'click .play-track':'playNurtureTrack',
               'click .pause-track':'pauseNurtureTrack',
               'click .message-view':'viewNurtureTrack',
-              'click .report-bar':'reportNT',    
+              'click .report-bar':'reportNT'   
             },
             /**
              * Initialize view - backbone
@@ -178,8 +178,7 @@ function (template,moment,highlighter,tagView) {
                      $("body").append(view_page.$el);        
                      view_page.init();
                  },this));
-            },
-
+            }
             
         });
 });

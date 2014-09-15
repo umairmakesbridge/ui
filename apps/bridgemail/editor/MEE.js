@@ -1583,25 +1583,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             contentBlocksGlobal = e.blocks[0];
                                             var ulContentBlocks = myElement.find(".content-block");
                                             ulContentBlocks.empty();
-                                            var imageMapping = {
-                                                                "c81e728d9d4c2f636f067f89cc14862c":"columnfeaturedarticles",
-                                                                "b6d767d2f8ed5d21a44b0e5886680cb9":"columnfeaturedarticles",
-                                                                "eccbc87e4b5ce2fe28308fd9f2a7baf3":"columnImageWithText",
-                                                                "a87ff679a2f3e71d9181a67b7542122c":"columnImageWithHeading",
-                                                                "e4da3b7fbbce2345d7772b0674a318d5":"BannerPlusText",
-                                                                "1679091c5a880faf6fb5e6087eb1b2dc":"Button",
-                                                                "4e732ced3463d06de0ca9a15b6153677":"footer",
-                                                                "c9f0f895fb98ab9159f51fd0297e236d":"FooterPlusLogo",
-                                                                "45c48cce2e2d7fbdea1afc51c7c6ad26":"FooterPlusLogo",
-                                                                "d3d9446802a44259755d38e6d163e820":"ImageTextbutton",
-                                                                "6512bd43d9caa6e02c990b0a82652dca":"RightImagePlusText",
-                                                                "c20ad4d76fe97759aa27a0c99bff6710":"logoCenter",
-                                                                "c51ce410c124a10e0db5e4b97fc2af39":"logoPlusBanner",
-                                                                "aab3238922bcc25a6f606eb525ffdc56":"Paragraph",
-                                                                "c74d97b01eae257e44aa9d5bade97baf":"Social_Share",
-                                                                "70efdf2ec9b086079795c442636b55fb":"Testimonial",
-                                                                "9bf31c7ff062936a96d3c8bd1f8f2ff3":"LeftImagePlusText",
-                                                                "6f4922f45568161a8cdf4ad2299f6d23":"Useful_Links"}
+                                            var imageMapping = {"c81e728d9d4c2f636f067f89cc14862c":"columnfeaturedarticles","b6d767d2f8ed5d21a44b0e5886680cb9":"columnfeaturedarticles","a87ff679a2f3e71d9181a67b7542122c":"columnImageWithText","6364d3f0f495b6ab9dcf8d3b5c6e0b01":"columnImageWithHeading","e4da3b7fbbce2345d7772b0674a318d5":"BannerPlusText","1679091c5a880faf6fb5e6087eb1b2dc":"Button","4e732ced3463d06de0ca9a15b6153677":"footer","c9f0f895fb98ab9159f51fd0297e236d":"FooterPlusLogo","45c48cce2e2d7fbdea1afc51c7c6ad26":"FooterPlusLogo","d3d9446802a44259755d38e6d163e820":"ImageTextbutton","6512bd43d9caa6e02c990b0a82652dca":"RightImagePlusText","c20ad4d76fe97759aa27a0c99bff6710":"logoCenter","c51ce410c124a10e0db5e4b97fc2af39":"logoPlusBanner","aab3238922bcc25a6f606eb525ffdc56":"Paragraph","c74d97b01eae257e44aa9d5bade97baf":"Social_Share","70efdf2ec9b086079795c442636b55fb":"Testimonial","9bf31c7ff062936a96d3c8bd1f8f2ff3":"LeftImagePlusText","6f4922f45568161a8cdf4ad2299f6d23":"Useful_Links","33e75ff09dd601bbe69f351039152189":"_3imagecolumn","6ea9ab1baa0efb9e19094440c317e21b":"PortfolioPlusButton","2e74f10e0327ad868d138f2b4fdd6f0":"_Text2Button"}                                                            
                                             $.each(contentBlocks, function (i, obj) {
                                                 var cssImage = imageMapping[obj[0]["blockId.checksum"]]?imageMapping[obj[0]["blockId.checksum"]]:"";
                                                 var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
@@ -4005,11 +3987,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         }
 
                         myElement.find("input#searchBB").keyup(function (e) {
-                            if(e.which == 13){
-                                console.log("enter pressed");
+                            if(e.which == 13){                                
                                 _searchBuildingBlocks();
                             }
-
                         });
 
                         myElement.find("input#searchForm").keyup(function (e) {
@@ -4017,8 +3997,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 console.log("enter pressed");
                                 _searchFormBlocks();
                             }
-
                         });
+                        
+                        myElement.find("#clearsearch-blocks").click(function(e){
+                            myElement.find("#clearsearch-blocks").hide();
+                            myElement.find("input#searchBB").val('');
+                            myElement.find("#BBResultDiv").hide();
+                            mee._LoadBuildingBlocks();
+                            
+                        })
+                        
 
 
                         var _searchBuildingBlocks = function (args) {
@@ -4029,10 +4017,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var textForSearch = myElement.find("input#searchBB").val();
                             var counter = 0;
                             if(textForSearch != null && textForSearch != "") {
-
+                                myElement.find("#clearsearch-blocks").show();
                                 //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                 $.each(buildingBlocksFromService, function (i, obj) {
-
                                     //Assigning unique ID here:
                                     obj[0].ID = obj[0]["blockId.encode"];
                                     var label = obj[0].name;
@@ -4068,6 +4055,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             }
                             else {
+                                myElement.find("#clearsearch-blocks").hide();
                                 mee._LoadBuildingBlocks();
                                 myElement.find("#BBResultDiv").hide();
                             }
@@ -4541,10 +4529,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                               });
                             if(inview.length && inview.attr("data-load")){
                                inview.removeAttr("data-load");
-                               myElement.find(".footer-loading").show();
+                               myElement.find(".footer-loading").show();                               
                                LoadImagesInLibrary(20); 
                             }  
                         }
+                        myElement.find("#clearsearch-image").click(function(){
+                            myElement.find("#clearsearch-image").hide();
+                            myElement.find("input#searchImg").val('');
+                            myElement.find("#ILResultDiv").hide();
+                            LoadImagesInLibrary();
+                        })
                         myElement.find(".images-accordion").scroll(_.bind(mee.liveLoading,mee));
                         var _imageAjaxParameters = null;
                         if (options.ImagesAjaxProperties != null) {
@@ -4558,13 +4552,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         if (_imageAjaxParameters != null) {
 
-                            var LoadImagesInLibrary = function (offset) {
+                            var LoadImagesInLibrary = function (offset) {                                
                                 if(offset){
                                       _offset = _offset + offset;
                                      _imageAjaxParameters.Url = "/pms/io/publish/getImagesData/?"+options._BMSTOKEN+"&type=list&offset="+_offset;
                                 }
-                                else{
+                                else{                                    
                                     myElement.find(".imageLib").children().remove();
+                                    options._app.showLoading("Loading Images...",  myElement.find(".imageLib"),{"width":"140px","margin-left":"-70px"});
                                 }
                                 returnData = SendServerRequest(_imageAjaxParameters);
                                 var obj = returnData;
@@ -4584,6 +4579,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         myElement.find(".footer-loading").hide();
                                     }
                                 }
+                                options._app.showLoading(false,  myElement.find(".imageLib"));
                             }
 
                             LoadImagesInLibrary();
@@ -4604,17 +4600,24 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         var SearchImages = function (searchText) {
                             var data = {
                                 searchText: searchText
-                            };
+                            };                            
+                            options._app.showLoading("Loading Images...",  myElement.find(".imageLib"),{"width":"140px","margin-left":"-70px"});
                             _searchImagesAjaxParameters.Data = JSON.stringify(data);
                             _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url + searchText;
                             returnData = SendServerRequest(_searchImagesAjaxParameters);
                             var obj = returnData;                
                             if (obj != null && obj != undefined) {
                                 imageListGlobal = obj.images;
-                                myElement.find(".imageLib").html(getImagesMarkup(obj.images));
+                                var imagesHTML = getImagesMarkup(obj.images);
+                                var oImages = $(imagesHTML);
+                                myElement.find(".imageLib").html(oImages);
+                                oImages.find(".draggableControl").andSelf().filter(".draggableControl").each(function (index, element) {
+                                           InitializeMainDraggableControls($(element));
+                                       });
                                 myElement.find("#ILResultDiv").html(obj.count + " records Found.");
                                 myElement.find("#ILResultDiv").show();
                             }
+                            options._app.showLoading(false,  myElement.find(".imageLib"));
                         };
 
                         myElement.find("input#searchImg").keyup(function (e) {
@@ -4624,11 +4627,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 if(searchText == "") {
                                     LoadImagesInLibrary();
                                     myElement.find("#ILResultDiv").hide();
+                                    myElement.find("input#searchImg").val('');
+                                    myElement.find("#clearsearch-image").hide();
                                 }
                                 else {
+                                    myElement.find("#clearsearch-image").show();
                                     SearchImages(searchText);
-                                }
-                                myElement.find(".searchimg-text").val("");
+                                }                                
                                 return false;
                             }
 
@@ -4666,7 +4671,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         myElement.find("#form1").submit(function (e) {
                             var formObj = $(this);
                             var formURL = "/pms/io/publish/saveImagesData/?"+options._BMSTOKEN+"&type=add";
-                            var formData = new FormData(this);
+                            var formData = new FormData(this);                            
+                            options._app.showLoading("Uploading Image...",  myElement.find(".imageLib"),{"width":"140px","margin-left":"-70px"});
                             $.ajax({
                                 url: formURL,
                                 type: 'POST',
@@ -4677,7 +4683,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 processData: false,
                                 success: function (data, textStatus, jqXHR) {
                                     console.log("Image Upload success:" + e);
-                                    var result = jQuery.parseJSON(data);
+                                     options._app.showLoading(false,  myElement.find(".imageLib"));
+                                    var result = jQuery.parseJSON(data);                                    
                                     if(result.success){
                                         options._app.showMessge("Image has been successfully uploaded.",$("body"));
                                         LoadImagesInLibrary();
@@ -4687,7 +4694,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
+                                    options._app.showLoading(false,  myElement.find(".imageLib"));
                                     console.log("Image Upload failed:" + e);
+                                    options._app.showAlert(e,$("body"));
                                 }
                             });
                             e.preventDefault(); //Prevent Default action.
@@ -5252,7 +5261,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             e.stopPropagation();
                             e.preventDefault();
                             console.log("drag enter called..");
-                            myElement.find(".divBuildingBlockLoadingImages").show();                                            
+                            //myElement.find(".divBuildingBlockLoadingImages").show();                                            
                         });
 
                         myElement.find("#HTML5FileUploader").on("dragover", function (e) {                                            
@@ -5279,7 +5288,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             // console.log(files);
                             handleFileUpload(files);
-                            myElement.find(".divBuildingBlockLoadingImages").hide();
+                            //myElement.find(".divBuildingBlockLoadingImages").hide();
                         // this.$element.addClass('file-border');
                         });
 
