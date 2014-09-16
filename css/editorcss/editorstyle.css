@@ -1,12 +1,4 @@
 /*@import url('../fonts/fonts.css');*/
-
-
-
-
-
-
-
-
 /*
 @import url(http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic);
 */
@@ -165,6 +157,7 @@ a,
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+.MEE_EDITOR .icon.edit  {background: url("../images/edit.png") no-repeat  center center; }
 
 /* ----------------------------- Tools ------------------------------- */
 
@@ -1757,6 +1750,9 @@ ul.linkresults li:hover { background:#dcf3fe; }
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
+}
+.MEE_EDITOR .dcContents .moredd{
+    width: 65px;
 }
 .MEE_EDITOR .moredd:before {
     border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #BADAEC;

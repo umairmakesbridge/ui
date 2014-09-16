@@ -2219,15 +2219,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     if(html_json.htmlText){
                         
-                          if(html_json.isEasyEditorCompatible=="Y"){
+                          /*if(html_json.isEasyEditorCompatible=="Y"){
                               this.$("#html_editor_mee").click();
                               this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
                               this.states.editor_change = true;                           
                           }
-                          else{
+                          else{*/
                               this.$("#html_editor").click();
                               _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
-                          }                      
+                          //}                      
                     }
                     
                 },

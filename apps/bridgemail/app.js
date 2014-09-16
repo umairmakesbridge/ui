@@ -629,9 +629,8 @@ define([
                 }
             },
             removeDialogs:function(){
-                $(".modal,.modal-backdrop").remove();
-                if($("body > .overlay,.modal-backdrop").length==0){
-                    $("body").css("overflow-y","auto");
+                if(this.dialogView){
+                    this.dialogView.hide();
                 }
             },
             isEmpty:function(val){
