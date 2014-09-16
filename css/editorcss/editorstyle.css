@@ -419,6 +419,8 @@ ul.b-blocks > li.newblock:hover {
 
 ul.b-blocks > li.newblock:hover  a span {	color: #fff; }
 ul.b-blocks > li.newblock:hover  i.plus { background-position:0 bottom; }
+ul.b-blocks.hide-footer  .imageicons{ display: none !important; }
+ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 
 	
 	

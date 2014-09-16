@@ -236,7 +236,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             var dialogForTextColor = true;
                             var selectedLinkFromTinyMCE = null;
-                            var imageListGlobal = null;
+                            var imageListGlobal = [];
                             var returnData = null;
                             var eventsApplied = false;
                             var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth,TotalBorderTopBottom,TotalBorderLeftRight;
@@ -430,23 +430,26 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             
 
                             function getImagesMarkup(obj) {
-                                var imagesMarkup = "";
-                                $.each(obj[0], function(index, val) {             
-                                    var tagsArr = val[0].tags.split(',');
-                                    var j = index + 1;
-                                    var li = "<li class='draggableControl ui-draggable droppedImage' data-type='droppedImage'>";
-                                        li += "<span class='img'>";
-                                        li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
-                                        li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
-                                        li += "<div class='imageicons'>";
-                                        li += "<i class='imgicons info action' data-actiontype='imageInfo' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
-                                        li += "<i class='imgicons link action' data-actiontype='imageLink' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
-                                        li += "<i class='imgicons preview action' data-actiontype='imagePreview' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "' data-url='" + val[0].originalURL + "' data-name='" + val[0].fileName + "'></i>";
-                                        li += "<i class='imgicons tag action' data-actiontype='imageTag' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
-                                        li += "<i class='imgicons delete action' data-actiontype='imageDelete' data-index='"+ index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
-                                        li += "</li>";                                    
-                                    imagesMarkup = imagesMarkup + li;   
-                                })                            
+                                var imagesMarkup = "";                                
+                                var _index = "";
+                                if(obj && obj[0]){
+                                    $.each(obj[0], function(index, val) {             
+                                        var tagsArr = val[0].tags.split(',');                                         
+                                        var _index = "image"+ (parseInt(_offset)+parseInt(index.substr(5)));
+                                        var li = "<li class='draggableControl ui-draggable droppedImage' data-type='droppedImage'>";
+                                            li += "<span class='img'>";
+                                            li += "<img title='" + val[0].tags + "' src='" + val[0].thumbURL + "' alt='" + val[0].fileName + "' data-id='" + val[0]["imageId.encode"] + "' data-tags='" + val[0].tags + "' data-name='" + val[0].fileName + "' /></span>";
+                                            li += "<a href='#'><span class='font_75'>" + val[0].fileName + "</span></a>";
+                                            li += "<div class='imageicons'>";
+                                            li += "<i class='imgicons info action' data-actiontype='imageInfo' data-index='"+ _index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                            li += "<i class='imgicons link action' data-actiontype='imageLink' data-index='"+ _index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                            li += "<i class='imgicons preview action' data-actiontype='imagePreview' data-index='"+ _index +"' data-id='" + val[0]["imageId.encode"] + "' data-url='" + val[0].originalURL + "' data-name='" + val[0].fileName + "'></i>";
+                                            li += "<i class='imgicons tag action' data-actiontype='imageTag' data-index='"+ _index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                            li += "<i class='imgicons delete action' data-actiontype='imageDelete' data-index='"+ _index +"' data-id='" + val[0]["imageId.encode"] + "'></i>";
+                                            li += "</li>";                                                 
+                                        imagesMarkup = imagesMarkup + li;   
+                                    })       
+                                }
                                 return imagesMarkup;
                             }
                             
@@ -2428,11 +2431,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 ////
 
                                 //Initialize Plugins Event
-                                this.InitializePluginsEvents = function (element) {
-                                                
-                                    element.find(".resizableImage").resizable({
-                                                    
-                                        });
+                                this.InitializePluginsEvents = function (element) {                                    
+                                    try{
+                                        element.find(".resizableImage").resizable("destroy");           
+                                    }
+                                    catch(e){}
+                                    element.find(".resizableImage").resizable({});                                    
 
                                     element.find("div.textcontent").each(function (index, element) {
                                         
@@ -2770,8 +2774,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         //alert("dropped");
                                                         //Only dropable for IMAGE TYPE
                                                         if (ui.draggable.hasClass("droppedImage")) {                                                                                                                       
-
-                                                            $(this).find("img").attr("src",ui.draggable.find("img").attr("src"))
+                                                            var index = ui.draggable.find("i:first-child").data("index");
+                                                            if(index){
+                                                                index = parseInt(index.substr(5))-1;
+                                                            }
+                                                            var imageSrc= options._app.decodeHTML(imageListGlobal[index].originalURL);    
+                                                            $(this).find("img").attr("src",imageSrc)
                                                             makeCloneAndRegister();
                                                             oInitDestroyEvents.InitializeClickEvent(oHtml);
                                                         }
@@ -3012,10 +3020,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         //Elements Dropping
                         function InitializeWithDropable(sender) {
-
-                            //if (draggingUI != null) {
-                            //    alert("")
-                            //}
+                            
 
                             sender.droppable({
                                 tolerance: "pointer",
@@ -3145,7 +3150,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 oInitDestroyEvents.InitAll(args.droppedElement);
 
-
+                                                
                                             }
                                         }
                                         else if (typeOfDraggingControl == "formBlock") {
@@ -3375,7 +3380,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         SetElementSize(args); //$$
                                         ////////////////////////////////////
 
-
+                                        
                                         OnNewElementDropped(args);
 
 
@@ -3387,13 +3392,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             return sender;
                         }
 
-                        //Elements DRAGGING - for swapping elements:
+                        //Elements DRAGGING - for swapping elements:dragging2
                         function InitializeElementWithDraggable(object) {
 
                             object.draggable({
                                 helper: function(event, ui) {
                                     return $(this).clone().css({
-                                        width: $(this).width()
+                                        width: $(this).width(),
+                                        "background-color":"#fff"
                                     });
 
                                 },
@@ -3467,23 +3473,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         var InsertDroppableInEmpty = function (sender, listOfElements) {
                             var liLength = listOfElements.size();
-
                             //Placing highlighter into "Container" here  
                             if (liLength == 0) {
-
                                 var droppableElement = null;
                                 droppableElement = CreateDroppableWithAllFunctions();
-
-                                if (IsFirstDroppableElement) {
-                                                    
-
+                                if (IsFirstDroppableElement) {                                                    
                                     droppableElement.append("<div style='text-align:center; position:relative; top:40px; font-style:italic'> DROP HERE </div>");
                                 }
-
                                 sender.append(droppableElement);
-                            }
-
-                                            
+                            }                    
                         }
 
                         var RemoveDroppables = function (container,undo) {
@@ -3493,6 +3491,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             //Releted to last element dropped full height:
                             myElement.find(".sortable").removeAttr("style");
                             myElement.find(".myDroppable").removeInlineStyle("height");
+                            myElement.find(".hide-footer").remove();
                             if(!undo){
                                 makeCloneAndRegister();
                             }
@@ -3539,7 +3538,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             });
                         }
 
-                        //---------------------  MAIN DRAGGABLE--------------------------//
+                        //---------------------  MAIN DRAGGABLE--------------------------//dragging1
 
 
                         function InitializeMainDraggableControls(elementToApply) {
@@ -3561,15 +3560,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //scroll: false,
                                 //[M.Adnan] FOR DRAGGING
                                 start: function (e, ui) {
-
+                                    var imageDrag = ui.helper.data("type")==="droppedImage"?"image-footer-hide":"";
+                                    ui.helper.wrap("<ul class='b-blocks hide-footer "+imageDrag+"'></ul>");
                                     //Disable for droppedImage here
                                     if (ui.helper.data("type") === "droppedImage") {
                                         return;
                                     }
                                     //////////////
                                     // $this.wrapInner("<ul class='b-blocks'></ul>");
-                                    console.log(ui.helper);
-                                    ui.helper.wrap("<ul class='b-blocks'></ul>");
+                                    console.log(ui.helper);                                    
                                     ShowDroppables(myElement);
 
                                     RemovePopups();
@@ -3917,8 +3916,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                         var OnImageDropped = function (args) {
 
-                                            
-                            var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + args.ui.draggable.find("img").attr("src") + "' style='display:block;' /></div></div>");
+                            var index = args.ui.draggable.find("i:first-child").data("index");
+                            if(index){
+                                index = parseInt(index.substr(5))-1;
+                            }
+                            var imageSrc= options._app.decodeHTML(imageListGlobal[index].originalURL);
+                            var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
 
                             // htmlToPlace.find("img.imageHandlingClass").resizable({
                             htmlToPlace.find(".resizableImage").resizable({
@@ -4554,17 +4557,24 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             var LoadImagesInLibrary = function (offset) {                                
                                 if(offset){
-                                      _offset = _offset + offset;
-                                     _imageAjaxParameters.Url = "/pms/io/publish/getImagesData/?"+options._BMSTOKEN+"&type=list&offset="+_offset;
+                                      _offset = _offset + offset;                                    
                                 }
                                 else{                                    
+                                    imageListGlobal = [];
+                                    _offset = 0;
                                     myElement.find(".imageLib").children().remove();
                                     options._app.showLoading("Loading Images...",  myElement.find(".imageLib"),{"width":"140px","margin-left":"-70px"});
                                 }
+                                 _imageAjaxParameters.Url = "/pms/io/publish/getImagesData/?"+options._BMSTOKEN+"&type=list&offset="+_offset;
                                 returnData = SendServerRequest(_imageAjaxParameters);
                                 var obj = returnData;
                                 if (obj != null && obj != undefined) {
-                                    imageListGlobal = obj.images;
+                                    if(obj.images && obj.images[0]){
+                                        _.each(obj.images[0],function(val,key){
+                                            imageListGlobal.push(val[0]);
+                                        })
+                                        
+                                    }
                                     var imagesHTML = getImagesMarkup(obj.images);
                                     if (imagesHTML != "") {
                                         var oImages = $(imagesHTML);
@@ -4598,16 +4608,24 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         }
 
                         var SearchImages = function (searchText) {
+                             _offset = 0;
+                            myElement.find("#clearsearch-image").show();
                             var data = {
                                 searchText: searchText
                             };                            
+                            imageListGlobal = [];
                             options._app.showLoading("Loading Images...",  myElement.find(".imageLib"),{"width":"140px","margin-left":"-70px"});
                             _searchImagesAjaxParameters.Data = JSON.stringify(data);
                             _searchImagesAjaxParameters.Url = options.SearchImagesProperties.Url + searchText;
                             returnData = SendServerRequest(_searchImagesAjaxParameters);
                             var obj = returnData;                
                             if (obj != null && obj != undefined) {
-                                imageListGlobal = obj.images;
+                                if(obj.images && obj.images[0]){
+                                    _.each(obj.images[0],function(val,key){
+                                        imageListGlobal.push(val[0]);
+                                    })
+
+                                }
                                 var imagesHTML = getImagesMarkup(obj.images);
                                 var oImages = $(imagesHTML);
                                 myElement.find(".imageLib").html(oImages);
@@ -4630,8 +4648,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     myElement.find("input#searchImg").val('');
                                     myElement.find("#clearsearch-image").hide();
                                 }
-                                else {
-                                    myElement.find("#clearsearch-image").show();
+                                else {                                    
                                     SearchImages(searchText);
                                 }                                
                                 return false;
@@ -4647,7 +4664,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             else {
                                 SearchImages(searchText);
                             }
-                            myElement.find(".searchimg-text").val("");
                             return false;
                         });
 
@@ -4969,6 +4985,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var imgurl = element.data("url");
                             var imgname = element.data("name");
                             var index = element.data("index");
+                            if(index){
+                                index = parseInt(index.substr(5))-1;
+                            }
 
                             var imageParams = {
                                 ID: imgid,
@@ -4988,7 +5007,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find('.DCEditDialog').hide();
 
 
-                                var imageObj = imageListGlobal[0][index][0];
+                                var imageObj = imageListGlobal[index];
 
                                 // var fileName = imageObj.fileName;
                                 // console.log("FileName extracted for image is:"+fileName);
@@ -5006,7 +5025,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                 // element.siblings('.link-window').show();
-                                var imageObj = imageListGlobal[0][index][0];
+                                var imageObj = imageListGlobal[index];
 
                                 showBox(element, imageObj, "link");
                             }
@@ -5025,7 +5044,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                 // element.siblings('.tag-window').show();
-                                var imageObj = imageListGlobal[0][index][0];
+                                var imageObj = imageListGlobal[index];
 
                                 showBox(element, imageObj, "tag");
                             }
@@ -5039,7 +5058,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find('.DCDeleteDialog').hide();
                                 myElement.find('.DCEditDialog').hide();
 
-                                var imageObj = imageListGlobal[0][index][0];
+                                var imageObj = imageListGlobal[index];
 
                                 showBox(element, imageObj, "delete");
                             }
@@ -6094,7 +6113,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 },
                 LoadPersonalizeTags: function (args) {
                     //GetDynamicBlocks
-
+                    
                     $.ajax({
                         url: "/pms/io/getMetaData/?"+BMSTOKEN+"&type=merge_tags",
                         data: "{}",
