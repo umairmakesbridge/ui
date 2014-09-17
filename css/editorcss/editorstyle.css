@@ -1296,7 +1296,7 @@ input[type="button"].small-button {
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 93px;
+    left: 237px;
     position: absolute;
     top: -14px;
 }
@@ -2217,4 +2217,7 @@ ul.socialbtns li .radiopanelinput.checked {
  .MEE_EDITOR .search .close-icon{
      right:28px;
      margin-top:-7px;
+ }
+ .add_new_rule{
+     
  }

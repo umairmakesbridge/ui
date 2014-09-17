@@ -6,7 +6,7 @@
  * * Section5 - DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY)
  * * Section6 - Content Blocks
  * * Section7 - Editor Functions
- * * Section8 - Ladning page Forms
+ * * Section8 - Landing page Forms
  ****/
 define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-ui','mee-helper','tinymce','mincolors'],
     function ($,Backbone,_, template) {
@@ -2792,8 +2792,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         });
 
-
-
                                     }
                                     else {
                                         console.log("args.DynamicContent is null");
@@ -2801,11 +2799,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
 
                                 var OpenRulesWindow = function (args, top, left) {
-
+                                    var filterDialog = myElement.find(".dcRulesDialog");
+                                    options._app.showLoading("Loading Filters...", filterDialog.find("div"),{"top":"51px","left":"260px"});
+                                    require(["editor/DC/filters"],function(templatePage){
+                                        var mPage = new templatePage({                                            
+                                            opt:options,
+                                            args:args
+                                        });
+                                        filterDialog.html(mPage.$el);
+                                    }); 
+                                    filterDialog.css({"left":left-leftMinus,"top":top-topMinus-12,"display":"block"});
+                                    return false;
+                                    
                                     var dcRulesManageDialog = myElement.find(".dcRulesDialog");
-
-
-
                                     dcRulesManageDialog.dialog({                                                    
                                         width: 850,
                                         position:[left,top],                                                    
@@ -2814,16 +2820,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     myElement.find(".ui-dialog-buttonpane").hide();
                                     myElement.find(".ruleDialogClose").click(function () {
-
                                         dcRulesManageDialog.dialog("destroy");
                                     });
                                     myElement.find(".ruleDialogSave").click(function () {
                                         args.dcRulesDialog = dcRulesManageDialog;
                                         SaveRuleWindow(args);
                                         dcRulesManageDialog.dialog('destroy');
-
-
-
                                     });
 
                                 // var topp = top+"px";
@@ -2839,7 +2841,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         var parentLi = $(this).parents("li:first");
                                         args.clickedLi = parentLi;
-
 
                                         args.IsUpdate = true;
                                         args.DynamicContent = args.clickedLi.data("content");
@@ -3148,21 +3149,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     options.LoadDynamicBlocks(args);
                                 }
 
-
-
-
                                 //Getting building blocks from provided block:
                                 if (args.dynamicBlocks != null) {
-
-                                    var listOfDynamicBlocksHtml = $();
+                                    
                                     var dynamicBlocksFromService = args.dynamicBlocks;
                                     var ulDynamicBlocks = myElement.find(".ulDynamicBlocks");
                                     ulDynamicBlocks.empty();
-
-
-
-
-
 
                                     //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
                                     $.each(dynamicBlocksFromService, function (i, obj) {
@@ -3194,97 +3186,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     dynamicBlocksGlobal = dynamicBlocksFromService;
 
-                                }
-                                else {
-                                    var ulDynamicBlocks = myElement.find(".ulDynamicBlocks");
-                                    ulDynamicBlocks.empty();
-                                    //Insert dummy data here
-                                    for (var i = 0; i < 20; i++) {
-
-                                        var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' data-isdummy='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + i + "'>" +
-                                            "<i class='icon dyblck'></i> " +
-                                            "<a href='#'> <span class='font_75 bbName'>" + i + "</span></a>" +
-                                            actionButtons.html() +
-                                            "</li>");
-
-                                        block.find(".imgicons.edit").click(function () {
-                                            var parentLi = $(this).closest(".draggableControl");
-                                            var editBox = parentLi.find(".editBox");
-                                            var bbName = parentLi.find(".bbName");
-                                            editBox.find(".txtBlockName").val(bbName.text());
-
-                                            editBox.show();
-
-                                            var closeBtn = editBox.find(".closebtn");
-                                            closeBtn.click(function () {
-                                                editBox.hide();
-                                            });
-
-                                            var saveBtn = editBox.find(".btnSave");
-                                            saveBtn.click(function () {
-                                                var txtBlockName = editBox.find(".txtBlockName");
-
-                                                var args = new Object();
-                                                args.DCName = txtBlockName.val();
-                                                args.DCID = parentLi.data("id");
-
-                                                //Call overridden Method here: will use when exposing properties to developer
-                                                if (options.OnDynamicContentSave != null) {
-                                                    options.OnDynamicContentSave(args);
-
-                                                    parentLi.find(".bbName").text(args.BlockName);
-                                                    alert("Saved successfully");
-                                                }
-                                            });
-
-                                        });
-
-                                        block.find(".imgicons.delete").click(function () {
-                                            var parentLi = $(this).closest(".draggableControl");
-
-                                            var delBox = parentLi.find(".delBox");
-                                            delBox.show();
-
-                                            var btnDelete = delBox.find(".btnDelete");
-                                            btnDelete.click(function () {
-
-                                                var args = new Object();
-                                                args.DCID = parentLi.data("id");
-
-                                                //Call overridden Method here: will use when exposing properties to developer
-                                                if (options.OnDynamicContentDelete != null) {
-                                                    options.OnDynamicContentDelete(args);
-
-                                                    parentLi.remove();
-                                                    alert("Deleted Successfully");
-                                                }
-
-
-                                            });
-
-                                            var closeBtn = delBox.find(".closebtn");
-                                            closeBtn.click(function () {
-                                                delBox.hide();
-                                            });
-
-                                        });
-
-                                        //Initialize with default draggable:
-                                        InitializeMainDraggableControls(block);
-
-                                        // listOfBuildingBlocksHtml.append(block);
-                                        ulDynamicBlocks.append(block);
-
-                                        block.find(".imageicons").draggable({
-                                            disabled: true
-                                        });
-
-
-                                    }
-                                ///////
-
-                                }
-
+                                }                                
 
                                 myElement.find("#DCResultDiv").hide();
                             }
@@ -5179,7 +5081,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 //****************************************************End Editor Functions **************************************************** //    
 
-//****************************************************Ladning page Forms **************************************************** //    Section8
+//****************************************************Landing page Forms **************************************************** //    Section8
 
                             /// For Forms handling
 
