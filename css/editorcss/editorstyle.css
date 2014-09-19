@@ -2187,6 +2187,9 @@ ul.socialbtns li .radiopanelinput.checked {
  ul.b-blocks > li > i.icon.cblock.PortfolioPlusButton{
       background:url("../images/blocks/PortfolioPlusButton.png") no-repeat scroll center center rgba(0, 0, 0, 0);
  }
+  ul.b-blocks > li > i.icon.cblock.banner{
+      background:url("../images/blocks/banner_icon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+ }
   
     
  .leftpanel{
