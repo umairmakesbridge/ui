@@ -52,6 +52,7 @@ define([
                             'SUB_updated': 'Subscriber updated successfully',
                             'CAMPS_templatename_empty_error': 'Template name can not be empty'
 		}],
+                showbacktooltip:false,
 		initialize: function () {
 			//Load config or use defaults
 			this.set(_.extend({
@@ -653,6 +654,10 @@ define([
                // Hide Previous and show new 
                this.dialogView.$el.find($('.'+hideElement)).hide();
                this.dialogView.$el.find('.backbtn').show(); 
+               if(this.showbacktooltip==false){
+                    this.dialogView.$el.find('.backbtn').tooltip('show');
+                    this.showbacktooltip = true;
+                }
               //console.log(this.dialogArray);
               return this.dialogView;
             }

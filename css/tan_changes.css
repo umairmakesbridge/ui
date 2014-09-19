@@ -183,19 +183,18 @@ h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; col
 .settings .cont { position:relative; }
 .addrow label { width:25%; }
 div.tooltip.right { right:auto; width:auto; top:inherit; margin-left: 5px;
-    margin-top: 19px;
+    margin-top: 3px;
     padding: 0 5px; }
 #mapdata div.tooltip.right { margin-top:10px; }
 .tooltip.right .tooltip-arrow {
-    border-right-color: #FF0000;
-    border-width: 6px 6px 6px 0;
-    left: -7px;
-    margin-top: -6px;
+    border-right-color: #495b67;
+    border-width: 4px 4px 4px 0;
+    left: -5px;
+    margin-top: -4px;
     top: 50%;
 }
-.tooltip.right  { background-color:#ff0000; border-color:#ff0000; }
 .tooltip.right:before { display:none; }
-div.tooltip.right .tooltip-inner { padding:5px; border-radius:6px; }
+div.tooltip.right .tooltip-inner { border-radius:6px; }
 .popover-title { display: none; }
 .popover-content {
     color: #FFFFFF;

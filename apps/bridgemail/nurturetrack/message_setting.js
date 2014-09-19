@@ -147,10 +147,10 @@ function (template) {
                          this.app.showLoading(false,this.$bodyInner);                    
                          this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
                          this.$bodyInner.append(this.messagebody_page.$el); 
-                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          this.messagebody_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                          this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
-                        this.app.dialogArray[dialogArrayLength-1].currentView = this.messagebody_page; // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].currentView = this.messagebody_page; // New Dialog
                          this.messagebody_page.init();
                      },this));
                  }
@@ -182,6 +182,10 @@ function (template) {
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'Y';                        
+                        post_data['htmlCode'] = '';
+                     }else if(selected_li=="html_editor_mee"){
+                         html =this.$("#mee_editor").getMEEHTML();
+                         post_data['htmlCode'] = html;                         
                      }                 
                         
                  if(this.messagebody_page.states.editor_change ===true || typeof(showLoading)!=="undefined"){

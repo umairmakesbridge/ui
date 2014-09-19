@@ -85,6 +85,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                  this.option =options;
                              }
                             this.$('#dialog-title').html('<i class="icon left header-icon" style="display:none"></i><span class="dialog-title"></span><div class="pointy"><a class="icon edit"></a><a class="icon copy"></a><a class="icon delete"></a></div>');
+                             
                             this.$el.css(this.option.css ? this.option.css:{});
                             this.$(".modal-body").css(this.option.bodyCss ? this.option.bodyCss:{}); 
                             this.$(".dialog-title").html(this.option.title?this.option.title:'');
@@ -118,7 +119,8 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             if(options){
                                  this.option =options;
                              }
-                             this.$('.modal-footer').html('<a class="btn-gray left backbtn dialog-backbtn" style="display: none;"><i class="icon back left"></i><span>Back</span></a><a class="btn-gray btn-close right"><span>Close</span><i class="icon cross"></i></a><a style="display:none;" class="btn btn-blue btn-save right"><span>Save Target</span><i class="icon save"></i></a>');
+                             this.$('.modal-footer').html('<a class="btn-yellow left backbtn dialog-backbtn" title="You can always go back to previous dialog by click on back button" style="display: none;"><i class="icon back left"></i><span>Back</span></a><a class="btn-gray btn-close right"><span>Close</span><i class="icon cross"></i></a><a style="display:none;" class="btn btn-blue btn-save right"><span>Save Target</span><i class="icon save"></i></a>');
+                             this.$(".dialog-backbtn").tooltip({'placement':'right',delay: { show: 0, hide:0 },animation:true,trigger:"manual"});
                              if(this.option.buttons){
                                 if(this.option.buttons.saveBtn){ 
                                     this.$(".modal-footer .btn-save").show();

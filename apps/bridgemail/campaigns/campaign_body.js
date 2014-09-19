@@ -18,13 +18,7 @@ function (template,editorView) {
                'change #handcodedhtml':'editorChange',
                'change #plain-text':'editorChange',
                'change #htmlarea':'editorChange',
-               'click .save-step2': function(obj){
-                    var button = $.getObj(obj,"a");
-                    if(!button.hasClass("saving")){
-                        this.parent.saveStep2(false);
-                        button.addClass("saving");
-                    }                                                                
-                }
+               'click .save-step2': 'saveForStep2'
             },
             /**
              * Initialize view - backbone
@@ -35,9 +29,11 @@ function (template,editorView) {
                     this.camp_obj = this.options.camp_obj;                    
                     this.app = this.parent.app;   
                     this.templates = false;
-                    this.states = {}
+                    this.states = {};
                     this.states.editor_change = false;
+                    this.campobjData = this.parent.camp_json;
                     this.copyCampaigns = false;
+                    this.meeEditor = false;
                     this.editable=this.options.editable;
                     this.scrollElement = this.options.scrollElement;                    
                     this.wp_id = "NT_MESSAGE";
@@ -55,6 +51,14 @@ function (template,editorView) {
                 this.initControls();  
                
             },
+            saveForStep2:function(obj){                  
+                var button = $.getObj(obj,"a");
+                if(!button.hasClass("saving")){
+                    this.parent.saveStep2(false);
+                    button.addClass("saving");
+                }                                                                                      
+            },
+            
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
                 this.initMergeFields();
@@ -64,15 +68,20 @@ function (template,editorView) {
                    this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand',placeholder_text:'Merge tags'});
                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge tags'});
                 },
-            populateBody:function(){
-              if(this.parent.htmlText){
-                    this.$("#html_editor").click();
-                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
-                }
-                else if(this.parent.plainText){
+            populateBody:function(){           
+                if(this.plainText){
                     this.$("#plain_text").click();
-                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
+                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainTex,true));
+                }
+                else if(this.campobjData.editorType=="W"){
+                    this.$("#html_editor").click();
+                }
+                else if(this.campobjData.editorType=="MEE"){
+                    this.$("#html_editor_mee").click();
+                }else if(this.campobjData.editorType=="H"){
+                    this.$("#html_code").click();
                 }  
+                
             },
             init:function(){
               this.$("#editorhtml").append(this.bmseditor.$el);
@@ -82,7 +91,7 @@ function (template,editorView) {
               var _width = this.parent.$el.width()-48;
               this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
               this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
-              if(!this.parent.htmlText){
+              if(this.campobjData.editorType=="W"){
                 this.openEditor();
               }
             },
@@ -90,7 +99,7 @@ function (template,editorView) {
                 var camp_obj = this;
                 var target_li =$.getObj(obj,"li"); 
                 if(this.$("#choose_soruce li.selected").length==0){
-                    this.$(".selection-boxes").animate({width:"700px",margin:'0px auto'}, "medium",function(){
+                    this.$(".selection-boxes").animate({width:"840px",margin:'0px auto'}, "medium",function(){
                         $(this).removeClass("create-temp");                                                                                        
                         camp_obj.step2SlectSource(target_li);
                     });
@@ -115,10 +124,59 @@ function (template,editorView) {
                      case 'copy_campaign':
                            this.getcampaignscopy();                                                      
                      break;
+                     case 'html_editor_mee':
+                           this.loadMEE();                              
+                         break;
                      default:
                      break;
                 }
+                
+                var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
+                var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
+                var selected_li = target_li.attr("id");
+                 if(selected_li=="html_editor"){                        
+                    post_editor['editorType'] = 'W';                        
+                 }else if(selected_li=="html_code"){                        
+                    post_editor['editorType'] = 'H';                        
+                 }                 
+                 else if(selected_li=="html_editor_mee"){                        
+                     post_editor['editorType'] = 'MEE';
+                 }
+                 if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
+                    this.campobjData.editorType = post_editor["editorType"];
+                    $.post(URL,post_editor)
+                     .done(function(data) {
+                     });
+                 }
 
+            },
+            loadMEE:function(){
+                if(!this.meeEditor){
+                     this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
+                     this.meeEditor = true;               
+                     setTimeout(_.bind(this.setMEEView,this),100);                        
+                }
+            },
+            setMEEView:function(){
+                    var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
+                     require(["editor/MEE"],_.bind(function(MEE){                                              
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
+                        this.$("#mee_editor").setChange(this);                
+                        this.setMEE(_html);
+                        this.initScroll();
+                        this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                    },this));  
+            },
+            initScroll:function(){
+                
+            },
+            setMEE:function(html){
+               if(this.$("#mee_editor").setMEEHTML){
+                    this.$("#mee_editor").setMEEHTML(html);                        
+               } 
+               else{
+                   setTimeout(_.bind(this.setMEE,this,html),200);
+               }
             },
             setContents:function(){
               if(_tinyMCE.get('bmseditor_'+this.wp_id)){
@@ -219,7 +277,7 @@ function (template,editorView) {
              openEditor:function(){
                  this.$("#html_editor").click()
              },
-                ReattachEvents: function(){
+             ReattachEvents: function(){
                    this.$el.parents('.modal').find('.c-current-status').remove();
                    this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
                    this.$el.parents('.modal').find('#dialog-title i').hide();
@@ -230,8 +288,7 @@ function (template,editorView) {
                    previewIconMessage.click(_.bind(this.parent.previewCampaign,this.parent));
                    this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
                    if(this.parent.type == "autobots"){
-                          this.$el.parents('.modal').find('.modal-header .cstatus').remove();
-                          //this.$el.parents('.modal').find("#dialog-title i").removeClass('dlgpreview').addClass('bot').show();
+                          this.$el.parents('.modal').find('.modal-header .cstatus').remove();                          
                           this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
                     } 
                     

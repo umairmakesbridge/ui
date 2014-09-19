@@ -110,7 +110,13 @@ function (template) {
                     var result = jQuery.parseJSON(data);
                         if(result[0]=="success"){
                             this.app.showMessge("Block has been successfully created.",$("body"));
-                            this.dialog.hide();
+                             if(this.config.fromDialog){
+                                  this.dialog.showPrevious();      
+                             }
+                             else{
+                                 this.dialog.hide();      
+                             }
+                      
                             this.editor._LoadBuildingBlocks(this._args.args);
                         }
                         else{

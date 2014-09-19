@@ -403,7 +403,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             };
                             function setHTML(dialog){
                                 myElement.setMEEHTML(dialog.getBody().find(".divHtmlCode").val().replace(/\n/g,""));
-                                dialog.hide();
+                                if(options.fromDialog){
+                                    dialog.showPrevious();
+                                }
+                                else{
+                                    dialog.hide();
+                                }
                             }
                             //--------------------- Code Preview ---------------------------//
 
@@ -452,11 +457,30 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     preview_html += '<textarea style="font-size:12px;width:'+(dialog_width-46)+'px;height:'+(dialog_height-58)+'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
                                     preview_html += '</div></div></div>';
                                     preview_html = $(preview_html);    
-                                    dialog.getBody().html(preview_html); 
+                                    dialog.getBody().append(preview_html); 
                                     dialog.saveCallBack(_.bind(setHTML,this,dialog));
                                     
+                                    if(options.fromDialog){
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        dialog.getBody().find(".divPreviewCode").addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].currentView = preview_html; // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].saveCall=_.bind(setHTML,this,dialog); // New Dialog
+                                        preview_html.ReattachEvents = options.reAttachEvents;
+                                        dialog.getBody().find(".tabs-btn li").click(function(){
+                                            var obj = $(this);
+                                            if(obj.hasClass("active")==false){
+                                                var clicked_tab = obj.find("a").attr("href");
+                                                obj.parent("ul").next().find("div.tab-pane").removeClass("active");
+                                                obj.parent("ul").next().find("div"+clicked_tab).addClass("active");
+                                                
+                                            }
+                                        });
+                                    }
+                                    
                                     dialog.getBody().find(".divHtmlPreview").html(outputHTML);
-                                    dialog.getBody().find(".divHtmlCode").val(outputHTML);                                    
+                                    dialog.getBody().find(".divHtmlCode").val(outputHTML);            
+                                    
                                     
                                 });
 
@@ -1624,14 +1648,23 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 $(".modal-backdrop").css("z-index","99998");
                                 require(["editor/links"],function(page){                                              
                                     var linkDialogPage = new page({
-                                        app:options._app,
+                                        config:options,
                                         _el:myElement,
                                         dialog:dialog,
                                         linkType:lType,
                                         div:divID
                                     });                                                                        
-                                    dialog.getBody().html(linkDialogPage.$el);
+                                    dialog.getBody().append(linkDialogPage.$el);
                                     dialog.saveCallBack(_.bind(linkDialogPage.insertLink,linkDialogPage,dialog));
+                                    options._app.showLoading(false,dialog.getBody());
+                                    if(options.fromDialog){
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        dialog.getBody().find(".content_containerLinkGUI").addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].currentView = dialog.getBody().find(".content_containerLinkGUI"); // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].saveCall=_.bind(linkDialogPage.insertLink,linkDialogPage,dialog); // New Dialog
+                                        linkDialogPage.ReattachEvents = options.reAttachEvents;
+                                    }
                                 }); 
                             }
 
@@ -1676,8 +1709,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 var left_minus = 15;      //static space to minus to show dialog on exact location
                                 var ele_offset = _ele.offset();                 
                                 var ele_height =  _ele.height();
-                                var top = ele_offset.top + ele_height +4-topMinus;
-                                var left = ele_offset.left-left_minus-leftMinus-24;           
+                                var editorBox = _ele.parents(".MEE_EDITOR").offset();
+                                var top = ele_offset.top - editorBox.top +10 ;
+                                var left = ele_offset.left - editorBox.left-38;           
 
                                 if(type == "info") {
                                     var li = "<a class='closebtn'></a>";
@@ -1881,23 +1915,43 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     _newTitleHTML += '<div class="inputcont" style="text-align:right;"><input type="text" id="image_title" placeholder="Enter title here" style="width:70%;" /></div>'
                                     _newTitleHTML += '</div>';
                                     _newTitleHTML = $(_newTitleHTML) ;   
-                                    dialog.saveCallBack(function(){
+                                    var setTitle = function(){
                                         var title_text =_newTitleHTML.find("input#image_title").val();
                                         if(title_text){
                                             $(workingObject).attr("title",title_text);
-                                            dialog.hide();
+                                            if(options.fromDialog){
+                                                dialog.showPrevious();
+                                            }
+                                            else{
+                                                dialog.hide();
+                                            }
                                         }
                                         else{
                                             _newTitleHTML.find("input#image_title").focus();
                                         }
-                                    });
+                                    }
+                                    _newTitleHTML.find("input#image_title").keypress(function(e){
+                                        if(e.keyCode==13){
+                                                setTitle();
+                                         }
+                                    })
+                                    dialog.saveCallBack(setTitle);
                                     dialog.getBody().append(_newTitleHTML);
+                                    if(options.fromDialog){
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        dialog.getBody().find(".campname-container").addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].currentView = _newTitleHTML; // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].saveCall=setTitle; // New Dialog
+                                        _newTitleHTML.ReattachEvents = options.reAttachEvents;
+                                    }
                                     if($(workingObject).attr("title")){
                                         _newTitleHTML.find("input#image_title").val($(workingObject).attr("title"));
                                     }
                                     _newTitleHTML.find("input#image_title").focus();
                                 }
                             }
+                            
                             //========================= End Sohaib Nadeem =====================////
 
                             var isElementClicked = false;
@@ -1981,9 +2035,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
                                     myElement.find("#imageToolbar").css("width","310px");
                                 }
+                                var editorBox = $(event.target).parents(".editorpanel").offset();
                                 myElement.find("#imageToolbar").css({
-                                    "margin-top": ($(event.target).parent().parent().offset().top-topMinus-31), 
-                                    "margin-left": ($(event.target).parent().parent().offset().left-leftMinus)
+                                    top:$(event.target).offset().top-editorBox.top-34,
+                                    left:$(event.target).offset().left-editorBox.left+290                                    
                                 });
 
                             }                        
@@ -2308,21 +2363,42 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
                                 return false;
                             });
+                            
+                            var showLoadingWheel = function(isShow, ele) {
+                                if (isShow)
+                                    ele.append("<div class='loading-wheel right' style='margin-left:5px;margin-top: 9px;position: inherit!important;'></div>")
+                                else {
+                                    var ele = ele.find(".loading-wheel");
+                                    ele.remove();
+                                }
+                            }
 
                             var ShowImagePreview = function (args) {
-                                if (args != null && args != undefined) {
-                                    var imagePreviewContainer = myElement.find('.imgpreview-container');
-                                    imagePreviewContainer.find("h2").children("span").text(args.Name);
-                                    imagePreviewContainer.find("div.modal-body").children("img").attr('src', args.URL);
-                                    var actionsList = imagePreviewContainer.find("ul#more-tool-actions").children();
-                                    $.each(actionsList, function () {
-                                        var action = $(this).children("a");
-                                        var actionType = action.data("action");
-                                        if (actionType === "NewWindow") {
-                                            action.data("imgurl", args.URL);
-                                        }
+                                if (args != null && args != undefined) {                                    
+                                                                                                                                             
+                                    var dialog_width = $(document.documentElement).width() - 60;
+                                    var dialog_height = $(document.documentElement).height() - 162;
+                                    var dialog = options._app.showDialog({title: " " +args.Name,
+                                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                                        headerEditable: true,
+                                        headerIcon: '_graphics',
+                                        bodyCss: {"min-height": dialog_height + "px"}
                                     });
-                                    imagePreviewContainer.show();
+                                                                        
+                                    dialog.$el.find('.pointy').hide();
+                                    dialog.$el.find("camp_header .icon").css("margin", "0px");
+                                    dialog.$el.find('.dialog-title').addClass('images-preview');
+                                    if(dialog.$el.find('.c-current-status').length > 0){
+                                        dialog.$el.find('.c-current-status').hide();
+                                    }
+                                    var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                    var wrapelement = 'dialogWrap-'+dialogArrayLength; // New Dialog
+                                    var img = "<img id='img1' src= '"+args.URL + "' class='"+wrapelement+"'>";
+                                    dialog.getBody().append(img);
+                                    showLoadingWheel(true, dialog.$el.find(".images-preview"));
+                                    $('#img1').load(function() {
+                                        showLoadingWheel(false, dialog.$el.find(".images-preview"));
+                                    });
                                 }
                             }
 
@@ -2808,7 +2884,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
                                         filterDialog.html(mPage.$el);
                                     }); 
-                                    filterDialog.css({"left":left-leftMinus,"top":top-topMinus-12,"display":"block"});
+                                    filterDialog.css({"left":left,"top":top,"display":"block"});
                                     return false;
                                     
                                     var dcRulesManageDialog = myElement.find(".dcRulesDialog");
@@ -2849,10 +2925,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         var left_minus = 250;      //static space to minus to show dialog on exact location
                                         var _ele = $(this);
-                                        var ele_offset = _ele.offset();                 
-                                        var ele_height =  _ele.height();
-                                        var top = ele_offset.top + ele_height +4;
-                                        var left = ele_offset.left-left_minus;  
+                                        var ele_offset = _ele.offset();                                                         
+                                        var editorPanel = _ele.parents(".MEE_EDITOR").offset();
+                                        var top = ele_offset.top -editorPanel.top+18;
+                                        var left = ele_offset.left-editorPanel.left-242;  
 
                                         OpenRulesWindow(args, top, left);
 
@@ -4806,10 +4882,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     options._app.showLoading(false, mPage.$el.parent());              
                                     dialog.saveCallBack(_.bind(mPage.saveBlockCall,mPage));
                                     mPage.init();
-                                    mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog                                
-                                    options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
-                                    options._app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
-                                    options._app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBlockCall,mPage); // New Dialog
+                                    options._app.showLoading(false,dialog.getBody());
+                                    if(options.fromDialog){
+                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                        dialog.getBody().find(".add-block").addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                                        options._app.dialogArray[dialogArrayLength-1].saveCall = _.bind(mPage.saveBlockCall,mPage);
+                                        mPage.ReattachEvents = options.reAttachEvents;
+                                    }
                                 
                                 }); 
                             }
@@ -4988,7 +5069,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var args = {
                                             buildingBlock: null
                                         };                                                    
-
                                         var buildingBlock = new Object();
                                         buildingBlock.Id = mee._LastSelectedBuildingBlock.data("id");
                                         args.buildingBlock = buildingBlock;
@@ -5030,8 +5110,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 var left_minus = 15;      //static space to minus to show dialog on exact location
                                 var ele_offset = _ele.offset();                
                                 var ele_height =  _ele.height();
-                                var top = ele_offset.top + ele_height +4-topMinus;
-                                var left = ele_offset.left-left_minus-leftMinus;  
+                                var editorPanel = _ele.parents(".MEE_EDITOR").offset();
+                                var top = ele_offset.top - editorPanel.top+25;
+                                var left = ele_offset.left - editorPanel.left-17;  
                                 var url_string = "",showClass="disabled";
                                 url = _ele.attr("href");
                                 var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -5358,7 +5439,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
             },
             render: function () {
                 var BMSTOKEN = this.BMSTOKEN;                            
-                this._$el = this.options._el;                            
+                this._$el = this.options._el;         
+                this.fromDialog = this.options.fromDialog?true:false;
                 if (typeof String.prototype.startsWith != 'function') {
                     // see below for better implementation!
                     String.prototype.startsWith = function (str) {
@@ -5411,6 +5493,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
                 var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
                 var _app= this.app;
+                var reattachEvents =  this.options.reattachEvents;
 
                 this._$el.MakeBridgeEditor({
                     SaveImageTagsProperties: _saveImageTagsAjaxParameters,
@@ -5421,6 +5504,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                     preDefinedHTML: _preDefinedHTML,
                     landingPage: false,
                     formWizURL: _formWizURL,
+                    fromDialog:this.fromDialog,
+                    reAttachEvents:reattachEvents,
                     formDeleteURL: _formDeleteURL ,                
                     saveCallBack:  this.options.saveClick,
                     _app:this.app,

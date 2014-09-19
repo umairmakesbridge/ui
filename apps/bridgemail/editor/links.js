@@ -29,7 +29,8 @@ function (template) {
                     this.linkType = this.options.linkType;
                     this.textEditor = this.options.div;
                     this.tiny_editor_selection = null;    
-                    this.app = this.options.app;
+                    this.config = this.options.config;
+                    this.app = this.config._app;
                     this.systemLinks={
                         "fwdToFrndLink":"{{BMS_TELL_A_FRIEND_URL}}",
                         "unsubLink":"{{BMS_UNSUBSCRIBE_URL}}",
@@ -88,7 +89,12 @@ function (template) {
                     imgLink = this.attachLinkToText();
                 }           
                 if(imgLink!==false){
-                    dialog.hide();      
+                     if(this.config.fromDialog){
+                        dialog.showPrevious();      
+                     }
+                     else{
+                         dialog.hide();      
+                     }
                 }
             },
             showHyperLink:function(){
