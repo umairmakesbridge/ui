@@ -409,6 +409,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     if(model && model[0] && model[0].dispatchType){
                         if(model[0].dispatchType!=="L"){
                             messageView.waitView = this._wait(tOrder,model);
+                            messageView.disableButtons(true);
                             messageView.isWait=true;
                         }
                     }
@@ -422,13 +423,14 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     }
                     this.app.showLoading("Creating Wait...",this.$el);                    
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');                    
-                    $.post(URL, {type:'waitMessage',trackId:this.track_id,triggerOrder:tOrder,dispatchType:'D',dayLapse:'3'})
+                    $.post(URL, {type:'waitMessage',trackId:this.track_id,triggerOrder:tOrder,dispatchType:'D',dayLapse:'1'})
                     .done(_.bind(function(data) {                  
                            this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
                                 this.messages[tOrder-1].waitView = this._wait(tOrder);
                                 this.messages[tOrder-1].isWait = true;
+                                this.messages[tOrder-1].disableButtons(true);
                            }
                            else{
                                this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -571,11 +573,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         for(var i=0;i<this.messages.length;i++){
                             var _message =  this.messages[i];
                             this.saveAllCall++;
-                            _message.saveMessage();
-                            if(_message.waitView){
-                                this.saveAllCall++;
-                                _message.waitView.saveWait();
-                            }
+                            _message.saveMessage();                            
                         }
                         this.$(".save-all-nt").addClass("saving");
                     }
@@ -584,7 +582,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    for(var i=0;i<this.messages.length;i++){
                         var _message =  this.messages[i];                            
                         _message.expand();
-                        if(_message.waitView){                            
+                        if(_message.isWait){                            
                             _message.waitView.expand();
                         }
                     } 
@@ -594,7 +592,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                    for(var i=0;i<this.messages.length;i++){
                         var _message =  this.messages[i];                            
                         _message.collapse();
-                        if(_message.waitView){                            
+                        if(_message.isWait){                            
                             _message.waitView.collapse();
                         }
                     } 

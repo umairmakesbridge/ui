@@ -201,6 +201,9 @@ function (template) {
                 }
                 e.stopPropagation();
             },
+            disableButtons:function(disable){
+                
+            },
             previewCampaign:function(e){
                 var camp_id = this.object[0]['campNum.encode'];                
                 //var appMsgs = this.app.messages[0];				
@@ -266,17 +269,26 @@ function (template) {
                 this.$(".ntmessageno").html(order+": ");
                 this.$el.attr("t_order",this.triggerOrder);
             },
+            getPostData:function(){              
+              var post_data = {};
+              if(this.$(".timer-group button:first-child").hasClass("active")){
+                post_data['timeOfDay'] = -1;                            
+              }
+              else{
+                    post_data['timeOfDayHrs'] = this.getHour(this.$(".timebox-hour").val());                            
+                    post_data['timeOfDayMins'] = this.$(".timebox-min").val();
+                }                        
+                return post_data;
+            },
             saveMessage:function(obj){
-                if(this.triggerOrder){
+                if(this.triggerOrder){                             
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
                         var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
-                        if(this.$(".timer-group button:first-child").hasClass("active")){
-                            post_data['timeOfDay'] = -1;                            
+                        if(this.isWait){
+                            var _data = this.waitView.getPostData(); 
+                            post_data =  _data.post;                        
                         }
-                        else{
-                            post_data['timeOfDayHrs'] = this.getHour(this.$(".timebox-hour").val());                            
-                            post_data['timeOfDayMins'] = this.$(".timebox-min").val();
-                        }
+                        post_data = $.extend({},post_data,this.getPostData());
                         this.$(".save-message").addClass("saving");
                         $.post(URL, post_data)
                         .done(_.bind(function(data) {                                             
@@ -298,6 +310,7 @@ function (template) {
                                    this.app.showAlert(_json[0],$("body"),{fixed:true}); 
                                }
                        },this));
+                    
                 }
                 
             },

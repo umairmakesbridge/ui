@@ -93,7 +93,8 @@ function (template,moment) {
                                var _json = jQuery.parseJSON(data);        
                                if(_json[0]!=='err'){
                                    this.app.showMessge("Message wait deleted Successfully!"); 
-                                   this.parent.messages[this.triggerOrder-1].isWait = false;
+                                   this.parent.messages[this.triggerOrder-1].isWait = false;    
+                                   this.parent.messages[this.triggerOrder-1].disableButtons(false);
                                }
                                else{
                                    this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -109,28 +110,42 @@ function (template,moment) {
                     this.$("#waitday").focus();
                 }
             },
+            getPostData :function(){
+                var isError = "";
+                var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
+                        if(this.$(".schedule-group button:first-child").hasClass("active")){
+                        post_data['dispatchType'] = 'D';
+                        post_data['dayLapse'] = this.$("#waitday").val();
+                        if(post_data['dayLapse']>0 && post_data['dayLapse']<=365){                                                            
+                            var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
+                            this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
+                        }
+                        else{
+                            isError = "Days must be between 1-365";
+                        }
+                    }
+                    else{
+                        post_data['dispatchType'] = 'S';
+                        var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY');                            
+                        post_data['scheduleDate'] = _date.format("MM-DD-YY");
+                        this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
+                    }
+                    
+                    return {"post":post_data,isError:isError}
+            },
             saveWait:function(obj){
                 if(this.triggerOrder){
                     var isError = "";
                     var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-                        var post_data = {type:'waitMessage',trackId:this.parent.track_id,triggerOrder:this.triggerOrder};
-                        if(this.$(".schedule-group button:first-child").hasClass("active")){
-                            post_data['dispatchType'] = 'D';
-                            post_data['dayLapse'] = this.$("#waitday").val();
-                            if(post_data['dayLapse']>0 && post_data['dayLapse']<=365){                                                            
-                                var dayText =this.$("#waitday").val()=="1"?" Day":" Days";
-                                this.$(".wait-container").html(": "+this.$("#waitday").val() + dayText);
-                            }
-                            else{
-                                isError = "Days must be between 1-365";
-                            }
+                        var _data = this.getPostData();
+                        var post_data = {};
+                        if(_data.isError!==""){
+                            isError = _data.isError;
                         }
                         else{
-                            post_data['dispatchType'] = 'S';
-                            var _date = moment(this.$("#waitdatetime").val(),'DD-MM-YYYY');                            
-                            post_data['scheduleDate'] = _date.format("MM-DD-YY");
-                            this.$(".wait-container").html(": "+_date.format("DD MMM YYYY"));
+                            post_data = _data.post;
                         }
+                        post_data = $.extend({},post_data,this.parent.messages[this.triggerOrder-1].getPostData());
                         if(!isError){
                             this.$(".save-wait").addClass("saving");
                             $.post(URL, post_data)
