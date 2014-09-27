@@ -27,6 +27,7 @@
       }
       this.fields = []
       this.rules = []
+      this.filterFields = []
       
       var self = this;
       
@@ -48,7 +49,6 @@
             this.$element.find('input').iCheck({
                   checkboxClass: 'checkinput'
             })
-
             this.$element.find('input').on('ifChecked', function(event){
                   self.$element.find(".advncfilter .filter-cont").show();
             })
@@ -75,9 +75,13 @@
             filter_html +='<div class="btn-group rules-container"><select data-placeholder="Choose Match Type" class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
             filter_html +='</select></div>'                              
           }
-          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" /></div>'
+          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" />'
+          filter_html += '<select data-placeholder="Choose opportuinity value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
+          filter_html +='</select></div>'
       
       filter.find(".filter-cont").append(filter_html)
+      filter.find(".matchValueSelect").chosen({width:'200px'});
+      filter.find(".matchValueSelect").next().hide();
       this.addActionBar(filter)
       var self = this 
       if(this.$element.find(".filter-div ._row").length>=1){
@@ -105,8 +109,28 @@
                      }           
                 })
                 
-                    filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
-                    self.updateAdvanceFilter()
+                filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
+                if(attr_type=="picklist"){
+                     filter.find(".matchValue").hide();
+                     filter.find(".rules").val("equal").trigger("chosen:updated");
+                     var picklist_values = self.filterFields[$(this).find("option:selected").index()-1].picklist;
+                     if(picklist_values){
+                         var picklist_html = "";
+                         $.each(picklist_values[0],function(key,val){                                
+                                 picklist_html +='<option value="'+val+'">'+val+'</option>'                                                                      
+                           })
+                     }                     
+                     filter.find(".matchValueSelect").next().show();
+                     filter.find(".matchValueSelect").html(picklist_html).prop("disabled",false).trigger("chosen:updated");
+                     if(matchValue){
+                         filter.find(".matchValueSelect").val(matchValue).trigger("chosen:updated");
+                     }
+                }
+                else{
+                    filter.find(".matchValueSelect").next().hide();
+                    filter.find(".matchValue").show();
+                }
+                self.updateAdvanceFilter()
                  
            }
       })
@@ -123,8 +147,13 @@
       
       //Load Elements 
       if(this.options.filterFor==="S"){
-          this.addSalesForceField(filter,params)
-          this.addSalesForceRules(filter,params)
+         if(this.objType!=="opportunity"){ 
+            this.addSalesForceField(filter,params)          
+         }
+         else{
+             this.addSalesForceFieldFilter(filter,params)          
+         }
+         this.addSalesForceRules(filter,params)
       }
       else if(this.options.filterFor==="N"){
           this.addNetSuiteField(filter,params)
@@ -163,6 +192,44 @@
       else{
           var field_html ='<option value=""></option>'                                            
           $.each(this.fields,function(key,val){
+                selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
+                field_html +='<option value="'+val.name+'" '+selected_field+' field_type="'+val.type+'">'+val.label+'</option>'                           
+
+            })
+        filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
+      }
+  }
+  ,addSalesForceFieldFilter:function(filter,params){
+      var URL = ""
+      var self = this
+      var selected_field = ""
+      if(this.filterFields.length===0){
+          URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=opportunityFilterFields";
+          jQuery.getJSON(URL,  function(tsv, state, xhr){
+                if(xhr && xhr.responseText){                        
+                     var fields_json = jQuery.parseJSON(xhr.responseText);                                
+                     if(self.options.app.checkError(fields_json)){
+                         return false;
+                     }       
+                    var field_html ='<option value=""></option>'                                            
+                    $.each(fields_json.fldList[0],function(key,val){
+                        selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
+                        if(self.objType && self.objType===val[0].sfObject.toLowerCase()){
+                            self.filterFields.push(val[0])                                  
+                            field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
+                        }
+                        
+                    });                    
+                    filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
+                    if(params && params.fieldName){
+                        filter.find(".fields").change();
+                    }
+                }
+          }).fail(function() { console.log( "error in loading fields" ); });
+      }
+      else{
+          var field_html ='<option value=""></option>'                                            
+          $.each(this.filterFields,function(key,val){
                 selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                
                 field_html +='<option value="'+val.name+'" '+selected_field+' field_type="'+val.type+'">'+val.label+'</option>'                           
 
@@ -329,7 +396,7 @@
          var query = "";
          var condition = "";
          for (var i=0;i<total_rows.length;i++){
-             if($(total_rows[i]).find(".fields").val()!="" && $(total_rows[i]).find(".rules").val()!='none' && $(total_rows[i]).find(".matchValue").val()!==""){
+             if($(total_rows[i]).find(".fields").val()!="" && $(total_rows[i]).find(".rules").val()!='none' && ($(total_rows[i]).find(".matchValue").val()!=="" || $(total_rows[i]).find(".matchValueSelect").val()!=="")){
                  if(i!=0){
                      query += " "+condition+" "
                  }
@@ -368,7 +435,7 @@
               }  
             }
             else{
-              if(v[0].sfObject==self.objType){
+              if(v[0].sfObject==self.objType || self.objType=="opportunity"){
                 self.addBasicFilter(false,false,filter)                    
               }
             }
@@ -406,7 +473,12 @@
           if($(total_rows[i]).hasClass("filter")){
               filters_post[src+"Field"+N] = filter.find(".fields").val()
               filters_post[src+"FieldCondition"+N] = filter.find(".rules").val()
-              filters_post[src+"FieldValue"+N] = filter.find(".matchValue").val()
+              if(filter.find(".matchValue").css("display")!=="none"){
+                filters_post[src+"FieldValue"+N] = filter.find(".matchValue").val()
+              }
+              else{
+                  filters_post[src+"FieldValue"+N] = filter.find(".matchValueSelect").val();
+              }
               if(filter.next("span.andor").length==1){
                 filters_post[src+"ANDOR"+N] = filter.next("span.andor").find("select").val()
               }

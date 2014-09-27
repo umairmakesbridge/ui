@@ -88,7 +88,11 @@ function (template,OwnerFields) {
                          if(owner_trans[0]=="err"){
                              return false;
                          }
-                         if(owner_trans.status=="D"){
+                         if(owner_trans.count && owner_trans.count=="0"){
+                             this.$(".update-fields,.deactivate-fields").hide();
+                             this.$(".activate-fields").show();
+                         }
+                         else if(owner_trans.status=="D"){
                              this.$(".update-fields,.deactivate-fields").hide();
                              this.$(".activate-fields").show();
                          }else{

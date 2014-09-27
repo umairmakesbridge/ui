@@ -3325,8 +3325,8 @@ ul#template_search_menu li {
 }
 
 .bmsgrid .name-type h3 a.edit-target{
-    max-width:235px;
-    overflow-y: hidden;
+    max-width:80%;
+    overflow: hidden;
     display: inline-block;
     white-space: nowrap;
     text-overflow:ellipsis;
@@ -3348,4 +3348,17 @@ ul#template_search_menu li {
     width:242px !important;
     float: none;
 }
-
+.accordion-inner label.left-align{
+    text-align: left;
+    padding:4px 8px 0 8px;
+     font-size: 14px;
+    color:#01aeee;
+    width: 300px;
+}
+.refresh-block{
+    border-bottom: 2px solid #eaf5fc;    
+    height: 40px;
+    margin-left: 22px;
+    width: 343px;
+    margin-top:10px;
+}

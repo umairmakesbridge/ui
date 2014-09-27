@@ -71,7 +71,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                         "step2":{"templates":false,htmlText:'',plainText:'',change:false},
                         "step3":{"target_id":0,highrise:false,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,
-                                             csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:""},
+                                             csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:"",opportunity:""},
                                              ns_filters:{customer:"",contact:"",parnter:"",nsObject:"",isNewTarget:false,newTargetName:''}
                                 },
                         "step4":{"init":false,datetime:{day:0,month:0,year:0,hour:0,min:0,sec:0},cal:null,camp_status:'D',sch_date:''},
@@ -2517,6 +2517,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                  camp_obj.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
                              }                         
                          });
+                         this.$("input[value='opportunity']").on('ifClicked', function(event){
+                            if(self.$("input[value='opportunity']").prop("checked")){
+                               self.$(".contactby_opp").click()
+                            }
+                         })
                          if(this.states.step3.recipientType.toLowerCase()!=="salesforce"){
                              this.$("input[name='options_sf']").eq(0).iCheck('check');                   
                          }                             
@@ -2593,6 +2598,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      else if(filter_type=="both"){
                          dialog_title= "Lead & Contact";
                      }
+                     else if(filter_type=="opportunity"){
+                         dialog_title= "Contacts by Opportunities";
+                     }
                      var self = this;
                      var dialog_width = $(document.documentElement).width()-60;
                      var dialog_height = $(document.documentElement).height()-219; 
@@ -2605,7 +2613,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showLoading("Loading Filters...",dialog.getBody());
                     require(["crm/salesforce/after_filter"],function(afterFilter){                        
                         var step3_obj= self.states.step3;
-                        var recipient_obj = (step3_obj.recipientType && step3_obj.recipientType.toLowerCase()=="salesforce" && step3_obj.recipientDetial.filterType==="filter")?step3_obj.recipientDetial:null;
+                        var recipient_obj = (step3_obj.recipientType && step3_obj.recipientType.toLowerCase()=="salesforce")?step3_obj.recipientDetial:null;
                         var afilter = new afterFilter({camp:self,savedObject:recipient_obj,type:filter_type});
                         afilter.$el.css("margin","10px 0px");
                         dialog.getBody().html(afilter.$el);
@@ -2616,8 +2624,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    if(this.states.step3.recipientDetial && this.states.step3.recipientType.toLowerCase()=="salesforce"){
                        var recipient_obj = this.states.step3.recipientDetial;                       
                        if(recipient_obj.filterType==="campaign"){
-                           this.$("input[name='options_sf']").eq(3).iCheck('check');                           
+                           this.$("input[name='options_sf']").eq(4).iCheck('check');                           
                            this.$("#sfcamp_list_grid tr[id='row_"+recipient_obj.sfCampaignId+"']").addClass("selected");    
+                       }
+                       else if(recipient_obj.filterType==="opportunity"){
+                           this.$("input[name='options_sf']").eq(3).iCheck('check');                                                      
                        }
                        else if(recipient_obj.filterType==="filter" && recipient_obj.sfObject!=="both"){
                            if(recipient_obj.sfObject=="lead"){
@@ -2652,16 +2663,21 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    }
                    else{
                        var importType = salesforce_val;
-                       post_data['filterType']= "filter";
-                       post_data['sfObject'] = importType;               
+                        post_data['filterType']= (importType=="opportunity")?"opportunity":"filter";
+                        post_data['sfObject'] = (importType=="opportunity")?"contact":importType;                            
                        
                        var leadPost = camp_obj.states.step3.sf_filters.lead;
                        var contactPost= camp_obj.states.step3.sf_filters.contact;
+                       var opportunityPost= camp_obj.states.step3.sf_filters.opportunity;
                        if(importType=="lead"){
                         $.extend(post_data,leadPost)
                        }
                        else if(importType=="contact"){
                         $.extend(post_data,contactPost)
+                       }
+                       else if(importType=="opportunity"){
+                         $.extend(post_data,opportunityPost)
+                         post_data['isRefresh']='N';
                        }
                        else if(importType=="both"){
                          $.extend(post_data,leadPost)

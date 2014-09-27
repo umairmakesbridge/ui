@@ -267,7 +267,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                     var dialogTitle = importName?importName:"Loading...";
                     var dialog = this.app.showDialog({title:dialogTitle,
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
-                              headerEditable:true,
+                              headerEditable:false,
                               headerIcon : 'import',
                               bodyCss:{"min-height":dialog_height+"px"},
                               buttons: {saveBtn:{text:'Save'} }                                                                           

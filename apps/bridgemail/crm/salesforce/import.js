@@ -10,9 +10,11 @@ function (template) {
                     this.template = _.template(template);	
                     this.contactFilter = null;
                     this.leadFilter = null;
+                    this.opportunityFilter = null;
                     this.recipientDetial = null;
                     this.render();
                     this.countLoaded =false;
+                    this.refreshList = 'N';
                 },
 
                 render: function () {
@@ -37,7 +39,8 @@ function (template) {
                         radioClass: 'radiopanelinput',
                         insert: '<div class="icheck_radio-icon"></div>'
                      });
-                     var self=this;
+                     var self=this;                   
+                     
                      this.$('input.radiopanel').on('ifChecked', function(event){                                                          
                              self.$(".ui-accordion-header.selected").removeClass("selected");
                              $(this).parents(".ui-accordion-header").addClass("selected");
@@ -65,6 +68,10 @@ function (template) {
                         });              
                         
                        this.setUpSalesforceFields();
+                       
+                        this.$("input[value='opportunity']").on('ifChecked', function(event){
+                            self.$(".contactby_opp").click()
+                       })
                                       
                 },
                 setUpSalesforceFields : function (){
@@ -73,7 +80,7 @@ function (template) {
                         var parent_accordion = null;
                         var recipient_obj = this.parent.editImport;                       
                         if(recipient_obj.filterType==="campaign"){
-                            this.$("input[name='options_sf']").eq(3).iCheck('check');                           
+                            this.$("input[name='options_sf']").eq(4).iCheck('check');                           
                             this.$("#sfcamp_list_grid tr[id='row_"+recipient_obj.sfCampaignId+"']").addClass("selected");    
                         }
                         else if(recipient_obj.filterType==="filter" && recipient_obj.sfObject!=="both"){
@@ -86,6 +93,12 @@ function (template) {
                                 this.$("input[name='options_sf']").eq(2).iCheck('check');
                                 parent_accordion = this.$("input[name='options_sf']").eq(2).parents("h3");
                             }
+                            
+                            
+                        }
+                        else if(recipient_obj.filterType==="opportunity"){
+                                this.$("input[name='options_sf']").eq(3).iCheck('check');
+                                parent_accordion = this.$("input[name='options_sf']").eq(3).parents("h3");
                         }
                         else if(recipient_obj.filterType=="filter" && recipient_obj.sfObject=="both"){
                             this.$("input[name='options_sf']").eq(0).iCheck('check');
@@ -93,7 +106,7 @@ function (template) {
                         }
                         if(parent_accordion && recipient_obj.filterFields){
                             parent_accordion.find(".filterbtn .selectall").removeClass("active");
-                            parent_accordion.find(".filterbtn .managefilter").addClass("active");
+                            //parent_accordion.find(".filterbtn .managefilter").addClass("active");
                         }
                         if(this.parent.tId && this.countLoaded===false){
                             this.countLoaded = true;
@@ -104,11 +117,12 @@ function (template) {
                selectAllSalesforceFilter:function(obj){
                    var button = $.getObj(obj,"a");
                    button.next().removeClass("active");
-                   button.addClass("active");
+                   //button.addClass("active");
                    var input_radio = button.parents(".ui-accordion-header").find("input.radiopanel");                   
                    input_radio.iCheck('check');
                    this.contactFilter = null;
                    this.leadFilter = null;
+                   this.opportunityFilter = null;
                    this.$(".managefilter .badge").hide();
                },
                showSalesForceFitler:function(obj){
@@ -125,6 +139,10 @@ function (template) {
                      else if(filter_type=="both"){
                          dialog_title= "Lead & Contact";
                      }
+                     else if(filter_type=="opportunity"){
+                         dialog_title= "Contacts by Opportunities";
+                     }
+                     
                      var self = this;
                      var dialog_width = $(document.documentElement).width()-60;
                      var dialog_height = $(document.documentElement).height()-219; 
@@ -250,7 +268,7 @@ function (template) {
                     });
                 },
                 getImportData:function(){
-                    var post_data = {};
+                    var post_data = {isRefresh:"N"};
                     var camp_obj = this;  
                     var salesforce_val = this.$("input[name='options_sf']:checked").val();    
                     if(salesforce_val=="campaign"){
@@ -266,16 +284,21 @@ function (template) {
                     }
                     else{
                         var importType = salesforce_val;
-                        post_data['filterType']= "filter";
-                        post_data['sfObject'] = importType;               
+                        post_data['filterType']= (importType=="opportunity")?"opportunity":"filter";
+                        post_data['sfObject'] = (importType=="opportunity")?"contact":importType;               
 
                         var leadPost = camp_obj.leadFilter;
                         var contactPost= camp_obj.contactFilter;
+                        var opportunityPost= camp_obj.opportunityFilter;
                         if(importType=="lead"){
                          $.extend(post_data,leadPost)
                         }
                         else if(importType=="contact"){
                          $.extend(post_data,contactPost)
+                        }
+                        else if(importType=="opportunity"){
+                         $.extend(post_data,opportunityPost)
+                         post_data['isRefresh']=camp_obj.refreshList;
                         }
                         else if(importType=="both"){
                           $.extend(post_data,leadPost)
@@ -297,12 +320,18 @@ function (template) {
                          var totalcount = parseFloat(data.leadCount)+parseFloat(data.contactCount)
                          this.$(".managefilter .sf_all_count").show().html(totalcount);
                      }
-                     else{
-                         this.parent.$("#contact_accordion,#lead_accordion").hide().removeClass("top-margin-zero");;
+                     else if(data.sfObject=="lead" || data.sfObject=="contact"){
+                         this.parent.$("#contact_accordion,#lead_accordion").hide().removeClass("top-margin-zero");
                          this.parent.$("#"+data.sfObject+"_accordion").show().addClass("top-margin-zero");
-                         this.parent.$("."+data.sfObject+"-count").html(data[data.sfObject+"Count"]);
-                         this.$(".managefilter .sf_"+data.sfObject+"_count").show().html(data[data.sfObject+"Count"]);
+                         this.parent.$("."+data.sfObject+"-count").html(data[data.sfObject+"Count"]);                         
+                         if(data.filterType=="opportunity"){
+                            this.$(".managefilter .sf_opportunity_count").show().html(data[data.sfObject+"Count"]);
+                         }
+                         else{
+                            this.$(".managefilter .sf_"+data.sfObject+"_count").show().html(data[data.sfObject+"Count"]);
+                         }
                      }    
+                     
                      var tableObj = null;
                      var that = this;
                      var table_row = "",table_head="";

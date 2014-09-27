@@ -891,8 +891,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find("#imageTitleDialog").hide();                                            
                                 myElement.find(".accordian").accordion({ 
                                     heightStyle: "fill",                                                
-                                    collapsible: false,
-                                    clearStyle: true
+                                    collapsible: false
                                 });
                                 myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()-30)+"px");
                                 //Load building blocks from service:

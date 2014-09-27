@@ -66,7 +66,7 @@ function (Wizard,template,moment) {
                    if(!this.dialog) return;                                      
                    this.dialog.$(".modal-footer .btn-save").hide();
                    this.head_action_bar = this.dialog.$(".modal-header .edited  h2");                   
-                   this.head_action_bar.css("margin-top","10px");
+                   //this.head_action_bar.css("margin-top","10px");
                    this.head_action_bar.find(".edit,.copy,.delete").hide();
                    this.head_action_bar.find(".dialog-title").attr("title","Click to rename").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                    this.head_action_bar.find(".delete").attr("title","Delete import").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
@@ -461,6 +461,9 @@ function (Wizard,template,moment) {
                     if(data){
                         this.tId = data.tId;
                         this.editImport=data;
+                        if(data.name){
+                            this.app.dialogArray[0].title=data.name;
+                        }
                         this.$(".bms-lists tr").removeClass("selected");
                         this.$(".bms-lists tr[checksum='"+data.checkSum+"']").addClass("selected");
                         this.$(".bms-lists tr[checksum='"+data.checkSum+"']").scrollintoview(); 
