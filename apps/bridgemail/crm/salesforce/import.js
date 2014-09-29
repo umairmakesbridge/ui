@@ -248,7 +248,12 @@ function (template) {
                             this.$(".managefilter .sf_all_count").show().html(_total);
                         }
                         else{
-                           this.$(".managefilter .sf_"+recipient_obj.sfObject+"_count").show().html(json[recipient_obj.sfObject+"Count"]);
+                           if(recipient_obj.filterType=="opportunity"){
+                               this.$(".managefilter .sf_opportunity_count").show().html(json["contactCount"]);
+                           }
+                           else{                          
+                            this.$(".managefilter .sf_"+recipient_obj.sfObject+"_count").show().html(json[recipient_obj.sfObject+"Count"]);
+                           }
                         }
                         
                     },this))
