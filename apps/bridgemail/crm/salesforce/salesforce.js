@@ -256,7 +256,7 @@ define(['text!crm/salesforce/html/salesforce.html'],
                         _this.peeringPage.init();
                     });
                 }               
-                this.current_ws.find(".camp_header .cstats").css({"left":103+"px","top":63+"px","width":"520px","height":"286px"}).show();
+                this.current_ws.find(".camp_header .cstats").css({"left":103+"px","top":63+"px","width":"520px","height":"313px"}).show();
             },
             hidePeeringDialog:function(){
                 this.current_ws.find(".camp_header .cstats").hide();

@@ -3351,14 +3351,37 @@ ul#template_search_menu li {
 .accordion-inner label.left-align{
     text-align: left;
     padding:4px 8px 0 8px;
-     font-size: 14px;
-    color:#01aeee;
+    font-size: 14px;    
     width: 300px;
 }
-.refresh-block{
-    border-bottom: 2px solid #eaf5fc;    
-    height: 40px;
-    margin-left: 22px;
+.refresh-block{    
+    height: 35px;    
     width: 343px;
-    margin-top:10px;
+    position: absolute;
+    bottom:0px;
+    left:170px;
+}
+.input-wrapper{
+    background-color:  #eaf4f9;
+    marign-right:10px;
+    display: inline-block;
+    height:34px;
+    padding:2px;
+    margin-left:10px;
+}
+.input-wrapper label{
+    min-width: 55px;
+    padding: 7px 0;
+    text-align: left;    
+    
+}
+.input-wrapper .radiopanelinput{
+    min-height: 34px;
+    min-width: 34px;
+}
+.input-wrapper .radiopanelinput .icheck_radio-icon{
+    margin: 7px 0 0 6px;
+}
+.inputlabel div.input-wrapper:first-child{
+    margin-left:0px;
 }

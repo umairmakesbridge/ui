@@ -140,7 +140,7 @@ function (template) {
                          dialog_title= "Lead & Contact";
                      }
                      else if(filter_type=="opportunity"){
-                         dialog_title= "Contacts by Opportunities";
+                         dialog_title= "Opportunities";
                      }
                      
                      var self = this;

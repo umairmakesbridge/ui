@@ -2599,7 +2599,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          dialog_title= "Lead & Contact";
                      }
                      else if(filter_type=="opportunity"){
-                         dialog_title= "Contacts by Opportunities";
+                         dialog_title= "Opportunities";
                      }
                      var self = this;
                      var dialog_width = $(document.documentElement).width()-60;

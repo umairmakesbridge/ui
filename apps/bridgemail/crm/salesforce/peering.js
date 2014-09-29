@@ -26,6 +26,10 @@ function (template) {
                     this.$('input#notialert').iCheck({
                         checkboxClass: 'checkinput'                        
                     }); 
+                    this.$('input[type="radio"]').iCheck({
+                        radioClass: 'radiopanelinput',
+                        insert: '<div class="icheck_radio-icon"></div>'                        
+                    }); 
                 },
                 init:function(){
                     var URL = "/pms/io/salesforce/getData/?BMS_REQ_TK="+ this.app.get('bms_token')+"&type=getPeer";                    
@@ -35,6 +39,7 @@ function (template) {
                         var peer_details = jQuery.parseJSON(xhr.responseText);
                         this.tId  = peer_details.tId;
                         this.$(".peer-time").val(peer_details.peeringTime).trigger("chosen:updated");
+                        this.$("input[value='"+peer_details.sfObject+"']").iCheck('check');
                         this.selectedList=  peer_details.checkSum;
                         if(peer_details.alert!=="n"){
                             this.$('input#notialert').iCheck('check');
@@ -88,7 +93,8 @@ function (template) {
                    var _time=this.$(".peer-time").val();
                    var _alert=this.$("#notialert").prop("checked")?'y':'n';
                    var _list=this.$(".bms-lists").val();
-                   var post_data = {type:'peer',listNumber:_list,alert:_alert,peeringTime:_time};
+                   var sfobject=this.$("input[name='sfobjecttype']:checked").val();
+                   var post_data = {type:'peer',listNumber:_list,alert:_alert,peeringTime:_time,sfObject:sfobject};
                    this.app.showLoading("Activate Peering...",this.$el);
                    this.update(post_data);
                 },
@@ -101,7 +107,8 @@ function (template) {
                    var _time=this.$(".peer-time").val();
                    var _alert=this.$("#notialert").prop("checked")?'y':'n';
                    var _list=this.$(".bms-lists").val(); 
-                   var post_data = {type:'peer',listNumber:_list,alert:_alert,peeringTime:_time};
+                   var sfobject=this.$("input[name='sfobjecttype']:checked").val();
+                   var post_data = {type:'peer',listNumber:_list,alert:_alert,peeringTime:_time,sfObject:sfobject};
                    this.app.showLoading("Updating Peering...",this.$el);
                    this.update(post_data);                   
                 },

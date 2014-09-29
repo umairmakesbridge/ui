@@ -46,12 +46,10 @@ function (template,crm_filters) {
                            this.$(".contactbyopp-accordion").hide();
                         }
                         if(this.camp.refreshList){
-                            this.$(".refresh-block").show();
-                            this.$(".contactbyopp-filter").css("margin-top","17px")
+                            this.$(".refresh-block").show();                            
                         }
                         else{
-                            this.$(".refresh-block").hide();
-                            this.$(".contactbyopp-filter").css("margin-top","0px")
+                            this.$(".refresh-block").hide();                            
                         }
                         
                 },
