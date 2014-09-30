@@ -495,14 +495,14 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         this.options.app.showLoading(false, this.$el);
                         btnSave.removeClass('saving');
-                         btnPlay.addClass('saving-blue');
+                         btnPlay.removeClass('saving-blue');
                         return false;
                     }
                     if(this.saveFilters()  == false){
                          this.options.app.showLoading(false, this.$el.find('.modal-body'));
                         this.options.app.showAlert('Please select atleast one filter.', $("body"), {fixed: true});
                         btnSave.removeClass('saving');
-                         btnPlay.addClass('saving-blue');
+                         btnPlay.removeClass('saving-blue');
                         return false;
                     }
                     var that = this;
@@ -512,8 +512,37 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         var alertmessages = this.$el.find("#alertmessage").val();
                         post_data['alertEmails'] = alertemails;
                         post_data['alertMessage'] = alertmessages;
+                            var emails = alertemails.split(',');
+                    var that = this;
+                            var error = false;
+                            _.each(emails, function(val) {
+                                val = val.replace(",", "");
+                                if (!that.options.app.validateEmail(val)) {
+                                    error = true;
+                                }
+                            });
+                              if (error) {
+                                that.options.app.showError({
+                                    control: $(that.el).find('.uid-container'),
+                                    message: "Email address(s) not valid!"
+                                })
+                                btnPlay.removeClass('saving-blue');
+                                btnSave.removeClass('saving');
+                                
+                                return false;
+                            } else {
+                                that.options.app.hideError({
+                                    control: $(that.el).find('.uid-container')
+                                    
+                                })
+                            }
                     }
-                     
+                     if(alertmessages == ""){
+                         that.app.showAlert('Alert message can\'t be empty', $("body"), {fixed: true});
+                          btnSave.removeClass('saving');
+                                btnPlay.removeClass('saving-blue');
+                         return false;
+                     }
                     
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
@@ -537,7 +566,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
 
                                 }
                                 btnSave.removeClass('saving');
-                                 btnPlay.addClass('saving-blue');
+                                 btnPlay.removeClass('saving-blue');
                                 return result;
                             });
                             this.options.app.showLoading(false, this.$el.find('.modal-body'));
@@ -1228,6 +1257,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       
     }, 
   saveFilters:function(){
+       var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+        var btnSave = this.modal.find('.modal-footer').find('.btn-save');
        var filters_post = {}
       var _target = this.$el;
       var self = this;
@@ -1324,6 +1355,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
           }
       } 
       if(total == 0){
+            btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
           return false;
       }
       filters_post["count"] = total;
@@ -1335,6 +1368,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 .done(function(data) {
                                     var target_json = jQuery.parseJSON(data);
                                     if (that.app.checkError(target_json)) {
+                                          btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                                         return false;
                                     }
 
@@ -1343,6 +1378,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                     else {
                                         that.app.showAlert(false, that.$el);
                                     }
+                                      btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                                       
                                 });
                    
