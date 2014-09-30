@@ -1280,7 +1280,7 @@ input[type="button"].small-button {
     min-width: 500px;
     position: absolute;
     top: 58px;
-    width: 780px;
+    width: 856px;
     z-index: 993;
 	border:2px solid #BADAEC;
 	
@@ -2223,4 +2223,7 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  .add_new_rule{
      
+ }
+ .dcRulesDialog .btn-group + .btn-group{
+     margin-left: 0px;
  }

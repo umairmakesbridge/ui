@@ -21,8 +21,13 @@ function (template) {
             */
             initialize: function () {
                     this.template = _.template(template);	                    
-                    this.app = this.options.opt._app;                           
-                    this.render();                             
+                    this.app = this.options.opt._app;                                              
+                    this.basicFields = [];
+                    this.customFields = [];
+                    this.lists = null;
+                    this.formats = [];
+                    this.rules = [];
+                    this.render();       
             },
             /**
              * Render view on page.
@@ -41,12 +46,8 @@ function (template) {
                 
             },
             createRow:function(){
-                var rowElement = $(this.row({}));
-                this.$(".dynamic_inputs_list").append(rowElement);
-                rowElement.find(".dcRuleFieldName").chosen({width:'200px'});
-                rowElement.find(".dcRuleCondition").chosen({disable_search: "true",width:'170px'});
-                rowElement.find(".dcRuleFormat").chosen({disable_search: "true",width:'152px'});
-                rowElement.find(".btn-del-row").click(_.bind(this.deleteRow,this))
+                var rowElement = this.addBasicFilter();
+                this.$(".dynamic_inputs_list").append(rowElement);               
             },
             deleteRow:function(e){
                 var obj = $.getObj(e,"a");
@@ -55,7 +56,246 @@ function (template) {
             closeDialog:function(){
                 this.$el.parent().hide();
                 this.$el.remove();
-            }            
-            
+            },
+            addBasicFilter:function(obj,e,params){
+                var filter = $('<div class="filter-row rule"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>')
+                filter.addClass("filter")                
+                var selected_field = "",selected_rule="",selected_formats="", matchValue="",gapValue = "0",list_html='<div class="btn-group sub-date-container" style="display:none;margin-right:5px;"><a class="icon add-list" style="margin:0px"></a></div>',
+                    format_display="none",value_display="block",gap_display="none"
+                //In case of edit set parameters    
+                if(params){    
+                  matchValue = (params.matchValue)?params.matchValue:""
+                  gapValue = (params.spanInDays)?params.spanInDays:"0"
+                  if( params.fieldName=="{{SUBSCRIPTION_DATE}}"){
+                      list_html = '<div class="btn-group sub-date-container" style="display:block" list_id="'+params['listNumber.encode']+'" list_checksum="'+params['listNumber.checksum']+'"><a class="icon list"></a></div>'          
+                  }
+                  if(params.rule=="dr" || params.rule=="prior" || params.rule=="after" || params.rule=="dayof" || params.rule=="birthday" || params.rule=="pbday"){               
+                       format_display = "block"
+                       if(params.rule=="prior" || params.rule=="after" || params.rule=="pbday"){
+                           gap_display="block"
+                       }
+                       if(params.rule=="dr"){
+                          value_display = "block"
+                       }
+                       else{
+                          value_display = "none" 
+                       }
+                  }
+                   if(params.rule=="empty" || params.rule=="notempty"){
+                       value_display = "none" 
+                       format_display = "none"
+                       gap_display="none"
+                   }
+                }
+
+                var filter_html = '<div class="btn-group field-container"><div class="inputcont"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
+                    filter_html +='</select></div></div>'
+                    filter_html +=list_html
+                    filter_html +='<div class="btn-group rules-container"><div class="inputcont"><select  class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
+                    filter_html +='</select></div></div>'          
+                    filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><input type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
+                    filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
+                    filter_html +='</select></div></div>'
+                    filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:150px;" /></div></div>'                
+                filter.find(".filter-cont").append(filter_html)
+                //Chosen with fields
+                filter.find(".fields").chosen({width:'200px'}).change(function(){
+                    if($(this).val()=="{{SUBSCRIPTION_DATE}}"){
+                        filter.find(".sub-date-container").show();
+                    }
+                    else{
+                        filter.find(".sub-date-container").hide();
+                    }
+                    if($(this).val()=="{{SUBSCRIPTION_DATE}}" || $(this).val()=="{{BIRTH_DATE}}" ){
+                        filter.find(".formats-container").show()
+                    }
+                    else{
+                        filter.find(".formats-container").hide()
+                    }
+
+                    filter.find(".selectbox.rules").change()             
+
+
+
+                })
+                var self = this
+                //Chosen with rules
+                filter.find(".selectbox.rules").chosen({disable_search: "true",width:'170px'}).change(function(){             
+                       if((filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}") && ($(this).val()=="ct" || $(this).val()=="!ct" || $(this).val()=="nr") ){
+                           self.app.showAlert("'Subscribe Date' OR 'Birth Date' field can not have rules like: contains, not contains & within numeric range.",$("body"),{fixed:true});
+                           $(this).val('=').trigger("chosen:updated").change()
+                           return false
+                       }
+                       if($(this).val()=="dr" || $(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="dayof" || $(this).val()=="birthday" || $(this).val()=="pbday"){
+
+                          if(filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}"){
+                              filter.find(".formats-container").hide()
+                          }
+                          else{
+                              filter.find(".formats-container").show()
+                          }
+
+                          if($(this).val()=="prior" || $(this).val()=="after" || $(this).val()=="pbday"){
+                              filter.find(".days-container").show().val('0')
+                          }
+                          else{
+                              filter.find(".days-container").hide()
+                          }
+
+                          if($(this).val()=="dr"){
+                              filter.find(".value-container").show()
+                              filter.find(".formats-container").show()
+                          }
+                          else{
+                              filter.find(".value-container").hide()
+                          }
+                       }
+                       else{
+                          filter.find(".days-container").hide()
+                          if((filter.find(".fields").val()=="{{SUBSCRIPTION_DATE}}" || filter.find(".fields").val()=="{{BIRTH_DATE}}")){
+                              filter.find(".formats-container").show()
+                          }
+                          else{
+                              filter.find(".formats-container").hide()
+                          }
+                          filter.find(".value-container").show()
+                       }
+
+                       if($(this).val()=="empty" || $(this).val()=="notempty"){
+                            filter.find(".days-container").hide()  
+                            filter.find(".formats-container").hide()
+                            filter.find(".value-container").hide()
+                       }
+
+
+                });
+
+                //Chosen with formats      
+                filter.find(".selectbox.formats").chosen({disable_search: "true",width:'152px'})
+
+                filter.find(".sub-date-container").on("click",$.proxy(this.showDialog,this))
+
+                this.addActionBar(filter)                
+                this.showTooltips(filter)
+                //Loading Rules, basic fields and formats
+                  var URL = ""
+                  var self = this        
+                  if(this.basicFields.length===0){
+                      URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=fields_all";
+                      jQuery.getJSON(URL,  function(tsv, state, xhr){
+                          if(xhr && xhr.responseText){                        
+                               var fields_json = jQuery.parseJSON(xhr.responseText);                                
+                               if(self.app.checkError(fields_json)){
+                                   return false;
+                               }       
+                              var bas_field_html ='<option value=""></option>'
+                                  bas_field_html +='<optgroup label="Basic Fields">'                            
+                              var cust_field_html = '<optgroup label="Custom Fields">'                        
+                              $.each(fields_json,function(key,val){
+                                  selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
+                                  if(val[2]=="true"){                            
+                                      self.basicFields.push(val)                            
+                                      bas_field_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'                           
+                                  }
+                                  else{
+                                      self.customFields.push(val)
+                                      cust_field_html += '<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
+                                  }
+                              });
+                              bas_field_html +='</optgroup>'
+                              cust_field_html +='</optgroup>'                    
+                              filter.find(".fields").html(bas_field_html+cust_field_html).prop("disabled",false).trigger("chosen:updated")
+                          }
+                    }).fail(function() { console.log( "error in loading fields" ); });
+                }
+                else{
+                    var fields_array =this.basicFields
+                      var filter_html ='<option value=""></option>'
+                      filter_html +='<optgroup label="Basic Fields">'
+                      $.each(fields_array,function(k,val){
+                          selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
+                          filter_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
+                      });
+                      filter_html +='</optgroup>'
+                      fields_array =this.customFields
+                      filter_html +='<optgroup label="Custom Fields">'
+                      $.each(fields_array,function(k,val){
+                          selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
+                          filter_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
+                      });
+                      filter_html +='</optgroup>'
+                      filter.find(".fields").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+                }
+                if(this.rules.length===0){
+                  URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=rules";
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        if(xhr && xhr.responseText){                        
+                             var rules_json = jQuery.parseJSON(xhr.responseText);                                
+                             if(self.app.checkError(rules_json)){
+                                 return false;
+                             }                                     
+                             var filter_html =''
+                             $.each(rules_json,function(k,val){
+                                  selected_rule = (params && params.rule==val[0]) ? "selected" : ""
+                                  filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'
+                                  self.rules.push(val)
+                             });                   
+                             filter.find(".selectbox.rules").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+                        }
+                  }).fail(function() { console.log( "error in loading rules" ); });
+                }
+                else{
+                      var filter_html = ''
+                      $.each(this.rules,function(k,val){
+                          selected_rule = (params && params.rule==val[0]) ? "selected" : ""
+                          filter_html +='<option value="'+val[0]+'" '+selected_rule+'>'+val[1]+'</option>'                
+                      })  
+
+                      filter.find(".selectbox.rules").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+                }
+                if(this.formats.length===0){
+                  URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=formats";
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        if(xhr && xhr.responseText){                        
+                             var formats_json = jQuery.parseJSON(xhr.responseText);                                
+                             if(self.app.checkError(formats_json)){
+                                 return false;
+                             }
+
+                             var filter_html =''
+                             $.each(formats_json,function(k,val){
+                                  selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
+                                  filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'
+                                  self.formats.push(val)
+                             });                   
+                             filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+
+                        }
+                  }).fail(function() { console.log( "error in loading formats" ); });
+                }
+                else{
+                    var filter_html = ''
+                      $.each(this.formats,function(k,val){
+                          selected_formats = (params && params.dateFormat==val[0]) ? "selected" : ""
+                          filter_html +='<option value="'+val[0]+'" '+selected_formats+'>'+val[1]+'</option>'                
+                      })  
+
+                    filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
+                }
+                return filter;
+
+              },
+              addActionBar:function(filterRow){
+                    var action =  $('<div class="right-btns"></div>')            
+                    var del_btn = $('<a title="Delete Filter" class="btn-red showtooltip"><i class="icon delete "></i></a>')      
+                    action.append(del_btn)            
+                    del_btn.click(function(){
+                       $(this).parents(".filter-row").remove()
+                    });
+                    filterRow.find(".filter-cont").append(action)                       
+                }, showTooltips:function(filter){
+                    filter.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false})      
+                }            
+
         });
 });

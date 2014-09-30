@@ -898,10 +898,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 mee._LoadBuildingBlocks();
                                 //////////
                                 _LoadContentBlocks();
-                                _LoadDynamicBlocks();
-                                _LoadDynamicBlockFields();
-                                _LoadDynamicBlockRuleConditions();
-                                _LoadDynamicBlockFormats();
+                                _LoadDynamicBlocks();                            
                                 _LoadPersonalizeTags();
 
 
@@ -3266,113 +3263,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find("#DCResultDiv").hide();
                             }
                             
-
-
-                            var _LoadDynamicBlockFields = function (args) {
-
-                                if (args == null) {
-                                    args = new Object();
-                                }
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.LoadDynamicBlockFields != null) {
-                                    options.LoadDynamicBlockFields(args);
-                                }
-
-                                //Getting building blocks from provided block:
-                                if (args.dynamicBlockFields != null) {
-
-                                    var listOfDynamicBlockFieldssHtml = "";
-                                    var dynamicBlockFieldsFromService = args.dynamicBlockFields;
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(dynamicBlockFieldsFromService, function (i, obj) {
-
-                                        if (obj[2] == "true") {
-                                            listOfDynamicBlockFieldssHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
-                                        }
-
-                                    });
-                                    //console.log(listOfDynamicBlocksHtml);
-                                    var ulDynamicBlockFields = myElement.find(".dcRuleFieldName");
-                                    ulDynamicBlockFields.empty();
-                                    ulDynamicBlockFields.append(listOfDynamicBlockFieldssHtml);
-
-                                // dynamicBlocksGlobal = dynamicBlocksFromService;
-
-                                }
-
-                            }
-
-                            var _LoadDynamicBlockRuleConditions = function (args) {
-
-                                if (args == null) {
-                                    args = new Object();
-                                }
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.LoadDynamicBlockRuleConditions != null) {
-                                    options.LoadDynamicBlockRuleConditions(args);
-                                }
-
-                                //Getting building blocks from provided block:
-                                if (args.dynamicBlockRuleConditions != null) {
-
-                                    var listOfDynamicBlockRuleConditionsHtml = "";
-                                    var dynamicBlockRuleConditionsFromService = args.dynamicBlockRuleConditions;
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(dynamicBlockRuleConditionsFromService, function (i, obj) {
-
-                                        listOfDynamicBlockRuleConditionsHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
-
-                                    });
-                                    //console.log(listOfDynamicBlocksHtml);
-                                    var ulDynamicBlockRuleConditions = myElement.find(".dcRuleCondition");
-                                    ulDynamicBlockRuleConditions.empty();
-                                    ulDynamicBlockRuleConditions.append(listOfDynamicBlockRuleConditionsHtml);
-
-                                // dynamicBlocksGlobal = dynamicBlocksFromService;
-
-                                }
-
-                            }
-
-
-                            var _LoadDynamicBlockFormats = function (args) {
-
-                                if (args == null) {
-                                    args = new Object();
-                                }
-
-                                //Call overridden Method here: will use when exposing properties to developer
-                                if (options.LoadDynamicBlockFormats != null) {
-                                    options.LoadDynamicBlockFormats(args);
-                                }
-
-                                //Getting building blocks from provided block:
-                                if (args.dynamicBlockFormats != null) {
-
-                                    var listOfDynamicBlockFormatsHtml = "";
-                                    var dynamicBlockFormatsFromService = args.dynamicBlockFormats;
-
-                                    //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                    $.each(dynamicBlockFormatsFromService, function (i, obj) {
-
-                                        listOfDynamicBlockFormatsHtml += "<option value=\"" + obj[0] + "\">" + obj[1] + "</option>";
-
-                                    });
-                                    //console.log(listOfDynamicBlocksHtml);
-                                    var ulDynamicBlockFormats = myElement.find(".dcRuleFormat");
-                                    ulDynamicBlockFormats.empty();
-                                    ulDynamicBlockFormats.append(listOfDynamicBlockFormatsHtml);
-
-                                // dynamicBlocksGlobal = dynamicBlocksFromService;
-
-                                }
-
-                            }
-
                             function loadDynamicVariationFromServer(keyword) {
                                 var dynamicVariation = new DynamicVariation();
                                 var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&keyword=" + keyword;
