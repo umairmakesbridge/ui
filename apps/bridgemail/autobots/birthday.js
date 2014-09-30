@@ -248,8 +248,11 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveBirthDayAutobot: function(close) {
+                    var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
                         return;
                     }
                     this.fieldName = this.$el.find('#fieldname').val();
@@ -268,13 +271,16 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                        // that.options.dialog.hide();
                                         
                                     }
+                                    btnSave.removeClass('saving');
                                 }
                                 else {
                                     that.app.showAlert(_json[1], $("body"), {fixed: true});
-
+                                    btnSave.removeClass('saving');
 
                                 }
+                                btnSave.removeClass('saving');
                                 return result;
+                                
                             });
                 },
                 loadTagTargets: function() {

@@ -3578,7 +3578,22 @@ ul#autobots_search_menu li a {
     float: left !important;
     margin: 13px 11px 11px 0;
 }
-
+.saving-blue {
+    background: url("../img/greenloader.gif") no-repeat scroll 24px center #01AEEE;
+    font-size: 0 !important;
+    line-height: 35px;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 65px;
+}
+.saving-grey {
+    background: url("../img/greenloader.gif") no-repeat scroll 24px center #91ABBC;
+    font-size: 0 !important;
+    line-height: 35px;
+    min-height: 20px;
+    text-indent: -999em;
+    min-width: 65px;
+}
 
 
 

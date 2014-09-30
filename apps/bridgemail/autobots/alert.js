@@ -249,8 +249,11 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         return false;
                 },
                 saveAlertAutobot: function(close) {
+                    var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
                         return;
                     }
                     var isRecur = this.$el.find("#ddlIsRecur").val();
@@ -280,7 +283,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             control: $(that.el).find('.uid-container'),
                             message: "Email address(s) not valid!"
                         })
-
+                        btnSave.removeClass('saving');
                         return;
                     } else {
                         that.options.app.hideError({
@@ -307,6 +310,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
 
 
                                 }
+                                btnSave.removeClass('saving');
                                 return result;
                             });
                 },

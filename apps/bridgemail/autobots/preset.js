@@ -420,21 +420,33 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });  
-                    this.head_action_bar.find(".change-status").on('click', function() {
+                       this.head_action_bar.find(".change-status").on('click', function() {
+                            var btnPause = that.modal.find('.modal-footer').find('.btn-play');
+                      var btnPlay = that.modal.find('.modal-footer').find('.btn-pause');
                         var res = false; 
                         if (that.status == "D") {
                             if(that.saveTagAutobot() !=false){
+                                btnPlay.addClass('saving-blue');
                                 res = that.options.refer.playAutobot('dialog', that.botId);
+                                btnPlay.removeClass('saving-blue');
                             }
                         } else {
+                            btnPause.addClass('saving-grey');
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
+                            btnPause.removeClass('saving-grey');
                         }
                     })
                     this.modal = $(".modal");
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                        $(this).addClass('saving-blue');
                          if(that.saveTagAutobot() !=false){
+                            // var btnPlay = that.modal.find('.modal-footer').find('.btn-pause');
+                 
+                                
                                 that.options.refer.playAutobot('dialog', that.botId);
+                                
                          }
+                         $(this).removeClass('saving-blue');
                      })
                    // this.head_action_bar.find(".copy").on('click', function() {
                       //  that.options.refer.cloneAutobot('dialog', that.botId);

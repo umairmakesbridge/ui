@@ -286,8 +286,11 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveEmailAutobot: function(close) {
+                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
                         return;
                     }
                     var isRecur = this.$el.find("#ddlIsRecur").val();
@@ -319,6 +322,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
 
 
                                 }
+                                btnSave.removeClass('saving');
                                 return result;
                             });
                 },
