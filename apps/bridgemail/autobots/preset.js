@@ -494,15 +494,18 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         this.options.app.showLoading(false, this.$el);
-                        btnSave.removeClass('saving');
                          btnPlay.removeClass('saving-blue');
+                        btnSave.removeClass('saving');
+                        
                         return false;
                     }
                     if(this.saveFilters()  == false){
                          this.options.app.showLoading(false, this.$el.find('.modal-body'));
                         this.options.app.showAlert('Please select atleast one filter.', $("body"), {fixed: true});
+                        btnPlay.removeClass('saving-blue');
                         btnSave.removeClass('saving');
-                         btnPlay.removeClass('saving-blue');
+                        
+                        
                         return false;
                     }
                     var that = this;
@@ -513,7 +516,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         post_data['alertEmails'] = alertemails;
                         post_data['alertMessage'] = alertmessages;
                             var emails = alertemails.split(',');
-                    var that = this;
+                            var that = this;
                             var error = false;
                             _.each(emails, function(val) {
                                 val = val.replace(",", "");
@@ -526,8 +529,9 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                     control: $(that.el).find('.uid-container'),
                                     message: "Email address(s) not valid!"
                                 })
-                                btnPlay.removeClass('saving-blue');
                                 btnSave.removeClass('saving');
+                                btnPlay.removeClass('saving-blue');
+                                
                                 
                                 return false;
                             } else {
@@ -538,9 +542,11 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                             }
                     }
                      if(alertmessages == ""){
+                         btnPlay.removeClass('saving-blue'); 
+                        btnSave.removeClass('saving');
                          that.app.showAlert('Alert message can\'t be empty', $("body"), {fixed: true});
-                          btnSave.removeClass('saving');
-                                btnPlay.removeClass('saving-blue');
+                        
+                          
                          return false;
                      }
                     
