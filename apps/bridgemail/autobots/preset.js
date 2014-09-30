@@ -95,7 +95,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     }
                      this.showTags();
                     this.getFiltersById();
-                    this.loadCampaign();
+                  
                      if(this.alertEmails)
                      this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails));
                     if(this.alertMessage)
@@ -156,7 +156,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 that.addFormFilter();   
                                 that.addLeadScoreFilter();
                             }
-
+                               that.loadCampaign();
                             
                             that.$('input:checkbox').iCheck({
                                 checkboxClass: 'checkinput'
@@ -285,7 +285,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                       return ["Pending", "pclr6"];
                 },
                 previewCampaign: function(e) {
-                    var camp_name = this.model.get('label');
+                    var camp_name = this.model.get('presetLabel');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
@@ -315,6 +315,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     //e.stopPropagation();
                 },
                 loadCampaign: function() {
+                    if(!this.campNum) return;
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.campNum + "&type=basic";
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
                         var camp_json = jQuery.parseJSON(xhr.responseText);
@@ -420,21 +421,38 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });  
-                    this.head_action_bar.find(".change-status").on('click', function() {
+                       this.head_action_bar.find(".change-status").on('click', function() {
+                            var btnPause = $(".modal").find('.modal-footer').find('.icon.pause').closest('.btn');
+                      var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                         var res = false; 
                         if (that.status == "D") {
                             if(that.saveTagAutobot() !=false){
+                                btnPlay.addClass('saving-blue');
                                 res = that.options.refer.playAutobot('dialog', that.botId);
+                                btnPlay.removeClass('saving-blue');
                             }
                         } else {
+                            btnPause.addClass('saving-grey');
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
+                            btnPause.removeClass('saving-grey');
                         }
                     })
                     this.modal = $(".modal");
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                        
                          if(that.saveTagAutobot() !=false){
                                 that.options.refer.playAutobot('dialog', that.botId);
                          }
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                     this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                        if(that.status !="D"){
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                         btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
                      })
                    // this.head_action_bar.find(".copy").on('click', function() {
                       //  that.options.refer.cloneAutobot('dialog', that.botId);
@@ -470,18 +488,24 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveTagAutobot: function(close) {
+                    var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         this.options.app.showLoading(false, this.$el);
+                         btnPlay.removeClass('saving-blue');
                         btnSave.removeClass('saving');
+                        
                         return false;
                     }
                     if(this.saveFilters()  == false){
                          this.options.app.showLoading(false, this.$el.find('.modal-body'));
                         this.options.app.showAlert('Please select atleast one filter.', $("body"), {fixed: true});
+                        btnPlay.removeClass('saving-blue');
                         btnSave.removeClass('saving');
+                        
+                        
                         return false;
                     }
                     var that = this;
@@ -491,8 +515,40 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         var alertmessages = this.$el.find("#alertmessage").val();
                         post_data['alertEmails'] = alertemails;
                         post_data['alertMessage'] = alertmessages;
+                            var emails = alertemails.split(',');
+                            var that = this;
+                            var error = false;
+                            _.each(emails, function(val) {
+                                val = val.replace(",", "");
+                                if (!that.options.app.validateEmail(val)) {
+                                    error = true;
+                                }
+                            });
+                              if (error) {
+                                that.options.app.showError({
+                                    control: $(that.el).find('.uid-container'),
+                                    message: "Email address(s) not valid!"
+                                })
+                                btnSave.removeClass('saving');
+                                btnPlay.removeClass('saving-blue');
+                                
+                                
+                                return false;
+                            } else {
+                                that.options.app.hideError({
+                                    control: $(that.el).find('.uid-container')
+                                    
+                                })
+                            }
                     }
-                     
+                     if(alertmessages == ""){
+                         btnPlay.removeClass('saving-blue'); 
+                        btnSave.removeClass('saving');
+                         that.app.showAlert('Alert message can\'t be empty', $("body"), {fixed: true});
+                        
+                          
+                         return false;
+                     }
                     
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
@@ -516,6 +572,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
 
                                 }
                                 btnSave.removeClass('saving');
+                                 btnPlay.removeClass('saving-blue');
                                 return result;
                             });
                             this.options.app.showLoading(false, this.$el.find('.modal-body'));
@@ -1206,6 +1263,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       
     }, 
   saveFilters:function(){
+       var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+        var btnSave = this.modal.find('.modal-footer').find('.btn-save');
        var filters_post = {}
       var _target = this.$el;
       var self = this;
@@ -1302,6 +1361,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
           }
       } 
       if(total == 0){
+            btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
           return false;
       }
       filters_post["count"] = total;
@@ -1313,6 +1374,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 .done(function(data) {
                                     var target_json = jQuery.parseJSON(data);
                                     if (that.app.checkError(target_json)) {
+                                          btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                                         return false;
                                     }
 
@@ -1321,6 +1384,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                     else {
                                         that.app.showAlert(false, that.$el);
                                     }
+                                      btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                                       
                                 });
                    

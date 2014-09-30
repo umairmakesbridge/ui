@@ -206,9 +206,25 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         }
                     })
                     this.modal = $(".modal");
-                    this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
-                        that.options.refer.playAutobot('dialog', that.botId);
-                    })
+                    
+                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                        
+                         if(that.saveAlertAutobot() !=false){
+                                that.options.refer.playAutobot('dialog', that.botId);
+                         }
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                     this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                         if(that.status !="D"){
+                            var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                            btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                    
+                    
                     this.head_action_bar.find(".copy").on('click', function() {
                         that.options.refer.cloneAutobot('dialog', that.botId);
                     });
@@ -249,8 +265,13 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         return false;
                 },
                 saveAlertAutobot: function(close) {
+                    var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
+                    btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
+                        btnPlay.removeClass('saving-blue');
                         return;
                     }
                     var isRecur = this.$el.find("#ddlIsRecur").val();
@@ -280,7 +301,8 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             control: $(that.el).find('.uid-container'),
                             message: "Email address(s) not valid!"
                         })
-
+                        btnSave.removeClass('saving');
+                        btnPlay.removeClass('saving-blue');
                         return;
                     } else {
                         that.options.app.hideError({
@@ -307,6 +329,8 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
 
 
                                 }
+                                btnSave.removeClass('saving');
+                                btnPlay.removeClass('saving-blue');
                                 return result;
                             });
                 },

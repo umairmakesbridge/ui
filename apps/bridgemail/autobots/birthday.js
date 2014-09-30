@@ -214,7 +214,18 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     })
                      this.modal = $(".modal");
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
-                        that.options.refer.playAutobot('dialog', that.botId);
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                          if(that.saveBirthDayAutobot() !=false){
+                            that.options.refer.playAutobot('dialog', that.botId);
+                        }
+                     })
+                      this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                        if(that.status !="D"){
+                            var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                            btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
                      })
                     //this.head_action_bar.find(".copy").on('click', function() {
                       //  that.options.refer.cloneAutobot('dialog', that.botId);
@@ -248,8 +259,14 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveBirthDayAutobot: function(close) {
+                     var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                    var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                    btnSave.addClass('saving');
+                    btnSave.addClass('saving-blue');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
+                        btnPlay.addClass('saving-blue');
                         return;
                     }
                     this.fieldName = this.$el.find('#fieldname').val();
@@ -268,13 +285,17 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                                        // that.options.dialog.hide();
                                         
                                     }
+                                    btnSave.removeClass('saving');
                                 }
                                 else {
                                     that.app.showAlert(_json[1], $("body"), {fixed: true});
-
+                                    btnSave.removeClass('saving');
 
                                 }
+                                btnSave.removeClass('saving');
+                                btnPlay.addClass('saving-blue');
                                 return result;
+                                
                             });
                 },
                 loadTagTargets: function() {

@@ -208,8 +208,21 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         }
                     })
                      this.modal = $(".modal");
-                    this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
-                        that.options.refer.playAutobot('dialog', that.botId);
+                       this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                        
+                         if(that.saveTagAutobot() !=false){
+                                that.options.refer.playAutobot('dialog', that.botId);
+                         }
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                     this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                        if(that.status !="D"){
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                         btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
                      })
                     this.head_action_bar.find(".copy").on('click', function() {
                         that.options.refer.cloneAutobot('dialog', that.botId);
@@ -242,8 +255,13 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveTagAutobot: function(close) {
+                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                     var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
+                    btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
+                        btnSave.removeClass('saving');
+                        btnSave.removeClass('saving-blue');
                         return;
                     }
                     var that = this;
@@ -284,6 +302,8 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
 
 
                                 }
+                                btnSave.removeClass('saving-blue');
+                                btnSave.removeClass('saving');
                                 return result;
                             });
                 },
@@ -414,8 +434,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var tags = this.tags; 
                     if (tags != '' && !$.isArray(tags)) {
                         tags = tags.toString().split(',');
-                    }
-                    console.log(tags);
+                    } 
                     var editTags = tags;
                     var that = this;
                     var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=subscriberTagCountList";
@@ -426,8 +445,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             if (tags_array[0] != 'err'){
                                 that.app.setAppData('tags', tags_array);
                                      
-                                $.each(tags_array.tagList[0], function(key, val) {
-                                    console.log(($.inArray(val[0].tag, editTags)));
+                                $.each(tags_array.tagList[0], function(key, val) { 
                                     if ($.inArray(val[0].tag, editTags) != -1){
                                             editTags = jQuery.grep(editTags, function(value) {
                                             return value != val[0].tag;
