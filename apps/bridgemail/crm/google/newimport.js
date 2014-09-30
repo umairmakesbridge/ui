@@ -359,7 +359,6 @@ function (Wizard,template,moment) {
                          return data;
                      }
                     var maps = this.mapping.split("&");
-                    console.log(maps);
                     var result = "";
                     _.each(maps,function(key,value){
                        if(key){
@@ -374,8 +373,7 @@ function (Wizard,template,moment) {
                     var URL = "/pms/io/google/setData/?BMS_REQ_TK="+this.app.get('bms_token');
                     var post_data = {type:'import',synchType:'crm',listNumber:this.listNumber};
                     var that = this;
-                    this.app.showLoading("Starting Import...",this.$el); 
-                    console.log(this.getMappingData());
+                    this.app.showLoading("Starting Import...",this.$el);  
                     $.extend(post_data,this.getMappingData());
                     $.extend(post_data,this.Import_page.getImportData());
                     

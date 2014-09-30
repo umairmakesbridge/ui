@@ -191,19 +191,19 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.head_action_bar.find(".pointy").css({'padding-left': '10px', 'margin-top': '4px'});
                     if (this.status == "D") {
                         this.head_action_bar.find(".edit").addClass('play24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Play").css('cursor', 'pointer');
-                    } else {
-                        this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
-                    }
+                     } else {
+                       this.head_action_bar.find(".edit").addClass('pause24').addClass('change-status').removeClass('edit').addClass('showtooltip').attr('data-original-title', "Click to Pause").css('cursor', 'pointer');
+                     }
                     var that = this;
-                    if (this.status != "D") {
-                        this.head_action_bar.find(".delete").hide();
-                    }
+                   // if (this.status != "D") {
+                        // this.head_action_bar.find(".delete").hide();
+                    //}
                     this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });  
-                    this.head_action_bar.find(".copy").addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
-                    this.head_action_bar.find(".delete").addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
+                   this.head_action_bar.find(".copy").remove();//addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
+                     this.head_action_bar.find(".delete").remove();//.addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
                     this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
                         if (that.status == "D") {
@@ -216,24 +216,25 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                         that.options.refer.playAutobot('dialog', that.botId);
                      })
-                    this.head_action_bar.find(".copy").on('click', function() {
-                        that.options.refer.cloneAutobot('dialog', that.botId);
-                    });
-                    this.head_action_bar.find(".delete").on('click', function() {
-                        if (that.options.refer.deleteAutobot('dialog', that.botId, that.$el)) {
-                            that.options.dialog.hide();
-                        }
-                    });
+                    //this.head_action_bar.find(".copy").on('click', function() {
+                      //  that.options.refer.cloneAutobot('dialog', that.botId);
+                    //});
+                    //this.head_action_bar.find(".delete").on('click', function() {
+                    //    if (that.options.refer.deleteAutobot('dialog', that.botId, that.$el)) {
+                    //        that.options.dialog.hide();
+                    //    }
+                   // });
                     this.tagDiv.addClass("template-tag").show();
                     this.tagDiv.tags({app: this.options.app,
                         url: '/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=' + this.options.app.get('bms_token'),
                         params: {type: 'tags', botId: this.botId, tags: ''}
-                        , showAddButton: true,
+                        , showAddButton: false,
                         tags: tags,
                         fromDialog:this.dialog.$el,
                         callBack: _.bind(this.newTags, this),
-                        typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
+                       // typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.options.app.get('bms_token') + "&type=allTemplateTags"
                     });
+                     this.tagDiv.find('.cross').remove();
                     if(this.status !="D"){
                       this.tagDiv.addClass("not-editable");
                      }

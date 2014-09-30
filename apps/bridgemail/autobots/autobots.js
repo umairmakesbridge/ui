@@ -5,8 +5,8 @@
  * Description: 
  */
 
-define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot', 'jquery.highlight', 'bms-mergefields', 'jquery.chosen'],
-        function(template, Autobots, Autobot, AutobotTile, app, Choosebot, highlight, mrgfield, choosen) {
+define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot', 'jquery.highlight', 'bms-mergefields', 'jquery.chosen','autobots/autobot_name'],
+        function(template, Autobots, Autobot, AutobotTile, app, Choosebot, highlight, mrgfield, choosen,AutobotName) {
             'use strict';
             return Backbone.View.extend({
                 events: {
@@ -98,6 +98,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.offset = 0;
                         this.total_fetch = 0;
                         that.$el.find(".thumbnails").html('');
+                        that.$el.find("#autobots_listing  .create_new").remove();
                         that.$el.find("#tblAutobots tbody").html('');
                         this.app.showLoading("Loading Autobots...", that.$el);
                     } else {
@@ -116,8 +117,13 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.request.abort();
                     var that = this;
                     _data['offset'] = this.offset;
-                    if (this.sortBy && !this.actionType) {
-                        _data['status'] = this.sortBy;
+                    if (this.sortBy || this.actionType == "PRE") {
+                          if(this.sortBy == "PRE" || this.actionType == "PRE"){
+                              _data['status'] = ''
+                              _data['isPreset'] = "Y";
+                          }else{
+                             _data['status'] = this.sortBy;
+                          }
                     } else {
                         _data['actionType'] = this.actionType;
                     }
@@ -160,6 +166,16 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             if(botId){
                                 that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
                             }
+                             if (!offset) {
+                                that.$el.find("#autobots_listing").prepend(that.addListingRow());
+                                that.$el.find(".thumbnails").prepend(that.addThumbnailLi());
+                                that.$el.find(".thumbnails  .new-bot-ul ol li a").on('click',function(e){
+                                    that.selectAutobot(e);
+                                })
+                                 that.$el.find("#autobots_listing  .create_new ol li a").on('click',function(e){
+                                    that.selectAutobot(e);
+                                })
+                             }
                             that.app.showLoading(false, that.$el);
                             
                                 if (!offset) {
@@ -190,6 +206,45 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     
 
                 } ,
+                addThumbnailLi:function(){
+                    var str = "<li class='span3 new-bot-ul'>";
+                        str = str + "<div style='height:475px;' class='thumbnail addbot'><div>";
+                        str = str + "<h3>Create New Autobot</h3>";
+                        str = str + "<ol>";
+                        str = str + "<li data-bot='A'><a><img src='"+this.options.app.get('path')+"img/alertbot-icon.png'> <span>Alert Bot</span></a></li>";
+                        str = str + "<li data-bot='E'><a><img src='"+this.options.app.get('path')+"img/mailbot-icon.png'><span>Mail Bot</span></a></li>";
+                        str = str + "<li data-bot='TG'><a><img src='"+this.options.app.get('path')+"img/tagbot-icon.png'><span>Tag Bot</span></a></li>";
+                        str = str + "<li data-bot='SC'><a><img src='"+this.options.app.get('path')+"img/scorebot-icon.png'><span>Score Bot</span></a></li>";
+                        str = str + "</ol>";
+                        str = str + "</div>";
+                        str = str + "</div>";
+                        str = str + "</li>";
+                        return str;
+                },
+                addListingRow:function(){
+                    var listing = ' <div class="create_new">';
+                        listing = listing +  '<h3>Create New Autobot</h3>';
+                        listing = listing +  '<ol>';
+                        listing = listing +  '<li data-bot="A"><a><img src="'+this.options.app.get('path')+'img/alertbot-icon.png" alt=""> <span>Alert Bot</span></a></li>';
+                        listing = listing +  '<li data-bot="E"><a><img src="'+this.options.app.get('path')+'img/mailbot-icon.png" alt=""><span>Mail Bot</span></a></li>';
+                        listing = listing +  '<li data-bot="TG"><a><img src="'+this.options.app.get('path')+'img/tagbot-icon.png" alt=""><span>Tag Bot</span></a></li>';
+                        listing = listing +  '<li data-bot="SC"><a><img src="'+this.options.app.get('path')+'img/scorebot-icon.png" alt=""><span>Score Bot</span></a></li>';
+                        listing = listing +  '</ol>';
+                        listing = listing +  '</div> '; 
+                        return listing;
+                },
+                selectAutobot:function(ev){
+                     $("body #new_autobot").remove();
+                    $("body .autobots-modal-in").remove();
+                    this.typeOfbots = "N";
+                    var actionType = $(ev.target).parents('li').data('bot');
+                    $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
+                    $("body").append("<div id='new_autobot' style='width: 800px;  top: 120px;left:50%' class='modal in'></div>");
+                    $("body #new_autobot").html(new AutobotName({app: this.app, actionType:actionType,listing: this,botType:this.typeOfbots}).el);
+                    $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
+                    
+               
+                },
                 searchAutobots: function(ev) {
                     this.searchText = '';
                     this.searchTags = '';
@@ -252,9 +307,10 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                  $(this.el).find("#autobots_search_menu").find('li').removeClass('active');
                                     if(this.sortText == "Playing")
                                         $(this.el).find("#autobots_search_menu").find('#li_playing').addClass('active');
-                                    else
+                                    else if(this.sortText == "Paused")
                                          $(this.el).find("#autobots_search_menu").find('#li_paused').addClass('active');
-
+                                    else
+                                        $(this.el).find("#autobots_search_menu").find('#li_preset').addClass('active');
                             }
                         } else {
                             $(this.el).find('#total_autobots').find('.sort-text').html('');
@@ -287,6 +343,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         var header_part = "<li> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
                         header_part = header_part + "<li> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
                         header_part = header_part + "<li> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
+                        header_part = header_part + "<li> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";
                         var $header_part = $(header_part);
                         that.ws_header.find(".c-current-status").html($header_part);
                         that.ws_header.find(".c-current-status li a").on('click', function(ev) {
@@ -306,10 +363,10 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     });
                 },
                 addNewAutobot: function() {
-                     $("body #new_autobot").remove();
+                    $("body #new_autobot").remove();
                     $("body .autobots-modal-in").remove();
                     $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
-                    $("body").append("<div id='new_autobot' style='width: 950px;  top: 120px;left:50%' class='modal in'></div>");
+                    $("body").append("<div id='new_autobot' style='width: 795px;  top: 120px;left:50%' class='modal in'></div>");
                     $("body #new_autobot").html(new Choosebot({app: this.app, listing: this,type:this.typeOfBots}).el);
                     $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
                     this.typeOfBots = false;
@@ -367,9 +424,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 scrollToTop: function() {
                     $("html,body").css('height', '100%').animate({scrollTop: 0}, 600).css("height", "");
                 },
-             
+               
                 autoLoadBotImages:function(){
-                 var preLoadArray = [this.options.app.get("path")+'img/scorebot-h.png',this.options.app.get("path")+'img/alertbot-h.png',this.options.app.get("path")+'img/mailbot-h.png',this.options.app.get("path")+'img/tagbot-h.png',this.options.app.get("path")+'img/bdaybot-h.png']
+                 var preLoadArray = [this.options.app.get("path")+'img/meetingalertbot-h.png',this.options.app.get("path")+'img/autorespbot-h.png',this.options.app.get("path")+'img/salesalertbot-h.png',this.options.app.get("path")+'img/score10bot-h.png',this.options.app.get("path")+'img/score50bot-h.png',this.options.app.get("path")+'img/alertbot-h.png',this.options.app.get("path")+'img/score100bot-h.png',this.options.app.get("path")+'img/mailbot-h.png',this.options.app.get("path")+'img/tagbot-h.png',this.options.app.get("path")+'img/bdaybot-h.png']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });
@@ -406,6 +463,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                     }
                                     if(this.$("."+this.checkStatus[_i].checksum).length){
                                         that.$("."+this.checkStatus[_i].checksum).css("width",_json.percentageDone+"%");
+                                        that.$(".pr"+this.checkStatus[_i].checksum).attr('data-original-title','in progress ' + _json.percentageDone+"%")
                                         if(_json.dispensing == "N"){
                                             if(that.checkStatus[_i].length > 0){
                                                 that.checkStatus[_i].splice(i,1);

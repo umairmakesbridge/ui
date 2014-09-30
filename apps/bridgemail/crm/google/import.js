@@ -31,8 +31,7 @@
                 },
                 render: function() {
                     if (typeof this.options.edit != "undefined") {
-                        this.recipientDetial = this.options.edit;
-                        console.log(this.recipientDetial + 'I am here inide');
+                        this.recipientDetial = this.options.edit; 
                     }
                     this.$el.html(this.template({}));
                      this.$(":radio[value=importall]").iCheck('check');
