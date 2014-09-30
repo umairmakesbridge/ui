@@ -95,7 +95,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     }
                      this.showTags();
                     this.getFiltersById();
-                    this.loadCampaign();
+                  
                      if(this.alertEmails)
                      this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails));
                     if(this.alertMessage)
@@ -156,7 +156,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 that.addFormFilter();   
                                 that.addLeadScoreFilter();
                             }
-
+                               that.loadCampaign();
                             
                             that.$('input:checkbox').iCheck({
                                 checkboxClass: 'checkinput'
@@ -285,7 +285,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                       return ["Pending", "pclr6"];
                 },
                 previewCampaign: function(e) {
-                    var camp_name = this.model.get('label');
+                    var camp_name = this.model.get('presetLabel');
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
@@ -315,6 +315,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     //e.stopPropagation();
                 },
                 loadCampaign: function() {
+                    if(!this.campNum) return;
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&campNum=" + this.campNum + "&type=basic";
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
                         var camp_json = jQuery.parseJSON(xhr.responseText);
@@ -421,8 +422,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         that.showPercentage(ev);
                     });  
                        this.head_action_bar.find(".change-status").on('click', function() {
-                            var btnPause = that.modal.find('.modal-footer').find('.btn-play');
-                      var btnPlay = that.modal.find('.modal-footer').find('.btn-pause');
+                            var btnPause = $(".modal").find('.modal-footer').find('.icon.pause').closest('.btn');
+                      var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                         var res = false; 
                         if (that.status == "D") {
                             if(that.saveTagAutobot() !=false){
@@ -438,15 +439,20 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     })
                     this.modal = $(".modal");
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
-                        $(this).addClass('saving-blue');
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                        
                          if(that.saveTagAutobot() !=false){
-                            // var btnPlay = that.modal.find('.modal-footer').find('.btn-pause');
-                 
-                                
                                 that.options.refer.playAutobot('dialog', that.botId);
-                                
                          }
-                         $(this).removeClass('saving-blue');
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                     this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                        if(that.status !="D"){
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                         btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
                      })
                    // this.head_action_bar.find(".copy").on('click', function() {
                       //  that.options.refer.cloneAutobot('dialog', that.botId);
@@ -482,18 +488,21 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.options.refer.getAutobotById(this.botId);
                 },
                 saveTagAutobot: function(close) {
+                    var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                     btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         this.options.app.showLoading(false, this.$el);
                         btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                         return false;
                     }
                     if(this.saveFilters()  == false){
                          this.options.app.showLoading(false, this.$el.find('.modal-body'));
                         this.options.app.showAlert('Please select atleast one filter.', $("body"), {fixed: true});
                         btnSave.removeClass('saving');
+                         btnPlay.addClass('saving-blue');
                         return false;
                     }
                     var that = this;
@@ -528,6 +537,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
 
                                 }
                                 btnSave.removeClass('saving');
+                                 btnPlay.addClass('saving-blue');
                                 return result;
                             });
                             this.options.app.showLoading(false, this.$el.find('.modal-body'));

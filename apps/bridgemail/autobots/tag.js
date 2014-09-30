@@ -208,8 +208,21 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                         }
                     })
                      this.modal = $(".modal");
-                    this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
-                        that.options.refer.playAutobot('dialog', that.botId);
+                       this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
+                         btnPlay.addClass('saving-blue');
+                        
+                         if(that.saveTagAutobot() !=false){
+                                that.options.refer.playAutobot('dialog', that.botId);
+                         }
+                         //btnPlay.removeClass('saving-blue');
+                     })
+                     this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
+                        if(that.status !="D"){
+                         var btnPlay = $(".modal").find('.modal-footer').find('.btn-save');
+                         btnPlay.addClass('saving-grey');
+                         }
+                         //btnPlay.removeClass('saving-blue');
                      })
                     this.head_action_bar.find(".copy").on('click', function() {
                         that.options.refer.cloneAutobot('dialog', that.botId);
@@ -243,10 +256,12 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                 },
                 saveTagAutobot: function(close) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
+                     var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
                     btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         btnSave.removeClass('saving');
+                        btnSave.removeClass('saving-blue');
                         return;
                     }
                     var that = this;
@@ -287,6 +302,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
 
 
                                 }
+                                btnSave.removeClass('saving-blue');
                                 btnSave.removeClass('saving');
                                 return result;
                             });
