@@ -26,6 +26,11 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                 initialize: function() {
                     this.template = _.template(template);
                     this.parent = this.options.page;
+                    if (this.model.get('isPreset') == "Y") {
+                        this.label = this.model.get('presetLabel');
+                    }else{
+                        this.label = this.model.get('label');
+                    }
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
@@ -74,8 +79,31 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/tagbot.png'>";
                             break;
                     }
-                    if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
-                        label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>"
+                     switch (this.model.get('presetType')) {
+                        case "PRE.1":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>";
+                            break;
+                        case "PRE.2":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/meetingalertbot.png'>";
+                            break;
+                        case "PRE.3":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/autorespbot.png'>";
+                            break;
+                        case "PRE.4":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/salesalertbot.png'>";
+                            break;
+                        case "PRE.5":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score10bot.png'>";
+                            break;
+                        case "PRE.6":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score50bot.png'>";
+                            break;
+                         case "PRE.7":
+                            label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score100bot.png'>";
+                            break;
+                    }
+                    //if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
+                       // label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>"
 
                     return label;//+"botType" + this.model.get('actionType');
                 },
@@ -166,6 +194,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     var that = this;
                     var sentAt = "Sent at";
                         var status = "C";
+                        
                         var dialog_title = this.model.get("label") + " - Sent Population" ;
                         var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
@@ -281,12 +310,13 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot played.");
-                                   // that.getAutobotById(where, botId);
                                    // 
                                     //that.parent.callDispenseStats(that.model.get('botId.encode'),that.model.get("botId.checksum"),true);
                                    // that.options.page.topCounts();
                                    that.parent.fetchBots();
+                                   if (where == "dialog") { that.getAutobotById(where, botId);}
                                 }
+                                
                             });
                 },
                 pauseAutobot: function(where, id) {
@@ -311,6 +341,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
                                     that.parent.fetchBots();
+                                    if (where == "dialog") { that.getAutobotById(where, botId);}
                                 }
                             });
                 },
@@ -372,7 +403,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     return this.model;
                 },
                 previewCampaign: function(e) {
-                    var camp_name = this.model.get('label');
+                    var camp_name = this.label;
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
@@ -403,6 +434,14 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         var botId = this.model.get('botId.encode');
                     }
                     this.botId = botId;
+                    if(this.model.get('isPreset') == "Y"){
+                        if(this.model.get('presetType') == "PRE.1")
+                        this.chooseBotToEdit('autobots/birthday');
+                        else    
+                        this.chooseBotToEdit('autobots/preset');
+                        
+                    return;
+                    }
                     switch (this.model.get('actionType')) {
                         case "E":
                             if (this.model.get('botType') == "B") {
@@ -424,10 +463,14 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                 },
                 chooseBotToEdit: function(files) {
                     var that = this;
+                    var title = this.model.get('label');
+                     if(this.model.get('isPreset') == "Y"){
+                         title =  this.model.get('presetLabel');
+                     }
                     var dialog_width = 80;
                     var dialog_height = $(document.documentElement).height() - 200;
                     var dialog = this.options.app.showDialog({
-                        title: this.model.get('label'),
+                        title: title,
                         css: {"width": dialog_width + "%", "margin-left": "-" + (dialog_width / 2) + "%", "top": "20px"},
                         headerEditable: false,
                         headerIcon: 'bot',
@@ -443,7 +486,23 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         //console.log('Ok start From here for bot : ' + that.model.get('actionType'));
                         var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog
                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        if(that.model.get('isPreset') == "Y"){
+                            if(that.model.get('presetType') == "PRE.1"){
+                                 dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
+                                    that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBirthDayAutobot, mPage); // New Dialog
+                            }else{    
+                                dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
+                            }
+                                var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                                dialog.getFooter().append(btn);
+                            //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                                that.options.app.showLoading(false, dialog.getBody());
+                                that.options.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                that.options.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                                return;
 
+                        }
                         switch (that.model.get('actionType')) {
                             case "E":
                                 if (that.model.get('botType') == "B") {

@@ -81,8 +81,8 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             this.$el.find("#show_other").hide();
                         }
                         this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
-                        this.$el.find("#alertemails").val(this.alertEmails);
-                        this.$el.find("#alertmessage").val(this.alertMessage);
+                        this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails));
+                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage));
                         this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
 
                     }

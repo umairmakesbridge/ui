@@ -6,7 +6,16 @@
 
 <td width="100%"><div>
         <div class="name-type">
-            <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>"><%=this.model.get('label')%></a><%=this.getStatus()%> 
+            <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>">
+                    
+                    <%if(this.model.get('isPreset') == "Y"){%>
+                                <%=this.model.get('presetLabel')%>
+                 <%}else{%>
+                <%=this.model.get('label')%>
+                 <%}%>    
+                
+                
+                </a><%=this.getStatus()%> 
                 <%=this.isRecurring()%>
             </h3>
             <div class="tags tagscont">
@@ -20,11 +29,11 @@
     </div>
 </td>
 <td width="90px"><div>
-        <div class="mail">
+        <div class="mail  pr<%=this.model.get("botId.checksum")%> showtooltip" data-original-title="in progress 1%">
              <% if(this.model.get('status')==='P' || this.model.get('status')==='Q'){  %>    
                 <img alt="" class="recurring2img showprogressnt" src="<%- this.options.app.get('path')%>img/recurring2.gif">
-                <div class="prgressbar" style="left:50%;margin-left:-40px">    
-                    <span style="width: 1px;" class="prgrss <%- this.model.get("botId.checksum")%>"> </span>
+                <div class="prgressbar"  style="left:50%;margin-left:-40px">    
+                    <span style="width: 1px;"  class="prgrss <%- this.model.get("botId.checksum")%>"> </span>
                 </div>
             <% }  %>  
         </div>
@@ -56,17 +65,34 @@
 <td width="132px">
     <div>
         <%if(this.model.get('actionType') == "E"){
+          if(this.model.get('isPreset') != "Y"){
              if(this.model.get('status') == "D"){
                 var btns = "five s-clr6";
              }else{
                 var btns = "three s-clr4";
              }
+            }else{
+            if(this.model.get('status') == "D"){
+                var btns = "three s-clr4";
+             }else{
+                var btns = "two s-clr3";
+             }
+
+            }
         }else{
+         if(this.model.get('isPreset') != "Y"){
             if(this.model.get('status') == "D"){
                 var btns = "four s-clr5";
              }else{
                 var btns = "two s-clr3";
              }
+         }else{
+            if(this.model.get('status') == "D"){
+                var btns = "two s-clr3";
+             }else{
+                var btns = "one s-clr2";
+             }
+         }
         }
         %>
         <div style="width:105px" class="time"> <strong><span><%=this.getPlayedOn()%></strong> </div>
@@ -82,20 +108,28 @@
                       <a class="preview clr5 icon" data-id="<%=this.model.get('botId.encode')%>">
                              <span>Preview</span>
                        </a>
-                         <a class="play clr4 icon" ><span>Play</span></a> 
+                     <a class="edit clr4 edit-autobot icon" data-id="<%=this.model.get('botId.encode')%>"  ><span>Edit</span></a> 
+                         <a class="play clr3 icon" ><span>Play</span></a> 
                       <%}else{%>
-                         <a id="" class="play clr4 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Play</span></a>
+                       <a class="edit clr4 edit-autobot icon" data-id="<%=this.model.get('botId.encode')%>"  ><span>Edit</span></a> 
+                         <a id="" class="play clr3 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Play</span></a>
                       <%}%>
-
-                 <a class="edit clr3 edit-autobot icon" data-id="<%=this.model.get('botId.encode')%>"  ><span>Edit</span></a> 
+                        
+                 
+                                
+                                 <%if(this.model.get('isPreset') != "Y"){ %>
                         <a id="" class="copy clr2 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Copy</span></a>
                         <a id="" class="delete clr1 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Delete</span></a>
+                        <%}%>
                  <%}else{%>
                       <%if(this.model.get('actionType') == "E"){%>
                            <a class="preview clr3 icon"><span>Preview</span></a> 
                       <%}%>
+                      
                      <a id="" class="pause clr2 icon" data-id="<%=this.model.get('botId.encode')%>"><span>Pause</span></a>
-                      <a id="" class="copy clr1 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Copy</span></a>
+                      <%if(this.model.get('isPreset') != "Y"){ %>
+                        <a id="" class="copy clr1 icon" data-id="<%=this.model.get('botId.encode')%>" ><span>Copy</span></a>
+                      <%}%>
                       
                 <%}%>
           

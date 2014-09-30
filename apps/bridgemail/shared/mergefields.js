@@ -52,7 +52,10 @@
                 }else{
                     this.template.css({'width': '325px'});
                 }
-                this.template.find('input').attr({'style': 'width:75.2%'});
+                if(this.options.autobot == true)
+                    this.template.find('input').attr({'style': 'width:73.2%'});
+                else
+                    this.template.find('input').attr({'style': 'width:75.2%'});
             }
             if (id == "campaign_from_name" || id == "campaign_reply_to") {
                 this.$element.css('width','100%');

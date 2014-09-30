@@ -24,6 +24,11 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 initialize: function() {
                     this.template = _.template(template);
                     this.parent = this.options.page;
+                     if (this.model.get('isPreset') == "Y") {
+                        this.label = this.model.get('presetLabel');
+                    }else{
+                        this.label = this.model.get('label');
+                    }
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
@@ -282,6 +287,14 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         var botId = this.model.get('botId.encode');
                     }
                     this.botId = botId;
+                     if(this.model.get('isPreset') == "Y"){
+                        if(this.model.get('presetType') == "PRE.1")
+                        this.chooseBotToEdit('autobots/birthday');
+                        else    
+                        this.chooseBotToEdit('autobots/preset');
+                        
+                    return;
+                    }
                     switch (this.model.get('actionType')) {
                         case "E":
                             if (this.model.get('botType') == "B") {
@@ -306,7 +319,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     var dialog_width = 80;
                     var dialog_height = $(document.documentElement).height() - 200;
                     var dialog = this.options.app.showDialog({
-                        title: this.model.get('label'),
+                        title: this.label,
                         css: {"width": dialog_width + "%", "margin-left": "-" + (dialog_width / 2) + "%", "top": "20px"},
                         headerEditable: true,
                         headerIcon: 'bot',
@@ -321,7 +334,23 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         //console.log('Ok start From here for bot : ' + that.model.get('actionType'));
                         var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog
                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                        
+                          if(that.model.get('isPreset') == "Y"){
+                            if(that.model.get('presetType') == "PRE.1"){
+                                 dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
+                                    that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBirthDayAutobot, mPage); // New Dialog
+                            }else{    
+                                dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
+                                that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
+                            }
+                                var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
+                                dialog.getFooter().append(btn);
+                            //dialog.getFooter().prepend("<span style='display:inline-block; padding-top:5px; padding-right:10px'> <em>When you done with the changes, please don't forget to press save button.</em> </span>")
+                                that.options.app.showLoading(false, dialog.getBody());
+                                that.options.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                that.options.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                                return;
+
+                        }
                         switch (that.model.get('actionType')) {
                             case "E":
                                 if (that.model.get('botType') == "B") {
@@ -358,7 +387,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     return  this.model.get('tags').split(",");
                 },
                 previewCampaign: function(e) {
-                    var camp_name = this.model.get('label');
+                    var camp_name = this.label;
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;

@@ -1,10 +1,13 @@
 <div class="thumbnail temp-thumbnail auto-botthumb"  style="overflow:visible">
-    <div title="" class="template-type showtooltip"></div>
+     <%if(this.model.get('isPreset') == "Y"){%>
+     
+        <div title="" class="template-type builticon showtooltip" data-original-title="Makesbridge bot"></div>
+    <%}%>
     <div class="img">
          <% if(this.model.get('status')==='P' || this.model.get('status')==='Q'){  %>    
             <img alt="" class="recurring2img" src="<%- this.options.app.get('path')%>img/recurring2.gif">
-            <div class="prgressbar">    
-                <span style="width: 1px;" class="prgrss <%- this.model.get("botId.checksum")%>"> </span>
+            <div  class="prgressbar pr<%=this.model.get("botId.checksum")%> showtooltip" data-original-title="in progress 1%">    
+                <span style="width: 1px;"  class=" prgrss <%- this.model.get("botId.checksum")%> "> </span>
             </div>
       <% }  %>    
         <%if(this.model.get('actionType') == "E"){
@@ -20,6 +23,7 @@
                 var btn = "two s-clr3";
                }
             }%>
+           
         <div class="gallery-action-btns <%= btn %>">
             <%if(this.model.get('actionType') == "E"){
                 var width_pause = "width:25%";
@@ -28,32 +32,53 @@
                 var width_pause = "width:25%";
                 var width_playing = "width:50%"
             }%>
+             <%if(this.model.get('isPreset') == "Y"){ 
+              if(this.model.get('status') !='D'){
+                var width_playing = "width:100%"
+              }else{
+               var width_pause = "width:50%";
+                var width_playing = "width:50%"
+              }
+              
+            }%>
             <%if(this.model.get('status') == "D"){%>
                <%if(this.model.get('actionType') == "E"){%>
                  <a class="previewbtn clr5" style="width:100%; margin-bottom:1px" data-id="<%=this.model.get('botId.encode')%>">
                         <span>Preview message</span>
                   </a>
-                    <a class="playbtn clr4" style="<%=width_pause%>"><span>Play</span></a> 
+               <a class="editbtn clr4 edit-autobot" data-id="<%=this.model.get('botId.encode')%>" id="bottileid_<%=this.model.get('botId.checksum')%>" style="<%=width_pause%>" ><span>Edit</span></a> 
+                    <a class="playbtn clr3" style="<%=width_pause%>"><span>Play</span></a> 
                  <%}else{%>
-                    <a id="" class="playbtn clr4" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Play</span></a>
+                 <a class="editbtn clr4 edit-autobot" data-id="<%=this.model.get('botId.encode')%>" id="bottileid_<%=this.model.get('botId.checksum')%>" style="<%=width_pause%>" ><span>Edit</span></a> 
+                    <a id="" class="playbtn clr3" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Play</span></a>
                  <%}%>
                   
-            <a class="editbtn clr3 edit-autobot" data-id="<%=this.model.get('botId.encode')%>" id="bottileid_<%=this.model.get('botId.checksum')%>" style="<%=width_pause%>" ><span>Edit</span></a> 
-                   <a id="" class="copybtn clr2" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Copy</span></a>
-                   <a id="" class="deletebtn clr1" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Delete</span></a>
+                   
+                    <%if(this.model.get('isPreset') != "Y"){%>   
+                        <a id="" class="copybtn clr2" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Copy</span></a>
+                        <a id="" class="deletebtn clr1" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_pause%>"><span>Delete</span></a>
+                    <%}%>
             <%}else{%>
                  <%if(this.model.get('actionType') == "E"){%>
                       <a class="previewbtn clr3" style="width:100%;margin-bottom: 1px"><span>Preview message</span></a> 
                  <%}%>
                 <a id="" class="pausebtn clr2" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_playing%>"><span>Pause</span></a>
+                 <%if(this.model.get('isPreset') != "Y"){%>
                  <a id="" class="copybtn clr1" data-id="<%=this.model.get('botId.encode')%>" style="<%=width_playing%>"><span>Copy</span></a>
+                 <%}%>
            <%}%>
           
              
         </div>
         <%=this.getAutobotImage()%>  </div>
     <div class="caption nurture-caption" style="max-width: 222px;">
-        <h3><a class="left edit-autobot showtooltip" data-original-title="Click to view"  style="width:initial!important;" data-id="<%=this.model.get('botId.encode')%>"><%=this.model.get('label')%></a>
+        <h3><a class="left edit-autobot showtooltip" data-original-title="Click to view"  style="width:initial!important;" data-id="<%=this.model.get('botId.encode')%>">
+                <%if(this.model.get('isPreset') == "Y"){%>
+                                <%=this.model.get('presetLabel')%>
+                 <%}else{%>
+                <%=this.model.get('label')%>
+                 <%}%>    
+            </a>
             
       
         </h3>
@@ -62,7 +87,7 @@
         <div class="t-scroll" ></div>
       
        <div class="btm-bar">
-             <div class="percent_stats" style="position:absolute;">
+             <div class="percent_stats" style="position:absolute;z-index:999;">
             <span><span data-original-title="Click to view stats" style="cursor: pointer;" class="icon percent showtooltip"></span>
 
                    </span>
