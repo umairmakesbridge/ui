@@ -69,7 +69,7 @@ function (template) {
                         
                        this.setUpSalesforceFields();
                        
-                        this.$("input[value='opportunity']").on('ifChecked', function(event){
+                        this.$("input[value='opportunity']").on('ifClicked', function(event){
                             self.$(".contactby_opp").click()
                        })
                                       

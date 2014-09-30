@@ -100,7 +100,8 @@ function (template,crm_filters) {
                         this.camp.refreshList = this.$("#refresh_contacts").prop("checked")?"Y":"N";
                     }
                     if(this.camp.refreshList){
-                    dialog.showPrevious();
+                        dialog.showPrevious();
+                        
                     }
                     else{
                         dialog.hide();

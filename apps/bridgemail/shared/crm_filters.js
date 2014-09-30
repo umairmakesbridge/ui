@@ -17,7 +17,7 @@
   , init: function (element, options) {           
       this.$element = $(element)
       this.options = this.getOptions(options)            
-      this.objType = this.options.object
+      this.objType = this.options.object      
       this.$element.append($(this.options.template))
       if(this.options.showAdvanceOption){
         this.adv_options = $(this.options.adv_option)
@@ -78,7 +78,9 @@
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" />'
           filter_html += '<select data-placeholder="Choose opportuinity value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
           filter_html +='</select></div>'
-      
+      if(params && params.sfObject=="opportunity"){
+          params.paramsApplied = false;
+      }
       filter.find(".filter-cont").append(filter_html)
       filter.find(".matchValueSelect").chosen({width:'200px'});
       filter.find(".matchValueSelect").next().hide();
@@ -99,39 +101,9 @@
           }
       }
       
-      filter.find(".fields").chosen({width:'200px'}).change(function(){
-           var rule_html = ""
+      filter.find(".fields").chosen({width:'200px'}).change(function(){           
            if(self.options.filterFor==="S"){        
-                var attr_type = $(this).find("option:selected").attr("field_type").toLowerCase()	
-                $.each(self.rules,function(key,val){
-                     if(attr_type==val.type.toLowerCase()){
-                          rule_html +='<option value="'+val.name+'" rule_type="'+val.type+'">'+val.label+'</option>'                           
-                     }           
-                })
-                
-                filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
-                if(attr_type=="picklist"){
-                     filter.find(".matchValue").hide();
-                     filter.find(".rules").val("equal").trigger("chosen:updated");
-                     var picklist_values = self.filterFields[$(this).find("option:selected").index()-1].picklist;
-                     if(picklist_values){
-                         var picklist_html = "";
-                         $.each(picklist_values[0],function(key,val){                                
-                                 picklist_html +='<option value="'+val+'">'+val+'</option>'                                                                      
-                           })
-                     }                     
-                     filter.find(".matchValueSelect").next().show();
-                     filter.find(".matchValueSelect").html(picklist_html).prop("disabled",false).trigger("chosen:updated");
-                     if(matchValue){
-                         filter.find(".matchValueSelect").val(matchValue).trigger("chosen:updated");
-                     }
-                }
-                else{
-                    filter.find(".matchValueSelect").next().hide();
-                    filter.find(".matchValue").show();
-                }
-                self.updateAdvanceFilter()
-                 
+               self.updateRules(filter,params);                 
            }
       })
       filter.find(".rules").chosen({disable_search: "true",width:'170px'}).change(function(){
@@ -163,6 +135,46 @@
       }
       
     }
+   ,updateRules:function(filter,params){
+        var self=this;
+        var rule_html = ""
+        var attr_type = filter.find(".fields option:selected").attr("field_type").toLowerCase()	
+        if(attr_type=="id"){attr_type="double"}
+                $.each(self.rules,function(key,val){
+                     if(attr_type==val.type.toLowerCase()){
+                          rule_html +='<option value="'+val.name+'" rule_type="'+val.type+'">'+val.label+'</option>'                           
+                     }           
+                })
+                
+                filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
+                if(attr_type=="picklist"){
+                     filter.find(".matchValue").hide();
+                     filter.find(".rules").val("equal").trigger("chosen:updated");
+                     var picklist_values = self.filterFields[filter.find(".fields option:selected").index()-1].picklist;
+                     if(picklist_values){
+                         var picklist_html = "";
+                         $.each(picklist_values[0],function(key,val){                                
+                                 picklist_html +='<option value="'+val+'">'+val+'</option>'                                                                      
+                           })
+                     }                     
+                     filter.find(".matchValueSelect").next().show();
+                     filter.find(".matchValueSelect").html(picklist_html).prop("disabled",false).trigger("chosen:updated");
+                     if(params &&  params.paramsApplied===false){
+                         var matchValue = (params && params.fieldValue)?params.fieldValue :""
+                         filter.find(".matchValueSelect").val(matchValue).trigger("chosen:updated")
+                         var condition = (params && params.fieldCondition)?params.fieldCondition :""
+                         filter.find(".rules").val(condition).trigger("chosen:updated");                                                  
+                         params.paramsApplied = true;
+                     }
+                }
+                else{
+                    filter.find(".matchValueSelect").next().hide();
+                    filter.find(".matchValue").show();
+                }
+                
+                self.updateAdvanceFilter()
+                
+   }
   ,addSalesForceField:function(filter,params){
       var URL = ""
       var self = this
@@ -212,18 +224,23 @@
                          return false;
                      }       
                     var field_html ='<option value=""></option>'                                            
+                    var isPicklist = false;
                     $.each(fields_json.fldList[0],function(key,val){
-                        selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
+                        selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                                                
                         if(self.objType && self.objType===val[0].sfObject.toLowerCase()){
+                            if(selected_field){
+                                isPicklist = val[0].type=="picklist"?true:false;
+                            }
                             self.filterFields.push(val[0])                                  
                             field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
                         }
                         
                     });                    
                     filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
-                    if(params && params.fieldName){
-                        filter.find(".fields").change();
+                    if(params && params.fieldName && isPicklist){                        
+                        self.updateRules(filter,params)
                     }
+                    
                 }
           }).fail(function() { console.log( "error in loading fields" ); });
       }
@@ -250,6 +267,7 @@
                          return false;
                      }       
                     var rule_html =''                                            
+                    self.rules = [];
                     $.each(fields_json.fldList[0],function(key,val){
                         selected_field = (params && params.fieldCondition==val[0].name) ? "selected" : ""                        
                         self.rules.push(val[0])                            
@@ -554,7 +572,7 @@
   , bottomrow_c : '<div class="filter-row filter-menu addfilter"><ul></ul></div>'
   , condition_row : '<span class="andor"><div class="btn-group"><select><option value="AND">And</option><option value="OR">Or</option></select></div></span>'
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
-  , adv_option : '<div class="advncfilter"><div class="inputlabel" style=""><input type="checkbox" id="campaign_isFooterText" class="checkinput"><label for="campaign_isFooterText">Advanced Filter</label></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
+  , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput"><label for="campaign_isFooterText">Advanced Filter</label></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
   , filterFor : 'S'
   , title: ''
   , app:null

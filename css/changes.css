@@ -3358,8 +3358,8 @@ ul#template_search_menu li {
     height: 35px;    
     width: 343px;
     position: absolute;
-    bottom:0px;
-    left:170px;
+    bottom:6px;
+    left:405px;
 }
 .input-wrapper{
     background-color:  #eaf4f9;

@@ -169,12 +169,17 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("#header,#activities").hide();
                           $("body").css("overflow-y","hidden");
                         },
-                        hide:function(){                            
+                        hide:function(){
+                           if(this.app.dialogArray.length>1){
+                            this.showPrevious();
+                           
+                           }else{    
                             this.$el.modal("hide");
                             this.doubleBlackOut(false);
                            if($("body > .overlay,.modal-backdrop").length==0){
                                 $("body").css("overflow-y","auto");
                             }
+                          }  
                         },
                         getBody:function(){
                             return this.$(".modal-body");
