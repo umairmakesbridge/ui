@@ -97,9 +97,9 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.getFiltersById();
                   
                      if(this.alertEmails)
-                     this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails));
+                     this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails,true));
                     if(this.alertMessage)
-                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage));
+                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage,true));
                     this.$el.find("#ddlclickdays").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
                     this.$el.find("#ddlpagedays").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
                     this.$el.find("#ddlformsubmission").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "220px", disable_search: "true"});
@@ -426,11 +426,9 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                       var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                         var res = false; 
                         if (that.status == "D") {
-                            if(that.saveTagAutobot() !=false){
                                 btnPlay.addClass('saving-blue');
-                                res = that.options.refer.playAutobot('dialog', that.botId);
-                                btnPlay.removeClass('saving-blue');
-                            }
+                               that.saveFilters(true);
+                             
                         } else {
                             btnPause.addClass('saving-grey');
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
@@ -441,11 +439,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                          var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                          btnPlay.addClass('saving-blue');
-                        
-                         if(that.saveTagAutobot() !=false){
-                                that.options.refer.playAutobot('dialog', that.botId);
-                         }
-                         //btnPlay.removeClass('saving-blue');
+                            that.saveFilters(true);
                      })
                      this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
                         if(that.status !="D"){
@@ -487,27 +481,18 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     }
                     this.options.refer.getAutobotById(this.botId);
                 },
-                saveTagAutobot: function(close) {
+                saveTagAutobot: function(close,isPlayClicked) {
                     var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
-                    btnSave.addClass('saving');
+                    if(!isPlayClicked)
+                        btnSave.addClass('saving');
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         this.options.app.showLoading(false, this.$el);
                          btnPlay.removeClass('saving-blue');
                         btnSave.removeClass('saving');
-                        
                         return false;
-                    }
-                    if(this.saveFilters()  == false){
-                         this.options.app.showLoading(false, this.$el.find('.modal-body'));
-                        this.options.app.showAlert('Please select atleast one filter.', $("body"), {fixed: true});
-                        btnPlay.removeClass('saving-blue');
-                        btnSave.removeClass('saving');
-                        
-                        
-                        return false;
-                    }
+                    } 
                     var that = this;
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update"};
                     if(this.botType == "SR"){
@@ -558,15 +543,14 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 that.options.app.showLoading(false, that.$el.find('.modal-body'));
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== "err") {
-                                    that.app.showMessge(_json[1]);
                                     result = true;
-                                    if (!close) {
-                                        that.options.refer.getAutobotById(that.botId);
-                                        //that.options.dialog.hide();
-                                        result = true;
-                                    }
-                                }
-                                else {
+                                    if(isPlayClicked){
+                                         that.options.refer.playAutobot('dialog', that.botId);
+                                     }else{
+                                          that.app.showMessge(_json[1]);
+                                     }
+                                    
+                                }else {
                                     that.app.showAlert(_json[1], $("body"), {fixed: true});
                                     result = false;
 
@@ -1262,7 +1246,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
         
       
     }, 
-  saveFilters:function(){
+  saveFilters:function(isPlayClicked){
        var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
         var btnSave = this.modal.find('.modal-footer').find('.btn-save');
        var filters_post = {}
@@ -1362,7 +1346,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       } 
       if(total == 0){
             btnSave.removeClass('saving');
-                         btnPlay.addClass('saving-blue');
+            btnPlay.removeClass('saving-blue');
           return false;
       }
       filters_post["count"] = total;
@@ -1375,17 +1359,18 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                     var target_json = jQuery.parseJSON(data);
                                     if (that.app.checkError(target_json)) {
                                           btnSave.removeClass('saving');
-                         btnPlay.addClass('saving-blue');
-                                        return false;
+                                          btnPlay.removeClass('saving-blue');
+                                         
                                     }
 
                                     if (target_json[0] !== "err") {
+                                      that.saveTagAutobot(false,isPlayClicked);
                                     }
                                     else {
                                         that.app.showAlert(false, that.$el);
                                     }
                                       btnSave.removeClass('saving');
-                         btnPlay.addClass('saving-blue');
+                                      btnPlay.removeClass('saving-blue');
                                       
                                 });
                    

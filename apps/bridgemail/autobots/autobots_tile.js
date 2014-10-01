@@ -491,7 +491,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                                  dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
                                     that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBirthDayAutobot, mPage); // New Dialog
                             }else{    
-                                dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
+                                dialog.saveCallBack(_.bind(mPage.saveFilters, mPage));
                                 that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
                             }
                                 var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";

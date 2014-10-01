@@ -207,7 +207,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
                         if (that.status == "D") {
-                            res = that.options.refer.playAutobot('dialog', that.botId);
+                            that.saveBirthDayAutobot(false,true);  
                         } else {
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
                         }
@@ -216,9 +216,8 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                          var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                          btnPlay.addClass('saving-blue');
-                          if(that.saveBirthDayAutobot() !=false){
-                            that.options.refer.playAutobot('dialog', that.botId);
-                        }
+                         that.saveBirthDayAutobot(false,true);  
+                        
                      })
                       this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
                         if(that.status !="D"){
@@ -258,15 +257,17 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     }
                     this.options.refer.getAutobotById(this.botId);
                 },
-                saveBirthDayAutobot: function(close) {
+                saveBirthDayAutobot: function(close,isPlayClicked) {
                      var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                     var btnSave = this.modal.find('.modal-footer').find('.btn-save');
-                    btnSave.addClass('saving');
-                    btnSave.addClass('saving-blue');
+                    
+                    if(!isPlayClicked)
+                        btnSave.addClass('saving');
+                    
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         btnSave.removeClass('saving');
-                        btnPlay.addClass('saving-blue');
+                        btnPlay.removeClass('saving-blue');
                         return;
                     }
                     this.fieldName = this.$el.find('#fieldname').val();
@@ -279,12 +280,11 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                             .done(function(data) {
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== "err") {
-                                    that.app.showMessge(_json[1]);
-                                    if (!close) {
-                                        that.options.refer.getAutobotById(that.botId);
-                                       // that.options.dialog.hide();
-                                        
-                                    }
+                                     if(isPlayClicked){
+                                         that.options.refer.playAutobot('dialog', that.botId);
+                                     }else{
+                                          that.app.showMessge(_json[1]);
+                                     }
                                     btnSave.removeClass('saving');
                                 }
                                 else {
@@ -293,7 +293,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
 
                                 }
                                 btnSave.removeClass('saving');
-                                btnPlay.addClass('saving-blue');
+                                btnPlay.removeClass('saving-blue');
                                 return result;
                                 
                             });

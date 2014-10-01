@@ -426,7 +426,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                
                 autoLoadBotImages:function(){
-                 var preLoadArray = [this.options.app.get("path")+'img/meetingalertbot-h.png',this.options.app.get("path")+'img/autorespbot-h.png',this.options.app.get("path")+'img/salesalertbot-h.png',this.options.app.get("path")+'img/score10bot-h.png',this.options.app.get("path")+'img/score50bot-h.png',this.options.app.get("path")+'img/alertbot-h.png',this.options.app.get("path")+'img/score100bot-h.png',this.options.app.get("path")+'img/mailbot-h.png',this.options.app.get("path")+'img/tagbot-h.png',this.options.app.get("path")+'img/bdaybot-h.png']
+                 var preLoadArray = [this.options.app.get("path")+'img/meetingalertbot-h.png',this.options.app.get("path")+'img/autorespbot-h.png',this.options.app.get("path")+'img/salesalertbot-h.png',this.options.app.get("path")+'img/scorebot-h.png',this.options.app.get("path")+'img/score10bot-h.png',this.options.app.get("path")+'img/score50bot-h.png',this.options.app.get("path")+'img/alertbot-h.png',this.options.app.get("path")+'img/score100bot-h.png',this.options.app.get("path")+'img/mailbot-h.png',this.options.app.get("path")+'img/tagbot-h.png',this.options.app.get("path")+'img/bdaybot-h.png']
                  $(preLoadArray).each(function() {
                     var image = $('<img />').attr('src', this);                    
                  });
