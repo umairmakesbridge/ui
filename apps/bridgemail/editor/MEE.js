@@ -2872,7 +2872,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 var OpenRulesWindow = function (args, top, left) {
                                     var filterDialog = myElement.find(".dcRulesDialog");
-                                    options._app.showLoading("Loading Filters...", filterDialog.find("div"),{"top":"51px","left":"260px"});
+                                    options._app.showLoading("Loading Filters...", filterDialog.find("div"),{"top":"51px","left":"50%","margin-left":"-150px"});
                                     require(["editor/DC/filters"],function(templatePage){
                                         var mPage = new templatePage({                                            
                                             opt:options,
