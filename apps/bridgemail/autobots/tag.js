@@ -202,7 +202,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
                         if (that.status == "D") {
-                            res = that.options.refer.playAutobot('dialog', that.botId);
+                             that.saveTagAutobot(false,true); 
                         } else {
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
                         }
@@ -211,10 +211,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                        this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                          var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                          btnPlay.addClass('saving-blue');
-                        
-                         if(that.saveTagAutobot() !=false){
-                                that.options.refer.playAutobot('dialog', that.botId);
-                         }
+                         that.saveTagAutobot(false,true); 
                          //btnPlay.removeClass('saving-blue');
                      })
                      this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
@@ -254,14 +251,16 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     }
                     this.options.refer.getAutobotById(this.botId);
                 },
-                saveTagAutobot: function(close) {
+                saveTagAutobot: function(close,isPlayClicked) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay = this.modal.find('.modal-footer').find('.btn-play');
-                    btnSave.addClass('saving');
+                     if(!isPlayClicked)
+                        btnSave.addClass('saving');
+                   
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         btnSave.removeClass('saving');
-                        btnSave.removeClass('saving-blue');
+                        btnPlay.removeClass('saving-blue');
                         return;
                     }
                     var that = this;
@@ -290,19 +289,18 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             .done(function(data) {
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== "err") {
-                                    that.app.showMessge(_json[1]);
-                                    if (!close) {
-                                        that.options.refer.getAutobotById(that.botId);
-                                        //that.options.dialog.hide();
-                                        
-                                    }
+                                    if(isPlayClicked){
+                                         that.options.refer.playAutobot('dialog', that.botId);
+                                     }else{
+                                          that.app.showMessge(_json[1]);
+                                     }
                                 }
                                 else {
                                     that.app.showAlert(_json[1], $("body"), {fixed: true});
 
 
                                 }
-                                btnSave.removeClass('saving-blue');
+                                btnPlay.removeClass('saving-blue');
                                 btnSave.removeClass('saving');
                                 return result;
                             });

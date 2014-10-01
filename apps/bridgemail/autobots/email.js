@@ -246,7 +246,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.head_action_bar.find(".change-status").on('click', function() {
                         var res = false;
                         if (that.status == "D") {
-                            res = that.options.refer.playAutobot('dialog', that.botId);
+                            that.saveEmailAutobot(false,true);  
                         } else {
                             res = that.options.refer.pauseAutobot('dialog', that.botId);
                         }
@@ -255,10 +255,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.modal.find('.modal-footer').find(".btn-play").on('click', function() {
                          var btnPlay = $(".modal").find('.modal-footer').find('.btn-play');
                          btnPlay.addClass('saving-blue');
-                        
-                         if(that.saveEmailAutobot() !=false){
-                                that.options.refer.playAutobot('dialog', that.botId);
-                         }
+                         that.saveEmailAutobot(false,true);  
                          //btnPlay.removeClass('saving-blue');
                      })
                      this.modal.find('.modal-footer').find(".btn-save").on('click', function() {
@@ -298,10 +295,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     }
                     this.options.refer.getAutobotById(this.botId);
                 },
-                saveEmailAutobot: function(close) {
+                saveEmailAutobot: function(close,isPlayClicked) {
                      var btnSave = this.modal.find('.modal-footer').find('.btn-save');
                      var btnPlay= this.modal.find('.modal-footer').find('.btn-play');
-                    btnSave.addClass('saving');
+                     if(!isPlayClicked)
+                        btnSave.addClass('saving');
+                    
                     if (this.status != "D") {
                         this.options.refer.pauseAutobot(('dialog', this.botId));
                         btnSave.removeClass('saving');
@@ -325,19 +324,18 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             .done(function(data) {
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== "err") {
-                                    that.app.showMessge(_json[1]);
-                                    if (!close) {
-                                        that.options.refer.getAutobotById(that.botId);
-                                        //that.options.dialog.hide();
-                                         
-                                    }
+                                    if(isPlayClicked){
+                                         that.options.refer.playAutobot('dialog', that.botId);
+                                     }else{
+                                          that.app.showMessge(_json[1]);
+                                     }
                                 }
                                 else {
                                     that.app.showAlert(_json[1], $("body"), {fixed: true});
 
 
                                 }
-                                btnSave.removeClass('saving');
+                                 btnSave.removeClass('saving');
                                  btnPlay.removeClass('saving-blue');
                                 return result;
                             });

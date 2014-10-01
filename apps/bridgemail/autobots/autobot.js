@@ -181,8 +181,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         var botId = this.model.get('botId.encode');
                     }
                     var tile = this.$el.find("row_" + botId);
-
-                    var bms_token = that.options.app.get('bms_token');
+                       var bms_token = that.options.app.get('bms_token');
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + bms_token;
                     that.options.app.showLoading("Playing Autobots...", tile);
                     $.post(URL, {type: 'play', botId: botId})
@@ -339,7 +338,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                  dialog.saveCallBack(_.bind(mPage.saveBirthDayAutobot, mPage));
                                     that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveBirthDayAutobot, mPage); // New Dialog
                             }else{    
-                                dialog.saveCallBack(_.bind(mPage.saveTagAutobot, mPage));
+                                dialog.saveCallBack(_.bind(mPage.saveFilters, mPage));
                                 that.options.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTagAutobot, mPage); // New Dialog
                             }
                                 var btn = "<a class='btn btn-blue btn-play right' style='display: inline;'><span>Play</span><i class='icon play'></i></a>";
