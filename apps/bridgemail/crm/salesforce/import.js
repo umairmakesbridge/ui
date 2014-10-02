@@ -222,6 +222,12 @@ function (template) {
                     .done(_.bind(function(json) {
                         this.app.showLoading(false,this.parent.$el);
                         this.recipientDetial = json;
+                        if(json.sfObject=="contact"){
+                            this.recipientDetial.advancedOptionsC= data.advancedOptionsC;
+                        }
+                        else{
+                            this.recipientDetial.advancedOptionsL =data.advancedOptionsL;
+                        }
                         this.drawSampleData(json);
                         this.parent.isFilterChange=true;
                         if(goToNext){

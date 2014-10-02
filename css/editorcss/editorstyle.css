@@ -1469,7 +1469,7 @@ height: 72px;
 .chooselistdd  .bmsgrid .subscribers > strong { height:40px; }
 .chooselistdd  .bmsgrid .sched em, .chooselistdd  .bmsgrid .subscribers em, .chooselistdd  .bmsgrid .time em, .chooselistdd  .bmsgrid .mail em { float:none;}
 
-/* --------------------------------------- */
+/* --------------------------------------- 
 
 .MEE_EDITOR a.saving { background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E; min-width:80px; }
 
@@ -1482,6 +1482,15 @@ height: 72px;
     min-height: 30px;
     min-width: 20px;
     padding: 0;
+}*/
+
+.MEE_EDITOR a.saving span {
+    background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E;    
+    min-width: 30px;
+}
+
+.MEE_EDITOR .tagbox .btn-green span{
+    width:30px;
 }
 
 

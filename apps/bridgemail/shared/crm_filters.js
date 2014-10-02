@@ -86,8 +86,9 @@
       filter.find(".matchValueSelect").next().hide();
       this.addActionBar(filter)
       var self = this 
+      var condition_row =null
       if(this.$element.find(".filter-div ._row").length>=1){
-          var condition_row = $(this.options.condition_row);
+          condition_row = $(this.options.condition_row);
           this.$element.find(".addfilter").before(condition_row)
           if(this.options.filterFor==="S"){
             condition_row.find("select").chosen({disable_search: "true",width:'100px'}).change(function(){ 
@@ -133,6 +134,8 @@
       }else if(this.options.filterFor==="H"){
           this.addHighriseField(filter,params)
       }
+      
+      return condition_row;
       
     }
    ,updateRules:function(filter,params){
@@ -431,10 +434,12 @@
     if(this.options.filterFor=='H'){
         if(data.filterQuery){
             var filters = data.filterQuery.split(',');
+            
             $.each(filters,function(key,value){
                 var value = self.options.app.decodeHTML(value);
                 var split = value.split("=");
                 self.addBasicFilter(false,false,split)  
+                
             });
         }
         return;
@@ -443,7 +448,12 @@
       
       _target.find(".filter-div ._row").remove()      
       if(data.filterFields){
+      var filter_count = 0;
       var filters_data = data.filterFields[0]
+      var adv_option = null
+      if(self.options.filterFor=="S"){            
+           adv_option = self.objType=="lead"?"advancedOptionsL":"advancedOptionsC"         
+      }
         $.each(filters_data,function(i,v){
             var filter =  v[0]
             
@@ -454,12 +464,27 @@
             }
             else{
               if(v[0].sfObject==self.objType || self.objType=="opportunity"){
-                self.addBasicFilter(false,false,filter)                    
+                var condition = self.addBasicFilter(false,false,filter)                    
+                filter_count = filter_count +1;
+                if(condition){
+                    if(filter_count>1){
+                        var advanceFilter = data[adv_option];
+                        var sIndex = advanceFilter.indexOf(filter_count-1)
+                        var eIndex = advanceFilter.indexOf(filter_count)+1
+                        var conditionString = advanceFilter.substring(sIndex,eIndex)                        
+                        if(conditionString.indexOf("OR")>-1){
+                            condition.find("select").val("OR").trigger("chosen:updated")
+                        }
+                        else{
+                            condition.find("select").val("AND").trigger("chosen:updated")
+                        }
+                    }
+                }
               }
             }
+            
         })
-        if(self.options.filterFor=="S"){            
-            var adv_option = self.objType=="lead"?"advancedOptionsL":"advancedOptionsC"
+        if(self.options.filterFor=="S"){                        
             this.$element.find(".advance-option").val(data[adv_option])
         }
       }
@@ -572,7 +597,7 @@
   , bottomrow_c : '<div class="filter-row filter-menu addfilter"><ul></ul></div>'
   , condition_row : '<span class="andor"><div class="btn-group"><select><option value="AND">And</option><option value="OR">Or</option></select></div></span>'
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
-  , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput"><label for="campaign_isFooterText">Advanced Filter</label></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
+  , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput" style="margin-left:10px"><label for="campaign_isFooterText">Advanced Filter</label><span style="display: block;" class="fieldinfo"><i class="icon"></i><em style="z-index: 108;width:280px;line-height:14px">Click to set precedence if you are using more than 2 filters. e.g (1 AND 2) OR 3</em></span></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
   , filterFor : 'S'
   , title: ''
   , app:null

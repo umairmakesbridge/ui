@@ -21,7 +21,7 @@ function (template,crm_filters) {
                         this.$(".lead-filter").crmfilters({app:this.app,object:'lead'});
                         this.$(".contact-filter").crmfilters({app:this.app,object:'contact'});
                         this.$(".contactbyopp-filter").crmfilters({app:this.app,object:'opportunity'});
-                        this.$(".checkpanel")
+                        
                         this.$(".checkpanel").iCheck({
                                 checkboxClass: 'checkinput'
                           })
@@ -59,7 +59,7 @@ function (template,crm_filters) {
                         if(this.savedObject.filterType=="opportunity"){
                             this.$(".contact-accordion,.lead-accordion").hide();                            
                             this.$(".contactbyopp-filter").data("crmfilters").loadFilters(this.savedObject);
-                            if(this.savedObject.isRefresh=="Y"){
+                            if(this.savedObject.isRefresh=="Y" || (this.camp.refreshList && this.camp.refreshList=="Y")){
                                 this.$(".checkpanel").iCheck("check");
                             }
                         }
