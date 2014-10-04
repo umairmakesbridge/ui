@@ -597,7 +597,7 @@
   , bottomrow_c : '<div class="filter-row filter-menu addfilter"><ul></ul></div>'
   , condition_row : '<span class="andor"><div class="btn-group"><select><option value="AND">And</option><option value="OR">Or</option></select></div></span>'
   , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
-  , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput" style="margin-left:10px"><label for="campaign_isFooterText">Advanced Filter</label><span style="display: block;" class="fieldinfo"><i class="icon"></i><em style="z-index: 108;width:280px;line-height:14px">Click to set precedence if you are using more than 2 filters. e.g (1 AND 2) OR 3</em></span></div><div class="filter-cont"><input type="text" value="" class="advance-option" /></div></div>'
+  , adv_option : '<div class="advncfilter"><div class="inputlabel" style="position:relative"><input type="checkbox" id="campaign_isFooterText" class="checkinput" ><label for="campaign_isFooterText">Advanced Filter</label><span style="display: block;" class="fieldinfo"><i class="icon"></i><em style="z-index: 108;width:280px;line-height:14px">Click to set precedence if you are using more than 2 filters. e.g (1 AND 2) OR 3</em></span></div><div class="filter-cont"><input type="text" value="" class="advance-option" style="margin-left:10px" /></div></div>'
   , filterFor : 'S'
   , title: ''
   , app:null

@@ -55,7 +55,13 @@ function (template,icheck,bmstags) {
                copyIconTemplate.attr('data-original-title','Copy template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});;
                this.head_action_bar.find(".delete").attr('data-original-title','Delete template').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                this.head_action_bar.append(previewIconTemplate);
-               this.initEditor();
+               if(!this.app.get("isMEETemplate")){
+                this.initEditor();
+                this.$("textarea").css("height",(this.$("#area_create_template").height()-270)+"px");                              
+               }
+               else{
+                 this.$("textarea").css({"height":(this.$("#area_create_template").height()-250)+"px",width:(this.$("#area_create_template").width()-28)+"px"});   
+               }
                this.tagDiv.addClass("template-tag");
                this.loadTemplate();
                this.iThumbnail = this.$(".droppanel");
@@ -171,6 +177,9 @@ function (template,icheck,bmstags) {
                         if(template_json.isFeatured=='Y'){
                             _this.$(".featured").iCheck('check');
                         }
+                        if(_this.app.get("isMEETemplate")){
+                            _this.$("#bmseditor_template").val(_this.app.decodeHTML(template_json.htmlText,true));
+                        } 
                         if(template_json.isAdmin == "Y"){ 
                            if(template_json.isReturnPath=='Y'){
                                _this.$(".return-path").closest('.btnunchecked').css('display','inline-block');
@@ -253,9 +262,15 @@ function (template,icheck,bmstags) {
                                  isFeatured:isFeatured,
                                  isReturnPath:isReturnPath,
                                  isMobile:isMobile,
-                                 categoryID:this.$(".cat").text(),
-                                 templateHtml:_tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
+                                 categoryID:this.$(".cat").text()
                         };
+                 if(this.app.get("isMEETemplate")){
+                     this.dataObj["isMEE"]='Y'; 
+                     this.dataObj["templateHtml"]=this.$("#bmseditor_template").val();
+                 }       
+                 else{
+                      this.dataObj["templateHtml"]=_tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
+                 }
                 _this.app.showLoading("Updating Template...",this.$el.parents('.modal'));   
                 $.post(URL,this.dataObj )
                 .done(function(data) {                  
@@ -371,7 +386,7 @@ function (template,icheck,bmstags) {
                 var _this  = this;
                 var template_name_input =  $(obj.target).parents(".edited").find("input");                       
                 var dailog_head = this.dialog;
-                var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');                
                 $(obj.target).addClass("saving");
                 $.post(URL, { type: "rename",templateName:template_name_input.val(),templateNumber:this.template_id })
                   .done(function(data) {                              
@@ -402,40 +417,7 @@ function (template,icheck,bmstags) {
                     this.dialog.$("#dialog-title-input").hide();   
                     this.dialog.$(".tagscont").show();
                 }
-            },
-             /*updateTemplate:function(){                                           
-                    var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
-                    var dialog = this.app.showDialog({title:'Loading ...',
-                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
-                              headerEditable:true,
-                              headerIcon : 'template',
-                              bodyCss:{"min-height":dialog_height+"px"},
-                              buttons: {saveBtn:{text:'Save'} }                                                                           
-                        });
-
-                    this.app.showLoading("Loading...",dialog.getBody());
-                    this.loadTemplate(this);
-                    dialog.getBody().html(this.$el);
-             },
-            deleteTemplate:function(){
-                    var _this = this;                   
-                    this.app.showLoading("Deleting Template...",this.dialog.$el);
-                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
-                    $.post(URL, {type:'delete',templateNumber:this.template_id})
-                    .done(function(data) {                  
-                          _this.app.showLoading(false,_this.$el);   
-                           var _json = jQuery.parseJSON(data);        
-                           if(_json[0]!=='err'){
-                               _this.dialog.hide();
-                              _this.page.$("#template_search_menu li:first-child").removeClass("active").click();                              
-                           }
-                           else{
-                               _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
-                           }
-                   });
-                    
-                },*/
+            },             
                  TryDialog:function(obj){
                     this.image_obj = $.getObj(obj,"a");
                     var that = this;

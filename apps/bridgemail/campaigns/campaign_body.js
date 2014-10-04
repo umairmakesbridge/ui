@@ -69,9 +69,9 @@ function (template,editorView) {
                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge tags'});
                 },
             populateBody:function(){           
-                if(this.plainText){
+                if(this.parent.plainText && this.parent.htmlText===""){
                     this.$("#plain_text").click();
-                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainTex,true));
+                    this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
                 }
                 else if(this.campobjData.editorType=="W"){
                     this.$("#html_editor").click();
@@ -80,6 +80,7 @@ function (template,editorView) {
                     this.$("#html_editor_mee").click();
                 }else if(this.campobjData.editorType=="H"){
                     this.$("#html_code").click();
+                    this.$("#handcodedhtml").val(this.app.decodeHTML(this.parent.htmlText,true));
                 }  
                 
             },
@@ -161,7 +162,7 @@ function (template,editorView) {
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
-                        this.$("#mee_editor").setChange(this);                
+                        this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 

@@ -534,7 +534,8 @@ function (template,highlight,templateCollection,templateRowView) {
                     var template_name = $.trim(dialog.$("#template_name").val());
                     if(template_name){
                         this.app.showLoading("Creating Template...",dialog.$el);
-                        var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                        var isMEE = this.app.get("isMEETemplate")?"&isMEE=Y":"";
+                        var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token')+isMEE;
                         $.post(URL, {type:'create',templateName:template_name})
                         .done(function(data) {                  
                               _this.app.showLoading(false,dialog.$el);   

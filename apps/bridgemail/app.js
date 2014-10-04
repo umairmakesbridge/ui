@@ -58,7 +58,7 @@ define([
 			this.set(_.extend({
 				env: 'developement',
 				bms_token: bms_token,
-                                isNurtureTrack: $.getUrlVar(false,'enableNT'),
+                                isMEETemplate: $.getUrlVar(false,'meeTemplate'),
                                 isFromCRM: $.getUrlVar(false,'crm'),
                                 preview_domain : previewDomain,
                                 images_CDN : imagesCDN,
@@ -552,19 +552,14 @@ define([
                     }
                     return x1 + x2;
             },
-            dateSetting:function(dateText,sep){
-                dateText = this.decodeHTML(dateText);
-                var date = dateText.split(' ');
+            dateSetting:function(sentDate,sep){
+               sentDate = this.decodeHTML(sentDate);                
+               if(sep =="/") 
+                    var _date =  moment(sentDate,'MM/DD/YYYY');
+                if(sep =="-")
+                    var _date =  moment(sentDate,'YYYY-MM-DD');
                 
-                var dateparts = date[0].split(sep);
-                if(sep === "/"){
-                    var month = this.getMMM(dateparts[0].replace('0','')-1);
-                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[1];
-                }else{
-                    var month = this.getMMM(dateparts[1].replace('0','')-1);
-                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
-                }
-                return dateFormat;
+                return _date.format("DD MMM YYYY");            
             },
             showInfo: function(control,message)
             {

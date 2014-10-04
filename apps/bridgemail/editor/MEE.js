@@ -703,12 +703,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
 
                                 });
-
                                 return oHtml;
                             }
-
-
-
 
                             function CleanCode (html) {
 
@@ -2706,54 +2702,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                             function InitializeDynamicControl (args) {
-
-                                var SaveRuleWindow = function (args) {
-
-                                    var dcRulesDialog = args.dcRulesDialog;
-
-                                    var listOfDynamicRules = new Array();
-
-
-                                    dcRulesDialog.find(".rule").each(function (index, object) {
-                                        var $this = $(object);
-
-
-                                        var dcRuleFieldName = $this.find(".dcRuleFieldName");
-                                        var dcRuleCondition = $this.find(".dcRuleCondition");
-                                        var dcRuleMatchValue = $this.find(".dcRuleMatchValue");
-
-
-                                        var rule = new DynamicRules();
-                                        rule.RuleFieldName = dcRuleFieldName.val();
-                                        rule.RuleCondition = dcRuleCondition.val();
-                                        rule.RuleMatchValue = dcRuleMatchValue.val();
-
-                                        listOfDynamicRules.push(rule);
-
-                                    });
-
-                                    //var dcRuleLabel = dcRulesDialog.find(".dcRuleLabel");
-
-
-                                    var content = args.clickedLi.data("content");
-                                    content.ListOfDynamicRules = listOfDynamicRules;
-                                    content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
-                                    //content.IsUpdate = args.IsUpdate;
-
-                                    args.DynamicContent = new DynamicContents();
-                                    args.DynamicContent = content;
-
-                                    if (options.OnSaveDynamicRules != null) {                                                 
-                                        options.OnSaveDynamicRules(args);
-                                    }
-
-                                    args.clickedLi.data("content", args.DynamicContent);
-
-
-
-
-
-                                }
+                               
 
                                 var PopulateContent = function (args) {
 
@@ -2793,6 +2742,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var ContentLi = $(myElement.find(".dcLI").html());
                                                     ContentLi.find("span:first").html(variation.Label);
                                                     ContentLi.data("content", variation);
+                                                    ContentLi.attr("id",variation.DynamicContentID)
 
                                                     ContentLi.data("dcInternalData", $($('<div/>').html(variation.InternalContents).text()));
 
@@ -2806,69 +2756,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             });
                                         }
 
-
-
-
-
-
                                     }
                                 }
-
-                                var PopulateRulesWindow = function (args) {
-                                    if (args.DynamicContent != null) {
-
-                                        oInitDestroyEvents.InitAll(dcInternalContents);
-
-                                        //Rules
-                                        dcRulesContainer.html("");
-
-
-                                        $.each(args.DynamicContent.ListOfDynamicRules, function (i, o) {
-
-                                            var ruleTemplate = $(dcRuleTemplate.html());
-
-                                            //Delete Event
-                                            ruleTemplate.find(".delete").click(function () {
-                                                ruleTemplate.remove();
-                                            });
-
-                                            ////////////////////////////////////
-
-                                            ruleTemplate.find(".firstChosen").chosen({
-                                                width:"224px"
-                                            });
-                                            ruleTemplate.find(".secondChosen").chosen({
-                                                disable_search_threshold: 10 , 
-                                                width:"180px"
-                                            });
-                                            ruleTemplate.find(".thirdChosen").chosen({
-                                                disable_search_threshold: 10 , 
-                                                width:"150px"
-                                            });
-
-                                            var dcRuleFieldName = ruleTemplate.find(".dcRuleFieldName");
-                                            var dcRuleCondition = ruleTemplate.find(".dcRuleCondition");
-                                            var dcRuleFormat = ruleTemplate.find(".dcRuleFormat");
-                                            var dcRuleMatchValue = ruleTemplate.find(".dcRuleMatchValue");
-
-                                            dcRuleFieldName.find("option[value='" + o.RuleFieldName + "']").prop("selected", "selected");
-                                            dcRuleCondition.find("option[value='" + o.RuleCondition + "']").prop("selected", "selected");
-                                            dcRuleFormat.find("option[value='" + o.dcRuleFormat + "']").prop("selected", "selected");
-                                            dcRuleMatchValue.val(o.RuleMatchValue);
-
-                                            ruleTemplate.find(".firstChosen").trigger("chosen:updated");
-                                            ruleTemplate.find(".secondChosen").trigger("chosen:updated");
-                                            ruleTemplate.find(".thirdChosen").trigger("chosen:updated");                            
-
-                                            dcRulesContainer.append(ruleTemplate);
-
-                                        });
-
-                                    }
-                                    else {
-                                        console.log("args.DynamicContent is null");
-                                    }
-                                }
+                               
 
                                 var OpenRulesWindow = function (args, top, left) {
                                     var filterDialog = myElement.find(".dcRulesDialog");
@@ -2881,29 +2771,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         filterDialog.html(mPage.$el);
                                     }); 
                                     filterDialog.css({"left":left,"top":top,"display":"block"});
-                                    return false;
-                                    
-                                    var dcRulesManageDialog = myElement.find(".dcRulesDialog");
-                                    dcRulesManageDialog.dialog({                                                    
-                                        width: 850,
-                                        position:[left,top],                                                    
-                                        modal: true
-                                    }).dialog("open");
-
-                                    myElement.find(".ui-dialog-buttonpane").hide();
-                                    myElement.find(".ruleDialogClose").click(function () {
-                                        dcRulesManageDialog.dialog("destroy");
-                                    });
-                                    myElement.find(".ruleDialogSave").click(function () {
-                                        args.dcRulesDialog = dcRulesManageDialog;
-                                        SaveRuleWindow(args);
-                                        dcRulesManageDialog.dialog('destroy');
-                                    });
-
-                                // var topp = top+"px";
-                                // var leftp = left+ "px";
-                                // dcRulesDialog.dialog.css({"left":leftp,"top":topp});
-
+                                    return false;                                                                       
                                 }
 
                                 var OnFilterClick = function (element) {
@@ -2916,9 +2784,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         args.IsUpdate = true;
                                         args.DynamicContent = args.clickedLi.data("content");
-
-                                        PopulateRulesWindow(args);
-                                        
+                                                                                
                                         var _ele = $(this);
                                         var ele_offset = _ele.offset();                                                         
                                         var editorPanel = _ele.parents(".MEE_EDITOR").offset();
@@ -2930,15 +2796,35 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     });
                                 }
+                                
+                                var getDynamicContent = function(element){
+                                    var _dc =null;
+                                    if(element.data("content")){
+                                       _dc = element.data("content");
+                                    }
+                                    else if(element.attr("id")){
+                                        var contentId = element.attr("id");
+                                        var contents = args.DynamicVariation.ListOfDynamicContents;
+                                        for(var i=0;i<contents.length;i++){
+                                            if(contents[i].DynamicContentID==contentId){
+                                                _dc = contents[i];
+                                                break;    
+                                            }
+                                        }
+                                    }
+                                    return _dc;
+                                }
 
                                 var OnEditContentName = function (element) {
 
                                     element.find(".btnContentEditName").click(function (event) {
 
                                         event.stopPropagation();
-                                        args.DynamicContent = element.data("content");
-
-                                        var dcContentNameUpdateWindow = args.predefinedControl.Html.find(".dcContentNameUpdate");
+                                        
+                                        args.DynamicContent = getDynamicContent(element);
+                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        
+                                        var dcContentNameUpdateWindow = dc.find(".dcContentNameUpdate");
                                         dcContentNameUpdateWindow.find(".txtContentName").val(args.DynamicContent.Label);                                        
                                         dcContentNameUpdateWindow.show();
                                         var txtfieldContent = dcContentNameUpdateWindow.find(".txtContentName");
@@ -2948,11 +2834,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var updateContent = function(){
                                             txtfieldContent.prop("disabled",true);
                                             btnUpdateContent.addClass("saving");
-                                            args.DynamicContent = element.data("content");
+                                            args.DynamicContent = getDynamicContent(element);
 
                                             //console.log(element.data("content"));
                                             args.DynamicContent.Label = dcContentNameUpdateWindow.find(".txtContentName").val();
-                                            element.find("span:first").html(args.DynamicContent.Label);
+                                            if(element.attr("id")){
+                                                myElement.find("li[id='"+element.attr("id")+"'] span:first").html(args.DynamicContent.Label);
+                                            }else{
+                                                element.find("span:first").html(args.DynamicContent.Label);
+                                            }
 
                                             if (options.OnUpdateDynamicContent != null) {                                        
                                                 options.OnUpdateDynamicContent(args);
@@ -2989,7 +2879,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         event.stopPropagation();
 
-                                        args.DynamicContent = element.data("content");
+                                        args.DynamicContent = getDynamicContent(element);
 
                                         if (options.OnDeleteDynamicContent != null) {
 
@@ -3000,7 +2890,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         element.siblings(".defaultLi").trigger("click");
 
                                         element.remove();
-
+                                        if(element.attr("id")){
+                                            myElement.find("li[id='"+element.attr("id")+"']").remove()
+                                        }else{
+                                            element.remove();
+                                        }
 
 
                                     });
@@ -3023,32 +2917,32 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var txtVariationName = args.predefinedControl.Html.find(".txtVariationName");
                                     //Edit Button
                                     args.predefinedControl.Html.find(".editname").click(function () {
-                                        args.predefinedControl.Html.find(".editNameBox").toggle();
-                                        args.predefinedControl.Html.find(".editNameBox").width(405);
-                                        txtVariationName.focus();
+                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        dc.find(".editNameBox").toggle();
+                                        dc.find(".editNameBox").width(405);
+                                        dc.find(".txtVariationName").focus();
                                     });
-
 
                                     args.predefinedControl.Html.find(".btnCloseDCName").click(function () {
-                                        args.predefinedControl.Html.find(".editNameBox").hide();
+                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        dc.find(".editNameBox").hide();
                                     });
-
-
                                     
                                     txtVariationName.val(args.DynamicVariation.Label);
                                     var saveBtn = args.predefinedControl.Html.find(".btnSaveDCName");
                                     
                                     var saveDCName = function(){
-                                        args.DynamicVariation.Label = txtVariationName.val();
-                                        txtVariationName.prop("disabled",true);
-                                        saveBtn.addClass("saving");
+                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        args.DynamicVariation.Label = dc.find(".txtVariationName").val();
+                                        dc.find(".txtVariationName").prop("disabled",true);
+                                        dc.find(".btnSaveDCName").addClass("saving");
                                         if (options.OnDynamicVariationName != null) {
                                             options.OnDynamicVariationName(args.DynamicVariation);                                            
                                         }
-                                        args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);
-                                        txtVariationName.prop("disabled",false);
-                                        saveBtn.removeClass("saving");
-                                        args.predefinedControl.Html.find(".editNameBox").hide();
+                                        dc.find(".dcName span:first").html(args.DynamicVariation.Label);
+                                         dc.find(".txtVariationName").prop("disabled",false);
+                                        dc.find(".btnSaveDCName").removeClass("saving");
+                                        dc.find(".editNameBox").hide();
                                         _LoadDynamicBlocks();
                                     }
                                    txtVariationName.keyup(function(e){
@@ -3112,12 +3006,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     var dcContentNameWindow = args.predefinedControl.Html.find(".dcContentName");
                                     dcContentNameWindow.find(".btnCancelContent").click(function (event) {
+                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         event.stopPropagation();
                                         dcContentNameWindow.hide();
                                     });
                                     
                                     var saveDC = function(){
                                         var content = new DynamicContents();
+                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         content.Label = dcContentNameWindow.find(".txtContentName").val();                        
                                         content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
                                         dcContentNameWindow.find(".txtContentName").prop("disabled",true);
@@ -3127,7 +3023,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         if (options.OnSaveDynamicContent != null) {
                                             options.OnSaveDynamicContent(args);                                            
                                         }
-                                        var dcContents = args.predefinedControl.Html.find(".dcContents");
+                                        var dcContents =  myElement.find("table[keyword='"+args.ID+"']").find(".dcContents");
                                         var newLi = $(myElement.find(".dcLI").html());
                                         newLi.find("span:first").html(args.DynamicContent.Label);
                                         newLi.data("content", args.DynamicContent);
@@ -3141,6 +3037,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         dcContentNameWindow.find(".btnSaveContent").removeClass("saving");
                                         dcContentNameWindow.hide();
                                         dcContentNameWindow.find(".txtContentName").val("");
+                                        newLi.click();
                                     }
                                     
                                     dcContentNameWindow.find(".txtContentName").keyup(function(e){
@@ -3152,7 +3049,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         saveDC();
                                     });
 
-                                    args.predefinedControl.Html.find(".addDynamicRule").click(function () {
+                                    args.predefinedControl.Html.find(".addDynamicRule").click(function () {                                        
+                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         dcContentNameWindow.toggle();
                                         dcContentNameWindow.find(".txtContentName").focus();
                                     });
@@ -3275,9 +3173,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find("#DCResultDiv").hide();
                             }
                             
-                            function loadDynamicVariationFromServer(keyword) {
+                            function loadDynamicVariationFromServer(keyword,dynamicNumber) {
                                 var dynamicVariation = new DynamicVariation();
-                                var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&keyword=" + keyword;
+                                var getPart = keyword?("keyword=" + keyword):"dynamicNumber=" + dynamicNumber
+                                var URL = "/pms/io/publish/getDynamicVariation/?" + options._BMSTOKEN + "&type=get&"+getPart;
                                 $.ajax({
                                     url: URL,
                                     //data: "{ name: 'test', html: args.buildingBlock.Name }",
@@ -4283,7 +4182,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                                 options.OnDynamicControlSave(args.DynamicVariation);
                                                             }
 
-                                                            args.DynamicVariation = loadDynamicVariationFromServer(args.DynamicVariation.DynamicVariationCode);
+                                                            args.DynamicVariation = loadDynamicVariationFromServer('',args.DynamicVariation.DynamicVariationID);
+                                                            args.ID = args.DynamicVariation.DynamicVariationCode;
 
                                                             args.DynamicVariation.Label = txtVariationName.val();
 
@@ -5459,9 +5359,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             cache: false,
                             async: false,
                             success: function (ec) {
-                            //console.log("Insert Dynamic Variation Content success:"+ ec);  
-                            //console.log("Dynamic number Content is:" + ec[1]);
-
+                              args.DynamicContent.DynamicContentID = ec[1];  
                             },
                             error: function (e) {
                             //console.log("Insert Dynamic Variation Content failed:"+ e);
@@ -5559,21 +5457,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         var dynamicNumber = content.DynamicVariationID;
                         var dynamicNumberContent = content.DynamicContentID;
 
-                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&contentNumber=" + dynamicNumberContent;
-
-                        $.ajax({                                    
-                            url: contentURL,                                        
-                            type: "POST",
-                            contentType: "application/json; charset=latin1",
-                            dataType: "json",
-                            cache: false,
-                            async: true,
-                            success: function (ec) {                                        
-
-                            },
-                            error: function (e) {                                        
-                            }
-                        }); 
+                        var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN;                        
+                        $.post(contentURL,{"contents":content.InternalContents,type:"updateContent",dynamicNumber:dynamicNumber,campaignSubject:content.Label,contentLabel:content.Label,contentNumber:dynamicNumberContent} )
+                        .done(function(data) {                                 
+                            
+                        });
                     },
                     OnDynamicControlSave: function (variation)
                     {

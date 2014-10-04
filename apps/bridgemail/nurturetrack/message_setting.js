@@ -185,7 +185,7 @@ function (template) {
                         post_data['htmlCode'] = '';
                      }else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
-                         post_data['htmlCode'] = html;                         
+                         post_data['htmlCode'] = html;                                                  
                      }                 
                         
                  if(this.messagebody_page.states.editor_change ===true || typeof(showLoading)!=="undefined"){
