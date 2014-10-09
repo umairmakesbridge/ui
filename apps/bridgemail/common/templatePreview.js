@@ -251,7 +251,7 @@ function (template,contactsView,icheck,chosen) {
                             this.original = 'N';
                         }
                         var val = this.$('.selected').attr('id');
-                        if(val==="prev-iframe-text"){
+                        if(val==="prev-iframe-text" || (this.options.isText &&  this.options.isText=='Y')){
                             this.html = 'N';
                         }else{
                             this.html = 'Y';

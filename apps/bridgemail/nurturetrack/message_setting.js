@@ -203,10 +203,12 @@ function (template) {
                                 if(selected_li=="plain_text"){
                                     this.plainText = plain;                                    
                                     this.htmlText = "";
+                                    this.camp_json.isTextOnly = 'Y';
                                 }
                                 else{
                                     this.htmlText = html;
                                     this.plainText = plain;                                    
+                                    this.camp_json.isTextOnly = 'N';
                                 }
                                 this.messagebody_page.states.editor_change = false;
                                 

@@ -201,7 +201,7 @@ function (template) {
                             camp_obj.$("#sfcamp_list_grid tr td:nth-child(2)").attr("width","90px");
                             
                             camp_obj.$("#sfcamp_list_grid .action .select").click(function(){
-                                camp_obj.$("input[name='options_sf']").eq(3).iCheck('check');                            
+                                camp_obj.$("input[name='options_sf']").eq(4).iCheck('check');                            
                                 camp_obj.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
                                 $(this).parents("tr").addClass("selected");
                             });

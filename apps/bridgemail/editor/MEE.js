@@ -764,6 +764,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                 oHtml.find(".dynamicContentContainer").each(function (index, object) {
+                                    if($(object).find(".dcName span:first")){
+                                       myElement.find("#"+$(object).attr("id")).find(".dcName span:first").click();
+                                    }
                                     var variation = $(object);                        
                                     var keyword = variation.attr("keyword");
                                                 
@@ -822,6 +825,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 });
 
                                 oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
+                                    
                                     $(this).find("ul").each(function () {
                                         RemoveCommon($(this));
                                     });
@@ -2708,7 +2712,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     if (args.DynamicVariation != null) {
 
-                                        args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);                                                    
+                                        args.predefinedControl.Html.find(".dcName span:first").html(args.DynamicVariation.Label);
+                                        args.predefinedControl.Html.find(".dcName span:first").click(onSaveContent)
                                         var dcContents = args.predefinedControl.Html.find(".dcContents");
 
                                         if (args.DynamicVariation.ListOfDynamicContents.length > 0) {
@@ -2720,7 +2725,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var ContentLi = defaultLiContentForDC.clone();
                                                     ContentLi.data("dcInternalData", $('<div/>').html(variation.InternalContents).text());
                                                     ContentLi.data("content", variation);
-                                                    ContentLi.addClass("defaultLi");                                      
+                                                    ContentLi.addClass("defaultLi");                                                                                          
 
                                                     var dcInternal = args.droppedElement.find(".dcInternalContents:first");
 
@@ -2742,7 +2747,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     var ContentLi = $(myElement.find(".dcLI").html());
                                                     ContentLi.find("span:first").html(variation.Label);
                                                     ContentLi.data("content", variation);
-                                                    ContentLi.attr("id",variation.DynamicContentID)
+                                                    ContentLi.attr("id",variation.DynamicContentID)                                                    
 
                                                     ContentLi.data("dcInternalData", $($('<div/>').html(variation.InternalContents).text()));
 
@@ -2899,6 +2904,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     });
                                 }
+                                var onSaveContent = function(){
+                                    var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                    var dcInternal = dc.find(".dcInternalContents:first");
+                                    args.clickedLi = dc.find(".block_body li.active");
+                                    args.IsUpdate = false;
+                                    var previuosActivate = args.clickedLi;
+                                    previuosActivate.data("dcInternalData", dcInternal.html());
+                                    if (options.OnDynamicContentSwap != null) {
+                                        args.DynamicContent = previuosActivate.data("content");
+                                        args.DynamicContent.InternalContents = previuosActivate.data("dcInternalData");
+                                        options.OnDynamicContentSwap(args);
+                                    }                                    
+                                }
 
                                 if (args.predefinedControl != null) {
 
@@ -2908,7 +2926,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     mainParent.data("variationID", args.DynamicVariation.DynamicVariationID);
                                     mainParent.attr("id", args.DynamicVariation.DynamicVariationID);
                                     mainParent.attr("keyword", args.DynamicVariation.DynamicVariationCode);
-                                    mainParent.data("content", args.DynamicVariation);
+                                    mainParent.data("content", args.DynamicVariation);                                    
 
 
                                     dcInternalContents = args.predefinedControl.Html.find(".dcInternalContents");
@@ -2955,14 +2973,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                    });
 
 
-                                    ///////////
-
+                                    ///////////                                    
                                     args.predefinedControl.Html.find(".dcContents").on("click", "li", (function (event) { //&&
 
                                         event.stopPropagation();
                                         args.clickedLi = $(this);
                                         args.IsUpdate = false;
-
 
                                         var dcClickedContainer = args.clickedLi.parents(".dynamicContentContainer:first");
                                         var dcInternal = dcClickedContainer.find(".dcInternalContents:first");
@@ -2971,10 +2987,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         if (args.clickedLi.siblings(".active").length > 0) {
                                             var previuosActivate = args.clickedLi.siblings(".active");
                                             oInitDestroyEvents.DestroyPluginsEvents(dcInternal);
-
                                             previuosActivate.data("dcInternalData", dcInternal.html());
-
-
                                             if (options.OnDynamicContentSwap != null) {
                                                 args.DynamicContent = previuosActivate.data("content");
                                                 args.DynamicContent.InternalContents = previuosActivate.data("dcInternalData");
@@ -2989,10 +3002,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         //Set this element data
                                         if (args.clickedLi.data("dcInternalData") != null) {
-
-                                            var internalData = $(args.clickedLi.data("dcInternalData"));
-                                            oInitDestroyEvents.InitAll(internalData);
+                                            var internalData = $(args.clickedLi.data("dcInternalData"));                                            
                                             dcInternal.html(internalData);
+                                            oInitDestroyEvents.InitAll(internalData);
                                         }
                                         else {
                                             dcInternal.empty();
@@ -3902,9 +3914,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }                          
 
                             //Elements Dropping
-                            function InitializeWithDropable(sender) {
-                            
-
+                            function InitializeWithDropable(sender) {                           
                                 sender.droppable({
                                     tolerance: "pointer",
                                     greedy: true,
