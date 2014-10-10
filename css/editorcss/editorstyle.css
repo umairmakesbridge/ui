@@ -842,11 +842,8 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     background: none repeat scroll 0 0 #E9EFF3;
 }
 
-.MEE_EDITOR .block_controls {
-    height: 30px;
-    padding: 5px 5px 0;
-	position:relative;
-	border-bottom:1px solid #a9c2d5;
+.MEE_EDITOR .block_controls {    
+    padding: 0px 101px 0 5px;	 
 }
 
 
@@ -865,6 +862,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     font-weight: bold;
     line-height: 30px;
     margin-right: 5px;
+    margin-top:5px;
     padding: 0;
 	-webkit-border-radius: 2px 2px 0 0;
 	-moz-border-radius:  2px 2px 0 0;
@@ -907,15 +905,19 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 .MEE_EDITOR .dcContents li:hover  i.more { display:block;}
 
 
-.MEE_EDITOR .block_controls i.add {
+.MEE_EDITOR .block_controls div.add {
     background: url("../images/add.png") no-repeat scroll center center #94CF1E;
     border-radius: 2px;
     cursor: pointer;
     height: 30px;
+    display: inline-block;
+    float:left;
     width: 30px;
 	-webkit-border-radius: 2px 2px 0 0;
 	-moz-border-radius:  2px 2px 0 0;
 	border-radius:  2px 2px 0 0;
+        margin-top:5px;
+        margin-bottom: 0px;
 	 }
 
 
@@ -2235,4 +2237,16 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  .dcRulesDialog .btn-group + .btn-group{
      margin-left: 0px;
+ }
+ .mainContentHtmlGrand > .sortable > li.csDynamicData.hover .block_controls {    
+   padding-right:75px;
+}
+ .mainContentHtmlGrand > .sortable > li.csDynamicData td.tab-header{
+     background: #e9eff3;
+     position: relative;
+ }
+ .dcContents .defaultLi{
+     position: absolute;
+     right:0px;
+     bottom:1px;
  }

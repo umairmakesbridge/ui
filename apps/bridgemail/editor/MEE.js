@@ -245,6 +245,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var eventsApplied = false;
                             var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth,TotalBorderTopBottom,TotalBorderLeftRight;
                             var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
+                            
 //*****************************************Landing page options***********************************************************************************///
 
                             if (options.landingPage) {
@@ -480,10 +481,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     
                                     dialog.getBody().find(".divHtmlPreview").html(outputHTML);
                                     dialog.getBody().find(".divHtmlCode").val(outputHTML);            
-                                    
-                                    
+                                                                        
                                 });
-
 
                             };
 
@@ -2722,7 +2721,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 //var ContentLi = $("<li>" + variation.Label + "</li>");
 
                                                 if (variation.Label == "Default") {
-                                                    var ContentLi = defaultLiContentForDC.clone();
+                                                    var ContentLi = defaultLiContentForDC.clone();                                                    
                                                     ContentLi.data("dcInternalData", $('<div/>').html(variation.InternalContents).text());
                                                     ContentLi.data("content", variation);
                                                     ContentLi.addClass("defaultLi");                                                                                          
@@ -2739,7 +2738,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     OnEditContentName(ContentLi);
                                                     OnDeleteContent(ContentLi);
 
-                                                    dcContents.prepend(ContentLi);
+                                                    dcContents.prepend(ContentLi);                                                    
 
                                                 //ContentLi.trigger( "click" );                        
                                                 }
@@ -2830,6 +2829,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var dc = myElement.find("table[keyword='"+args.ID+"']");
                                         
                                         var dcContentNameUpdateWindow = dc.find(".dcContentNameUpdate");
+                                        dcContentNameUpdateWindow.height(dc.height());
                                         dcContentNameUpdateWindow.find(".txtContentName").val(args.DynamicContent.Label);                                        
                                         dcContentNameUpdateWindow.show();
                                         var txtfieldContent = dcContentNameUpdateWindow.find(".txtContentName");
@@ -3026,6 +3026,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var saveDC = function(){
                                         var content = new DynamicContents();
                                         var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                        
                                         content.Label = dcContentNameWindow.find(".txtContentName").val();                        
                                         content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
                                         dcContentNameWindow.find(".txtContentName").prop("disabled",true);
@@ -3063,6 +3064,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     args.predefinedControl.Html.find(".addDynamicRule").click(function () {                                        
                                         var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                        dcContentNameWindow.height(myElement.find("table[keyword='"+args.ID+"']").height());
                                         dcContentNameWindow.toggle();
                                         dcContentNameWindow.find(".txtContentName").focus();
                                     });
