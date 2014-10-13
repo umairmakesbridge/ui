@@ -213,8 +213,7 @@ a,
 
 
 .MEE_EDITOR .accordian {
-    background: none repeat scroll 0 0 #FFFFFF;
- 
+    background: none repeat scroll 0 0 #FFFFFF; 
     padding: 4px;
 	-webkit-border-radius: 2px 2px 2px;
 	-moz-border-radius:  2px 2px 2px;
@@ -237,6 +236,7 @@ a,
 	-webkit-border-radius: 2px 2px;
 	-moz-border-radius:  2px 2px  ;
 	border-radius:  2px 2px ;
+            
 }
 .MEE_EDITOR .accordian h3:first-child {margin-top: 0px ;}
 
@@ -408,6 +408,15 @@ ul.b-blocks > li.newblock:hover {
 	color:#fff;
 	width:220px;
 	height:40px;
+}
+
+.MEE_EDITOR img.blockimg{
+    min-width:50px;
+    min-height:50px;
+    max-width:86px;
+    max-height:50px;
+    display: block;
+    margin:10px auto 0;
 }
 
 ul.b-blocks > li.newblock:hover  a span {	color: #fff; }
@@ -2114,6 +2123,16 @@ ul.socialbtns li .radiopanelinput.checked {
      position: fixed;
      top:0px;     
      z-index: 1000;
+     -webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+	box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
+ }
+ .shadow-div{
+     -webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+	box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
+     height:1px;
+     width:100%;
  }
  .editor-lefttoolbar-fixed{
      position: fixed;

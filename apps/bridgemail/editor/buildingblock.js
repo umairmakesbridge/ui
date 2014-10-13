@@ -30,6 +30,7 @@ function (template) {
                     this.config = this.options.config;
                     this.app =  this.config._app;
                     this.imageId = null;
+                    this.imageChanged = false;
                     this._args = this.options.args
                     this.render();                             
             },
@@ -51,6 +52,11 @@ function (template) {
             init:function() {
                 if(this.editor._LastSelectedBuildingBlock){
                     this.$("#block_name").val(this.app.decodeHTML(this.editor._LastSelectedBuildingBlock["name"]));
+                    var img_thmbnail = this.app.decodeHTML(this.editor._LastSelectedBuildingBlock.thumbURL);
+                    if(img_thmbnail){
+                        this.imageId = this.editor._LastSelectedBuildingBlock["imageId.encode"]
+                        this.showImage(img_thmbnail)
+                    }
                 }
                 this.$("#block_name").focus();
             }
@@ -101,6 +107,7 @@ function (template) {
                 else{
                     post_data['type']="addBlock";
                     post_data['html']=args.buildingBlock.Html.html();                    
+                    post_data['imageId'] = this.imageId;
                 }
                 if(this.app.get("user").userId==='admin'){
                     post_data['isAdmin']='Y';
@@ -116,8 +123,9 @@ function (template) {
                              else{
                                  this.dialog.hide();      
                              }
-                      
-                            this.editor._LoadBuildingBlocks(this._args.args);
+                            
+                              this.editor._LoadBuildingBlocks(this._args.args);
+                            
                         }
                         else{
                             var btnObj= this.dialog.$(".btn-save");
@@ -154,8 +162,10 @@ function (template) {
                  },this));
             },
             insertImage : function(data){                                                
-                this.$("#image_url").val(data.imgurl);                                    
-            },
+                this.showImage(data.imgthumb);
+                this.imageId = data['imgencode'];
+                this.updateImage();
+             },
             ReattachEvents:function(){
                  if(this.dialog.$el.find('.c-current-status').length > 0){
                       this.dialog.$el.find('.c-current-status').remove();
@@ -168,13 +178,49 @@ function (template) {
                    var img_thmbnail = this.app.decodeHTML(img_obj.thumbURL);
                    this.showImage(img_thmbnail)
                    this.imageId = img_obj['imageId.encode'];
+                  this.updateImage(); 
+               }
+               else{
+                   this.app.showAlert(_image.err1,$("body"));
                }
            },
            showImage:function(img_thmbnail){
                 this.$(".no-image").hide();
-                this.$("#message-image").show();
+                this.$("#message-image").css("display","table-cell");
                 this.$("#message-image img").attr("src",img_thmbnail);
                 
+            },
+            updateImage:function(){
+                if(this.editor._LastSelectedBuildingBlock){
+                    var URL = "/pms/io/publish/saveEditorData/?BMS_REQ_TK="+this.app.get('bms_token');                
+                    var post_data = {                                      
+                    };
+                    post_data['type']="updateBlockImage";
+                    post_data['blockId']=this.editor._LastSelectedBuildingBlock["blockId.encode"];                    
+                    post_data['imageId'] = this.imageId;
+
+                    if(this.app.get("user").userId==='admin'){
+                        post_data['isAdmin']='Y';
+                    }
+                    $.post(URL,post_data)
+                    .done(_.bind(function(data){
+                        var result = jQuery.parseJSON(data);
+                            if(result[0]=="success"){
+                                this.app.showMessge("Block Image has been successfully updated.",$("body"));                                                        
+                                var blockImg = this.editor.find("li[data-id='"+this.editor._LastSelectedBuildingBlock["blockId.encode"]+"'] img");
+                                this.editor._LastSelectedBuildingBlock["thumbURL"]= this.$("#message-image img").attr("src");
+                                if(blockImg.length){
+                                    blockImg.attr("src",this.$("#message-image img").attr("src"))
+                                }
+                                else{
+                                    this.editor.find("li[data-id='"+this.editor._LastSelectedBuildingBlock["blockId.encode"]+"'] i").replaceWith("<img src='"+this.$("#message-image img").attr("src")+"' class='blockimg' />")
+                                }
+                            }
+                            else{                            
+                                this.app.showAlert(result[1],$("body"));
+                            }
+                    },this));
+               } 
             }
             
         });

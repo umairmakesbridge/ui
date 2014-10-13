@@ -402,6 +402,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 oInitDestroyEvents.InitAll(mainObj);                                
                                 makeCloneAndRegister();
                             };
+                            
+                            $.fn.setAccordian = function(diff) {
+                                 myElement.find(".builder-panel").css("height",($(window).height()-62-diff)+"px");
+                                 myElement.find(".style-panel").css("height",($(window).height()-62-diff)+"px");
+                                 if(myElement.find(".style-panel").css("display")!=="none"){
+                                    myElement.find(".style-panel .accordian").accordion("refresh");
+                                    myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                 }
+                                 else{
+                                    myElement.find(".builder-panel .accordian").accordion("refresh");
+                                    myElement.find(".builder-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                 }
+                            };
                             function setHTML(dialog){
                                 myElement.setMEEHTML(dialog.getBody().find(".divHtmlCode").val().replace(/\n/g,""));
                                 if(options.fromDialog){
@@ -883,16 +896,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             
                                 //Building Blocks Drop Area:
                                 InitializeBuildingBlockDroppableArea();
-                                myElement.find(".builder-panel").css("height",($(window).height()-20)+"px");
+                                myElement.find(".builder-panel").css("height",($(window).height()-62)+"px");
                                 myElement.find(".style-panel").css("height",($(window).height()-62)+"px");
-                                //myElement.find(".editorbox").css("min-height",($(window).height()-100)+"px");
+                                myElement.find(".editorbox").css("min-height",($(window).height()-100)+"px");
                                 myElement.find("#contentAreaDiv").scroll();
                                 myElement.find("#imageTitleDialog").hide();                                            
                                 myElement.find(".accordian").accordion({ 
                                     heightStyle: "fill",                                                
                                     collapsible: false
                                 });
-                                myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()-30)+"px");
+                                myElement.find(".builder-panel").css("height",(myElement.find(".builder-panel").height()+12)+"px");
                                 //Load building blocks from service:
                                 mee._LoadBuildingBlocks();
                                 //////////
@@ -4164,6 +4177,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                                     var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
+                                                    dcContentVariationWindow.height(dcContentVariationWindow.parents("table.dynamicContentContainer").height())
                                                     dcContentVariationWindow.show();
                                                     dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
                                                         event.stopPropagation();
@@ -4568,8 +4582,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             }                                                            
                                             $.each(contentBlocks, function (i, obj) {
                                                 var cssImage = imageMapping[obj[0]["blockId.checksum"]]?imageMapping[obj[0]["blockId.checksum"]]:"";
+                                                var blockIcon ="<i class='icon cblock "+cssImage+"'></i> ";
+                                                if(obj[0]["thumbURL"]){
+                                                    blockIcon = "<img src='"+obj[0]["thumbURL"]+"' class='blockimg' />"
+                                                }
                                                 var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
-                                                    "<i class='icon cblock "+cssImage+"'></i> " +
+                                                    blockIcon +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +                                                    
                                                     "</li>");
                                                 InitializeMainDraggableControls(block);
@@ -4612,10 +4630,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         //Assigning unique ID here:
                                         obj[0].ID = obj[0]["blockId.encode"];
-
+                                        var blockIcon = "<i class='icon myblck'></i>";
+                                        if(obj[0]["thumbURL"]){
+                                            blockIcon = "<img src='"+obj[0]["thumbURL"]+"' class='blockimg' />"
+                                        }
 
                                         var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
-                                            "<i class='icon myblck'></i> " +
+                                            blockIcon +
                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                             "<div class='imageicons' > " +
                                             "<i class='imgicons edit action' data-actiontype='bbedit'  data-index='"+ i +"' data-id='" + obj[0]["blockId.encode"] + "'></i> " +
@@ -4677,14 +4698,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     dialog.saveCallBack(_.bind(mPage.saveBlockCall,mPage));
                                     mPage.init();
                                     options._app.showLoading(false,dialog.getBody());
-                                    if(options.fromDialog){
-                                        var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                        dialog.getBody().find(".add-block").addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                    var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                    dialog.getBody().find(".add-block").addClass('dialogWrap-'+dialogArrayLength); // New Dialog                                    
                                         options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
                                         options._app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                                         options._app.dialogArray[dialogArrayLength-1].saveCall = _.bind(mPage.saveBlockCall,mPage);
+                                    if(options.fromDialog){
                                         mPage.ReattachEvents = options.reAttachEvents;
                                     }
+                                    
                                 
                                 }); 
                             }
@@ -4988,7 +5010,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         //Assigning unique ID here:
                                         obj[0].ID = obj[0]["formId.encode"];
-
+                                                                               
 
                                         var block = $("<li class='draggableControl ui-draggable droppedFormBlock' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                             "<i class='icon myblck'></i> " +
@@ -5585,59 +5607,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     var dynamicNumber = e[1];
                                     if(dynamicNumber != "err") {  
-                                        variation.DynamicVariationID = dynamicNumber;  
-                                        var contents = variation.ListOfDynamicContents;
-                                        for (var i = 0; i < contents.length; i++) {
-                                            var content = contents[i];
-                                            var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=newContent&dynamicNumber="+ dynamicNumber+"&campaignSubject="+ content.Label + "&contents="+ encodeURIComponent(content.InternalContents) +"&contentLabel="+ content.Label +"&isDefault=" + (content.IsDefault ? "Y" : "N");
-                                            $.ajax({                                    
-                                                url: contentURL,
-                                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                                type: "POST",
-                                                contentType: "application/json; charset=latin1",
-                                                dataType: "json",
-                                                cache: false,
-                                                async: false,
-                                                success: function (ec) {
-                                                    console.log("Insert Dynamic Variation Content success:"+ ec);  
-                                                    console.log("Dynamic number Content is:" + ec[1]);
-                                                    var dynamicNumberContent = ec[1];
-                                                    if(dynamicNumberContent != "err") {    
-                                                        var rules = content.ListOfDynamicRules;
-                                                        var contentRuleURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN+"&type=updateContentRules&dynamicNumber="+ dynamicNumber+"&contentNumber=" + dynamicNumberContent + "&applyRuleCount=" + content.ApplyRuleCount + "&ruleCount=" + rules.length;
-                                                        for (var j = 0; j < rules.length; j++) {
-                                                            var rule = rules[j];
-                                                            //contentRuleURL += "&"+ j +".spanInDays=";
-                                                            contentRuleURL += "&"+ (j+1) +".matchValue=" + rule.RuleMatchValue;
-                                                            contentRuleURL += "&"+ (j+1) +".fieldName=" + rule.RuleFieldName;
-                                                            contentRuleURL += "&"+ (j+1) +".dateFormat=" + rule.RuleDefaultValue;
-                                                            contentRuleURL += "&"+ (j+1) +".rule="+ rule.RuleCondition;
-                                                        //contentRuleURL += "&"+ j +".listNumber=";
-                                                        } 
-                                                        $.ajax({                                    
-                                                            url: contentRuleURL,
-                                                            //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                                            type: "POST",
-                                                            contentType: "application/json; charset=latin1",
-                                                            dataType: "json",
-                                                            cache: false,
-                                                            async: false,
-                                                            success: function (e) {
-                                                                console.log("Insert Dynamic Variation Content Rule success:"+ e);  
-
-                                                            },
-                                                            error: function (e) {
-                                                                console.log("Insert Dynamic Variation Rule failed:"+ e);
-                                                            }
-                                                        });
-
-                                                    }                      
-                                                },
-                                                error: function (e) {
-                                                    console.log("Insert Dynamic Variation Content failed:"+ e);
-                                                }
-                                            });
-                                        }    
+                                        variation.DynamicVariationID = dynamicNumber;                                                                                     
                                     }                           
                                 },
                                 error: function (e) {

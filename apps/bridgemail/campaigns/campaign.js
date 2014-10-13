@@ -734,7 +734,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     ,this.container = $("#container")
                     ,this.$editorarea =this.$('.editorbox')
                     , this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
-                    , this.isFixed = 0;
+                    , this.isFixed = 0,this.scrollChanged=false;
 
                     this.processScroll=_.bind(function(){                                                       
                       if(this.$("#area_html_editor_mee").css("display")!=="none"){  
@@ -751,6 +751,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.$nav.css("width","100%");
                           this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                           this.$editorarea.removeClass('editor-panel-fixed');                        
+                        }
+                        var scrollWindowDiff = $("body").height()-$(window).scrollTop();
+                        if(scrollWindowDiff<118){
+                            var lessBy = 118-scrollWindowDiff;                            
+                            if(this.$("#mee_editor").setAccordian){
+                                this.$("#mee_editor").setAccordian(lessBy);
+                                this.scrollChanged=true;
+                            }                            
+                        }
+                        else if(this.scrollChanged){
+                            this.$("#mee_editor").setAccordian(0);
+                            this.scrollChanged=false;
                         }
                       }
                     },this);
@@ -1874,7 +1886,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$("#sfcamp_list_grid tr td:nth-child(2)").attr("width","90px");
                             
                             camp_obj.$("#sfcamp_list_grid .action .select").click(function(){
-                                camp_obj.$("input[name='options_sf']").eq(3).iCheck('check');
+                                camp_obj.$("input[name='options_sf']").eq(4).iCheck('check');
                                 //camp_obj.$("#salesforce_setup .filterbtn").hide();
                                 camp_obj.$("#sfcamp_list_grid tr.selected").removeClass("selected");    
                                 $(this).parents("tr").addClass("selected");
