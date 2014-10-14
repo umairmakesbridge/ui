@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
-        function(template, moment,chosen) {
+define(['text!notifications/html/notification.html', 'moment','jquery.chosen','app'],
+        function(template, moment,chosen,app) {
             'use strict';
             return Backbone.View.extend({
                 tagName: "div",
@@ -23,6 +23,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen'],
                     "click .list-name":"openListWorkspace"
                 },
                 initialize: function() {
+                    this.app = app;
                     this.template = _.template(template);
                     this.model.on('change', this.render, this);
                     this.render();

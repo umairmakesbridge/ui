@@ -15,8 +15,8 @@
             <span class="tagicon gray"></span>
             <ul>
                 <% _.each(this.model.get('tags').split(","),function(t){ %>  
-                <li><a  class="tag showtooltip" data-original-title="Click to view lists with same tag" ><%- t %></a> </li>
-                <% })%> 
+                <li><a  class="tag showtooltip" data-original-title="Click to view lists with same tag" ><%- this.app.decodeHTML(t) %></a> </li>
+                <% },this)%> 
 
             </ul>
         </div>

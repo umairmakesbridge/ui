@@ -752,9 +752,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                           this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                           this.$editorarea.removeClass('editor-panel-fixed');                        
                         }
-                        var scrollWindowDiff = $("body").height()-$(window).scrollTop();
-                        if(scrollWindowDiff<118){
-                            var lessBy = 118-scrollWindowDiff;                            
+                        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
+                        if(scrollBottom<74){
+                            var lessBy = 74-scrollBottom;                            
                             if(this.$("#mee_editor").setAccordian){
                                 this.$("#mee_editor").setAccordian(lessBy);
                                 this.scrollChanged=true;

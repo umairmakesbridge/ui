@@ -2787,6 +2787,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
                                         filterDialog.html(mPage.$el);
                                     }); 
+                                    myElement.find(".editNameBox").hide();
                                     filterDialog.css({"left":left,"top":top,"display":"block"});
                                     return false;                                                                       
                                 }
@@ -2844,6 +2845,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var dcContentNameUpdateWindow = dc.find(".dcContentNameUpdate");
                                         dcContentNameUpdateWindow.height(dc.height());
                                         dcContentNameUpdateWindow.find(".txtContentName").val(args.DynamicContent.Label);                                        
+                                        myElement.find(".dcRulesDialog").hide();
+                                        myElement.find(".editNameBox").hide();
                                         dcContentNameUpdateWindow.show();
                                         var txtfieldContent = dcContentNameUpdateWindow.find(".txtContentName");
                                         txtfieldContent.focus();
@@ -2948,7 +2951,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var txtVariationName = args.predefinedControl.Html.find(".txtVariationName");
                                     //Edit Button
                                     args.predefinedControl.Html.find(".editname").click(function () {
-                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        myElement.find(".dcRulesDialog").hide();                                        
+                                        var dc = myElement.find("table[keyword='"+args.ID+"']");                                        
                                         dc.find(".editNameBox").toggle();
                                         dc.find(".editNameBox").width(405);
                                         dc.find(".txtVariationName").focus();
@@ -3075,7 +3079,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         saveDC();
                                     });
 
-                                    args.predefinedControl.Html.find(".addDynamicRule").click(function () {                                        
+                                    args.predefinedControl.Html.find(".addDynamicRule").click(function () {    
+                                        myElement.find(".dcRulesDialog").hide();
+                                        myElement.find(".editNameBox").hide();
                                         var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         dcContentNameWindow.height(myElement.find("table[keyword='"+args.ID+"']").height());
                                         dcContentNameWindow.toggle();
@@ -3207,7 +3213,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 $.ajax({
                                     url: URL,
                                     //data: "{ name: 'test', html: args.buildingBlock.Name }",
-                                    type: "POST",
+                                    type: "GET",
                                     contentType: "application/json; charset=latin1",
                                     dataType: "json",
                                     cache: false,
@@ -4703,9 +4709,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         options._app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
                                         options._app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                                         options._app.dialogArray[dialogArrayLength-1].saveCall = _.bind(mPage.saveBlockCall,mPage);
-                                    if(options.fromDialog){
-                                        mPage.ReattachEvents = options.reAttachEvents;
-                                    }
+                                    
                                     
                                 
                                 }); 

@@ -6,8 +6,8 @@
  * Dependency: SCONTACT HTML
  */
 
-define(['text!reports/summary/html/scontact.html','moment'],
-function (template,moment) {
+define(['text!reports/summary/html/scontact.html','moment','app'],
+function (template,moment,app) {
         'use strict';
         return Backbone.View.extend({
             className: 'erow',
@@ -21,8 +21,9 @@ function (template,moment) {
             },
             initialize: function () {
                 _.bindAll(this, 'getRightText', 'pageClicked');
+                 this.app = app;
                  this.template = _.template(template);	
-                 this.viewCount = 0;
+                 this.viewCount = 0;                 
                  this.type = this.options.type;
                  this.firstOpenDate = ""
                  this.bounceType = "";
