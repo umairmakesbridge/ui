@@ -26,6 +26,7 @@ function (template) {
                     this.editable=this.options.editable;
                     this.settingchange = true;
                     this.isDataLoaded = false;
+                    this.campDefaults = {};
                     this.render();                    
             },
               /**
@@ -50,10 +51,10 @@ function (template) {
                 
                 this.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: "true"});
                 var camp_obj = this;
-                this.$("#campaign_from_email").chosen().change(function(){
+                /*this.$("#campaign_from_email").chosen().change(function(){
                     camp_obj.fromNameSelectBoxChange(this)
                     camp_obj.$("#campaign_from_email_input").val($(this).val());
-                });
+                });*/
                 this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "62%",disable_search: "true"});                                        
                 this.$("#fromemail_default").chosen().change(function(){                       
                     camp_obj.$("#fromemail_default_input").val($(this).val());
@@ -75,7 +76,7 @@ function (template) {
                    this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'dialog',isrequest:true,parallel:true},placeholder_text:'Enter subject'});
                    this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                    this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'dialog'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
-                   this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 
+                   //this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 
                 },
             initCheckbox:function(){
                  this.$('input').iCheck({
@@ -110,7 +111,7 @@ function (template) {
             setFromNameField:function(){
                var active_workspace = this.$el;
                var subj_w = this.$('#campaign_subject').width(); // Abdullah Check
-               active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+22)+"px","padding-right":"61px"});   // Abdullah Try
+               active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+82)+"px"});   // Abdullah Try
                 if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
                    active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
                    active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");
@@ -127,17 +128,24 @@ function (template) {
                      if(merge_field_patt.test(this.app.decodeHTML(camp_json.fromEmail)))
                      {
                          var merge_field = this.app.decodeHTML(camp_json.fromEmail);                                                                    
-                         this.$("#campaign_from_email_input").val(merge_field);
-                         this.$("#campaign_from_email_default").show();
-                         this.$("#fromemail_default").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                         this.$("#fromemail_default_input").val(this.app.decodeHTML(camp_json.defaultFromEmail));
-                         setTimeout(_.bind(this.setFromNameField,this),300);
+                         if(this.campDefaults.fromEmail){
+                            this.$("#campaign_from_email").val(this.app.decodeHTML(this.campDefaults.fromEmail)).trigger("chosen:updated");
+                         }
+                         else{
+                           this.$("#campaign_from_email").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                         }
+                        
+                         //this.$("#campaign_from_email_input").val(merge_field);
+                         //this.$("#campaign_from_email_default").show();
+                         //this.$("#fromemail_default").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                         //this.$("#fromemail_default_input").val(this.app.decodeHTML(camp_json.defaultFromEmail));
+                         //setTimeout(_.bind(this.setFromNameField,this),300);
                      }
                      else
                      {
                          this.$("#campaign_from_email").val(this.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");                                
-                         this.$("#campaign_from_email_input").val(this.app.decodeHTML(camp_json.fromEmail));
-                         this.$("#campaign_from_email_default").hide();                            
+                         //this.$("#campaign_from_email_input").val(this.app.decodeHTML(camp_json.fromEmail));
+                         //this.$("#campaign_from_email_default").hide();                            
                      }
                  }
                  this.$("select#campaign_unSubscribeType").val(camp_json.unSubscribeType).trigger("chosen:updated");
@@ -200,6 +208,7 @@ function (template) {
                             if(this.app.checkError(defaults_json)){
                                 return false;
                             }                            
+                            this.campDefaults = defaults_json;
                             this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
                             this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
                             this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
@@ -226,7 +235,7 @@ function (template) {
                             setTimeout(_.bind(this.setFromNameField,this),300);                            
                             
                             var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
-                            this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
+                            //this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
                             
                             if(defaults_json.customFooter==""){
                                 this.$("#campaign_useCustomFooter_div").hide();                                
@@ -250,7 +259,7 @@ function (template) {
                     var defaultSenderName = "",defaultReplyToEmail="";
                     var replyto = this.$('#campaign_reply_to').val();
                     var email_addr = this.$('#campaign_default_reply_to').val();
-                    var fromEmail = this.$('#campaign_from_email_input').val();
+                    var fromEmail = this.$('#campaign_from_email').val();
                     var fromEmailDefault = this.$('#fromemail_default_input').val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                     
@@ -372,7 +381,7 @@ function (template) {
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val())?this.$("#campaign_default_reply_to").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
-                        var fromEmail = this.$('#campaign_from_email_input').val();
+                        var fromEmail = this.$('#campaign_from_email').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
                         if( this.settingchange || this.parent.camp_id==0){
                                 this.app.showLoading("Saving settings...",this.parent.dialog.$el);

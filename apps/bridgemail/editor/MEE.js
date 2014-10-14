@@ -18,7 +18,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
             initialize: function () {    
                 this.app = this.options.app;
                 this.leftMinus = 80;
-                this.topMinus = 381;
+                this.topMinus = 381;                
                 this.BMSTOKEN = "BMS_REQ_TK="+this.app.get('bms_token');
                 var mee_view =  this;
                 var predefinedControls = [
@@ -205,7 +205,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 },
 
                                 render: function () {
-                                    this.$el.html(this.my_template);                      
+                                    this.$el.html(this.my_template({allowedUser:['admin','jayadams','demo'],app:options._app}));                      
                                 }
 
                             });

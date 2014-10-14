@@ -254,7 +254,7 @@ define([
                 
                 var active_workspace = $(".ws-content.active");
                 var subj_w = active_workspace.find('#campaign_subject').width(); // Abdullah Check
-                active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+21)+"px","padding-right":"61px"});   // Abdullah Try
+                active_workspace.find('#campaign_from_email_chosen').css({"width":parseInt(subj_w+81)+"px"});   // Abdullah Try
                  if(active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()){  
                     active_workspace.find("#campaign_from_email_input").css({"width":active_workspace.find("#campaign_from_email_input").prev().find(".chosen-single span").width()+"px","margin-right":"61px"}); // Abdullah Check
                     active_workspace.find("#campaign_from_email_chosen .chosen-drop").css("width",(parseInt(active_workspace.find('#campaign_from_email_chosen').width()))+"px");

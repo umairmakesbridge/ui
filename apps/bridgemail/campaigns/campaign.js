@@ -66,6 +66,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.rescheduled = false;
                     this.hidecalender = false;
                     this.campobjData = null;
+                    this.campDefaults = {};
                     this.allowedUser = ['admin','jayadams','demo'];  
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
@@ -93,7 +94,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'workspace',isrequest:true},placeholder_text:'Enter subject'});
                     this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace',isrequest:true},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
                     this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'workspace'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
-                    this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});                    
+                    //this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'workspace'},elementID:'campaign_from_email',placeholder_text:'Enter from email'});                    
                     this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-editor',placeholder_text:'Merge Tags'});
                     this.$('#merge_field_plugin-wrap-hand').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-hand',placeholder_text:'Merge Tags'});
                     this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge Tags'});
@@ -226,13 +227,14 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var camp_obj = this;
                     this.$("#campaign_from_email").chosen().change(function(){
                         camp_obj.fromNameSelectBoxChange(this)
-                        camp_obj.$("#campaign_from_email_input").val($(this).val());
+                        //camp_obj.$("#campaign_from_email_input").val($(this).val());
+                        camp_obj.$("#campaign_from_email").val($(this).val()).trigger('chosen:updated');
                     });
-                    this.$("#campaign_from_email_input").keydown(_.bind(function(event){
+                    /*this.$("#campaign_from_email_input").keydown(_.bind(function(event){
                         if(event.keyCode === 40){
                             this.$("#campaign_from_email").trigger('chosen:open');
                         }
-                    },this));
+                    },this));*/
                     this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});                    
                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                     
                     this.$("#ns_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                     
@@ -361,18 +363,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         {
                             if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
                             {
-                                var merge_field = camp_obj.app.decodeHTML(camp_json.fromEmail);                                                                    
-                                camp_obj.$("#campaign_from_email_input").val(merge_field);
-                                camp_obj.$("#campaign_from_email_default").show();
-                                camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                                camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
-                                setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);    
+                                var merge_field = camp_obj.app.decodeHTML(camp_json.defaultFromEmail);                                                                    
+                                //camp_obj.$("#campaign_from_email_input").val(merge_field);
+                                if(camp_obj.campDefaults.fromEmail){
+                                         camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_obj.campDefaults.fromEmail)).trigger('chosen:updated');
+                                }
+                                else{
+                                    camp_obj.$("#campaign_from_email").val(merge_field).trigger('chosen:updated');
+                                }
+                                //camp_obj.$("#campaign_from_email_default").show();
+                                //camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                                //camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
+                                //setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);    
                                     
                             }
                             else
                             {
                                 camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");                                
-                                camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+                                //camp_obj.$("#campaign_from_email_input").val(camp_obj.app.decodeHTML(camp_json.fromEmail));                                
                                 camp_obj.$("#campaign_from_email_default").hide();                            
                             }
                         }
@@ -839,7 +847,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     //this.setScheduleArea();
                     //this.scheduleStateCamp();
                     this.$("#campaign_preview_subject").html(this.app.encodeHTML(this.$("#campaign_subject").val()));
-                    this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email_input").val()));
+                    //this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email_input").val()));
+                    this.$("#campaign_preview_fromEmail").html(this.app.encodeHTML(this.$("#campaign_from_email").val()));
                     if(this.$("#fromemail_default").val() != '' && this.$('#campaign_from_email_default').css('display') == 'block')
                     {
                         this.$("#femail_default").show();
@@ -1029,7 +1038,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var defaultSenderName = "",defaultReplyToEmail="";
                     var replyto = el.find('#campaign_reply_to').val();
                     var email_addr = el.find('#campaign_default_reply_to').val();
-                    var fromEmail = el.find('#campaign_from_email_input').val();
+                    var fromEmail = el.find('#campaign_from_email').val();//el.find('#campaign_from_email_input').val();
                     var fromEmailDefault = el.find('#fromemail_default_input').val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                    
@@ -1178,7 +1187,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val())?this.$("#campaign_default_reply_to").val():"";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
-                        var fromEmail = this.$('#campaign_from_email_input').val();
+                        var fromEmail = this.$('#campaign_from_email').val();//this.$('#campaign_from_email_input').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
                         if(proceed!==0 && (this.states.step1.change || this.camp_id==0)){
                                 this.app.showLoading("Saving Step 1...",this.$el.parents(".ws-content"));
@@ -1416,10 +1425,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
-                            var defaults_json = jQuery.parseJSON(xhr.responseText);
+                            var defaults_json = jQuery.parseJSON(xhr.responseText);                            
                             if(camp_obj.app.checkError(defaults_json)){
                                 return false;
                             }
+                            camp_obj.campDefaults  = defaults_json;
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(defaults_json.footerText));                          
                             camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(defaults_json.fromEmail));
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(defaults_json.fromName));
@@ -1447,7 +1457,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             
                             var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck   
                             //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40));
-                            camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
+                            //camp_obj.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
                             
                             if(defaults_json.customFooter==""){
                                 camp_obj.$("#campaign_useCustomFooter_div").hide();                                
