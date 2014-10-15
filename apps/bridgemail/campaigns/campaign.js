@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!campaigns/html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment','bms-mergefields'],
-function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment) {
+define(['jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.icheck','jquery.searchcontrol','jquery.highlight','jquery-ui','text!campaigns/html/campaign.html','editor/editor','bms-tags','bms-filters','bms-mapping','moment','bms-mergefields','scrollbox'],
+function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,template,editorView,bmstags,bmsfilters,Mapping,moment,bms,scrollbox) {
         'use strict';
         return Backbone.View.extend({
                 id: 'step_container',                  
@@ -703,6 +703,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 break;                                
                             case 'step_3':
                                 this.initStep3();
+                                
                                 break;
                             case 'step_4':
                                 this.initStep4();
@@ -800,10 +801,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }else if(this.states.step3.recipientType.toLowerCase()=="google"){
                             source_li = "google_import";
                         }
-                        
-                        
                         this.$(".step3 #"+source_li).click();
+                         
                     }
+                            var that = this;
+                            var width = 560;
+                            that.$('.scroll-text').css('width',width + "px");
+                            that.$('.selection-boxes').css('width',width + "px");
+                            that.$('.scroll-text').scrollbox({
+                                chunk:4,
+                                back:that.$('#box_backward'),
+                                forward:that.$('#box_forward')
+                            });
+                            that.$('#box_backward').click(function () {
+                              that.$('.scroll-text').trigger('backward');
+                            });
+                            that.$('#box_forward').click(function () {
+                              that.$('.scroll-text').trigger('forward');
+                            });    
                 },
 
                 fetchServerTime:function(){    
@@ -2268,7 +2283,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                    this.$(".step3 .soruces").hide();                           
                    this.$(".step3 #area_"+target_li.attr("id")).fadeIn("fast");                                                      
                    target_li.addClass("selected");                             
-                   this.step3SlectSource(target_li);  
+                   this.step3SlectSource(target_li);
+                   
                 },
                 step3SlectSource:function(target_li){
                     var camp_obj = this;
@@ -2357,6 +2373,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         default:
                             break;
                     }
+                   
+                   
                     this.states.step3.change = true;
                },
                checkRecipientsSaved :function(type){

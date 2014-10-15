@@ -39,7 +39,8 @@
            'jquery.isotope':'shared/libs/jquery.isotope',
            'mee-helper': 'shared/editor_common',
            'mincolors':'shared/libs/jquery.minicolors',
-           'tinymce':'shared/libs/tinymce/tinymce.min'
+           'tinymce':'shared/libs/tinymce/tinymce.min',
+           'scrollbox':'shared/jquery.scrollbox'
        },
         shim: {
                 backbone: {
@@ -121,6 +122,9 @@
                    deps: ['jquery']
                },
                'jquery.customScroll':{
+                   deps: ['jquery']
+               },
+               'jquery.scrollbox':{
                    deps: ['jquery']
                }
          }

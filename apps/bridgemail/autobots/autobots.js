@@ -209,7 +209,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 addThumbnailLi:function(){
                     var str = "<li class='span3 new-bot-ul'>";
                         str = str + "<div style='height:475px;' class='thumbnail addbot'><div>";
-                        str = str + "<h3>Create New Autobot</h3>";
+                        str = str + "<h3 >Create New Autobot</h3>";
                         str = str + "<ol>";
                         str = str + "<li data-bot='A'><a><img src='"+this.options.app.get('path')+"img/alertbot-icon.png'> <span>Alert Bot</span></a></li>";
                         str = str + "<li data-bot='E'><a><img src='"+this.options.app.get('path')+"img/mailbot-icon.png'><span>Mail Bot</span></a></li>";
@@ -223,7 +223,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 addListingRow:function(){
                     var listing = ' <div class="create_new">';
-                        listing = listing +  '<h3>Create New Autobot</h3>';
+                        listing = listing +  '<h3 style="width: 150px;">Create New Autobot</h3>';
                         listing = listing +  '<ol>';
                         listing = listing +  '<li data-bot="A"><a><img src="'+this.options.app.get('path')+'img/alertbot-icon.png" alt=""> <span>Alert Bot</span></a></li>';
                         listing = listing +  '<li data-bot="E"><a><img src="'+this.options.app.get('path')+'img/mailbot-icon.png" alt=""><span>Mail Bot</span></a></li>';

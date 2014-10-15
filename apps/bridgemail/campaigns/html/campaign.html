@@ -427,21 +427,28 @@
 
 </div>
 <div class="wizard-steps step3">  
-    <div class="selection-boxes" style="width: 1120px;"> <!--<a class="prev"><span></span></a>-->
+   
+     <div class="selection-boxes" style=" "> <!--<a class="prev"><span></span></a>-->
         <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recipients</strong>"  options from  below.</p></div>
-        <ul id="choose_soruce">
-            <li id="choose_lists"><a><img alt="" src="<%- this.app.get('path')%>img/lists.png"><span>Select Lists</span></a></li>
-            <li id="choose_targets"><a><img alt="" src="<%- this.app.get('path')%>img/targets.png"><span>Select Targets</span></a></li>      
-            <li id="choose_tags"><a><img alt="" src="<%- this.app.get('path')%>img/tags.png"><span>Tags</span></a></li>
-            <li id="upload_csv"><a><img alt="" src="<%- this.app.get('path')%>img/csv.png"><span>Upload CSV</span></a></li>
-            <li id="salesforce_import"><a><img alt="" src="<%- this.app.get('path')%>img/salesforce.png"><span>Import from Salesforce</span></a></li>
-            <li id="netsuite_import"><a><img alt="" src="<%- this.app.get('path')%>img/netsuite.png"><span>Import from Netsuite</span></a></li>
-            <li id="highrise_import"><a><img alt="" src="<%- this.app.get('path')%>img/highrisewizard.png"><span>Import from Highrise</span></a></li>
-            <li id="google_import"><a><img alt="" src="<%- this.app.get('path')%>images/google100.png"><span>Import from Google</span></a></li>
-        </ul>
-        <!--<a class="next"><span></span></a>-->
+              <div class="scroll-text">   
+            <a class="prev" id="box_backward"><span></span></a>
+            <ul id="choose_soruce" style="width:2000px">
+                <li id="choose_lists"><a><img alt="" src="<%- this.app.get('path')%>img/lists.png"><span>Select Lists</span></a></li>
+                <li id="choose_targets"><a><img alt="" src="<%- this.app.get('path')%>img/targets.png"><span>Select Targets</span></a></li>      
+                <li id="choose_tags"><a><img alt="" src="<%- this.app.get('path')%>img/tags.png"><span>Tags</span></a></li>
+                <li id="upload_csv"><a><img alt="" src="<%- this.app.get('path')%>img/csv.png"><span>Upload CSV</span></a></li>
+                <li id="salesforce_import"><a><img alt="" src="<%- this.app.get('path')%>img/salesforce.png"><span>Import from Salesforce</span></a></li>
+                <li id="netsuite_import"><a><img alt="" src="<%- this.app.get('path')%>img/netsuite.png"><span>Import from Netsuite</span></a></li>
+                <li id="highrise_import"><a><img alt="" src="<%- this.app.get('path')%>img/highrisewizard.png"><span>Import from Highrise</span></a></li>
+                <li id="google_import"><a><img alt="" src="<%- this.app.get('path')%>images/google100.png"><span>Import from Google</span></a></li>
+            </ul>
+            <a class="next" id="box_forward"><span></span></a>
+         </div> 
+        
+          <!--<a class="next"><span></span></a>-->
         <div class="clearfix"></div>
     </div>  
+    
     <div class="soruces" id="area_choose_lists" style="display:none">
         <!--        <div class="col1">
                                 <h2 class="header-list">Lists

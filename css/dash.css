@@ -1564,7 +1564,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 305px;
+    left: 304px;
     position: absolute;
     top: -13px;
 }
@@ -1753,18 +1753,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
     -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15); }
 
-
-.messages_dialogue:before {
-    border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
-    border-style: solid;
-    border-width: 7px;
-    bottom: auto;
-    content: "";
-    display: inline-block;
-    left: 305px;
-    position: absolute;
-    top: -13px;
-}
+ 
 
 
 .messages_dialogue .miscbar {
@@ -2176,5 +2165,5 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
     -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
 }
 
-
+// Slider Menu left side
 

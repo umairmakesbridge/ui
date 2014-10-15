@@ -1,21 +1,17 @@
- 
-
-<h2><i class="icon target"></i>
-    <span>Select and edit conditions below</span> 
-</h2>
+  
 <div class="bot_p_box">
     <div class="bot_p_boxinner">
 
 
         
-        <div class="filt_cont">
+        <div class="filt_cont" id="div_condition">
             <h4> 
-                <%=this.getPresetTitle(0)%>  <em class="text ifs" style="margin-right:5px;">If </em>
+                <%=this.getPresetTitle(0)%>  <em class="text ifs" style="margin-right:5px;">when </em>
             <select id="ddlif" class=" nosearch" style="width: 40px; margin: 0px 5px; display: none;">
                 <option value="A">All</option>
                 <option value="1">Any</option>
             </select>
-            <em class="text ifs" style="margin-left:5px;">of the filter match below</em>
+            <em class="text ifs" style="margin-left:5px;">conditions below are met.</em>
             </h4>
         </div>
 
@@ -127,7 +123,7 @@
 </div>
 <div id="alert" style="display:none;">
 
-<h2><i class="icon alerts"></i>Sales Alert  </h2>
+<h2><i class="icon alerts"></i>Sales Alert Message </h2>
 
 <div class="bot_p_box">
     <div class="bot_p_boxinner">

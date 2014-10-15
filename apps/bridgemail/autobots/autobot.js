@@ -49,20 +49,20 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
-                            label = "<img src='"+this.options.app.get("path")+"img/scorebot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/scorebot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "A":
-                            label = "<img src='"+this.options.app.get("path")+"img/alertbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/alertbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "E":
-                            label = "<img src='"+this.options.app.get("path")+"img/mailbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/mailbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "TG":
-                            label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png'>";
+                            label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png' style='max-width:none!important;'>";
                             break;
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
-                        label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png'>"
+                        label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png' style='max-width:none!important;'>"
                     return label;
                 },
                 getPlayedOn: function() {

@@ -138,7 +138,9 @@ define([
                         }
                         if(app.mainContainer.$(".icon-menu").hasClass("active")){
                             app.mainContainer.$(".icon-menu").removeClass( "active" );
-                            app.mainContainer.$(".slidenav-dd").hide();
+                            
+                            if(!($(ev.target).hasClass('refresh')))
+                                app.mainContainer.$(".slidenav-dd").hide();
                         }
                        if(app.mainContainer.$('.sc-links ul').hasClass('open')){
                            app.mainContainer.$('.sc-links ul').removeClass('open');
@@ -553,13 +555,14 @@ define([
                     return x1 + x2;
             },
             dateSetting:function(sentDate,sep){
-               sentDate = this.decodeHTML(sentDate);                
+                sentDate = this.decodeHTML(sentDate);                
                if(sep =="/") 
                     var _date =  moment(sentDate,'MM/DD/YYYY');
                 if(sep =="-")
                     var _date =  moment(sentDate,'YYYY-MM-DD');
                 
-                return _date.format("DD MMM YYYY");            
+                return _date.format("DD MMM YYYY");
+            
             },
             showInfo: function(control,message)
             {

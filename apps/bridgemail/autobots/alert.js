@@ -81,10 +81,9 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             this.$el.find("#show_other").hide();
                         }
                         this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
-                        this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails));
-                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage));
+                        this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails,true));
+                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage,true));
                         this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
-
                     }
                     if (!this.alertMessage) {
                         this.$el.find("#alertmessage").attr('placeholder', 'Type your alert message here. You can also insert merge tags in your message.');
@@ -179,7 +178,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     var that = this;
                     this.head_action_bar = this.modal.find(".modal-header .edited  h2");
                     this.head_action_bar.append("<a style='margin-top: 10px; margin-left: -10px;' class='cstatus " + labels[1] + "'>" + labels[0] + "</a>");
-                    this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
+                    this.head_action_bar.append("<div class='percent_stats autobots_percent'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:-1px 0px 0px 0px!important;'></a></div>");
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });    
