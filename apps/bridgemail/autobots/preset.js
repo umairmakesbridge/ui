@@ -210,7 +210,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         case "PRE.2":
                             this.botType = "MT";
                             label = "<span>Send a meeting request </span> ";
-                            information = " I will send a meeting request once to people who match your meeting request rules.";
+                            information = "I will send a meeting request once to people who match your meeting request rules.";
                             break;
                         case "PRE.3":
                             this.botType = "AR";
@@ -220,7 +220,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         case "PRE.4":
                             this.botType = "SR";
                             label = "Alert my <span>sales reps</span> ";
-                            information = "I will keep updating sales reps once to contacts matched in the filter to every contact matched in the filter.";
+                            information = "I'll alert reps when people match your alert rules.";
                             break;
                         case "PRE.5":
                             label = label ="Score will be updated by <span>+10</span>  ";
