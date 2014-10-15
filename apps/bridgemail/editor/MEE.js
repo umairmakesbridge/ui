@@ -924,25 +924,40 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find('.tabs').click(function () {
                                     var $this = $(this);
                                     var $tabs = myElement.find('.tabs');
-
+                                    var initStyles = false;
                                     $tabs.removeClass('active');
                                     $this.addClass('active');
                                     if ($(this).hasClass("builder-tab")) {
                                         myElement.find('.builder-panel').show();
                                         myElement.find('.style-panel').hide();
-                                        InitializeElementsForStyle(false);
+                                        initStyles = false;
 
-                                    }
-                                    if ($(this).hasClass("style-tab")) {
+                                    } 
+                                    else if ($(this).hasClass("style-tab")) {
                                         myElement.find('.builder-panel').hide();
                                         myElement.find('.style-panel').show();
-                                        if(showStyle===false){
+                                        if(showStyle===false && options.fromDialog==true){
                                             myElement.find(".style-panel .accordian").accordion("refresh");
                                             myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
                                             showStyle = true;
                                         }
-                                        InitializeElementsForStyle(true);
+                                        initStyles = true;
                                     }
+                                    if(options.fromDialog==false){
+                                        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
+                                        if(scrollBottom<74){
+                                            var lessBy = 74-scrollBottom;                            
+                                            if(mee.setAccordian){
+                                                mee.setAccordian(lessBy);                                            
+                                            }                            
+                                        }
+                                        else{
+                                            mee.setAccordian(0);                                        
+                                        }
+                                    }
+                                    
+                                    InitializeElementsForStyle(initStyles);
+                                    
 
                                 });
 
@@ -2735,15 +2750,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                                 if (variation.Label == "Default") {
                                                     var ContentLi = defaultLiContentForDC.clone();                                                    
-                                                    ContentLi.data("dcInternalData", $('<div/>').html(variation.InternalContents).text());
+                                                    var _html = $('<div/>').html(variation.InternalContents).text();
+                                                    ContentLi.data("dcInternalData", $(reConstructCode("<div>"+_html+"</div>").html()));
                                                     ContentLi.data("content", variation);
                                                     ContentLi.addClass("defaultLi");                                                                                          
-
                                                     var dcInternal = args.droppedElement.find(".dcInternalContents:first");
 
                                                     //args.clickedLi = ContentLi;
                                                     var defaultInternalContent = $(ContentLi.data("dcInternalData"));
-                                                    oInitDestroyEvents.InitAll(defaultInternalContent);
+                                                    //oInitDestroyEvents.InitAll(defaultInternalContent);
 
                                                     dcInternal.html(defaultInternalContent);
 
@@ -2751,7 +2766,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     OnEditContentName(ContentLi);
                                                     OnDeleteContent(ContentLi);
 
-                                                    dcContents.prepend(ContentLi);                                                    
+                                                    dcContents.prepend(ContentLi);        
+                                                    
+                                                    var dc = myElement.find("table[keyword='"+args.ID+"']");
 
                                                 //ContentLi.trigger( "click" );                        
                                                 }
@@ -2760,8 +2777,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     ContentLi.find("span:first").html(variation.Label);
                                                     ContentLi.data("content", variation);
                                                     ContentLi.attr("id",variation.DynamicContentID)                                                    
-
-                                                    ContentLi.data("dcInternalData", $($('<div/>').html(variation.InternalContents).text()));
+                                                    var _html = $('<div/>').html(variation.InternalContents).text();
+                                                    ContentLi.data("dcInternalData", $(reConstructCode("<div>"+_html+"</div>").html()));
 
                                                     OnFilterClick(ContentLi);
                                                     OnEditContentName(ContentLi);
@@ -2926,10 +2943,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     args.clickedLi = dc.find(".block_body li.active");
                                     args.IsUpdate = false;
                                     var previuosActivate = args.clickedLi;
-                                    previuosActivate.data("dcInternalData", dcInternal.html());
+                                    previuosActivate.data("dcInternalData",dcInternal.html());
                                     if (options.OnDynamicContentSwap != null) {
                                         args.DynamicContent = previuosActivate.data("content");
-                                        args.DynamicContent.InternalContents = previuosActivate.data("dcInternalData");
+                                        args.DynamicContent.InternalContents = CleanCode($("<div>"+previuosActivate.data("dcInternalData")+"</div>")).html();
                                         options.OnDynamicContentSwap(args);
                                     }                                    
                                 }
@@ -3007,7 +3024,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             previuosActivate.data("dcInternalData", dcInternal.html());
                                             if (options.OnDynamicContentSwap != null) {
                                                 args.DynamicContent = previuosActivate.data("content");
-                                                args.DynamicContent.InternalContents = previuosActivate.data("dcInternalData");
+                                                args.DynamicContent.InternalContents = CleanCode($("<div>"+previuosActivate.data("dcInternalData")+"</div>")).html();
 
                                                 options.OnDynamicContentSwap(args);
                                             }
@@ -3467,7 +3484,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //Destroy plugin events all event
                                 this.DestroyPluginsEvents = function (element) {
                                     try {
-                                        element.find("img.imageHandlingClass").resizable("destroy");
+                                        element.find("img.imageHandlingClass").resizable("destroy");                                        
                                     }
                                     catch (e) {
                                         console.log("Exception on destroying resizable on text");
@@ -3502,7 +3519,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //Initialize Plugins Event
                                 this.InitializePluginsEvents = function (element) {                                    
                                     try{
-                                        element.find(".resizableImage").resizable("destroy");           
+                                        element.find(".resizableImage .ui-resizable-handle").remove();
+                                        element.find(".resizableImage").resizable("destroy");                                        
                                     }
                                     catch(e){}
                                     element.find(".resizableImage").resizable({});                                    
