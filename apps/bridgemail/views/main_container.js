@@ -620,7 +620,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
                             that.timeOut = true;
                            }
-                          that.$el.find('#ql_graphics em').html(data.memOccupiedInMBs + '/' + data.memAllowedInMBs);
+                          that.$el.find('#ql_graphics em').html(data.memOccupiedInMBs+'MB');
                           that.$el.find('#ql_graphics strong').html(that.app.addCommas(data.totalCount));
                     }); 
                     var URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+app.get('bms_token')+"&type=totalCount";

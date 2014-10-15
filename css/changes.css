@@ -2695,7 +2695,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 
 .slidenav-dd .supporthelp {
     background: none repeat scroll 0 0 #e1f3ff;
-    height: 40px;
+    height: 43px;
     line-height: 40px;
     margin: 5px -6px -5px;
     text-align: center;
@@ -2729,7 +2729,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
     background: none repeat scroll 0 0 #e1f3ff;
     border-left: 0 solid #eff5f9;
     float: left;
-    height: 378px;
+    height: 383px;
     margin: -5px -5px -5px -6px;
     padding: 9px;
     width: 240px;
