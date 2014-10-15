@@ -19,8 +19,9 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     "mouseover .sumry": 'showButtons',
                     "mouseout .sumry": "hideButtons",
                     "click .small-edit": "editMessage",
-                    "click #preivew_bot": "previewCampaign"
-                },
+                    "click #preivew_bot": "previewCampaign",
+                    
+                 } ,
                 initialize: function() {
                     this.template = _.template(template);
                     this.model = null;
@@ -109,7 +110,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     this.checkMailMessages();
                       this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                     this.options.app.showLoading(false, this.$el);
+                   
+                    this.options.app.showLoading(false, this.$el);
                  }, 
                   showButtons: function() { 
                     this.$el.find(".btn-show").show();
@@ -147,13 +149,13 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                 that.$el.find('.ifs').hide();
                                 that.$el.find('#ddlif').val('A');
                                 that.$el.find('#ddlif_chosen').hide();
-                                
-                                that.addFormFilter();
+                                that.$el.find("#div_condition").hide();
+                                that.addFormFilter(true);
                             }else{
                                 
                                 that.addPageViwes();
                                 that.addEmailClicks();
-                                that.addFormFilter();   
+                                that.addFormFilter(false);   
                                 that.addLeadScoreFilter();
                             }
                                that.loadCampaign();
@@ -168,12 +170,38 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                             that.$el.find("#ddlif").val(targets.applyRuleCount); 
                             that.$el.find("#ddlif").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "80px", disable_search: "true"});
                             if(that.model.get('presetType') == "PRE.3"){that.$el.find('#ddlif_chosen').hide();}
-                    }, this);
+                            
+                         
+                         
+                            that.$(".iCheck-helper").on('click',function(ev){
+                              var checkDiv = $(this).parents('.checkpanelinput');
+                                    if(checkDiv.hasClass('checked')){
+                                          checkDiv.parents('.filt_cont').find("select").prop("disabled",false).trigger("chosen:updated");
+                                          checkDiv.parents('.filt_cont').find("input[type=text]").prop("disabled",false)
+                                      }else{
+                                          checkDiv.parents('.filt_cont').find("select").prop("disabled",'disabled').trigger("chosen:updated");
+                                          checkDiv.parents('.filt_cont').find("input[type=text]").prop("disabled",'disabled')
+                                      }
+                             })
+                    
+                            that.$(".iCheck-helper").hover(
+                                    
+                                     function () {
+                                        if($(this).parents(".checkpanelinput").hasClass('checked')) return;
+                                        $(this).parents(".checkpanelinput").css({"background-color":"#94CF1E"});
+                                     }, 
+                                     function () {
+                                         if($(this).parents(".checkpanelinput").hasClass('checked')) return;
+                                        $(this).parents(".checkpanelinput").css({"background-color":"#CCDCE5"});
+                                     }
+                            )
+                            
+                             } );
                     
                  },
                  getPresetTitle:function(info){
                      var label = "";
-                     var information = "I will keep updating score <em>everyday</em> to contacts matched in the filter.";
+                     var information = "I'll constantly watch for people who match your lead score increase rules and update their score.";
                       switch (this.model.get('presetType')) {
                         case "PRE.1":
                             label = "Alert my <span>sales reps</span> ";
@@ -182,12 +210,12 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         case "PRE.2":
                             this.botType = "MT";
                             label = "<span>Send a meeting request </span> ";
-                            information = "I will send meeting request message <em>once</em> for every contact matched in the filter.";
+                            information = " I will send a meeting request once to people who match your meeting request rules.";
                             break;
                         case "PRE.3":
                             this.botType = "AR";
                             label = "Choose a form to send an <span>auto responder message</span>";
-                            information = "I will send auto responder message <em>once</em> for every contact that submitted against this form."
+                            information = "I will send an email message to anyone who submits the form you specified."
                             break;
                         case "PRE.4":
                             this.botType = "SR";
@@ -417,7 +445,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                     }
                      this.head_action_bar.find(".copy").remove();//addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
                      this.head_action_bar.find(".delete").remove();//addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
-                    this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
+                    this.head_action_bar.append("<div class='percent_stats autobots_percent'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:-1px 0px 0px !important'></a></div>");
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });  
@@ -529,10 +557,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                      if(alertmessages == ""){
                          btnPlay.removeClass('saving-blue'); 
                         btnSave.removeClass('saving');
-                         that.app.showAlert('Alert message can\'t be empty', $("body"), {fixed: true});
-                        
-                          
-                         return false;
+                        that.app.showAlert('Alert message can\'t be empty', $("body"), {fixed: true});
+                        return false;
                      }
                     
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
@@ -1014,7 +1040,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       filter.addClass('emailclick-panel');
       var filter_html = ''
        filter_html += '<div><input type="checkbox" id="chkemailclicks" class="checkpanel" value="" style="position: absolute; opacity: 0;"><span class="filt">Email Clicks</span>';
-      filter_html += '<input type="text" style="width: 50px;" value="250" id="txtEmailFrequency">  <em class="text">times or more</em><em class="text">in last</em><select  class=" chosen-select" id="ddlemailclicks">';
+      filter_html += '<input type="text" style="width: 50px;" value="1" id="txtEmailFrequency"><em class="text" style="padding: 7px 1px!important;">times or more</em><em class="text" style="padding: 7px 1px!important;">in last</em><select  class=" chosen-select" id="ddlemailclicks">';
       filter_html += this.getTimeSpan(30)+'</select>'        
               
       filter_html += ' <em class="text">days</em></div>'
@@ -1025,9 +1051,15 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       filter.find(".filt_cont").append(filter_html);
       if(this.clickViews.type=="E"){
        filter.find(".filt_cont").find('#chkemailclicks').iCheck("check");
-       filter.find(".filt_cont").find('#txtEmailFrequency').val(this.clickViews.frequency);
+       
+       if(typeof this.clickViews.frequency !="undefined" &&  this.clickViews.frequency > 0)
+        filter.find(".filt_cont").find('#txtEmailFrequency').val(this.clickViews.frequency);
+       if(typeof this.clickViews.timeSpanInDays !="undefined" &&  this.clickViews.timeSpanInDays > 0)
        filter.find(".filt_cont").find('#ddlemailclicks').val(this.clickViews.timeSpanInDays);
-      }
+      }else{
+            filter.find('.filt_cont').find("select").prop("disabled",'disabled').trigger("chosen:updated");
+             filter.find('.filt_cont').find("input[type=text]").prop("disabled",'disabled')
+        }
       filter.find("#ddlemailclicks").chosen({disable_search: "true",width:"100px"}).change(function(){
          
       })
@@ -1041,17 +1073,22 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       filter.addClass('pageviews-panel');
       var filter_html = ''
        filter_html += '<div><input type="checkbox" id="chkpageviews" class="checkpanel" value="" style="position: absolute; opacity: 0;"><span class="filt">Page Viewed</span>';
-      filter_html += '<input type="text" style="width: 50px;" value="250" id="txtfrequency">  <em class="text">times or more</em><em class="text">in last</em><select  class="chosen-select" id="ddlpageviews">';
+      filter_html += '<input type="text" style="width: 50px;" value="1" id="txtfrequency"><em class="text" style="padding: 7px 1px!important;">times or more</em><em class="text" style="padding: 7px 1px!important;">in last</em><select  class="chosen-select" id="ddlpageviews">';
       filter_html +=  this.getTimeSpan(30)+'</select>'        
               
       filter_html += ' <em class="text">days</em></div>'
       filter.find(".filt_cont").append(filter_html);
       if(this.pageViews.type == "W"){
        filter.find(".filt_cont").find('#chkpageviews').iCheck("check");
-       filter.find('.filt_cont').find('#txtfrequency').val(this.pageViews.frequency);
-       filter.find('.filt_cont').find('#ddlpageviews').val(this.pageViews.timeSpanInDays);
+       if(typeof this.pageViews.frequency !="undefined" &&  this.pageViews.frequency > 0)
+        filter.find('.filt_cont').find('#txtfrequency').val(this.pageViews.frequency);
+       if(typeof this.pageViews.timeSpanInDays !="undefined" &&  this.pageViews.timeSpanInDays > 0)
+         filter.find('.filt_cont').find('#ddlpageviews').val(this.pageViews.timeSpanInDays);
        
-      }
+      }else{
+            filter.find('.filt_cont').find("select").prop("disabled",'disabled').trigger("chosen:updated");
+             filter.find('.filt_cont').find("input[type=text]").prop("disabled",'disabled')
+        }
       filter.find("#ddlpageviews").chosen({disable_search: "true",width:"100px"}).change(function(){
          
       })
@@ -1070,14 +1107,16 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
           filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><input id="timespandays" type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
           filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><select class="selectbox formats"><option>Loading...</option>'                    
           filter_html +='</select></div></div>'
-          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:240px;" /></div></div></div>'
+          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="Lead" name="" class="matchValue" style="width:240px;" /></div></div></div>'
    
      // filter_html += '<div class="match row days-container" style="display:none;clear:both"> in last '
             //filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
     //  filter_html += '</div>'
      // filter.find(".filter-cont").append('<span class="timelinelabel">Lead Score</span>');            
       filter.find(".filt_cont").append(filter_html);
+         if(typeof this.saleStatus.matchValue !="undefined" &&  this.saleStatus.matchValue > 0)
       filter.find(".filt_cont").find('.matchValue').val(this.saleStatus.matchValue);
+     if(typeof this.saleStatus.spanInDays !="undefined" &&  this.saleStatus.spanInDays > 0)
       filter.find(".filt_cont").find('#timespandays').val(this.saleStatus.spanInDays);
       var selected_rule = "";
       var that = this;
@@ -1102,9 +1141,8 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                    });                   
                     filter.find("#ddlsalestatus").html(filter_html).prop("disabled",false).trigger("chosen:updated");
                     filter.find("#ddlsalestatus").chosen({disable_search: "true",width:"200px"}) 
-                    if(that.saleStatus.type  == "P")
-                      filter.find(".filt_cont").find('#chksalesstatus').iCheck("check");
-                  }
+                   
+               }
           });
           var URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=formats";
           jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -1126,6 +1164,12 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                    });      
                      filter.find(".selectbox.formats").html(filter_html).prop("disabled",false).trigger("chosen:updated")
                    filter.find(".formats").chosen({disable_search: "true",width:"200px"}) 
+                    if(that.saleStatus.type  == "P"){
+                      filter.find(".filt_cont").find('#chksalesstatus').iCheck("check");
+                    }else{
+                      filter.find('.filt_cont').find("select").prop("disabled",'disabled').trigger("chosen:updated");
+                      filter.find('.filt_cont').find("input[type=text]").prop("disabled",'disabled');
+                   }
               }
         }).fail(function() { console.log( "error in loading formats" ); });
          filter.find("#ddlsalestatus").change(function(){             
@@ -1179,36 +1223,33 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
        
     },
      
-  addFormFilter:function(obj,e,params){
+  addFormFilter:function(auto){
+      var text = "Form Submitted";
+      if(auto){
+       text = "An auto-reply message will be sent to anyone who submits this form:"
+      }
       var filter = this.$el.find('.form-submit');
       var select_form = ""
       filter.addClass("form");
       var self = this
       if(this.botType == "AR"){
-          var filter_html = '<div><span class="filt">Form Submitted</span>'
-      }  else{ 
-            var filter_html = '<div><input type="checkbox" id="chkformsubmission" class="checkpanel" value="" style="position: absolute; opacity: 0;"><span class="filt">Form Submitted</span>'
-        }    
-        filter_html += '  <select class=" chosen-select" id="ddlformsubmission" data-placeholder="Select Webform" disabled="disabled"><option value="-1">Loading Web Forms...</option></select> '
-         filter_html += '</div> '          
-            
+        var filter_html = '<div><span class="filt" style="width:25%">'+text+'</span>'
+      }else{ 
+        var filter_html = '<div><input type="checkbox" id="chkformsubmission" class="checkpanel" value="" style="position: absolute; opacity: 0;"><span class="filt">Form Submitted</span>'
+      }    
+      filter_html += '  <select class=" chosen-select" id="ddlformsubmission" data-placeholder="Select Webform" disabled="disabled"><option value="-1">Loading Web Forms...</option></select> '
+      filter_html += '</div> '          
         //  filter_html += '<div> Happened in last '
              //   filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'                  
        ///   filter_html += '</div>'
      // filter.find(".filter-cont").append('<span class="timelinelabel">Form Submission</span>');                
-      filter.find(".filt_cont").append(filter_html)
-       if(self.forms.type == "F" && this.botType != "AR"){
-            filter.find(".filt_cont").find('#chkformsubmission').iCheck("check");
-            //filter.find("#ddlformsubmission").val(this.forms.formNumber);
-        }
-       filter.find("#ddlformsubmission").chosen({width:"300px",disable_search: false})      
+       filter.find(".filt_cont").append(filter_html)
       
-     
-     //filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
+       filter.find("#ddlformsubmission").chosen({width:"300px",disable_search: false})      
+       //filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
         //  $(this).val($(this).val())
         //  $(this).trigger("chosen:updated")
        //})
-
       //this.addActionBar(filter)
       ///this.$el.append(filter)
       //this.showTooltips(filter)
@@ -1239,7 +1280,15 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                        
                    }                   
                    filter.find("#ddlformsubmission").html(select_html).prop("disabled",false).trigger("chosen:updated")
-                   
+                    if(self.forms.type == "F" && this.botType != "AR"){
+                    filter.find(".filt_cont").find('#chkformsubmission').iCheck("check");
+                    //filter.find("#ddlformsubmission").val(this.forms.formNumber);
+                    }else{
+                        if(!auto){
+                            filter.find('.filt_cont').find("select").prop("disabled",'disabled').trigger("chosen:updated");
+                            filter.find('.filt_cont').find("input[type=text]").prop("disabled",'disabled')
+                        }
+                    }
               }
               
           }).fail(function() { console.log( "error campaign listing" ); })
@@ -1345,9 +1394,14 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
           }
       } 
       if(total == 0){
-            btnSave.removeClass('saving');
+          if(this.model.get('presetType') == "PRE.3"){
+              total = 1;
+          }else{
+              btnSave.removeClass('saving');
             btnPlay.removeClass('saving-blue');
           return false;
+          }
+            
       }
       filters_post["count"] = total;
                          var that = this; 
@@ -1367,7 +1421,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                                       that.saveTagAutobot(false,isPlayClicked);
                                     }
                                     else {
-                                        that.app.showAlert(false, that.$el);
+                                         that.app.showAlert(target_json[1], $("body"), {fixed: true});
                                     }
                                       btnSave.removeClass('saving');
                                       btnPlay.removeClass('saving-blue');

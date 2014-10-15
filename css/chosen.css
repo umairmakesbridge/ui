@@ -247,7 +247,9 @@
 	-moz-border-radius: 0 2px 2px 0;
 	-webkit-border-radius: 0 2px 2px 0;
 }
-
+.chosen-container .chosen-results li:last-child{
+    margin-bottom:7px;
+}
 
 /* @end */
 /* @group Multi Chosen */

@@ -70,7 +70,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     //'click .new-campaign': 'createNewCampaign',
                     'click .csv-upload': 'csvUpload',
                     'click .new-nurturetrack': 'addNurtureTrack',
-                    'click .messagesbtn': 'loadNotifications'
+                    'click .messagesbtn': 'loadNotifications',
+                    "click .announcementbtn":"toggleAnnouncement",
+                    "click .quick-add":"quickAdd"
                 },
                 initialize: function() {
                     this.app = app;
@@ -234,7 +236,15 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             else        
                                 document.body.className = this[hidden] ? "hidden" : "visible";
                         }
-               }
+               },
+               toggleAnnouncement:function(){
+                   this.$el.find('.announcement_dialogue').slideToggle();
+               },
+               quickAdd:function(){
+                   console.log('I clicked some one.;p');
+                   this.$el.find('.add_dialogue').slideToggle();
+               } 
+              
 
             });
         });

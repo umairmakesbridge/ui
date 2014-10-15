@@ -92,7 +92,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-tagbot':'newAutobot',
                     'click .new-alertbot':'newAutobot',
                     'click .new-scorebot':'newAutobot',
-                    
+                    'click #ql_refresh':'loadHeaderCount'
 
                 },
                 initialize: function() {
@@ -108,7 +108,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
                     this.app = this.options.app;
                     this.template = _.template(LandingPage);     
-                    this.$el.append(this.header.$el, this.template({}));                    
+                    this.$el.append(this.header.$el, this.template({}));
+                    this.loadHeaderCount(true);
 
                 },
                 allowWorkspace:function(options){                                    
@@ -607,8 +608,60 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
                     }
                    
+                },
+                loadHeaderCount:function(isRender){
+                    if(isRender !== true){
+                       this.$el.find('#ql_refresh').css('background','url("img/recurring2.gif") no-repeat scroll center center transparent');
+                    }
+                    var URL = "/pms/io/publish/getImagesData/?BMS_REQ_TK="+app.get('bms_token')+"&type=counts";
+                    var that = this;
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
+                            that.timeOut = true;
+                           }
+                          that.$el.find('#ql_graphics em').html(data.memOccupiedInMBs + '/' + data.memAllowedInMBs);
+                          that.$el.find('#ql_graphics strong').html(that.app.addCommas(data.totalCount));
+                    }); 
+                    var URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+app.get('bms_token')+"&type=totalCount";
+                    var that = this;
+                    jQuery.getJSON(URL,  function(tsv, state, xhr){
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
+                            that.timeOut = true;
+                           }
+                        that.$el.find('#ql_contacts strong').html(that.app.addCommas(data.totalCount));
+                    });
+                    
+                     var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
+                     jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        that.$el.find('#ql_autobots .play').html(that.app.addCommas(data.playCount));
+                        that.$el.find('#ql_autobots .pause').html(that.app.addCommas(data.pauseCount));
+                    });
+                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allStats";
+                     jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        var total = (parseInt(data.draft) + parseInt(data.sent) + parseInt(data.scheduled) + parseInt(data.pending));
+                        that.$el.find('#ql_campaigns em').html(that.app.addCommas(total));
+                    });
+                      var URL = "/pms/io/trigger/getNurtureData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
+                     jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        var pauseCount = (parseInt(data.userCount) - parseInt(data.playCount))
+                        that.$el.find('#ql_nurturetracks .play').html(that.app.addCommas(data.playCount));
+                        that.$el.find('#ql_nurturetracks .pause').html(that.app.addCommas(pauseCount));
+                    });
+                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
+                     jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        that.$el.find('#ql_templates em').html(that.app.addCommas(data.userTotal)); 
+                        if(isRender !== true){
+                            that.$el.find('#ql_refresh').css('background','url("img/refresh-g.png") no-repeat scroll center center transparent');
+                        }
+                    });
+                     
                 }
-
             });
 
         });

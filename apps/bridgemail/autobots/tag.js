@@ -195,7 +195,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     }
                     this.head_action_bar.find(".copy").addClass('showtooltip').attr('data-original-title', "Click to Copy").css('cursor', 'pointer');
                     this.head_action_bar.find(".delete").addClass('showtooltip').attr('data-original-title', "Click to Delete").css('cursor', 'pointer');
-                    this.head_action_bar.append("<div class='percent_stats'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:3px 0px 0px 0px!important;'></a></div>");
+                    this.head_action_bar.append("<div class='percent_stats autobots_percent'><a class='icon percent showtooltip' data-original-title='Click to see responsiveness of this target' style='margin:-1px 0px 0px 0px!important;'></a></div>");
                     this.head_action_bar.find(".percent").on('click', function(ev) {
                         that.showPercentage(ev);
                     });  
@@ -425,8 +425,16 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
 
 
                 },
+                 showLoadingWheel: function(isShow, ele) {
+                    if (isShow)
+                        ele.append("<div class='loading-wheel' style='margin-left:5px;margin-top: 9px;position: inherit!important;'></div>")
+                    else {
+                        var ele = ele.find(".loading-wheel");
+                        ele.remove();
+                    }
+                },
                 updateTags: function(firstTime) {
-                    
+                    this.showLoadingWheel(true,this.$el.find("#divtags"));
                     var str = "<div id='tagslist' class='tagscont tagslist'>";
                     str = str + "<ul>";
                     var tags = this.tags; 
@@ -486,6 +494,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                         that.saveTagAutobot(true);
                                     }
                             }
+                            this.showLoadingWheel(false,that.$el.find("#divtags"));
                         }});
                   
                 },

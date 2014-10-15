@@ -138,7 +138,9 @@ define([
                         }
                         if(app.mainContainer.$(".icon-menu").hasClass("active")){
                             app.mainContainer.$(".icon-menu").removeClass( "active" );
-                            app.mainContainer.$(".slidenav-dd").hide();
+                            
+                            if(!($(ev.target).hasClass('refresh')))
+                                app.mainContainer.$(".slidenav-dd").hide();
                         }
                        if(app.mainContainer.$('.sc-links ul').hasClass('open')){
                            app.mainContainer.$('.sc-links ul').removeClass('open');
@@ -552,19 +554,16 @@ define([
                     }
                     return x1 + x2;
             },
-            dateSetting:function(dateText,sep){
-                dateText = this.decodeHTML(dateText);
-                var date = dateText.split(' ');
+            dateSetting:function(sentDate,sep){
+                sentDate = this.decodeHTML(sentDate);
                 
-                var dateparts = date[0].split(sep);
-                if(sep === "/"){
-                    var month = this.getMMM(dateparts[0].replace('0','')-1);
-                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[1];
-                }else{
-                    var month = this.getMMM(dateparts[1].replace('0','')-1);
-                    var dateFormat = dateparts[2] + ' ' + month + ', ' + dateparts[0];
-                }
-                return dateFormat;
+               if(sep =="/") 
+                    var _date =  moment(sentDate,'MM/DD/YYYY');
+                if(sep =="-")
+                    var _date =  moment(sentDate,'YYYY-MM-DD');
+                
+                return _date.format("DD MMM YYYY");
+            
             },
             showInfo: function(control,message)
             {

@@ -53,20 +53,23 @@
         	</ul>
             
             <ul class="quicklinks">
-             <li class="dd"><h4><i class="icon quicklinks"></i><span>Quick Links</span></h4>
+             <li class="dd">
                 	<ul>
-                        <li class="view-contacts"><a><i class="icon subscribers"></i><span>Contacts</span></a></li>                            
-                    	<li class="campaign-listing"><a><i class="icon campaign"></i><span>Campaigns</span></a></li>   
-                        <li class="nurture-tracks nt-li"><a><i class="icon nurturetracks"></i><span>Nurture Tracks</span></a></li>                        
-                    	<li class="template-gallery"><a><i class="icon templates"></i><span>Template Gallery</span></a></li>
-                    	<li class="new-graphics"><a><i class="icon graphic"></i><span>Image Gallery</span></a></li>
-                        <li class="autobots-gallery"><a><i class="icon autobots"></i><span>Autobots</span></a></li>
+                            <li class="view-contacts block" id="ql_contacts"><a><span>Contacts</span><i class="icon subscribers"></i><strong>Loading...</strong></a></li>                            
+                    	<li class="campaign-listing" id="ql_campaigns"><a><i class="icon campaign"></i><em>12</em><span>Campaigns</span></a></li>  
+                        <li class="template-gallery" id="ql_templates"><a><i class="icon templates"></i><em>25</em><span>Templates</span></a></li> 
+                        <li class="new-graphics block" id="ql_graphics"><a><span>Graphics <em>Loading...</em></span><i class="icon graphic"></i><strong>Loading...</strong></a></li>
+                        <li class="nurture-tracks nt-li" id="ql_nurturetracks"><a><i class="icon nurturetracks"></i><span>Nurture Tracks</span><strong class="play">0</strong><strong class="pause">0</strong></a></li>                        
+                    	<li class="autobots-gallery" id="ql_autobots"><a><i class="icon autobots"></i><span>Autobots</span><strong class="play">0</strong><strong class="pause">0</strong></a></li>
+                    	
+                        
                     </ul>
                 </li>
             </ul>
             
             <div class="clearfix"></div>
             <div class="supporthelp">
+            	<a class="refresh" id="ql_refresh"></a>
                 <!--<a href="">Support & Help</a>-->
             </div>
         </nav>
