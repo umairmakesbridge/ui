@@ -2695,7 +2695,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 
 .slidenav-dd .supporthelp {
     background: none repeat scroll 0 0 #e1f3ff;
-    height: 40px;
+    height: 43px;
     line-height: 40px;
     margin: 5px -6px -5px;
     text-align: center;
@@ -2742,9 +2742,9 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul.quicklinks > li ul li i.icon {
     display: block;
     float: none;
-    height: 42px;
+    height: 40px;
     margin: 0 auto !important;
-    width: 21px;
+    width: 40px;
 }
 .slidenav-dd >  ul.quicklinks > li h4 i.icon { display:none;}
 
