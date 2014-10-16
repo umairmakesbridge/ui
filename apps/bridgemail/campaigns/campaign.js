@@ -807,7 +807,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var that = this;
                             var width = 560;
                             that.$('.scroll-text').css('width',width + "px");
-                            that.$('.selection-boxes').css('width',width + "px");
+                            that.$('.step3').find('.selection-boxes').css('width',width + "px");
                             that.$('.scroll-text').scrollbox({
                                 chunk:4,
                                 back:that.$('#box_backward'),

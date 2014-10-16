@@ -70,7 +70,8 @@ String _path = "/pms/beta/";
     <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
-        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>";        
+        var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>"; 
+        var userKey =  "<%=userInfo.getUserKey()%>"; 
     </script>
     
     <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >

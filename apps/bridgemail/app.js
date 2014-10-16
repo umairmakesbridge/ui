@@ -61,6 +61,7 @@ define([
                                 isMEETemplate: $.getUrlVar(false,'meeTemplate'),
                                 isFromCRM: $.getUrlVar(false,'crm'),
                                 preview_domain : previewDomain,
+                                user_Key:userKey,
                                 images_CDN : imagesCDN,
                                 static_CDN : staticCDN,
 				host: window.location.hostname,

@@ -185,9 +185,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     return null;
                                 }
                             }
-
-
-
                         }
                         var mee = this;
                         this.each(function () {
@@ -203,9 +200,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 initialize: function () {                                    
                                     this.render();
                                 },
-
                                 render: function () {
-                                    this.$el.html(this.my_template({allowedUser:['admin','jayadams','demo'],app:options._app}));                      
+                                    this.$el.html(this.my_template({allowedUser:['admin','jayadams','demo'],options:options}));                      
                                 }
 
                             });
@@ -2744,6 +2740,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var dcContents = args.predefinedControl.Html.find(".dcContents");
 
                                         if (args.DynamicVariation.ListOfDynamicContents.length > 0) {
+                                            var firstBlock = false;
                                             $.each(args.DynamicVariation.ListOfDynamicContents, function (i, variation) {
 
                                                 //var ContentLi = $("<li>" + variation.Label + "</li>");
@@ -2767,9 +2764,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     OnDeleteContent(ContentLi);
 
                                                     dcContents.prepend(ContentLi);        
-                                                    
-                                                    var dc = myElement.find("table[keyword='"+args.ID+"']");
-
+                                                                                                        
                                                 //ContentLi.trigger( "click" );                        
                                                 }
                                                 else {
@@ -2779,7 +2774,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     ContentLi.attr("id",variation.DynamicContentID)                                                    
                                                     var _html = $('<div/>').html(variation.InternalContents).text();
                                                     ContentLi.data("dcInternalData", $(reConstructCode("<div>"+_html+"</div>").html()));
-
+                                                    if(firstBlock===false){
+                                                        var dcInternal = args.droppedElement.find(".dcInternalContents:first");
+                                                        var defaultInternalContent = $(ContentLi.data("dcInternalData"));
+                                                        dcInternal.html(defaultInternalContent);
+                                                        args.droppedElement.find("li.defaultLi").removeClass("active");
+                                                        ContentLi.addClass("active");
+                                                        firstBlock= true;
+                                                    }
                                                     OnFilterClick(ContentLi);
                                                     OnEditContentName(ContentLi);
                                                     OnDeleteContent(ContentLi);
@@ -2916,24 +2918,27 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     element.find(".btnContentDelete").click(function (event) {
 
                                         event.stopPropagation();
+                                        if($("table[keyword='"+args.ID+"'] .dcContents > li").length!==2){
+                                            args.DynamicContent = getDynamicContent(element);
 
-                                        args.DynamicContent = getDynamicContent(element);
+                                            if (options.OnDeleteDynamicContent != null) {
 
-                                        if (options.OnDeleteDynamicContent != null) {
+                                                options.OnDeleteDynamicContent(args);
+                                            }
 
-                                            options.OnDeleteDynamicContent(args);
-                                        }
+                                            //Activate Default here.
+                                            element.siblings(".defaultLi").trigger("click");
 
-                                        //Activate Default here.
-                                        element.siblings(".defaultLi").trigger("click");
-
-                                        element.remove();
-                                        if(element.attr("id")){
-                                            myElement.find("li[id='"+element.attr("id")+"']").remove()
-                                        }else{
                                             element.remove();
+                                            if(element.attr("id")){
+                                                myElement.find("li[id='"+element.attr("id")+"']").remove()
+                                            }else{
+                                                element.remove();
+                                            }
                                         }
-
+                                        else{
+                                            options._app.showAlert("You cann't delete this option. Dynamic content block should have at least one option.",$("body"),{type:'caution'});
+                                        }
 
                                     });
                                 }
@@ -5328,8 +5333,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                 var _preDefinedHTML = this.options.html;
 
-                var _formWizURL = "http://<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
-                var _formDeleteURL = "<%=PMSResources.getInstance().getPreviewDomain()%>/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey=<%=userInfo.getUserKey()%>";
+                var _formWizURL = this.app.get("preview_domain")+"/pms/landingpages/rformBuilderNew.jsp?"+BMSTOKEN+"&ukey="+this.app.get("user_Key");
+                var _formDeleteURL = this.app.get("preview_domain")+"/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey="+this.app.get("user_Key");
                 var _app= this.app;
                 var reattachEvents =  this.options.reattachEvents;
 
@@ -5340,7 +5345,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                     SearchImagesProperties: _searchImagesAjaxParameters,
                     AddImageProperties: _AddimageAjaxParameters,
                     preDefinedHTML: _preDefinedHTML,
-                    landingPage: false,
+                    landingPage: this.options.landingPage?true:false,
                     formWizURL: _formWizURL,
                     fromDialog:this.fromDialog,
                     reAttachEvents:reattachEvents,

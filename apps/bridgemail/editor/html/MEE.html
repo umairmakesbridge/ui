@@ -214,7 +214,7 @@
                 </div>
             </div>
             <!--  accordian-content  -->
-           <% if(allowedUser.indexOf(app.get("user").userId)>-1 ){ %>     
+           <% if(allowedUser.indexOf(options._app.get("user").userId)>-1 && options.landingPage==false){ %>     
            <h3 class="DCH3" style="dispaly:none">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Dynamic Content Blocks
@@ -255,14 +255,14 @@
                 </div>
             </div>
             <%}%>
-            <!--  accordian-content  
-
-           <h3 style="display:none;" class="formH3" >
+            
+           <% if(options.landingPage==true){ %>      
+           <h3 class="formH3" >
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Forms Library
             </h3>
             <div class="scrollarea">
-                <div class="accordian-content active formContent" style="display:none;">
+                <div class="accordian-content active formContent">
                     <div class="accordianbar">
                         <div>
                             <h5></h5>
@@ -294,7 +294,8 @@
 
                     </div>
                 </div>
-            </div>-->
+            </div>
+            <%}%>
             <!--  accordian-content  -->
             <h3>
                 Image Library
@@ -797,73 +798,6 @@
 <div class="rulesdiv dcRulesDialog" style="display:none;">
     <div style="position: relative;min-height: 200px;width:100%;padding:0px">        
     </div>
-</div>
-<div style="display:none;" class="dcRuleRowTemplate">
-
-    <div class="filter-row rule">
-
-        <div class="filter-cont">
-
-            <select data-placeholder="Choose a Field" class="forms-box chosen-select firstChosen chosefields dcRuleFieldName" style="width:224px;">
-
-                <optgroup label="Basic Fields">
-                    <option value="Email">Email</option>
-                    <option value="Address Line 1">Address Line 1</option>
-                    <option value="Address Line 2">Address Line 2</option>
-                    <option>City</option>
-                    <option>State</option>
-                    <option>Zip</option>
-                    <option>Country</option>
-                    <option>Telephone</option>
-                    <option>Subscribe Date</option>
-                    <option>Birth Date</option>
-                    <option>Occupation</option>
-                    <option>Industry</option>
-                    <option>Company</option>
-                    <option>Source</option>
-                    <option>Sales Rep</option>
-                    <option>Sales Status</option>
-
-                </optgroup>
-                <optgroup label="Custom Fields">
-                    <option>19mayCustfield</option>
-                    <option>7Apr2010</option>
-                    <option>ADJ_SGN</option>
-                    <option>AccountId</option>
-                    <option>AnnualRevenue</option>
-                    <option>AssistantName</option>
-                    <option>AssistantPhone</option>
-                </optgroup>
-            </select>
-
-
-            <select class="nosearch conddd secondChosen dcRuleCondition" style="width:180px">
-                <option value="Equal to">Equal to</option>
-                <option value="Not Equal to">Not Equal to</option>
-                <option>Contains</option>
-                <option>Does not contain</option>
-
-                <option>Birthday</option>
-                <option>Day(s) prior birthday</option>
-
-            </select>
-
-            <select class=" nosearch thirdChosen dcRuleFormat" style="width:150px;">
-                <option value="MM-DD-YY">MM-DD-YY</option>
-                <option value="MM-DD-YYYY">MM-DD-YYYY</option>
-                <option>DD-MM-YY</option>
-                <option>DD-MM-YYYY</option>
-                <option>YYYY-MM-DD</option>
-
-                <option>DD/MM/YYYY</option>
-                <option>YYYY/MM/DD</option>
-            </select>
-
-            <input type="text" value="" style="max-width:120px;" class="dcRuleMatchValue">
-            <div class="right-btns"><a title="" class="btn-red showtooltip" ><i class="icon delete "></i></a></div>
-        </div>
-    </div> <!-- filter-row  --> 
-
 </div>
 
 <div class="dcLI" style="display:none;">
