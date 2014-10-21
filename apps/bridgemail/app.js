@@ -194,6 +194,13 @@ define([
                           return false;
                     }
                     this.set("user",_json);   
+                    var allowedUser = ['admin','jayadams','demo'];  
+                    if(allowedUser.indexOf(this.get("user").userId)>-1){
+                        this.mainContainer.$(".local-adds").show();
+                    }
+                    else{
+                        this.mainContainer.$(".local-adds").hide();
+                    }
                     /*if(this.mainContainer){
                         this.NTusers();
                     }else{

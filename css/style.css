@@ -11111,4 +11111,94 @@ background: url("../img/pattern.png") repeat scroll center center rgba(0, 0, 0, 
  .refresh_btn:hover {background: none repeat scroll 0 0 #97D61D;}
 .refresh_btn:hover i  { color:#fff; }
 
+/****** NEW local tile styles***********/
+a.loacl-toggle {
+    background: none repeat scroll 0 0 #b98259;
+    border: 0 solid #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    left: 10px;
+    padding: 4px;
+    position: absolute;
+    top: 105px;
+    z-index: 99;
+}
+
+a.loacl-toggle i {
+    background: url("../img/local-icon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+    opacity: 1;
+    transition: opacity 0.3s ease-out 0s;
+    width: 30px;
+}
+
+#tiles .sepia {
+    background-color: #b98259;
+}
+
+#tiles .local {
+    background: url("../img/market.jpg") no-repeat scroll center top #b98259;
+    height: 50px;
+    width: 830px;
+	overflow:hidden;
+}
+#tiles .box.local.expanded {padding: 0;
+height: 200px;
+background-position:200px top;
+    width: 830px;}
+
+#tiles .box.local > div.title {
+    height: 20px;
+    padding: 15px;
+    width: 800px;
+}
+
+#tiles .box.local.expanded > div.title {
+    height: 170px;
+    width: 170px;
+}
+
+#tiles .box.local > div.title img {
+    bottom: 5px;
+    right: 5px;
+    width: 40px;
+}
+#tiles .box.local.expanded > div.title img {
+    bottom: 15px;
+    right: 20px;
+    width: 60px;
+}
+#tiles .box.local > div.title:hover .helpvid { display:none; }
+#tiles .box.local.expanded > div.title .helpvid { display:block; }
+
+
+#tiles .box.local.expanded .tile-shortcuts {   width: 600px;}
+
+#tiles .box.local .tile-shortcuts ul {}
+#tiles .box.local .tile-shortcuts ul li { height:40px;  padding: 20px 0;cursor: pointer;}
+#tiles .box.local .tile-shortcuts ul li:hover { background:#af794f;}
+
+
+#tiles .box.local .tile-shortcuts ul li > a i {
+    background-size: cover;
+    float: left;
+    height: 40px;
+    margin: 0 0 0 12px !important;
+    width: 40px;
+}
+
+
+#tiles .local .tile-shortcuts ul li > a span {
+    float: left;
+    font-family: "proxima_nova_semibold";
+    font-size: 13px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0 10px 0 15px;
+    text-align: left;
+}
+.promotion {background: url("../img/promotion.png") no-repeat scroll center center; }
+.intouch {background: url("../img/intouch.png") no-repeat scroll center center; }
+.socialposts {background: url("../img/socialposts.png") no-repeat scroll center center; }
+.addcontacts {background: url("../img/addcontacts.png") no-repeat scroll center center; }
 

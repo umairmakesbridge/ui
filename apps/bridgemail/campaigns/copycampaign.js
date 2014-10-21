@@ -75,9 +75,9 @@ function (template) {
                                                 }
                                                 else{
                                                         curview.options.copycampdialog.hide();
-                                                        campview.getcampaigns(); 
-                                                        app.mainContainer.openCampaign(res[1]);
-                                                }								
+                                                        campview.getcampaigns();                                                         
+                                                }				
+                                                app.mainContainer.openCampaign(res[1],res[2]);
                                         }
                                 });
                         }

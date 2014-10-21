@@ -95,7 +95,7 @@ function (template,contactsView,icheck,chosen) {
                 if(this.options.prevFlag==='C'){
                   this. setiFrameSrc();
                 }else{
-               this.$('#email-template-iframe').attr('src',this.options.frameSrc).css('height',this.options.frameHeight-56);
+                    this.$('#email-template-iframe').attr('src',this.options.frameSrc).css('height',this.options.frameHeight);
                 }
              },
             setiFrameSrc:function(){ // HTML & Text Tab Click
@@ -112,13 +112,7 @@ function (template,contactsView,icheck,chosen) {
                     }
                    else{
                        this.html='N';
-                   }
-                   /* Check if Text is N or Y
-                   if(this.options.isText=='N'){
-                      this.html='Y'; 
-                   }else{
-                      this.html='N';
-                   }*/
+                   }                  
                     if(this.options.isText &&  this.options.isText=='Y'){
                         this.html = 'N';
                     }
@@ -127,10 +121,15 @@ function (template,contactsView,icheck,chosen) {
                    if(this.subNum !== null){
                       frame+="&snum="+this.subNum; 
                    }
-                  if(this.options.isText === "Y")
-                      newFrameheight = this.options.frameHeight - 85;
-                  else
-                      newFrameheight = this.options.frameHeight - 170;
+                  if(this.options.prevFlag==='C'){ 
+                    if(this.options.isText === "Y")
+                        newFrameheight = this.options.frameHeight - 85;
+                    else
+                        newFrameheight = this.options.frameHeight - 170;
+                  }
+                  else{
+                      newFrameheight = this.options.frameHeight - 50;
+                  }
                   this.$('#email-template-iframe').attr('src',frame).css('height',newFrameheight);
             },
             loadPrevTemplates: function(){

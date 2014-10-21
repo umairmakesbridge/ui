@@ -342,6 +342,7 @@ define(['text!editor/DC/html/filters.html'],
             getPostData:function(){
                 var filters_post = {type:'updateContentRules',dynamicNumber:this.args.DynamicContent.DynamicVariationID,contentNumber:this.args.DynamicContent.DynamicContentID};
                 var total_rows = this.$(".dc_rule");
+                if(this.validate(total_rows)){return false}
                 var rules = {};
                 filters_post["ruleCount"] = total_rows.length;
                 filters_post["applyRuleCount"]= this.$(".all-any .btn.active").attr("rule")           
@@ -384,9 +385,11 @@ define(['text!editor/DC/html/filters.html'],
                 return filters_post;
             },
             saveFilters:function(){
-               var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token');                                      
-               this.$(".ruleDialogSave").addClass("saving");
-                $.post(URL,this.getPostData())
+               var URL = "/pms/io/publish/saveDynamicVariation/?BMS_REQ_TK="+this.app.get('bms_token');                                                     
+               var post_data = this.getPostData();               
+               if(post_data){
+                this.$(".ruleDialogSave").addClass("saving");
+                $.post(URL,post_data)
                 .done(_.bind(function(data){
                     this.$(".ruleDialogSave").removeClass("saving");
                     var result = jQuery.parseJSON(data);
@@ -398,6 +401,38 @@ define(['text!editor/DC/html/filters.html'],
                         this.app.showAlert(result[1],$("body"));
                     }
                 },this));
+              }  
+            },
+            validate:function(total_rows){
+                var isError = false
+                for(var i=0;i<total_rows.length;i++){
+                    var filter = $(total_rows[i])
+                    if(filter.hasClass("filter")){
+                      if(filter.find(".fields").val()==""){
+                          this.app.showError({
+                              control:filter.find(".field-container"),
+                              message:this.app.messages[0].TRG_basic_no_field
+                          })
+                          isError = true
+                      }
+                      else{
+                          this.app.hideError({control:filter.find(".field-container")})
+                      }
+
+                      if(filter.find(".value-container").css("display")=="block" && filter.find(".matchValue").val()==""){
+                           this.app.showError({
+                              control:filter.find(".value-container"),
+                              message:'Match value missing.'
+                          })
+                          isError = true
+                      }
+                      else{
+                          this.app.hideError({control:filter.find(".value-container")})
+                      }
+                      //End of basic filter
+                    }                   
+                }
+                return isError
             }
 
         });

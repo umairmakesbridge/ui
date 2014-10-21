@@ -407,13 +407,43 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         gutter: 0
                       }
                     });
+                    var self = this;                    
                     // change size of clicked box
                     $tiles.delegate( '.box', 'click', function(){                               
                       $(this).toggleClass('expanded');
                       $tiles.isotope('reLayout');
+                      
+                      if(self.$("#tiles .box").hasClass("expanded")){
+                          if($(this).hasClass("local")){
+                              self.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
+                          }
+                          if(self.$("#tiles .box.expanded").length==1 && self.$("#tiles .box.expanded").hasClass("local")){
+                            self.$(".local").css("top","-180px");
+                          }
+                          else{
+                              self.$(".local").css("top","0px");
+                          }
+                      }
+                      else{
+                            self.$(".local").css("top","-180px");
+                      }
                     });
                     
                     this.$(".popup").click(_.bind(this.showPopup, this));
+                    
+                    this.$('.loacl-toggle ').click(_.bind(function(){
+                        if(this.$("#tiles .local").hasClass( "expanded")){
+                            this.$("#tiles .local .tile-shortcuts").fadeOut();
+                            setTimeout(_.bind(function() {
+                                this.$('#tiles .local ').removeClass( "expanded");
+                            },this), 500);
+                        }
+                        else{
+                            this.$("#tiles .local").addClass( "expanded");
+                            this.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
+                        }
+                    },this));
+                    this.$(".local").css("top","-180px");
                     
                    
                 },
@@ -428,7 +458,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var link = _arr[_id].url;
                     window.open(link, 'HELPSUPPORT_' + _id, 'width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');                   
                 },
-                createCampaign: function(e) {
+                createCampaign: function(e) {                    
                     var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title: dialog_title,
@@ -444,6 +474,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         dialog.$("input").focus();
                         dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
                     });
+                    e.stopPropagation();
+                    e.preventDefault();
                 },
                 createTemplate: function() {
                     this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});

@@ -244,13 +244,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             
 //*****************************************Landing page options***********************************************************************************///
 
-                            if (options.landingPage) {
-                                myElement.find(".DCH3").hide();
-                                myElement.find(".DCCC").hide();
-                                myElement.find(".formH3").show();
-                                myElement.find(".formContent").show();  
+                            if (options.landingPage) {                                
                                 myElement.find(".mainTable").css("width", "95%");
-
                             }
 //*****************************************End of landing pages***********************************************************************************///
 
@@ -3101,13 +3096,19 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         saveDC();
                                     });
 
-                                    args.predefinedControl.Html.find(".addDynamicRule").click(function () {    
-                                        myElement.find(".dcRulesDialog").hide();
-                                        myElement.find(".editNameBox").hide();
-                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
-                                        dcContentNameWindow.height(myElement.find("table[keyword='"+args.ID+"']").height());
-                                        dcContentNameWindow.toggle();
-                                        dcContentNameWindow.find(".txtContentName").focus();
+                                    args.predefinedControl.Html.find(".addDynamicRule").click(function (event) {    
+                                        event.stopPropagation();
+                                        if($("table[keyword='"+args.ID+"'] .dcContents > li").length<7){
+                                            myElement.find(".dcRulesDialog").hide();
+                                            myElement.find(".editNameBox").hide();
+                                            var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                            dcContentNameWindow.height(myElement.find("table[keyword='"+args.ID+"']").height());
+                                            dcContentNameWindow.toggle();
+                                            dcContentNameWindow.find(".txtContentName").focus();
+                                        }
+                                        else{
+                                            options._app.showAlert("You can add upto 6 options.",$("body"),{type:'caution'});
+                                        }
                                     });
 
                                 }

@@ -3583,3 +3583,10 @@ ul#template_search_menu li {
 .inputlabel div.input-wrapper:first-child{
     margin-left:0px;
 }
+.filter-row .filter-cont .errortext em{
+    line-height: 20px;
+}
+.disabled-btn {
+	opacity:0.5;
+	cursor: not-allowed;
+}

@@ -1086,6 +1086,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                         isValid = false;
                     }
+                    else if( el.find('#campaign_from_name').val().indexOf("{{") && el.find('#campaign_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1){
+                        app.showError({
+                            control:el.find('.fname-container'),
+                            message:'From name contains invalid character(s)'
+                        });
+                        isValid = false;
+                    }
                     else
                     {           
                             app.hideError({control:el.find(".fname-container")});
@@ -1095,6 +1102,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         app.showError({
                             control:el.find('.fnamedefault-container'),
                             message:camp_obj.app.messages[0].CAMP_defaultfromname_empty_error
+                        });
+                        isValid = false;
+                    }
+                    else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1){
+                        app.showError({
+                            control:el.find('.fnamedefault-container'),
+                            message:'From name contains invalid character(s)'
                         });
                         isValid = false;
                     }
@@ -2499,7 +2513,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.setSalesForceWiz();
                     }
                },
-               loginSalesForce:function(){
+               loginSalesForce:function(e){
+                   if($(e.target).hasClass("disabled-btn")){
+                       return false;
+                   }
                     var camp_obj = this;
                     var dialog = this.app.showDialog({title:'Salesforce Login Setup',
                         css:{"width":"650px","margin-left":"-325px"},
@@ -2523,16 +2540,23 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     camp_obj.app.showLoading(false,camp_obj.$el.find('#area_salesforce_import'));
                     var salesforce_setting = this.app.getAppData("salesfocre");
                     var self = this;
-                    if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y"){
+                    
+                    if(salesforce_setting && salesforce_setting.isSalesforceUser=="N"){                        
+                        this.$(".tag_msg1").html('<span class="caution"></span><span style="display: inline-block; text-align: left; margin-top: -24px; margin-left: 31px;">Please contact support@makesbridge.com to activiate your Salesforce setup.</span>');                        
+                        this.$("#btnSFLogin").addClass("disabled-btn");
+                        this.$("#salesforce_welcome").show();                        
+                        this.$("#salesforce_setup").hide();
+                    }
+                    else if(salesforce_setting && salesforce_setting.isSalesforceUser=="Y" && salesforce_setting.isLoggedIn=="Y"){
                         if(this.states.saleforce_campaigns ===null)
                           this.showSalesForceCampaigns();
-
                         this.$("#salesforce_welcome").hide();                        
                         this.$("#salesforce_setup").show();
                     }
                     else{
                         this.$("#salesforce_welcome").show();
                         this.$("#salesforce_setup").hide();  
+                        this.$("#btnSFLogin").removeClass("disabled-btn");
                         return;
                     }
                     if(this.states.step3.recipientType.toLowerCase()=="salesforce"){
