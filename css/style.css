@@ -247,38 +247,50 @@ label:hover .fieldinfo { display:block;}
 } */
 
 
+.inputcont {
+    line-height: 39px;
+    min-height: 39px;
+    position: relative;
+}
+
 .errortext {
     background: none repeat scroll 0 0 #FB8080;
+    background: url("../img/caution.png") no-repeat scroll 2px  center #FB8080;
     color: #FFFFFF;
     font-size: 12px;
     padding: 0;
     position: absolute;
     right: 0;
-    top: -20px;
-    max-width: 100%;
-	-webkit-border-radius: 2px 2px 0 0;
-	-moz-border-radius: 2px 2px 0 0;
-	border-radius: 2px 2px 0 0;
-	}
+    bottom: 37px; 
+     min-height: 22px;
+    padding:0 0 0 22px;
+    max-width: 90%; 
+    -webkit-border-radius: 2px 2px 0 0;
+    -moz-border-radius: 2px 2px 0 0;
+    border-radius: 2px 2px 0 0;
+    }
 
 .errortext i.erroricon {
-    background: url("../img/caution.png") no-repeat scroll center center #F57070;
+    background: url("../img/caution.png") no-repeat scroll 2px  center #F57070;
     border-radius: 2px;
     float: left;
     height: 18px;
+    display:none;
     padding: 2px;
     width: 18px;
-}
+    }
+
 
 .errortext em {
     display: none;
-    float: left;
     font-style: normal;
     font-weight: bold;
-    line-height: 20px;
-    padding: 0 10px;
+    line-height: 14px;
+    padding: 10px;
+    white-space: normal;
 }
-.errortext:hover em { display:block !important;}
+.errortext:hover {max-width: 90%;   }
+.errortext:hover em  { display:block !important; }
 
 
 

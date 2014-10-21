@@ -2279,5 +2279,5 @@ ul.socialbtns li .radiopanelinput.checked {
  }
  
  .resizableImage .ui-icon-gripsmall-diagonal-se{
-     background:url("../images/resizable.png") no-repeat scroll -55px 3px rgba(0, 0, 0, 0);
+     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(0, 0, 0, 0);
  }

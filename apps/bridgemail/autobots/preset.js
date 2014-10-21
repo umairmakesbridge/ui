@@ -1233,7 +1233,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       filter.addClass("form");
       var self = this
       if(this.botType == "AR"){
-        var filter_html = '<div><span class="filt" style="width:25%">'+text+'</span>'
+        var filter_html = '<div><span class="filt" style="min-width: 400px;">'+text+'</span>'
       }else{ 
         var filter_html = '<div><input type="checkbox" id="chkformsubmission" class="checkpanel" value="" style="position: absolute; opacity: 0;"><span class="filt">Form Submitted</span>'
       }    

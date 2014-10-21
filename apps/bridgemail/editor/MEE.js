@@ -5520,7 +5520,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         var dynamicNumberContent = content.DynamicContentID;
 
                         var contentURL = "/pms/io/publish/saveDynamicVariation/?"+BMSTOKEN;                        
-                        $.post(contentURL,{"contents":content.InternalContents,type:"updateContent",dynamicNumber:dynamicNumber,campaignSubject:content.Label,contentLabel:content.Label,contentNumber:dynamicNumberContent} )
+                        $.post(contentURL,{"contents":content.InternalContents,type:"updateContent",dynamicNumber:dynamicNumber,campaignSubject:content.Label,contentLabel:content.Label,contentNumber:dynamicNumberContent,isDefault: content.IsDefault } )
                         .done(function(data) {                                 
                             
                         });
