@@ -3590,3 +3590,6 @@ ul#template_search_menu li {
 	opacity:0.5;
 	cursor: not-allowed;
 }
+#campaign_from_email_chosen .chosen-search input[type="text"]{
+    width:95%;
+}

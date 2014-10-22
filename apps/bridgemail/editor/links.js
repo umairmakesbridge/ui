@@ -224,6 +224,9 @@ function (template) {
                     
                 if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {                    
                     this.tiny_editor_selection.getNode().setAttribute("href", postBackupLink);
+                    if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
+                        this.tiny_editor_selection.getNode().innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
+                    }
                 }
                 else {                    
                     this.tiny_editor_selection.setContent(myTextLink);

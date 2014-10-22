@@ -222,19 +222,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.$("#campaign_unSubscribeType").chosen().change(_.bind(function(){
                         this.states.step1.change = true;
                         $(this).trigger("chosen:updated");
-                    },this));                    
-                    this.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: "true"});
-                    var camp_obj = this;
-                    this.$("#campaign_from_email").chosen().change(function(){
-                        camp_obj.fromNameSelectBoxChange(this)
-                        //camp_obj.$("#campaign_from_email_input").val($(this).val());
-                        camp_obj.$("#campaign_from_email").val($(this).val()).trigger('chosen:updated');
-                    });
-                    /*this.$("#campaign_from_email_input").keydown(_.bind(function(event){
-                        if(event.keyCode === 40){
-                            this.$("#campaign_from_email").trigger('chosen:open');
-                        }
-                    },this));*/
+                    },this));                                        
+                    var camp_obj = this;                    
                     this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});                    
                     this.$("#sf_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                     
                     this.$("#ns_campaigns_combo").chosen({no_results_text:'Oops, nothing found!', width: "280px",disable_search: "true"});                                     
@@ -1468,6 +1457,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var fromEmailsArray = fromEmails.split(',');
                             var fromOptions = '';
                             var selected_fromEmail = '';
+                            fromEmailsArray.sort();
                             for(var i=0;i<fromEmailsArray.length;i++)
                             {
                                 if(fromEmailsArray[i] == defaults_json.fromEmail){
@@ -1477,9 +1467,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 else
                                      fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
                             }
+                            
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
                             camp_obj.$el.find('#fromemail_default').append(fromOptions);
-                            camp_obj.$("#campaign_from_email").trigger("chosen:updated");
+                            camp_obj.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: (fromEmailsArray.length<=5)?true:false});
+                            camp_obj.$("#campaign_from_email").css("visibility","visible");
                             camp_obj.$('#fromemail_default').trigger("chosen:updated");
                             camp_obj.$(".flyinput").val(selected_fromEmail);
                             setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);                            
