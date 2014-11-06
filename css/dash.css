@@ -1564,7 +1564,7 @@ top:50%; margin:-250px 0 0 -310px; z-index:999999;}
     bottom: auto;
     content: "";
     display: inline-block;
-    left: 304px;
+    left: 230px;
     position: absolute;
     top: -13px;
 }
@@ -2164,6 +2164,3 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
     -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
 }
-
-// Slider Menu left side
-

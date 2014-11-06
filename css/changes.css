@@ -2663,7 +2663,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li i.icon.createtemplates {  background: url("../img/createtemplate1.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li i.icon.mee {   background: url("../img/meeicon1.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li i.icon.subscribers {   background: url("../img/subscribers-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-.slidenav-dd > ul > li ul li i.icon.nurturetracks {    background: url("../img/nurturetrack-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.slidenav-dd > ul > li ul li i.icon.nurturetracks {    background: url("../img/nurturetrack-gw.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul > li ul li i.icon.autobots {  background: url("../img/autobots-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 .slidenav-dd > ul >  li ul li:hover i.icon.uploadcontact {background: url("../img/uploadcontact.png") no-repeat scroll center center; }
@@ -2687,7 +2687,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 .slidenav-dd > ul >  li ul li:hover i.icon.createtemplates {  background: url("../img/createtemplate.png") repeat scroll 0 0 rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover i.icon.mee {   background: url("../img/meeicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover i.icon.subscribers {   background: url("../img/subscribers.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
-.slidenav-dd > ul >  li ul li:hover i.icon.nurturetracks {   background: url("../img/nurture-track.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.slidenav-dd > ul >  li ul li:hover i.icon.nurturetracks {   background: url("../img/nurture-track-gw.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .slidenav-dd > ul >  li ul li:hover  i.icon.autobots {   background: url("../img/autobots.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 
 
@@ -2760,14 +2760,15 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 }
 .slidenav-dd >  ul.quicklinks > li ul li:hover a  span { color: #fff; opacity:1; 
 	-webkit-transition: opacity .5s ease-out;
-    -moz-transition: opacity .5s ease-out;
+    -moz-transition: opacity .5s ease-out;c
     -o-transition: opacity .5s ease-out;
     transition: opacity .5s ease-out;
 	}
 .slidenav-dd > ul.quicklinks > li ul li a strong {
     color: #fff;
     float: right;
-    font-size: 22px;
+    font-size: 13px;
+    font-weight: normal!important;
     margin: 14px 8px 0 0;
 }
 
@@ -2790,7 +2791,8 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 }
 
 .slidenav-dd >  ul.quicklinks > li ul li.view-contacts { background:#b9737d;}
-.slidenav-dd >  ul.quicklinks > li ul li.view-contacts:hover { background:#e29aa4;}
+.slidenav-dd >  ul.quicklinks > li ul li.view-contacts:hover { background:rgba(185, 115, 125, 0.6)}
+.slidenav-dd >  ul.quicklinks > li ul li.view-contacts:hover strong{opacity:0;}
 .slidenav-dd > ul.quicklinks > li ul li.view-contacts  a  {     height: 70px;}
 .slidenav-dd > ul.quicklinks > li ul li.view-contacts  a span { text-align:left; display:block;opacity:1; }
 .slidenav-dd > ul > li ul li.view-contacts i.icon.subscribers {
@@ -2798,17 +2800,18 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
     float: left;   margin: 5px !important;}
 
 .slidenav-dd >  ul.quicklinks > li ul li.campaign-listing { background:#2e9cd3; height: 100px;margin-bottom: 4px;}
-.slidenav-dd >  ul.quicklinks > li ul li.campaign-listing:hover { background:#47a9d9; margin-bottom: 4px;}
+.slidenav-dd >  ul.quicklinks > li ul li.campaign-listing:hover { background:rgba(46, 156, 211, 0.6); margin-bottom: 4px;}
+
 .slidenav-dd >  ul.quicklinks > li ul li.campaign-listing span { margin-top:-5px;}
 .slidenav-dd > ul.quicklinks > li ul li.campaign-listing em {
     color: #fff;
     display: block;
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     position: absolute;
     right: 10px;
-    top: 0;
+    bottom: 0;
 	opacity:1;
 	-webkit-transition: opacity .3s ease-out;
     -moz-transition: opacity .3s ease-out;
@@ -2817,24 +2820,24 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 }
 .slidenav-dd > ul.quicklinks > li ul li.campaign-listing:hover em {opacity:0;}
 .slidenav-dd > ul > li ul li.campaign-listing i.icon.campaign {
-    background: url("../img/campaign-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    background: url("../img/camplisting60.png") no-repeat scroll center center rgba(0, 0, 0, 0);
     height: 50px;
     margin: 20px auto 0 !important;
     width: 50px;
 }
 
 .slidenav-dd >  ul.quicklinks > li ul li.template-gallery { background:#f65f5f; height: 100px;}
-.slidenav-dd >  ul.quicklinks > li ul li.template-gallery:hover { background:#ec7373; }
+.slidenav-dd >  ul.quicklinks > li ul li.template-gallery:hover {background: rgba(246, 95, 95, 0.6);}
 .slidenav-dd >  ul.quicklinks > li ul li.template-gallery span { margin-top:-5px;}
 .slidenav-dd >  ul.quicklinks > li ul li.template-gallery em { 
  	color: #fff;
     display: block;
-    font-size: 14px;
+    font-size: 13px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     position: absolute;
     right: 10px;
-    top: 0;
+    bottom: 0;
 	-webkit-transition: opacity .3s ease-out;
     -moz-transition: opacity .3s ease-out;
     -o-transition: opacity .3s ease-out;
@@ -2849,16 +2852,16 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 }
 
 .slidenav-dd >  ul.quicklinks > li ul li.nurture-tracks  { background:#3bafc0;height: 100px;}
-.slidenav-dd >  ul.quicklinks > li ul li.nurture-tracks:hover  { background:#6bb8c4;}
+.slidenav-dd >  ul.quicklinks > li ul li.nurture-tracks:hover  {background:rgba(59, 175, 192, 0.6)}
 .slidenav-dd > ul > li ul li.nurture-tracks i.icon.nurturetracks {
-    background: url("../img/nurture-track-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    background: url("../img/nurture-track-gw.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 	height: 50px;
     margin: 10px auto 4px !important;
     width: 50px;
 }
 
 .slidenav-dd >  ul.quicklinks > li ul li.autobots-gallery { background:#f9c452; height: 100px;}
-.slidenav-dd >  ul.quicklinks > li ul li.autobots-gallery:hover { background:#d7b365; }
+.slidenav-dd >  ul.quicklinks > li ul li.autobots-gallery:hover { background:rgba(249, 196, 82, 0.6) }
 .slidenav-dd > ul > li ul li.autobots-gallery  i.icon.autobots {
     background: url("../img/autobots-gg.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 	height: 50px;
@@ -2869,15 +2872,16 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
    
 
 .slidenav-dd >  ul.quicklinks > li ul li.new-graphics { background:#71b100;}
-.slidenav-dd >  ul.quicklinks > li ul li.new-graphics:hover { background:#95b064;}
+.slidenav-dd >  ul.quicklinks > li ul li.new-graphics:hover { background:rgba(113, 177, 0, 0.6);}
+.slidenav-dd >  ul.quicklinks > li ul li.new-graphics:hover strong{ opacity:0}
 .slidenav-dd > ul.quicklinks > li ul li.new-graphics a  {height: 70px; }
 .slidenav-dd > ul.quicklinks > li ul li.new-graphics a span { text-align:left;  display:block; opacity:1;}
 .slidenav-dd > ul.quicklinks > li ul li.new-graphics a span em {
     float: right;
     font-style: normal;
-    font-weight: bold;
+    font-weight: normal;
     text-align: right;
-	  font-size: 11px;
+	  font-size: 13px;
 }
 .slidenav-dd > ul > li ul li.new-graphics  i.icon.graphic {
     background: url("../img/graphics.png") no-repeat scroll center center rgba(0, 0, 0, 0);

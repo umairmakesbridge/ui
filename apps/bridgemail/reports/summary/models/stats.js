@@ -9,9 +9,10 @@ define(['backbone', 'app'], function (Backbone, app) {
 	'use strict';
 	return Backbone.Model.extend({
 		idAttribute: "_id",
-                initialize:function(){
-                    
-                },
+                initialize:function(options){
+                 
+                     this.type = options.type;
+              },
                 urlRoot: '/pms/io/campaign/getCampaignData/',
 		url: function () {
                     return Backbone.Model.prototype.url.call(this) + '?BMS_REQ_TK=' + app.get('bms_token')
@@ -25,13 +26,17 @@ define(['backbone', 'app'], function (Backbone, app) {
                 }else{
                 
                       if(!app.checkError(response) && response.count!=="0"){
-                            _.each(response.campaigns[0],function(val,key){
+                          if(this.type == "bot"){
+                              result = response; 
+                          }else{
+                          _.each(response.campaigns[0],function(val,key){
 
                                 val[0]._id =  parseInt(key.substring(4));
                                 result = val[0];
                             })                    
                         }
-                }
+                     }
+                 }
                 return result;
                 
             }

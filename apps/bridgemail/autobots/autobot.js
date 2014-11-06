@@ -19,11 +19,13 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     "click .pause": "pauseAutobot",
                     "click .preview": "previewCampaign",
                     "click .edit-autobot": "editAutobot",
-                    "click .copy": "cloneAutobot"
+                    "click .copy": "cloneAutobot",
+                    "click .report":"reportShow"
                 },
                 initialize: function() {
                     this.template = _.template(template);
                     this.parent = this.options.page;
+                    this.icon = "";
                      if (this.model.get('isPreset') == "Y") {
                         this.label = this.model.get('presetLabel');
                     }else{
@@ -45,26 +47,57 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     else if (this.model.get('status') == "P")
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
+                getReport:function(){
+                    // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                       // return '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                },
                 getAutobotImage: function() {
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
                             label = "<img src='"+this.options.app.get("path")+"img/scorebot-icon.png' style='max-width:none!important;'>";
+                             this.icon = 'scorebot';
                             break;
                         case "A":
+                            this.icon = 'alertbot';
                             label = "<img src='"+this.options.app.get("path")+"img/alertbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "E":
+                            this.icon = 'mailbot';
                             label = "<img src='"+this.options.app.get("path")+"img/mailbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "TG":
+                            this.icon = 'tagbot';
                             label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png' style='max-width:none!important;'>";
+                            break;
+                    }
+                     switch (this.model.get('presetType')) {
+                        case "PRE.1":
+                            this.icon = 'bdaybot';
+                            break;
+                        case "PRE.2":
+                            this.icon = 'meetingalertbot';
+                            break;
+                        case "PRE.3":
+                            this.icon = 'autorespbot';
+                            break;
+                        case "PRE.4":
+                            this.icon = 'salesalertbot';
+                            break;
+                        case "PRE.5":
+                            this.icon = 'score10bot';
+                            break;
+                        case "PRE.6":
+                            this.icon = 'score50bot';
+                            break;
+                         case "PRE.7":
+                             this.icon = 'score100bot';
                             break;
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
                         label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png' style='max-width:none!important;'>"
                     return label;
-                },
+                } ,
                 getPlayedOn: function() {
                     var playedOn = this.model.get('lastPlayedTime');
                     if (playedOn && this.model.get('status') != "D") {
@@ -74,6 +107,10 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         return "<em>Last edited on</em>" + this.dateSetting(this.model.get('updationTime')) + "</span>";
                     }
                 },
+                reportShow:function(){
+                       var camp_id=this.model.get('actionData')[0]['campNum.encode'];
+                                        this.options.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                  },
                 dateSetting: function(sentDate) {
                     var _date = moment(sentDate, 'MM-DD-YY');
                     return _date.format("DD MMM YYYY");

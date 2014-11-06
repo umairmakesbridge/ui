@@ -21,7 +21,7 @@
 </div> <!-- sum_top -->
 <ul class="chartstatdetail">
     <% var active="active" ;%>
-    <%if(summary.get('campaignType') == "T"){ var style="width:16.2%"; active=""; %>
+    <%if(summary.get('campaignType') == "T" || this.autobotId){ var style="width:16.2%"; active=""; %>
       
      <li data-count="<%=this.stats.get('sentCount')%>" class="active" style="<%=style%>">
         <a href="#sent-listing" data-toggle="tab" class='sent-views'>

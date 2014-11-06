@@ -49,13 +49,15 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                             var tags_html = '';
                             if (tags_array[0] != 'err')
                             {
-                                app.setAppData('tags', tags_array);
-                                $.each(tags_array.tagList[0], function(key, val) {
-                                    if (val[0].subCount == 0)
-                                        tags_html += '<li class="action inactive" id="row_' + key + '" checksum="' + val[0].tag + '"><a class="tag"><span>' + val[0].tag + '</span><strong class="badge">' + val[0].subCount + '</strong></a></li>';
-                                    else
-                                        tags_html += '<li class="action" id="row_' + key + '" checksum="' + val[0].tag + '"><a class="tag"><span>' + val[0].tag + '</span><strong class="badge">' + val[0].subCount + '</strong></a> <a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a></li>';
-                                });
+                                if(typeof tags_array.tagList !="undefined"){
+                                    app.setAppData('tags', tags_array);
+                                    $.each(tags_array.tagList[0], function(key, val) {
+                                        if (val[0].subCount == 0)
+                                            tags_html += '<li class="action inactive" id="row_' + key + '" checksum="' + val[0].tag + '"><a class="tag"><span>' + val[0].tag + '</span><strong class="badge">' + val[0].subCount + '</strong></a></li>';
+                                        else
+                                            tags_html += '<li class="action" id="row_' + key + '" checksum="' + val[0].tag + '"><a class="tag"><span>' + val[0].tag + '</span><strong class="badge">' + val[0].subCount + '</strong></a> <a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a></li>';
+                                    });
+                                }
                                 curview.$el.find('.leftcol .tagslist ul').children().remove();
                                 curview.$el.find('.leftcol .tagslist ul').html(tags_html);
 

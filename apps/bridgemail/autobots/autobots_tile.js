@@ -21,10 +21,12 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     "click .pausebtn": "pauseAutobot",
                     "click .previewbtn": "previewCampaign",
                     "click .edit-autobot": "editAutobot",
-                    "click .copybtn": "cloneAutobot"
+                    "click .copybtn": "cloneAutobot",
+                    "click .report":"reportShow"
                 },
                 initialize: function() {
                     this.template = _.template(template);
+                    this.icon = "";
                     this.parent = this.options.page;
                     if (this.model.get('isPreset') == "Y") {
                         this.label = this.model.get('presetLabel');
@@ -37,7 +39,6 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                 },
                 render: function() {
                     this.$el.html(this.template(this.model.toJSON()));
-
                     this.$el.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.showTagsTemplate();
                     
@@ -63,17 +64,28 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     else if (this.model.get('status') == "P")
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
+                getReport:function(){
+                    // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                      //  return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
+                },
+                 reportShow:function(){ 
+                       var camp_id=this.model.get('actionData')[0]['campNum.encode'];
+                                        this.options.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                  },
                 getAutobotImage: function() {
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/scorebot.png'>";
+                            this.icon = 'scorebot';
                             break;
                         case "A":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/alertbot.png'>";
+                            this.icon = 'alertbot';
                             break;
                         case "E":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/mailbot.png'>";
+                            this.icon = 'mailbot';
                             break;
                         case "TG":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/tagbot.png'>";
@@ -81,24 +93,31 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     }
                      switch (this.model.get('presetType')) {
                         case "PRE.1":
+                            this.icon = 'bdaybot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>";
                             break;
                         case "PRE.2":
+                            this.icon = 'meetingalertbot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/meetingalertbot.png'>";
                             break;
                         case "PRE.3":
+                            this.icon = 'autorespbot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/autorespbot.png'>";
                             break;
                         case "PRE.4":
+                            this.icon = 'salesalertbot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/salesalertbot.png'>";
                             break;
                         case "PRE.5":
+                            this.icon = 'score10bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score10bot.png'>";
                             break;
                         case "PRE.6":
+                            this.icon = 'score50bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score50bot.png'>";
                             break;
                          case "PRE.7":
+                             this.icon = 'score100bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score100bot.png'>";
                             break;
                     }

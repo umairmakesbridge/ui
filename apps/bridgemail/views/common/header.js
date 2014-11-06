@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header.html', 'notifications/notifications'],
+define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header.html', 'notifications/notifications','moment'],
         function($, Backbone, _, app, template, Notifications) {
             'use strict';
             return Backbone.View.extend({
@@ -6,6 +6,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                 
                 events: {
                     'click .overlay-notification':'hideMessageDialog',
+                    'click .closebtn-gray':'closeAnnouncement',
                     'click .dropdown-menu li': function(obj) {
                         app.openModule(obj);
                     },
@@ -81,7 +82,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.firstTime = false;
                     this.timeOut = false;
                     this.newMessages = null;
-                  
+                    this.criticalMessageTime = '';
+                    this.isQuickMenuLoaded = false;
                     
                 },
                 render: function() {
@@ -126,12 +128,14 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     // Hide all dropdown
                     this.$('.add-new-header').on('mouseover', _.bind(function() {
                         this.$('.messages_dialogue').hide();
+                        this.$el.find('.announcement_dialogue').hide();
                         this.$el.find('.lo-confirm a.lo-no').click();
                         this.$('.sc-links ul').removeClass('open');
                         $('.icon-menu').removeClass('active');
                         $('#slidenav-newdd').hide();
                         this.$('#add-menu').css('display', 'none');
                     }, this));
+                  this.toggleAnnouncement();
                 },
                 getTitle: function(obj) {
                     var title = $(obj.target).parent("li").find("a").text();
@@ -146,8 +150,10 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         this.$el.find(".messages_dialogue").slideUp('fast');
                         return;
                     }
+                    this.$el.find('.add_dialogue').hide();
                     var that = this;
                     this.$el.find(".messages_dialogue").slideDown('fast');
+                    this.$el.find('.announcement_dialogue').hide();
                     this.$el.find(".messages_dialogue").html(new Notifications({newMessages : this.newMessages,isModel:false}).el)
                     this.$el.find(".messages_dialogue").append("<div class='viewallmsgs' style='margin:0px;padding:0px;height:40px'><div style='text-align:center'><a class='btn-blue' style='margin-top:5px;'><span class='view-all'>View All Messages </span></a></div></div>");
                     this.$el.find(".messages_dialogue").append("<div class='btm-thumb'></div>");
@@ -173,7 +179,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                    $(ev.target).hide();
                 },
                updateNotfication:function(){
-                     var URL = "/pms/io/user/notification/?BMS_REQ_TK="+app.get('bms_token')+"&type=unReadCount";
+                     var URL = "/pms/io/user/notification/?BMS_REQ_TK="+app.get('bms_token')+"&type=latest";
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var data = jQuery.parseJSON(xhr.responseText);
@@ -181,28 +187,46 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             that.timeOut = true;
                            }
                         if(app.checkError(data)){return false;}
-                        if(that.newMessages < data[1] && that.firstTime == false){
+                        if(that.firstTime == false){
+                            var dt = new Date();
+                            var time = dt;//{'h':dt.getHours() ,'m':dt.getMinutes() ,'s': dt.getSeconds()}
+                            that.criticalMessageTime = time;
+                        }
+                        if(that.newMessages < data['notify.unread.count'] && that.firstTime == false){
                             that.$el.find('.messagesbtn').addClass('swing');
+                            
                             that.$el.find('.messagesbtn sup').css({"top":"-4px",left:"22px"});
                             setTimeout(function(){
                                  that.$el.find('.messagesbtn').removeClass('swing');
-                                 that.$el.find('.messagesbtn sup').css({"top":"5px",left:"144px"});
+                                 that.$el.find('.messagesbtn sup').css({"top":"5px",left:"70px"});
                             },5000)
                            
                             
                         }else{
                             that.$el.find('.messagesbtn').removeClass('swing');
-                            that.$el.find('.messagesbtn sup').css({"top":"5px",left:"144px"});
+                            that.$el.find('.messagesbtn sup').css({"top":"5px",left:"70px"});
                         }
-                        that.newMessages = data[1];
+                        that.newMessages = data['notify.unread.count'];
                         that.$el.find('.messagesbtn sup').show();
-                        that.$el.find('.messagesbtn sup').html(data[1]);
-                        if(data[1] == "0" || data[1] == 0){
+                        that.$el.find('.messagesbtn sup').html(data['notify.unread.count']);
+                        if(data['system.message'] != ""){
+                             that.$el.find(".announcementbtn").show();
+                            that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
+                         }else{
+                             that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
+                             that.$el.find('.announcement_dialogue').hide()
+                         }
+                        if(data['notify.unread.count'] == "0" || data['notify.unread.count']== 0){
                             that.$el.find('.messagesbtn sup').hide();
                         }
                         that.firstTime = true;
-                     
+                        that.$el.find('.announcement_dialogue').find('.date').html(that.getTimeAgo(that.criticalMessageTime));
                     });
+               },
+               getTimeAgo:function(date){
+                   console.log(date);
+                    return moment(date).fromNow();
+            
                },
                setIsActiveTab:function(){
                         var hidden = "hidden";
@@ -240,9 +264,22 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                toggleAnnouncement:function(){
                    this.$el.find('.announcement_dialogue').slideToggle();
                },
+               closeAnnouncement:function(){
+                   this.$el.find('.announcement_dialogue').hide();
+               },
                quickAdd:function(){
-                   console.log('I clicked some one.;p');
+                   var that = this;
                    this.$el.find('.add_dialogue').slideToggle();
+                   this.$el.find('.announcement_dialogue').hide();
+                   if(this.isQuickMenuLoaded == true) return;
+                   this.isQuickMenuLoaded = true;
+                   
+                   this.$el.find('.add_dialogue div').css('top','47%'); 
+                   require(["views/common/quickadd"], function(quickadd) {
+                         var mPage = new quickadd({page:that});
+                        /// that.app.showLoading(false, that.$el.find('.add_dialogue'));
+                          that.$el.find('.add_dialogue').html(mPage.$el);
+                    });
                } 
               
 

@@ -20,6 +20,7 @@
       this.$element.css("position:relative");
       this.options = this.getOptions(options);            
       this.module = this.options.module;
+      this.section = this.options.section;
       //this.progElement = this.option.progress;
       this.name = [];
       this.from = this.options.from_dialog;
@@ -125,11 +126,15 @@
          var index = $('.li-mew-images').size();
          var id =  index + 1;
             data_id = id;
+        if(this.section != "topMenu"){
          if(this.from_dialog)
             $(".modal .images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
          else
             $(".images_grid .thumbnails li:eq(0)").after(this.uploadInProgressHTML(data_id));
-        
+        }else{
+            $(".imgs_added").show();
+            $(".imgs_added ul").prepend(this.uploadInProgressTopMenu(data_id));
+        }
             $('#templi_'+data_id).fadeIn();
          
         }else if(this.module == "csv" || this.module=="template"){            
@@ -216,6 +221,13 @@
                      </div>\n\
                   </li>";
         return li;
+     },
+     uploadInProgressTopMenu:function(id){
+          if($("#templi_"+id).find('.'+this.name.name).length > 0) return;
+          var li = "<li id=templi_"+id+" class='li-mew-images' style='display:none; min-width:75px; min-height:78px'>";
+              li = li + "<div id='progress' style='position:absolute; top:50%;background: none repeat scroll 0 0 #FFFFFF; z-index:1001; opacity:100;height: 6px; width: 94%;border: 1px solid #FFFFFF;margin-left:1px;border-radius:9px;'><div style='background:#97D61D;height:6px;border-radius: 9px;'></div>";
+              li = li +"</li>";
+        return li; 
      },
      UploadInstantBaloon: function(){         
          var value = '',
