@@ -223,8 +223,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         that.$el.find('.announcement_dialogue').find('.date').html(that.getTimeAgo(that.criticalMessageTime));
                     });
                },
-               getTimeAgo:function(date){
-                   console.log(date);
+               getTimeAgo:function(date){ 
                     return moment(date).fromNow();
             
                },
