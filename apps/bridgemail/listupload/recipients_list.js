@@ -76,6 +76,9 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                     _.each(data.models, function(model){
                         that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app}).el);
                      });
+                      /*-----Remove loading------*/
+                    that.app.removeSpinner(that.$el);
+                   /*------------*/
                       if(that.searchText){
                        that.showSearchFilters(that.searchText,that.objRecipients.total);
                       }else{

@@ -51,6 +51,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             addLinks:function(){
                this.$el.find('.links-container').prepend(new ViewLinks({clickCount:this.stats.get('clickCount'),app:this.options.app,campNum:this.campNum}).el);  
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
+                 /*-----Remove loading------*/
+                    this.options.app.removeSpinner(this.$el);
+                   /*------------*/
             },
             addGraphs:function(data){
                 this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId}).el);  
@@ -252,6 +255,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.clearHTML();  
                 this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
+                 
             },
             convertViews:function(ev){
                 if($(ev.target).parents('li').hasClass('active')) return;
@@ -299,6 +303,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     this.active_ws.find(".open-views").parents('li').addClass('active');
                 }
                   this.clearHTML();
+                 
                   this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                   this.active_ws.find(".contacts_listing").find(".closebtn").remove();
               

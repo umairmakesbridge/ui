@@ -119,6 +119,7 @@
                 var searchterm = $(obj.target).val();					  
                 var grid = (typeof options.gridcontainer == 'string') ? $("#"+options.gridcontainer):options.gridcontainer;
                 grid.parent().find(".notfound").remove();  
+                grid.parents('.ws-content.active').find(".notfound").remove();  
                 if(searchterm.length > 0)
                 {
                     $(this).parent().find("#clearsearch").show();

@@ -136,6 +136,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                             return false;
                         }
                         this.ws_header.find("#workspace-header").html(_json.name);
+                         /*-----Remove loading------*/
+                           this.app.removeSpinner(this.$el);
+                         /*------------*/
                         var tags = _json.tags ? _json.tags:'';
                         this.initTag(tags); 
                         var workspace_id = this.current_ws.attr("id");

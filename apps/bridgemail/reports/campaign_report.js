@@ -116,6 +116,9 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                         },this);
                     list_html += '</tbody></table>';
                     this.app.showLoading(false,this.$(".camp_listing"));
+                     /*-----Remove loading------*/
+                    this.app.removeSpinner(this.$el);
+                   /*------------*/
                     this.$(".camp_listing").html(list_html);
                     
                     //Create Grid

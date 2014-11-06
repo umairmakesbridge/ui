@@ -91,7 +91,10 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                                 this.$timelineContainer.append(this.timeStamp(this.monthYear));                                                                                               
                             }      
                             this.$timelineContainer.append(timelineView.$el);                                                       
-                        }                                                
+                        }    
+                         /*-----Remove loading------*/
+                                 this.app.removeSpinner(this.$el);
+                               /*------------*/
                         if(collection.length<parseInt(response.totalCount)){                            
                             this.$(".filter-row").last().attr("data-load","true");
                         }

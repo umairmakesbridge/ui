@@ -199,7 +199,7 @@ function (template,highlighter,tagView) {
                                 __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
                         },this));
                 },
-                updateTemplate:function(tempNum){                                   
+                updateTemplate:function(tempNum,isTotal){                                   
                    var _this = this.parent;
                    var self = this;
                    if(typeof(tempNum)==="object"){
@@ -233,7 +233,7 @@ function (template,highlighter,tagView) {
                     self.app.dialogArray[dialogArrayLength-1].copyCall=_.bind(self.copyTemplate,self); // New Dialog
                     self.app.dialogArray[dialogArrayLength-1].tags= mPage.jsonTag; // New Dialog
                     }); 
-                    this.parent.callTemplates(this.parent.offset);
+                    this.parent.callTemplates(this.parent.offset,isTotal);
                 },
               deleteTemplate:function(){        
                   this.app.showAlertDetail({heading:'Confirm Deletion',
@@ -241,7 +241,7 @@ function (template,highlighter,tagView) {
                             callback: _.bind(function(){													
                                     this.deleteCall(this.model.get('templateNumber.encode'));
                             },this)},
-                    this.$el);                       
+                    $('body'));                       
                 },
              deleteCall:function(templateNum){
                     
@@ -252,8 +252,10 @@ function (template,highlighter,tagView) {
                           this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-
-                              this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
+            
+                              this.parent.offset = 0;
+                              this.parent.callTemplates(this.parent.offset,true);
+                              //this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
 
                            }
                            else{

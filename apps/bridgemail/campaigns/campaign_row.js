@@ -132,6 +132,7 @@ function (template,highlighter) {
                var camp_id = this.model.get('campNum.encode');
                var camp_wsid = this.model.get('campNum.checksum');
                this.app.mainContainer.openCampaign(camp_id,camp_wsid);
+               
             },
             copyCampaign: function()
 			{
@@ -219,7 +220,7 @@ function (template,highlighter) {
                                                 camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
                                                 this.deleteCampaign();
                                         },this)},
-                                        camp_obj.$el.parents(".ws-content.active"));
+                                        $('body'));
                                             /*$(".overlay .btn-ok").click(function(){
                                                     $(".overlay").remove();
                                                camp_obj.deleteCampaign(target.attr("id"));

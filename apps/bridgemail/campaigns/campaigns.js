@@ -110,9 +110,19 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                 var prevStatus = this.status;
 				if(target.html() != 'Date Range')
 				{
-                                    if(target.prevObject && target.prevObject[0].localName == 'span')
+                                    if(target.prevObject && (target.prevObject[0].localName == 'span' || target.prevObject[0].localName == 'li'))
                                     {
-                                        target = $.getObj(obj,"span");
+                                        if(target.prevObject[0].localName === 'li')
+                                        {
+                                         target = $(obj.currentTarget);
+                                         target.parents('ul').find('li.font-bold').removeClass('font-bold');
+                                         target.addClass('font-bold');
+                                        }
+                                        else{
+                                            target = $.getObj(obj,"span");
+                                            target.parents('ul').find('span.font-bold').removeClass('font-bold');
+                                            target.addClass('font-bold');
+                                        }
                                         camp_obj.$el.find('.stattype').parent().removeClass('active');
                                         switch(target.attr("search"))
                                         {
@@ -306,7 +316,9 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                  _.each(data1.models, _.bind(function(model){
                                     this.$el.find('#camps_grid tbody').append(new campaignRowView({model:model,sub:this}).el);
                                 },this));
-                                
+                                /*-----Remove loading------*/
+                                 this.app.removeSpinner(this.$el);
+                               /*------------*/
                                 if (this.total_fetch < parseInt(collection.totalCount)) {
                                     this.$(".campaign-box").last().attr("data-load", "true");
                                 }
@@ -316,6 +328,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     if (this.searchTxt) {
                                         search_message += " containing '" + this.searchTxt + "'";
                                     }
+                                    this.$('#total_templates').html('<p class="notfound nf_overwrite">No Campaigns found' + search_message + '</p>');
                                     this.$el.find('#camps_grid tbody').before('<p class="notfound">No Campaigns found' + search_message + '</p>');
                                 }
 
@@ -473,6 +486,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                     var active_ws = this.$el.parents(".ws-content");
                     var header_title = active_ws.find(".camp_header .edited  h2");
                     active_ws.find("#addnew_action").attr("data-original-title", "Add new Campaign").click(_.bind(this.createCampaign, this));
+                    active_ws.find("div.create_new").click(_.bind(this.createCampaign, this));
                     var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     $.post(URL, {type: 'allStats'})
                             .done(_.bind(function(data) {
@@ -483,13 +497,13 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                 var header_title = active_ws.find(".camp_header .edited");
                                 header_title.find('ul').remove();
                                 var stats = '<ul class="c-current-status">';
-                                stats += '<li><span class="badge pclr18 showtooltip stattype topbadges" tabindex="-1" search="C" data-original-title="Click to view sent campaigns">' + allStats['sent'] + '</span>Sent</li>';
-                                stats += '<li><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" data-original-title="Click to view pending campaigns">' + allStats['pending'] + '</span>Pending</li>';
-                                stats += '<li><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" data-original-title="Click to view scheduled campaigns">' + allStats['scheduled'] + '</span>Scheduled</li>';
-                                stats += '<li><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft campaigns">' + allStats['draft'] + '</span>Draft</li>';
+                                stats += '<li search="C"><span class="badge pclr18 showtooltip stattype topbadges" tabindex="-1" search="C" data-original-title="Click to view sent campaigns">' + allStats['sent'] + '</span>Sent</li>';
+                                stats += '<li search="P"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" data-original-title="Click to view pending campaigns">' + allStats['pending'] + '</span>Pending</li>';
+                                stats += '<li search="S"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" data-original-title="Click to view scheduled campaigns">' + allStats['scheduled'] + '</span>Scheduled</li>';
+                                stats += '<li search="D"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft campaigns">' + allStats['draft'] + '</span>Draft</li>';
                                 stats += '</ul>';
                                 header_title.append(stats);
-                                $(".c-current-status li span").click(_.bind(this.findCampaigns, this));
+                                $(".c-current-status li").click(_.bind(this.findCampaigns, this));
                                 header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
 
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));

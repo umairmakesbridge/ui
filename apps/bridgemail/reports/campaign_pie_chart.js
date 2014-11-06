@@ -58,6 +58,7 @@ function (template) {
               formatter.format(data, 1);      
               this.chart = new google.visualization.PieChart(this.el);
               this.chart.draw(data, options);
+             
             }
         });
 });

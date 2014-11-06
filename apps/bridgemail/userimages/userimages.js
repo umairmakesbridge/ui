@@ -217,6 +217,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                            that.listenTo(viewImage, 'tagclick', that.searchTag);
                          });
                          that.app.showLoading(false,that.$el);
+                         /*-----Remove loading------*/
+                                 that.app.removeSpinner(that.$el);
+                               /*------------*/
                          that.total_fetch = that.total_fetch + data.length;
                          that.dragFileSetting();
                          if(that.fromDialog){
@@ -423,8 +426,8 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               
                 
                var li = "<li class='span3 upload'>"
-                            +"<div class='thumbnail browse graphics'>"
-                               +"<div class='drag'>"
+                            +"<div class='thumbnail browse graphics image-browse'>"
+                               +"<div class='drag image-drag'>"
                                    +"<div class='droppanel'><h4><img src='"+this.options.app.get("path")+"img/droparrow.png'><br class='clearfix'>Drag images here to upload</h4></div>"
                                    +"<div class='SI-FILES-STYLIZED' style='display:inline-block;position:relative;'>"
                                    +"<label style='width:154px;' class='cabinet'>"
