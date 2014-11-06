@@ -8,7 +8,7 @@
  * * Section7 - Editor Functions
  * * Section8 - Landing page Forms
  ****/
-define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-ui','mee-helper','tinymce','mincolors'],
+define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-ui','mee-helper','mincolors'],
     function ($,Backbone,_, template) {
         'use strict';
         return Backbone.View.extend({			                                                                                               
@@ -20,7 +20,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 this.leftMinus = 80;
                 this.topMinus = 381;                
                 this.BMSTOKEN = "BMS_REQ_TK="+this.app.get('bms_token');
-                var mee_view =  this;
+                var mee_view =  this;                
                 var predefinedControls = [
                 {
                     "type": "text",
@@ -34,12 +34,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                 {
                     "type": "textWithImage",
-                    "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent'>this is Text with Image</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td></tr></table></div>"
+                    "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td></tr></table></div>"
                 },
 
                 {
                     "type": "imageWithText",
-                    "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td><td valign='top' width='50%'><div class='textcontent'>This is Image with Image</div></td></tr></table></div>"
+                    "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td></tr></table></div>"
                 },
 
                 {
@@ -103,7 +103,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var undoRedoStack = new Array();    
                             var isRedoEnable = false;
                             var isUndoPerformed = false;
-                            var _view = opts.view;
+                            var _view = opts.view;                            
 
                             this.registerAction = MakeBridgeUndoRedoManager_RegisterAction;
                             this._undo = MakeBridgeUndoRedoManager_Undo;
@@ -187,6 +187,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                         }
                         var mee = this;
+                        mee.iframeLoaded = false;
                         this.each(function () {
                             var $this = $(this);                
                             var undoManager = new MakeBridgeUndoRedoManager({
@@ -201,30 +202,35 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     this.render();
                                 },
                                 render: function () {
-                                    this.$el.html(this.my_template({allowedUser:['admin','jayadams','demo'],options:options}));                      
+                                    this.$el.html(this.my_template({allowedUser:['admin','jayadams','demo'],options:options}));                                      
+                                    this.$("#mee-iframe").load(function(){
+                                        mee.iframeLoaded = true;
+                                    })
                                 }
 
                             });
 
                             var mainView = new MainHtmlView();
+                            
+                           
                             //$this = element;
                             $this.html(mainView.el);
                             var myElement = $this;
+                            var meeIframe = myElement.find("#mee-iframe").contents(); 
+                            var meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;                          
                             var oInitDestroyEvents = new InitializeAndDestroyEvents();
-                            var IsStyleActivated = false;
+                            var IsStyleActivated = false;                            
                             var changFlag = null;
                             var SelectedElementForStyle = null;
                             var borderColor = "#000";
                             var chkChangeAllMatching = myElement.find(".chkChangeAllMatching");
                             var templateColors = myElement.find(".templateColors");
-                            var mainContentHtmlGrand = myElement.find(".mainContentHtmlGrand");
+                            var mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
                             var myColorsFromServiceGlobal = "";
                             var txtColorCode = myElement.find(".txtColorCode");
                             var ulMyColors = myElement.find(".myColors");
                             var personalizedTagsGlobal = "";
-                            var formBlocksGlobal = "";
-                            var areaToDisplay = null;
-                            var selectedSocialLink = null;
+                            var formBlocksGlobal = "";                                                   
                             var topMinus = mee_view.topMinus;
                             var leftMinus = mee_view.leftMinus;
                             var $element = null;
@@ -241,11 +247,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var eventsApplied = false;
                             var borderLeftWidth,borderRightWidth,borderTopWidth,borderBottomWidth,TotalBorderTopBottom,TotalBorderLeftRight;
                             var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
+                            var iframeEle = myElement.find(".mee-iframe");
                             
 //*****************************************Landing page options***********************************************************************************///
 
-                            if (options.landingPage) {                                
-                                myElement.find(".mainTable").css("width", "95%");
+                            if (options.landingPage) {      
+                                iframeEle.css("width", "95%");
+                                meeIframe.find(".mainTable").css("width", "100%");
                             }
 //*****************************************End of landing pages***********************************************************************************///
 
@@ -281,7 +289,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     oInitDestroyEvents.InitAll(oHtml);
 
-                                    var mainObj = myElement.find(".mainContentHtml");
+                                    var mainObj = meeIframe.find(".mainContentHtml");
                                     oInitDestroyEvents.InitAll(mainObj);
 
                                     mainObj.append(oHtml);                            
@@ -293,7 +301,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
 
                             function makeCloneAndRegister() {
-                                var mainTable = myElement.find(".mainTable").clone(true);
+                                var mainTable = meeIframe.find(".mainTable").clone(true);
                                 mainTable.find("div.ui-resizable-e").remove();
                                 mainTable.find("div.ui-resizable-s").remove();
                                 mainTable.find("div.ui-resizable-se").remove();
@@ -304,13 +312,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }   
                             
                             function resizeHeight(){
-                                var ul_container = myElement.find(".mainContentHtml");
+                                var ul_container = meeIframe.find(".mainContentHtml");
                                 var main_container = myElement.find(".editorbox");
                                 if(ul_container.height()>($(".tabcontent").height()-100)){
                                     main_container.css("height",(ul_container.height()+200)+"px");
+                                    iframeEle.css("height",(ul_container.height()+200)+"px");
                                 }
                                 else{
                                     main_container.css("height",$(".tabcontent").height()+"px");
+                                    iframeEle.css("height",$(".tabcontent").height()+"px");
                                 }
                             }
                             
@@ -323,7 +333,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 if (replaceObj != null) {
                                     var contentObj = myElement.find(".content");                                    
                                     contentObj.html(replaceObj.outerHTML());
-                                    var mainObj = myElement.find(".mainTable");
+                                    var mainObj = meeIframe.find(".mainTable");
                                     mainObj.find("div.textcontent").css('visibility', 'visible');                                    
                                     oInitDestroyEvents.InitAll(mainObj, true);
                                     undoredo = true;
@@ -332,9 +342,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                     else{
                                         RemoveAllOutline();
-                                        var editorfocused = myElement.find("div.textcontent.mce-edit-focus");
+                                        var editorfocused = meeIframe.find("div.textcontent.mce-edit-focus");
                                         if(editorfocused.length){
-                                            tinymce.get(editorfocused.attr("id")).focus();
+                                            meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                         }
                                     }
                                     resizeHeight();
@@ -357,9 +367,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         InitializeElementsForStyle(true);
                                     }else{
                                         RemoveAllOutline();
-                                        var editorfocused = myElement.find("div.textcontent.mce-edit-focus");
+                                        var editorfocused = meeIframe.find("div.textcontent.mce-edit-focus");
                                         if(editorfocused.length){
-                                            tinymce.get(editorfocused.attr("id")).focus();
+                                            meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                         }
                                     }
                                     resizeHeight();
@@ -373,8 +383,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 changFlag = states;
                             };
 
-                            $.fn.getMEEHTML = function() {                    
-                                var mainHTMLELE = myElement.find(".mainContentHtml");
+                            $.fn.getMEEHTML = function() {                                                    
+                                var mainHTMLELE = meeIframe.find(".mainContentHtml");
                                 var constructedHTML = $(mainHTMLELE.outerHTML());                    
                                 var cleanedupHTML = CleanCode(constructedHTML).html();                    
                                 var outputter = $("<div style='margin:0px auto;width:"+emailWidth+"'></div>");
@@ -387,12 +397,21 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             $.fn.setMEEHTML = function(html) {
                                 options.preDefinedHTML = html;
                                 oHtml = reConstructCode(options.preDefinedHTML);                                                
-                                var mainObj = myElement.find(".mainContentHtml");                                
+
+                                meeIframe = myElement.find("#mee-iframe").contents();   
+                                removeDialogs();
+
+                                meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;                        
+                                var mainObj = meeIframe.find(".mainContentHtml");                                
                                 mainObj.html(oHtml);                    
                                 IsStyleActivated = false;
                                 oInitDestroyEvents.InitAll(mainObj);                                
                                 makeCloneAndRegister();
                             };
+                            
+                            $.fn.getIframeStatus = function(){
+                                return mee.iframeLoaded;
+                            }
                             
                             $.fn.setAccordian = function(diff) {
                                  myElement.find(".builder-panel").css("height",($(window).height()-62-diff)+"px");
@@ -415,6 +434,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     dialog.hide();
                                 }
                             }
+                            function removeDialogs (){
+                                  meeIframe.find("body").click(function () {
+
+                                    if (!isElementClicked) {                                               
+                                        //Sohaib 
+                                        RemovePopups();
+                                        myElement.find(".alertButtons").hide();
+                                    }
+                                    isElementClicked = false;                                    
+
+                                });
+                            }
                             //--------------------- Code Preview ---------------------------//
 
                             function InitializePreviewControls() {
@@ -424,7 +455,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //previeCodeTabs.tabs();
 
                                 lnkPreviewCode.click(function () {
-                                    var mainHTMLELE = myElement.find(".mainContentHtml");
+                                    var mainHTMLELE = meeIframe.find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
 
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
@@ -768,7 +799,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 oHtml.find(".dynamicContentContainer").each(function (index, object) {
                                     if($(object).find(".dcName span:first")){
-                                       myElement.find("#"+$(object).attr("id")).find(".dcName span:first").click();
+                                       meeIframe.find("#"+$(object).attr("id")).find(".dcName span:first").click();
                                     }
                                     var variation = $(object);                        
                                     var keyword = variation.attr("keyword");
@@ -872,7 +903,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             
                                 //Muhammad.Adnan
                                 //Main Draggable Controls
-                                var draggableControls = myElement.find(".draggableControl");
+                                var draggableControls = myElement.find(".draggableControl");                                
                                 InitializeMainDraggableControls(draggableControls);
 
                                 //Click on overall element:
@@ -884,6 +915,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     }
                                     isElementClicked = false;
                                 });
+
                                             
                                 //Building Blocks Drop Area:
                                 InitializeBuildingBlockDroppableArea();
@@ -998,16 +1030,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     SelectedElementForStyle = null;
 
-                                    oInitDestroyEvents.InitializePluginsEvents(myElement);
+                                    oInitDestroyEvents.InitializePluginsEvents(meeIframe);
 
 
                                 }
                                 else {
-                                    oInitDestroyEvents.DestroyPluginsEvents(myElement);
+                                    oInitDestroyEvents.DestroyPluginsEvents(meeIframe);
                                     IsStyleActivated = true;
                                     if(undoredo===true){
                                         //Selection
-                                        myElement.find(".csHaveData td, .csHaveData div").click(function (event) {
+                                        meeIframe.find(".csHaveData td, .csHaveData div").click(function (event) {
                                             if (IsStyleActivated) {
                                                 event.stopPropagation(); //Stop bubbling
 
@@ -1199,7 +1231,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
 
                                         myElement.find(".txtContainerSize").keyup(function (e) {
-                                            myElement.find(".mainTable").css("width", $(this).val() + "px");
+                                            meeIframe.find(".mainTable").css("width", $(this).val() + "px");
                                             emailWidth = $(this).val() + "px";
                                             // undoManager.registerAction(mainContentHtmlGrand.html());
                                             makeCloneAndRegister();
@@ -1249,8 +1281,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
 
                             function RemoveAllOutline() {
-                                myElement.find(".mainContentHtmlGrand").removeInlineStyle("outline");
-                                myElement.find("*").removeInlineStyle("outline");
+                                meeIframe.find(".mainContentHtmlGrand").removeInlineStyle("outline");
+                                meeIframe.find("*").removeInlineStyle("outline");
                             }
 
                             function SetStylesOnSelection(selectedElement) {
@@ -1581,7 +1613,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                             function DeleteElement(element)
                             {
-                                var csHaveDataLength = myElement.find(".csHaveData").length;
+                                var csHaveDataLength = meeIframe.find(".csHaveData").length;
                                 var myParent = element.closest(".csHaveData");
 
                                 //REMOVE DROPPABLES HERE  
@@ -1639,7 +1671,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 var lType = myElement.find("#linkTrack").data("linkObject");
                                 var divID = ""; 
                                 if(lType==="text"){
-                                    divID =  myElement.find("div.textcontent.mce-edit-focus").attr("id");                                    
+                                    divID =  meeIframe.find("div.textcontent.mce-edit-focus").attr("id");                                    
                                 }
                                 var dialog = options._app.showDialog({
                                     title:"Links GUI",
@@ -1663,6 +1695,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 require(["editor/links"],function(page){                                              
                                     var linkDialogPage = new page({
                                         config:options,
+                                        meeIframeWindow:meeIframeWindow,
                                         _el:myElement,
                                         dialog:dialog,
                                         linkType:lType,
@@ -1818,11 +1851,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         "top":top+"px"
                                     }).show();
                                 }
-
-
-                            // console.log("left:"+left+"px, top:"+top+"px");
-                            // this.dialog.css({"left":left+"px","top":top+"px"}).show();
-
                             }
 //**************************************************************End ***********************************************************************************///
 //
@@ -2048,11 +2076,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 else{
                                     myElement.find("#imageToolbar .ImageToolbarUnLinkClass").hide();
                                     myElement.find("#imageToolbar").css("width","310px");
-                                }
-                                var editorBox = $(event.target).parents(".editorpanel").offset();
+                                }                                
                                 myElement.find("#imageToolbar").css({
-                                    top:$(event.target).offset().top-editorBox.top-34,
-                                    left:$(event.target).offset().left-editorBox.left+290                                    
+                                    top:$(event.target).offset().top+19,
+                                    left:$(event.target).offset().left+292                                   
                                 });
 
                             }                        
@@ -2801,7 +2828,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
                                         filterDialog.html(mPage.$el);
                                     }); 
-                                    myElement.find(".editNameBox").hide();
+                                    meeIframe.find(".editNameBox").hide();
                                     filterDialog.css({"left":left,"top":top,"display":"block"});
                                     return false;                                                                       
                                 }
@@ -2820,8 +2847,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var _ele = $(this);
                                         var ele_offset = _ele.offset();                                                         
                                         var editorPanel = _ele.parents(".MEE_EDITOR").offset();
-                                        var top = ele_offset.top -editorPanel.top+18;
-                                        var left = ele_offset.left-editorPanel.left-242;  
+                                        var top = ele_offset.top + 18;
+                                        var left = ele_offset.left + 242;  
 
                                         OpenRulesWindow(args, top, left);
 
@@ -2854,13 +2881,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         event.stopPropagation();
                                         
                                         args.DynamicContent = getDynamicContent(element);
-                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        var dc = meeIframe.find("table[keyword='"+args.ID+"']");
                                         
                                         var dcContentNameUpdateWindow = dc.find(".dcContentNameUpdate");
                                         dcContentNameUpdateWindow.height(dc.height());
                                         dcContentNameUpdateWindow.find(".txtContentName").val(args.DynamicContent.Label);                                        
                                         myElement.find(".dcRulesDialog").hide();
-                                        myElement.find(".editNameBox").hide();
+                                        meeIframe.find(".editNameBox").hide();
                                         dcContentNameUpdateWindow.show();
                                         var txtfieldContent = dcContentNameUpdateWindow.find(".txtContentName");
                                         txtfieldContent.focus();
@@ -2874,7 +2901,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             //console.log(element.data("content"));
                                             args.DynamicContent.Label = dcContentNameUpdateWindow.find(".txtContentName").val();
                                             if(element.attr("id")){
-                                                myElement.find("li[id='"+element.attr("id")+"'] span:first").html(args.DynamicContent.Label);
+                                                meeIframe.find("li[id='"+element.attr("id")+"'] span:first").html(args.DynamicContent.Label);
                                             }else{
                                                 element.find("span:first").html(args.DynamicContent.Label);
                                             }
@@ -2926,7 +2953,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             element.remove();
                                             if(element.attr("id")){
-                                                myElement.find("li[id='"+element.attr("id")+"']").remove()
+                                                meeIframe.find("li[id='"+element.attr("id")+"']").remove()
                                             }else{
                                                 element.remove();
                                             }
@@ -2938,7 +2965,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     });
                                 }
                                 var onSaveContent = function(){
-                                    var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                    var dc = meeIframe.find("table[keyword='"+args.ID+"']");
                                     var dcInternal = dc.find(".dcInternalContents:first");
                                     args.clickedLi = dc.find(".block_body li.active");
                                     args.IsUpdate = false;
@@ -2969,14 +2996,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     //Edit Button
                                     args.predefinedControl.Html.find(".editname").click(function () {
                                         myElement.find(".dcRulesDialog").hide();                                        
-                                        var dc = myElement.find("table[keyword='"+args.ID+"']");                                        
+                                        var dc = meeIframe.find("table[keyword='"+args.ID+"']");                                        
                                         dc.find(".editNameBox").toggle();
                                         dc.find(".editNameBox").width(405);
                                         dc.find(".txtVariationName").focus();
                                     });
 
                                     args.predefinedControl.Html.find(".btnCloseDCName").click(function () {
-                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        var dc = meeIframe.find("table[keyword='"+args.ID+"']");
                                         dc.find(".editNameBox").hide();
                                     });
                                     
@@ -2984,7 +3011,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var saveBtn = args.predefinedControl.Html.find(".btnSaveDCName");
                                     
                                     var saveDCName = function(){
-                                        var dc = myElement.find("table[keyword='"+args.ID+"']");
+                                        var dc = meeIframe.find("table[keyword='"+args.ID+"']");
                                         args.DynamicVariation.Label = dc.find(".txtVariationName").val();
                                         dc.find(".txtVariationName").prop("disabled",true);
                                         dc.find(".btnSaveDCName").addClass("saving");
@@ -3052,14 +3079,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     var dcContentNameWindow = args.predefinedControl.Html.find(".dcContentName");
                                     dcContentNameWindow.find(".btnCancelContent").click(function (event) {
-                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                        var dcContentNameWindow = meeIframe.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         event.stopPropagation();
                                         dcContentNameWindow.hide();
                                     });
                                     
                                     var saveDC = function(){
                                         var content = new DynamicContents();
-                                        var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                        var dcContentNameWindow = meeIframe.find("table[keyword='"+args.ID+"']").find(".dcContentName");
                                         
                                         content.Label = dcContentNameWindow.find(".txtContentName").val();                        
                                         content.DynamicVariationID = args.DynamicVariation.DynamicVariationID;
@@ -3070,7 +3097,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         if (options.OnSaveDynamicContent != null) {
                                             options.OnSaveDynamicContent(args);                                            
                                         }
-                                        var dcContents =  myElement.find("table[keyword='"+args.ID+"']").find(".dcContents");
+                                        var dcContents =  meeIframe.find("table[keyword='"+args.ID+"']").find(".dcContents");
                                         var newLi = $(myElement.find(".dcLI").html());
                                         newLi.find("span:first").html(args.DynamicContent.Label);
                                         newLi.data("content", args.DynamicContent);
@@ -3100,9 +3127,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         event.stopPropagation();
                                         if($("table[keyword='"+args.ID+"'] .dcContents > li").length<7){
                                             myElement.find(".dcRulesDialog").hide();
-                                            myElement.find(".editNameBox").hide();
-                                            var dcContentNameWindow = myElement.find("table[keyword='"+args.ID+"']").find(".dcContentName");
-                                            dcContentNameWindow.height(myElement.find("table[keyword='"+args.ID+"']").height());
+                                            meeIframe.find(".editNameBox").hide();
+                                            var dcContentNameWindow = meeIframe.find("table[keyword='"+args.ID+"']").find(".dcContentName");
+                                            dcContentNameWindow.height(meeIframe.find("table[keyword='"+args.ID+"']").height());
                                             dcContentNameWindow.toggle();
                                             dcContentNameWindow.find(".txtContentName").focus();
                                         }
@@ -3140,7 +3167,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var label = obj[0].label;
                                         if(label.startsWith(textForSearch)) {
                                             counter++;
-                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                                 "<i class='icon dyblck'></i> " +
                                                 "<a href='#'> <span class='font_75 bbName'>" + obj[0].label + "</span></a>" +
                                                 "<div class='imageicons' > " +
@@ -3198,7 +3225,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     $.each(dynamicBlocksFromService, function (i, obj) {
 
 
-                                        var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
+                                        var block = $("<li class='draggableControl ui-draggable droppedDynamicBlock' draggable='true' data-type='dynamicContentContainer' data-isnew='false' data-id='" + obj[0]["dynamicNumber.encode"] + "' data-keyword='" + obj[0].keyword + "'>" +
                                             "<i class='icon dyblck'></i> " +
                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].label + "</span></a>" +
                                             "<div class='imageicons' > " +
@@ -3533,18 +3560,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     element.find("div.textcontent").each(function (index, element) {
                                         
-                                        tinymce.init({
+                                        meeIframeWindow.tinymce.init({
                                             selector: "div.textcontent",
                                             inline: true,
                                             theme: "modern",
-                                            skin_url: "editorcss/skin.css",
+                                            skin_url: options._app.get("path")+"css/editorcss",
                                             plugins: 'textcolor table anchor autolink advlist',
                                             //script_url: '/scripts/libs/tinymce/tinymce.min.js',
                                             toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
 
                                             setup: function (editor) {                                                   
-                                                if ($("#"+editor.id).data('tinymce') == undefined) {
-                                                    $("#"+editor.id).data('tinymce',true);
+                                                if (meeIframe.find("#"+editor.id).data('tinymce') == undefined) {
+                                                    meeIframe.find("#"+editor.id).data('tinymce',true);
                                                     editor.on("mouseDown", function(e) {                                           
                                                         selectedLinkFromTinyMCE = e.target;                                                            
                                                     });                                                    
@@ -3555,12 +3582,14 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     });  
                                                     editor.on("mouseUp", function(e) {                                                                                                                                                                                                                      
                                                         myElement.find(".alertButtons").hide();
-                                                        var tiny_editor_selection = editor.selection;
+                                                        var tiny_editor_selection = editor.selection;                                                        
                                                         var currentNode = tiny_editor_selection.getNode();
+                                                        isElementClicked = false;
                                                         if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
                                                             editor.selection.select(selectedLinkFromTinyMCE);
-                                                            var selected_element_range = tinyMCE.activeEditor.selection.getRng();
+                                                            var selected_element_range = meeIframeWindow.tinyMCE.activeEditor.selection.getRng();
                                                             showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
+                                                            isElementClicked = true;   
                                                         }
                                                     });  
                                                 }                                                    
@@ -3630,7 +3659,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         });
                                                         myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
                                                             if(dialogForTextColor) {
-                                                                var selectedText = tinyMCE.activeEditor.selection.getContent({
+                                                                var selectedText = meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                                                                     format: 'text'
                                                                 });                                                        
                                                                 var selectedFontColor = myElement.find(".selectedFontColor");
@@ -3707,7 +3736,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         });
                                                         myElement.find('#fontDialogOKButtonID').unbind('click').click(function () {
                                                             if(!dialogForTextColor) {                                                
-                                                                var selectedText = tinyMCE.activeEditor.selection.getContent({
+                                                                var selectedText = meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                                                                     format: 'text'
                                                                 });                                                        
 
@@ -3780,7 +3809,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 },
                                                 mouseleave: function (e) {
                                                     //e.stopPropagation();
-
                                                     $(this).find(myobject).remove();
                                                     $(this).removeClass("hover");
                                                 }
@@ -3820,29 +3848,34 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             //Apply here Droppable Container:
                                             oHtml.find('.imageContainer').andSelf().filter('.imageContainer').each(function (index, element) {
-
-                                                $(element).droppable({
-                                                    tolerance: "pointer",
-                                                    greedy: true,
-                                                    drop: function (event, ui) {
-                                                        //alert("dropped");
-                                                        //Only dropable for IMAGE TYPE
-                                                        if (ui.draggable.hasClass("droppedImage")) {
-                                                            $(element).removeClass("imageContainer imagePlaceHolderAlone ui-droppable")
-
-                                                            var argsThis = {
-                                                                droppedElement: $(this),
-                                                                event: event,
-                                                                ui: ui
-                                                            //predefinedControl: args.predefinedControl
-                                                            };
-
-                                                            OnImageDropped(argsThis);
-                                                            oInitDestroyEvents.InitializeClickEvent(oHtml);
-                                                        }
+                                                $(element).on('dragover', function(event) {                                    
+                                                    event.preventDefault();
+                                                    if($(this).hasClass("imagePlaceHolderAlone")){
+                                                        $(this).css({"outline":"2px dashed #01aeee"});
+                                                    }
+                                                }).on('dragleave', function(event) {                                    
+                                                    event.preventDefault();
+                                                    if($(this).hasClass("imagePlaceHolderAlone")){
+                                                        $(this).removeInlineStyle("outline");
                                                     }
                                                 });
-
+                                                
+                                                $(element).find('*').andSelf().on('drop', function(event) { 
+                                                    event.stopPropagation();
+                                                    event.preventDefault();
+                                                    $(this).removeInlineStyle("outline");                                                    
+                                                    $(element).removeClass("imageContainer imagePlaceHolderAlone ui-droppable");
+                                                    var ui = {draggable:null};
+                                                    ui.draggable = mee.dragElement;
+                                                    var argsThis = {
+                                                        droppedElement: $(this),
+                                                        event: event,
+                                                        ui: ui                                                    
+                                                    };
+                                                    OnImageDropped(argsThis);
+                                                    oInitDestroyEvents.InitializeClickEvent(oHtml);
+                                                })    
+                                                
                                             });
                                         }
 
@@ -3856,23 +3889,39 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             //Apply here Droppable Container:
                                             oHtml.find('.resizableImage').andSelf().filter('.resizableImage').each(function (index, element) {
-
-                                                $(element).droppable({
-                                                    tolerance: "pointer",
-                                                    greedy: true,
-                                                    drop: function (event, ui) {
-                                                        //alert("dropped");
-                                                        //Only dropable for IMAGE TYPE
-                                                        if (ui.draggable.hasClass("droppedImage")) {                                                                                                                       
-                                                            var index = ui.draggable.find("i:first-child").data("index");
-                                                            if(index){
-                                                                index = parseInt(index.substr(5))-1;
-                                                            }
-                                                            var imageSrc= options._app.decodeHTML(imageListGlobal[index].originalURL);    
-                                                            $(this).find("img").attr("src",imageSrc)
-                                                            makeCloneAndRegister();
-                                                            oInitDestroyEvents.InitializeClickEvent(oHtml);
+                                                $(element).on('dragover', function(event) {                                    
+                                                    event.preventDefault();
+                                                    if($(this).hasClass("resizableImage")){
+                                                       $(this).css({"outline":"2px dashed #01aeee"});
+                                                    }
+                                                }).on('dragleave', function(event) {                                    
+                                                    event.preventDefault();
+                                                    if($(this).hasClass("resizableImage")){
+                                                        $(this).removeInlineStyle("outline")
+                                                    }
+                                                });
+                                                
+                                                $(element).find('*').andSelf().on('drop', function(event) { 
+                                                    event.stopPropagation();
+                                                    event.preventDefault();
+                                                    var ui = {draggable:null};
+                                                    ui.draggable = mee.dragElement;
+                                                    $(this).removeInlineStyle("outline");
+                                                    $(this).parents(".resizableImage").removeInlineStyle("outline");
+                                                    if (ui.draggable.hasClass("droppedImage")) {                                                                                                                       
+                                                        var index = ui.draggable.find("i:first-child").data("index");
+                                                        if(index){
+                                                            index = parseInt(index.substr(5))-1;
                                                         }
+                                                        var imageSrc= options._app.decodeHTML(imageListGlobal[index].originalURL);    
+                                                        if($(this)[0].tagName.toLowerCase()=="img"){
+                                                            $(this).attr("src",imageSrc)
+                                                        }
+                                                        else{    
+                                                            $(this).find("img").attr("src",imageSrc)
+                                                        }
+                                                        makeCloneAndRegister();
+                                                        oInitDestroyEvents.InitializeClickEvent(oHtml);
                                                     }
                                                 });
 
@@ -3959,13 +4008,28 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }                          
 
                             //Elements Dropping
-                            function InitializeWithDropable(sender) {                           
-                                sender.droppable({
-                                    tolerance: "pointer",
-                                    greedy: true,
-                                    drop: function (event, ui) {
-
-                                        //makeCloneAndRegister();
+                            function InitializeWithDropable(sender) {       
+                                sender.on('dragover', function(event) {                                    
+                                    event.preventDefault();
+                                    if($(this).html()==""){
+                                        $(this).css({'height':'20px',"background":"#379ffb"});
+                                    }
+                                }).on('dragleave', function(event) {                                    
+                                    event.preventDefault();
+                                    if($(this).html()==""){
+                                        $(this).css({'height':'10px',"background":"#dceefe"});
+                                    }
+                                });
+                                
+                                sender.find('*').andSelf().on('drop', function(event) {
+                                    //restore the dropzone after dropevent                                    
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                    var ui = {draggable:null}; 
+                                    ui.draggable = mee.dragElement;
+                                    //drop(event,ui)
+                                    //Now lets restrict what all can be dropped inside each dropzone
+                                    //makeCloneAndRegister();
                                         //only allowed to drag controls from controls panel
                                         if (!$(this).hasClass("myDroppable") || ui.draggable.data("type") === "droppedImage") {
                                             //DO NOTHING
@@ -4313,15 +4377,21 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         }
 
-                                    }
                                 });
+                                
+                                
+                                 var drop = function (event, ui) {
+
+                                        
+                                    }
+                               
 
                                 return sender;
                             }
 
                             //Elements DRAGGING - for swapping elements:dragging2
                             function InitializeElementWithDraggable(object) {
-
+                                
                                 object.draggable({
                                     helper: function(event, ui) {
                                         return $(this).clone().css({
@@ -4330,6 +4400,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
 
                                     },
+                                    iframeFix: true,
                                     handle: ".myHandle",
                                     cursor: "crosshair",
                                     cursorAt: {
@@ -4349,11 +4420,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             "height":_height+"px"
                                             });
 
-                                        ShowDroppables(myElement);
+                                        ShowDroppables(meeIframe);
 
                                         RemovePopups();
 
-                                        myElement.find(".content .sortable").each(function (index) {
+                                        meeIframe.find(".sortable").each(function (index) {
                                             //Exclude here dragging element (which is added by jqueryUI)
                                             var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
 
@@ -4378,7 +4449,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         myElement.find(".divBuildingBlockLoading").hide();
 
                                         //Remove all Droppables places here.
-                                        RemoveDroppables(myElement);
+                                        RemoveDroppables(meeIframe);
                                     }
                                 });
 
@@ -4419,8 +4490,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 //Remove height from destination's parent and source's parent (.sortable UL)
                                 //Releted to last element dropped full height:
-                                myElement.find(".sortable").removeAttr("style");
-                                myElement.find(".myDroppable").removeInlineStyle("height");
+                                meeIframe.find(".sortable").removeAttr("style");
+                                meeIframe.find(".myDroppable").removeInlineStyle("height");
                                 myElement.find(".hide-footer").remove();
                                 if(!undo){
                                     makeCloneAndRegister();
@@ -4472,43 +4543,21 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                             function InitializeMainDraggableControls(elementToApply) {
-                                elementToApply.draggable({
-                                    helper: function(event, ui) {
-                                        return $(this).clone().css({
-                                            width: $(this).width()
-                                        });
-
-                                    },
-                                    cursor: "crosshair",
-                                    // containment: "parent",
-                                    // stack: ".myDroppable",
-                                    cursorAt: {
-                                        top: -7,
-                                        left: -7
-                                    },                                                
-                                    appendTo: '.editorpanel',
-                                    //scroll: false,
-                                    //[M.Adnan] FOR DRAGGING
-                                    start: function (e, ui) {
-                                        var imageDrag = ui.helper.data("type")==="droppedImage"?"image-footer-hide":"";
-                                        ui.helper.wrap("<ul class='b-blocks hide-footer "+imageDrag+"'></ul>");
-                                        //Disable for droppedImage here
-                                        if (ui.helper.data("type") === "droppedImage") {
+                                
+                                 $(elementToApply).on('dragstart', function(event) {
+                                        event.originalEvent.dataTransfer.setData("ui", $(this));                                    
+                                        mee.dragElement = $(this);
+                                        if ($(this).data("type") === "droppedImage") {
                                             return;
-                                        }
-                                        //////////////
-                                        // $this.wrapInner("<ul class='b-blocks'></ul>");
-                                        console.log(ui.helper);                                    
-                                        ShowDroppables(myElement);
-
+                                        }                                                                                
+                                        ShowDroppables(meeIframe);
                                         RemovePopups();
-
-                                        var draggedControlType = ui.helper.data("type");
+                                        var draggedControlType = $(this).data("type");
 
                                         if (draggedControlType != "droppedImage") {
 
-                                            var totalLiLength = myElement.find(".content .sortable li").length;
-                                            myElement.find(".content .sortable").each(function (indx) {
+                                            var totalLiLength = meeIframe.find(".sortable li").length;
+                                            meeIframe.find(".sortable").each(function (indx) {
 
                                                 var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
 
@@ -4516,24 +4565,20 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     //For first time dropping element                                
                                                     IsFirstDroppableElement = true;
                                                 }
-
                                                 InsertDroppableInEmpty($(this), firstLevelLiDroppable);
                                                 if(indx===0){
                                                     SetLastElementHeight($(this));
                                                 }
-
                                             });
-
-                                        }
-                                                   
-                                    },
-
-                                    stop: function (e, ui) {                                  
-                                        //Remove all Droppables places here.
-                                        RemoveDroppables(myElement);
-
-                                    }
+                                     }                                       
+                                    
+                                }).on('dragend', function(event) {
+                                    event.preventDefault();
+                                    RemoveDroppables(meeIframe);
+                                    //
                                 });
+                                                                
+                                
                             }
                             function OnNewElementDropped(args) {
                                             
@@ -4616,7 +4661,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 if(obj[0]["thumbURL"]){
                                                     blockIcon = "<img src='"+obj[0]["thumbURL"]+"' class='blockimg' />"
                                                 }
-                                                var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
+                                                var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='contentBlock' data-isnew='false' data-id='" + obj[0]["blockId.encode"] + "' >" +
                                                     blockIcon +
                                                     "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +                                                    
                                                     "</li>");
@@ -4665,7 +4710,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             blockIcon = "<img src='"+obj[0]["thumbURL"]+"' class='blockimg' />"
                                         }
 
-                                        var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                        var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                             blockIcon +
                                             "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                             "<div class='imageicons' > " +
@@ -4684,6 +4729,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         block.find(".imageicons").draggable({
                                             disabled: true
+                                            
                                         });
                                         count++;
                                     });
@@ -4805,7 +4851,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var label = obj[0].name;
                                         if(label.startsWith(textForSearch)) {
                                             counter++;
-                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
+                                            var block = $("<li class='draggableControl ui-draggable droppedBuildingBlock' draggable='true' data-type='buildingBlock' data-id='" + obj[0]["blockId.encode"] + "'>" +
                                                 "<i class='icon myblck'></i> " +
                                                 "<a href='#'> <span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                 "<div class='imageicons' > " +
@@ -4953,10 +4999,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 var _ele  = $(obj); //element which is clicked
                                 var left_minus = 15;      //static space to minus to show dialog on exact location
                                 var ele_offset = _ele.offset();                
-                                var ele_height =  _ele.height();
-                                var editorPanel = _ele.parents(".MEE_EDITOR").offset();
-                                var top = ele_offset.top - editorPanel.top+25;
-                                var left = ele_offset.left - editorPanel.left-17;  
+                                var ele_height =  _ele.height();                                
+                                var top = ele_offset.top + 74 ;
+                                var left = ele_offset.left + 297 ;  
                                 var url_string = "",showClass="disabled";
                                 url = _ele.attr("href");
                                 var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
@@ -4990,7 +5035,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 myElement.find(".alertButtons").hide();                                
                             });
                             myElement.on("click", "i.linkRemove", function () {                            
-                                var selected_anchor = tinyMCE.activeEditor.selection.getNode();
+                                var selected_anchor = meeIframeWindow.tinyMCE.activeEditor.selection.getNode();
                                 if(selected_anchor.tagName.toLowerCase()=="a"){
                                     var $selected_anchor= $(selected_anchor);
                                     var _html = $selected_anchor.html();
@@ -5040,7 +5085,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         obj[0].ID = obj[0]["formId.encode"];
                                                                                
 
-                                        var block = $("<li class='draggableControl ui-draggable droppedFormBlock' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
+                                        var block = $("<li class='draggableControl ui-draggable droppedFormBlock' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                             "<i class='icon myblck'></i> " +
                                             "<span class='font_75 bbName'>" + obj[0].name + "</span>" +
                                             "<div class='imageicons' > " +
@@ -5125,7 +5170,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             var _saveCallBackMethod = function () {
                                 if (options.CallBackSaveMethod != null) {
                                     var templateHTML = mainContentHtmlGrand.html();
-                                    var mainHTMLELE = myElement.find(".mainContentHtml");
+                                    var mainHTMLELE = meeIframe.find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());                                                
                                     var cleanedupHTML = CleanCode(constructedHTML).html();                                                
                                     var outputter = $("<div></div>");
@@ -5291,6 +5336,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                         return this.indexOf(str) == 0;
                     };
                 }
+                $().dndPageScroll();
 
                 var _imageAjaxParameters = {
                     Url: "/pms/io/publish/getImagesData/?"+BMSTOKEN+"&type=list&offset=0",
@@ -5338,6 +5384,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                 var _formDeleteURL = this.app.get("preview_domain")+"/pms/landingpages/rFormSaver.jsp?"+BMSTOKEN+"&ukey="+this.app.get("user_Key");
                 var _app= this.app;
                 var reattachEvents =  this.options.reattachEvents;
+                //Inserting iframe css and basic html
+                
 
                 this._$el.MakeBridgeEditor({
                     SaveImageTagsProperties: _saveImageTagsAjaxParameters,
@@ -5348,7 +5396,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                     preDefinedHTML: _preDefinedHTML,
                     landingPage: this.options.landingPage?true:false,
                     formWizURL: _formWizURL,
-                    fromDialog:this.fromDialog,
+                    fromDialog:this.fromDialog,                    
                     reAttachEvents:reattachEvents,
                     formDeleteURL: _formDeleteURL ,                
                     saveCallBack:  this.options.saveClick,

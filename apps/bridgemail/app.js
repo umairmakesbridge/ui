@@ -58,16 +58,16 @@ define([
 			this.set(_.extend({
 				env: 'developement',
 				bms_token: bms_token,
-                                isMEETemplate: $.getUrlVar(false,'meeTemplate'),
-                                isFromCRM: $.getUrlVar(false,'crm'),
-                                preview_domain : previewDomain,
-                                user_Key:userKey,
-                                images_CDN : imagesCDN,
-                                static_CDN : staticCDN,
+        isMEETemplate: $.getUrlVar(false,'meeTemplate'),
+        isFromCRM: $.getUrlVar(false,'crm'),
+        preview_domain : previewDomain,
+        user_Key:userKey,
+        images_CDN : imagesCDN,
+        static_CDN : staticCDN,
 				host: window.location.hostname,
-                                path:_path,
+        path:_path,
 				session: null,
-                                app_data : {}
+        app_data : {}
 			}, window.sz_config || {}));
 					
 			//Convenience for accessing the app object in the console
@@ -535,7 +535,7 @@ define([
             },
             validateEmail:function(emailVal)
             {
-                    var email_patt = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+                    var email_patt = new RegExp("[A-Za-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?");
 					//var email_patt = new RegExp("[A-Za-z0-9'_`-]+(?:\\.[A-Za-z0-9'_`-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])");
                     return email_patt.test(emailVal);
             },

@@ -78,14 +78,15 @@
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" />'
           filter_html += '<select data-placeholder="Choose opportuinity value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
           filter_html +='</select></div>'
-      if(params && params.sfObject=="opportunity"){
+      var self = this     
+      if(params && self.options.filterFor=="S"){
           params.paramsApplied = false;
       }
       filter.find(".filter-cont").append(filter_html)
       filter.find(".matchValueSelect").chosen({width:'200px'});
       filter.find(".matchValueSelect").next().hide();
       this.addActionBar(filter)
-      var self = this 
+      
       var condition_row =null
       if(this.$element.find(".filter-div ._row").length>=1){
           condition_row = $(this.options.condition_row);
@@ -153,7 +154,13 @@
                 if(attr_type=="picklist"){
                      filter.find(".matchValue").hide();
                      filter.find(".rules").val("equal").trigger("chosen:updated");
-                     var picklist_values = self.filterFields[filter.find(".fields option:selected").index()-1].picklist;
+                     var picklist_values = '';
+                     if(self.fields.length){
+                         picklist_values = self.fields[filter.find(".fields option:selected").index()-1].picklist;
+                     }
+                     else{
+                         picklist_values = self.filterFields[filter.find(".fields option:selected").index()-1].picklist;
+                     }
                      if(picklist_values){
                          var picklist_html = "";
                          $.each(picklist_values[0],function(key,val){                                
@@ -191,9 +198,13 @@
                          return false;
                      }       
                     var field_html ='<option value=""></option>'                                            
+                    var isPicklist = false;
                     $.each(fields_json.fldList[0],function(key,val){
                         selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
                         if(self.objType && self.objType===val[0].sfObject.toLowerCase()){
+                            if(selected_field){
+                                isPicklist = val[0].type=="picklist"?true:false;
+                            }
                             self.fields.push(val[0])                                  
                             field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
                         }
@@ -201,6 +212,9 @@
                     });
                     
                     filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
+                    if(params && params.fieldName && isPicklist){                        
+                        self.updateRules(filter,params)
+                    }
                 }
           }).fail(function() { console.log( "error in loading fields" ); });
       }

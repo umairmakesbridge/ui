@@ -83,25 +83,25 @@
                     <div class="clearfix">
                         <h4 class="">Rows</h4>
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable" data-type="oneColumnContainer">
+                            <li class="draggableControl ui-draggable" data-type="oneColumnContainer" draggable="true">
                                 <i class="icon col1"></i>
                                 <a >
                                     <span class=" font_75">1 Item</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="twoColumnContainer">
+                            <li class="draggableControl ui-draggable" data-type="twoColumnContainer" draggable="true">
                                 <i class="icon col2"></i>
                                 <a >
                                     <span class=" font_75">2 Items</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="threeColumnContainer">
+                            <li class="draggableControl ui-draggable" data-type="threeColumnContainer" draggable="true">
                                 <i class="icon col3"></i>
                                 <a >
                                     <span class=" font_75">3 Items</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="fourColumnContainer">
+                            <li class="draggableControl ui-draggable" data-type="fourColumnContainer" draggable="true">
                                 <i class="icon col4"></i>
                                 <a >
                                     <span class=" font_75">4 Items</span>
@@ -118,25 +118,25 @@
                     <div class="clearfix">
                         <h4 class="">Items</h4>
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable" data-type="text">
+                            <li class="draggableControl ui-draggable" data-type="text" draggable="true">
                                 <i class="icon txt"></i>
                                 <a >
                                     <span class=" font_75">Text</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="image">
+                            <li class="draggableControl ui-draggable" data-type="image" draggable="true">
                                 <i class="icon imag"></i>
                                 <a >
                                     <span class=" font_75">Image</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="textWithImage">
+                            <li class="draggableControl ui-draggable" data-type="textWithImage" draggable="true">
                                 <i class="icon txtimag"></i>
                                 <a >
                                     <span class=" font_75">Text + Image</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="imageWithText">
+                            <li class="draggableControl ui-draggable" data-type="imageWithText" draggable="true">
                                 <i class="icon imagtxt"></i>
                                 <a >
                                     <span class=" font_75">Image + Text</span>
@@ -147,25 +147,25 @@
                      <div class="clearfix">
                         <h4 class="">Spacer</h4>
                         <ul class="b-blocks">
-                            <li class="draggableControl ui-draggable" data-type="spacer5">
+                            <li class="draggableControl ui-draggable" data-type="spacer5" draggable="true">
                                 <i class="icon spacer1"></i>
                                 <a >
                                     <span class=" font_75">Spacer 1</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer10">
+                            <li class="draggableControl ui-draggable" data-type="spacer10" draggable="true">
                                 <i class="icon spacer2"></i>
                                 <a >
                                     <span class=" font_75">Spacer 2</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer15">
+                            <li class="draggableControl ui-draggable" data-type="spacer15" draggable="true">
                                 <i class="icon spacer3"></i>
                                 <a >
                                     <span class=" font_75">Spacer 3</span>
                                 </a>
                             </li>
-                            <li class="draggableControl ui-draggable" data-type="spacer20">
+                            <li class="draggableControl ui-draggable" data-type="spacer20" draggable="true">
                                 <i class="icon spacer4"></i>
                                 <a >
                                     <span class=" font_75">Spacer 4</span>
@@ -575,7 +575,7 @@
                 </a>
             </li>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
-                <a  class="btn-green ">
+                <a  class="btn-green save-step2">
                     <i class="icon save"></i><span>Save</span>
                 </a>
             </li>
@@ -584,14 +584,15 @@
     <!--  tools  -->
 
     <div class="editorbox content" style="height: 1000px;">
-        <table style="width: 600px; height: 100%; vertical-align: top;" align="center" class="mainTable">
+        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="/pms/umair/apps/bridgemail/editor/html/MEE_AREA.html"></iframe>
+        <!--<table style="width: 600px; height: 100%; vertical-align: top;" align="center" class="mainTable">
             <tr>
                 <td class="mainContentHtmlGrand" valign="top">
                     <ul class="sortable mainContentHtml" style="list-style: none; padding: 0; margin: 0;">
                     </ul>
                 </td>
             </tr>
-        </table>
+        </table>-->
     </div>
     <!--  editorpanel  -->
 
@@ -698,7 +699,7 @@
             <h5 style="padding-bottom: 10px;">Edit Block Name</h5>
 
             <input type="text" placeholder="Image URL" class="left tginput txtBlockName" style="width: 202px; margin-bottom: 10px; dis" value="Edit Block Name">
-            <a class="btn-green left btnSave">
+            <a class="btn-green left btnSave ">
                 <span>Save</span><i class="icon save"></i>
             </a>
         </div>

@@ -24,6 +24,7 @@ function (template) {
                     this.editorEl = this.options._el;
                     this.hiddenObj = $(this.editorEl.find("#imageDataSavingObject").data("myWorkingObject"));
                     this.activeTab = "_addHyperLink";
+                    this.meeIframeWindow = this.options.meeIframeWindow;
                     this.template = _.template(template);	
                     this.dialog = this.options.dialog;
                     this.linkType = this.options.linkType;
@@ -111,16 +112,16 @@ function (template) {
                     // Selection is text from editor 
                     this.$("div.linkImagePreview").hide();
                     this.$("div.textAreaDivfortextLink").show();                    
-                    this.$("textarea.linkTextArea").val(tinyMCE.activeEditor.selection.getContent({
+                    this.$("textarea.linkTextArea").val(this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                         format: 'text'
                     }));
-                    this.tiny_editor_selection = tinyMCE.activeEditor.selection;
+                    this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                     if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {
                         this.showLinkDetails($(this.tiny_editor_selection.getNode()));
                         this.$("textarea.linkTextArea").val($(this.tiny_editor_selection.getNode()).text());
                     }else{
-                        if (tinyMCE.activeEditor.selection.getContent({format: 'text'}) != "") {                        
-                            var tiny_editor = tinyMCE.activeEditor.selection.getContent({format: 'text'});
+                        if (this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'text'}) != "") {                        
+                            var tiny_editor = this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'text'});
                             this.$("textarea.linkTextArea").val(tiny_editor);
                             this.$("input.linkHyperLinkURL").val("");
                         }

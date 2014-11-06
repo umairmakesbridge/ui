@@ -26,7 +26,7 @@ if(userInfo == null) {
 %><jsp:forward page="../InvalidAccess.jsp"/><%
   return;
 }
-String _path = "/pms/beta/";
+String _path = "/pms/umair/";
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,23 +56,20 @@ String _path = "/pms/beta/";
     <link rel="stylesheet" href="<%= _path %>css/dash.css?bust=1.362" rel="stylesheet" />
     <link rel="stylesheet" href="<%= _path %>css/a_changes.css?bust=1.362" rel="stylesheet" />        
     <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css?bust=1.362" rel="stylesheet" />        
-    
-    <link href="<%= _path %>css/editorcss/skin.css?bust=1.362" rel="stylesheet" />
+        
     <link href="<%= _path %>css/editorcss/jquery.minicolors.css?bust=1.362" rel="stylesheet" />
     <link href="<%= _path %>css/editorcss/style.css?bust=1.362" rel="stylesheet" />
     <link href="<%= _path %>css/editorcss/editorstyle.css?bust=1.362" rel="stylesheet" />
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
         var _path = '<%= _path %>'
-    </script>
-    <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
-
-    <script  type="text/javascript">
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
         var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>"; 
         var userKey =  "<%=userInfo.getUserKey()%>"; 
     </script>
+    <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
+
     
     <!-- <link href="build/bridgemail/bridgemail_0.1.min.css" rel="stylesheet" type="text/css" >
     <script type="text/javascript" src="js/require.js" data-main="build/bridgemail/bridgemail_0.1.min"></script>-->
@@ -80,7 +77,7 @@ String _path = "/pms/beta/";
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+          <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
     <script type="text/javascript" src="https://test.bridgemailsystem.com/tinymce_3/tiny_mce_old.js"></script>
 </head>

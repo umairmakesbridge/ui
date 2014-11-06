@@ -355,7 +355,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 var merge_field = camp_obj.app.decodeHTML(camp_json.defaultFromEmail);                                                                    
                                 //camp_obj.$("#campaign_from_email_input").val(merge_field);
                                 if(camp_obj.campDefaults.fromEmail){
-                                         camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_obj.campDefaults.fromEmail)).trigger('chosen:updated');
+                                     camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_obj.campDefaults.fromEmail)).trigger('chosen:updated');
                                 }
                                 else{
                                     camp_obj.$("#campaign_from_email").val(merge_field).trigger('chosen:updated');
@@ -2275,7 +2275,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 setMEE:function(html){
-                   if(this.$("#mee_editor").setMEEHTML){
+                   if(this.$("#mee_editor").setMEEHTML && this.$("#mee_editor").getIframeStatus()){
                         this.$("#mee_editor").setMEEHTML(html);                        
                    } 
                    else{
