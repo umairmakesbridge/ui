@@ -132,6 +132,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                        
                     var workspace_li = $("#wstabs li[workspace_id='" + options.workspace_id + "']");
                     
+                    
                     if (workspace_li.length === 0) {
                         this.wp_counter = this.wp_counter + 1;
                         var obj = $(".tw-toggle button").eq(1);
@@ -154,8 +155,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
                         var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";                        
                         $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">'+options.title+'</div><div class="subheading">'+options.sub_title+'</div><i class="closehover" title="Close Workspace"></i></div></li>');
+                        /*--loading Spinneer--*/
                         this.lastActiveWorkSpace = "wp_li_" + wp_count;
                         wp_view.$el.attr("id", "workspace_" + wp_count);
+                        $('#'+this.lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                        $('#'+this.lastActiveWorkSpace).find('.detail .subheading').html('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                        /*-----*/
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                         $("#workspace .workspace").append(wp_view.$el);
                         //wp_view.initScroll(wp_view.$el);
@@ -299,6 +304,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             , {'iconCls': 'segments', 'text': 'Edit Segments', 'url': ''}, {'iconCls': 'reports', 'text': 'Reports', 'url': ''}
                         ]
                     });
+                    
                 },
                 openSubscriber: function(sub_id) {
                     var sub_id = sub_id ? sub_id : 0;

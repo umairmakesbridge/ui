@@ -63,11 +63,11 @@ function (template) {
             addCountHeader:function(){
                this.ws_header = this.current_ws.find(".camp_header .edited");   
                var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li><span class="badge pclr18 tcount showtooltip temp-count" search="all" data-original-title="View All Templates">'+this.total_count+'</span>Total Templates</li>';             
+                 count_header += '<li><span class="badge pclr18 tcount showtooltip temp-count ttval" search="all" data-original-title="View All Templates">'+this.total_count+'</span>Total Templates</li>';             
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader); 
-                 this.tempCount = this.ws_header.find('.temp-count');
+                 this.tempCount = this.ws_header.find('.temp-count').parent().addClass('font-bold');
                  this.tempCount.click(_.bind(this.page.triggerAll,this.page));
                  this.ws_header.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false}); 
             },

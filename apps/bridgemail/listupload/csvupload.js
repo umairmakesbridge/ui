@@ -108,6 +108,7 @@ function (app,template,fileuploader,dragfile,chosen,addbox) {
                         module:'csv',
                         progressElement:this.$('.csvimg')
                     });
+                    
                 },
                  uploadCsvFile:function(obj){
                 var input_obj = obj.target;
@@ -117,7 +118,10 @@ function (app,template,fileuploader,dragfile,chosen,addbox) {
                     }
                 },
                     init:function(){
-                    this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
+                    this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));
+                     /*-----Remove loading------*/
+                    this.app.removeSpinner(this.$el);
+                   /*------------*/
 		}
 	});
 });

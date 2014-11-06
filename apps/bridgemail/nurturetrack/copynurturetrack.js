@@ -19,7 +19,8 @@ function (template) {
                     this.render();                        
                 },
                 render: function () {                        						
-                    this.$el.html(this.template({trackName:this.trackObj.get("name")}));                                        
+                    this.$el.html(this.template({trackName:this.trackObj.get("name")})); 
+                   
                 },
                 init:function(){
                   this.$("#camp_name").focus();  

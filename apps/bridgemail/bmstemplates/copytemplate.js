@@ -78,7 +78,7 @@ function (template) {
                                             app.showAlert(res[1].replace('&#58;',':'),curview.$el);
                                         }else{
                                                       var id = res[1];
-                                                     
+                                                      var isTotal = true;
                                                        
                                                       if(typeof page !="undefined"){ 
                                                         page.dialog.hide();
@@ -86,7 +86,7 @@ function (template) {
                                                       //curview.options.dialog.hide();
                                                       curview.options.templatesDialog.hide();
                                                       //_current.template_id = id;
-                                                      _current.updateTemplate(id);
+                                                      _current.updateTemplate(id,isTotal);
                                                       _current.$el.find("#template_search_menu li:first-child").removeClass("active").click();
                                                 
                                           } 

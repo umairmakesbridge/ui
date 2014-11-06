@@ -94,6 +94,7 @@ function (template,highlighter,tagView) {
                     var mPage = new copyTrackPage({page:this,copydialog:dialog});
                     dialog.getBody().html(mPage.$el);
                     mPage.init();
+                    
                     dialog.saveCallBack(_.bind(mPage.copyTrack,mPage));
                 },this));
             },

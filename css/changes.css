@@ -1931,6 +1931,17 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 #merge-field-plug-wrap{
     width:386px;
 }
+ul.c-current-status li{
+    cursor: pointer;
+}
+.ttbadge{
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: normal;
+    padding: 1px 5px;
+     background: none repeat scroll 0 0 #f7f9fb;
+    border-radius: 30px;
+}
 /*Template Preview Css*/
  .previewbar {
     background: none repeat scroll 0 0 #EAF4F9;
@@ -3455,8 +3466,123 @@ ul#template_search_menu li {
     display: block;
     margin: 2px 0 0;
 }
+.create_new {
+    background: url("../img/act-plus-g.png") no-repeat scroll center center #f6fbfd;
+    border: 2px dashed #d7e8f1 !important;
+    border-radius: 2px;
+    clear: both;
+    cursor: pointer;
+    height: 60px;
+    margin: 0 0 10px;
+    padding: 5px;
+    transition: background-position 0.3s linear 0s;
+}
+.create_new:hover {
+    background: url("../img/act-plus.png") no-repeat scroll center 10px #fff;
+    border: 2px dashed #94cf1e !important;
+}
+.create_new > span {
+    color: #80c000;
+    display: block;
+    font-size: 14px;
+    height: 20px;
+    line-height: 18px;
+    margin: 38px 0 0;
+    opacity: 0;
+    padding: 0;
+    text-align: center;
+    transition: opacity 0.3s ease-out 0s;
+    width: 100%;
+}
+.create_new:hover > span {
+    opacity: 1;
+}
+.create_new h3 {
+    background: none repeat scroll 0 0 #e4f1f8;
+    border-radius: 2px;
+    float: left;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 2px;
+    padding: 8px 20px;
+}
+.thumbnail.browse {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: 2px solid transparent !important;
+    box-shadow: none;
+}
+.thumbnail.browse:hover {
+    border: 2px solid #fff !important;
+}
+.thumbnail.image-browse {
+    background: none repeat scroll 0 0 #f8fdff;
+     border: 2px solid #fff;
+}
 
+.thumbnail.browse .drag {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border-radius: 3px;
+    height: 440px;
+    margin: 5px;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+}
 
+.thumbnail.browse .drag.create {
+    background: url("../img/act-plus2-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    transition: background-position 0.3s linear 0s;
+}
+.thumbnail.browse:hover .drag.create {
+    background: url("../img/act-plus2.png") no-repeat scroll center 45% rgba(0, 0, 0, 0);
+}
+.thumbnail.browse .drag.create span {
+    color: #80c000;
+    display: block;
+    font-size: 14px;
+    height: 20px;
+    left: 0;
+    line-height: 18px;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    top: 55%;
+    transition: opacity 0.3s ease-out 0s;
+    width: 100%;
+}
+.thumbnail.browse:hover .drag.create {
+    border: 2px dashed #94cf1e;
+}
+.thumbnail.browse:hover .drag.create span {
+    opacity: 1;
+}
+.thumbnail.browse .drag {
+    border: 2px dashed #91bed6;
+}
+.thumbnail.browse:hover .drag {
+    border: 2px dashed #79d4f6;
+}
+.thumbnail:hover {
+    background: none repeat scroll 0 0 #FFFFFF;
+    box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
+    outline: 0 none;
+}
+.thumbnail {
+    box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
+}
+.thumbnail.browse .image-drag{
+    height :auto;
+    border:none;
+    margin: 0;
+}
+.thumbnail.browse:hover .image-drag{
+    border:none;
+}
+#wstabs > li {
+    position: relative;
+}
 /*==========Subscriber=========*/
 .score-buttons ul li:first-child {
     background: none repeat scroll 0 0 #eaf3f8;
@@ -3470,6 +3596,56 @@ ul#template_search_menu li {
 }
 .score-buttons {
     padding: 15px 0;
+}
+.icon.contact-name {
+    background: url("../img/ccard.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    height: 22px;
+    margin: 0 0 0 6px !important;
+}
+.nf_overwrite{
+     margin-top: 7px !important;
+}
+.notfound {
+    color: #6292ad;
+}
+.spinner {
+    bottom: 0;
+    left: 4px;
+    margin: 0;
+    position: absolute;
+    text-align: center;
+    width: 50px;
+    z-index: 99;
+}
+.spinner > div {
+    animation: 1.4s ease-in-out 0s normal both infinite running bouncedelay;
+    background-color: #7b929f;
+    border-radius: 100%;
+    display: inline-block;
+    height: 5px;
+    width: 5px;
+}
+.spinner .bounce1 {
+    animation-delay: -0.32s;
+}
+.spinner .bounce2 {
+    animation-delay: -0.16s;
+}
+
+@-webkit-keyframes bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0.0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bouncedelay {
+  0%, 80%, 100% { 
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 40% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
 }
 /*
 -------------- ENDS HERE ----------

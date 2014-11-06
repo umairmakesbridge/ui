@@ -69,6 +69,7 @@ function (template,contactsView,icheck,chosen) {
                     this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>')
                     this.$( "#email-template-iframe" ).load(_.bind(function() {
                        this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
+                       this.$('#temp-camp-previewbar').delay(1000).slideDown(500);
                     },this));
                //this.loadTemplates();
                 if(this.options.prevFlag==='C')

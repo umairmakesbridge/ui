@@ -231,13 +231,21 @@ function (template,highlight,templateCollection,templateRowView) {
                 },
                 searchTemplate:function(obj){
                     var li = $.getObj(obj,"li");
+                    // Remove the class from Total Temp
+                    _.each(li.parents('div.ws-content.active').find('span.ttval').parents('ul').find('li.font-bold'),
+                    function(k,v){
+                        $(k).removeClass('font-bold');
+                    });
                     if(!li.hasClass("active")){
                         this.$("#search-template-input").val('');
                         this.$('#clearsearch').hide();
                         this.$("#template_search_menu li,#template_layout_menu li").removeClass("active");
                         var html = li.clone();
                         $(this.el).find(".sortoption_expand").find('.spntext').html(html.text());
-                        var searchType = li.find("a").attr("search");  
+                        var searchType = li.find("a").attr("search");
+                        if(searchType == "all"){
+                            li.parents('div.ws-content.active').find('span.ttval').parent().addClass('font-bold');
+                        }
                         this.$el.find("#template_search_menu").hide();
                         li.addClass("active");
                         this.loadTemplates('search',searchType);                       
@@ -292,7 +300,7 @@ function (template,highlight,templateCollection,templateRowView) {
                        // this.drawTemplates();
                     }
                 },
-                callTemplates:function(tcount){
+                callTemplates:function(tcount,isTotal){
                     var remove_cache = false;
                     var newCount = 0;
                 if(!tcount){
@@ -321,14 +329,19 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     if(response.totalCount){
                                                         this.totalCount = response.totalCount;
                                                     }
-                                                    this.showTotalCount(this.totalCount);
+                                                    this.showTotalCount(this.totalCount,isTotal);
                                                     this.app.showLoading(false,this.$(".template-container"));
                                                       
+                                                        this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Template </span></div></div></li>');
                                                 _.each(collection.models, _.bind(function(model){
                                                         this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
                                                         this.$el.find('.thumbnails').append(this.rowView.$el);
                                                        this.rowView.tmPr.trimTags();
                                                     },this));
+                                                    /*-----Remove loading------*/
+                                                        this.app.removeSpinner(this.$el);
+                                                    /*------------*/
+                                                    this.$('#new_template').click(_.bind(this.createTemplate,this));
                                                    newCount = this.totalCount - this.offset;
                                                    //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
                                                    if(collection.length<parseInt(newCount)){
@@ -336,10 +349,12 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     }
                                                     if(collection.length==0){
                                                         var search_message  ="";
-                                                        if(this.searchTxt){
-                                                          search_message +=" containing '"+this.searchString.searchTxt+"'" ;
+                                                        if(this.searchString){
+                                                          search_message +=" containing '"+this.searchString.searchText+"'" ;
                                                         }
-                                                        this.$(".template-container").append('<p class="notfound">No Templates found'+search_message+'</p>');
+                                                        //console.log(this.searchString);
+                                                        //this.$(".template-container").append('<p class="notfound">No Templates found'+search_message+'</p>');
+                                                        this.$("#total_templates").html('<p class="notfound nf_overwrite">No Templates found'+search_message+'</p>');
                                                     }
                                                     this.$(".footer-loading").hide();
                                                     
@@ -544,7 +559,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                    dialog.hide();
                                     _this.template_id = _json[1];    
                                     _this.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.rowView.updateTemplate(_this.template_id);
+                                    _this.rowView.updateTemplate(_this.template_id,true);
                                }
                                else{
                                    _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
@@ -567,18 +582,18 @@ function (template,highlight,templateCollection,templateRowView) {
                         }
                         event.preventDefault();
                    },
-                   showTotalCount:function(count){                    
+                   showTotalCount:function(count,isTotal){                    
                         // var _text = parseInt(count)<="1"?"Template":"Templates";
                         // var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong>';
                          if(this.page.total_count==0){
                                 this.page.total_count=count;
                                 this.trigger('updatecount');
                             }else{
-                                this.$el.parents('.ws-content.active').find('.temp-count').text(count);
+                                //this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                             }
                     if(this.$("#template_search_menu li.active").length){
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>"+text+"</b> templates found");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>"+text+"</b> templates found");  
                     }
                     else if(this.searchString.searchText && this.searchString.searchType ==="nameTag"){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
@@ -600,8 +615,12 @@ function (template,highlight,templateCollection,templateRowView) {
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> templates");
+                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                     }
-                   
+                   // Creating Copy/deleting template update the total count 
+                   if(isTotal){
+                       this.$el.parents('.ws-content.active').find('.temp-count').text(count);
+                   }
                 },
                 triggerAll: function(){
                         this.$("#template_search_menu li:nth-child(2)").click(); 

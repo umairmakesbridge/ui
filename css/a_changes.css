@@ -2000,6 +2000,9 @@ position:relative;
     margin-right: -14px;
     margin-top: -8px;
     min-height: 66px !important;
+    box-shadow: -4px 0px 4px  rgba(58, 173, 254, 0.6);
+    -moz-box-shadow: -4px 0px 4px  rgba(58, 173, 254, 0.6);
+    -webkit-box-shadow: -4px 0px 4px  rgba(58, 173, 254, 0.6);
 }
 .slide-btns .icon { width:70px; }
 .sortoption {

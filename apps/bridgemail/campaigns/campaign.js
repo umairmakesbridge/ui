@@ -233,7 +233,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     });
                     this.$("#campaign_from_email_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     this.$("#fromemail_default_chosen .chosen-single div").attr("title","View More Options").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                    
+                   
                 },
                 setFromNameField:function(){
                     this.app.fixEmailFrom();
@@ -334,7 +334,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         var camp_json = jQuery.parseJSON(xhr.responseText);
                         camp_obj.campobjData = camp_json;
-                        $("#campMenubtn").attr("disabled",false).html("Load");
+                        $("#campMenubtn").attr("disabled",false).html("Load"); 
+                        
                         if(camp_obj.app.checkError(camp_json)){
                             return false;
                         }
@@ -342,7 +343,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.checksum = camp_json['campNum.checksum'];
                         //Setting Campaign Basic Settings
                         camp_obj.$el.parents(".ws-content").find("#workspace-header").addClass('header-edible-campaign').html(camp_json.name);
-        
+                         /*-----Remove loading------*/
+                          camp_obj.app.removeSpinner(camp_obj.$el);
+                        /*------------*/
                         //Setting tab details
                         var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
                         camp_obj.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:camp_json.name,subheading:"Campaign Wizard"});
@@ -427,6 +430,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         camp_obj.$("#campaign_tellAFriend").prop("checked",camp_json.tellAFriend=="N" ? false:true );
                         //camp_obj.$("#campaign_isTextOnly").prop("checked",camp_json.isTextOnly=="N"?false:true);
                         camp_obj.$("#campaign_isWebVersion").prop("checked",camp_json.isWebVersionLink=="N"?false:true);
+                        
                         camp_obj.setFooterArea();
                         camp_obj.setCustomFooterArea();
                         //Load tags

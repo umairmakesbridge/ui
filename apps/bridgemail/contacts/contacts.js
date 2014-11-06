@@ -39,6 +39,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.offset = 0;               
                this.searchTxt = '';
                this.tagTxt = '';
+               this.tempCount = null;
+               this.filterBy = null;
                this.contacts_request = null;
                this.sortBy = 'lastActivityDate';
                this.render();
@@ -71,13 +73,15 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             },
             addCountHeader:function(){
                var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li><span class="badge pclr18 tcount">0</span>Total Contacts</li>';
-                 count_header += '<li><span class="badge pclr11 suppressCount">0</span>Suppressed</li>';
-                 count_header += '<li style="display:none"><span class="badge pclr15 hiddenCount" >0</span>Hidden</li>';
-                 count_header += '<li><span class="badge pclr23 addCount">0</span>Added in Last 24hrs </li>';
+                 count_header += '<li search="T"><span class="badge pclr18 tempCount tcount">0</span>Total Contacts</li>';
+                 count_header += '<li search="S"><span class="badge pclr11 tempCount suppressCount">0</span>Suppressed</li>';
+                 count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';
+                 count_header += '<li search="A"><span class="badge pclr23 tempCount addCount">0</span>Added in Last 24hrs </li>';
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
-                 this.ws_header.append($countHeader);                  
+                 this.ws_header.append($countHeader);
+                 this.tempCount = this.ws_header.find('.tempCount').parent();
+                 this.tempCount.click(_.bind(this.filterContacts, this));
             },
             /**
              * Initializing all controls here which need to show in view.
@@ -130,7 +134,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     _.each(_json,function(value,key){
                          _this.ws_header.find("."+key).html(_this.app.addCommas(value));
                     });
-                    
+                     
                 }),this); 
             },
             /**
@@ -164,6 +168,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     }
                     _data['orderBy'] = this.sortBy;
                 }
+                if(this.filterBy && this.filterBy != "T"){
+                   _data['filterBy']  = this.filterBy;
+                }
                 if(this.contacts_request){
                     this.contacts_request.abort();
                 }
@@ -186,7 +193,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                             subscriberView.on('updatecount',this.updateRefreshCount);
                             this.$contactLoading.before(subscriberView.$el);
                         }                        
-                        
+                        /*-----Remove loading------*/
+                            this.app.removeSpinner(this.$el);
+                    /*------------*/
                         if(collection.length<parseInt(response.totalCount)){
                             this.$(".contactbox").last().attr("data-load","true");
                         } 
@@ -283,6 +292,14 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.fetchContacts();
             }
             ,
+            filterContacts : function(obj){
+                var target = $.getObj(obj,"li");
+                target.parent().find('li.font-bold').removeClass('font-bold');
+                target.addClass('font-bold');
+                var targetName = target.attr('search');
+                this.filterBy = targetName;
+                this.fetchContacts();
+            },
             showTotalCount:function(count){
                 this.$(".refreshbtn").hide();
                 this.$("#total_templates").show();

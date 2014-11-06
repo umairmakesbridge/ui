@@ -480,6 +480,11 @@ define([
                 cache[key] = null;
                 delete cache[key];
             },
+            removeSpinner: function(elObj){
+                var activeSpaceID = elObj.parents('.ws-content').attr('id');
+                activeSpaceID = activeSpaceID.split('_')[1];
+                $('#wp_li_'+activeSpaceID).find('.spinner').remove();
+            },
             getData:function(data){
               var app = this;  
               $.ajax({

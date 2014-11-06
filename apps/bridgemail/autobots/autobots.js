@@ -157,6 +157,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                         that.callDispenseStats(model.get("botId.encode"),model.get("botId.checksum"),true);
                                  }
                             })
+                            /*-----Remove loading------*/
+                                 that.app.removeSpinner(that.$el);
+                               /*------------*/
                             that.$el.find('.tag').on('click', function() {
                                 var html = $(this).html();
                                 that.searchText = $.trim(html);
