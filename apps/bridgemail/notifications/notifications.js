@@ -222,13 +222,13 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                               $('.messagesbtn sup').css({"top":"-4px",left:"22px"});
                             setTimeout(function(){
                                  $('.messagesbtn').removeClass('swing');
-                                 $('.messagesbtn sup').css({"top":"5px",left:"144px"});
+                                 $('.messagesbtn sup').css({"top":"5px",left:"70px"});
                             },5000);
                           
                             
                         }else{
                             $('.messagesbtn').removeClass('swing');
-                            $('.messagesbtn sup').css({"top":"5px",left:"144px"});
+                            $('.messagesbtn sup').css({"top":"5px",left:"70px"});
                         }
                         that.options.newMessages = data[1];
                         $('.messagesbtn sup').show();

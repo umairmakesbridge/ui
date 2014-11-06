@@ -450,7 +450,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             var tags_html = '';
                             if (tags_array[0] != 'err'){
                                 that.app.setAppData('tags', tags_array);
-                                     
+                                if(typeof tags_array.tagList !="undefined"){     
                                 $.each(tags_array.tagList[0], function(key, val) { 
                                     if ($.inArray(val[0].tag, editTags) != -1){
                                             editTags = jQuery.grep(editTags, function(value) {
@@ -466,6 +466,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                     }
                                         
                                 });
+                              }
                                 _.each(editTags,function(elem, idx){
                                     if(elem !=""){
                                         str = str + "<li id='li_" + elem + "' class='action' checksum='" + elem + "'>";
@@ -494,7 +495,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                         that.saveTagAutobot(true);
                                     }
                             }
-                            this.showLoadingWheel(false,that.$el.find("#divtags"));
+                            that.showLoadingWheel(false,that.$el.find("#divtags"));
                         }});
                   
                 },

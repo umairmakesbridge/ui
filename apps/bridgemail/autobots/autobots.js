@@ -60,11 +60,21 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }
                 },
                 render: function() {
-                    this.$el.html(this.template());
-                    this.fetchBots();
+                    this.$el.html(this.template()); ;
                     if(typeof this.options.params !="undefined"){
+                        if(typeof this.options.params.botId !="undefined"){
+                             this.fetchBots(0,this.options.params.botId);
+                        }else{
+                            this.fetchBots();
+                        }
+                    }else{
+                        this.fetchBots();
+                    }
+                    if(typeof this.options.params !="undefined"){
+                       if(typeof this.options.params.botType !="undefined"){
                         this.typeOfBots = this.options.params.botType;
                         this.addNewAutobot();
+                        }
                     }
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
@@ -164,7 +174,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                  
                             } 
                             if(botId){
-                                that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
+                                 that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
                             }
                              if (!offset) {
                                 that.$el.find("#autobots_listing").prepend(that.addListingRow());

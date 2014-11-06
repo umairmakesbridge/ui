@@ -75,6 +75,7 @@ function (template,chosen,addbox) {
 		   var curview = campview?campview.states.step3.csvupload:this.csv;
 		   var app = this.app;
 		   var mapview = this;
+                   var that = this;
 		   var appMsgs = app.messages[0];
 		   var el = this.$el;
 		   var actid = el.find('.map-toggle .active').attr('id');
@@ -207,6 +208,7 @@ function (template,chosen,addbox) {
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
 			   app.showLoading("Uploading file",curview.$el);
+                           var that= this;
 			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';                           
 			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:curview.fileName,layout:layout_map })
 			   .done(function(data) {
@@ -223,15 +225,28 @@ function (template,chosen,addbox) {
                                                  app.showLoading(false,mapview.$el);
                                            }
                                            else{
-                                               app.showLoading(false,curview.$el);
-                                               mapview.$el.hide();
-                                               mapview.$el.parents(".ws-content").find("#drop-files .middle").show();
-                                               mapview.$el.parents(".ws-content").find("#drop-files .middle #list_file_upload").parent().show();
-                                               mapview.$el.parents(".ws-content").find("#drop-files").show();
-                                               mapview.$el.parents(".ws-content").find(".csvpng").show();
-                                               mapview.$el.parents(".ws-content").find("#progress").remove();
-                                               mapview.csv.fileuploaded = false;
                                                app.showMessge("Your contacts in CSV file updated successfully.You can upload other CSV file as well.");
+                                                 if(typeof(mapview.options.params) !="undefined"){
+                                                    app.showLoading(false,mapview.$el);
+                                                    //that.$el.hide();
+                                                    require(["listupload/csvupload"], function(csvupload) {
+                                                        var mPage = new csvupload({app:app,camp:mapview});
+                                                        mapview.$el.html(mPage.$el);
+                                                      //  mapview.$el.find('#mapdata').show();
+                                                        mapview.$el.parents(".ws-content").find("#drop-files").show();
+                                                        mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                                    });
+                                                }else{
+                                                  app.showLoading(false,curview.$el);
+                                                  mapview.$el.hide();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files .middle").show();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files .middle #list_file_upload").parent().show();
+                                                  mapview.$el.parents(".ws-content").find("#drop-files").show();
+                                                  mapview.$el.parents(".ws-content").find(".csvpng").show();
+                                                  mapview.$el.parents(".ws-content").find("#progress").remove();
+                                                  mapview.csv.fileuploaded = false;
+                                               }
+                                               
                                            }
 					  
 				   }
@@ -313,10 +328,15 @@ function (template,chosen,addbox) {
 		   var curview = this;
 		   var app = this.app;
 		   var campview = this.options.camp;
+                   if(typeof(this.options.params) != 'undefined' ){
+                       this.rows = curview.options.params.rows
+                   }else{
+                      this.rows =  curview.options.rows
+                   }
 		   var appMsgs = app.messages[0];
 		   this.filllistsdropdown();
 		   curview.$el.find('.tabel-div').children().remove();
-		   var mappingHTML = curview.createMappingTable(curview.options.rows);
+		   var mappingHTML = curview.createMappingTable(this.rows);
 		   curview.$el.find('.tabel-div').append(mappingHTML);
                    if(campview){
                     campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
@@ -336,7 +356,11 @@ function (template,chosen,addbox) {
 			this.$el.html(this.template({}));
 			this.app = this.options.app;                        
 			this.camp_obj = this.options.camp;
-                        this.csv = this.options.csv;
+                       if(typeof(this.options.params) != 'undefined' ){
+                            this.csv = this.options.params.csv;
+                        }else{
+                            this.csv = this.options.csv;
+                        }
                         if(this.csv){
                             this.$(".save-contacts").show();
                         }

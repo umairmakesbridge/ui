@@ -299,7 +299,8 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     parents.find(".camp_header .tcount").text(parseInt(headerSet) - 1);
                     $('#total_graphics .badge').text(parseInt(headerSet) - 1);
 
-                }
+                } 
+                
             });
         });
  

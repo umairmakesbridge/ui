@@ -65,6 +65,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.wp_id = this.options.params.wp_id;
                     this.rescheduled = false;
                     this.hidecalender = false;
+                    this.scrollApply = false;
                     this.campobjData = null;
                     this.campDefaults = {};
                     this.allowedUser = ['admin','jayadams','demo'];  
@@ -794,20 +795,26 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          
                     }
                             var that = this;
-                            var width = 560;
-                            that.$('.scroll-text').css('width',width + "px");
-                            that.$('.step3').find('.selection-boxes').css('width',width + "px");
-                            that.$('.scroll-text').scrollbox({
-                                chunk:4,
-                                back:that.$('#box_backward'),
-                                forward:that.$('#box_forward')
-                            });
-                            that.$('#box_backward').click(function () {
-                              that.$('.scroll-text').trigger('backward');
-                            });
-                            that.$('#box_forward').click(function () {
-                              that.$('.scroll-text').trigger('forward');
-                            });    
+                            var width = 820;
+                            if(this.scrollApply == false){
+                                that.$('.scroll-text').css('width',width + "px");
+                                that.$('.step3').find('.selection-boxes').css('width',width + "px");
+
+                                that.$('.scroll-text').scrollbox({
+                                    chunk:6,
+                                    selection:true,
+                                    back:that.$('#box_backward'),
+                                    forward:that.$('#box_forward')
+                                });
+
+                                   this.scrollApply = true;
+                                    that.$('#box_backward').click(function () {
+                                      that.$('.scroll-text').trigger('backward');
+                                    });
+                                    that.$('#box_forward').click(function () {
+                                      that.$('.scroll-text').trigger('forward');
+                                    });
+                           }
                 },
 
                 fetchServerTime:function(){    

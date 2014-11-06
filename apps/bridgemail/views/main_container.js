@@ -92,13 +92,16 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-tagbot':'newAutobot',
                     'click .new-alertbot':'newAutobot',
                     'click .new-scorebot':'newAutobot',
-                    'click #ql_refresh':'loadHeaderCount'
+                    'click #ql_refresh':function(){
+                         this.loadHeaderCount(true);
+                    }
 
                 },
                 initialize: function() {
                     this.header = new HeaderView();
                     this.footer = new FooterView();
                     this.news = new NewsView();
+                    this.isRender = false;
                     this.lastActiveWorkSpace = "";
                     this.render();
                 }
@@ -109,7 +112,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.app = this.options.app;
                     this.template = _.template(LandingPage);     
                     this.$el.append(this.header.$el, this.template({}));
-                    this.loadHeaderCount(true);
+                   
 
                 },
                 allowWorkspace:function(options){                                    
@@ -328,7 +331,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 //Handling Dashboard Scripts for animation stuff.      
                 ,
                 dashBoardScripts: function() {
-
+                    var that = this;
                     this.$('ul.rightnav > li.logout > a').click(_.bind(function() {
                         this.$(".lo-confirm").animate({right: "0"}, 120);
                         this.$("ul.rightnav > li.logout span").css({display: "block"}, 120);
@@ -347,6 +350,13 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         this.$(".videopop").fadeIn("slow");
                     }, this));
 
+                    this.$('.icon-menu').on('mouseover',function(){
+                       // that.$('.add_dialogue').hide('fast'); 
+                       if(!that.isRender){
+                            that.loadHeaderCount(false);
+                            that.isRender = true;
+                        }
+                    })
 
                     this.$('.icon-menu').click(_.bind(function(event) {
                         var li = $.getObj(event, "li");
@@ -380,6 +390,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      this.$('#slidenav-newdd').on('mouseover', _.bind(function(e){
                         this.$('#slidenav-newdd').css('display','block');
                         this.$('.icon-menu').addClass('active');
+                        
                       },this));
                       this.$('#slidenav-newdd').on('mouseout', _.bind(function(e){
                         var e = e.toElement || e.relatedTarget;
@@ -641,10 +652,26 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     }
                    
                 },
-                loadHeaderCount:function(isRender){
-                    if(isRender !== true){
-                       this.$el.find('#ql_refresh').css('background','url("img/recurring2.gif") no-repeat scroll center center transparent');
-                    }
+                clearMenuCount:function(){
+                    var that = this;
+                    that.$el.find('.quicklinks .dd .play').hide();
+                    that.$el.find('.quicklinks .dd .pause').hide();
+                    that.$el.find('#ql_contacts strong').html('');
+                    that.$el.find('#ql_graphics em').html('');
+                    that.$el.find('#ql_graphics strong').html('');
+                    that.$el.find('#ql_contacts strong').html('');
+                    that.$el.find('#ql_autobots .play').html('');
+                    that.$el.find('#ql_autobots .pause').html('');
+                    that.$el.find('#ql_campaigns em').html('');
+                    that.$el.find('#ql_templates em').html(''); 
+                     that.$el.find('#ql_nurturetracks .pause').html('')
+                     that.$el.find('#ql_nurturetracks .play').html('');
+                },
+                loadHeaderCount:function(notRefresh){
+                    if(this.isRender && notRefresh == false) return false;
+                    
+                    this.clearMenuCount();
+                    this.$el.find('#ql_refresh').css('background','url("img/refresh-g.gif") no-repeat scroll center center transparent');
                     var URL = "/pms/io/publish/getImagesData/?BMS_REQ_TK="+app.get('bms_token')+"&type=counts";
                     var that = this;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -652,8 +679,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
                             that.timeOut = true;
                            }
-                          that.$el.find('#ql_graphics em').html(data.memOccupiedInMBs+'MB');
-                          that.$el.find('#ql_graphics strong').html(that.app.addCommas(data.totalCount));
+                          if(data.memOccupiedInMBs == '' || data.memOccupiedInMBs == '0') {
+                              that.$el.find('#ql_graphics em').html('');
+                            that.$el.find('#ql_graphics strong').html('');
+                          }else{ 
+                            that.$el.find('#ql_graphics strong').html(that.app.addCommas(data.totalCount) + " | "+ data.memOccupiedInMBs+'MB');
+                          }
                     }); 
                     var URL = "/pms/io/subscriber/getData/?BMS_REQ_TK="+app.get('bms_token')+"&type=totalCount";
                     var that = this;
@@ -662,7 +693,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         if(data[0]=="err" && data[1]=="SESSION_EXPIRED"){
                             that.timeOut = true;
                            }
-                        that.$el.find('#ql_contacts strong').html(that.app.addCommas(data.totalCount));
+                        if(data.totalCount !=''){   
+                            that.$el.find('#ql_contacts strong').html(that.app.addCommas(data.totalCount));
+                        }else{
+                            that.$el.find('#ql_contacts strong').html('');
+                        }
                     });
                     
                      var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
@@ -675,7 +710,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
                         var total = (parseInt(data.draft) + parseInt(data.sent) + parseInt(data.scheduled) + parseInt(data.pending));
-                        that.$el.find('#ql_campaigns em').html(that.app.addCommas(total));
+                        if(total == 0){
+                            that.$el.find('#ql_campaigns em').html('');
+                        }else{
+                           that.$el.find('#ql_campaigns em').html(that.app.addCommas(total));     
+                        }
                     });
                       var URL = "/pms/io/trigger/getNurtureData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                      jQuery.getJSON(URL, function(tsv, state, xhr) {
@@ -687,10 +726,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                      jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
-                        that.$el.find('#ql_templates em').html(that.app.addCommas(data.userTotal)); 
-                        if(isRender !== true){
-                            that.$el.find('#ql_refresh').css('background','url("img/refresh-g.png") no-repeat scroll center center transparent');
-                        }
+                        if(data.userTotal != '')
+                            that.$el.find('#ql_templates em').html(that.app.addCommas(data.userTotal)); 
+                        else
+                         that.$el.find('#ql_templates em').html(''); 
+                         that.$el.find('.quicklinks .dd .play').show();
+                         that.$el.find('.quicklinks .dd .pause').show();
+                         that.$el.find('#ql_refresh').css('background','url("img/refresh-g.png") no-repeat scroll center center transparent');
+                        
+                       
                     });
                      
                 }

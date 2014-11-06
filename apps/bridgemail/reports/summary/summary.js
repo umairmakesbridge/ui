@@ -28,10 +28,15 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
                this.trackId = this.options.params.trackId || null;
+               this.autobotId = this.options.params.autobotId || null;
                this.active_ws = "";
                this.clickType = this.options.params.clickType || null;
                this.type="basic";
-               this.stats = new Stats();
+               var type = "";
+               if(this.autobotId)
+                type = "bot";
+               
+               this.stats = new Stats({type:type});
                this.objSummary = new Summary();
                this.render();
             },
@@ -71,21 +76,27 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     _data['type'] = "messageStats";
                     //type=get&trackId=kzaqwKb26Dd17Mj20kbhui&triggerOrder=1&status=C&searchText=jay
                 }
+                if(this.autobotId !=null && this.autobotId){
+                     this.stats.url = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK="+this.options.app.get('bms_token')
+                    _data['botId'] = this.autobotId;
+                    
+                   // _data["triggerOrder"] = this.options.params.messageNo
+                    _data['type'] = "mailBotStats";
+                    //xxx.bridgemailsystem.com/pms/io/trigger/getAutobotData/?type=mailBotStats&botId=xxx0
+                }
                
                 this.stats.fetch({data:_data,success:function(data){
                     var _data = {};
                     _data['type'] = self.type;
                     _data['campNum'] = self.campNum;
                     self.objSummary.fetch({data:_data,success:function(dataS){
-                        
-                         self.$el.html(self.template({stats:data,summary:dataS}));
-                          
-                         //self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                         //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
-                          self.addGraphs(data);
-                         self.setHeader(self);
-                           self.options.app.showLoading(false,self.active_ws);
-                        if(dataS.get('campaignType') == "T"){
+                        self.$el.html(self.template({stats:data,summary:dataS}));
+                        //self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
+                        //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+                        self.addGraphs(data);
+                        self.setHeader(self);
+                        self.options.app.showLoading(false,self.active_ws);
+                        if(dataS.get('campaignType') == "T" || self.autobotId){
                              switch (self.clickType){
                                  case "sent":
                                      self.sentViews();
@@ -326,7 +337,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.active_ws.find(".sentat").remove();
                 this.active_ws.find("#campaign_tags").html('');
                 var subheading = "Campaign Summary";
-                if(this.objSummary.get('campaignType') == "T"){
+                if(this.objSummary.get('campaignType') == "T" || this.autobotId){
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('subject'));
                     this.$el.find(".c-settings span").html("Message Settings")
                     if(c_name == ""){
@@ -394,9 +405,10 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                      this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                      return;
                  }
-                action_icon.append(copyIconCampaign);
-                action_icon.append(deleteIconCampaign);
-                
+                 if(!this.autobotId){
+                    action_icon.append(copyIconCampaign);
+                    action_icon.append(deleteIconCampaign);
+                }
                 
                 copyIconCampaign.on('click',function(){
                     that.copyCampaign(that.campNum);

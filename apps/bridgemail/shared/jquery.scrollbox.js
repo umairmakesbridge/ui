@@ -12,7 +12,8 @@
 $.fn.scrollbox = function(config) {
   //default config
   var defConfig = {
-      chunk:4
+      chunk:4,
+      selection:false
   };
   config = $.extend(defConfig, config);
 	/**  scroll to element function **/
@@ -21,45 +22,84 @@ $.fn.scrollbox = function(config) {
 	    config.element = $(this);
 	    config.max_length = $(this).find('ul li').length
             config.count = 0;
-             
+            config.seed = 0;
 	   // config.chunk = config.chunk + 1;
-            var count = 1;
+           var count = 1;
+            
            backward = function(){  
-                 
-                config.element.animate({
-                     scrollLeft: config.element.find('ul li:nth-child(0)').scrollLeft()
-                });
-                count--;         
-                config.forward.show();
-                config.back.hide();
+               config.seed = config.seed - config.chunk;
+               if(config.seed < config.chunk){
+                     var left = config.element.find('ul li:first-child').css('left')
+                    config.element.animate({
+                        scrollLeft: left///
+                    });
+                    return false;;
+                 }
+                if(config.seed < 0)
+                     config.seed = 0;
+                 if(typeof config.element.find('ul li:nth-child('+(config.seed +1)+')').position() !="undefined"){
+                    var left = config.element.find('ul li:nth-child('+(config.seed +1)+')').css('left')
+                    config.element.animate({
+                        scrollLeft: left///
+                    });
+                    return false;
+                  }else{
+                          config.element.animate({
+                           scrollLeft:config.element.find('ul li:first-child').position().left
+                         });
+                         return false;
+                    }
+              return false;
+                
 	     //   scrollToElement('.highlight:nth-child(' + count + ')', 1000, -150);
 	    };
             var count = 1;
             forward = function() { 
-                if(count > 1 && config.max_length <= 8) return;
-                    config.element.animate({
-                         scrollLeft: config.element.find('ul li:nth-child('+(config.chunk+1)+')').position().left
-                    });
-                if(config.max_length <= 8){
-                    config.forward.hide();
-                    config.back.show();
-                }
-                    count++;
+                
+                 config.max_length = config.element.find('ul li').length
+                if(config.max_length <= config.seed) { 
+                    //console.log('reached last');
+                   // config.forward.hide();
+                   // config.back.show();
+                    return false;
+                }; 
+                    if(config.seed < 0)
+                        config.seed = 0;
+                    
+                    config.seed = config.seed + config.chunk; 
+                      if(config.max_length < config.seed){
+                        config.element.animate({
+                           scrollLeft:config.element.find('ul li:last-child').position().left
+                         });
+                         return false;
+                      }
+                     if(typeof config.element.find('ul li:nth-child('+(config.seed+1)+')').position() !="undefined"){
+                          config.element.animate({
+                           scrollLeft:config.element.find('ul li:nth-child('+(config.seed+1)+')').position().left
+                         });
+                         return false;
+                    }else{
+                          config.element.animate({
+                           scrollLeft:config.element.find('ul li:last-child').position().left
+                         });
+                         return false;
+                    }
+                    
+              
+                    return false;
             };
-           
+           if(config.selection == true){
              if(config.element.find('ul li.selected').length > 0){
                 var index = config.element.find('ul li.selected').parent().children().index(config.element.find('ul li.selected'));
-                console.log();
-                 if(index > 3){
-                  forward();
-                 }else{
-                     config.forward.show();
-                    config.back.hide();
+                 if(index > 5){
+                  forward(); 
+                 }else{ 
                  }
              }
+           
+          }
             config.element.bind('forward', function() {  forward(); });
             config.element.bind('backward', function() {  backward(); });
-            
 	});
    
 };

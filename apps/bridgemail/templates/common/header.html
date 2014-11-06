@@ -5,33 +5,11 @@
         <li><a  class="logo">  Makesbridge</a></li>
     </ul>
     <div class="sc-links">
-        <div class="ddlist-btn">
-                    	<a data-original-title="" class="new-campaign dropdown-nav-addcampaign showtooltip add-new-header"><i class="icon campaignicon"></i></a>
-                    	<span class="ddicon"><em></em></span>
-                    </div>
-                    
-                    
-                	<ul style="display: none;" id="add-menu" class="ddlist dropdown-nav">
-                        <li class="new-campaign"><a><i class="icon campaignicon"></i><span>Campaign</span></a></li>
-                        <!--<li><a href="#"><i class="icon workflowicon"></i><span>Workflow</span></a></li>-->
-                        <!--<li class="active"><a href="#"><i class="icon autotriggericon"></i><span>Auto Trigger</span></a></li>-->
-                        <li class="naturetrack-li"><a><i class="icon nurturetrackicon"></i><span>Nurture Track</span></a></li>
-                        
-                      </ul>
-                      <a data-original-title="" class="contacts-nav-wrap csv-li showtooltip add-new-header"><i class="icon contactsicon"></i></a>
-                       <a class="messagesbtn"><i class="icon messagesicon"></i><sup style="top: 5px; left: 144px;">0</sup></a>
-                     
-                	<!--<a class=""><i class="icon announcementicon"></i></a>-->
-                
-                
-        
-        
-        
-        <!--
+         
         <a class="addbtn quick-add"><i class="icon plusicon"></i></a>
         <a class="messagesbtn"><i class="icon messagesicon"></i><sup>0</sup></a>
-        <a class="announcementbtn "><i class="icon announcementicon"></i></a>
-        <a class=""><i class="icon announcementicon"></i></a>-->
+        <a class="announcementbtn " style="display:none;"><i class="icon announcementicon"></i></a>
+       <!-- <a class=""><i class="icon announcementicon"></i></a>-->
 
 
     </div>
@@ -60,127 +38,13 @@
     <div class="messages_dialogue dropdown-nav" style="display: none;">
 
     </div>
-    <div class="announcement_dialogue">
-        <em class="date">3 hrs ago</em>
-        <h3>Loading...</h3>
+    <div class="announcement_dialogue" style="display:none;">
+        <a class="closebtn-gray"></a>
+        <em class="date">&nbsp;</em> 
         <p>Loading....</p>	
     </div>
-    <div class="add_dialogue">  
-
-        <ul  class="nav-tabs options" id="add_options">
-            <li class="active"><a href="#dp1"><img alt="" data-src="" src="img/graphics.png"></a>
-
-
-            </li>
-            <li><a href="#dp2"><img alt="" data-src="" src="img/csv-g.png"></a></li>
-            <li><a href="#dp3"><img alt="" data-src="" src="img/campaign-g.png"></a></li>
-            <li><a href="#dp4"><img alt="" data-src="" src="img/nurturetrack-g.png"></a></li>
-            <li><a href="#dp5"><img alt="" data-src="" src="img/autobots-g.png"></a></li>
-        </ul>
-
-
-        <div class="add_detail tab-content">
-
-            <div  class="tab-pane active" id="dp1">
-                <div class="droppanel">
-                    <h4><img alt="" src="img/image.png"><br class="clearfix">Drag and drop an image</h4>
-                    <a href="" class="btn-blue g-btn  "><span>Browse &amp; Upload </span><i class="icon update"></i></a>
-                </div>
-
-                <div class="imgs_added">
-                    <h4>Recently added images &nbsp;&nbsp; <a href="">Visit Image Gallery &raquo;</a></h4>
-                    <ul>
-                        <li><a href=""><img alt="" data-src="" src="img/mbs.png"></a></li>
-                        <li><a href=""><img alt="" data-src="" src="img/videosample.jpg"></a></li>
-                        <li class="active"><a href=""><img alt="" data-src="" src="img/avatar.jpg"></a>
-                            <div class="imgbtns">
-                                <a href="" class="icon preview s-clr2"><span>Preview</span></a>
-                                <a href="" class="icon delete s-clr1"><span>Delete</span></a>                                                
-                            </div>
-                        </li>
-                        <li><a href=""><img alt="" data-src="" src="img/csvicon-yell.png"></a></li>
-                    </ul>
-
-                    <div class="img_detail">
-
-                        <h3><a href="">Dexion Newsletter</a>  <span class="size"> 24kb   |   410x560</span></h3>
-
-                        <p><a href="">business</a><a href="">marketing</a><a href="">online shopping</a><a href="">freeware </a>
-                            <a href="" class=" addtag btn-green"><i class="icon plus left"></i> <span>Add Tag</span></a>
-                        </p>
-
-                        <div class="imgurl">
-                            <h4>Image URL</h4>
-                            <input type="text" placeholder="Image URL" onclick="this.focus();
-                                    this.select()"  class="left tginput" style="width:455px;" value="http://dnfnb6d6s/ccaY49Wc/IMG_0877.JPG">
-                        </div>
-
-
-
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div> <!--  add_detail  -->
-
-            <div  class="tab-pane" id="dp2">
-                <div class="droppanel">
-                    <h4><img alt="" src="img/csv.png"><br class="clearfix">Drag .CSV file or browse from computer</h4>
-                    <a href="" class="btn-blue g-btn  "><span>Browse &amp; Upload </span><i class="icon update"></i></a>
-                </div>
-
-
-            </div> <!--  add_detail  -->
-
-            <div  class="tab-pane" id="dp3">
-                <div class="add_panel">
-                    <h2>Create a new Campaign</h2>
-                    <div class="takename">
-                        <input type="text" style="width:300px;" placeholder="Enter campaign name here" id="" name="camp_name">
-                        <a href="" class="btn-green g-btn  "><span>Create </span><i class="icon next"></i></a>
-                    </div>
-
-                </div>
-            </div> <!--  add_detail  -->
-
-            <div  class="tab-pane" id="dp4">
-                <div class="add_panel">
-                    <h2>Create a new Nurture Track</h2>
-                    <div class="takename">
-                        <input type="text" style="width:300px;" placeholder="Enter Nurture Track name here" id="" name="">
-                        <a href="" class="btn-green g-btn  "><span>Create </span><i class="icon next"></i></a>
-                    </div>
-
-                </div>
-            </div> <!--  add_detail  -->
-
-            <div  class="tab-pane" id="dp5">
-                <div class="add_panel">
-                    <h2>Create a new Autobot</h2>
-
-                    <ol class="slctbot">
-                        <li><a href=""><img src="img/alertbot-icon.png" alt=""> <span>Alert Bot</span></a></li>
-                        <li><a href=""><img src="img/bdaybot-icon.png" alt=""><span>Birthday Bot</span></a></li>
-                        <li><a href="" class="active"><img src="img/mailbot-icon.png" alt=""><span>Mail Bot</span></a></li>
-                        <li><a href=""><img src="img/tagbot-icon.png" alt=""><span>Tag Bot</span></a></li>
-                        <li><a href=""><img src="img/scorebot-icon.png" alt=""><span>Score Bot</span></a></li>
-
-                    </ol>
-
-                    <div class="takename" style=" padding-bottom: 50px;">
-                        <input type="text" style="width:300px;" placeholder="Enter autobot name here" id="" name="">
-                        <a href="" class="btn-green g-btn  "><span>Create </span><i class="icon next"></i></a>
-                    </div>
-
-                </div>
-            </div> <!--  add_detail  -->
-
-
-
-        </div>
-
-
-
-
+    <div class="add_dialogue" style="min-height: 300px; display:none;">  
+        <div style="position:absolute; left:45%;top:47%; display:block;"><img src="<%- this.app.get('path')%>img/loading.gif"/></div>
 
     </div> <!--  add_dialogue  -->
 
