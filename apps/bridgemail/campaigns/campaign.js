@@ -3299,7 +3299,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          that.app.showLoading(false, mPage.$el.parent());
                          var dialogArrayLength = that.app.dialogArray.length; // New Dialog
                          mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                         that.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         //that.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
                          that.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                         // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
                        // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();

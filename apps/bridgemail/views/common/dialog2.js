@@ -200,6 +200,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                         },
                         showPrevious : function(){
                             var length = this.app.dialogArray.length;
+                           if(length > 1){
                             var showElement = length-1;
                             var removeElement = length;
                             this.app.dialogArray.pop();
@@ -212,9 +213,12 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                            //this.render(this.optionObj[showElement]);
                             var newLength = this.app.dialogArray.length;
                             if(newLength === 1){
-                                this.$('.dialog-backbtn').hide();
+                                    this.$('.dialog-backbtn').hide();
+                                }else{
+                                    this.$('.dialog-backbtn').show();
+                                }
                             }else{
-                                this.$('.dialog-backbtn').show();
+                                this.hide();
                             }
                         },
                         reattachEvents : function(){
