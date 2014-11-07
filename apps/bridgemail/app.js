@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog2','views/common/quickadd'
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog2'
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
@@ -481,12 +481,11 @@ define([
                 delete cache[key];
             },
             removeSpinner: function(elObj){
-                
-                var activeSpaceID = elObj.parents('.ws-content').attr('id');
-                activeSpaceID = activeSpaceID.split('_')[1];
-                if(activeSpaceID){
-                        $('#wp_li_'+activeSpaceID).find('.spinner').remove();
-                    }
+                if(elObj.parents('.ws-content').length){
+                    var activeSpaceID = elObj.parents('.ws-content').attr('id');
+                    activeSpaceID = activeSpaceID.split('_')[1];                
+                    $('#wp_li_'+activeSpaceID).find('.spinner').remove();
+               }
             },
             getData:function(data){
               var app = this;  
