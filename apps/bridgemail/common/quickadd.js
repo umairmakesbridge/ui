@@ -1,4 +1,4 @@
-define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/quickadd.html','fileuploader','bms-dragfile','bms-tags','scrollbox'],
+define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','bms-tags','scrollbox'],
 	function ($, Backbone, _, app, template,fileuploader,dragfile,bmstags,scrollbox) {
 		'use strict';
 		return Backbone.View.extend({
