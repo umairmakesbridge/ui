@@ -211,10 +211,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         that.$el.find('.messagesbtn sup').html(data['notify.unread.count']);
                         if(data['system.message'] != ""){
                              that.$el.find(".announcementbtn").show();
+                             that.$el.find('.announcementbtn').show();
                             that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
                          }else{
                              that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
                              that.$el.find('.announcement_dialogue').hide()
+                             that.$el.find('.announcementbtn').hide(); 
                          }
                         if(data['notify.unread.count'] == "0" || data['notify.unread.count']== 0){
                             that.$el.find('.messagesbtn sup').hide();

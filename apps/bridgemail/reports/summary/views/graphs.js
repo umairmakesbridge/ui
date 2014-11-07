@@ -22,6 +22,7 @@ function (template,chart,contactsView,jsPDF) {
                  this.chart_data = "";
                  this.active_ws = "";
                  this.trackId = this.options.trackId || 0;
+                 this.botId = this.options.botId || 0;
                  this.data = [];
                  this.render();
             },
@@ -85,7 +86,7 @@ function (template,chart,contactsView,jsPDF) {
             getStatus:function(){
                 //console.log(this.options.status);
                 var status = "";
-                 if(this.options.campaignType == "T") {
+                 if(this.options.campaignType == "T" || this.botId) {
                     var html = "<span class='pclr18 chart-sent-views showtooltip' style='width:auto;cursor:pointer;' data-original-title='Click to view contacts'>Sent <strong>"+this.options.app.addCommas(this.model.get('sentCount'))+"</strong></span>";
                     html = html + "<span class='pclr6 pdf-pending chart-pending-views showtooltip' style='width:auto;cursor:pointer;' data-original-title='Click to view contacts'>Pending <strong>"+this.options.app.addCommas(this.model.get('pendingCount'))+"</strong></span>";
                     return html;
