@@ -331,8 +331,9 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     }
                                                     this.showTotalCount(this.totalCount,isTotal);
                                                     this.app.showLoading(false,this.$(".template-container"));
-                                                      
+                                                    if(this.$el.find('.thumbnails #new_template').length == 0){
                                                         this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Template </span></div></div></li>');
+                                                    }
                                                 _.each(collection.models, _.bind(function(model){
                                                         this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
                                                         this.$el.find('.thumbnails').append(this.rowView.$el);
