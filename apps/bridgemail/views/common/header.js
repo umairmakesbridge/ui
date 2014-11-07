@@ -135,7 +135,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         $('#slidenav-newdd').hide();
                         this.$('#add-menu').css('display', 'none');
                     }, this));
-                  this.toggleAnnouncement();
+                  
                 },
                 getTitle: function(obj) {
                     var title = $(obj.target).parent("li").find("a").text();
