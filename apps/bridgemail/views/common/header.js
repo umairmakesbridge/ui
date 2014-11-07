@@ -276,7 +276,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                    this.isQuickMenuLoaded = true;
                    
                    this.$el.find('.add_dialogue div').css('top','47%'); 
-                   require(["views/common/quickadd"], function(quickadd) {
+                   require(["common/quickadd"], function(quickadd) {
                          var mPage = new quickadd({page:that});
                         /// that.app.showLoading(false, that.$el.find('.add_dialogue'));
                           that.$el.find('.add_dialogue').html(mPage.$el);
