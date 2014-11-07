@@ -3516,7 +3516,7 @@ ul#template_search_menu li {
     border: 2px solid #fff !important;
 }
 .thumbnail.image-browse {
-    background: none repeat scroll 0 0 #f8fdff;
+   /* background: none repeat scroll 0 0 #f8fdff;*/
      border: 2px solid #fff;
 }
 
@@ -3563,7 +3563,7 @@ ul#template_search_menu li {
     border: 2px dashed #91bed6;
 }
 .thumbnail.browse:hover .drag {
-    border: 2px dashed #79d4f6;
+   /* border: 2px dashed #79d4f6;*/
 }
 .thumbnail:hover {
     background: none repeat scroll 0 0 #FFFFFF;
@@ -3575,11 +3575,17 @@ ul#template_search_menu li {
 }
 .thumbnail.browse .image-drag{
     height :auto;
-    border:none;
     margin: 0;
+    padding: 10px 5px 0;
 }
+.thumbnail.browse > .image-drag > .droppanel:hover{
+    border : 2px dashed transparent !important;
+} 
+.thumbnail.browse > .image-drag > .droppanel{
+    border : 2px dashed transparent !important;
+} 
 .thumbnail.browse:hover .image-drag{
-    border:none;
+    border:3px dashed #94cf1e !important;
 }
 #wstabs > li {
     position: relative;
@@ -3629,12 +3635,19 @@ ul#template_search_menu li {
     display: inline-block;
     height: 5px;
     width: 5px;
+    -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
+  animation: bouncedelay 1.4s infinite ease-in-out;
+  /* Prevent first frame from flickering when animation starts */
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
 .spinner .bounce1 {
     animation-delay: -0.32s;
+    -webkit-animation-delay: -0.32s;
 }
 .spinner .bounce2 {
     animation-delay: -0.16s;
+    -webkit-animation-delay: -0.16s;
 }
 
 @-webkit-keyframes bouncedelay {

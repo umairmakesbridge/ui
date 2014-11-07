@@ -119,6 +119,9 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                             _.each(data.models, function(model) {
                                 that.$el.find('#targets_grid tbody').append(new TargetView({model: model, app: app,page:that,showUse:that.showUse,type:that.type,dialog:that.dialog}).el);
                             });
+                             /*-----Remove loading------*/
+                             that.app.removeSpinner(that.$el);
+                             /*------------*/
                             if (that.searchText) {
                                 that.showSearchFilters(that.searchText, that.objTargets.total);
                             } else {
