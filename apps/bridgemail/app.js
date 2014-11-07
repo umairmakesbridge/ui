@@ -1,5 +1,5 @@
 define([
-	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog2'/*,'jquery.icheck','jquery.bmsgrid','jquery.calendario','jquery.chosen','jquery.highlight','jquery.searchcontrol','jquery-ui','fileuploader','bms-filters','bms-shuffle','bms-crm_filters','bms-tags','bms-mapping','moment','_date','daterangepicker','bms-dragfile','bms-addbox','propertyParser','goog','async','bms-mergefields','datetimepicker','jquery.isotope','jquery.customScroll','mee-helper','mincolors','tinymce'*/
+	'jquery', 'underscore', 'backbone','bootstrap','views/common/dialog2','views/common/quickadd'
 ], function ($, _, Backbone,  bootstrap,bmsDialog) {
 	'use strict';
 	var App = Backbone.Model.extend({
