@@ -2056,9 +2056,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 var htmlToPlace = $("<div class='myImage resizable' align='left' style='float:none;'><div class='resizableImage' style='height:200px; width:200px;'><img style='height:100%; width:100%;' class='imageHandlingClass  clickEvent' src='" + imageSrc + "' style='display:block;' /></div></div>");
 
                                 // htmlToPlace.find("img.imageHandlingClass").resizable({
-                                htmlToPlace.find(".resizableImage").resizable({
-                                            
-                                    });                                            
+                                
+                                meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({});                                            
                                 args.droppedElement.html(htmlToPlace);
                                 makeCloneAndRegister();
 
@@ -2845,14 +2844,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         args.DynamicContent = args.clickedLi.data("content");
                                                                                 
                                         var _ele = $(this);
-                                        var ele_offset = _ele.offset();                                                         
-                                        var editorPanel = _ele.parents(".MEE_EDITOR").offset();
-                                        var top = ele_offset.top + 18;
-                                        var left = ele_offset.left + 242;  
-
+                                        var ele_offset = _ele.offset();                                                                                                 
+                                        var top = ele_offset.top + 80;
+                                        var left = ele_offset.left + 50;  
                                         OpenRulesWindow(args, top, left);
-
-
                                     });
                                 }
                                 
@@ -3517,7 +3512,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 //Destroy plugin events all event
                                 this.DestroyPluginsEvents = function (element) {
                                     try {
-                                        element.find("img.imageHandlingClass").resizable("destroy");                                        
+                                        meeIframeWindow.$(element.find("img.imageHandlingClass")).resizable("destroy");                                        
                                     }
                                     catch (e) {
                                         console.log("Exception on destroying resizable on text");
@@ -3553,10 +3548,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 this.InitializePluginsEvents = function (element) {                                    
                                     try{
                                         element.find(".resizableImage .ui-resizable-handle").remove();
-                                        element.find(".resizableImage").resizable("destroy");                                        
+                                        meeIframeWindow.$(element.find(".resizableImage")).resizable("destroy");                                        
                                     }
                                     catch(e){}
-                                    element.find(".resizableImage").resizable({});                                    
+                                    meeIframeWindow.$(element.find(".resizableImage")).resizable({});                                    
 
                                     element.find("div.textcontent").each(function (index, element) {
                                         
