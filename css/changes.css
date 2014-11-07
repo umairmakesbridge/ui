@@ -1773,6 +1773,7 @@ div.shortcuts .ddicon{
     text-overflow:ellipsis;
     line-height: 20px;
     white-space: nowrap;
+    position:relative;
 }
 .workspace ul.tabs-menu li .detail .subheading{
     font-size:12px;    
@@ -3608,6 +3609,9 @@ ul#template_search_menu li {
 }
 .notfound {
     color: #6292ad;
+}
+#autobots_listing > .create_new {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
 }
 .spinner {
     bottom: 0;

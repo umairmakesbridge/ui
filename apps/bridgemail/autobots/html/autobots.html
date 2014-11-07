@@ -3,8 +3,8 @@
         <h2 id="total_autobots"><strong class="badge">0</strong> <span class='sort-text'></span> autobots found <span class='search-text'></span></h2>
         <div style=" " class="srt-div">
             <div class="btn-group tile-list">
-                <button class="btn btn-default view-tiles active showtooltip" style="display:none;border-radius: 3px;" data-original-title="Switch to gallery view" type="button"><i class="icon tiles"></i></button>
-                <button class="btn btn-default view-listing active showtooltip" style="border-radius: 3px;"  data-original-title="Switch to list view" type="button"><i class="icon listing"></i></button>
+                <button class="btn btn-default view-tiles active showtooltip" style="border-radius: 3px;" data-original-title="Switch to gallery view" type="button"><i class="icon tiles"></i></button>
+                <button class="btn btn-default view-listing active showtooltip" style="border-radius: 3px;display:none;"  data-original-title="Switch to list view" type="button"><i class="icon listing"></i></button>
             </div>
             <div class="template-filter_expand right" id="autobots"> <strong class="sort left">Filter</strong>
                 <span class="sortoption_expand active text-truncated showtooltip" data-original-title="Click to expand/collapse"><span class="spntext">All</span> <b class="caret right" style="position:absolute; top:8px; right:335px"> </b></span>
@@ -32,7 +32,7 @@
 
 </div>
 <div class="template-container">
-    <div id="autobots_tiles" class=" tileview autobots">
+    <div id="autobots_tiles" class=" tileview autobots" style="display: none;">
         <div class="row-fluid">
             <ul class="thumbnails">
             </ul> 
@@ -43,7 +43,7 @@
         </div>
     </div>
 
-    <div id="autobots_listing" class="target-listing camp_listing" style="display: none;">
+    <div id="autobots_listing" class="target-listing camp_listing" >
         <div class="bmsgrid">
             <div class="hDiv">
                 <div class="hDivBox">

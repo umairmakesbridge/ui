@@ -159,7 +159,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         this.lastActiveWorkSpace = "wp_li_" + wp_count;
                         wp_view.$el.attr("id", "workspace_" + wp_count);
                         $('#'+this.lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
-                        $('#'+this.lastActiveWorkSpace).find('.detail .subheading').html('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                        if(options.isLoadSpinner){
+                            $('#'+this.lastActiveWorkSpace).find('.detail .heading').html('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                        }
                         /*-----*/
                         $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                         $("#workspace .workspace").append(wp_view.$el);
@@ -293,9 +295,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     }
                     this.addWorkSpace({type: 'wizard',
                         title: "Campaigns",
+                        isLoadSpinner : true,
                         workspace_id: 'campaign_' + camp_wsid,
                         url: 'campaigns/campaign',
                         tab_icon: 'campaign',
+                        sub_title:'Campaing Wizard',
                         params: {camp_id: camp_id},
                         wizard: {cssClass:'campaign_progress',rescheduled:reschedule,hidecalender:hidecalender,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
@@ -310,8 +314,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var sub_id = sub_id ? sub_id : 0;
                     this.addWorkSpace({type: '',
                         title: "Loading...",
+                        isLoadSpinner : true,
                         tab_icon: 'contactdetail',
                         workspace_id: 'subscriber_' + sub_id,
+                        sub_title:'Contact Profile',
                         url: 'contacts/subscriber',
                         params: {sub_id: sub_id},
                         actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
