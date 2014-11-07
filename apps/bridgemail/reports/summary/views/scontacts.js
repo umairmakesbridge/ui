@@ -29,6 +29,7 @@ function (template,Contacts,viewContact) {
                  this.total_fetch  = 0;
                  this.total = 0;
                  this.timer = 0;
+                 this.botId = this.options.botId || null;
                  this.render();
             },
             render: function () {
@@ -84,7 +85,7 @@ function (template,Contacts,viewContact) {
                        that.showSearchFilters(this.searchText);
                     }
                     
-                        if(this.options.type=="C" || this.options.type == "P"){
+                        if((this.options.type=="C" || this.options.type == "P") && !this.botId){
                             this.type = this.options.type;
                            // _data['responderType'] = this.responderType;
                             //_data['type'] = this.type ;
@@ -94,6 +95,14 @@ function (template,Contacts,viewContact) {
                             _data['type'] = "get";
                             _data['trackId'] = this.options.trackId;
                             _data['triggerOrder'] = this.options.triggerOrder;
+                            _data['status'] = this.type;
+                        }else if(this.botId){
+                            this.type = this.options.type;
+                            
+                            this.objContacts.url = "/pms/io/trigger/getAutobotPopulation/?BMS_REQ_TK="+this.options.app.get('bms_token');
+                            _data['type'] = "get";
+                            _data['botId'] = this.botId;
+                           // _data['triggerOrder'] = this.options.triggerOrder;
                             _data['status'] = this.type;
                         }else{
                         _data['responderType'] = this.responderType;
@@ -114,7 +123,7 @@ function (template,Contacts,viewContact) {
                            that.$el.find('#tblcontacts tbody #loading-tr').remove();
                       }
                       _.each(data1.models, function(model){
-                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,article:that.options.article,app:that.options.app,type:that.options.type,campNum:that.campNum,url:that.options.url}).el);
+                           that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,article:that.options.article,app:that.options.app,type:that.options.type,campNum:that.campNum,url:that.options.url,botId:that.botId}).el);
                        });
                        if(that.where != "page"){
                            

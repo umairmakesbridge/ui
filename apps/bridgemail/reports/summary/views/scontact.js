@@ -26,6 +26,7 @@ function (template,moment,app) {
                  this.viewCount = 0;                 
                  this.type = this.options.type;
                  this.firstOpenDate = ""
+                 this.botId = this.options.botId || null;
                  this.bounceType = "";
                  this.articleTitle = "";
                  this.articleUrl = "";
@@ -35,11 +36,17 @@ function (template,moment,app) {
                  this.render();
             },
             render: function () {
-                 if(this.type == "C" || this.type == "P"){
+                 if((this.type == "C" || this.type == "P") && !this.botId){
                   this.isNurtureTrack = true;
                   this.bounceType =   this.model.get('nurtureData')[0].bounceCategory;  
                   this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount;  
                   this.logTime =this.model.get('nurtureData')[0].execDate; 
+                }else if(this.botId){
+                        this.bounceType =   this.model.get('autobotData')[0].bounceCategory;  
+                        this.viewCount =   this.model.get('autobotData')[0].totalPageViewsCount;  
+                        this.logTime =this.model.get('autobotData')[0].execDate; 
+                        this.recurCount = this.model.get('autobotData')[0].recurCount;
+                        this.totalClickCount = this.model.get('autobotData')[0].totalClickCount;
                 }else{
                   this.bounceType = this.model.get('activityData')[0].bounceCategory;
                   this.logTime = this.model.get('activityData')[0].logTime;
@@ -216,8 +223,10 @@ function (template,moment,app) {
                        $('.percent_stats').find(".ocp_stats").remove();
                     
                 var nurtureData;
-                 if(this.type == "C"){
+                 if(this.type == "C" && !this.botId){
                    nurtureData  = this.model.get('nurtureData')[0];
+                 }else if(this.botId){
+                     nurtureData =  this.model.get('autobotData')[0];
                  }else{
                    nurtureData =  this.model.get('activityData')[0];
                  }
@@ -292,8 +301,10 @@ function (template,moment,app) {
              },
              getMeterIconClass:function(){
                  var nurtureData;
-                 if(this.type=="C"){
+                 if(this.type=="C" && !this.botId){
                    nurtureData  = this.model.get('nurtureData')[0];
+                 }else if(this.botId){
+                     nurtureData =  this.model.get('autobotData')[0];
                  }else{
                    nurtureData =  this.model.get('activityData')[0];
                  }

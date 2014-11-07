@@ -65,8 +65,8 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
                 getReport:function(){
-                     if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
-                       return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
+                    if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                      return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
                 },
                  reportShow:function(){ 
                        var camp_id=this.model.get('actionData')[0]['campNum.encode'];

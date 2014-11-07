@@ -63,7 +63,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                    /*------------*/
             },
             addGraphs:function(data){
-                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId}).el);  
+                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId,botId:this.autobotId}).el);  
                 
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },
@@ -266,7 +266,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     this.active_ws.find(".sent-views").parents('li').addClass('active');
                 }
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"C",app:this.options.app,botId:this.autobotId,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
                  
             },
