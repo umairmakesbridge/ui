@@ -48,51 +48,37 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
                 getReport:function(){
-                    // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
-                       // return '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                     // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                       //  return '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
                 },
                 getAutobotImage: function() {
                     var label = "";
                     switch (this.model.get('actionType')) {
                         case "SC":
                             label = "<img src='"+this.options.app.get("path")+"img/scorebot-icon.png' style='max-width:none!important;'>";
-                             this.icon = 'scorebot';
                             break;
                         case "A":
-                            this.icon = 'alertbot';
                             label = "<img src='"+this.options.app.get("path")+"img/alertbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "E":
-                            this.icon = 'mailbot';
+                            this.icon = 'mailbotc18';
                             label = "<img src='"+this.options.app.get("path")+"img/mailbot-icon.png' style='max-width:none!important;'>";
                             break;
                         case "TG":
-                            this.icon = 'tagbot';
                             label = "<img src='"+this.options.app.get("path")+"img/tagbot-icon.png' style='max-width:none!important;'>";
                             break;
                     }
                      switch (this.model.get('presetType')) {
                         case "PRE.1":
-                            this.icon = 'bdaybot';
+                            this.icon = 'bdaybotc18g';
                             break;
                         case "PRE.2":
-                            this.icon = 'meetingalertbot';
+                            this.icon = 'meetingbotc18';
                             break;
                         case "PRE.3":
-                            this.icon = 'autorespbot';
+                            this.icon = 'autorespbotbotc18';
                             break;
-                        case "PRE.4":
-                            this.icon = 'salesalertbot';
-                            break;
-                        case "PRE.5":
-                            this.icon = 'score10bot';
-                            break;
-                        case "PRE.6":
-                            this.icon = 'score50bot';
-                            break;
-                         case "PRE.7":
-                             this.icon = 'score100bot';
-                            break;
+                       
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
                         label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png' style='max-width:none!important;'>"
