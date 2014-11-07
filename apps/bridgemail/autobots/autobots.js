@@ -173,7 +173,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             if (that.total_fetch < parseInt(that.objAutobots.total)) {
                                 that.$el.find("#tblAutobots tbody tr:last").attr("data-load", "true");
                                 that.$el.find(".thumbnails li:last").attr("data-load", "true");
-                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='grd' style='text-align:center; margin-left:auto;'><img src='"+that.options.app.get("path")+"img/loading.gif'></div></td>");
+                                that.$el.find("#tblAutobots tbody").append("<tr id='tr_loading'><td colspan='6'><div class='gridLoading' style='text-align:center; margin-left:auto;'><img src='"+that.options.app.get("path")+"img/loading.gif'></div></td>");
                                  
                             } 
                             if(botId){

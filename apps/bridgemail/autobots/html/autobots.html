@@ -32,7 +32,16 @@
 
 </div>
 <div class="template-container">
-   
+    <div id="autobots_tiles" class=" tileview autobots" style="display: none;">
+        <div class="row-fluid">
+            <ul class="thumbnails">
+            </ul> 
+            <div class="footer-loading" style="display:none">
+                <hr>
+                <div class="gridLoading" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
+            </div>
+        </div>
+    </div>
 
     <div id="autobots_listing" class="target-listing camp_listing" >
         <div class="bmsgrid">
@@ -40,10 +49,7 @@
                 <div class="hDivBox">
                     <table cellspacing="0" cellpadding="0">
                     </table>
-                    <div class="footer-loading" style="display:none">
-                        <hr>
-                        <div class="grd" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
-                    </div>
+                 
                 </div>
             </div>
             <div class="bDiv" style="height: ;">
@@ -54,16 +60,6 @@
                 </table>
                 
                 <div class="iDiv" style="display: none;"></div>
-            </div>
-        </div>
-    </div>
-     <div id="autobots_tiles" class=" tileview autobots" style="display: none;">
-        <div class="row-fluid">
-            <ul class="thumbnails">
-            </ul> 
-            <div class="footer-loading" style="display:none">
-                <hr>
-                <div class="grd" ><img src="<%=this.options.app.get('path')%>img/loading.gif" alt=""> <!--span class="gridFooterSpinner"></span>--> </div>
             </div>
         </div>
     </div>
