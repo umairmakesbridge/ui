@@ -28,6 +28,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                this.template = _.template(template);				
                this.campNum = this.options.params.camp_id;
                this.trackId = this.options.params.trackId || null;
+               this.icon = this.options.params.icon || null;
+               this.label = this.options.params.label || null;
                this.autobotId = this.options.params.autobotId || null;
                this.active_ws = "";
                this.clickType = this.options.params.clickType || null;
@@ -357,9 +359,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");
                  this.options.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:name,subheading:subheading});
-                if(this.objSummary.get('campaignType') == "T"){
-                    this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='nurture2'></span>&nbsp;"+this.options.params.trackName+" </li></ul>");
-                    this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Message <b>"+ this.options.params.messageNo +"</b>  </strong>")
+                if(this.objSummary.get('campaignType') == "T" || this.icon){
+                    if(!this.icon)
+                         this.icon = "nurture2";
+                    this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='"+this.icon+"'></span>&nbsp;"+this.label+" </li></ul>");
+                    if(this.options.params.messageNo)
+                        this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Message <b>"+ this.options.params.messageNo +"</b>  </strong>")
                     this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     
                 }else{

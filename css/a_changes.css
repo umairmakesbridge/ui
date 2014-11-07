@@ -3870,7 +3870,7 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
 	-webkit-border-radius: 2px 2px;
 	-moz-border-radius:  2px 2px;
 	border-radius:  2px 2px;
-        width: 85px;
+        width: 104px;
 }
 
 
@@ -4044,8 +4044,8 @@ max-height: 78px;
 .add_dialogue .add_detail .add_panel .takename {  margin: 0 auto;  width: 450px;}
 .add_dialogue .add_detail .add_panel .takename input[type="text"] { float:left;}
 .add_dialogue .add_detail .add_panel .takename .btn-green {   margin: 2px 0 0;}
-
-
+.add_dialogue .add_detail .add_panel .takename .inputcont span { bottom:45px;}
+ 
 
 
 
@@ -4161,3 +4161,31 @@ background:none;
 .arrow_r:hover { background: url("../img/arrowright20.png") no-repeat scroll center center #9EB8CA;}
 
 /*-----------------*/
+.camp_header .meetingbotc18 {
+    background: url('../img/meetingbotc18.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 13px;
+}
+.camp_header .bdaybotc18 {
+    background: url('../img/bdaybotc18.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 13px;
+}
+.camp_header .autorespbotc18 {
+    background: url('../img/autorespbotc18.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 13px;
+}
+.camp_header .mailbotc18 {
+    background: url('../img/mailbotc18.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 13px;
+}

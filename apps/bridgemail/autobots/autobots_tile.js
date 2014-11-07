@@ -65,8 +65,8 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
                 getReport:function(){
-                    // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
-                      //  return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
+                     if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                       return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
                 },
                  reportShow:function(){ 
                        var camp_id=this.model.get('actionData')[0]['campNum.encode'];
@@ -77,15 +77,13 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     switch (this.model.get('actionType')) {
                         case "SC":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/scorebot.png'>";
-                            this.icon = 'scorebot';
                             break;
                         case "A":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/alertbot.png'>";
-                            this.icon = 'alertbot';
-                            break;
+                             break;
                         case "E":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/mailbot.png'>";
-                            this.icon = 'mailbot';
+                            this.icon = 'mailbotc18';
                             break;
                         case "TG":
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/tagbot.png'>";
@@ -93,31 +91,27 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     }
                      switch (this.model.get('presetType')) {
                         case "PRE.1":
-                            this.icon = 'bdaybot';
+                            this.icon = 'bdaybotc18';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/bdaybot.png'>";
                             break;
                         case "PRE.2":
-                            this.icon = 'meetingalertbot';
+                            this.icon = 'meetingbotc18';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/meetingalertbot.png'>";
                             break;
                         case "PRE.3":
-                            this.icon = 'autorespbot';
+                            this.icon = 'autorespbotc18';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/autorespbot.png'>";
                             break;
                         case "PRE.4":
-                            this.icon = 'salesalertbot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/salesalertbot.png'>";
                             break;
                         case "PRE.5":
-                            this.icon = 'score10bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score10bot.png'>";
                             break;
                         case "PRE.6":
-                            this.icon = 'score50bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score50bot.png'>";
                             break;
                          case "PRE.7":
-                             this.icon = 'score100bot';
                             label = "<img class='img-replaced' src='"+this.options.app.get("path")+"img/score100bot.png'>";
                             break;
                     }
