@@ -47,6 +47,9 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                             _.each(data.models, function(model) {
                                 that.$el.find('#tagslist ul').append(new tagView({model: model, app: app}).el);
                             });
+                             /*-----Remove loading------*/
+                             that.app.removeSpinner(that.$el);
+                             /*------------*/
                             that.$("#total_tags .badge").html(that.objTags.total);
                             that.app.showLoading(false, that.el);
                         }});
