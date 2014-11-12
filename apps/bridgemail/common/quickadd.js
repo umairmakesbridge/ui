@@ -220,7 +220,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                             this.fileName = arguments[1].fileName;
                             var _csv= jQuery.parseJSON(files);
                             if(_csv[0]!=="err"){
-                                    this.app.showLoading("Getting mapping fields...",el);
+                                 //  this.app.showLoading("Getting mapping fields...",el);
                                     
                                 this.toggleVisibility();    
                                 var rows = _csv;
@@ -230,9 +230,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                                             this.map_feilds = jQuery.parseJSON(xhr.responseText);
                                             this.fileuploaded=true;
                                             var mapPage;
-                                            that.app.showLoading("Getting mapping fields...",that.$el);
-                                           // require(["listupload/mapdata"],_.bind(function(mapdataPage){	
-                                               //         that.app.showLoading("Getting mapping fields...",that.$el);
+                                             // require(["listupload/mapdata"],_.bind(function(mapdataPage){	
+                                                   // that.app.showLoading("Getting mapping fields...",that.$el);
                                                       //  mapPage = new mapdataPage({csv:that,app:app,rows:rows});
                                                         that.app.mainContainer.addWorkSpace({type: '', title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/mapdata', workspace_id: 'csv_upload', tab_icon: 'csvupload',params:{csv:that,app:app,rows:rows}, single_row: true});
                                            // },this));

@@ -806,6 +806,8 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 
 .icon.salesforce {   background: url("../img/sficon.png") no-repeat scroll center center ;}
 .icon.netsuite {   background: url("../img/nsicon.png") no-repeat scroll center center ;}
+.icon.highrise {   background: url("../img/highrise-g.png") no-repeat scroll center center ;}
+.icon.google {   background: url("../img/google-g.png") no-repeat scroll center center ;}
 
 
 .icon.h-info {

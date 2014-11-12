@@ -2586,6 +2586,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
     padding: 0 5px;
 	font-size:14px; font-weight:600; color:#4590b5;  line-height:32px;
 	text-indent:0;
+        min-width:127px;
 }
 
 .slidenav-dd > ul >  li.open { background-color:#f4fbff; }
