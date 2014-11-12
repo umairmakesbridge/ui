@@ -21,6 +21,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                "click .tip-dialogue .closebtn":"hideURL",
                "click .ScrollToTop":"scrollToTop",
                "click .refresh_btn":function(){
+                    this.app.addSpinner(this.$el);
                     this.fetchImages();               
                 }
                

@@ -18,6 +18,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     e.stopPropagation();
                 },
                 'click .user_tracks .refresh_btn':function(){
+                    this.app.addSpinner(this.$el);
                     this.fetchTracks();
                 },
                 'click .bms_tracks .refresh_btn':function(){

@@ -19,6 +19,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     }
                 },
                 "click .refresh_btn":function(){
+                    this.app.addSpinner(this.$el);
                     this.fetchContacts();               
                 },
                 "click .searchbtn":function(){

@@ -14,8 +14,10 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                "keyup #lists_search":"search",
                "click  #clearsearch":"clearSearch",
                "click .closebtn":"closeContactsListing",
+               'click .add-list,.create_new': "createList",
                "click .refresh_btn":function(){
                    this.loadLists();
+                   this.app.addSpinner(this.$el);
                }
             },
             initialize: function () {
@@ -31,8 +33,8 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
             render:function (search) {
                 this.$el.html(this.template({}));
                 this.loadLists();
-                this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
-                this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                //this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
+                //this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.liveLoading,this));
@@ -162,63 +164,40 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
               this.$("#total_lists .badge").html(total);
                this.$("#total_lists span").html(" List(s) found for <b>\""+text+"\"</b> ");
            },
-            checkListName:function(listName){
-                var isListExists = false;
-                var that = this;
-                var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&name="+listName+"&type=exists";
-                jQuery.getJSON(URL,  function(tsv, state, xhr){
-                        var data = jQuery.parseJSON(xhr.responseText);
-                        if(that.app.checkError(data)){
-                            return false;
-                        }
-                        if(data.exists == "Y"){ isListExists = true;}else{ isListExists = false;}
+           
+            createList : function(){
+                 var camp_obj = this;
+                    var dialog_title = "New Lists";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "650px", "margin-left": "-325px"},
+                        bodyCss: {"min-height": "100px"},
+                        headerIcon: 'targetw',
+                        buttons: {saveBtn: {text: 'Create List'}}
                     });
-                    return isListExists;
-                },
-            addlist:function(listName,ele){                    
-                    if(this.checkListName(listName)){
-                        this.app.showAlert("List already exists with same name",$("body"),{fixed:true});
-                        return false;
-                    }
-                    if (listName.toLowerCase().indexOf("supress_list_") >= 0){
-                        this.app.showAlert("List name with word supress_list_ not allowed",$("body"),{fixed:true});
-                        return false;
-                    }
-                                        if (listName.toLowerCase().indexOf("bounce_supressed_list") >= 0){
-                        this.app.showAlert("List name with word bounce_supressed_list not allowed",$("body"),{fixed:true});
-                        return false;
-                    }
-                    
-                    var that = this;
-                    var add_box = this.$(".add-list").data("addbox");
-                    add_box.dialog.find(".btn-add").addClass("saving");
-                    var URL = "/pms/io/list/saveListData/";
-                    var post_data = {BMS_REQ_TK:that.app.get('bms_token'),type:"create",listName:listName};
-                    $.post(URL,post_data)
-                    .done(_.bind(function(data) {                          
-                        add_box.dialog.find(".btn-add").removeClass("saving");
-                        add_box.dialog.find(".input-field").val("");
-                        add_box.hideBox();
-                        var _json = jQuery.parseJSON(data); 
-                        if(_json[0]!=="err"){
-                            app.removeCache("lists");
-                            //this.getLists();
-                            this.newList = _json[1];
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    require(["listupload/newlist"], function(newtargetPage) {
+                        var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
+                        dialog.getBody().append(mPage.$el);
+                        camp_obj.app.showLoading(false, mPage.$el.parent());
+                        var dialogArrayLength = camp_obj.app.dialogArray.length; // New Dialog
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        dialog.saveCallBack(_.bind(mPage.addlist, mPage));
+                        camp_obj.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.addlist, mPage); // New Dialog
+                        dialog.$el.find('#list_name').focus();
+                    });
+            },
+            appendlist:function(listName,ele){                    
+                  
                             var newModel = new listModel({
                                 campaignSentCount:0,
-                                "listNumber.encode": that.newList,
+                                "listNumber.encode": this.newList,
                                 name:listName,
                                 subscriberCount:0,
                                 tags:''});
-                            that.objRecipients.add(newModel);
-                             var last_model = that.objRecipients.last();
-                            that.$el.find('#list_grid tbody').prepend(new recipientView({model:last_model,app:app}).el);
-                            that.$el.find("#list_grid tbody tr:first").slideDown("slow");
-                        }
-                        else{
-                            that.app.showAlert(_json[1],$("body"),{fixed:true}); 
-                        }
-                    },this));
+                            this.objRecipients.add(newModel);
+                             var last_model = this.objRecipients.last();
+                            this.$el.find('#list_grid tbody').prepend(new recipientView({model:last_model,app:app}).el);
+                            this.$el.find("#list_grid tbody tr:first").slideDown("slow"); 
                 },
                 
              closeContactsListing:function(){

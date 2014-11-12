@@ -16,6 +16,7 @@ define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags
                     "click  #clearsearch": "clearSearch",
                     "click .closebtn": "closeContactsListing",
                     "click .refresh_btn":function(){
+                        this.app.addSpinner(this.$el);
                         this.loadTags();
                     }
                 },

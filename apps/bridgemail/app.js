@@ -487,6 +487,13 @@ define([
                     $('#wp_li_'+activeSpaceID).find('.spinner').remove();
                }
             },
+            addSpinner: function(elObj){
+                if(elObj.parents('.ws-content').length){
+                    var activeSpaceID = elObj.parents('.ws-content.active').attr('id');                
+                    var lastActiveWorkSpace = activeSpaceID.split('_')[1];
+                    $('#wp_li_'+lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
+                }
+            },
             getData:function(data){
               var app = this;  
               $.ajax({

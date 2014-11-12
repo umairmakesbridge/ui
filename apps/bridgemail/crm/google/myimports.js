@@ -4,7 +4,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
             return Backbone.View.extend({
                 className: 'clearfix',
                 events: {
-                    'click #addnew_import': 'newImport',
+                    'click #addnew_import,.create_new': 'newImport',
                     "click .refresh_btn":'getMyImports'
                 },
                 initialize: function() {
@@ -34,11 +34,12 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
 
                 },
                 getMyImports: function() {
+                    this.app.addSpinner(this.$el);
                     this.app.showLoading("Loading My Imports...", this.$myImportsContainer);
                     this._request = this.myImportsRequest.fetch({
                         success: _.bind(function(collection, response) {
                             if (collection.length) {
-                                var myimports_html = '<table cellpadding="0" cellspacing="0" width="100%" id="hsmyimports_list_grid"><tbody>';
+                                var myimports_html = '<div class="create_new"><span>Enter Google import name</span></div><table cellpadding="0" cellspacing="0" width="100%" id="hsmyimports_list_grid"><tbody>';
                                 _.each(collection.models, function(val, key) {
 
                                     myimports_html += '<tr id="row_' + val.get("tId") + '">';
@@ -63,6 +64,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                                 }, this);
                                 myimports_html += "</tbody></table>";
                                 this.$myImportsContainer.html(myimports_html);
+                                     
                                 this.$("#hsmyimports_list_grid").bmsgrid({
                                     useRp: false,
                                     resizable: false,
@@ -80,7 +82,11 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                             }
                             else {
                                 this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
+                                
                             }
+                              /*-----Remove loading------*/
+                                    this.app.removeSpinner(this.$myImportsContainer);
+                                /*------------*/
                             this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         }, this),
                         error: function(collection, resp) {

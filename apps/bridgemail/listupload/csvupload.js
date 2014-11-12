@@ -65,10 +65,11 @@ function (app,template,fileuploader,dragfile,chosen,addbox) {
                                                             app.showLoading("Getting mapping fields...",curview.$el);
                                                             mapPage = new mapdataPage({csv:this,app:app,rows:rows});
                                                             }
+                                                        
                                                         },this));
                                                     }
 					},this));
-			
+                           
                     }else{												
                             app.showAlert(_csv[1],el);
 			    curview.removeFile();

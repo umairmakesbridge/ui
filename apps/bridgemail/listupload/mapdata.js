@@ -338,6 +338,7 @@ function (template,chosen,addbox) {
 		   curview.$el.find('.tabel-div').children().remove();
 		   var mappingHTML = curview.createMappingTable(this.rows);
 		   curview.$el.find('.tabel-div').append(mappingHTML);
+                   
                    if(campview){
                     campview.$el.find('.step3 #area_upload_csv').html(curview.$el);
                    }
@@ -350,6 +351,7 @@ function (template,chosen,addbox) {
                         placeholder_text:appMsgs.MAPDATA_customfield_placeholder
 		   });
 		   var curview = this;
+                   
 		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 		},
 		render: function () {
@@ -371,6 +373,7 @@ function (template,chosen,addbox) {
 		}
 		,
 		init:function(){
+                    this.app.removeSpinner(this.$el);
                     this.$(".template-container").css("min-height",(this.app.get('wp_height')-178));			
 		},
 		createMappingTable:function(rows){			
