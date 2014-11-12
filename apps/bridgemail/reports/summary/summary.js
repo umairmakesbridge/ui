@@ -361,7 +361,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
                 }
                 var name = this.truncateHeader(c_name);
-                this.active_ws.find("#workspace-header").css('min-width','200px');
+                this.active_ws.find("#workspace-header").css('min-width','60px');
                 this.active_ws.find("#workspace-header").addClass('showtooltip').attr('data-original-title',c_name).html(name);
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");

@@ -281,8 +281,8 @@ function (template,moment,app) {
                            +"<h4>Engagement level</h4>"
                            +"<ul>"
                            +"<li class='open showtooltip' data-original-title='First opened on'><i class='icon'></i> "+open+" </li>"
-                           +"<li class='click showtooltip click-detail' data-original-title='Unique click count' ><i class='icon'></i> "+aClick+"</li>"
-                           +"<li class='pageview showtooltip page-view' data-id='"+encode+"' data-original-title='Page Views'><i class='icon'></i>"+aPageViews+"</li>"
+                           +"<li class='click showtooltip click-detail' data-original-title='Unique click count' data-click='"+aClick+"'><i class='icon'></i> "+aClick+"</li>"
+                           +"<li class='pageview showtooltip page-view' data-id='"+encode+"' data-original-title='Page Views' data-view='"+aPageViews+"'><i class='icon'></i>"+aPageViews+"</li>"
                            +"<li class='conversion showtooltip' data-original-title='Converted on'><i class='icon'></i>"+converted+" </li>"
                            +"</ul>"
                            +"</div>"
@@ -295,10 +295,12 @@ function (template,moment,app) {
                           +"</div>";
                       $(ev.target).parents(".percent_stats").append(str);
                       $(ev.target).parents(".percent_stats").find('.page-view').on('click',function(ev){
+                         if($(ev.target).data("view") == "0") return false;
                          that.loadPageViewsDialog(ev);
                          return false;
                       })
                       $(ev.target).parents(".percent_stats").find('.click-detail').on('click',function(ev){
+                          if($(ev.target).data("click") == "0") return false;
                          that.loadClickViewDialog(ev);
                          return false;
                       })
