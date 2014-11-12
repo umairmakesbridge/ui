@@ -141,6 +141,7 @@
             this.progressElement.append('<div class="csv-opcbg"></div>')
             this.progressElement.append("<div id='progress' class='progress-bar'><div class='progress-bar-slider'></div></div>");            
         }
+        
        //if(this.module !=="Image" || this.module !== "csv")this.app.showLoading("Uploading...",this.$element);
        var jqXHR=$.ajax({
             xhr: function() {

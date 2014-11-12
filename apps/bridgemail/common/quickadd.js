@@ -219,8 +219,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                             var el = this.$el;
                             this.fileName = arguments[1].fileName;
                             var _csv= jQuery.parseJSON(files);
+                            this.app.showLoading("&nbsp;",this.$('.drop-files'));
                             if(_csv[0]!=="err"){
-                                 //  this.app.showLoading("Getting mapping fields...",el);
+                              ///   this.app.showLoading("&nbsp;",this.$('.drop-files'));
                                     
                                 this.toggleVisibility();    
                                 var rows = _csv;
@@ -230,6 +231,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                                             this.map_feilds = jQuery.parseJSON(xhr.responseText);
                                             this.fileuploaded=true;
                                             var mapPage;
+                                            this.app.showLoading(false,this.$('.drop-files'));
                                              // require(["listupload/mapdata"],_.bind(function(mapdataPage){	
                                                    // that.app.showLoading("Getting mapping fields...",that.$el);
                                                       //  mapPage = new mapdataPage({csv:that,app:app,rows:rows});
@@ -247,7 +249,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                            callBack : _.bind(this.showSelectedfile,this),
                            app:this.app,
                            module:'csv',
-                           progressElement:this.$('.csvimg')
+                           progressElement:this.$('.tab-pane')
                         });
                     },
                     uploadCsvFile:function(obj){ 
