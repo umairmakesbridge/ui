@@ -331,7 +331,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
                                 var replaceObj = undoManager._undo();                                                                
                                 if (replaceObj != null) {
-                                    var contentObj = myElement.find(".content");                                    
+                                    var contentObj = meeIframe.find("body");                                    
                                     contentObj.html(replaceObj.outerHTML());
                                     var mainObj = meeIframe.find(".mainTable");
                                     mainObj.find("div.textcontent").css('visibility', 'visible');                                    
@@ -357,7 +357,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }
                                 var replaceObj = undoManager._redo();                                
                                 if (replaceObj != null) {
-                                    var contentObj = myElement.find(".content");                                    
+                                    var contentObj = meeIframe.find("body");                                      
                                     contentObj.html(replaceObj.outerHTML());
                                     var mainObj = myElement.find(".mainTable");
                                     mainObj.find("div.textcontent").css('visibility', 'visible');                                    
@@ -436,7 +436,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                             function removeDialogs (){
                                   meeIframe.find("body").click(function () {
-
                                     if (!isElementClicked) {                                               
                                         //Sohaib 
                                         RemovePopups();
@@ -634,17 +633,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 });
 
-
-                                oHtml.find(".sortable").not(".container").each(function () {
+                                oHtml.find("div.sortable").not(".container").each(function () {
                                     RevertCommonUl($(this));
                                 });
+                                
                                 oHtml.find(".csHaveData").each(function () {
                                     RevertCommonLi($(this));
                                 });
+                                                                
                                 oHtml.find(".myDroppable").each(function () {
                                     RevertCommonLi($(this));
                                 });                                
-
+                                
                                 oHtml.find("table").each(function () {                                   
                                     oHtml.find(".container .sortable .csHaveData").each(function () {
                                         RevertCommonLi($(this));
@@ -652,8 +652,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     oHtml.find(".container .sortable .myDroppable").each(function () {
                                         RevertCommonLi($(this));
                                     });
-
-
                                 });
 
                                 var lengthHTML = oHtml.length;
@@ -666,17 +664,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                             if(obj.children().length > 1) {
                                                 var ht = obj.html();                                    
-
                                                 oHtml = $(ht);
-
                                             }
                                             else {
                                                 var ht = obj.html();                                    
                                                 var newHtml = $("<li class='csHaveData ui-draggable ui-droppable'></li>");
                                                 newHtml.append(obj);
-
                                                 oHtml = $(newHtml);
-
                                             }
 
                                         }
@@ -771,6 +765,8 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     if(img.length){
                                         img.css("width", resizableImg.inlineStyle("width"));
                                         img.css("height", resizableImg.inlineStyle("height"));
+                                        img.attr("width", resizableImg.inlineStyle("width"));
+                                        img.attr("height", resizableImg.inlineStyle("height"));
                                         if(resizableImg.attr("style")){
                                             img.attr("isStyleSet","true");
                                             img.attr("style",resizableImg.attr("style"));
@@ -846,17 +842,18 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     // newElement.removeClass();
                                     element.replaceWith(newElement);
                                 }
-
-                                oHtml.find("ul").each(function () {  
-                                    if($(this).hasClass("sortable")){
-                                        RemoveCommon($(this));
-                                    }
-                                });
-                                oHtml.find("li").each(function () {
-                                    if($(this).hasClass("MEE_DROPPABLE") || $(this).hasClass("MEE_ELEMENT") || $(this).hasClass("MEE_CONTENTS")){ 
-                                        RemoveCommon($(this));
-                                    }
-                                });
+                                while (oHtml.find("ul.sortable").length){
+                                    oHtml.find("ul.sortable").each(function () {  
+                                        if($(this).hasClass("sortable")){
+                                            RemoveCommon($(this));
+                                        }
+                                    });
+                                }
+                                while (oHtml.find("li.MEE_DROPPABLE,li.MEE_ELEMENT,li.MEE_CONTENTS").length){
+                                    oHtml.find("li.MEE_DROPPABLE,li.MEE_ELEMENT,li.MEE_CONTENTS").each(function () {                                    
+                                        RemoveCommon($(this));                                    
+                                    });
+                                }
 
                                 oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
                                     
@@ -878,26 +875,37 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             };                            
                             
                             var InitializeBuildingBlockDroppableArea = function () {
-                                myElement.find(".buildingBlockDroppableOverlay").droppable({
-                                    tolerance: "pointer",
-                                    accept: ".csHaveData",
-                                    drop: function (event, ui) {
-
-                                        var args = {
-                                            droppedElement: $(this),
-                                            buildingBlock: null,
-                                            event: event,
-                                            ui: ui
-                                        };
-                                        //
-                                        mee._LastSelectedBuildingBlock = null;
-                                        mee.addUpdateContentBlock({
-                                            args:args,
-                                            oInitDestroyEvents:oInitDestroyEvents
-                                        });
-                                        return false;                                    
+                                myElement.find(".buildingBlockDroppableOverlay").on('dragover', function(event) {                                    
+                                    event.preventDefault();
+                                    if(mee.dragElementIframe){
+                                        $(this).find('.blockdrop').css({"border":"2px dashed #01aeee"});
+                                    }
+                                }).on('dragleave', function(event) {                                    
+                                    event.preventDefault();
+                                    if( mee.dragElementIframe){
+                                        $(this).find('.blockdrop').css({"border":"1px dashed #fff"});
                                     }
                                 });
+
+                                myElement.find(".buildingBlockDroppableOverlay").find('*').andSelf().on('drop', function(event) { 
+                                    event.stopPropagation();
+                                    event.preventDefault();
+                                    var ui = {draggable:null};
+                                    ui.draggable = mee.dragElementIframe;
+                                    var args = {
+                                        droppedElement: $(this),
+                                        buildingBlock: null,
+                                        event: event,
+                                        ui: ui
+                                    };
+                                    //
+                                    mee._LastSelectedBuildingBlock = null;
+                                    mee.addUpdateContentBlock({
+                                        args:args,
+                                        oInitDestroyEvents:oInitDestroyEvents
+                                    });
+                                    mee.dragElementIframe = null;                                    
+                                })                                                                    
                             }
                             function InitializeControls() {
                                             
@@ -1625,9 +1633,11 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     myParent.next(".myDroppable").remove();
                                     myParent.prev(".myDroppable").remove();
                                 }
-
                                 myParent.remove();
-
+                                
+                                if(meeIframeWindow.$(".myDroppable").length==1){
+                                    meeIframeWindow.$(".myDroppable").remove();
+                                }
                             }
 
                             function InitializeCopyButtonOnElement(element) {
@@ -1636,6 +1646,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                     var myParent = $(this).closest(".csHaveData");
                                     var droppable = CreateDroppableWithAllFunctions();
+                                    droppable.css("visibility","hidden");
                                     myParent.before(droppable);
            
                                     oInitDestroyEvents.DestroyPluginsEvents(myParent);
@@ -3782,13 +3793,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     var InitializeMouseHover = function (oHtml) {
 
                                         if (oHtml != null) {
-                                            var topHandlersHTML = "<div class='topHandlers'><ul><li class='myHandle'><i class='icon move'></i></li><li class='myHandlerCopy'><i class='icon copy'></i></li><li class='myHandlerDelete'><i class='icon delete'></i></li></ul></div>";    
+                                            var topHandlersHTML = "<div class='topHandlers'><ul><li class='myHandle' draggable='true'><i class='icon move'></i></li><li class='myHandlerCopy'><i class='icon copy'></i></li><li class='myHandlerDelete'><i class='icon delete'></i></li></ul></div>";    
                                             var myobject = $(topHandlersHTML);
-
                                             oHtml.on({
                                                 mouseover: function (e) {
                                                     e.stopPropagation();
-                                                    myElement.find(".topHandlers").remove();
+                                                    meeIframe.find(".topHandlers").remove();
 
                                                     if (!IsStyleActivated) {
                                                         //Assign DELETE functionality here
@@ -3845,12 +3855,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             oHtml.find('.imageContainer').andSelf().filter('.imageContainer').each(function (index, element) {
                                                 $(element).on('dragover', function(event) {                                    
                                                     event.preventDefault();
-                                                    if($(this).hasClass("imagePlaceHolderAlone")){
+                                                    if($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement){
                                                         $(this).css({"outline":"2px dashed #01aeee"});
                                                     }
                                                 }).on('dragleave', function(event) {                                    
                                                     event.preventDefault();
-                                                    if($(this).hasClass("imagePlaceHolderAlone")){
+                                                    if($(this).hasClass("imagePlaceHolderAlone") && mee.dragElement){
                                                         $(this).removeInlineStyle("outline");
                                                     }
                                                 });
@@ -3858,7 +3868,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                 $(element).find('*').andSelf().on('drop', function(event) { 
                                                     event.stopPropagation();
                                                     event.preventDefault();
-                                                    $(this).removeInlineStyle("outline");                                                    
+                                                    $(this).removeInlineStyle("outline");                                                                                                        
                                                     $(element).removeClass("imageContainer imagePlaceHolderAlone ui-droppable");
                                                     var ui = {draggable:null};
                                                     ui.draggable = mee.dragElement;
@@ -3869,6 +3879,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                     };
                                                     OnImageDropped(argsThis);
                                                     oInitDestroyEvents.InitializeClickEvent(oHtml);
+                                                    mee.dragElement = null;
                                                 })    
                                                 
                                             });
@@ -3886,12 +3897,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                             oHtml.find('.resizableImage').andSelf().filter('.resizableImage').each(function (index, element) {
                                                 $(element).on('dragover', function(event) {                                    
                                                     event.preventDefault();
-                                                    if($(this).hasClass("resizableImage")){
+                                                    if($(this).hasClass("resizableImage")  && mee.dragElement){
                                                        $(this).css({"outline":"2px dashed #01aeee"});
                                                     }
                                                 }).on('dragleave', function(event) {                                    
                                                     event.preventDefault();
-                                                    if($(this).hasClass("resizableImage")){
+                                                    if($(this).hasClass("resizableImage") && mee.dragElement){
                                                         $(this).removeInlineStyle("outline")
                                                     }
                                                 });
@@ -3918,6 +3929,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                                         makeCloneAndRegister();
                                                         oInitDestroyEvents.InitializeClickEvent(oHtml);
                                                     }
+                                                    mee.dragElement = null;
                                                 });
 
                                             });
@@ -4371,7 +4383,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
 
                                         }
-
+                                        mee.dragElement = null;
                                 });
                                 
                                 
@@ -4383,10 +4395,34 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 return sender;
                             }
-
+                            mee.startDragging = function(e){
+                                myElement.find(".divBuildingBlockLoading").parent().height();
+                                var _height = myElement.find(".divBuildingBlockLoading").parent().height()-30;
+                                var _scrollTop = myElement.find(".divBuildingBlockLoading").parent().scrollTop();
+                                myElement.find(".divBuildingBlockLoading").show().css({
+                                    "top":_scrollTop+"px",
+                                    "height":_height+"px"
+                                });
+                                ShowDroppables(meeIframe);
+                                RemovePopups();
+                                meeIframe.find(".sortable").each(function (index) {
+                                    //Exclude here dragging element (which is added by jqueryUI)
+                                    var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
+                                    InsertDroppableInEmpty($(this), firstLevelLiDroppable);
+                                    //Last element FULL height                                           
+                                    SetLastElementHeight($(this));                                     
+                                });
+                                $(e.target).next(".myDroppable").invisible();
+                                $(e.target).prev(".myDroppable").invisible();                                    
+                            } 
+                            mee.stopDragging = function(){
+                                myElement.find(".divBuildingBlockLoading").hide();                                        
+                                RemoveDroppables(meeIframe);
+                            }
                             //Elements DRAGGING - for swapping elements:dragging2
                             function InitializeElementWithDraggable(object) {
-                                
+                                 meeIframeWindow.setDragging(object,mee);                              
+                                /*
                                 object.draggable({
                                     helper: function(event, ui) {
                                         return $(this).clone().css({
@@ -4447,7 +4483,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         RemoveDroppables(meeIframe);
                                     }
                                 });
-
+                                */
                                 return object;
                             }
 
@@ -4570,6 +4606,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 }).on('dragend', function(event) {
                                     event.preventDefault();
                                     RemoveDroppables(meeIframe);
+                                    mee.dragElement = null;
                                     //
                                 });
                                                                 
@@ -4580,7 +4617,6 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 if (args.predefinedControl != null) {
 
                                     if (args.predefinedControl.Type == "copied" || args.predefinedControl.Type == "buildingBlock") {
-
                                         //alert(args.predefinedControl.Html.html());
                                         oInitDestroyEvents.InitializePluginsEvents(args.predefinedControl.Html);
                                     }

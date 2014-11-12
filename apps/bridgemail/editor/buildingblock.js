@@ -77,6 +77,7 @@ function (template) {
                         if(!this.editor._LastSelectedBuildingBlock){
                             this._args.oInitDestroyEvents.DestroyPluginsEvents(this._args.args.ui.draggable);
                             buildingBlock.Html = this._args.args.ui.draggable.clone();
+                            buildingBlock.Html.find(".topHandlers").remove();
                             this._args.oInitDestroyEvents.InitializePluginsEvents(this._args.args.ui.draggable);                            
                         }
                         else{

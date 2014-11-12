@@ -303,7 +303,10 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 
 
 /* -----------------------------------------------------------------------------------------------   */
-.mainTable { margin:0 auto;  }
+.mainTable { margin:0 auto;  
+            
+            backgroud-colol:#fff;
+}
 .ui-draggab le-dragging .myDroppable {
     visibility:hidden !important;
 }
@@ -1200,13 +1203,8 @@ a.saving span {
     width:30px;
 }
 
-
-
-
 .textcontent {}
-.textcontent p {
-    margin: 0;
-    padding: 0;
+.textcontent p {   
     word-break: normal;
 }
 /*
