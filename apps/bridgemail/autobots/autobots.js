@@ -50,7 +50,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 refreshWorkSpace:function(options){
                     if(typeof options !="undefined"){
                         if(typeof options.params != "undefined"){
-                            if(typeof options.params.botType != "undefined"){
+                            if(typeof options.params.botType != "undefined" ){
                                 this.typeOfBots = options.params.botType;
                                 this.addNewAutobot();
                             }
@@ -59,10 +59,10 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         
                     }
                 },
-                render: function() {
+                render: function(ev) {
                     this.$el.html(this.template()); ;
                     if(typeof this.options.params !="undefined"){
-                        if(typeof this.options.params.botId !="undefined"){
+                        if(typeof this.options.params.botId !="undefined" && typeof ev =="undefined"){
                              this.fetchBots(0,this.options.params.botId);
                         }else{
                             this.fetchBots();

@@ -48,8 +48,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
                 getReport:function(){
-                      //if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
-                        //  return '<div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div>';
+                       if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                           return '<div class="campaign_stats showtooltip" style="width:20px;display:inline-block;float:none;" title="Click to View Chart"><a class="icon report"></a></div>';
                 },
                 getAutobotImage: function() {
                     var label = "";

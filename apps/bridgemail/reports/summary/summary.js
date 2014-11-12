@@ -195,11 +195,17 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   var that = this;
                   var title = 'Campaign Settings';
                   var loading = "Loading Campaign Settings...";
+                  var height = 250;
                   if(this.trackId != null  && this.trackId){
+                      height = 450;
                       title = "Message Settings"
                       loading = "Loading Message Settings... ";
                   }
-                  var dialog_height = $(document.documentElement).height()-280;
+                  if(this.autobotId != null  && this.autobotId){
+                      height = 450;
+                  }
+                  console.log(height + this.autobotId + this.trackId);
+                  var dialog_height = $(document.documentElement).height()-height;
                   var dialog = this.options.app.showDialog(
                         {           
                                     title:title,
@@ -210,7 +216,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                          });
                   that.options.app.showLoading(loading,dialog.getBody());
                   require(["reports/summary/views/settings"],function(Settings){
-                         var mPage = new Settings({model:that.objSummary});
+                         var mPage = new Settings({model:that.objSummary,app:that.options.app, botId:that.autobotId,trackId:that.trackId});
                          dialog.getBody().html(mPage.$el);
                          that.options.app.showLoading(false,dialog.getBody());
                    });
@@ -355,6 +361,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     var c_name = this.options.app.encodeHTML(this.objSummary.get('name'));
                 }
                 var name = this.truncateHeader(c_name);
+                this.active_ws.find("#workspace-header").css('min-width','60px');
                 this.active_ws.find("#workspace-header").addClass('showtooltip').attr('data-original-title',c_name).html(name);
                 //Setting tab details for workspace. 
                  var workspace_id = this.$el.parents(".ws-content").attr("id");

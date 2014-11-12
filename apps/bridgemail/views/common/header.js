@@ -82,6 +82,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.firstTime = false;
                     this.timeOut = false;
                     this.newMessages = null;
+                    this.isForceHide = false;
                     this.criticalMessageTime = '';
                     this.isQuickMenuLoaded = false;
                     
@@ -209,7 +210,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         that.newMessages = data['notify.unread.count'];
                         that.$el.find('.messagesbtn sup').show();
                         that.$el.find('.messagesbtn sup').html(data['notify.unread.count']);
-                        if(data['system.message'] != ""){
+                        if(data['system.message'] != "" && that.isForceHide == false){
                              that.$el.find(".announcementbtn").show();
                              that.$el.find('.announcement_dialogue').show();
                             that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
@@ -266,6 +267,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                    this.$el.find('.announcement_dialogue').slideToggle();
                },
                closeAnnouncement:function(){
+                   this.isForceHide == true;
                    this.$el.find('.announcement_dialogue').hide();
                },
                quickAdd:function(){

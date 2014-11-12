@@ -85,7 +85,10 @@ function (template,moment,app) {
                       text = this.unsubscribe("Converted on");
                        break;
                     case "C":
-                          text = this.unsubscribe("Sent on")
+                        if(this.botId)
+                          text = this.unsubscribe("Last sent on")
+                        else
+                          text = this.unsubscribe("Sent on")  
                           break;
                     case "P":
                           text = this.unsubscribe("Schedule to go on");
@@ -102,22 +105,22 @@ function (template,moment,app) {
                      str = str +  "<td width='5%'><div><div class='bounce-type colico' style='width:155px'><strong><span><em>Bounce Type</em>"+this.bounceType+"</span></strong></div></div></td>";;
                  }
                  if(text== "Schedule to go on"){
-                     str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
+                     str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span class='showtooltip' data-original-title='"+this.dateSettingFull(this.logTime,"/")+"'><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
                  }else{
-                    str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
+                    str = str +  "<td width='5%'><div><div class='time show' style='width:155px'><strong><span class='showtooltip' data-original-title='"+this.dateSettingFull(this.logTime,"/")+"'><em>"+text+"</em>"+this.dateSetting(this.logTime,"/")+"</span></strong></div></div></td>";;
                  }
                     return str;
             },
             pageViews:function(text){
                
                 if(this.viewCount !="0"){
-                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+hhis.viewCount +"</b></a></span></strong>";
+                    return "<strong><span><em>"+text+"</em><a class='page-views-modal'><b>"+this.viewCount +"</b></a></span></strong>";
                 }else{
                       return "<strong><span><em>"+text+"</em> <b>"+this.viewCount +"</b> </span></strong>";
                     }
             },
             pageOpened:function(text){
-                return "<td><div><div class='time show' width='10%'><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
+                return "<td><div><div class='time show' width='10%'><strong><span class='showtooltip' data-original-title='"+this.dateSettingFull(this.logTime,"/")+"'><em>"+text+"</em> "+this.dateSetting(this.logTime,"/")+" </span></strong></div></div></td>";
             },
             pageClicked:function(text){
                       if(text == "Clicked on"){
@@ -130,7 +133,7 @@ function (template,moment,app) {
                             html = html + "<strong><span><em>Click count</em><b>"+aClick+"</b></span></strong></div></div>";
                             return html;
                       }else{
-                        return  "<td width='10%'><div><div class='time show' ><strong><span><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
+                        return  "<td width='10%'><div><div class='time show' ><strong><span class='showtooltip' data-original-title='"+this.dateSettingFull(this.logTime,"/")+"'><em>"+text+"</em> "+this.dateSetting(this.logTime, "/")+" </span></strong></div></div></td>";
                       }
                   
                      
@@ -142,6 +145,17 @@ function (template,moment,app) {
                    html = html + "<strong><span><em>Link URL</em><a class='showtooltip' data-original-title='"+this.model.get('activityData')[0].articleURL+"' href='"+this.model.get('activityData')[0].articleURL+"' target='_blank'>"+this.truncateURL(this.model.get('activityData')[0].articleTitle)+"</a></span></strong></div></div>";
                    return html;
                  }
+            },
+            repeatCounts:function(){
+                var str;
+                if(this.botId){
+                var str ='<td width="120px">';
+                    str +='<div class="colico   recur showtooltip " data-original-title="How many time action repeated">';
+                    str +="<strong><span><em>Recur Count</em>"+this.options.app.addCommas(this.model.get('autobotData')[0].recurCount)+"</span></strong>";
+                    str +='</div>';
+                    str +='</td>';
+                }
+                return str;
             },
             truncateURL:function(url){
                 if(url.length > 30) 
@@ -267,8 +281,8 @@ function (template,moment,app) {
                            +"<h4>Engagement level</h4>"
                            +"<ul>"
                            +"<li class='open showtooltip' data-original-title='First opened on'><i class='icon'></i> "+open+" </li>"
-                           +"<li class='click showtooltip click-detail' data-original-title='Unique click count' ><i class='icon'></i> "+aClick+"</li>"
-                           +"<li class='pageview showtooltip page-view' data-id='"+encode+"' data-original-title='Page Views'><i class='icon'></i>"+aPageViews+"</li>"
+                           +"<li class='click showtooltip click-detail' data-original-title='Unique click count' data-click='"+aClick+"'><i class='icon'></i> "+aClick+"</li>"
+                           +"<li class='pageview showtooltip page-view' data-id='"+encode+"' data-original-title='Page Views' data-view='"+aPageViews+"'><i class='icon'></i>"+aPageViews+"</li>"
                            +"<li class='conversion showtooltip' data-original-title='Converted on'><i class='icon'></i>"+converted+" </li>"
                            +"</ul>"
                            +"</div>"
@@ -281,10 +295,12 @@ function (template,moment,app) {
                           +"</div>";
                       $(ev.target).parents(".percent_stats").append(str);
                       $(ev.target).parents(".percent_stats").find('.page-view').on('click',function(ev){
+                         if($(ev.target).data("view") == "0") return false;
                          that.loadPageViewsDialog(ev);
                          return false;
                       })
                       $(ev.target).parents(".percent_stats").find('.click-detail').on('click',function(ev){
+                          if($(ev.target).data("click") == "0") return false;
                          that.loadClickViewDialog(ev);
                          return false;
                       })
@@ -335,6 +351,14 @@ function (template,moment,app) {
                     var _date =  moment(sentDate,'YYYY-MM-DD');
                 
                 return _date.format("DD MMM YYYY");
+             },
+               dateSettingFull:function(sentDate, sep){
+                if(sentDate)
+                sentDate = this.options.app.decodeHTML(sentDate);
+               
+                   return moment(sentDate).format('DD MMM YYYY, h:mm:ss a');
+                    
+                 
              },
              loadClickViewDialog:function(ev){
                     
