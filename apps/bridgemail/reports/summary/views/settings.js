@@ -169,8 +169,7 @@ function (template,icheck) {
               
             },
             fetchLists:function(lists,type){ 
-                var that = this;
-                console.log(lists);
+                var that = this; 
                  var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list_csv&listNum_csv="+lists;
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
