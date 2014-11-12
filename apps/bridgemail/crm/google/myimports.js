@@ -81,7 +81,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
 
                             }
                             else {
-                                this.$myImportsContainer.html('<p class="notfound">No imports found</p>');
+                                this.$myImportsContainer.html('<div class="create_new"><span>Enter Google import name</span></div><p class="notfound">No imports found</p>');
                                 
                             }
                               /*-----Remove loading------*/

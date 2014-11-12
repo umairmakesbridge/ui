@@ -268,7 +268,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                                         }
                                     });
                         }, _this)},
-                    _this.$el);
+                    $('body'));
                 },
                 useImage: function(ev) {
                     if (this.options.callBack) {
