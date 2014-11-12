@@ -578,7 +578,9 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                             this.saveAllCall++;
                             _message.saveMessage();                            
                         }
-                        this.$(".save-all-nt").addClass("saving");
+                        if(this.messages.length){
+                            this.$(".save-all-nt").addClass("saving");
+                        }
                     }
                 },
                 expandAll:function(){

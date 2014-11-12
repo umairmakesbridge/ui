@@ -267,7 +267,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                    this.$el.find('.announcement_dialogue').slideToggle();
                },
                closeAnnouncement:function(){
-                   this.isForceHide == true;
+                   this.isForceHide = true;
                    this.$el.find('.announcement_dialogue').hide();
                },
                quickAdd:function(){

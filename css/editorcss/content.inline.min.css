@@ -700,9 +700,9 @@ div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
 }
 
 .container > tbody > tr > td {
-    height: 30px;
+    /* height: 30px;
     border:1px solid #eee;
-    /*background: url("../images/pattern.png") repeat center center #f1f1f1;*/
+    background: url("../images/pattern.png") repeat center center #f1f1f1;*/
 }
 
 
