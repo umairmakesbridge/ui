@@ -195,14 +195,14 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   var that = this;
                   var title = 'Campaign Settings';
                   var loading = "Loading Campaign Settings...";
-                  var height = 280;
+                  var height = 250;
                   if(this.trackId != null  && this.trackId){
-                      height = 480;
+                      height = 450;
                       title = "Message Settings"
                       loading = "Loading Message Settings... ";
                   }
                   if(this.autobotId != null  && this.autobotId){
-                      height = 480;
+                      height = 450;
                   }
                   console.log(height + this.autobotId + this.trackId);
                   var dialog_height = $(document.documentElement).height()-height;
