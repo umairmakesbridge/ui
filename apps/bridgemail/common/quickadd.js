@@ -249,7 +249,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                            callBack : _.bind(this.showSelectedfile,this),
                            app:this.app,
                            module:'csv',
-                           progressElement:this.$('.tab-pane')
+                           progressElement:this.$('#drop-files')
                         });
                     },
                     uploadCsvFile:function(obj){ 
