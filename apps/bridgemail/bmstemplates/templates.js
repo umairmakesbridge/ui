@@ -16,6 +16,7 @@ function (template,highlight,templateCollection,templateRowView) {
                      this.$("#search-template-input").keyup();
                 },
                 "click .refresh_btn":function(){
+                    this.app.addSpinner(this.$el);
                     this.loadTemplates();
                 },
                 'click #clearsearch':'searchTemplateNameTag',

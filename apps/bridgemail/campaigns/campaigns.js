@@ -17,6 +17,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
                                     this.findCampaigns(obj);
                             },
                             "click .refresh_btn":function(){
+                                this.app.addSpinner(this.$el);
                                 this.getallcampaigns();
                             },
                             "click .stattype":function(obj){					

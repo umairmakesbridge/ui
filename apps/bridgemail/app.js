@@ -483,9 +483,17 @@ define([
             removeSpinner: function(elObj){
                 
                 var activeSpaceID = elObj.parents('.ws-content').attr('id');
-                activeSpaceID = activeSpaceID.split('_')[1];
-                if(activeSpaceID){
+                console.log('Hit');
+                if(activeSpaceID){                
+                        activeSpaceID = activeSpaceID.split('_')[1];
                         $('#wp_li_'+activeSpaceID).find('.spinner').remove();
+                    }
+            },
+            addSpinner: function(elObj){
+                var activeSpaceID = elObj.parents('.ws-content.active').attr('id');
+                if(activeSpaceID){   
+                var lastActiveWorkSpace = activeSpaceID.split('_')[1];
+                        $('#wp_li_'+lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
                     }
             },
             getData:function(data){

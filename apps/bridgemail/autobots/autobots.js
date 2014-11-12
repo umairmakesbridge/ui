@@ -60,6 +60,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }
                 },
                 render: function() {
+                    this.app.addSpinner(this.$el);
                     this.$el.html(this.template()); ;
                     if(typeof this.options.params !="undefined"){
                         if(typeof this.options.params.botId !="undefined"){

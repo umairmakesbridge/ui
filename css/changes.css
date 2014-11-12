@@ -1292,43 +1292,43 @@ ul.tabs-btns li.active a{
 
 /*****workspace tabs icons ***/
 .wtab-campaignlisting{
-    background: url("../img/camplisting.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll -29px -31px rgba(0, 0, 0, 0);
 }
 .wtab-campaign{
-    background: url("../img/campaign.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll 0 -30px rgba(0, 0, 0, 0);
 }
 .wtab-contactlisting{
-    background: url("../img/contactlisting.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll 0 -179px rgba(0, 0, 0, 0);
 }
 .wtab-contactdetail{
-    background: url("../img/contactdetail.png") no-repeat scroll center center;
+   background: url("../img/ws-icons.png") no-repeat scroll 0 -150px rgba(0, 0, 0, 0);
 }
 .wtab-mytemplates{
-    background: url("../img/mytemplates.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll -29px -90px rgba(0, 0, 0, 0)
 }
 .wtab-reports{
-    background: url("../img/reports.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll 0 -120px rgba(0, 0, 0, 0);
 }
 .wtab-csvupload{
-    background: url("../img/csvicon.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll -30px -120px rgba(0, 0, 0, 0);
 }
 .wtab-crm{
     background:url("../img/connection.png") no-repeat scroll center center;
 }
 .wtab-salesforce{
-    background:url("../img/sf-icon30.png") no-repeat scroll center center;
+    background:url("../img/ws-icons.png") no-repeat scroll 0 -240px rgba(0, 0, 0, 0);
 }
 .wtab-netsuite{
-    background:url("../img/ns-icon30.png") no-repeat scroll center center;
+      background: url("../img/ws-icons.png") no-repeat scroll -30px -240px rgba(0, 0, 0, 0);
 }
 .wtab-nuturelisting{
-    background:url("../img/nurturelisting.png") no-repeat scroll center center;
+    background:url("../img/ws-icons.png") no-repeat scroll -30px -60px rgba(0, 0, 0, 0);
 }
 .wtab-nuturetrack{
-    background:url("../img/nurturetrack.png") no-repeat scroll center center;
+    background:url("../img/ws-icons.png") no-repeat scroll 0 -60px rgba(0, 0, 0, 0);
 }
 .wtab-autobotslisting{
-    background:url("../img/autobots.png") no-repeat scroll center center;
+    background: url("../img/ws-icons.png") no-repeat scroll -30px 0 rgba(0, 0, 0, 0);
 }
 .wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
 
@@ -3377,7 +3377,9 @@ text-align:center;
 .ListsViewWrap{
     overflow:hidden;
 }
-
+#contacts_count{
+    position:relative;
+}
 /*Gallery Section styling*/
 .gallery-action-btns a:nth-child(1) {
     background: none repeat scroll 0 0 #2FA4F6;
@@ -3518,6 +3520,7 @@ ul#template_search_menu li {
 .thumbnail.image-browse {
    /* background: none repeat scroll 0 0 #f8fdff;*/
      border: 2px solid #fff;
+     padding:4px;
 }
 
 .thumbnail.browse .drag {
@@ -3530,6 +3533,9 @@ ul#template_search_menu li {
     text-align: center;
 }
 
+.thumbnail.browse .droppanel h4 {
+    margin: 173px 0 0;
+}
 .thumbnail.browse .drag.create {
     background: url("../img/act-plus2-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
     cursor: pointer;
@@ -3574,9 +3580,13 @@ ul#template_search_menu li {
     box-shadow: 0 1px 15px rgba(102, 147, 170, 0.5);
 }
 .thumbnail.browse .image-drag{
-    height :auto;
+   /* height :auto;*/
     margin: 0;
-    padding: 10px 5px 0;
+    padding: 10px 0 0;
+    height: 465px;
+}
+.image-browse .btn-blue.g-btn{
+     width: 219px !important;
 }
 .thumbnail.browse > .image-drag > .droppanel:hover{
     border : 2px dashed transparent !important;
@@ -3585,7 +3595,7 @@ ul#template_search_menu li {
     border : 2px dashed transparent !important;
 } 
 .thumbnail.browse:hover .image-drag{
-    border:3px dashed #94cf1e !important;
+    border:2px dashed #94cf1e !important;
 }
 #wstabs > li {
     position: relative;

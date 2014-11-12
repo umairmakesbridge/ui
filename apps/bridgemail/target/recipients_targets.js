@@ -17,9 +17,10 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                 events: {
                     "keyup #grids_search": "search",
                     "click #clearsearch": "clearSearch",
-                    'click #newTarget': "createTarget",
+                    'click #newTarget ,.create_new': "createTarget",
                     "click .closebtn": "closeContactsListing",
                     "click .refresh_btn":function(){
+                        this.app.addSpinner(this.$el);
                         this.loadTargets();
                     }
                 },
