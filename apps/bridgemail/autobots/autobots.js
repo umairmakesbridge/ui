@@ -39,6 +39,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.topClickEvent = false;
                     this.basicFilters = null;
                     this.basicFormats = null;
+                    this.isTileFlag = false;
                     this.request = null;
                     this.app = app;
                     this.render();
@@ -190,6 +191,11 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                     that.selectAutobot(e);
                                 })
                              }
+                            if(that.isTileFlag){
+                                that.showTiles();
+                            }else{
+                                that.show
+                            }
                             that.app.showLoading(false, that.$el);
                             
                                 if (!offset) {
@@ -387,6 +393,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 showTiles: function(ev) {
                     this.isTiles = true;
+                    this.isTileFlag = true;
                     $(this.el).find('.btn-default').find('i').addClass('listing').removeClass('tiles');                    
                     $(this.el).find(".view-tiles").hide();
                     $(this.el).find(".view-listing").show();
@@ -395,6 +402,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 showListing: function(ev) {
                     this.isTiles = false;
+                    this.isTileFlag = false;
                     $(this.el).find('.btn-default').find('i').addClass('tiles').removeClass('listing');
                     $(this.el).find(".view-listing").hide();
                     $(this.el).find(".view-tiles").show();

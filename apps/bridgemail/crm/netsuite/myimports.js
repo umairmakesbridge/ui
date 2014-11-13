@@ -41,7 +41,7 @@ function (template,MyImports,moment) {
                     this._request = this.myImportsRequest.fetch({
                       success: _.bind(function (collection, response) {                                                        
                            if(collection.length){                               
-                            var myimports_html = '<div class="create_new"><span>Enter Netsuite import name</span></div><table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
+                            var myimports_html = '<div class="create_new"><span>Add Import</span></div><table cellpadding="0" cellspacing="0" width="100%" id="myimports_list_grid"><tbody>';                                
                            _.each(collection.models,function(val,key){
                               myimports_html += '<tr id="row_'+val.get("tId")+'">';                                
                                 var import_name = val.get("name")?val.get("name"):val.get("listName");
@@ -81,7 +81,7 @@ function (template,MyImports,moment) {
                             
                           }
                           else{
-                             this.$myImportsContainer.html('<div class="create_new"><span>Enter Google import name</span></div><p class="notfound">No import(s) found.</p>');
+                             this.$myImportsContainer.html('<div class="create_new"><span>Add Import</span></div><p class="notfound">No import(s) found.</p>');
                           }
                           
                             

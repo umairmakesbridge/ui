@@ -42,7 +42,7 @@ function (template) {
                 this.current_ws = this.$el.parents(".ws-content");                 
                 this.current_ws.find("#campaign_tags").hide();
                 this.addNewTemplateBtn = this.current_ws.find(".camp_header #addnew_action");
-                this.addNewTemplateBtn.attr("data-original-title","New Template")
+                this.addNewTemplateBtn.attr("data-original-title","Add Template")
                 this.tempCount = null;
                 this.app.showLoading("Loading Templates...",this.$el);  
                 var _this = this;

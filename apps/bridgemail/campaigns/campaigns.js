@@ -486,7 +486,7 @@ function (bmsgrid,jqhighlight,jsearchcontrol,template,bmsfilters,_daterangepicke
             headBadge:function(){
                     var active_ws = this.$el.parents(".ws-content");
                     var header_title = active_ws.find(".camp_header .edited  h2");
-                    active_ws.find("#addnew_action").attr("data-original-title", "Add new Campaign").click(_.bind(this.createCampaign, this));
+                    active_ws.find("#addnew_action").attr("data-original-title", "Add Campaign").click(_.bind(this.createCampaign, this));
                     active_ws.find("div.create_new").click(_.bind(this.createCampaign, this));
                     var URL = '/pms/io/campaign/getCampaignData/?BMS_REQ_TK=' + this.app.get('bms_token');
                     $.post(URL, {type: 'allStats'})
