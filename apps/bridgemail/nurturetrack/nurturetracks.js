@@ -230,7 +230,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         
                         //this.$contactLoading.hide();
                         if(this.$el.find('.thumbnails #new_template').length == 0){
-                        this.$trackTileArea.append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Nurture Track </span></div></div></li>')
+                        this.$trackTileArea.append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Nurture Track </span></div></div></li>')
                          }
                         for(var s=this.offset;s<collection.length;s++){
                             var trackView = new trackRow({ model: collection.at(s),sub:this });                                                            

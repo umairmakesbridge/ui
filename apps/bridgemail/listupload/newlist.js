@@ -27,24 +27,34 @@ define(['text!listupload/html/newlist.html'],
                 },
                addlist:function(){    
                     var listName = this.$('#list_name').val();
-                    this.$el.parents('.modal').find('.btn-blue').addClass('saveing-blue');
-                    var URL = "/pms/io/list/saveListData/";
-                    var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"create",listName:listName};
-                    $.post(URL,post_data)
-                    .done(_.bind(function(data) {                          
-                        var _json = jQuery.parseJSON(data); 
-                        if(_json[0]!=="err"){
-                           this.app.removeCache("lists");
+                     var el = this.$el;
+                    var app = this.app;
+                    var appMsgs = this.app.messages[0];
+                    if(listName){
+                        this.$el.parents('.modal').find('.btn-blue').addClass('saveing-blue');
+                        var URL = "/pms/io/list/saveListData/";
+                        var post_data = {BMS_REQ_TK:this.app.get('bms_token'),type:"create",listName:listName};
+                        $.post(URL,post_data)
+                            .done(_.bind(function(data) {                          
+                            var _json = jQuery.parseJSON(data); 
+                            if(_json[0]!=="err"){
+                            this.app.removeCache("lists");
                             //this.getLists();
                             this.page.newList = _json[1];
                             this.newtardialog.hide();
                             this.page.appendlist(listName);
-                        }
-                        else{
+                            }
+                            else{
                             this.app.showAlert(_json[1],$("body"),{fixed:true}); 
                             this.newtardialog.hide();
-                        }
-                    },this));
+                            }
+                        },this));
+                   }else{
+                        app.showError({
+                            control: el.find('.listname-container'),
+                            message: appMsgs.MAPDATA_newlist_empty_error
+                        });
+                   }
                 },
             });
         });

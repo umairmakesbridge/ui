@@ -20,6 +20,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     "click #autobots_search_menu li a": 'sortByoptions',
                     "click #refresh_autobots": "render",
                     "click .closebtn": "closeContactsListing",
+                    "click .thumbnails .new-bot-ul, .create_new":"addNewAutobot"
                 },
                 initialize: function() {
                     this.template = _.template(template);
@@ -39,6 +40,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.topClickEvent = false;
                     this.basicFilters = null;
                     this.basicFormats = null;
+                    this.isTileFlag = false;
                     this.request = null;
                     this.app = app;
                     this.render();
@@ -185,13 +187,18 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                              if (!offset) {
                                 that.$el.find("#autobots_listing").prepend(that.addListingRow());
                                 that.$el.find(".thumbnails").prepend(that.addThumbnailLi());
-                                that.$el.find(".thumbnails  .new-bot-ul ol li a").on('click',function(e){
+                                /*that.$el.find(".thumbnails  .new-bot-ul ol li a").on('click',function(e){
                                     that.selectAutobot(e);
-                                })
-                                 that.$el.find("#autobots_listing  .create_new ol li a").on('click',function(e){
+                                })*/
+                                /* that.$el.find("#autobots_listing  .create_new ol li a").on('click',function(e){
                                     that.selectAutobot(e);
-                                })
+                                })*/
                              }
+                            if(that.isTileFlag){
+                                that.showTiles();
+                            }else{
+                                that.show
+                            }
                             that.app.showLoading(false, that.$el);
                             
                                 if (!offset) {
@@ -224,28 +231,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 } ,
                 addThumbnailLi:function(){
                     var str = "<li class='span3 new-bot-ul'>";
-                        str = str + "<div style='height:475px;' class='thumbnail addbot'><div>";
-                        str = str + "<h3 >Create New Autobot</h3>";
-                        str = str + "<ol>";
-                        str = str + "<li data-bot='A'><a><img src='"+this.options.app.get('path')+"img/alertbot-icon.png'> <span>Alert Bot</span></a></li>";
-                        str = str + "<li data-bot='E'><a><img src='"+this.options.app.get('path')+"img/mailbot-icon.png'><span>Mail Bot</span></a></li>";
-                        str = str + "<li data-bot='TG'><a><img src='"+this.options.app.get('path')+"img/tagbot-icon.png'><span>Tag Bot</span></a></li>";
-                        str = str + "<li data-bot='SC'><a><img src='"+this.options.app.get('path')+"img/scorebot-icon.png'><span>Score Bot</span></a></li>";
-                        str = str + "</ol>";
-                        str = str + "</div>";
+                        str = str + "<div style='height:475px;' class='thumbnail browse'><div class='drag create'>";
+                        str = str + "<span>Add Autobot</span></div>";
                         str = str + "</div>";
                         str = str + "</li>";
                         return str;
                 },
                 addListingRow:function(){
                     var listing = ' <div class="create_new">';
-                        listing = listing +  '<h3 style="width: 150px;">Create New Autobot</h3>';
-                        listing = listing +  '<ol>';
-                        listing = listing +  '<li data-bot="A"><a><img src="'+this.options.app.get('path')+'img/alertbot-icon.png" alt=""> <span>Alert Bot</span></a></li>';
-                        listing = listing +  '<li data-bot="E"><a><img src="'+this.options.app.get('path')+'img/mailbot-icon.png" alt=""><span>Mail Bot</span></a></li>';
-                        listing = listing +  '<li data-bot="TG"><a><img src="'+this.options.app.get('path')+'img/tagbot-icon.png" alt=""><span>Tag Bot</span></a></li>';
-                        listing = listing +  '<li data-bot="SC"><a><img src="'+this.options.app.get('path')+'img/scorebot-icon.png" alt=""><span>Score Bot</span></a></li>';
-                        listing = listing +  '</ol>';
+                        listing = listing +  '<span>Add Autobot</span>';
                         listing = listing +  '</div> '; 
                         return listing;
                 },
@@ -347,7 +341,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     // if(that.ws_header.find('.c-current-status').length > 0){
                     that.ws_header.find('.c-current-status').remove();
                     //}
-                    this.ws_header.find("#addnew_action").attr('data-original-title', "Add new autobot");
+                    this.ws_header.find("#addnew_action").attr('data-original-title', "Add Autobot");
                     this.ws_header.find("#addnew_action").on('click', function() {
                         that.addNewAutobot();
                     }) 
@@ -389,6 +383,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 showTiles: function(ev) {
                     this.isTiles = true;
+                    this.isTileFlag = true;
                     $(this.el).find('.btn-default').find('i').addClass('listing').removeClass('tiles');                    
                     $(this.el).find(".view-tiles").hide();
                     $(this.el).find(".view-listing").show();
@@ -397,6 +392,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 showListing: function(ev) {
                     this.isTiles = false;
+                    this.isTileFlag = false;
                     $(this.el).find('.btn-default').find('i').addClass('tiles').removeClass('listing');
                     $(this.el).find(".view-listing").hide();
                     $(this.el).find(".view-tiles").show();

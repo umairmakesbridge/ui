@@ -167,7 +167,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
            
             createList : function(){
                  var camp_obj = this;
-                    var dialog_title = "New Lists";
+                    var dialog_title = "New List";
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "650px", "margin-left": "-325px"},
                         bodyCss: {"min-height": "100px"},
