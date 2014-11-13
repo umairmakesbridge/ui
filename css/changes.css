@@ -3627,9 +3627,6 @@ ul#template_search_menu li {
 .notfound {
     color: #6292ad;
 }
-#autobots_listing > .create_new {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-}
 .spinner {
     bottom: 0;
     left: 4px;
