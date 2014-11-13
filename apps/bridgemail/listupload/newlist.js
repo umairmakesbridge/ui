@@ -7,7 +7,7 @@ define(['text!listupload/html/newlist.html'],
                     "keyup #list_name": function(e)
                     {
                         if (e.keyCode == 13) {
-                            this.addList();
+                            this.addlist();
                         }
                     }
                 },
