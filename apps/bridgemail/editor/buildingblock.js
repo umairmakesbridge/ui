@@ -53,6 +53,10 @@ function (template) {
                 if(this.editor._LastSelectedBuildingBlock){
                     this.$("#block_name").val(this.app.decodeHTML(this.editor._LastSelectedBuildingBlock["name"]));
                     var img_thmbnail = this.app.decodeHTML(this.editor._LastSelectedBuildingBlock.thumbURL);
+                    if(this.app.get("user").userId==='admin'){
+                        this.$("#block_html").css({"width":(parseInt(this.dialog.options.css.width)-45)+"px","height":(parseInt(this.dialog.options.bodyCss['min-height'])-240)+"px"})
+                        this.$("#block_html").val(this.app.decodeHTML(this.editor._LastSelectedBuildingBlock["html"],true));
+                    }
                     if(img_thmbnail){
                         this.imageId = this.editor._LastSelectedBuildingBlock["imageId.encode"]
                         this.showImage(img_thmbnail)
@@ -135,6 +139,26 @@ function (template) {
                             this.app.showAlert(result[1],$("body"));
                         }
                 },this));
+                if(this.app.get("user").userId==='admin' && this.editor._LastSelectedBuildingBlock){
+                   var _div =   $("<div class='___block_div' style='display:none'></div>"); 
+                    _div.html(this.$("#block_html").val().replace(/\n/g,""));
+                   $("body").append(_div) 
+                   var _post_data = {
+                        type:'updateBlock',
+                        blockId: args.buildingBlock.Id,
+                        html : _div.html()
+                   }
+                   $(".___block_div").remove();
+                   $.post(URL,_post_data)
+                    .done(_.bind(function(data){
+                        var result = jQuery.parseJSON(data);
+                            if(result[0]=="success"){                                
+                            }
+                            else{                                
+                                this.app.showAlert(result[1],$("body"));
+                            }
+                    },this)); 
+                }
                   
             },
             loadImageGallery:function(obj){

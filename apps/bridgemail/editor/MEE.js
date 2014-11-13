@@ -4803,17 +4803,30 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                             mee.addUpdateContentBlock = function(args){
                                 var dialog_title = mee._LastSelectedBuildingBlock?"Edit Block":"Add Block";
-                                var dialog = options._app.showDialog({
-                                    title:dialog_title,
-                                    css:{
+                                var dialog_width = $(document.documentElement).width() - 60;
+                                var dialog_height = $(document.documentElement).height() - 162;
+                                var css = {}
+                                if((mee._LastSelectedBuildingBlock && options._app.get("user").userId==='admin')){
+                                    css = {
+                                        "width":dialog_width+"px",
+                                        "margin-left": "-" + (dialog_width / 2) + "px",
+                                        "top":"20px"
+                                    }
+                                }
+                                else{
+                                    css = {
                                         "width":"600px",
                                         "margin-left":"-300px",
                                         "top":"20%"
-                                    },
+                                    }
+                                }
+                                var dialog = options._app.showDialog({
+                                    title:dialog_title,
+                                    css:css,
                                     headerEditable:false,
                                     headerIcon : 'template',
                                     bodyCss:{
-                                        "min-height":"210px"
+                                        "min-height":(mee._LastSelectedBuildingBlock && options._app.get("user").userId==='admin') ? dialog_height+"px": "210px"
                                     },                                    
                                     buttons: {
                                         saveBtn:{
