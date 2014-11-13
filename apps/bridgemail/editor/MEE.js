@@ -487,7 +487,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     preview_html += '<li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>';
                                     preview_html += '<li><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';                                        
                                     preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane active">';
-                                    preview_html += '<div class="divHtmlPreview" style="height:'+(dialog_height-48)+'px;overflow:auto"></div></div>';
+                                    preview_html += '<div class="divHtmlPreview"><iframe id="preview_iframe" frameborder="0" src="about:blank" style="width:100%;height:'+(dialog_height-48)+'px;"></iframe></div></div>';
                                     preview_html += '<div id="htmlCode" class="tab-pane">';
                                     preview_html += '<textarea style="font-size:12px;width:'+(dialog_width-46)+'px;height:'+(dialog_height-58)+'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
                                     preview_html += '</div></div></div>';
@@ -513,7 +513,16 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         });
                                     }
                                     
-                                    dialog.getBody().find(".divHtmlPreview").html(outputHTML);
+                                    var content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
+                                        content += '<html xmlns="http://www.w3.org/1999/xhtml">'
+                                        content += '<head><title></title></head><body>'
+                                        content += outputHTML
+                                        content += '</body>'
+                                        content += '</html>'
+                                    var iframe = dialog.getBody().find("#preview_iframe")[0].contentDocument;
+                                    iframe.open();
+                                    iframe.write(content);
+                                    iframe.close();
                                     dialog.getBody().find(".divHtmlCode").val(outputHTML);            
                                                                         
                                 });
@@ -747,7 +756,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 oHtml.find(".textcontent").removeAttr("tabindex");
                                 oHtml.find(".textcontent").removeAttr("contenteditable");
                                 oHtml.find(".textcontent").removeAttr("spellcheck");
-                                oHtml.find(".textcontent").removeClass("mce-content-body").addClass("MEE_ITEM").removeClass("textcontent");
+                                
 
                                 oHtml.find("div.ui-resizable-e").remove();
                                 oHtml.find("div.ui-resizable-s").remove();
@@ -858,12 +867,17 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                 oHtml.find("table").not(".DYNAMIC_VARIATION").each(function () {
                                     
                                     $(this).find("ul").each(function () {
-                                        RemoveCommon($(this));
+                                        if($(this).parents(".mce-content-body").length==0){
+                                            RemoveCommon($(this));
+                                        }
                                     });
                                     $(this).find("li").each(function () {
-                                        RemoveCommon($(this));
+                                        if($(this).parents(".mce-content-body").length==0){
+                                            RemoveCommon($(this));
+                                        }
                                     });
                                 });
+                                oHtml.find(".textcontent").removeClass("mce-content-body").addClass("MEE_ITEM").removeClass("textcontent");
 
                                 oHtml.addClass("MEE_DOCUMENT");
                                 oHtml.removeClass("mainTable");
@@ -3562,7 +3576,23 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         meeIframeWindow.$(element.find(".resizableImage")).resizable("destroy");                                        
                                     }
                                     catch(e){}
-                                    meeIframeWindow.$(element.find(".resizableImage")).resizable({});                                    
+                                    meeIframeWindow.$(element.find(".resizableImage")).resizable({});          
+                                    
+                                    if( element.find("div.textcontent").length===0){
+                                        meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
+                                        meeIframeWindow.tinymce.init({
+                                            selector: "div#load_css",
+                                            inline: true,
+                                            theme: "modern",
+                                            skin_url: "/pms/umair/css/editorcss",                                                                                     
+                                            toolbar_items_size: 'small',
+                                            menubar: false,
+                                            schema: "html5",                                                            
+                                            statusbar: true,
+                                            object_resizing: false
+                                        })
+                                        meeIframeWindow.$("div#load_css").remove();
+                                    }
 
                                     element.find("div.textcontent").each(function (index, element) {
                                         

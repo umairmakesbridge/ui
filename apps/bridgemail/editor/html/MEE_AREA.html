@@ -13,8 +13,7 @@
                 crt.id = "drag-class";
                 crt.style.backgroundColor = "#fff";crt.style.border="1px solid #a9c2d5";crt.style.borderTop="10px solid #a9c2d5";  
                 crt.style.position = "absolute"; crt.style.top = $(e.currentTarget).offset().top+"px"; crt.style.left = $(e.currentTarget).offset().left+"px";crt.style.listStyle = "outside none none";               
-                crt.innerHTML = "";
-                crt.style.width = $(e.currentTarget).width() +"px";crt.style.height=$(e.currentTarget).height()+"px";
+                crt.innerHTML = "";crt.style.width = $(e.currentTarget).width() +"px";crt.style.height=$(e.currentTarget).height()+"px";
                 document.body.appendChild(crt);                
                 e.originalEvent.dataTransfer.setData($(this).attr('data-type'), "text"); 
                 e.originalEvent.dataTransfer.setDragImage(crt, $(this).width(), 0); 
@@ -24,21 +23,9 @@
             }).on('dragend', function(event) {
                 event.preventDefault();         
                 $("#drag-class").remove();
-                mee.stopDragging();
-                //
+                mee.stopDragging();                
             });            
-           }              
-            $(window).load(function(){
-                if($(".mainContentHtml").children().length==0){
-                    if($('link[href="'+top.BRIDGEMAIL.get("path")+'css/editorcss/content.inline.min.css"]').length==0){
-                     tinymce.DOM.loadCSS(top.BRIDGEMAIL.get("path")+'css/editorcss/content.inline.min.css');
-                    }
-                    if($('link[href="'+top.BRIDGEMAIL.get("path")+'css/editorcss/skin.min.css"]').length==0){
-                        tinymce.DOM.loadCSS(top.BRIDGEMAIL.get("path")+'css/editorcss/skin.min.css');
-                    }
-                }
-            });
-           
+           }                      
     </script>            
 </head>
 <body style="cursor: auto;">
