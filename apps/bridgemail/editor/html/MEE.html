@@ -584,7 +584,7 @@
     <!--  tools  -->
 
     <div class="editorbox content" style="height: 1000px;">
-        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="/pms/umair/apps/bridgemail/editor/html/MEE_AREA.html"></iframe>
+        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('host').indexOf('mks.')==-1){ print('apps/bridgemail/')} %>editor/html/MEE_AREA.html"></iframe>
         <!--<table style="width: 600px; height: 100%; vertical-align: top;" align="center" class="mainTable">
             <tr>
                 <td class="mainContentHtmlGrand" valign="top">

@@ -217,7 +217,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                          }else{
                              that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
                              that.$el.find('.announcement_dialogue').hide()
-                             that.$el.find('.announcementbtn').hide(); 
+                             if(that.isForceHide==true && data['system.message'] != ""){
+                                 that.$el.find('.announcementbtn').show(); 
+                             }
+                             else {
+                                 that.$el.find('.announcementbtn').hide();
+                             }    
                          }
                         if(data['notify.unread.count'] == "0" || data['notify.unread.count']== 0){
                             that.$el.find('.messagesbtn sup').hide();

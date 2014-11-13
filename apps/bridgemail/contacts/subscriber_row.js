@@ -122,7 +122,7 @@ function (template,highlighter) {
                 return full_name;
             },
             tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).html());
+                this.trigger('tagclick',$(obj.target).text());
                 return false;
             }
             
