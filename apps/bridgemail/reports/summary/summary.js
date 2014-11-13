@@ -29,6 +29,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                this.campNum = this.options.params.camp_id;
                this.trackId = this.options.params.trackId || null;
                this.icon = this.options.params.icon || null;
+               if(this.icon)
+                   this.icon = "autobot18"
                this.label = this.options.params.label || null;
                this.autobotId = this.options.params.autobotId || null;
                this.active_ws = "";
@@ -37,7 +39,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                var type = "";
                if(this.autobotId)
                 type = "bot";
-               
+                
                this.stats = new Stats({type:type});
                this.objSummary = new Summary();
                this.render();
@@ -193,13 +195,13 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
             campaignSetting:function(){
                   var dialog_width = 800;
                   var that = this;
-                  var title = 'Campaign Settings';
-                  var loading = "Loading Campaign Settings...";
+                  var title = 'Settings';
+                  var loading = "Loading Settings...";
                   var height = 250;
                   if(this.trackId != null  && this.trackId){
                       height = 450;
-                      title = "Message Settings"
-                      loading = "Loading Message Settings... ";
+                      title = "Settings"
+                      loading = "Loading Settings... ";
                   }
                   if(this.autobotId != null  && this.autobotId){
                       height = 450;
@@ -237,7 +239,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 }
                 
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"WV",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
              pendingViews:function(ev){
@@ -254,7 +256,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     this.active_ws.find(".pending-views").parents('li').addClass('active');
                 }
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"P",botId:this.autobotId,app:this.options.app,trackId:this.trackId,campNum:this.campNum,listing:'page',triggerOrder:this.options.params.messageNo}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
                /// this.active_ws.find(".contacts_listing #tblcontacts").css('margin-bottom','90px!important');
             },
@@ -288,7 +290,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     this.active_ws.find(".convert-views").parents('li').addClass('active');
                 }
                 this.clearHTML();
-               this.active_ws.find(".contacts_listing").html(new contactsView({type:"CT",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+               this.active_ws.find(".contacts_listing").html(new contactsView({type:"CT",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                this.active_ws.find(".contacts_listing").find(".closebtn").remove();
              },
             clickViews:function(ev){
@@ -305,7 +307,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     this.active_ws.find(".click-views").parents('li').addClass('active');
                 }
                 this.clearHTML();  
-                this.active_ws.find(".contacts_listing").html(new contactsView({type:"CK",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                this.active_ws.find(".contacts_listing").html(new contactsView({type:"CK",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                 this.active_ws.find(".contacts_listing").find(".closebtn").remove();
             },
             openViews:function(ev){
@@ -323,7 +325,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 }
                   this.clearHTML();
                  
-                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",app:this.options.app,campNum:this.campNum,listing:'page'}).el)
+                  this.active_ws.find(".contacts_listing").html(new contactsView({type:"OP",botId:this.autobotId,app:this.options.app,campNum:this.campNum,listing:'page'}).el)
                   this.active_ws.find(".contacts_listing").find(".closebtn").remove();
               
             },
@@ -369,7 +371,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 if(this.objSummary.get('campaignType') == "T" || this.icon){
                     if(!this.icon)
                          this.icon = "nurture2";
-                    this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='"+this.icon+"'></span>&nbsp;"+this.label+" </li></ul>");
+                     if(!this.label)
+                         this.label = this.options.params.trackName;
+                     this.active_ws.find(".camp_header").find("#campaign_tags").css("width","auto").append("").append("<ul><li style='color:#fff'><span class='"+this.icon+"'></span>&nbsp;"+this.label+" </li></ul>");
                     if(this.options.params.messageNo)
                         this.active_ws.find("#workspace-header").append("<strong class='cstatus pclr18' style='margin-left:10px; float:right'> Message <b>"+ this.options.params.messageNo +"</b>  </strong>")
                     this.active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});

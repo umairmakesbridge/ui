@@ -356,7 +356,7 @@ function (template,moment,app) {
                 if(sentDate)
                 sentDate = this.options.app.decodeHTML(sentDate);
                
-                   return moment(sentDate).format('DD MMM YYYY, h:mm:ss a');
+                   return moment(sentDate).format('DD MMM YYYY, h:mm a');
                     
                  
              },

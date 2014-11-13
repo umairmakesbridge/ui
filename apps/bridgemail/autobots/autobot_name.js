@@ -76,6 +76,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                                     }else{
                                         $(that.el).find('.errortext').css({'right': '5px'});
                                     }
+                                    
                         $(this.el).find('#txtAutobotName').focus();
                         return;
                     }

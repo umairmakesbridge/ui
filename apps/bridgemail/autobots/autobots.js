@@ -95,7 +95,9 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     $(this.el).find(".sortoption_expand").find('.spntext').html(html.html());
                     if (sort != "R" && sort != "D") {
                         this.actionType = sort;
+                        this.sortBy = '';
                     } else {
+                        this.actionType = '';
                         this.sortBy = sort;
                     }
                     this.sortText = html.html();
@@ -193,7 +195,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                             that.app.showLoading(false, that.$el);
                             
                                 if (!offset) {
-                                    if (that.searchText == "" && that.sortBy == "") {
+                                    if (that.searchText == "" && that.sortBy == "" && that.actionType == "") {
                                      that.topCounts();
                                     }
                                      that.updateCount();
