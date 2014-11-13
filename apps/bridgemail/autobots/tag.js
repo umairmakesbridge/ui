@@ -541,6 +541,8 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                                     _this.app.showMessge("Autobot Renamed");
                                     //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
                                     _this.model.set("name", name.val());
+                                    _this.options.refer.model.set("name", name.val());
+                                    _this.options.refer.render();
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], _this.$el);

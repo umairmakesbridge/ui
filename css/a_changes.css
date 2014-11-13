@@ -4204,12 +4204,20 @@ background:none;
     height: 13px;
 }
 .camp_header .bdaybotc18 {
-    background: url('../img/bdaybotc18.png') no-repeat scroll center center transparent;
+    background: url('../img/autobots-gw.png') no-repeat scroll center center transparent;
     display: inline-block;
     font-size: 0px;
     width: 24px;
     height: 13px;
 }
+.camp_header .autobot18 {
+    background: url('../img/autobot18.png') no-repeat scroll center center transparent;
+    display: inline-block;
+    font-size: 0px;
+    width: 24px;
+    height: 13px;
+}
+
 .camp_header .autorespbotc18 {
     background: url('../img/autorespbotc18.png') no-repeat scroll center center transparent;
     display: inline-block;
@@ -4319,4 +4327,34 @@ sup.beta {
     border-radius: 12px;
     padding: 0 5px;
 	font-style:italic;
+}
+.selection-boxes a.prev, .selection-boxes a.next {
+    background: none repeat scroll 0 0 #eaf4f9;
+    border-radius: 2px;
+    bottom: 5px;
+    height: 90px;
+    top: auto;
+	opacity: 0.7;
+	border-radius:2px;
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+}
+.selection-boxes a.prev:hover, .selection-boxes a.next:hover {
+	opacity: 1;
+}
+.selection-boxes a.prev.disabled, .selection-boxes a.next.disabled {
+	opacity: 0.2;
+	cursor:default;
+	background-color:#b0c8d6 !important; 
+}
+
+.selection-boxes a.prev span, .selection-boxes a.next span {
+}
+.selection-boxes a.prev {
+	left: -40px;
+	background: url("../img/arrow-left.png") no-repeat scroll center center #eaf4f9;
+}
+.selection-boxes a.next {
+	right: -40px;
+	background: url("../img/arrow-right.png") no-repeat scroll center center #eaf4f9;
 }

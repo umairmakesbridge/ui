@@ -124,7 +124,24 @@ define([
                             }
                         }
                         $(".nurture_msgslist").hide();
-                       // || $(ev.target).parents(".ocp_stats").length > 0
+                        
+                        var container = $(".add_dialogue");
+                        if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
+                        && container.has(ev.target).length === 0){ // ... nor a descendant of the  message dialogue
+                            if(!$(ev.target).hasClass('quick-add') && !$(ev.target).hasClass('plusicon') && !$(ev.target).hasClass('btn-ok') && !$(ev.target).hasClass('close') && !$(ev.target).hasClass('btn-cancel') && !$(ev.target).parents('div').hasClass('btns')){
+                                  container.slideUp('fast');
+                            }
+                        }
+                        var container = $(".ocp_stats");
+                        if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
+                        && container.has(ev.target).length === 0){ // ... nor a descendant of the  message dialogue
+                            if(!$(ev.target).hasClass('metericon'))
+                                   container.hide('fast');
+                         }
+                        
+                         
+                         
+                        // || $(ev.target).parents(".ocp_stats").length > 0
                        //if(!($(ev.target).hasClass('metericon')) ){
                         // $('.percent_stats').find(".ocp_stats").remove();
                       // }

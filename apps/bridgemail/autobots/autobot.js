@@ -36,7 +36,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));
                 },
                 render: function() {
-                    this.$el.html(this.template(this.model.toJSON()));
+                      this.$el.html(this.template(this.model.toJSON()));
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 getStatus: function() {
@@ -221,7 +221,9 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot played.");
-                                     that.parent.fetchBots();
+                                    
+                                         that.parent.fetchBots();
+                                     if (where == "dialog") { that.getAutobotById(where, botId);}
 
                                 }
                             });
@@ -250,7 +252,10 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                                     that.options.app.showAlert(_json[1], $("body"), {fixed: true});
                                 } else {
                                     that.options.app.showMessge("Autobot paused.");
-                                    that.parent.fetchBots();
+                                     
+                                         that.parent.fetchBots();
+                                       if (where == "dialog") { that.getAutobotById(where, botId);}
+                                    
                                 }
                             });
                 },
@@ -351,7 +356,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     this.dialog = dialog;
                     that.options.app.showLoading('Loading Autobots....', dialog.getBody());
                     require([files], function(Alert) {
-                        var mPage = new Alert({refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model});
+                        var mPage = new Alert({origin:that.parent,refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model});
                         dialog.getBody().html(mPage.$el);
                         //console.log('Ok start From here for bot : ' + that.model.get('actionType'));
                         var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog

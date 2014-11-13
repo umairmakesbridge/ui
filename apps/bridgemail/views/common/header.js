@@ -210,20 +210,19 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         that.newMessages = data['notify.unread.count'];
                         that.$el.find('.messagesbtn sup').show();
                         that.$el.find('.messagesbtn sup').html(data['notify.unread.count']);
-                        if(data['system.message'] != "" && that.isForceHide == false){
+                         if(data['system.message'] != "" && that.isForceHide == false){
                              that.$el.find(".announcementbtn").show();
                              that.$el.find('.announcement_dialogue').show();
                             that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
                          }else{
                              that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
                              that.$el.find('.announcement_dialogue').hide()
-                             if(that.isForceHide==true && data['system.message'] != ""){
+                             if(that.isForceHide==true && data['system.message'] != "")
                                  that.$el.find('.announcementbtn').show(); 
-                             }
-                             else {
+                             else
                                  that.$el.find('.announcementbtn').hide();
-                             }    
                          }
+
                         if(data['notify.unread.count'] == "0" || data['notify.unread.count']== 0){
                             that.$el.find('.messagesbtn sup').hide();
                         }
@@ -277,7 +276,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                },
                quickAdd:function(){
                    var that = this;
-                   this.$el.find('.add_dialogue').slideToggle();
+                   this.$el.find('.add_dialogue').slideToggle('fast');
                    this.$el.find('.announcement_dialogue').hide();
                    if(this.isQuickMenuLoaded == true) return;
                    this.isQuickMenuLoaded = true;

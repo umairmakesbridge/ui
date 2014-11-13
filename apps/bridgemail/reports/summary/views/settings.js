@@ -54,12 +54,13 @@ function (template,icheck) {
                         this.$el.find("#campaign_isWebVersion").prop("checked",this.model.get('isWebVersionLink')=="N"?false:true);
                         
                          this.$('input').iCheck({
-                        checkboxClass: 'checkinput'
-                });
+                                checkboxClass: 'checkinput'
+                         });
                 this.$('input.checkpanel').iCheck({
                          checkboxClass: 'checkpanelinput',
                          insert: '<div class="icheck_line-icon"></div>'
                 });
+                this.$('.checkinput').css('cursor','default');
                        this.$el.find("#campaign_profileUpdate").prop("disabled",true);
                         this.$el.find("#campaign_isTextOnly").prop("disabled",true);
                         this.$el.find("#campaign_isWebVersion").prop("disabled",true);
