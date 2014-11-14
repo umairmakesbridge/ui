@@ -27,6 +27,7 @@ function (template,moment,app) {
                  this.type = this.options.type;
                  this.firstOpenDate = ""
                  this.botId = this.options.botId || null;
+                 this.trackId = this.options.trackId || null;
                  this.bounceType = "";
                  this.articleTitle = "";
                  this.articleUrl = "";
@@ -36,18 +37,32 @@ function (template,moment,app) {
                  this.render();
             },
             render: function () {
-                 if((this.type == "C" || this.type == "P") && !this.botId){
-                  this.isNurtureTrack = true;
-                  this.bounceType =   this.model.get('nurtureData')[0].bounceCategory;  
-                  this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount;  
-                  this.logTime =this.model.get('nurtureData')[0].execDate; 
-                }else if(this.botId){
+              
+                 if((this.type == "C" || this.type == "P") && !this.botId && !this.trackId){
+                        this.clickCount =   this.model.get('activityData')[0].totalClickCount; 
+                 this.data = this.model.get('activityData')[0];   
+                  this.bounceType = this.model.get('activityData')[0].bounceCategory;
+                  this.logTime = this.model.get('activityData')[0].logTime;
+                  this.viewCount =   this.model.get('activityData')[0].pageViewCount;
+                
+                }else if(this.botId && (this.type == "C" || this.type == "P")){
                         this.bounceType =   this.model.get('autobotData')[0].bounceCategory;  
                         this.viewCount =   this.model.get('autobotData')[0].totalPageViewsCount;  
                         this.logTime =this.model.get('autobotData')[0].execDate; 
                         this.recurCount = this.model.get('autobotData')[0].recurCount;
                         this.totalClickCount = this.model.get('autobotData')[0].totalClickCount;
+                        this.clickCount = this.model.get('autobotData')[0].totalClickCount;
+                        this.data = this.model.get('autobotData')[0];
+                }else if(this.trackId && (this.type == "C" || this.type == "P")){
+                   this.isNurtureTrack = true;
+                  this.bounceType =   this.model.get('nurtureData')[0].bounceCategory;  
+                  this.viewCount =   this.model.get('nurtureData')[0].pageViewsCount; 
+                   this.clickCount =   this.model.get('nurtureData')[0].totalClickCount; 
+                  this.logTime =this.model.get('nurtureData')[0].execDate; 
+                  this.data = this.model.get('nurtureData')[0];
                 }else{
+                  this.clickCount =   this.model.get('activityData')[0].totalClickCount; 
+                  this.data = this.model.get('activityData')[0];   
                   this.bounceType = this.model.get('activityData')[0].bounceCategory;
                   this.logTime = this.model.get('activityData')[0].logTime;
                   this.viewCount =   this.model.get('activityData')[0].pageViewCount;
@@ -124,8 +139,8 @@ function (template,moment,app) {
             },
             pageClicked:function(text){
                       if(text == "Clicked on"){
-                        if(this.model.get('activityData')[0].clickCount !="0"){
-                          var aClick = "<a class='click-detail showtooltip' data-original-title='Click to view detail'><b>"+this.options.app.addCommas(this.model.get('activityData')[0].clickCount)+"</b></a> ";
+                        if(this.clickCount !="0"){
+                          var aClick = "<a class='click-detail showtooltip' data-original-title='Click to view detail'><b>"+this.options.app.addCommas(this.clickCount)+"</b></a> ";
                         }else{
                            var aClick = "0";
                         }
@@ -148,7 +163,7 @@ function (template,moment,app) {
             },
             repeatCounts:function(){
                 var str;
-                if(this.botId){
+                if(this.botId && (this.type == "C")){
                 var str ='<td width="120px">';
                     str +='<div class="colico   recur showtooltip " data-original-title="How many time action repeated">';
                     str +="<strong><span><em>Recur Count</em>"+this.options.app.addCommas(this.model.get('autobotData')[0].recurCount)+"</span></strong>";
@@ -237,12 +252,14 @@ function (template,moment,app) {
                        $('.percent_stats').find(".ocp_stats").remove();
                     
                 var nurtureData;
-                 if(this.type == "C" && !this.botId){
-                   nurtureData  = this.model.get('nurtureData')[0];
-                 }else if(this.botId){
+                 if((this.type == "C" || this.type=="P") && !this.trackId && !this.botId){
+                   nurtureData  = this.model.get('activityData')[0];
+                 }else if(this.botId && (this.type == "C" || this.type=="P")){
                      nurtureData =  this.model.get('autobotData')[0];
+                 }else if(this.trackId && (this.type == "C" || this.type=="P")){
+                   nurtureData =  this.model.get('nurtureData')[0];
                  }else{
-                   nurtureData =  this.model.get('activityData')[0];
+                     nurtureData  = this.model.get('activityData')[0];
                  }
                  var pageViews = nurtureData.totalPageViewsCount;
                  var click = nurtureData.totalClickCount;
@@ -317,12 +334,14 @@ function (template,moment,app) {
              },
              getMeterIconClass:function(){
                  var nurtureData;
-                 if(this.type=="C" && !this.botId){
-                   nurtureData  = this.model.get('nurtureData')[0];
-                 }else if(this.botId){
+                  if((this.type == "C" || this.type=="P") && !this.trackId && !this.botId){
+                   nurtureData  = this.model.get('activityData')[0];
+                 }else if(this.botId && (this.type == "C" || this.type=="P")){
                      nurtureData =  this.model.get('autobotData')[0];
+                 }else if(this.trackId && (this.type == "C" || this.type=="P")){
+                   nurtureData =  this.model.get('nurtureData')[0];
                  }else{
-                   nurtureData =  this.model.get('activityData')[0];
+                     nurtureData  = this.model.get('activityData')[0];
                  }
                  
                  var pageViews = nurtureData.totalPageViewsCount;
