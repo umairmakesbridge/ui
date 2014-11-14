@@ -740,32 +740,34 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     , this.isFixed = 0,this.scrollChanged=false;
 
                     this.processScroll=_.bind(function(){                                                       
-                      if(this.$("#area_html_editor_mee").css("display")!=="none"){  
-                        var i, scrollTop = this.$win.scrollTop();
-                        if (scrollTop >= this.navTop && !this.isFixed) {
-                          this.isFixed = 1
-                          this.$nav.addClass('editor-toptoolbar-fixed');
-                          this.$nav.css("width",this.$(".editorpanel").width());
-                          this.$tools.addClass('editor-lefttoolbar-fixed');                        
-                          this.$editorarea.addClass('editor-panel-fixed');                        
-                        } else if (scrollTop <= this.navTop && this.isFixed) {
-                          this.isFixed = 0
-                          this.$nav.removeClass('editor-toptoolbar-fixed');
-                          this.$nav.css("width","100%");
-                          this.$tools.removeClass('editor-lefttoolbar-fixed');                        
-                          this.$editorarea.removeClass('editor-panel-fixed');                        
-                        }
-                        var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
-                        if(scrollBottom<74){
-                            var lessBy = 74-scrollBottom;                            
-                            if(this.$("#mee_editor").setAccordian){
-                                this.$("#mee_editor").setAccordian(lessBy);
-                                this.scrollChanged=true;
-                            }                            
-                        }
-                        else if(this.scrollChanged){
-                            this.$("#mee_editor").setAccordian(0);
-                            this.scrollChanged=false;
+                      if(this.$("#area_html_editor_mee").height() > 0 ){ 
+                        if(this.$("#area_html_editor_mee").css("display")!=="none"){  
+                          var i, scrollTop = this.$win.scrollTop();
+                          if (scrollTop >= this.navTop && !this.isFixed) {
+                            this.isFixed = 1
+                            this.$nav.addClass('editor-toptoolbar-fixed');
+                            this.$nav.css("width",this.$(".editorpanel").width());
+                            this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                            this.$editorarea.addClass('editor-panel-fixed');                        
+                          } else if (scrollTop <= this.navTop && this.isFixed) {
+                            this.isFixed = 0
+                            this.$nav.removeClass('editor-toptoolbar-fixed');
+                            this.$nav.css("width","100%");
+                            this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                            this.$editorarea.removeClass('editor-panel-fixed');                        
+                          }
+                          var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
+                          if(scrollBottom<74){
+                              var lessBy = 74-scrollBottom;                            
+                              if(this.$("#mee_editor").setAccordian){
+                                  this.$("#mee_editor").setAccordian(lessBy);
+                                  this.scrollChanged=true;
+                              }                            
+                          }
+                          else if(this.scrollChanged){
+                              this.$("#mee_editor").setAccordian(0);
+                              this.scrollChanged=false;
+                          }
                         }
                       }
                     },this);

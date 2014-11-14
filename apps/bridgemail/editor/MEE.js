@@ -417,15 +417,15 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                             
                             $.fn.setAccordian = function(diff) {
-                                 myElement.find(".builder-panel").css("height",($(window).height()-62-diff)+"px");
-                                 myElement.find(".style-panel").css("height",($(window).height()-62-diff)+"px");
-                                 if(myElement.find(".style-panel").css("display")!=="none"){
-                                    myElement.find(".style-panel .accordian").accordion("refresh");
-                                    myElement.find(".style-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                 this.find(".builder-panel").css("height",($(window).height()-62-diff)+"px");
+                                 this.find(".style-panel").css("height",($(window).height()-62-diff)+"px");
+                                 if(this.find(".style-panel").css("display")!=="none"){
+                                    this.find(".style-panel .accordian").accordion("refresh");
+                                    this.find(".style-panel").css("height",(this.find(".style-panel").height()+12)+"px");
                                  }
                                  else{
-                                    myElement.find(".builder-panel .accordian").accordion("refresh");
-                                    myElement.find(".builder-panel").css("height",(myElement.find(".style-panel").height()+12)+"px");
+                                    this.find(".builder-panel .accordian").accordion("refresh");
+                                    this.find(".builder-panel").css("height",(this.find(".style-panel").height()+12)+"px");
                                  }
                             };
                             function setHTML(dialog){
@@ -3579,7 +3579,12 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         meeIframeWindow.$(element.find(".resizableImage")).resizable("destroy");                                        
                                     }
                                     catch(e){}
-                                    meeIframeWindow.$(element.find(".resizableImage")).resizable({});          
+                                    if( !meeIframeWindow || !meeIframeWindow.$){
+                                        return false;                                        
+                                    }
+                                    if( meeIframeWindow.$(element.find(".resizableImage")).resizable){
+                                        meeIframeWindow.$(element.find(".resizableImage")).resizable({}); 
+                                    }
                                     
                                     if( element.find("div.textcontent").length===0){
                                         meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
