@@ -375,9 +375,13 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     resizeHeight();
                                 }
                             });
-                            mainContentHtmlGrand.mouseup(function(){                                
-                                changFlag.editor_change = true;
-                            })
+                            function setIFrameElements(){
+                                meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;  
+                                mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
+                                mainContentHtmlGrand.mouseup(function(){                                
+                                    changFlag.editor_change = true;
+                                })
+                            }
 
                             $.fn.setChange = function(states) {                    
                                 changFlag = states;
@@ -400,8 +404,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                 meeIframe = myElement.find("#mee-iframe").contents();   
                                 removeDialogs();
-
-                                meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;                        
+                                setIFrameElements();
                                 var mainObj = meeIframe.find(".mainContentHtml");                                
                                 mainObj.html(oHtml);                    
                                 IsStyleActivated = false;
@@ -4062,6 +4065,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     //restore the dropzone after dropevent                                    
                                     event.stopPropagation();
                                     event.preventDefault();
+                                    meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                     var ui = {draggable:null}; 
                                     ui.draggable = mee.dragElement;
                                     //drop(event,ui)
@@ -4451,69 +4455,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                             }
                             //Elements DRAGGING - for swapping elements:dragging2
                             function InitializeElementWithDraggable(object) {
-                                 meeIframeWindow.setDragging(object,mee);                              
-                                /*
-                                object.draggable({
-                                    helper: function(event, ui) {
-                                        return $(this).clone().css({
-                                            width: $(this).width(),
-                                            "background-color":"#fff"
-                                        });
-
-                                    },
-                                    iframeFix: true,
-                                    handle: ".myHandle",
-                                    cursor: "crosshair",
-                                    cursorAt: {
-                                        top: -7,
-                                        left: -7
-                                    },
-
-                                    //[M.Adnan] FOR DRAGGING
-                                    start: function (e, ui) {
-
-                                        //Show DRAG HERE Div here
-                                        myElement.find(".divBuildingBlockLoading").parent().height();
-                                        var _height = myElement.find(".divBuildingBlockLoading").parent().height()-30;
-                                        var _scrollTop = myElement.find(".divBuildingBlockLoading").parent().scrollTop();
-                                        myElement.find(".divBuildingBlockLoading").show().css({
-                                            "top":_scrollTop+"px",
-                                            "height":_height+"px"
-                                            });
-
-                                        ShowDroppables(meeIframe);
-
-                                        RemovePopups();
-
-                                        meeIframe.find(".sortable").each(function (index) {
-                                            //Exclude here dragging element (which is added by jqueryUI)
-                                            var firstLevelLiDroppable = $(this).find(">.myDroppable:not(.ui-draggable-dragging)");
-
-
-                                            InsertDroppableInEmpty($(this), firstLevelLiDroppable);
-
-                                            //Last element FULL height
-                                           
-                                            SetLastElementHeight($(this));
-                                            
-
-                                        });
-
-                                        //Hide imediate next and previos droppable containers
-                                        //e.target get original element.
-                                        $(e.target).next(".myDroppable").invisible();
-                                        $(e.target).prev(".myDroppable").invisible();
-                                    },
-
-                                    stop: function (e, ui) {
-
-                                        myElement.find(".divBuildingBlockLoading").hide();
-
-                                        //Remove all Droppables places here.
-                                        RemoveDroppables(meeIframe);
-                                    }
-                                });
-                                */
+                                 meeIframeWindow.setDragging(object,mee);                                                             
                                 return object;
                             }
 
@@ -4616,7 +4558,9 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         var draggedControlType = $(this).data("type");
 
                                         if (draggedControlType != "droppedImage") {
-
+                                            if( meeIframe.find(".mainContentHtml li.myDroppable").length > 1 ){
+                                                meeIframe.find(".mainContentHtml").addClass("show-droppables")
+                                            }
                                             var totalLiLength = meeIframe.find(".sortable li").length;
                                             meeIframe.find(".sortable").each(function (indx) {
 
@@ -4635,6 +4579,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     
                                 }).on('dragend', function(event) {
                                     event.preventDefault();
+                                     meeIframe.find(".mainContentHtml").removeClass("show-droppables");
                                     RemoveDroppables(meeIframe);
                                     mee.dragElement = null;
                                     //

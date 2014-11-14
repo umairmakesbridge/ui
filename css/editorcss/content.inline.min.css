@@ -1964,3 +1964,6 @@ div.textcontent ol{
 .resizableImage .ui-icon-gripsmall-diagonal-se{
     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(0, 0, 0, 0);
 }
+ul.show-droppables > li:last-child{
+    height:150px !important;
+}
