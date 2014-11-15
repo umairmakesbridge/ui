@@ -66,7 +66,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
                this.addNewButton = this.current_ws.find(".show-add");
                this.addNewButton.attr("title","Add Nuture Track").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-               this.addCountHeader();               
+               this.addCountHeader(); 
+               this.isPlaying = false;
                this.addNewButton.click(_.bind(this.addNurtureTrack,this));
                this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
@@ -79,16 +80,17 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                         <li class="bmstrackcount"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
                         <li class="usertrackcount"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
-                        <div class="savedmsg" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon"></span> '+response.playCount+' Playing </div></div>');
+                        <div class="savedmsg playingcount" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
                         var $header_part = $(header_part);                        
                         $header_part.find(".bmstrackcount").click(_.bind(this.showBmsTracks,this));
                         $header_part.find(".usertrackcount").click(_.bind(this.showUserTracks,this));
-                        $header_part.find(".savedmsg").click(_.bind(function(){                            
+                        $header_part.find(".playingcount").click(_.bind(this.showPlayTracks,this));
+                        /*$header_part.find(".savedmsg").click(_.bind(function(){                            
                                 this.$(".bms_tracks").hide();
                                 this.$(".user_tracks").fadeIn();                                
                                 this.ws_header.find(".usertrackcount a").addClass("font-bold");
                                 this.ws_header.find(".bmstrackcount a").removeClass("font-bold");                             
-                        },this));
+                        },this));*/
                         this.ws_header.append($header_part);
                 }, this),
                   error: function (collection, resp) {
@@ -545,9 +547,13 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             showBmsTracks:function(e){
                 var target = $.getObj(e,"li");
                 this.$(".user_tracks").hide();
+                this.$el.find('#nurturetrack_grid tr').show();
+                this.$el.find('.thumbnails li').show();
                 this.$(".bms_tracks").fadeIn();               
                 target.find("a").addClass("font-bold");
+                 this.isPlaying = false;
                 this.ws_header.find(".usertrackcount a").removeClass("font-bold");
+                this.ws_header.find('div.playingcount').removeClass("font-bold");
                 //this.ws_header.find(".bmstrackcount").hide();
                 //this.ws_header.find(".usertrackcount").show();                
                 if(this.makesbridge_tracks ===false){
@@ -556,12 +562,41 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             },
             showUserTracks:function(e){
                 var target = $.getObj(e,"li");
+                
                 this.$(".bms_tracks").hide();
-                this.$(".user_tracks").fadeIn();                                
+                this.$el.find('#nurturetrack_grid tr').show();
+                this.$el.find('.thumbnails li').show();
+                this.$(".user_tracks").fadeIn();  
+                 this.isPlaying = false;
                 target.find("a").addClass("font-bold");
                 this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
+                this.ws_header.find('div.playingcount').removeClass("font-bold");
              //  this.ws_header.find(".bmstrackcount").show();
              //  this.ws_header.find(".usertrackcount").hide();
+            },
+            showPlayTracks: function(){
+                 this.isPlaying = true;
+                var target = this.$el.parents('.ws-content.active').find('.camp_header .edited div .playingcount');
+                this.$(".bms_tracks").hide();
+                this.$(".user_tracks").fadeIn();
+                target.addClass("font-bold");
+                
+                if(this.$el.find('div.nt_listing').css('display')==='block'){
+                    var playing = this.$el.find('#nurturetrack_grid tr h3 .pclr18');
+                            if(playing.parents('tr').length){
+                            this.$el.find('#nurturetrack_grid tr').hide();
+                            playing.parents('tr').fadeIn();
+                        }
+                }else{
+                     var playing = this.$el.find('.thumbnails li div.temp-thumbnail a.pclr18');
+                      if(playing.parents('li').length){
+                            this.$el.find('.thumbnails li').hide();
+                            playing.parents('li').fadeIn();
+                        }
+                }
+                this.ws_header.find(".bmstrackcount a").removeClass("font-bold");
+                this.ws_header.find(".usertrackcount a").removeClass("font-bold");
+                
             },
             toggleView:function(e){
                 var obj = $.getObj(e,"button");
@@ -585,9 +620,12 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     this.$(".nt_listing").hide();
                     this.$(".tileview").show();
                 }
+               
                 this.$(".search-control").val('');
                 this.$(".search-control").keyup();
-                
+                 if( this.isPlaying){
+                    this.showPlayTracks();
+                }
             },
             showStates:function(obj,model,leftMinus){
                 var _ele = $.getObj(obj,"div");

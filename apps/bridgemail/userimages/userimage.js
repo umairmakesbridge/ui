@@ -160,7 +160,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                     });
 
                     this.$el.find('.tag span').on('click', function() {
-                        that.trigger('tagclick', $(this).html());
+                        that.trigger('tagclick', $(this).text());
                     });
                     this.$el.find(".tags-contents .tagicon").remove();
 

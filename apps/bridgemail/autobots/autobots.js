@@ -166,7 +166,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                  that.app.removeSpinner(that.$el);
                                /*------------*/
                             that.$el.find('.tag').on('click', function() {
-                                var html = $(this).html();
+                                var html = $(this).text();
                                 that.searchText = $.trim(html);
                                 $(that.el).find("#txtAutobotSearch").val(that.searchText);
                                 that.$el.find('#clearsearch').show();
