@@ -779,9 +779,10 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                         img.css("height", resizableImg.inlineStyle("height"));
                                         img.attr("width", resizableImg.inlineStyle("width"));
                                         img.attr("height", resizableImg.inlineStyle("height"));
+                                        img.attr("border", 0);
                                         if(resizableImg.attr("style")){
                                             img.attr("isStyleSet","true");
-                                            img.attr("style",resizableImg.attr("style"));
+                                            img.attr("style",resizableImg.attr("style")+"border:0;margin:0px;padding:0px;");
                                         }
                                         else{
                                             img.removeAttr("isStyleSet");
@@ -4072,7 +4073,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
                                     event.preventDefault();
                                     meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                     var ui = {draggable:null}; 
-                                    ui.draggable = mee.dragElement;
+                                    ui.draggable =  mee.dragElementIframe ? mee.dragElementIframe: mee.dragElement;
                                     //drop(event,ui)
                                     //Now lets restrict what all can be dropped inside each dropzone
                                     //makeCloneAndRegister();
@@ -4423,6 +4424,7 @@ define(['jquery','backbone', 'underscore', 'text!editor/html/MEE.html','jquery-u
 
                                         }
                                         mee.dragElement = null;
+                                        mee.dragElementIframe = null;
                                 });
                                 
                                 

@@ -18,11 +18,13 @@
                 e.originalEvent.dataTransfer.setData($(this).attr('data-type'), "text"); 
                 e.originalEvent.dataTransfer.setDragImage(crt, $(this).width(), 0); 
                 mee.dragElementIframe =$(e.currentTarget);
-                mee.startDragging(e);                
+                mee.startDragging(e);            
+                top.$("#top_scroll_page,#bottom_scroll_page").show();
                 e.stopPropagation();    
-            }).on('dragend', function(event) {
+            }).on('dragend', function(event) {                
                 event.preventDefault();         
                 $("#drag-class").remove();
+                top.$("#top_scroll_page,#bottom_scroll_page").hide();
                 mee.stopDragging();                
             });            
            }                      
