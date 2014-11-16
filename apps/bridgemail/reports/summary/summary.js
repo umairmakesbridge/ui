@@ -45,6 +45,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                this.render();
             },
             render: function () {
+                this.options.app.addSpinner(this.$el);
                 this.fetchStats();
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));

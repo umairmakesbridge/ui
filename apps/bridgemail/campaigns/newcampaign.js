@@ -55,9 +55,10 @@ function (template) {
                               app.showLoading(false,curview.$el);                            
                               var camp_json = jQuery.parseJSON(data);                              
                               if(camp_json[0]!=="err"){                                 
-                                 var camp_id = camp_json[1];                                 
+                                 var camp_id = camp_json[1];
+                                 var camp_wsid = camp_json[2];
                                  newcampdialog.hide();
-                                 app.mainContainer.openCampaign(camp_id);
+                                 app.mainContainer.openCampaign(camp_id,camp_wsid);
                               }
                               else{
                                   app.showAlert(camp_json[1],curview.$el);

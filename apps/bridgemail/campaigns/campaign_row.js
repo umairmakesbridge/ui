@@ -260,7 +260,7 @@ function (template,highlighter) {
 			},
                         tagClick:function(obj){
                             this.sub.taglinkVal = true;
-                            this.tagTxt = obj.currentTarget.text;
+                            this.tagTxt = $(obj.currentTarget).text();
                             this.app.initSearch(obj,this.sub.$el.find("#list-search"));
                         },
                         reportShow:function(){
