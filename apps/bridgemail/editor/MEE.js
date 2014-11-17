@@ -374,7 +374,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 };
 
                                 $.fn.getMEEHTML = function () {
-                                    var mainHTMLELE = meeIframe.find(".mainContentHtml");
+                                    var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
                                     var outputter = $("<div style='margin:0px auto;width:" + emailWidth + "'></div>");
@@ -388,7 +388,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     options.preDefinedHTML = html;
                                     oHtml = reConstructCode(options.preDefinedHTML);
 
-                                    meeIframe = myElement.find("#mee-iframe").contents();
+                                    meeIframe = this.find("#mee-iframe").contents();
                                     removeDialogs();
                                     setIFrameElements();
                                     var mainObj = meeIframe.find(".mainContentHtml");
