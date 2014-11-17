@@ -52,6 +52,7 @@ a.disabled
 }
 .btn-gray {
     background: none repeat scroll 0 0 #91abbc;
+    cursor: pointer;
 }
 .btn-gray i {
     background-color: #7996a8 !important;
@@ -78,6 +79,7 @@ a.disabled
 }
 .btn-green {
     background: none repeat scroll 0 0 #94CF1E;
+    cursor: pointer;
 }
 .btn-green i {
     background-color: #80C000  !important;
@@ -1211,15 +1213,6 @@ a.saving span {
 .textcontent p {   
     word-break: normal;
 }
-/*
-.editorpanel .btn-gray, 
-.editorpanel .btn-blue, 
-.editorpanel .btn-green, 
-.editorpanel .btn-red, 
-.editorpanel .btn-yellow { line-height:30px; }
-
-
-*/
 
 .dropblockpanel { background: none repeat scroll 0 0 rgba(47, 63, 74, 0.85);
                   position:absolute; left:0; top:0; 
@@ -1492,8 +1485,15 @@ ul.linkresults li:hover { background:#dcf3fe; }
 
 .dcContents li i.more:hover .moredd  { display:block;}
 
-
-
+.loading, .overlay, .mask {
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	display:block;
+	z-index: 9999;
+}
 
 .csHaveData .overlay { position:absolute;  background: none repeat scroll 0 0 rgba(47, 63, 74, 0.5);}
 .csHaveData .overlay .image-info {
@@ -1888,6 +1888,9 @@ div.textcontent ol{
     background: #e9eff3;
     position: relative;
     padding-bottom: 0px;
+    border: 1px solid #A8B9C5;
+    height: 30px;
+    vertical-align:top;
 }
 .dcContents .defaultLi{
     position: absolute;
@@ -1970,4 +1973,92 @@ div.textcontent ol{
 }
 ul.show-droppables > li:last-child{
     height:150px !important;
+}
+.tagbox .btn-green { float:left !important; margin-left: 5px}
+.tagbox:after {
+    border-top: 6px solid #0096FF;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;    
+    position: absolute;    
+    border-color:rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #FFFFFF; 
+    border-style: solid; 
+    border-width: 6px;
+    bottom: auto;
+    left: 20px;
+    top: -12px;
+}
+.tagbox {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #0096FF;
+    display:none;    
+    position: absolute;
+    left: 0px;
+    top: 95px;
+    width:367px;
+    border:0; 
+    padding: 5px;
+    -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+    border-radius:3px;
+    -webkit-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.25); 
+     -moz-box-shadow: 0 4px 5px rgba(0, 0, 0, 0.25); 
+   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.25); 
+   z-index: 1003;
+}
+.tagbox input,.txtContentName {
+    color: #000000;    
+    margin: 0 0 0;
+    padding: 3px 5px;
+    width: 185px;
+    float:left;
+    border:2px solid #EAF4F9;
+    padding:5px 10px;
+    height:21px;
+    font-size: 13px;
+    color:#495a63;
+     letter-spacing: 0.1px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    box-shadow: none;
+    -webkit-box-shadow:  none;
+    -moz-box-shadow: none;
+    -webkit-appearance: none;
+}
+.tagbox input:focus,.txtContentName:focus {
+    border:2px solid #94daf5;
+    box-shadow: none;
+    color:#000;
+    outline: 0;
+    outline: thin dotted \9;/* IE6-9 */
+}
+.tagbox .btn-green , .tagbox .btn-gray{    
+    margin-left: 5px;
+}
+.tagbox .btn-green{
+    float: left !important;
+}
+.btn-green span,.btn-gray span{
+    color: #fff;
+    display: inline-block;
+    float: left;
+    font-weight: bold;
+    padding: 0 15px;
+    font-family: 'PT Sans', sans-serif;    
+}
+i.icon{
+    height: 35px;
+    margin: 0 !important;
+    width: 35px;
+}
+.btn-green i {
+    background-color: #80c000 !important;
+}
+.icon.save {
+    background: url("../images/save.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.icon.cross {
+    background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

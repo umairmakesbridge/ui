@@ -3010,7 +3010,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             myElement.find(".dcRulesDialog").hide();
                                             var dc = meeIframe.find("table[keyword='" + args.ID + "']");
                                             dc.find(".editNameBox").toggle();
-                                            dc.find(".editNameBox").width(405);
+                                            dc.find(".editNameBox").width(415);
                                             dc.find(".txtVariationName").focus();
                                         });
 
