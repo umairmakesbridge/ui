@@ -171,7 +171,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "650px", "margin-left": "-325px"},
                         bodyCss: {"min-height": "100px"},
-                        headerIcon: 'targetw',
+                        headerIcon: 'lists',
                         buttons: {saveBtn: {text: 'Create List'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());

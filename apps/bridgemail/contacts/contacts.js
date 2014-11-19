@@ -74,7 +74,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             },
             addCountHeader:function(){
                var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li search="T"><span class="badge pclr18 tempCount tcount">0</span>Total Contacts</li>';
+                 count_header += '<li search="T" ><span class="badge pclr18 tempCount tcount">0</span>Total Contacts</li>';
                  count_header += '<li search="S"><span class="badge pclr11 tempCount suppressCount">0</span>Suppressed</li>';
                  count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';
                  count_header += '<li search="A"><span class="badge pclr23 tempCount addCount">0</span>Added in Last 24hrs </li>';
@@ -134,6 +134,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     }
                     _.each(_json,function(value,key){
                          _this.ws_header.find("."+key).html(_this.app.addCommas(value));
+                         _this.ws_header.find("."+key).parent().addClass(_this.app.getClickableClass(value));
                     });
                      
                 }),this); 
@@ -295,6 +296,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             ,
             filterContacts : function(obj){
                 var target = $.getObj(obj,"li");
+                if(!target.hasClass('clickable_badge')){return false;}
                 target.parent().find('li.font-bold').removeClass('font-bold');
                 target.addClass('font-bold');
                 var targetName = target.attr('search');
@@ -306,7 +308,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.$("#total_templates").show();
                 this.$(".total-count").html(this.app.addCommas(count));                        
                 if(this.ws_header.find(".tcount").html()=="0"){
-                    this.ws_header.find(".tcount").html(this.app.addCommas(count));                        
+                    this.ws_header.find(".tcount").html(this.app.addCommas(count));     
+                    this.ws_header.find(".tcount").parent().addClass(this.app.getClickableClass(count));
                 }
                 var _text = count=="1"?"Contact":"Contacts";
                 if(this.tagTxt){

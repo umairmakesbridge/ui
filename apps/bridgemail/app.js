@@ -32,6 +32,7 @@ define([
                             'CSVUpload_wrong_filetype_error':'CSV format only. Watch video on how to save an excel file to CSV.',
                             'CSVUpload_cancel_msg':'Your CSV upload has been cancelled',
                             'MAPDATA_newlist_empty_error':'Enter a list name',
+                            'MAPDATA_importlist_empty_error':'Enter an import name',
                             'MAPDATA_newlist_exists_error':'List name already exists',
                             'MAPDATA_extlist_empty_error':'Choose a list',
                             'MAPDATA_email_format_error':'Please enter correct email address format',
@@ -512,6 +513,15 @@ define([
                     $('#wp_li_'+lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
                 }
             },
+            getClickableClass : function(value){
+                    var classname = "";
+                    if(Number(value) === 0){
+                         classname="";
+                    }else{
+                        classname = "clickable_badge"; 
+                    }
+                    return classname;
+                },
             getData:function(data){
               var app = this;  
               $.ajax({

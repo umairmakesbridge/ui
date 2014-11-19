@@ -64,6 +64,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.current_ws = this.$el.parents(".ws-content");
                this.current_ws.find("#campaign_tags").hide();
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
+               this.ws_header.find('.workspace-field').remove();
                this.addNewButton = this.current_ws.find(".show-add");
                this.addNewButton.attr("title","Add Nuture Track").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                this.addCountHeader(); 
@@ -73,14 +74,16 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
             },
             addCountHeader:function(){
-                this.ws_header.find(".c-current-status,.savedmsg").remove();
+                
+                
                 this.tracksRequest.fetch({data:{type:'counts'},
                     success: _.bind(function (collection, response) {  
+      
                         var header_part = $('<div><ul class="c-current-status">\n\
-                        <li class="bmstrackcount"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
-                        <li class="usertrackcount"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
+                        <li class="bmstrackcount '+ this.app.getClickableClass(response.systemCount) +'" ><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
+                        <li class="usertrackcount '+ this.app.getClickableClass(response.userCount) +'"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
-                        <div class="savedmsg playingcount" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
+                        <div class="savedmsg playingcount '+ this.app.getClickableClass(response.playCount) +'" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
                         var $header_part = $(header_part);                        
                         $header_part.find(".bmstrackcount").click(_.bind(this.showBmsTracks,this));
                         $header_part.find(".usertrackcount").click(_.bind(this.showUserTracks,this));
@@ -546,6 +549,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             },
             showBmsTracks:function(e){
                 var target = $.getObj(e,"li");
+                if(!target.hasClass('clickable_badge')){return false;}
                 this.$(".user_tracks").hide();
                 this.$el.find('#nurturetrack_grid tr').show();
                 this.$el.find('.thumbnails li').show();
@@ -562,7 +566,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             },
             showUserTracks:function(e){
                 var target = $.getObj(e,"li");
-                
+                if(!target.hasClass('clickable_badge')){return false;}
                 this.$(".bms_tracks").hide();
                 this.$el.find('#nurturetrack_grid tr').show();
                 this.$el.find('.thumbnails li').show();
@@ -577,6 +581,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
             showPlayTracks: function(){
                  this.isPlaying = true;
                 var target = this.$el.parents('.ws-content.active').find('.camp_header .edited div .playingcount');
+                if(!target.hasClass('clickable_badge')){return false;}
                 this.$(".bms_tracks").hide();
                 this.$(".user_tracks").fadeIn();
                 target.addClass("font-bold");

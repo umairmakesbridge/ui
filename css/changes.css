@@ -1933,7 +1933,10 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     width:386px;
 }
 ul.c-current-status li{
-    cursor: pointer;
+    /*cursor: pointer;*/
+}
+.clickable_badge{
+    cursor: pointer !important;
 }
 .ttbadge{
     color: #ffffff;
@@ -3627,6 +3630,19 @@ ul#template_search_menu li {
 .notfound {
     color: #6292ad;
 }
+
+ul.autobot-headbadge  li a{
+     cursor: default;
+}
+ul.autobot-headbadge  li a:hover{
+     opacity:1;
+}
+ul.autobot-headbadge li.clickable_badge a{
+    cursor:pointer;
+}
+ul.autobot-headbadge li.clickable_badge a:hover{
+    opacity: 0.7;
+}
 .spinner {
     bottom: 0;
     left: 4px;
@@ -3657,7 +3673,7 @@ ul#template_search_menu li {
     animation-delay: -0.16s;
     -webkit-animation-delay: -0.16s;
 }
-
+.lists { background: url("../img/list2.png") no-repeat scroll center center;}
 @-webkit-keyframes bouncedelay {
   0%, 80%, 100% { -webkit-transform: scale(0.0) }
   40% { -webkit-transform: scale(1.0) }

@@ -625,7 +625,9 @@ function (template,highlight,templateCollection,templateRowView) {
                    }
                 },
                 triggerAll: function(){
-                        this.$("#template_search_menu li:nth-child(2)").click(); 
+                        var target=this.$el.parents('.ws-content.active').find('.camp_header div .c-current-status li');
+                        if(!target.hasClass('clickable_badge')){return false;}
+                    this.$("#template_search_menu li:nth-child(2)").click(); 
                 },
                 toggleSortOption: function(ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
