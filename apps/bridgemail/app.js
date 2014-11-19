@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog2'
-], function ($, _, Backbone, bootstrap, bmsDialog) {
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog2','views/common/add_action'
+], function ($, _, Backbone, bootstrap, bmsDialog,addDialog) {
     'use strict';
     var App = Backbone.Model.extend({
         messages: [{'CAMP_subject_empty_error': 'Subject cannot be empty',
@@ -561,6 +561,12 @@ define([
                 return returnDialog;
             }
         },
+        showAddDialog: function (options) {                        
+            var dialog = new addDialog(options);            
+            $("body").append(dialog.$el);            
+            dialog.init();
+            return dialog;           
+        },       
         enableValidation: function (options)
         {
             if (options.controlcss)

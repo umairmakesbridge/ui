@@ -4,7 +4,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
             return Backbone.View.extend({
                 tags: 'div',
                 events: {
-                    "click .refresh_btn": 'efreshListing'
+                    "click .refresh_btn": 'refreshListing'
                 },
                 initialize: function () {
                     this.template = _.template(template);
@@ -38,7 +38,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         clearFunc: _.bind(this.clearSearchPages, this),
                         placeholder: 'Search Landing Pages',
                         showicon: 'yes',
-                        iconsource: 'campaigns',
+                        iconsource: 'lpage',
                         countcontainer: 'no_of_camps'
                     });
                 },         
@@ -80,6 +80,19 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     }, this));
                 },
                 createLandingPage: function ( ) {
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'Start with choosing a name for your Landing Page',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter landing page name here',
+                      emptyError : 'Landing page name cann\'t be empty',
+                      createURL : '',
+                      postData : {type:'create'},
+                      saveCallBack :  _.bind(this.createPage,this)
+                    });
+                },
+                createPage: function(txt,json){
                     
                 },
                 refreshListing: function(){

@@ -11218,9 +11218,39 @@ background-position:200px top;
 .intouch {background: url("../img/intouch.png") no-repeat scroll center center; }
 .socialposts {background: url("../img/socialposts.png") no-repeat scroll center center; }
 .addcontacts {background: url("../img/addcontacts.png") no-repeat scroll center center; }
-
+/* Landing pages*/
 .cstatus.published {
     background: url("../img/check18.png") no-repeat scroll 3px center #fff;
     color: #41ce20;
     padding-left: 22px;
+}
+.sd_common { } 
+.sd_common  h2 {
+    color: #598398;
+    font-size: 24px;
+    font-weight: 400;
+    padding: 20px 0;
+    text-align: center;
+}
+.sd_common .row {
+    margin: 30px auto 5px;
+    width: 410px;
+}
+
+.lp_name {
+    background: none repeat scroll 0 0 #eff7fb;
+    border-radius: 2px;
+    margin: 30px auto 0;
+    padding: 50px;
+    width: 450px;
+	height:40px;
+}
+.lp_name  input[type="text"] { float:left; }
+
+.lp_name .btn-green {
+    float: right;
+    margin: 2px 0 0;
+}
+.search > .icon.lpage{
+     background: url("../img/landingpg24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
