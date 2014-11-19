@@ -34,6 +34,7 @@ function (template,Contacts,viewContact) {
                  this.app = this.options.page.app;
                  this.parent = this.options.page;
                  this.searchWidth = this.options.searchCss ? this.options.searchCss:'415px';
+                 this.contactHeight = this.options.contactHeight;
                  this.placeholderText = this.options.placeholderText ? this.options.placeholderText:'Search Contacts &amp; Tags';
                  this.isHideCross = this.options.hideCross;
                  this.isCamPreview = this.options.isCamPreview;
@@ -110,7 +111,10 @@ function (template,Contacts,viewContact) {
                            that.$el.find('#tblcontacts tbody').append(new viewContact({model:model,page:that,isCamPreview:that.isCamPreview}).el);
                        });
                        if(that.where != "page"){
-                           var height = that.$el.find(".stats_listing").outerHeight(true) ;
+                           if(that.contactHeight)
+                                height = that.contactHeight;
+                           else
+                                var height = that.$el.find(".stats_listing").outerHeight(true) ;
                            if(height < 360){
                                
                              that.$el.find(".stats_listing").css({"height":height+"px", "overflow-y":"auto"});
@@ -198,8 +202,8 @@ function (template,Contacts,viewContact) {
                    if(this.isCamPreview) {
                        this.$('.stats_listing').hide();
                        this.parent.$el.find('#camp-prev-contact-search').css('background','none');
-                       this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                        if(this.parent.subNum != null){
+                           this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                            this.parent.subNum=null;
                            this.parent.setiFrameSrc();
                        }
