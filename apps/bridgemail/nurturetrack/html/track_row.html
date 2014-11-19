@@ -6,7 +6,7 @@
                 <% if(model.get('status')==='D'){  %>
                 <a class="cstatus pclr1">Paused </a>
                 <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-                <a class="cstatus pclr26">Dispensing </a>
+                <a class="cstatus pclr6">Pending </a>
                 <% } else {%>
                 <a class="cstatus pclr18">Playing </a>
                 <%}
@@ -33,10 +33,12 @@
 <td width="90px"><div>
         <div class="mail">
              <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>    
+             <div class="showtooltip" title="in progress 0%" style="height:20px">
                 <img alt="" class="recurring2img showprogressnt" src="<%- this.app.get('path')%>img/recurring2.gif">
                 <div class="prgressbar" style="left:50%;margin-left:-40px">    
                     <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
                 </div>
+             </div>  
             <% }  %>  
         </div>
     </div></td>

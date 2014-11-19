@@ -1,15 +1,15 @@
 <div class="thumbnail temp-thumbnail">
   <div class="img">
-      <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>    
-      <img alt="" class="recurring2img" src="<%- this.app.get('path')%>img/recurring2.gif">
-      <div class="prgressbar">    
-          <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
-      </div>
+      <% if(model.get('status')==='P' || model.get('status')==='Q'){  %>                
+        <img alt="" class="recurring2img" src="<%- this.app.get('path')%>img/recurring2.gif">      
+        <div class="prgressbar showtooltip" title="in progress 0%">    
+            <span style="width: 1px;" class="prgrss <%- model.get("trackId.checksum")%>"> </span>
+        </div>      
       <% }  %>    
       <% if(model.get('status')==='D'){  %>    
       <div class="gallery-action-btns five s-clr6">
         <a class="main-action play-track clr5">
-                <span>Play Track</span>
+               <span>Play Track</span>
          </a>  
         <a class="previewbtn message-view clr4"><span>Preview</span></a>
         <a class="editbtn edit-track clr3"><span>Edit</span></a>
@@ -46,7 +46,7 @@
     <% if(model.get('status')==='D'){  %>
     <a class="cstatus pclr1">Paused </a> 
     <% } else if(model.get('status')==='P' || model.get('status')==='Q'){ %>
-        <a class="statusdd">Dispensing </a> 
+        <a class="cstatus pclr6">Pending </a> 
     <% } else { %>
       <a class="cstatus pclr18">Playing </a>                
      <% } %>                 

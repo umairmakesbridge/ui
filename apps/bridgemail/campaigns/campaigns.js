@@ -427,7 +427,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                         this.getallcampaigns();
                         this.taglinkVal = false;
                     } else {
-                        var keyCode = this.keyvalid(o);
+                        var keyCode = this.app.validkeysearch(o);
                         if (keyCode) {
                             if ($.trim(this.searchTxt).length > 0) {
 
@@ -487,8 +487,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                 },
                 headBadge: function () {
                     var active_ws = this.$el.parents(".ws-content");
-                    var header_title = active_ws.find(".camp_header .edited  h2");                  
-                    
+                    var header_title = active_ws.find(".camp_header .edited  h2");                                     
                     if (active_ws.find('ul.c-current-status').length) {
                         var header_title = active_ws.find(".camp_header .edited");
                         header_title.find('ul').remove();
@@ -517,20 +516,6 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
 
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
-                },
-                keyvalid: function (event) {
-                    var regex = new RegExp("^[A-Z,a-z,0-9]+$");
-                    var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                    if (event.keyCode == 8 || event.keyCode == 32 || event.keyCode == 37 || event.keyCode == 39) {
-                        return true;
-                    }
-                    else if (regex.test(str)) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                    event.preventDefault();
                 },
                 toggleSortOption: function (ev) {
                     $(this.el).find("#template_search_menu").slideToggle();

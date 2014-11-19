@@ -2026,7 +2026,10 @@ position:relative;
 .slide-btns .icon.delete { background-image: url("../img/delete48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.play { background-image: url("../img/play48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.pause { background-image: url("../img/pause48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.link { background-image: url("../img/link48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.setting { background-image: url("../img/setting-b.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.uncheck { background-image: url("../img/unpublish48.png"); background-position:center center; background-repeat:no-repeat; }
   
 .slide-btns div .icon:hover  {background-position:center 10px !important;}
 

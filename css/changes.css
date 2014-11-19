@@ -1331,6 +1331,7 @@ ul.tabs-btns li.active a{
     background: url("../img/ws-icons.png") no-repeat scroll -30px 0 rgba(0, 0, 0, 0);
 }
 .wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
+.wtab-lpageslisting{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);

@@ -1,0 +1,63 @@
+<td width="100%">
+    <div>
+        <div class="name-type">              
+            <h3>
+                <% if(model.get('status')!=='D'){ %>
+                    <a class="scheduleOpn-camp show-detail showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>
+                <% }else{ %>
+                    <a class="campname show-detail showtooltip" title="<%= this.getPageStatus().tooltip %>"> <%= this.model.get('name')%> </a>
+                <% } %>
+                <a class="cstatus pclr3"> <%= this.model.get('category')%> </a><% if(model.get('status')=='R'){ %><span class="cstatus published">Published</span> <% } %></h3>  
+                <div class="tags tagscont">
+                    <%= this.app.showTags(this.model.get('tags')) %>
+                </div>
+        </div>
+    </div>
+</td>
+<td width="90px">
+  <div>
+    <% if(this.model.get('status')!== 'D'){ %>  
+    <div class="colico pgview">
+        <strong><span><em>Page Visitors</em><a> <%- this.model.get('viewCount') %></a></span></strong>
+    </div>
+    <% }%>     
+  </div>
+</td>
+<td width="90px">
+    <div>        
+        <% if(this.model.get('status')!== 'D'){ %>  
+        <div class="colico  form ">
+        <strong><span><em>Form Submissions</em> <a><%- this.model.get('submitCount') %></a></span></strong>
+        </div>
+        <% }%>     
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>
+        <div class="slide-btns <% if(model.get('status')==='D'){ print('six s-clr7') } else { print('five s-clr6') } %>">
+            <span class="icon setting"></span>
+            <div>                 
+                <% if(model.get('status')==='D'){  %>
+                    <a class="icon publish-page check clr6"><span>Publish</span></a>
+                    <a class="icon preview-page preview clr5"><span>Preview</span></a>
+                    <a class="icon link-page link clr4"><span>Link</span></a>  
+                    <a class="icon edit-page edit clr3"><span>Edit</span></a>                    
+                    <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>                                           
+                <%} else {%>
+                    <a class="icon publish-page uncheck clr5"><span>Unpublish</span></a>
+                    <a class="icon preview-page preview clr4"><span>Preview</span></a>
+                    <a class="icon link-page link clr3"><span>Link</span></a>                      
+                    <a class="icon copy-camp copy clr2"><span>Copy</span></a> 
+                    <a class="icon delete-camp delete clr1"><span>Delete</span></a>   
+                <% } %>
+            </div>   
+        </div> 
+
+    </div>
+</td>
+
+

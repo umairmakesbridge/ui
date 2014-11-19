@@ -10112,6 +10112,11 @@ input.search-control[type="text"] {
     background: url("../img/ggicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
 .bmsgrid .colico.hr > strong {
     background: url("../img/hrricon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.pgview > strong {
+    background: url("../img/pageviewicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0); }
+.bmsgrid .colico.form > strong {
+    background: url("../img/formicon.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0);
+}
 .bmsgrid .colico.score span { color:#57b916; }
 
 .bmsgrid .colico.score.red span { color:#cc0000; } 
@@ -11214,3 +11219,8 @@ background-position:200px top;
 .socialposts {background: url("../img/socialposts.png") no-repeat scroll center center; }
 .addcontacts {background: url("../img/addcontacts.png") no-repeat scroll center center; }
 
+.cstatus.published {
+    background: url("../img/check18.png") no-repeat scroll 3px center #fff;
+    color: #41ce20;
+    padding-left: 22px;
+}

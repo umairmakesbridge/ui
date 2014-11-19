@@ -92,6 +92,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-tagbot':'newAutobot',
                     'click .new-alertbot':'newAutobot',
                     'click .new-scorebot':'newAutobot',
+                    'click .landing-pages':'landingPageslist',
                     'click #ql_refresh':function(){
                          this.loadHeaderCount(true);
                     }
@@ -546,6 +547,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 autoBots:function(){
                     this.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots','addAction':true,tab_icon:'autobotslisting'});
+                },
+                landingPageslist: function() {
+                    this.addWorkSpace({type: '', title: 'Landing Pages',sub_title:'Listing', url: 'landingpages/landingpages', workspace_id: 'landingpages', 'addAction': true, tab_icon: 'lpageslisting'});
                 },
                 newAutobot:function(ev){
                     if($(ev.target).prop('tagName') !="LI"){
