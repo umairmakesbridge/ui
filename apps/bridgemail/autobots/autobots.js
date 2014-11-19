@@ -345,20 +345,22 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.ws_header.find("#addnew_action").on('click', function() {
                         that.addNewAutobot();
                     }) 
-                    var progress  = $("<ul class='c-current-status' id='top_count'><li style='margin-left:5px;'><a><img src='"+this.options.app.get("path")+"img/greenloader.gif'></a></li></ul>");
+                    var progress  = $("<ul class='c-current-status autobot-headbadge' id='top_count'><li style='margin-left:5px;'><a><img src='"+this.options.app.get("path")+"img/greenloader.gif'></a></li></ul>");
                     that.ws_header.append(progress);
                     var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=counts";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
                         var data = jQuery.parseJSON(xhr.responseText);
-                        var header_part = "<li> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
-                        header_part = header_part + "<li> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
-                        header_part = header_part + "<li> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
-                        header_part = header_part + "<li> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";
+                        var header_part = "<li class='"+that.app.getClickableClass(data.pauseCount)+"'> <a data-text='D'><span class='badge pclr2'>" + that.options.app.addCommas(data.pauseCount) + "</span> Paused </a> </li>";
+                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.playCount)+"'> <a data-text='R'><span class='badge pclr18'>" + that.options.app.addCommas(data.playCount) + "</span> Playing </a> </li>";
+                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.pendingCount)+"'> <a data-text='P'><span class='badge pclr6'>" + that.options.app.addCommas(data.pendingCount) + "</span> Pending </a> </li>";
+                        header_part = header_part + "<li class='"+that.app.getClickableClass(data.presetCount)+"'> <a data-text='PRE'><span class='badge pclr1'>" + that.options.app.addCommas(data.presetCount) + "</span> Preset </a> </li>";
                         var $header_part = $(header_part);
                         that.ws_header.find(".c-current-status").html($header_part);
                         that.ws_header.find(".c-current-status li a").on('click', function(ev) {
                            // if ($(this).text().split(" ")[0] == "0")
                              //   return;
+                            var target = $.getObj(ev, "a");
+                             if(!target.parent().hasClass('clickable_badge')){return false;}
                             that.sortBy = $(this).data('text');
                             that.sortText = $(this).text().split(" ")[1];
                             that.topClickEvent = true;

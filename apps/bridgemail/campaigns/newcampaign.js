@@ -58,6 +58,7 @@ function (template) {
                                  var camp_id = camp_json[1];
                                  var camp_wsid = camp_json[2];
                                  newcampdialog.hide();
+                                 camp_obj.headBadge();
                                  app.mainContainer.openCampaign(camp_id,camp_wsid);
                               }
                               else{

@@ -285,6 +285,7 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
               
                 if(headerSet == "0" || this.changecount){
                    this.$el.parents(".ws-content").find(".camp_header .tcount").text(this.total);
+                   this.$el.parents(".ws-content").find(".camp_header .tcount").parent().addClass(this.app.getClickableClass(this.total_count));
                 }
                 this.changecount = false;
                 this.$el.find('#total_graphics .badge').text(this.total);
@@ -348,7 +349,9 @@ function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryu
                  this.$el.parents(".ws-content").find(".camp_header h2").after(header);
                  this.$el.append("<button class='ScrollToTop' style='display:none;' type='button'></button>");  
                  var that = this;
-                 $(".c-current-status,#template_search_menu li a").click(function(){
+                 $(".c-current-status,#template_search_menu li a").click(function(ev){
+                    var target = $.getObj(ev, "ul");
+                   if(!target.find('li').hasClass('clickable_badge')){return false;}
                     that.type = "list";
                     that.search_text = "";
                     that.offset = 0;

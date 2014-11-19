@@ -50,7 +50,8 @@ define([
                 'CAMPS_html_empty_error': 'Campaign has not content',
                 'CAMPS_delete_success_msg': 'Campaign deleted',
                 'SUB_updated': 'Subscriber updated successfully',
-                'CAMPS_templatename_empty_error': 'Template name can not be empty'
+                'CAMPS_templatename_empty_error': 'Template name can not be empty',
+                'MAPDATA_importlist_empty_error': 'Enter an import name',
             }],
         showbacktooltip: false,
         initialize: function () {
@@ -514,6 +515,15 @@ define([
                 var lastActiveWorkSpace = activeSpaceID.split('_')[1];
                 $('#wp_li_' + lastActiveWorkSpace).append('<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>');
             }
+        },
+        getClickableClass: function (value) {
+            var classname = "";
+            if (Number(value) === 0) {
+                classname = "";
+            } else {
+                classname = "clickable_badge";
+            }
+            return classname;
         },
         getData: function (data) {
             var app = this;

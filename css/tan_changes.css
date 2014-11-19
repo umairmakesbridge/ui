@@ -416,7 +416,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
 .fullwindow .temp-filters .adv_dd { width:327px; }
 .fullwindow .temp-filters .mergeinput { width:300px; }
 a#drop4 { background-color:#fff; }
-ul.c-current-status li .badge { cursor:pointer; }
+/*ul.c-current-status li .badge { cursor:pointer; }*/
 .chosen-container .chosen-results li { padding:5px 10px; }
 .chosen-container .chosen-results li.result-selected:after { width:30px; }
 .copy_campbox .tagscont ul li > a { padding:0 10px; }

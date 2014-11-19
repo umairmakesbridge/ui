@@ -229,7 +229,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                         buttons: {saveBtn: {text: 'Create Import', btnicon: 'save'}}
                     });
                     var new_import = '<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-import-container">';
-                    new_import += '<div class="cont-box" style="margin-top:10px; top:0; left:56%; width:90%;">';
+                    new_import += '<div class="cont-box" style="margin-top:10px; top:0; left:53%; width:90%;">';
                     new_import += '<div class="row campname-container">';
                     new_import += '<label style="width:10%;">Name:</label>';
                     new_import += '<div class="inputcont" style="text-align:right;">';
@@ -246,9 +246,18 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                     dialog.saveCallBack(_.bind(this.editImport, this, dialog));
                 },
                 editImport: function(dialog) {
-                    dialog.hide();
+                    var appMsgs = this.app.messages[0];
+                    var el = this.$el;
                     var importName = dialog.$("#import_name").val();
-                    this.parent.updateImport(importName);
-                }
+                    if(importName){
+                            dialog.hide();
+                            this.parent.updateImport(importName);
+                        }else{
+                            this.app.showError({
+                            control: el.parents('.modal-open').find('.campname-container'),
+                            message: appMsgs.MAPDATA_importlist_empty_error
+                            });
+                        }
+                   }
             });
         });

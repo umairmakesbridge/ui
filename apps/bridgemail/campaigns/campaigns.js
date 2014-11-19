@@ -119,9 +119,15 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                             else {
                                 target = $.getObj(obj, "span");
                                 target.parents('ul').find('span.font-bold').removeClass('font-bold');
-                                target.addClass('font-bold');
+                                target.parent().addClass('font-bold');
+                                target = target.parent();
                             }
+                                if(!target.hasClass('clickable_badge')){
+                                  target.removeClass('font-bold');
+                                  return false;
+                              }
                             camp_obj.$el.find('.stattype').parent().removeClass('active');
+                            
                             switch (target.attr("search"))
                             {
                                 case "C":
@@ -141,6 +147,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                     camp_obj.$el.find(".sortoption_expand").find('.spntext').html(camp_obj.$el.find('.draft').text());
                                     break;
                             }
+                          
                         }
                         var dateStart = target.attr('dateStart');
                         var dateEnd = target.attr('dateEnd');
@@ -195,7 +202,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                             this.searchTxt = '';
                         }
                         this.total_fetch = 0;
-
+                       
                         this.getallcampaigns();
                     }
                 },
@@ -505,10 +512,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                 var header_title = active_ws.find(".camp_header .edited");
                                 header_title.find('ul').remove();
                                 var stats = '<ul class="c-current-status">';
-                                stats += '<li search="C"><span class="badge pclr18 showtooltip stattype topbadges" tabindex="-1" search="C" data-original-title="Click to view sent campaigns">' + allStats['sent'] + '</span>Sent</li>';
-                                stats += '<li search="P"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" data-original-title="Click to view pending campaigns">' + allStats['pending'] + '</span>Pending</li>';
-                                stats += '<li search="S"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" data-original-title="Click to view scheduled campaigns">' + allStats['scheduled'] + '</span>Scheduled</li>';
-                                stats += '<li search="D"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft campaigns">' + allStats['draft'] + '</span>Draft</li>';
+                                
+                                stats += '<li search="C" class="'+ this.app.getClickableClass(allStats['sent']) +'"><span class="badge pclr18 showtooltip stattype topbadges" tabindex="-1" search="C" data-original-title="Click to view sent campaigns">' + allStats['sent'] + '</span>Sent</li>';
+                                stats += '<li search="P" class="'+ this.app.getClickableClass(allStats['pending']) +'"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" data-original-title="Click to view pending campaigns">' + allStats['pending'] + '</span>Pending</li>';
+                                stats += '<li search="S" class="'+ this.app.getClickableClass(allStats['scheduled']) +'"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" data-original-title="Click to view scheduled campaigns">' + allStats['scheduled'] + '</span>Scheduled</li>';
+                                stats += '<li search="D" class="'+ this.app.getClickableClass(allStats['draft']) +'"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft campaigns">' + allStats['draft'] + '</span>Draft</li>';
                                 stats += '</ul>';
                                 header_title.append(stats);
                                 $(".c-current-status li").click(_.bind(this.findCampaigns, this));
