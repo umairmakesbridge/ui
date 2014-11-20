@@ -527,6 +527,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                 },
                 toggleSortOption: function (ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
+                    ev.stopPropagation();
                 }
 
             });

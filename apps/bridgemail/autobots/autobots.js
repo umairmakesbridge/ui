@@ -331,6 +331,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                 },
                 toggleSortOption: function(ev) {
                     $(this.el).find("#autobots_search_menu").slideToggle();
+                    ev.stopPropagation();
                 },
                 topCounts: function(isDelete) {
 

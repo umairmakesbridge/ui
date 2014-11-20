@@ -4309,7 +4309,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     dcContentVariationWindow.find(".btnCancelVariation").click(function (event) {
                                                         event.stopPropagation();
                                                         DeleteElement(args.droppedElement);
-                                                        dcContentNameWindow.hide();
+                                                        if(dcContentNameWindow){
+                                                            dcContentNameWindow.hide();
+                                                        }
                                                     });
                                                     var saveContentBlock = function () {
                                                         var txtVariationName = dcContentVariationWindow.find(".txtPlaceHolder");
@@ -4355,7 +4357,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                         dcContentVariationWindow.hide();
                                                     }
-                                                    dcContentVariationWindow.find(".txtPlaceHolder").focus();
+                                                    setTimeout(_.bind(function(){
+                                                        this.find(".txtPlaceHolder").focus();
+                                                    },dcContentVariationWindow),300);
                                                     dcContentVariationWindow.find(".btnSaveVariation").click(function () {
                                                         saveContentBlock();
                                                     });

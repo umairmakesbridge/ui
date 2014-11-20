@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -168,7 +168,8 @@ define([
                 }
                 $(".messsage_alert").fadeOut("fast", function () {
                     $(this).remove();
-                })
+                });
+                $("#template_search_menu").hide();
             });
             $("body").mousedown(function () {
                 $(".MEE_EDITOR .alertButtons").hide();

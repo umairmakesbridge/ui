@@ -1203,6 +1203,8 @@ a.saving span {
 a.saving span {
     background: url("../images/greenloader.gif") no-repeat scroll center center #94CF1E;    
     min-width: 30px;
+    font-size:0px;
+    text-indent: -999em;
 }
 
 .tagbox .btn-green span{
@@ -2007,7 +2009,7 @@ ul.show-droppables > li:last-child{
    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.25); 
    z-index: 1003;
 }
-.tagbox input,.txtContentName {
+.tagbox input,.txtContentName,.txtPlaceHolder {
     color: #000000;    
     margin: 0 0 0;
     padding: 3px 5px;
@@ -2027,7 +2029,7 @@ ul.show-droppables > li:last-child{
     -moz-box-shadow: none;
     -webkit-appearance: none;
 }
-.tagbox input:focus,.txtContentName:focus {
+.tagbox input:focus,.txtContentName:focus,.txtPlaceHolder:focus {
     border:2px solid #94daf5;
     box-shadow: none;
     color:#000;

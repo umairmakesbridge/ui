@@ -3815,3 +3815,12 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 #campaign_from_email_chosen .chosen-search input[type="text"]{
     width:95%;
 }
+.showhand{
+    cursor: pointer;
+}
+.defaulthand{
+    cursor: default;
+}
+.c-current-status li.active {
+    font-weight: bold;
+}

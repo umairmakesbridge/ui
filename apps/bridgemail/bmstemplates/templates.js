@@ -631,6 +631,7 @@ function (template,highlight,templateCollection,templateRowView) {
                 },
                 toggleSortOption: function(ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
+                    ev.stopPropagation();
                 }
         });
 });

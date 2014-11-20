@@ -4,7 +4,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
             return Backbone.View.extend({
                 tags: 'div',
                 events: {
-                    "click .refresh_btn": 'refreshListing'
+                    "click .refresh_btn": 'refreshListing',
+                    "click .sortoption_expand": "toggleSortOption",
+                    "click li.stattype": 'filterListing'
                 },
                 initialize: function () {
                     this.template = _.template(template);
@@ -41,7 +43,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         iconsource: 'lpage',
                         countcontainer: 'no_of_camps'
                     });
-                },         
+                }, 
+                toggleSortOption: function(e) {
+                     this.$("#template_search_menu").slideToggle();
+                     e.stopPropagation();
+                },
                 addLandingPage: function( ) {
                    var active_ws = this.$el.parents(".ws-content");   
                    this.ws_header = active_ws.find(".camp_header .edited"); 
@@ -68,13 +74,16 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         }
                         var header_title = active_ws.find(".camp_header .edited");
                         header_title.find('ul').remove();
-                        var stats = '<ul class="c-current-status">';                                                                    
-                            stats += '<li search="S"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="R" data-original-title="Click to view published pages">' + allStats['publishCount'] + '</span>Published</li>';
-                            stats += '<li search="D"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft pages">' + allStats['draftCount'] + '</span>Draft</li>';
-                            stats += '<li search="T"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="T" data-original-title="Click to view templates">' + allStats['templateCount'] + '</span>Templates</li>';
+                        var pendingClass = (parseInt(allStats['publishCount']) > 0) ? "showtooltip showhand" : "defaulthand";
+                        var draftClass =  (parseInt(allStats['draftCount']) > 0) ? "showtooltip showhand" : "defaulthand";
+                        var templateClass = (parseInt(allStats['templateCount']) > 0) ? "showtooltip showhand" : "defaulthand" ;
+                        var stats = '<ul class="c-current-status">';                                
+                            stats += '<li data-search="P" class="' + pendingClass + '" title="Click to view published pages"><span class="badge pclr2 topbadges" tabindex="-1">' + allStats['publishCount'] + '</span>Published</li>';
+                            stats += '<li data-search="D" class="' + draftClass + '" title="Click to view draft pages"><span class="badge pclr1 topbadges" tabindex="-1">' + allStats['draftCount'] + '</span>Draft</li>';
+                            stats += '<li data-search="T" class="' + templateClass + '" title="Click to view templates"><span class="badge pclr6 topbadges" tabindex="-1">' + allStats['templateCount'] + '</span>Templates</li>';
                         stats += '</ul>';
                         header_title.append(stats);
-                        //$(".c-current-status li").click(_.bind(this.findPages, this));
+                        this.ws_header.find(".c-current-status li").click(_.bind(this.topBadgesClick, this));
                         header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
 
                     }, this));
@@ -116,7 +125,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         this.loadingpages_request.abort();
                     }
                     var _data = {offset: this.offset,type:'search'};                    
-                    if (filterObj) {                        
+                    if (this.status) {                        
                         _data['status'] = this.status;                        
                     }
                     if(this.actionType){
@@ -170,15 +179,41 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         }
                     });   
                 },
+                filterListing: function(e){                    
+                    var li = $.getObj(e,"li");                                        
+                    if(li.hasClass("active")==false){
+                        this.status = li.attr("data-search");                        
+                        this.$("#template_search_menu li").removeClass("active");
+                        li.addClass("active");                                                
+                        
+                        this.$(".sortoption_expand .spntext").html(li.text());
+                        this.getLandingPages();
+                        
+                        this.ws_header.find(".c-current-status li").removeClass("active");
+                        this.ws_header.find(".c-current-status li[data-search='"+this.status+"']").addClass("active");
+                    }
+                },
+                topBadgesClick : function(e){
+                    var li = $.getObj(e,"li");           
+                    if(li.hasClass("active")==false && li.hasClass("showhand")){
+                        this.ws_header.find(".c-current-status li").removeClass("active");
+                        li.addClass("active");                        
+                        this.status = li.attr("data-search");                                                                                                                      
+                        this.getLandingPages();
+                        
+                        this.$("#template_search_menu li").removeClass("active");
+                        var selectSort = this.$("#template_search_menu li[data-search='"+this.status+"']");
+                        selectSort.addClass("active");
+                        this.$(".sortoption_expand .spntext").html(selectSort.text());
+                    }
+                },
                 showTotalCount: function ( count ){
-                    var statusType = 'All';
+                    var statusType = '';
                     var _text = parseInt(count) <= "1" ? "Landing page" : "Landing pages";
                     if (this.status == 'D')
-                        statusType = 'Draft';
-                    else if (this.status === 'C')
-                        statusType = 'Sent';
+                        statusType = 'Draft';                   
                     else if (this.status === 'P')
-                        statusType = 'Pending';
+                        statusType = 'Published';
                     
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong><b>' + statusType + ' </b>';
 
