@@ -25,7 +25,15 @@ $.fn.scrollbox = function(config) {
             config.seed = 0;
 	   // config.chunk = config.chunk + 1;
            var count = 1;
-            
+           isScrolledIntoView=function(elem){
+                        var docViewTop = $(window).scrollTop();
+                        var docViewBottom = docViewTop + $(window).height();
+
+                        var elemTop = $(elem).offset().top;
+                        var elemBottom = elemTop + $(elem).height();
+
+                        return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+            },
            backward = function(){  
                config.seed = config.seed - config.chunk;
                if(config.seed < config.chunk){
@@ -98,8 +106,49 @@ $.fn.scrollbox = function(config) {
              }
            
           }
-            config.element.bind('forward', function() {  forward(); });
-            config.element.bind('backward', function() {  backward(); });
+            config.element.bind('forward', function() {  
+                forward(); 
+                if(config.selection == true){
+                     var onScreen = isScrolledIntoView(config.element.find('ul li:first-child'));
+                    /* if(onScreen){
+                         config.forward.hover( 
+                                function() {
+                                  $(this)
+                                    .css({'background-color':'#EAF4F9','opacity':'1'})
+                                    //.animate({'color': 'red'}, 400);
+                                } );
+                            
+                        }else{
+                              config.forward.hover( 
+                                function() {
+                                  $(this)
+                                    .css({'background-color':'#fff','opacity':'0.7'})
+                                    //.animate({'color': 'red'}, 400);
+                                } );
+                        }
+                    }*/
+            });
+            config.element.bind('backward', function() { 
+                backward(); 
+                if(config.selection == true){
+                     var onScreen = isScrolledIntoView(config.element.find('ul li:last-child'));
+                    /* if(onScreen){
+                              config.back.hover( 
+                                function() {
+                                  $(this)
+                                    .css({'background-color':'#fff','opacity':'0.7'})
+                                    //.animate({'color': 'red'}, 400);
+                                } );
+                        }else{
+                            config.back.hover( 
+                                function() {
+                                  $(this)
+                                    .css({'background-color':'#EAF4F9','opacity':'1'})
+                                    //.animate({'color': 'red'}, 400);
+                                } );
+                        }
+                    }*/
+            });
 	});
    
 };

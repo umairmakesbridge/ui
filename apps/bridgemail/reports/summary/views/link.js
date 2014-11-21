@@ -69,7 +69,12 @@ function (template,contactsView) {
                   active_ws.find(".campaign-clickers").html(new contactsView({url:url,campNum:this.options.campNum,article:this.model.get('articleNum.encode'),type:"CK",app:this.options.app}).el)
               },
             calculateProgress:function(){
-              return (parseInt(this.model.get('clickCount'))/parseInt(this.options.clicks) * 100)+ "%";
+                var prog = (parseInt(this.model.get('clickCount'))/parseInt(this.options.clicks) * 100);
+                if(isNaN(prog) || prog < 0) {
+                   return 0+ "%"
+               }else{
+                   return prog+ "%";
+               }
             },
             truncateURL:function(url){
                 if(url.length > 100) 

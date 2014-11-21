@@ -73,7 +73,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     'click .new-nurturetrack': 'addNurtureTrack',
                     'click .messagesbtn': 'loadNotifications',
                     "click .announcementbtn":"toggleAnnouncement",
-                    "click .quick-add":"quickAdd"
+                    //"click ":"quickAdd"
                 },
                 initialize: function() {
                     this.app = app;
@@ -129,6 +129,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     // Hide all dropdown
                     this.$('.add-new-header').on('mouseover', _.bind(function() {
                         this.$('.messages_dialogue').hide();
+                        $(".quick-add").removeClass( "active" );
                         this.$el.find('.announcement_dialogue').hide();
                         this.$el.find('.lo-confirm a.lo-no').click();
                         this.$('.sc-links ul').removeClass('open');
@@ -136,6 +137,22 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         $('#slidenav-newdd').hide();
                         this.$('#add-menu').css('display', 'none');
                     }, this));
+                    this.$('.quick-add').click(function(event){
+                        
+                        if($(".quick-add").hasClass("active")){
+                                $(".quick-add").removeClass( "active" );
+                                $( ".add_dialogue" ).animate({top:"-600px"});
+                        }
+                        else{
+                                $(".quick-add").addClass( "active" );
+                                $( ".add_dialogue" ).animate({top:"54px"});
+                                that.quickAdd();
+                        }
+                        that.$('.messages_dialogue').hide();
+                         event.stopPropagation();
+               });
+									
+                     
                   
                 },
                 getTitle: function(obj) {
@@ -146,14 +163,16 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.addWorkSpace({type: '', title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                 },
                 loadNotifications: function() {
-                    this.$el.find('.lo-confirm a.lo-no').click();
-                    if (this.$el.find(".messages_dialogue").length > 0 && this.$el.find(".messages_dialogue").is(':visible')) {
-                        this.$el.find(".messages_dialogue").slideUp('fast');
-                        return;
+                     $( ".add_dialogue" ).animate({top:"-600px"});
+                     if (this.$el.find(".messages_dialogue").attr('style').trim()!="display: none;") {
+                        this.$el.find(".messages_dialogue").slideUp();
+                          return false;
                     }
-                    this.$el.find('.add_dialogue').hide();
+                    this.$el.find('.lo-confirm a.lo-no').click();
+                    this.$el.find( ".add_dialogue" ).animate({top:"-600px"});
                     var that = this;
                     this.$el.find(".messages_dialogue").slideDown('fast');
+                    $(".quick-add").removeClass( "active" );
                     this.$el.find('.announcement_dialogue').hide();
                     this.$el.find(".messages_dialogue").html(new Notifications({newMessages : this.newMessages,isModel:false}).el)
                     this.$el.find(".messages_dialogue").append("<div class='viewallmsgs' style='margin:0px;padding:0px;height:40px'><div style='text-align:center'><a class='btn-blue' style='margin-top:5px;'><span class='view-all'>View All Messages </span></a></div></div>");
@@ -276,8 +295,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                },
                quickAdd:function(){
                    var that = this;
-                   this.$el.find('.add_dialogue').slideToggle('fast');
-                   this.$el.find('.announcement_dialogue').hide();
+                   //this.$el.find('.add_dialogue').slideToggle('fast');
+                   //this.$el.find('.announcement_dialogue').hide();
                    if(this.isQuickMenuLoaded == true) return;
                    this.isQuickMenuLoaded = true;
                    

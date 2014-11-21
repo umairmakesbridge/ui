@@ -50,6 +50,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.active_ws = this.$el.parents(".ws-content");
                 $(window).scroll(_.bind(this.scrollTop,this));
                 $(window).resize(_.bind(this.scrollTop,this));
+               
                 //console.log(this.options);
             },
             refreshWorkSpace:function(options){
@@ -175,7 +176,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     percent = Math.ceil(percent);
                     percent = (isNaN(percent = parseInt(percent, 10)) ? 0 : percent)
                     var span = "";
-                     if(this.trackId != null  && this.trackId && (tab == "Page Views" || tab == "Sent" || tab == "Pending" )){
+                     if(((this.autobotId != null  && this.autobotId) || (this.trackId != null  && this.trackId)) && (tab == "Page Views" || tab == "Sent" || tab == "Pending" )){
                           span = "<span> "+tab+" </span><strong>"+this.options.app.addCommas(numbers)+"</strong>";
                      }else{
                            span = "<span> "+tab+" </span><em>"+percent+"%</em><strong>"+this.options.app.addCommas(numbers)+"</strong>";

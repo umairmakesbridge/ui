@@ -125,16 +125,22 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 },
                 showPageViews: function(ev) {
                     var that = this;
-                    var sentAt;
+                    var clickType;
                    if($(ev.target).hasClass('show-sent-views')){
-                        sentAt = "Sent at";
-                        var status = "C";
+                        clickType = "sent";
+                        var status = "P";
                         var dialog_title = this.model.get("label") + " - Sent Population" ;
                     }else{
                         var status = "P";
-                        sentAt = "Scheduled for";
+                        clickType = "pending";
                         var dialog_title = this.model.get("label") + " - Pending Population" ;
                     } 
+                    
+                    if(this.model.get('actionType') == "E" || this.model.get('botType') == "B"){
+                           var camp_id=this.model.get('actionData')[0]['campNum.encode'];
+                                        this.options.app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                                    }
+                    return;
                     
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;

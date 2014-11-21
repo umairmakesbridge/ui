@@ -27,7 +27,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.objAutobots = new Autobots();
                     this.type = "search";
                     this.current_ws = "";
-                    this.isTiles = true;
+                    this.isTiles = false;
                     this.searchText = "";
                     this.sortBy = "";
                     this.ws_header = "";
@@ -410,7 +410,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     if (this.isTiles == true) {
                         var filters = this.$el.find('.thumbnails li:last');
                     } else {
-                        var filters = this.$el.find('table tbody tr:last').prev();
+                        var filters = this.$el.find('#tblAutobots tbody tr:last').prev();
                     }
                     var inview = filters.filter(function() {
                         var $e = $(this),
