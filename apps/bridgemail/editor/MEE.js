@@ -364,6 +364,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function setIFrameElements() {
                                     meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
+                                    removeDialogs();    
                                     mainContentHtmlGrand.mouseup(function () {
                                         changFlag.editor_change = true;
                                     })
@@ -386,17 +387,25 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 $.fn.setMEEHTML = function (html) {
                                     options.preDefinedHTML = html;
-                                    oHtml = reConstructCode(options.preDefinedHTML);
-
-                                    meeIframe = this.find("#mee-iframe").contents();
-                                    removeDialogs();
-                                    setIFrameElements();
-                                    var mainObj = meeIframe.find(".mainContentHtml");
-                                    mainObj.html(oHtml);
-                                    IsStyleActivated = false;
-                                    oInitDestroyEvents.InitAll(mainObj);
-                                    makeCloneAndRegister();
+                                    oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
+                                    mee.setHTML();
+                                    
                                 };
+                                
+                                mee.setHTML =  function(){
+                                    if(myElement.find("#mee-iframe").contents().find(".mainContentHtml").length){
+                                        meeIframe = myElement.find("#mee-iframe").contents();
+                                        setIFrameElements();
+                                        var mainObj = meeIframe.find(".mainContentHtml");
+                                        mainObj.html(oHtml);
+                                        IsStyleActivated = false;
+                                        oInitDestroyEvents.InitAll(mainObj);
+                                        makeCloneAndRegister();
+                                    }
+                                    else {
+                                        setTimeout(_.bind(mee.setHTML,mee),200);
+                                    }
+                                }
 
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
@@ -1690,22 +1699,29 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     if (lType === "text") {
                                         divID = meeIframe.find("div.textcontent.mce-edit-focus").attr("id");
                                     }
-                                    var dialog = options._app.showDialog({
-                                        title: "Links GUI",
-                                        css: {
-                                            "width": "780px",
-                                            "margin-left": "-390px"
-                                        },
-                                        bodyCss: {
-                                            "min-height": "325px"
-                                        },
-                                        headerIcon: 'link',
-                                        buttons: {
-                                            saveBtn: {
-                                                text: 'Insert'
+                                    var dialogOptions = {
+                                            title: "Links GUI",
+                                            css: {
+                                                "width": "780px",
+                                                "margin-left": "-390px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": "325px"
+                                            },
+                                            headerIcon: 'link',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Insert'
+                                                }
                                             }
-                                        }
-                                    });
+                                        };
+                                    var dialog = null;  
+                                    if (options.fromDialog) {
+                                        dialog = options._app.showStaticDialog(dialogOptions);                                            
+                                    }
+                                    else{
+                                        dialog = options._app.showDialog(dialogOptions);                                        
+                                    }
                                     options._app.showLoading("Loading...", dialog.getBody());
                                     dialog.$el.css("z-index", "99999");
                                     $(".modal-backdrop").css("z-index", "99998");
@@ -1720,15 +1736,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         });
                                         dialog.getBody().append(linkDialogPage.$el);
                                         dialog.saveCallBack(_.bind(linkDialogPage.insertLink, linkDialogPage, dialog));
-                                        options._app.showLoading(false, dialog.getBody());
-                                        if (options.fromDialog) {
-                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
-                                            dialog.getBody().find(".content_containerLinkGUI").addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                                            options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
-                                            options._app.dialogArray[dialogArrayLength - 1].currentView = dialog.getBody().find(".content_containerLinkGUI"); // New Dialog
-                                            options._app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(linkDialogPage.insertLink, linkDialogPage, dialog); // New Dialog
-                                            linkDialogPage.ReattachEvents = options.reAttachEvents;
-                                        }
+                                        options._app.showLoading(false, dialog.getBody());                                        
                                     });
                                 }
 
@@ -3523,7 +3531,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
 //**************************************************** DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) **************************************************** //Section5            
-
+                                mee.initTinyMCE = function(){
+                                    if(meeIframeWindow && meeIframeWindow.tinymce){
+                                        meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
+                                        meeIframeWindow.tinymce.init({
+                                            selector: "div#load_css",
+                                            inline: true,
+                                            theme: "modern",
+                                            skin_url: options._app.get("path") + "css/editorcss",
+                                            toolbar_items_size: 'small',
+                                            menubar: false,
+                                            schema: "html5",
+                                            statusbar: true,
+                                            object_resizing: false
+                                        })
+                                        meeIframeWindow.$("div#load_css").remove();
+                                    }
+                                    else{
+                                         setTimeout(_.bind(mee.initTinyMCE,mee),200);
+                                    }
+                                }
+                                
                                 function InitializeAndDestroyEvents() {
 
                                     //Destroy plugin events all event
@@ -3577,19 +3605,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
 
                                         if (element.find("div.textcontent").length === 0) {
-                                            meeIframeWindow.$("body").append($("<div id='load_css'></div>"))
-                                            meeIframeWindow.tinymce.init({
-                                                selector: "div#load_css",
-                                                inline: true,
-                                                theme: "modern",
-                                                skin_url: options._app.get("path") + "css/editorcss",
-                                                toolbar_items_size: 'small',
-                                                menubar: false,
-                                                schema: "html5",
-                                                statusbar: true,
-                                                object_resizing: false
-                                            })
-                                            meeIframeWindow.$("div#load_css").remove();
+                                            mee.initTinyMCE();
                                         }
 
                                         element.find("div.textcontent").each(function (index, element) {
@@ -4545,7 +4561,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function InitializeMainDraggableControls(elementToApply) {
 
                                     $(elementToApply).on('dragstart', function (event) {
-                                        event.originalEvent.dataTransfer.setData("ui", $(this));
+                                        event.originalEvent.dataTransfer.setData("text", "dragging");
                                         mee.dragElement = $(this);
                                         if ($(this).data("type") === "droppedImage") {
                                             return;
@@ -4578,6 +4594,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         event.preventDefault();
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables");
                                         RemoveDroppables(meeIframe);
+                                        $(".file-border").removeClass("file-border");
                                         mee.dragElement = null;
                                         //
                                     });

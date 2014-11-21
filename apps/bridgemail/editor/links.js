@@ -91,7 +91,12 @@ function (template) {
                 }           
                 if(imgLink!==false){
                      if(this.config.fromDialog){
-                        dialog.showPrevious();      
+                        if(dialog.showPrevious){
+                            dialog.showPrevious();  
+                        }
+                        else{
+                            dialog.hide();      
+                        }
                      }
                      else{
                          dialog.hide();      

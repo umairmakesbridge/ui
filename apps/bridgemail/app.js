@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog2','views/common/add_action'
-], function ($, _, Backbone, bootstrap, bmsDialog,addDialog) {
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2','views/common/add_action'
+], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog) {
     'use strict';
     var App = Backbone.Model.extend({
         messages: [{'CAMP_subject_empty_error': 'Subject cannot be empty',
@@ -561,6 +561,14 @@ define([
                 var returnDialog = this.appendDialogView(options);
                 return returnDialog;
             }
+        },
+        showStaticDialog: function (options) {
+            options['app'] = this;
+            var dialog = new bmsStaticDialog(options);
+            $(".modal,.modal-backdrop").css("visibility","hidden");
+            $("body").append(dialog.$el);
+            dialog.show();
+            return dialog;           
         },
         showAddDialog: function (options) {                        
             var dialog = new addDialog(options);            

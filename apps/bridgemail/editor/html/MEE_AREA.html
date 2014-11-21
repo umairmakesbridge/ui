@@ -15,7 +15,7 @@
                 crt.style.position = "absolute"; crt.style.top = $(e.currentTarget).offset().top+"px"; crt.style.left = ($(e.currentTarget).offset().left-1)+"px";crt.style.listStyle = "outside none none";               
                 crt.innerHTML = "";crt.style.width = $(e.currentTarget).width() +"px";crt.style.height=$(e.currentTarget).height()+"px";
                 document.body.appendChild(crt);                
-                e.originalEvent.dataTransfer.setData($(this).attr('data-type'), "text"); 
+                e.originalEvent.dataTransfer.setData("text", "text"); 
                 e.originalEvent.dataTransfer.setDragImage(crt, $(this).width(), 0); 
                 mee.dragElementIframe =$(e.currentTarget);
                 mee.startDragging(e);            
@@ -25,6 +25,7 @@
                 event.preventDefault();         
                 $("#drag-class").remove();
                 top.$("#top_scroll_page,#bottom_scroll_page").hide();
+                top.$(".file-border").removeClass("file-border");
                 mee.stopDragging();                
             });            
            }                      
