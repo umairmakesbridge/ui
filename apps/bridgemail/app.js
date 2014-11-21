@@ -123,6 +123,7 @@ define([
                         && container.has(ev.target).length === 0) { // ... nor a descendant of the  message dialogue
                     if (!$(ev.target).hasClass('messagesbtn') && !$(ev.target).hasClass('view-all') && !$(ev.target).parents('.messagesbtn').length && !$(ev.target).hasClass('r-notify') && !$(ev.target).hasClass('closebtn')) {
                         container.hide();
+
                     }
                 }
                 $(".nurture_msgslist").hide();
@@ -131,7 +132,7 @@ define([
                 if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
                         && container.has(ev.target).length === 0) { // ... nor a descendant of the  message dialogue
                     if (!$(ev.target).hasClass('quick-add') && !$(ev.target).hasClass('plusicon') && !$(ev.target).hasClass('btn-ok') && !$(ev.target).hasClass('close') && !$(ev.target).hasClass('btn-cancel') && !$(ev.target).parents('div').hasClass('btns')) {
-                        container.slideUp('fast');
+                        container.animate({top:"-600px"});
                     }
                 }
                 var container = $(".ocp_stats");

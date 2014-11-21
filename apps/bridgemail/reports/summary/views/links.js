@@ -45,8 +45,9 @@ function (Links,viewLinks,template) {
                  });
                }});
             },
-            viewAll:function(){
+            viewAll:function(ev){
                    
+                    if(this.total <= 0) return;
                     var dialog_width = 80;
                     var dialog_height = $(document.documentElement).height()-200;
                     var dialog = this.options.app.showDialog(

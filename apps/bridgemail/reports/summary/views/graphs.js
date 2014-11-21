@@ -207,7 +207,14 @@ function (template,chart,contactsView,jsPDF) {
                      
                     var doc =  new jsPDF( );
                    var active_ws = that.$el.parents(".ws-content");
-                    var name = active_ws.find("#workspace-header").html();    
+                  var name =  active_ws.find("#workspace-header")
+    .clone()    //clone the element
+    .children() //select all the children
+    .remove()   //remove all the children
+    .end()  //again go back to selected element
+    .text();
+                  //  var name = active_ws.find("#workspace-header").text();
+                    name = that.options.app.decodeHTML(name);                    
                     doc.setProperties({
                         title: name,
                         subject: name,     
@@ -227,21 +234,27 @@ function (template,chart,contactsView,jsPDF) {
                       
                     var imgData = that.$el.find("#img_download").attr('src');
                     doc.setFontSize(20);
-                    doc.text(20, 20, name);
-                    var tags = that.options.tags;
-                    
-                    if(tags){
-                     doc.setFontSize(8);
+                    doc.text(20, 20, name); 
+                    var tags = that.options.tags; 
+                    if(!that.botId && !that.trackId){
+                      doc.setFontSize(8);
                      doc.text(20, 25, "Tags: "+ tags);     
+                    }else{
+                        var li = active_ws.find("#campaign_tags").find('ul li').text();
+                         doc.setFontSize(8);
+                     if(typeof li!="undefined")
+                        doc.text(22, 26,li);  
                     }
                     var date = active_ws.find("#campaign_tags").find('.sentat em').html() +" " + active_ws.find("#campaign_tags").find('.sentat strong').html();
-                    doc.setFontSize(11);
-                    doc.text(20, 32, date);
+                    if(!that.botId && !that.trackId){
+                         doc.setFontSize(11);
+                        doc.text(20, 32, date);
+                    }
                     doc.setFontSize(11);
                     var sent = that.$el.parents(".ws-content").find(".sent-pending span:first strong").html();
                      doc.text(80, 32, "Sent: " + sent);
-                     var pending = that.$el.parents(".ws-content").find(".sent-pending .pdf-pending strong").html();
-                     if(pending)doc.text(100, 32, "Pending: " + pending);
+                      var pending = that.$el.parents(".ws-content").find(".sent-pending .pdf-pending strong").html();
+                     if(pending)doc.text(120, 32, "Pending: " + pending);
                     if(imgData){
                       doc.addImage(imgData, 'PNG', 35, 30,130,90);
                     }
@@ -250,10 +263,22 @@ function (template,chart,contactsView,jsPDF) {
                     
                     that.$el.parents(".ws-content").find(".chartstatdetail li").each(function(){
                       var text = $(this).find('span').html();
-                      var percent = $(this).find('em').html();
+                      var text1 = $(this).find('span').html();
+                      text = $.trim(text);
+                      text = text.toLowerCase();
+                      var percent = "N/A";
+                     if(!that.trackId && !that.botId)
+                          percent = $(this).find('em').html();
+                     else{
+                        if(text =="pending" || text =="sent" || text == "page views")
+                             percent = "N/A";
+                        else
+                             percent = $(this).find('em').html();   
+                     }
+                     
                       var count = $(this).find('strong').html();
                        doc.setFontSize(10);
-                       doc.text(counter, 115,text );
+                       doc.text(counter, 115,text1 );
                        doc.setFontSize(7);
                        doc.text(counter + 1, 120,percent );
                        doc.setFontSize(9);
@@ -278,7 +303,7 @@ function (template,chart,contactsView,jsPDF) {
                              doc.text(165, y, that.options.app.addCommas(m.get('clickCount')));
                              y = y + 7;
                          });
-                       doc.save('datauri');       
+                       doc.save(name);       
                     }});
                     
                      //that.$el.append("<div style='display:none' id='links'></div>");

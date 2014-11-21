@@ -65,8 +65,8 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         return "<a class='cstatus pclr6'> Pending </a>";
                 },
                 getReport:function(){
-                   // if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
-                     // return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
+                    if(this.model.get('actionType') == "E" || this.model.get('botType') == "B")
+                      return '<div class="campaign_stats showtooltip" title="Click to View Chart" style="margin-top: 2px;"><a class="icon report"></a></div>';
                 },
                  reportShow:function(){ 
                        var camp_id=this.model.get('actionData')[0]['campNum.encode'];
@@ -204,9 +204,15 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     return _date.format("DD MMM YYYY");
                 },
                 showSentPopulation: function(ev) {
-                    var that = this;
-                    var sentAt = "Sent at";
-                        var status = "C";
+                   
+                        var clickType = "sent";
+                        
+                    if(this.model.get('actionType') == "E" || this.model.get('botType') == "B"){
+                           var camp_id=this.model.get('actionData')[0]['campNum.encode'];
+                                        this.options.app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                                    }
+                    return;
+                        
                         
                         var dialog_title = this.model.get("label") + " - Sent Population" ;
                         var dialog_width = $(document.documentElement).width()-60;
@@ -231,6 +237,14 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     });
                 },
                 showPendingPopulation:function(){
+                      var clickType = "pending";
+                        
+                    if(this.model.get('actionType') == "E" || this.model.get('botType') == "B"){
+                           var camp_id=this.model.get('actionData')[0]['campNum.encode'];
+                                        this.options.app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                                    }
+                    return;
+                    
                     var that = this;
                       var status = "P";
                         var sentAt = "Scheduled for";

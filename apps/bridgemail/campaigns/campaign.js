@@ -816,13 +816,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                    this.scrollApply = true;
                                     that.$('#box_backward').click(function () {
                                       that.$('.scroll-text').trigger('backward');
+                                      
                                     });
                                     that.$('#box_forward').click(function () {
                                       that.$('.scroll-text').trigger('forward');
+                                      
                                     });
                            }
                 },
-
+               
                 fetchServerTime:function(){    
                    this.app.showLoading("Loading Calender...",this.$(".schedule-box2")); 
                    require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
