@@ -3834,26 +3834,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var InitializeMouseHover = function (oHtml) {
 
                                             if (oHtml != null) {
-                                                var topHandlersHTML = "<div class='topHandlers'><ul><li class='myHandle' draggable='true'><i class='icon move'></i></li><li class='myHandlerCopy'><i class='icon copy'></i></li><li class='myHandlerDelete'><i class='icon delete'></i></li></ul></div>";
-                                                var myobject = $(topHandlersHTML);
+                                                var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
+                                                var myobject = meeIframeWindow.$(topHandlersHTML);
                                                 oHtml.on({
                                                     mouseover: function (e) {
                                                         e.stopPropagation();
                                                         meeIframe.find(".topHandlers").remove();
 
                                                         if (!IsStyleActivated) {
-                                                            //Assign DELETE functionality here
-                                                            InitializeDeleteButtonOnElement(myobject);
-
-                                                            //Assign COPY functionality here
-                                                            InitializeCopyButtonOnElement(myobject);
+                                                            console.log("mouse over block");
+                                                            //Assign DELETE functionality here                                                            
+                                                            
                                                             $(this).prepend(myobject);
                                                             $(this).addClass("hover");
                                                             $(this).parents(".csHaveData").removeClass("hover");
+                                                            InitializeDeleteButtonOnElement(myobject);
+                                                            //Assign COPY functionality here
+                                                            InitializeCopyButtonOnElement(myobject);
                                                         }
 
                                                     },
                                                     mouseleave: function (e) {
+                                                        console.log("----mouse leave block");
                                                         //e.stopPropagation();
                                                         $(this).find(myobject).remove();
                                                         $(this).removeClass("hover");

@@ -647,10 +647,10 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
                box-shadow: 3px 0px 8px rgba(3, 211, 255, 0.5);
 
 }
-.topHandlers ul {}
-.topHandlers ul li { cursor:pointer;}
-.topHandlers ul li i { width:25px; height:25px;}
-.topHandlers ul li.myHandle { cursor:move;}
+
+.topHandlers div { cursor:pointer;}
+.topHandlers div i { width:25px; height:25px;}
+.topHandlers div.myHandle { cursor:move;}
 
 .myDroppable.hover { border:1px solid #03d3ff; 
                      -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);

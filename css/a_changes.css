@@ -3794,7 +3794,7 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
     width: 600px;
     display:none;
 	min-height:100px;
-    z-index: 99;
+    z-index: 199;
 }
 .add_dialogue:before {
     border-color: rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) #fff;
