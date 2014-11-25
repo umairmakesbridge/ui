@@ -69,7 +69,7 @@
         }
       }
       else{
-          this.options.app.showAlert('Value cann\'t be empty',$("body"));
+          this.options.app.showAlert('Value can\'t be empty',$("body"));
       }
   }
   ,

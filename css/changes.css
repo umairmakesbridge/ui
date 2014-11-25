@@ -1331,7 +1331,7 @@ ul.tabs-btns li.active a{
     background: url("../img/ws-icons.png") no-repeat scroll -30px 0 rgba(0, 0, 0, 0);
 }
 .wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
-.wtab-lpageslisting{background:url("../img/ws_icons.png") no-repeat scroll -30px -180px}
+.wtab-lpageslisting{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
 
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -3690,8 +3690,80 @@ ul.autobot-headbadge li.clickable_badge a:hover{
   }
 }
 /*
+-------------- Template view ----------
+*/
+.left-wrap{
+    float: left;
+    width: 17%;
+}
+.right-wrap{
+    float: left;
+    width: 82%;
+}
+.template-wrap {
+    background: none repeat scroll 0 0 #d8ecf5;
+    overflow: hidden;
+}
+.editor-new-template {
+    background: none repeat scroll 0 0 #fff;
+    height: 200px !important;
+    width: 180px !important;
+}
+.editor-new-template > h4{
+    line-height: 17px !important;
+    margin: 45px 29px 20px !important;
+}
+.templateimg {
+    background : transparent !important;
+}
+.editor-new-template-filter-wrap > div {
+    margin : 12px 0 0;
+}
+.editor-new-template-filter-wrap .pre_row .checkpanelinput .icheck_line-icon {
+    background-position: -20px 0;
+    margin: 20px 0 0 5px !important;
+}
+.editor-new-template-category-icon {
+     border-radius: 25px !important;
+     margin: 7px 0 0 10px;
+}
+.editor-new-template-category-icon i.icon{
+    width:25px;
+    height: 25px;
+}
+.common-filter:first-child{
+        background: #eff7fb;
+    }
+    #myTab li.active a{
+        color:#fff;
+        background: none repeat scroll 0 0 #94cf1e;
+        font-weight: bold;
+    }
+    #myTab li{width: 140px;}
+    #myTab li a{
+        color:#fff;
+        background: none repeat scroll 0 0 #91abbc;
+        font-size: 15px;
+    height: 34px;
+    text-align: center;
+    line-height: 34px;
+    }
+    #myTab li img{
+        left: 10px;
+    position: relative;
+    top: 4px;
+    }
+    .tabpanel-wrapper  .tab-content {
+        padding:0px;
+        border:none;
+    }
+    .editor-new-template img{
+        margin-top:5px;
+    }
+/*
 -------------- ENDS HERE ----------
 */
+
 .videobar{
     cursor: pointer;
 }
