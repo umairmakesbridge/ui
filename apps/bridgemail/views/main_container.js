@@ -433,24 +433,28 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                     var self = this;                    
                     // change size of clicked box
-                    $tiles.delegate( '.box', 'click', function(){                               
-                      $(this).toggleClass('expanded');
-                      $tiles.isotope('reLayout');
-                      
-                      if(self.$("#tiles .box").hasClass("expanded")){
-                          if($(this).hasClass("local")){
-                              self.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
-                          }
-                          if(self.$("#tiles .box.expanded").length==1 && self.$("#tiles .box.expanded").hasClass("local")){
-                            self.$(".local").css("top","-180px");
-                          }
-                          else{
-                              self.$(".local").css("top","0px");
-                          }
-                      }
-                      else{
-                            self.$(".local").css("top","-180px");
-                      }
+                    $tiles.find('.box').on('click', function(ev){ 
+                      var target = $(ev.target)
+                      if ( target.is( "li" ) || target.is( "i" ) || target.is( "a" )  ) {
+                      }else{
+                        $(this).toggleClass('expanded');
+                        $tiles.isotope('reLayout');
+
+                        if(self.$("#tiles .box").hasClass("expanded")){
+                            if($(this).hasClass("local")){
+                                self.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
+                            }
+                            if(self.$("#tiles .box.expanded").length==1 && self.$("#tiles .box.expanded").hasClass("local")){
+                              self.$(".local").css("top","-180px");
+                            }
+                            else{
+                                self.$(".local").css("top","0px");
+                            }
+                        }
+                        else{
+                              self.$(".local").css("top","-180px");
+                        }
+                     }
                     });
                     
                     this.$(".popup").click(_.bind(this.showPopup, this));
@@ -491,6 +495,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         headerIcon: 'new_headicon',
                         buttons: {saveBtn: {text: 'Create Campaign'}}
                     });
+                     e.stopPropagation();
+                    e.preventDefault();
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["campaigns/newcampaign"], function(newcampPage) {
                         var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
@@ -498,8 +504,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         dialog.$("input").focus();
                         dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
                     });
-                    e.stopPropagation();
-                    e.preventDefault();
+                   
+                    return false;
                 },
                 createTemplate: function() {
                     this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});

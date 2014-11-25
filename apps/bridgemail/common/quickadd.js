@@ -209,7 +209,8 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                             }
                         },
                         toggleVisibility:function(){
-                            this.options.page.$el.find('.add_dialogue').hide('fast');
+                                this.options.page.$el.find(".quick-add").removeClass( "active" );
+                                this.options.page.$el.find( ".add_dialogue" ).animate({top:"-600px"}); 
                         },
                         showSelectedfile:function(files){
                             var z = -40;

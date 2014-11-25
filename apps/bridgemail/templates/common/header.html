@@ -1,4 +1,4 @@
-<nav id="dashnav">
+<nav id="dashnav" style="z-index:1000!important">
 
     <ul class="leftnav">
         <li class="icon-menu"><a ><i class="icon menu"></i></a></li>
@@ -44,10 +44,10 @@
   
 
 </nav>
- <div class="messages_dialogue dropdown-nav" style="display:none;">
+ <div class="messages_dialogue dropdown-nav" style="display:none;z-index: 999!important">
 
     </div>
-  <div class="add_dialogue" style="min-height: 300px; top:-300px;display:block!important">  
+  <div class="add_dialogue" style="min-height: 300px; top:-300px;display:block!important;z-index: 999!important">  
         <div style="position:absolute; left:45%;top:47%; display:block;"><img src="<%- this.app.get('path')%>img/loading.gif"/></div>
 
     </div> <!--  add_dialogue  -->

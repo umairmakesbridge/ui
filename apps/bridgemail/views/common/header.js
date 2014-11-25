@@ -163,8 +163,9 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.addWorkSpace({type: '', title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload', single_row: true});
                 },
                 loadNotifications: function() {
-                     $( ".add_dialogue" ).animate({top:"-600px"});
-                     if (this.$el.find(".messages_dialogue").attr('style').trim()!="display: none;") {
+                     $(".add_dialogue" ).animate({top:"-600px"});
+                      $(".quick-add").removeClass( "active" );
+                      if (this.$el.find(".messages_dialogue").css('display')!="none") {
                         this.$el.find(".messages_dialogue").slideUp();
                           return false;
                     }
