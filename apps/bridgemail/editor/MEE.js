@@ -345,13 +345,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     if (replaceObj != null) {
                                         var contentObj = meeIframe.find("body");
                                         contentObj.html(replaceObj.outerHTML());
-                                        var mainObj = myElement.find(".mainTable");
+                                        var mainObj = meeIframe.find(".mainTable");
                                         mainObj.find("div.textcontent").css('visibility', 'visible');
                                         oInitDestroyEvents.InitAll(mainObj, true);
                                         undoredo = true;
                                         if (myElement.find(".style-tab").hasClass("active")) {
                                             InitializeElementsForStyle(true);
-                                        } else {
+                                        }
+                                        else {
                                             RemoveAllOutline();
                                             var editorfocused = meeIframe.find("div.textcontent.mce-edit-focus");
                                             if (editorfocused.length) {
@@ -359,6 +360,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             }
                                         }
                                         resizeHeight();
+
                                     }
                                 });
                                 function setIFrameElements() {
@@ -590,14 +592,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
                                             imageElem.addClass("imageHandlingClass  resizable clickEvent");
                                             var imgHeight = imageElem.inlineStyle("height");
-
                                             var imgWidth = imageElem.inlineStyle("width");
 
                                             imageElem.css("height", "100%");
                                             imageElem.css("width", "100%");
                                             if (imgHeight == "") {
                                                 imgHeight = "200px";
-
                                             }
                                             if (imgWidth == "") {
                                                 imgWidth = "200px";
@@ -606,7 +606,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             var _containerStyle = elem.attr("style") ? elem.attr("style") : "float:none";
                                             var _imageStyle = imageElem.attr("isStyleSet") ? imageElem.attr("style") : "height:" + imgHeight + ";width:" + imgWidth;
                                             elem.removeAttr("style");
-                                            imageElem.attr("style", "width:100%;height:100%");
+                                            //imageElem.attr("style", "width:100%;height:100%");
 
                                             var imgOutHtml = "";
                                             if (imageElem.parent().get(0).tagName == 'a' || imageElem.parent().get(0).tagName == 'A') {
@@ -3835,27 +3835,26 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                             if (oHtml != null) {
                                                 var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
-                                                var myobject = meeIframeWindow.$(topHandlersHTML);
+                                                var myobject = $(topHandlersHTML);
                                                 oHtml.on({
                                                     mouseover: function (e) {
                                                         e.stopPropagation();
                                                         meeIframe.find(".topHandlers").remove();
 
                                                         if (!IsStyleActivated) {
-                                                            console.log("mouse over block");
-                                                            //Assign DELETE functionality here                                                            
+                                                            //Assign DELETE functionality here
+                                                            InitializeDeleteButtonOnElement(myobject);
+
+                                                            //Assign COPY functionality here
+                                                            InitializeCopyButtonOnElement(myobject);
                                                             
                                                             $(this).prepend(myobject);
                                                             $(this).addClass("hover");
                                                             $(this).parents(".csHaveData").removeClass("hover");
-                                                            InitializeDeleteButtonOnElement(myobject);
-                                                            //Assign COPY functionality here
-                                                            InitializeCopyButtonOnElement(myobject);
                                                         }
 
                                                     },
                                                     mouseleave: function (e) {
-                                                        console.log("----mouse leave block");
                                                         //e.stopPropagation();
                                                         $(this).find(myobject).remove();
                                                         $(this).removeClass("hover");

@@ -95,7 +95,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                       heading : 'Start with choosing a name for your Landing Page',
                       buttnText: 'Create',
                       plHolderText : 'Enter landing page name here',
-                      emptyError : 'Landing page name cann\'t be empty',
+                      emptyError : 'Landing page name can\'t be empty',
                       createURL : '',
                       postData : {type:'create'},
                       saveCallBack :  _.bind(this.createPage,this)
