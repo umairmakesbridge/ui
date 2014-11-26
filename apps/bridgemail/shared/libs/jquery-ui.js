@@ -10,4 +10,82 @@
 /*!
  * dnd code
  */
-(function(a){a.fn.dndPageScroll=function(d){d||(d={});var h={topId:"top_scroll_page",bottomId:"bottom_scroll_page",delay:50};var d=a.extend(h,d);var g=a("#"+d.topId);if(!g.length){g=a('<div id="top_scroll_page">&nbsp;</div>').appendTo("body")}var e=a("#"+d.bottomId);if(!e.length){e=a('<div id="bottom_scroll_page">&nbsp;</div>').appendTo("body")}var c=a("#top_scroll_page, #bottom_scroll_page");c.hide();c.css({position:"fixed",left:0,right:0,height:20,zIndex:999999});g.css({top:0});e.css({bottom:0});var f;var i;c.on("dragenter",function(k){var j=(a(this).attr("id")==d.topId)?"up":"down";return true});c.on("dragover",function(o){if(a("html,body").is(":animated")){return true}var n=a(window).scrollTop();var m=(a(this).attr("id")==d.topId)?-1:1;var k=(m==-1)?f:i;var l=(m==-1)?n:a(document).height()-(n+a(window).height());if(k!=undefined&&k==l&&l>0){var j=n+m*50;a("html,body").animate({scrollTop:j},d.delay,"linear")}if(m==-1){f=l}else{i=l}return true});var b=function(j){c.hide();timestamp=undefined;scrolltop=0;scrollbottom=0;return true};a(document).on("dragstart",function(j){c.show();return true});a(document).on("dragend",b);c.on("mouseover",b)}})(jQuery);
+(function($){
+    $.fn.dndPageScroll = function (options) {
+        options || (options = {});
+        var defaults = {
+            topId: 'top_scroll_page',
+            bottomId: 'bottom_scroll_page',
+            delay: 50
+        };
+        var options = $.extend(defaults, options);
+        var top_el = $('#' + options.topId);
+        if (!top_el.length)
+            top_el = $('<div id="top_scroll_page">&nbsp;</div>').appendTo('body');
+        var bottom_el = $('#' + options.bottomId);
+        if (!bottom_el.length)
+            bottom_el = $('<div id="bottom_scroll_page">&nbsp;</div>').appendTo('body');
+        var both_el = $('#top_scroll_page, #bottom_scroll_page');
+        both_el.hide();
+        both_el.css({
+            position: 'fixed', left: 0, right: 0,
+            height: 20, zIndex: 999999
+        });
+        top_el.css({top: 0});
+        bottom_el.css({bottom: 0});
+        var lastTop;
+        var lastBottom;
+        both_el.on('dragenter', function (e) {
+            var direction = ($(this).attr('id') == options.topId) ? 'up' : 'down';
+            return true;
+        });
+        both_el.on('dragover', function (e) {
+            var scrollElement = $('.modal').length? $(".modal .modal-body"): $('html,body');
+            if (scrollElement.is(':animated'))
+                return true;
+            var scrollTop = $('.modal').length ? $(".modal .modal-body").scrollTop(): $(window).scrollTop();
+            var direction = ($(this).attr('id') == options.topId) ? -1 : 1;
+            var last = (direction == -1) ? lastTop : lastBottom;
+            var current = 0 
+            if($('.modal').length){
+                current = (direction == -1) ? scrollTop : $('.modal-body > div').height() - (scrollTop + $('.modal-body').height());
+            } else {
+                current = (direction == -1) ? scrollTop : $(document).height() - (scrollTop + $(window).height());
+            }
+            if (last != undefined && last == current && current > 0) {
+                var newScrollTop = scrollTop + direction * 50;
+                scrollElement.animate(
+                        {scrollTop: newScrollTop},
+                options.delay,
+                        'linear'
+                        );
+            }
+            if (direction == -1)
+                lastTop = current;
+            else
+                lastBottom = current;
+            return true;
+        });
+        var _hide = function (e) {
+            both_el.hide();
+            timestamp = undefined;
+            scrolltop = 0;
+            scrollbottom = 0;
+            return true;
+        };
+        $(document).on('dragstart', function (e) {
+            if($('.modal').length){
+                top_el.css({top: 60});
+                bottom_el.css({bottom: 92});
+            }
+            else{
+                top_el.css({top: 0});
+                bottom_el.css({bottom: 0}); 
+            }
+            both_el.show();
+            return true;
+        });
+        $(document).on('dragend', _hide);
+        both_el.on('mouseover', _hide);
+    };
+})(jQuery);

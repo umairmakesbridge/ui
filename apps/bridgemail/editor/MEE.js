@@ -370,6 +370,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mainContentHtmlGrand.mouseup(function () {
                                         changFlag.editor_change = true;
                                     })
+                                     meeIframe.find("body").click(function(e){
+                                        console.log(e.target);
+                                    })
                                 }
 
                                 $.fn.setChange = function (states) {
@@ -942,8 +945,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     //Building Blocks Drop Area:
                                     InitializeBuildingBlockDroppableArea();
-                                    myElement.find(".builder-panel").css("height", ($(window).height() - 62) + "px");
-                                    myElement.find(".style-panel").css("height", ($(window).height() - 62) + "px");
+                                    var acc_height = options.fromDialog? (parseInt(myElement.parents(".modal-body").css("min-height"))-52) :($(window).height() - 62);                                    
+                                    myElement.find(".builder-panel").css("height", acc_height + "px");
+                                    myElement.find(".style-panel").css("height", acc_height + "px");
                                     myElement.find(".editorbox").css("min-height", ($(window).height() - 100) + "px");
                                     myElement.find("#contentAreaDiv").scroll();
                                     myElement.find("#imageTitleDialog").hide();
@@ -3835,22 +3839,52 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                             if (oHtml != null) {
                                                 var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
-                                                var myobject = $(topHandlersHTML);
-                                                oHtml.on({
+                                                var myobject = meeIframeWindow.$(topHandlersHTML);
+                                                meeIframeWindow.$(oHtml).mouseover(function(e){
+                                                     e.stopPropagation();
+                                                    meeIframe.find(".topHandlers").remove();
+
+                                                    meeIframe.find(".topHandlers")
+
+                                                    if (!IsStyleActivated) {
+
+                                                        $(this).prepend(myobject);
+                                                        $(this).addClass("hover");
+                                                        $(this).parents(".csHaveData").removeClass("hover");
+
+                                                        //Assign DELETE functionality here
+                                                        InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
+
+                                                        //Assign COPY functionality here
+                                                        InitializeCopyButtonOnElement($(this).find(".topHandlers"));
+
+
+                                                    }
+                                                });
+                                                meeIframeWindow.$(oHtml).mouseleave(function(e){
+                                                    $(this).find(myobject).remove();
+                                                    $(this).removeClass("hover");
+                                                })
+                                                /*oHtml.on({
                                                     mouseover: function (e) {
                                                         e.stopPropagation();
                                                         meeIframe.find(".topHandlers").remove();
+                                                        
+                                                        meeIframe.find(".topHandlers")
 
                                                         if (!IsStyleActivated) {
-                                                            //Assign DELETE functionality here
-                                                            InitializeDeleteButtonOnElement(myobject);
-
-                                                            //Assign COPY functionality here
-                                                            InitializeCopyButtonOnElement(myobject);
                                                             
                                                             $(this).prepend(myobject);
                                                             $(this).addClass("hover");
                                                             $(this).parents(".csHaveData").removeClass("hover");
+                                                            
+                                                            //Assign DELETE functionality here
+                                                            InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
+
+                                                            //Assign COPY functionality here
+                                                            InitializeCopyButtonOnElement($(this).find(".topHandlers"));
+                                                            
+                                                            
                                                         }
 
                                                     },
@@ -3859,7 +3893,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         $(this).find(myobject).remove();
                                                         $(this).removeClass("hover");
                                                     }
-                                                });
+                                                });*/
 
                                                 return oHtml;
                                             }

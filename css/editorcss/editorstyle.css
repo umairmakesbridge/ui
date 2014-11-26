@@ -2110,6 +2110,9 @@ ul.socialbtns li .radiopanelinput.checked {
     -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
     box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
 }
+.modal-body .editor-toptoolbar-fixed,.modal-body .editor-lefttoolbar-fixed{
+    top:60px;    
+}
 .shadow-div{
     -webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);

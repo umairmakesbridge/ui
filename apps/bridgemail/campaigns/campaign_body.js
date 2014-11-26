@@ -58,6 +58,41 @@ function (template,editorView) {
                     button.addClass("saving");
                 }                                                                                      
             },
+            initScroll:function(){            
+                this.$win=this.$el.parents(".modal-body")
+                ,this.$nav = this.$('.editortoolbar')
+                ,this.$tools = this.$('.editortools')                                    
+                ,this.$editorarea =this.$('.editorbox')
+                ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
+                ,this.isFixed = 0,this.scrollChanged=false;
+
+                this.processScroll=_.bind(function(){                                                       
+                  if(this.$("#area_html_editor_mee").height() > 0 ){ 
+                    if(this.$("#area_html_editor_mee").css("display")!=="none"){  
+                      var i, scrollTop = this.$win.scrollTop();
+                      this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top  
+                      if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                          scrollTop = scrollTop - 500;
+                      }
+                      if (scrollTop >= this.navTop && !this.isFixed) {
+                        this.isFixed = 1
+                        this.$nav.addClass('editor-toptoolbar-fixed');
+                        this.$nav.css("width",this.$(".editorpanel").width());
+                        this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                        this.$editorarea.addClass('editor-panel-fixed');                                                
+                      } else if (scrollTop <= this.navTop && this.isFixed) {
+                        this.isFixed = 0
+                        this.$nav.removeClass('editor-toptoolbar-fixed');
+                        this.$nav.css("width","100%");
+                        this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                        this.$editorarea.removeClass('editor-panel-fixed');                        
+                      }                      
+                    }
+                  }
+                },this);
+                this.processScroll();
+                this.$win.on('scroll', this.processScroll);                                
+            },
             
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
@@ -168,9 +203,6 @@ function (template,editorView) {
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                     },this));  
             },
-            initScroll:function(){
-                
-            },
             setMEE:function(html){
                if(this.$("#mee_editor").setMEEHTML){
                     this.$("#mee_editor").setMEEHTML(html);                        
@@ -279,21 +311,21 @@ function (template,editorView) {
                  this.$("#html_editor").click()
              },
              ReattachEvents: function(){
-                   this.$el.parents('.modal').find('.c-current-status').remove();
-                   this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
-                   this.$el.parents('.modal').find('#dialog-title i').hide();
-                   this.$el.parents('.modal').find("#dialog-title i").hide();
-                   this.$el.parents('.modal').find("#dialog-title .preview").remove();
-                   var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                   this.$el.parents('.modal').find(".modal-header .edited  h2").append(previewIconMessage);
-                   previewIconMessage.click(_.bind(this.parent.previewCampaign,this.parent));
-                   this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
-                   if(this.parent.type == "autobots"){
-                          this.$el.parents('.modal').find('.modal-header .cstatus').remove();                          
-                          this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
-                    } 
-                    
-                }
+                this.$el.parents('.modal').find('.c-current-status').remove();
+                this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
+                this.$el.parents('.modal').find('#dialog-title i').hide();
+                this.$el.parents('.modal').find("#dialog-title i").hide();
+                this.$el.parents('.modal').find("#dialog-title .preview").remove();
+                var previewIconMessage = $('<a class="icon preview showtooltip" title="Preview Message"></a>').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.$el.parents('.modal').find(".modal-header .edited  h2").append(previewIconMessage);
+                previewIconMessage.click(_.bind(this.parent.previewCampaign,this.parent));
+                this.$el.parents('.modal').find('#dialog-title span').append('<strong style="float:right; margin-left:5px" class="cstatus pclr18"> Message <b>'+this.parent.triggerOrder+'</b> </strong>');
+                if(this.parent.type == "autobots"){
+                       this.$el.parents('.modal').find('.modal-header .cstatus').remove();                          
+                       this.$el.parents('.modal').find('#dialog-title .cstatus').remove();
+                 } 
+
+             }            
             
         });
 });
