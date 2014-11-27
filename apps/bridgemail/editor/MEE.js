@@ -3853,10 +3853,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         $(this).parents(".csHaveData").removeClass("hover");
 
                                                         //Assign DELETE functionality here
-                                                        InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
+                                                        InitializeDeleteButtonOnElement(meeIframeWindow.$(this).find(".topHandlers"));
 
                                                         //Assign COPY functionality here
-                                                        InitializeCopyButtonOnElement($(this).find(".topHandlers"));
+                                                        InitializeCopyButtonOnElement(meeIframeWindow.$(this).find(".topHandlers"));
 
 
                                                     }
