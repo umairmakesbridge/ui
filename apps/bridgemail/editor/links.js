@@ -27,6 +27,7 @@ function (template) {
                     this.meeIframeWindow = this.options.meeIframeWindow;
                     this.template = _.template(template);	
                     this.dialog = this.options.dialog;
+                    this.selection  = this.options.selectedText;
                     this.linkType = this.options.linkType;
                     this.textEditor = this.options.div;
                     this.tiny_editor_selection = null;    
@@ -120,10 +121,12 @@ function (template) {
                     this.$("textarea.linkTextArea").val(this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({
                         format: 'text'
                     }));
+                    this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
                     this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
-                    if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {
-                        this.showLinkDetails($(this.tiny_editor_selection.getNode()));
-                        this.$("textarea.linkTextArea").val($(this.tiny_editor_selection.getNode()).text());
+                    var getSelectedAnchor = this.selectedAnchor(this.tiny_editor_selection);
+                    if (getSelectedAnchor) {
+                        this.showLinkDetails(getSelectedAnchor);
+                        this.$("textarea.linkTextArea").val(this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'text'}));
                     }else{
                         if (this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'text'}) != "") {                        
                             var tiny_editor = this.meeIframeWindow.tinyMCE.activeEditor.selection.getContent({format: 'text'});
@@ -134,7 +137,7 @@ function (template) {
                             this.$("textarea.linkTextArea").val("Some Link");
                         }
                     }
-                    
+                    this.selection = this.meeIframeWindow.tinyMCE.activeEditor.selection.getBookmark();
                     
                 }
                 
@@ -142,6 +145,22 @@ function (template) {
                     $(".existinglinksdd").remove();                    
                 });                
                 
+            },
+            selectedAnchor:function(selection){
+                var _node = $(selection.getNode());
+                var selectedNode = null;
+                
+                if(selection.getNode().nodeName.toLowerCase()=="a"){
+                    selectedNode = _node;
+                }
+                else if(selection.getContent({format: 'text'})!==""){
+                    _node.find("a").each(function(){
+                        if($.trim($(this).text())==$.trim(selection.getContent({format: 'text'}))){
+                            selectedNode = $(this);
+                        }
+                    });
+                }
+                return selectedNode ;
             },
             showLinkDetails:function(anchorObj){                
                 var _a_href = anchorObj.attr("href").toLowerCase();
@@ -227,7 +246,8 @@ function (template) {
                     tiny_editor_selection.setRng(selected_element_range);
                     selected_element_range = null;
                  }*/
-                    
+                this.meeIframeWindow.﻿tinyMCE.activeEditor.﻿selection.moveToBookmark(this.selection);
+                this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {                    
                     this.tiny_editor_selection.getNode().setAttribute("href", postBackupLink);
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){

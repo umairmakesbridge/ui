@@ -1698,7 +1698,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 //Load Link GUI and show in BMS dialog
                                 function showLinkGUI() {
                                     //BMS dialog code
-                                    var lType = myElement.find("#linkTrack").data("linkObject");
+                                    var lType = myElement.find("#linkTrack").data("linkObject");    
+                                    meeIframeWindow.$("[data-mce-type='bookmark']").remove();
+                                    var selectedText = ﻿meeIframeWindow.tinyMCE.activeEditor.selection.getBookmark();
                                     var divID = "";
                                     if (lType === "text") {
                                         divID = meeIframe.find("div.textcontent.mce-edit-focus").attr("id");
@@ -1732,6 +1734,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     require(["editor/links"], function (page) {
                                         var linkDialogPage = new page({
                                             config: options,
+                                            selectedText : selectedText,
                                             meeIframeWindow: meeIframeWindow,
                                             _el: myElement,
                                             dialog: dialog,
@@ -2269,8 +2272,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 // ------------------ Start Image upload --------------//
 
-                                myElement.find(".uploadFile").click(function () {
-                                    console.log("upload file clicked.");
+                                myElement.find(".uploadFile").click(function () {                                    
                                     myElement.find("#myUploadFile").click();
                                     return false;
                                 });
@@ -2298,8 +2300,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         contentType: false,
                                         cache: false,
                                         processData: false,
-                                        success: function (data, textStatus, jqXHR) {
-                                            console.log("Image Upload success:" + e);
+                                        success: function (data, textStatus, jqXHR) {                                            
                                             options._app.showLoading(false, myElement.find(".imageLib"));
                                             var result = jQuery.parseJSON(data);
                                             if (result.success) {
@@ -2415,8 +2416,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     return false;
                                 });
 
-                                myElement.on("click", "a.closebtn-imgtag", function () {
-                                    console.log("tags close button pressed..");
+                                myElement.on("click", "a.closebtn-imgtag", function () {                                    
                                     var element = $(this);
                                     var imageId = element.data("id");
                                     var tags = "";
@@ -3650,11 +3650,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         type: 'button',
                                                         title: 'Links',
                                                         icon: 'link',
-                                                        onClick: function (e) {
-                                                            //editor.insertContent(this.value());
-                                                            //handleTextLink();
+                                                        onClick: function (e) {                                                            
                                                             myElement.find("#linkTrack").data("linkObject", "text");
                                                             showLinkGUI();
+                                                            e.stopPropagation();
+                                                            e.preventDefault();
                                                         },
                                                         onPostRender: function () {
                                                             // Select the second item by default
