@@ -156,7 +156,7 @@ function (Wizard,template,moment) {
                     this.$("#year-select").html(yearHTML);  
                     if(this.editImport){
                         this.$(".frequency-type").val(this.editImport.frequency);
-                        this.$(".step3 .frequency-type").change();
+                        this.$(".step3 .frequency-type").trigger("change");
                         if(this.editImport.day){
                             if(this.editImport.frequency=="O" || this.editImport.frequency=="T"){
                                 var _day = this.editImport.day.split(",");
@@ -169,24 +169,26 @@ function (Wizard,template,moment) {
                                 this.$(".step3 .import-day").val(this.editImport.day);
                             }
                         }
+                    }else{ 
+                         this.$(".step3 .frequency-type").trigger("change");
                     }
                     this.$(".step3 .nosearch").chosen({disable_search_threshold: 25});
-                                        
+                      _this.$(".step3 .s-days button").unbind("click").click(function(){
+                                 $(this).addClass("selected");
+                       });                  
                     this.$(".step3 .frequency-type").change(function(){
                         var freq_val = $(this).val();
                         if(freq_val=="O"){                            
                             _this.$(".step3 .week-days-row").show();
-                            _this.$(".step3 .s-days button").unbind("click").click(function(){
-                                $(this).toggleClass("selected");
-                            });
+                             
                             _this.$(".step3 .date-row").hide();
                         }
                         else if(freq_val=="T"){
                            _this.$(".step3 .week-days-row").show();
                            if(!_this.editImport || _this.editImport['frequency']!=="T"){
-                           _this.$(".step3 .s-days button.selected").removeClass("selected");
-                           _this.$(".step3 .s-days button:first-child").addClass("selected");
-                       }
+                            _this.$(".step3 .s-days button.selected").removeClass("selected");
+                            _this.$(".step3 .s-days button:first-child").addClass("selected");
+                            }
                            _this.$(".step3 .s-days button").unbind("click").click(function(){
                                $(this).parent().find(".selected").removeClass("selected");
                                $(this).addClass("selected");
