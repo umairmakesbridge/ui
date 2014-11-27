@@ -36,7 +36,7 @@
      this.$element.on("dragenter",$.proxy(this._dragenter,this))
      this.$element.on("dragover",$.proxy(this._dragover,this))
      this.$element.on("drop",$.proxy(this._drop,this))      
-     //this.$element.on('dragleave',$.proxy(this._dragleave,this))
+      //this.$element.on('dragleave',$.proxy(this._dragleave,this))
      
 
      var _this = this;
@@ -48,9 +48,13 @@
      $(document).on('dragover', function (e)
       {
         e.stopPropagation();
-        e.preventDefault();
+        e.preventDefault(); 
         //_this.$element.append(_this.UploadInstantBaloon());
         _this.$element.addClass('file-border');
+        setTimeout(function(){
+        if(typeof element !="undefined")
+        $(element).removeClass('file-border');
+       }, 3000);
         
       });
      $(document).on('drop', function (e)
@@ -67,6 +71,11 @@
     e.stopPropagation();
     e.preventDefault();
     this.$element.addClass('file-border');
+     var _this = _this;
+    setTimeout(function(){
+     if(typeof element !="undefined")
+     $(element).removeClass('file-border');
+    }, 3000);
     //this.$element.append(this.UploadInstantBaloon());    
 
   },

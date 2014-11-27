@@ -29,6 +29,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                 },
                 render: function() {
                     this.$el.html(this.template());
+                    
                 },
                 closeAutobot: function() {
                     $(this.el).remove();
@@ -72,9 +73,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                             message: "Autobot Name can not be empty!"
                         });
                           if (that.msieversion()){ //test for MSIE x.x;
-                                      $(that.el).find('.errortext').css({'right': '6px'});
+                                      $(that.el).find('.errortext').css({'right': '-4px'});
                                     }else{
-                                        $(that.el).find('.errortext').css({'right': '5px'});
+                                        $(that.el).find('.errortext').css({'right': '-4px'});
                                     }
                                     
                         $(this.el).find('#txtAutobotName').focus();
@@ -145,9 +146,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                                         message: _json[1]
                                     });
                                     if (that.msieversion()){ //test for MSIE x.x;
-                                      $(that.el).find('.errortext').css({'right': '6px'});
+                                      $(that.el).find('.errortext').css({'right': '-4'});
                                     }else{
-                                        $(that.el).find('.errortext').css({'right': '5px'});
+                                        $(that.el).find('.errortext').css({'right': '-4'});
                                     }
                                     
                                     $(that.el).find('#txtAutobotName').focus();

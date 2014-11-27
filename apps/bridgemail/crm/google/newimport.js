@@ -182,7 +182,9 @@ function (Wizard,template,moment) {
                         }
                     }
                     this.$(".step3 .nosearch").chosen({disable_search_threshold: 25});
-                                        
+                      _this.$(".step3 .s-days button").unbind("click").click(function(){
+                                 $(this).addClass("selected");
+                       });                       
                     this.$(".step3 .frequency-type").change(function(){
                         var freq_val = $(this).val();
                         if(freq_val=="O"){                            
