@@ -647,16 +647,19 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                       if(this.$("#area_html_editor_mee").height() > 0 ){ 
                         if(this.$("#area_html_editor_mee").css("display")!=="none"){  
                           var i, scrollTop = this.$win.scrollTop();
-                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                            
+                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top;
+                          scrollTop = scrollTop - 220;
                           if (scrollTop >= this.navTop && !this.isFixed) {
                             this.isFixed = 1
-                            this.$nav.addClass('editor-toptoolbar-fixed');
+                            this.$nav.addClass('editor-toptoolbar-fixed');                            
                             this.$nav.css("width",this.$(".editorpanel").width());
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');                                                
+                            this.$nav.css("top","90px");this.$tools.css("top","90px");
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
                             this.$nav.removeClass('editor-toptoolbar-fixed');
+                            this.$nav.css("top","0px");this.$tools.css("top","0px");
                             this.$nav.css("width","100%");
                             this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.removeClass('editor-panel-fixed');                        
