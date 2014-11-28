@@ -538,14 +538,15 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
                 },
-                toggleSortOption: function (ev) {
+                toggleSortOption: function (ev) {               
                     $(this.el).find("#template_search_menu").slideToggle();
+                    ev.stopPropagation();
                 },
                 createCampaign:function(fieldText, _json){                                 
-                                 if(this.headBadge){
-                                     this.headBadge();
-                                 }
-                                 this.app.mainContainer.createCampaign(fieldText, _json);
+                    if(this.headBadge){
+                        this.headBadge();
+                    }
+                    this.app.mainContainer.createCampaign(fieldText, _json);
                }
 
             });
