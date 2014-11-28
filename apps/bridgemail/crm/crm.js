@@ -31,6 +31,10 @@ define(['text!crm/html/crm.html','app'],
                 this.$el.html(this.template({}));
                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
+            init:function(){
+               this.app.removeSpinner(this.$el);                
+            }
+            ,
             /**
              * Load Salesforce CRM .
             */

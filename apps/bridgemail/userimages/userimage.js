@@ -276,7 +276,7 @@ define(['text!userimages/html/userimage.html', 'bms-tags'],
                         this.options.callBack({imgurl: $(ev.target).data('url'), imgencode: this.model.get('imageId.encode'), imgthumb: $(ev.target).data('thumb')});
                     }
                     else {
-                        this.options._select_page.useImage($(ev.target).data('url'));
+                        this.options._select_page.useImage($(ev.target).data('url'),this.model.get('imageId.encode'));
                     }
                     $('.modal-open .custom_popup').remove();
                     if(this.options.isClose){
