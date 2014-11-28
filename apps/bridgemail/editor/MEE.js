@@ -217,8 +217,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var ulMyColors = myElement.find(".myColors");
                                 var personalizedTagsGlobal = "";
                                 var formBlocksGlobal = "";
-                                var topMinus = mee_view.topMinus;
-                                var leftMinus = mee_view.leftMinus;
+                                var topPlus = options.topPlus;
+                                var leftPlus = options.leftPlus;
                                 var $element = null;
                                 var emailWidth = "600px";
                                 var undoredo = true;
@@ -1789,7 +1789,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
                                     var editorBox = _ele.parents(".MEE_EDITOR").offset();
-                                    var top = ele_offset.top - editorBox.top + 10;
+                                    var top = ele_offset.top - editorBox.top + 10 + topPlus;
                                     var left = ele_offset.left - editorBox.left - 38;
 
                                     if (type == "info") {
@@ -2109,8 +2109,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         myElement.find("#imageToolbar").css("width", "310px");
                                     }
                                     myElement.find("#imageToolbar").css({
-                                        top: $(event.target).offset().top + 19,
-                                        left: $(event.target).offset().left + 292
+                                        top: $(event.target).offset().top + 19 + topPlus,
+                                        left: $(event.target).offset().left + 292 + leftPlus
                                     });
 
                                 }
@@ -5068,8 +5068,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var left_minus = 15;      //static space to minus to show dialog on exact location
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
-                                    var top = ele_offset.top + 74;
-                                    var left = ele_offset.left + 297;
+                                    var top = ele_offset.top + 74 + topPlus;
+                                    var left = ele_offset.left + 297 + leftPlus;
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");
                                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
@@ -5463,6 +5463,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         SearchImagesProperties: _searchImagesAjaxParameters,
                         AddImageProperties: _AddimageAjaxParameters,
                         preDefinedHTML: _preDefinedHTML,
+                        topPlus : this.options.margin ? this.options.margin.top:0,
+                        leftPlus : this.options.margin? this.options.margin.left:0,    
                         landingPage: this.options.landingPage ? true : false,
                         formWizURL: _formWizURL,
                         fromDialog: this.fromDialog,
