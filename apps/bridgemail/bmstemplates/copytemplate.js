@@ -86,9 +86,10 @@ function (template) {
                                                       //curview.options.dialog.hide();
                                                       curview.options.templatesDialog.hide();
                                                       //_current.template_id = id;
+                                                     if(_current){
                                                       _current.updateTemplate(id,isTotal);
                                                       _current.$el.find("#template_search_menu li:first-child").removeClass("active").click();
-                                                
+                                                  }
                                           } 
                                 });
                         }

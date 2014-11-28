@@ -18,7 +18,7 @@ function (template) {
                         if(this.options.templateID){
                             this.templateID = this.options.templateID
                         }
-                        app.showLoading(false,newcampdialog.getBody());
+                      //  app.showLoading(false,newcampdialog.getBody());
                 },
 
                 render: function () {
@@ -58,7 +58,9 @@ function (template) {
                                  var camp_id = camp_json[1];
                                  var camp_wsid = camp_json[2];
                                  newcampdialog.hide();
-                                 camp_obj.headBadge();
+                                 if(camp_obj.headBadge){
+                                     camp_obj.headBadge();
+                                 }
                                  app.mainContainer.openCampaign(camp_id,camp_wsid);
                               }
                               else{

@@ -67,7 +67,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         e.stopPropagation();
                         e.preventDefault();
                     },
-                    'click .new-campaign': 'createCampaign',
+                    'click .new-campaign': 'createCampaignDialog',
                     'click .new-template': 'createTemplate',
                     'click .naturetrack-li':'createNurtureTrack',
                     'click .new-graphics':'createGraphics',
@@ -482,27 +482,39 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     var link = _arr[_id].url;
                     window.open(link, 'HELPSUPPORT_' + _id, 'width=800,height=600,left=50,top=50,screenX=100,screenY=100,scrollbars=yes,status=yes,resizable=yes');                   
                 },
-                createCampaign: function(e) {                    
-                    var camp_obj = this;
-                    var dialog_title = "New Campaign";
-                    var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'new_headicon',
-                        buttons: {saveBtn: {text: 'Create Campaign'}}
-                    });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["campaigns/newcampaign"], function(newcampPage) {
-                        var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
-                        dialog.getBody().html(mPage.$el);
-                        dialog.$("input").focus();
-                        dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
+                createCampaignDialog: function(e) {                    
+                    
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Campaign',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter campaign name here',
+                      emptyError : 'Campaign name can\'t be empty',
+                      createURL : '/pms/io/campaign/saveCampaignData/',
+                      fieldKey : "campName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createCampaign,this) // Calling same view for refresh headBadge
                     });
                     e.stopPropagation();
                     e.preventDefault();
                 },
-                createTemplate: function() {
-                    this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
+                createTemplate: function(e) {
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Template',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter template name here',
+                      emptyError : 'Template name can\'t be empty',
+                      createURL : '/pms/io/campaign/saveUserTemplate/',
+                      fieldKey : "templateName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createTemplateCall,this) // Calling same view for refresh headBadge
+                    });
+                    e.stopPropagation();
+                    e.preventDefault();
+                    //this.addWorkSpace({type: '', title: 'Template Gallery',sub_title:'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates', params: {action: 'new'}});
                 },
                 viewContacts: function() {
                     this.addWorkSpace({type: '', title: 'Contacts',sub_title:'Listing', url: 'contacts/contacts', workspace_id: 'contacts', 'addAction': true, tab_icon: 'contactlisting'});
@@ -615,6 +627,36 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
                     },this));
                 },
+                createTemplateCall:function(fieldText, _json){
+                    
+                                    this.template_id = _json[1];
+                                    var _this = this;
+                                    var dialog_width = $(document.documentElement).width()-60;
+                                    var dialog_height = $(document.documentElement).height()-182;
+                                    var dialog = this.app.showDialog({title:'Loading ...',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : 'template',
+                                    bodyCss:{"min-height":dialog_height+"px"},
+                                    tagRegen:true,
+                                    buttons: {saveBtn:{text:'Save'} }
+                                    });
+                                    this.app.showLoading("Loading...",dialog.getBody());
+                                    this.$el.parents('body').find("#template_search_menu li:first-child").removeClass("active").click();
+                                    require(["bmstemplates/template"],function(templatePage){
+                                        var mPage = new templatePage({template:_this,dialog:dialog});
+                                        var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
+                                        dialog.getBody().append(mPage.$el);
+                                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                                        _this.app.showLoading(false, mPage.$el.parent());
+                                        mPage.init();
+                                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall,mPage));
+                                        _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                                        _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                                        _this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTemplateCall,mPage); // New Dialog
+                                        }); 
+                },
                 createNurtureTrack:function(){
                     var dialog = this.app.showDialog({title:'New Nurture Track',
                       css:{"width":"650px","margin-left":"-325px"},
@@ -629,6 +671,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                       mPage.$("input").focus();
                       dialog.saveCallBack(_.bind(mPage.createNurtureTrack,mPage));
                   },this));  
+                },
+                createCampaign:function(fieldText, _json){
+                                 var camp_id = _json[1];
+                                 var camp_wsid = _json[2];
+                                 this.openCampaign(camp_id,camp_wsid);
+                    
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;

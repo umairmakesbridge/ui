@@ -43,7 +43,7 @@ function (template,Contacts,viewContact) {
             },
             render: function () {
               this.$el.html(this.template());
-              this.loadContacts();
+              //this.loadContacts();
              if(this.where != "page"){
                 this.$el.find(".stats_listing").scroll(_.bind(this.liveLoading,this));
                 this.$el.find(".stats_listing").resize(_.bind(this.liveLoading,this));
@@ -87,6 +87,7 @@ function (template,Contacts,viewContact) {
                   _data['offset'] = this.offset;
                   _data['responderType'] = this.responderType;
                   _data['type'] = this.type ;
+                  _data['orderBy'] = "firstName";
                   //_data['campNum'] = this.campNum ;
 //                  if(this.options.article)
 //                    _data['articleNum'] = this.options.article;
@@ -170,8 +171,13 @@ function (template,Contacts,viewContact) {
                  that.$el.find('#clearsearch').show();
                 
                  var text = $(ev.target).val();
-                 this.searchText = text;
-                 that.loadContacts();
+                 if(text){
+                     that.searchText = text;
+                     that.loadContacts();
+                    }else{
+                        this.$('#clearsearch').click();
+                        return false;
+                    }
                }else if(code == 8 || code == 46){
                    var text = $(ev.target).val();
                    if(!text){
@@ -210,7 +216,7 @@ function (template,Contacts,viewContact) {
                    };
                    this.$el.find("#total_subscriber span").html("contacts found");
                    
-                   this.loadContacts();
+                   //this.loadContacts();
            },
            liveLoading:function(){
                 var $w = $(window);
