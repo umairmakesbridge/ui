@@ -208,7 +208,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                   if(this.autobotId != null  && this.autobotId){
                       height = 450;
                   }
-                  console.log(height + this.autobotId + this.trackId);
+                  //console.log(height + this.autobotId + this.trackId);
                   var dialog_height = $(document.documentElement).height()-height;
                   var dialog = this.options.app.showDialog(
                         {           

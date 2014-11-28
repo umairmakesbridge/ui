@@ -80,10 +80,10 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                     success: _.bind(function (collection, response) {  
       
                         var header_part = $('<div><ul class="c-current-status">\n\
-                        <li class="bmstrackcount '+ this.app.getClickableClass(response.systemCount) +'" ><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
-                        <li class="usertrackcount '+ this.app.getClickableClass(response.userCount) +'"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
+                        <li class="bmstrackcount showtooltip '+ this.app.getClickableClass(response.systemCount) +'" data-original-title="Click to view system templates"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
+                        <li class="usertrackcount showtooltip '+ this.app.getClickableClass(response.userCount) +'"  data-original-title="Click to view user templates"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
-                        <div class="savedmsg playingcount '+ this.app.getClickableClass(response.playCount) +'" style="margin:2px 0 0;cursor:pointer"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
+                        <div class="savedmsg playingcount showtooltip '+ this.app.getClickableClass(response.playCount) +'" style="margin:2px 0 0;cursor:pointer" data-original-title="Click to view play tracks"> <span class="playingicon "></span> '+response.playCount+' Playing </div></div>');
                         var $header_part = $(header_part);                        
                         $header_part.find(".bmstrackcount").click(_.bind(this.showBmsTracks,this));
                         $header_part.find(".usertrackcount").click(_.bind(this.showUserTracks,this));

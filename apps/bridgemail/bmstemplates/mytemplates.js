@@ -74,7 +74,19 @@ function (template) {
             },
             createCampaign: function(obj)
             {
-                    var templateId =  $.getObj(obj,"a").attr("id").split("_")[1];
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Campaign',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter campaign name here',
+                      emptyError : 'Campaign name can\'t be empty',
+                      createURL : '/pms/io/campaign/saveCampaignData/',
+                      fieldKey : "campName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.app.mainContainer.createCampaign,this.app.mainContainer) // Calling same view for refresh headBadge
+                    });
+                   /* var templateId =  $.getObj(obj,"a").attr("id").split("_")[1];
                     var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title:dialog_title,
@@ -87,7 +99,7 @@ function (template) {
                             var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog,templateID:templateId});
                             dialog.getBody().html(mPage.$el);
                             dialog.saveCallBack(_.bind(mPage.createCampaign,mPage,templateId));
-                    });
+                    });*/
             }            
             
         });

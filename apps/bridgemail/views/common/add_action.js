@@ -28,9 +28,10 @@ function ($,Backbone, _, template) {
                     var field_text = $.trim(this.$(".field-text").val());
                     if(field_text){
                         this.app.hideError({control:this.$('.lp_name')});                        
-                        if(this.options.createURL){                      
-                             this.$(".create-button").addClass("saving");
-                             this.$(".field-text").prop("disabled",true);
+                        if(this.options.createURL){   
+                            if(this.options.postData){this.options.postData[this.options.fieldKey] = field_text;}
+                            this.$(".create-button").addClass("saving");
+                            this.$(".field-text").prop("disabled",true);
                              $.post(this.options.createURL,this.options.postData )
                               .done(_.bind(function(data) {                                      
                                   var _json = jQuery.parseJSON(data);                              

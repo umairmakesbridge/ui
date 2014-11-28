@@ -1,7 +1,10 @@
 <div id="area_create_template" style="display: block;" class="content-inner soruces">        
-    <div class="templateimg">
-        <div class="droppanel"><h4><img alt="" src="<%- this.app.get('path')%>img/droparrow.png"><br class="clearfix">Drag and drop an image</h4><img src="" style="width:150px;height:150px;display:none" /></div>
-        
+    <div class="templateimg" style="display:none;"><!-- Need to be removed later -->
+        <div class="droppanel">
+            <h4><img alt="" src="<%- this.app.get('path')%>img/droparrow.png">
+                <br class="clearfix">
+                Drag and drop an image</h4>
+            <img src="" style="width:150px;height:150px;display:none" /></div>
          <div class="SI-FILES-STYLIZED" style="display:inline-block;position:relative;">
          <!--<label style="width:154px;" class="cabinet">
               <input type="button" id="file_control" name="file" class="file">
@@ -13,9 +16,9 @@
     </a>
          </div>
         
-    </div>    
-    
-    <div class="customer_options" style="margin-left:0;">
+    </div>    <!-- Need to be removed later -->
+  
+    <div class="customer_options" style="margin-left:0;display:none;">
         <span class="btnunchecked" style="position: relative">
              <input type="checkbox" class="checkpanel featured" value=""/>
              <label for="Customer"><span class="icon star  "></span><strong>Featured</strong></label>
@@ -29,15 +32,62 @@
              <label for="Prospect"><span class="icon mobile active  "></span><strong>Mobile Compatible</strong></label>
         </span>
     </div>      
-  <br/><br/>  
-  <div class="templatecat">
+    <div class="template-wrap">
+                <div class="left-wrap">
+                            <div class="templateimg left">
+                            <div class="droppanel editor-new-template"><h4><img alt="" src="<%- this.app.get('path')%>img/imgiconb-w.png"><br class="clearfix">Drag images here to upload</h4><img src="" style="width:150px;height:150px;display:none">
+                                <div class="SI-FILES-STYLIZED" style="display:inline-block;position:relative;">
+                             <!--<label style="width:154px;" class="cabinet">
+                                  <input type="button" id="file_control" name="file" class="file">
+                                </label>
+                                <a href="" class="btn-blue g-btn" id="list_file_upload"><span>Browse Photo </span><i class="icon update"></i></a>-->
+                                <a class="btn btn-blue btn-opengallery right" style="display: inline;position: relative;top: 5px;width: 165px;">
+                            <span>Browse Images</span>
+                            <i class="icon update"></i>
+                        </a>
+                             </div>
+                            </div>
+                            
+                             
+        
+                            </div>
+                    </div> <!-- # LEFT - Wrap-->
+                     <div class="right-wrap">
+                <div class="bot_p_boxinner editor-new-template-filter-wrap">
+                    <div class="pre_row common-filter">
+                        <div class="filt_cont">
+                            <span class="filt">Category</span>
+                            <input type="text" value="3" style="width: 200px;">
+                            <a class="btn-green left editor-new-template-category-icon"><i class="icon plus left showtooltip" data-original-title="Add Category"></i></a>
+                            <input type="text" value="3" style="width: 200px;">
+                            <a style="display: inline;margin-top: 2px;" class="btn btn-green left btn-save filter-save"><span>Save</span><i class="icon save"></i></a>
+                        </div>    
+                    </div> <!--  pre_row  -->
+                    <div class="pre_row common-filter">
+                        <div class="filt_cont">
+                           <input type="checkbox" id="reoccure" class="checkpanel" value=""/>
+                            <span class="filt"><span style="margin: -4px 0px;" class="icon star  left"></span>Featured</span>
+                        </div>    
+                    </div> <!--  pre_row  -->
+                    <div class="pre_row common-filter">
+                        <div class="filt_cont">
+                            <input type="checkbox" id="reoccure" class="checkpanel" value=""/>
+                            <span class="filt"><span class="icon mobile active left" style="margin: -2px 0px;"></span>Mobile Compatible</span>
+                      </div>    
+                  </div> <!--  pre_row  -->
+              </div> <!-- #Right Filter -->
+            
+          </div>
+      </div>
+  
+  <div class="templatecat" style="display:none;">
         <label> Category</label>        
         <div class="iconpointy">
             <a class="btn-green"><i class="icon plus left add-cat showtooltip" title="Add Category" ></i></a>        
        </div>        
   </div>
   <div class="clearfix"></div>
-  <div class="merge-fields-wrapper">
+  <div class="merge-fields-wrapper" style="position: relative;top: 32px;">
   <div id="merge_field_plugin-wrap" style="float:left;"></div>
   <!-- Image Gallery  -->
   <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px;margin-left:10px">
@@ -50,14 +100,37 @@ width: 244px;" ></div>
         </div>
   <!-- End Image Gallery -->
   </div>
-  <div style="margin:5px 5px 0 0;clear:both;" class="content-inner">
-    <div class="">
-    <!--<label style=" width:140px">Paste your HTML here</label>-->    
-    <form action="somepage" method="post">
-        <textarea style="width:100%; min-height:100px;" name="content" id="bmseditor_template"></textarea>
-    </form>                            
-   </div>
-  </div>  
+   <div class="clearfix"></div>
+  <div class="tabpanel-wrapper">
+            <div role="tabpanel">
+
+                  <!-- Nav tabs -->
+                  <ul id="myTab" role="tablist" class="left nav nav-tabs">
+                    <li class="active" role="presentation"><img class="left" src="<%- this.app.get('path')%>img/mee-w.PNG" /><a data-toggle="tab" role="tab" aria-controls="MEE" href="#MEE">Easy Editor</a></li>
+                    <li role="presentation"><img class="left" src="<%- this.app.get('path')%>img/tiny-w.PNG" /><a data-toggle="tab" role="tab" aria-controls="Tiny" href="#Tiny">Tiny MCE</a></li>
+                  </ul>
+
+                  <!-- Tab panes -->
+                  <div class="tab-content">
+                      <div class="clearfix"></div>
+                    <div id="MEE" class="tab-pane active" role="tabpanel">Here Will be set MEE</div>
+                    <div id="Tiny" class="tab-pane" role="tabpanel">
+
+                                        <div style="margin:0px 5px 0 0;clear:both;" class="content-inner">
+                    <div class="">
+                    <!--<label style=" width:140px">Paste your HTML here</label>-->    
+                    <form action="somepage" method="post">
+                        <textarea style="width:100%; min-height:100px;" name="content" id="bmseditor_template"></textarea>
+                    </form>                            
+                   </div>
+                  </div>  
+                    </div>
+                  </div>
+
+                </div>
+            </div>
+  <!-- End of Tabpanel -->
+  
   <div class="clearfix"></div>
   
 </div>

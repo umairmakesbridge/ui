@@ -82,23 +82,36 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                     "click .cstats .closebtn": "closeChart",
                     "click .sortoption_expand": "toggleSortOption",
              },
-                createCampaign: function ()
+                createCampaignDialog: function ()
                 {
-                    var camp_obj = this;
+                    
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Campaign',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter campaign name here',
+                      emptyError : 'Campaign name can\'t be empty',
+                      createURL : '/pms/io/campaign/saveCampaignData/',
+                      fieldKey : "campName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createCampaign,this) // Calling same view for refresh headBadge
+                    });
+                    /*var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "650px", "margin-left": "-325px"},
                         bodyCss: {"min-height": "100px"},
                         headerIcon: 'new_headicon',
                         buttons: {saveBtn: {text: 'Create Campaign'}}
-                    });
-                    this.app.showLoading("Loading...", dialog.getBody());
+                    });*
+                    //this.app.showLoading("Loading...", dialog.getBody());
                     require(["campaigns/newcampaign"], function (newcampPage) {
                         var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
-                        dialog.getBody().html(mPage.$el);
-                        mPage.$("input").focus();
+                        //dialog.getBody().html(mPage.$el);
+                        //mPage.$("input").focus();
                         dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
-                    });
+                    });*/
                 },
                 findCampaigns: function (obj)
                 {
@@ -489,8 +502,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                 },
                 addCampaign:function(){
                    var active_ws = this.$el.parents(".ws-content");                
-                   active_ws.find("#addnew_action").attr("data-original-title", "Add Campaign").click(_.bind(this.createCampaign, this));
-                   active_ws.find("div.create_new").click(_.bind(this.createCampaign, this));  
+                   active_ws.find("#addnew_action").attr("data-original-title", "Add Campaign").click(_.bind(this.createCampaignDialog, this));
+                   active_ws.find("div.create_new").click(_.bind(this.createCampaignDialog, this));  
                 },
                 headBadge: function () {
                     var active_ws = this.$el.parents(".ws-content");
@@ -513,10 +526,10 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                 header_title.find('ul').remove();
                                 var stats = '<ul class="c-current-status">';
                                 
-                                stats += '<li search="C" class="'+ this.app.getClickableClass(allStats['sent']) +'"><span class="badge pclr18 showtooltip stattype topbadges" tabindex="-1" search="C" data-original-title="Click to view sent campaigns">' + allStats['sent'] + '</span>Sent</li>';
-                                stats += '<li search="P" class="'+ this.app.getClickableClass(allStats['pending']) +'"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" data-original-title="Click to view pending campaigns">' + allStats['pending'] + '</span>Pending</li>';
-                                stats += '<li search="S" class="'+ this.app.getClickableClass(allStats['scheduled']) +'"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" data-original-title="Click to view scheduled campaigns">' + allStats['scheduled'] + '</span>Scheduled</li>';
-                                stats += '<li search="D" class="'+ this.app.getClickableClass(allStats['draft']) +'"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" data-original-title="Click to view draft campaigns">' + allStats['draft'] + '</span>Draft</li>';
+                                stats += '<li search="C" class="showtooltip '+ this.app.getClickableClass(allStats['sent']) +'" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sent'] + '</span>Sent</li>';
+                                stats += '<li search="P" class="showtooltip '+ this.app.getClickableClass(allStats['pending']) +'" data-original-title="Click to view pending campaigns"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" >' + allStats['pending'] + '</span>Pending</li>';
+                                stats += '<li search="S" class="showtooltip '+ this.app.getClickableClass(allStats['scheduled']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
+                                stats += '<li search="D" class="showtooltip '+ this.app.getClickableClass(allStats['draft']) +'" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
                                 stats += '</ul>';
                                 header_title.append(stats);
                                 $(".c-current-status li").click(_.bind(this.findCampaigns, this));
@@ -527,8 +540,13 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                 },
                 toggleSortOption: function (ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
-                    ev.stopPropagation();
-                }
+                },
+                createCampaign:function(fieldText, _json){                                 
+                                 if(this.headBadge){
+                                     this.headBadge();
+                                 }
+                                 this.app.mainContainer.createCampaign(fieldText, _json);
+               }
 
             });
         });

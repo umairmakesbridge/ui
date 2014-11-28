@@ -169,7 +169,7 @@ function (template) {
                     if(el.find('#sf_email').val() == ''){
                         app.showError({
                                 control:el.find('.email-container'),
-                                message:'Email cann\'t be empty'
+                                message:'Email can\'t be empty'
                         });
                         isValid = false;
                     }

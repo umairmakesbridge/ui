@@ -29,7 +29,8 @@ function (template,icheck,bmstags) {
                this.app = this.options.template.app;                                               
                this.$el.html(this.template({}));
                this.page = this.options.template;
-               this.modelTemplate = this.options.rowtemplate;
+               if(this.options.rowtemplate){this.modelTemplate = this.options.rowtemplate;}
+               
                this.dialog = this.options.dialog;
                this.template_id = this.page.template_id;   
                this.$('input.checkpanel').iCheck({
@@ -89,7 +90,10 @@ function (template,icheck,bmstags) {
                 // Merge Field Abdullah 
                 this.$('#merge_field_plugin-wrap').mergefields({app:this.app,view:this,config:{links:true,state:'dialog'},elementID:'merge_field_plugin',placeholder_text:'Merge Tags'});
                 copyIconTemplate.click(_.bind(function(e){                                     
-                    this.options.rowtemplate.copyTemplate();
+                    if(this.options.rowtemplate){this.options.rowtemplate.copyTemplate()}
+                    else{
+                        this.copyTemplate();
+                    }
                },this));  
                previewIconTemplate.click(_.bind(function(e){                                     
                     var dialog_width = $(document.documentElement).width()-60;
@@ -136,7 +140,7 @@ function (template,icheck,bmstags) {
                     this.app.showAlertDetail({heading:'Confirm Deletion',
                         detail:"Are you sure you want to delete this template?",                                                
                             callback: _.bind(function(){													
-                                    _this.deleteTemplate();
+                                    _this.deleteTemplate(_this.template_id);
                             },_this)},
                     _this.dialog.$el);                         
                 
@@ -251,6 +255,29 @@ function (template,icheck,bmstags) {
                     this.app.showAlert(_image.err1,$("body"),{fixed:true});
                 }
             },
+            copyTemplate : function(){
+                 var dialog_title = "Copy Template";
+                        var self;
+                        var __dialog = this.app.showDialog({title:dialog_title,
+                                          css:{"width":"600px","margin-left":"-300px"},
+                                          bodyCss:{"min-height":"260px"},							   
+                                          headerIcon : 'copy',
+                                          overlay:true,
+                                          buttons: {saveBtn:{text:'Create Template'} }                                                                           
+                        });
+                        this.app.showLoading("Loading...",__dialog.getBody());
+                        require(["bmstemplates/copytemplate"],_.bind(function(copyTemplatePage){                                     
+                                var mPage = new copyTemplatePage({templ:self,template_id:this.template_id,app:this.app,templatesDialog:__dialog});
+                                __dialog.getBody().append(mPage.$el);
+                                this.app.showLoading(false, mPage.$el.parent());
+                                var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                                mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                                this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTemplate,mPage); // New Dialog
+                                __dialog.$el.find('#dialog-title .preview').remove();
+                                __dialog.saveCallBack(_.bind(mPage.copyTemplate,mPage));
+                        },this));
+            },
+            
             saveTemplateCall:function(){
                 var _this = this;
                 var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
@@ -278,7 +305,7 @@ function (template,icheck,bmstags) {
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
                            _this.app.showMessge("Template Updated Successfully!");                                     
-                           _this.modelSave();
+                          if(_this.modelTemplate){ _this.modelSave();}
                        }
                        else{
                            _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
@@ -476,6 +503,27 @@ function (template,icheck,bmstags) {
                                 }
                          },this));
                 },
+                deleteTemplate :function(templateNum){
+                    this.app.showLoading("Deleting Template...",this.$el,{fixed:'fixed'});
+                    var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $.post(URL, {type:'delete',templateNumber:templateNum})
+                    .done(_.bind(function(data) {                  
+                          this.app.showLoading(false,this.$el);   
+                           var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){
+                              if(this.options.rowtemplate){
+                                  this.page.offset = 0;
+                                  this.page.callTemplates(this.page.offset,true);
+                              }
+                              this.$el.parents('.modal').find('.btn-close').click();
+                              //this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
+
+                           }
+                           else{
+                               this.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                           }
+                   },this));
+                },
                 modelSave:function(){
                     this.modelTemplate.model.set("isFeatured",this.dataObj.isFeatured);
                     this.modelTemplate.model.set("isReturnPath",this.dataObj.isReturnPath);
@@ -497,9 +545,13 @@ function (template,icheck,bmstags) {
                     }
                    copyIconTemplate.click(_.bind(function(e){                                     
                         // this.rowtemplate.copyTemplate(this);
+                        if(this.app.dialogArray[dialogArrayLength-1].copyCall){
                         this.app.dialogArray[dialogArrayLength-1].copyCall(this);
+                        }else{
+                            this.copyTemplate(); // call from dashboard
+                        }
                      },this));
-                    
+                    this.dialog.$('.pointy .edit').hide();
                     this.dialog.$(".pointy .edit").click(_.bind(function(){
                     this.showHideTargetTitle(true);
                     },this));

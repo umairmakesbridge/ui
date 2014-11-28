@@ -527,7 +527,19 @@ function (template,highlight,templateCollection,templateRowView) {
                     return _html
                 },
                 createTemplate:function(){
-                    var dialog_width = 650;
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Template',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter template name here',
+                      emptyError : 'Template name can\'t be empty',
+                      createURL : '/pms/io/campaign/saveUserTemplate/',
+                      fieldKey : "templateName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.app.mainContainer.createTemplateCall,this) // Calling same view for refresh headBadge
+                    });
+                    /*var dialog_width = 650;
                     var dialog_height = 100;
                     var dialog = this.app.showDialog({title:'New Template',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10%"},                     
@@ -544,32 +556,8 @@ function (template,highlight,templateCollection,templateRowView) {
                         if(e.keyCode==13){
                             this.createTemplateCall(dialog);
                         }
-                    },this));
-                },
-                createTemplateCall:function(dialog){
-                    var _this = this;
-                    var template_name = $.trim(dialog.$("#template_name").val());
-                    if(template_name){
-                        this.app.showLoading("Creating Template...",dialog.$el);
-                        var isMEE = this.app.get("isMEETemplate")?"&isMEE=Y":"";
-                        var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK="+this.app.get('bms_token')+isMEE;
-                        $.post(URL, {type:'create',templateName:template_name})
-                        .done(function(data) {                  
-                              _this.app.showLoading(false,dialog.$el);   
-                               var _json = jQuery.parseJSON(data);        
-                               if(_json[0]!=='err'){
-                                   dialog.hide();
-                                    _this.template_id = _json[1];    
-                                    _this.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.rowView.updateTemplate(_this.template_id,true);
-                               }
-                               else{
-                                   _this.app.showAlert(_json[1],$("body"),{fixed:true}); 
-                               }
-                       });
-                    }
-                }
-                ,       
+                    },this));*/
+                },     
                  keyvalid:function(event){
                         var regex = new RegExp("^[A-Z,a-z,0-9]+$");
                         var str = String.fromCharCode(!event.charCode ? event.which : event.charCode);
