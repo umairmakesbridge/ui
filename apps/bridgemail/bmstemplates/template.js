@@ -13,7 +13,8 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                 events: {
                     'change #file_control': 'uploadImage',
                     'click #btn_image_url': "TryDialog",
-                    'click .btn-opengallery': "TryDialog"
+                    'click .btn-opengallery': "TryDialog",
+                    'click #myTab li': 'loadEditor'
                 },
                 /**
                  * Initialize view - backbone .
@@ -30,6 +31,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.$el.html(this.template({}));
                     this.page = this.options.template;
                     this.editor_change = false;
+                    this.editorContentMEE = "";
                     if (this.options.rowtemplate) {
                         this.modelTemplate = this.options.rowtemplate;
                     }
@@ -37,6 +39,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.dialog = this.options.dialog;
                     this.template_id = this.page.template_id;
                     this.meeEditor = false;
+                    this.tinymceEditor = false;
                     this.$('input.checkpanel').iCheck({
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
@@ -60,15 +63,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     copyIconTemplate.attr('data-original-title', 'Copy template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     ;
                     this.head_action_bar.find(".delete").attr('data-original-title', 'Delete template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.head_action_bar.append(previewIconTemplate);
-                    if (!this.app.get("isMEETemplate")) {
-                        this.initEditor();
-                        this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
-                    }
-                    else {
-                        this.$("textarea").css({"height": (this.$("#area_create_template").height() - 250) + "px", width: (this.$("#area_create_template").width() - 28) + "px"});
-                    }
-                    this.loadMEE();
+                    this.head_action_bar.append(previewIconTemplate);                                        
                     this.tagDiv.addClass("template-tag");
                     this.loadTemplate();
                     this.iThumbnail = this.$(".droppanel");
@@ -155,6 +150,15 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     }, this));
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
+                loadEditor : function(obj){
+                  var target_li =$.getObj(obj,"li");   
+                  if(target_li.hasClass("tinymce-editor")){
+                      this.initEditor();
+                  }
+                  else{
+                      this.loadMEE();
+                  }
+                },
                 /**
                  * Load template contents and flag doing a get Ajax call.
                  *
@@ -178,13 +182,14 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                             }
 
                             _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                            _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;
-                            //_this.$("textarea").val(_this.app.decodeHTML(template_json.htmlText,true));
-                            if (_tinyMCE.get('bmseditor_template')) {
-                                _tinyMCE.get('bmseditor_template').setContent(_this.app.decodeHTML(template_json.htmlText, true));
-                            }
-                            else {
+                            _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
+                            if(template_json.isEasyEditorCompatible=="N"){                                     
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
+                                _this.$(".tinymce-editor a").click();
+                            }
+                            else{
+                                _this.editorContentMEE = template_json.htmlText
+                                _this.loadMEE(); 
                             }
                             if (template_json.isFeatured == 'Y') {
                                 _this.$(".featured").iCheck('check');
@@ -204,7 +209,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                 _this.$(".mobile-comp").iCheck('check');
                             }
                             if (template_json.categoryID) {
-                                _this.$(".iconpointy").before($('<a class="cat">' + template_json.categoryID + '</a>'))
+                                _this.$(".category-input").val(template_json.categoryID)
                             }
                             if (template_json.thumbURL) {
                                 _this.iThumbnail.find("h4").hide();
@@ -227,12 +232,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                 },
                 addCategory: function (val) {
                     val = this.app.encodeHTML(val);
-                    if (this.$(".cat").length) {
-                        this.$(".cat").html(val);
-                    }
-                    else {
-                        this.$(".iconpointy").before($('<a class="cat">' + val + '</a>'))
-                    }
+                    this.$(".category-input").val(val);
                     return true;
                 },
                 uploadImage: function (obj) {
@@ -298,11 +298,11 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         isFeatured: isFeatured,
                         isReturnPath: isReturnPath,
                         isMobile: isMobile,
-                        categoryID: this.$(".cat").text()
+                        categoryID: this.$(".category-input").val()
                     };
-                    if (this.app.get("isMEETemplate")) {
+                    if (this.$(".MEE-Editor").hasClass("active")) {
                         this.dataObj["isMEE"] = 'Y';
-                        this.dataObj["templateHtml"] = this.$("#bmseditor_template").val();
+                        this.dataObj["templateHtml"] = this.$("#mee_editor").getMEEHTML();
                     }
                     else {
                         this.dataObj["templateHtml"] = _tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
@@ -324,6 +324,9 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                             });
                 },
                 initEditor: function () {
+                    if(this.tinymceEditor==true){return false}
+                    this.tinymceEditor = true;
+                    this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");                  
                     var _this = this;
                     _tinyMCE.init({
                         // General options
@@ -618,7 +621,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     }
                 },
                 setMEEView:function(){
-                        var _html = "";//this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
+                        var _html = this.editorContent!==""?$('<div/>').html(this.editorContentMEE).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                                              
                             var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
                             this.$("#mee_editor").setChange(this.states);                
