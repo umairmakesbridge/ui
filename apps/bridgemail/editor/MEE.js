@@ -31,11 +31,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         },
                         {
                             "type": "textWithImage",
-                            "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td></tr></table></div>"
+                            "html": "<table class='MEE_TEXTWITHIMAGECONTENT' width='100%'><tr><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td></tr></table></div>"
                         },
                         {
                             "type": "imageWithText",
-                            "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone'><div class='drapableImageContainer'>Drag image here</div></div></td><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td></tr></table></div>"
+                            "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td></tr></table></div>"
                         },
                         {
                             "type": "spacer5",
@@ -370,8 +370,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mainContentHtmlGrand.mouseup(function () {
                                         changFlag.editor_change = true;
                                     })
-                                     meeIframe.find("body").click(function(e){
-                                        console.log(e.target);
+                                    meeIframe.find("body").click(function(e){
+                                       // console.log(e.target);
                                     })
                                 }
 
@@ -383,15 +383,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
-                                    var outputter = $("<div style='margin:0px auto;width:" + emailWidth + "'></div>");
-                                    outputter.wrapInner(cleanedupHTML);
-                                    var outputHTML = "<!-- MEE_DOCUMENT -->" + outputter.outerHTML();
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' width='"+parseFloat(emailWidth)+"'><tr><td  width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    
+                                     //"" + outputter.outerHTML();
                                     return outputHTML;
                                 };
 
 
                                 $.fn.setMEEHTML = function (html) {
-                                    options.preDefinedHTML = html;
+                                    var htmlOBJ = $(html);
+                                    var innerHTML = htmlOBJ.find("#__OUTERTD").length? $.trim(htmlOBJ.find("#__OUTERTD").html()) : html;
+                                    options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
                                     mee.setHTML();
                                     
@@ -402,7 +404,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         meeIframe = myElement.find("#mee-iframe").contents();
                                         setIFrameElements();
                                         var mainObj = meeIframe.find(".mainContentHtml");
-                                        mainObj.html(oHtml);
+                                        var htmlOBJ = $(oHtml);
+                                        var innerHTML = htmlOBJ.find("#__OUTERTD").length? htmlOBJ.find("#__OUTERTD").html() : oHtml;
+                                        mainObj.html(innerHTML);
                                         IsStyleActivated = false;
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
@@ -595,21 +599,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             elem.addClass("drapableImageContainer").removeClass("MEE_ITEM");
                                             imageElem.addClass("imageHandlingClass  resizable clickEvent");
                                             var imgHeight = imageElem.inlineStyle("height");
-                                            var imgWidth = imageElem.inlineStyle("width");
-
-                                            imageElem.css("height", "100%");
-                                            imageElem.css("width", "100%");
-                                            if (imgHeight == "") {
-                                                imgHeight = "200px";
-                                            }
-                                            if (imgWidth == "") {
-                                                imgWidth = "200px";
-                                            }
+                                            var imgWidth = imageElem.inlineStyle("width");                                            
 
                                             var _containerStyle = elem.attr("style") ? elem.attr("style") : "float:none";
                                             var _imageStyle = imageElem.attr("isStyleSet") ? imageElem.attr("style") : "height:" + imgHeight + ";width:" + imgWidth;
-                                            elem.removeAttr("style");
-                                            //imageElem.attr("style", "width:100%;height:100%");
+                                            elem.removeAttr("style");                                            
 
                                             var imgOutHtml = "";
                                             if (imageElem.parent().get(0).tagName == 'a' || imageElem.parent().get(0).tagName == 'A') {
@@ -774,10 +768,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var resizableImg = imageContainer.find(".resizableImage");
                                         var myImage = imageContainer.find(".myImage");
                                         if (img.length) {
+                                            img.attr("width", parseInt(resizableImg.inlineStyle("width")));
+                                            img.attr("height", parseInt(resizableImg.inlineStyle("height")));
                                             img.css("width", resizableImg.inlineStyle("width"));
                                             img.css("height", resizableImg.inlineStyle("height"));
-                                            img.attr("width", resizableImg.inlineStyle("width"));
-                                            img.attr("height", resizableImg.inlineStyle("height"));
                                             img.attr("border", 0);
                                             if (resizableImg.attr("style")) {
                                                 img.attr("isStyleSet", "true");
@@ -2089,7 +2083,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     // htmlToPlace.find("img.imageHandlingClass").resizable({
 
-                                    meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({});
+                                    meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
+                                        resize: function( event, ui ) {
+                                           $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                        }
+                                    });
                                     args.droppedElement.html(htmlToPlace);
                                     makeCloneAndRegister();
 
@@ -2312,8 +2310,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             }
                                         },
                                         error: function (jqXHR, textStatus, errorThrown) {
-                                            options._app.showLoading(false, myElement.find(".imageLib"));
-                                            console.log("Image Upload failed:" + e);
+                                            options._app.showLoading(false, myElement.find(".imageLib"));                                            
                                             options._app.showAlert(e, $("body"));
                                         }
                                     });
@@ -2628,12 +2625,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                         showBox(element, dcObj, "dcedit");
                                     }
-                                    else if (type === "fbedit") {
-                                        console.log("Calling loadForm method with id:" + imgid);
+                                    else if (type === "fbedit") {                                        
                                         loadForm(imgid);
                                     }
-                                    else if (type === "fbdel") {
-                                        console.log("Calling deleteForm method with id:" + imgid);
+                                    else if (type === "fbdel") {                                        
                                         deleteForm(imgid);
                                     }
                                     return false;
@@ -3605,7 +3600,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             return false;
                                         }
                                         if (meeIframeWindow.$(element.find(".resizableImage")).resizable) {
-                                            meeIframeWindow.$(element.find(".resizableImage")).resizable({});
+                                            meeIframeWindow.$(element.find(".resizableImage")).resizable({
+                                                resize: function( event, ui ) {
+                                                    $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                                }
+                                            });
                                         }
 
                                         if (element.find("div.textcontent").length === 0) {
@@ -5295,8 +5294,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
                                 function resizeIFrame(frame) {
-                                    var iFrame = $(frame);
-                                    console.log('ResizeIFrame Calle...' + iFrame.contents().find("body").height());
+                                    var iFrame = $(frame);                                    
                                     var iframe_height = iFrame.contents().find("body").height() + 30;
                                     iFrame.height(iframe_height);
 

@@ -3896,3 +3896,53 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .c-current-status li.active {
     font-weight: bold;
 }
+
+.ribbon-wrapper-red {
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+}
+
+.ribbon-red {
+  font: bold 11px Sans-Serif;
+  color: #fff;
+  text-align: center;
+  text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+  -webkit-transform: rotate(45deg);
+  -moz-transform:    rotate(45deg);
+  -ms-transform:     rotate(45deg);
+  -o-transform:      rotate(45deg);
+  position: relative;
+  padding: 3px 0;
+  left: 4px;
+  top: 12px;
+  width: 120px;
+  background-color: #B40404;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#B40404), to(#8A2908)); 
+  background-image: -webkit-linear-gradient(top, #B40404, #8A2908); 
+  background-image:    -moz-linear-gradient(top, #B40404, #8A2908); 
+  background-image:     -ms-linear-gradient(top, #B40404, #8A2908); 
+  background-image:      -o-linear-gradient(top, #B40404, #8A2908);  
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow:    0px 0px 3px rgba(0,0,0,0.3);
+  box-shadow:         0px 0px 3px rgba(0,0,0,0.3);
+}
+
+.ribbon-red:before, .ribbon-red:after {
+  content: "";
+  border-top:   3px solid #8A2908;   
+  border-left:  3px solid transparent;
+  border-right: 3px solid transparent;
+  position:absolute;
+  bottom: -3px;
+}
+
+.ribbon-red:before {
+  left: 0;
+}
+.ribbon-red:after {
+  right: 0;
+}
