@@ -3,9 +3,9 @@
 <head>                     
     <title>MEE</title>
    
-    <script type="text/javascript" src="../../shared/libs/jquery.js?bust=1.434" ></script>
+    <script type="text/javascript" src="../../shared/libs/jquery.js?bust=1.436" ></script>
     <script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
-    <script type="text/javascript" src="../../shared/libs/jquery-ui.js?bust=1.434" ></script>
+    <script type="text/javascript" src="../../shared/libs/jquery-ui.js?bust=1.436" ></script>
     <script  type="text/javascript">
            function setDragging(object,mee){
             $(object).on('dragstart', function(e) {
@@ -16,7 +16,12 @@
                 crt.innerHTML = "";crt.style.width = $(e.currentTarget).width() +"px";crt.style.height=$(e.currentTarget).height()+"px";
                 document.body.appendChild(crt);                
                 e.originalEvent.dataTransfer.setData("text", "text"); 
-                e.originalEvent.dataTransfer.setDragImage(crt, $(this).width(), 0); 
+                try{
+                    e.originalEvent.dataTransfer.setDragImage(crt, parseInt($(this).width()), 0); 
+                }
+                catch(e){
+                    
+                }
                 mee.dragElementIframe =$(e.currentTarget);
                 mee.startDragging(e);            
                 top.$("#top_scroll_page,#bottom_scroll_page").show();
@@ -39,6 +44,6 @@
                 </ul>
             </td>
         </tr>
-    </table>    
+    </table>        
 </body>
 </html>

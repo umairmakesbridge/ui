@@ -108,46 +108,11 @@ $.fn.scrollbox = function(config) {
           }
             config.element.bind('forward', function() {  
                 forward(); 
-                if(config.selection == true){
-                     var onScreen = isScrolledIntoView(config.element.find('ul li:first-child'));
-                    /* if(onScreen){
-                         config.forward.hover( 
-                                function() {
-                                  $(this)
-                                    .css({'background-color':'#EAF4F9','opacity':'1'})
-                                    //.animate({'color': 'red'}, 400);
-                                } );
-                            
-                        }else{
-                              config.forward.hover( 
-                                function() {
-                                  $(this)
-                                    .css({'background-color':'#fff','opacity':'0.7'})
-                                    //.animate({'color': 'red'}, 400);
-                                } );
-                        }
-                    }*/
+                 
             });
             config.element.bind('backward', function() { 
                 backward(); 
-                if(config.selection == true){
-                     var onScreen = isScrolledIntoView(config.element.find('ul li:last-child'));
-                    /* if(onScreen){
-                              config.back.hover( 
-                                function() {
-                                  $(this)
-                                    .css({'background-color':'#fff','opacity':'0.7'})
-                                    //.animate({'color': 'red'}, 400);
-                                } );
-                        }else{
-                            config.back.hover( 
-                                function() {
-                                  $(this)
-                                    .css({'background-color':'#EAF4F9','opacity':'1'})
-                                    //.animate({'color': 'red'}, 400);
-                                } );
-                        }
-                    }*/
+                 
             });
 	});
    

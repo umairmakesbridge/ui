@@ -395,8 +395,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var innerHTML = htmlOBJ.find("#__OUTERTD").length? $.trim(htmlOBJ.find("#__OUTERTD").html()) : html;
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
-                                    mee.setHTML();
-                                    
+                                    mee.setHTML();                                    
                                 };
                                 
                                 mee.setHTML =  function(){
@@ -1627,7 +1626,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function InitializeDeleteButtonOnElement(element) {
 
                                     element.find(".myHandlerDelete").click(function () {
-                                        DeleteElement($(this));
+                                        DeleteElement(meeIframeWindow.$(this));
                                         makeCloneAndRegister();
                                     });
                                 }
@@ -1654,8 +1653,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 }
 
                                 function InitializeCopyButtonOnElement(element) {
-
-                                    element.find(".myHandlerCopy").click(function () {
+                                    element.find(".myHandlerCopy").unbind("click");
+                                    element.find(".myHandlerCopy").bind("click",function () {
 
                                         var myParent = $(this).closest(".csHaveData");
                                         var droppable = CreateDroppableWithAllFunctions();
@@ -3837,62 +3836,31 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var InitializeMouseHover = function (oHtml) {
 
                                             if (oHtml != null) {
+                                                
                                                 var topHandlersHTML = "<div class='topHandlers'><div class='myHandle' draggable='true'><i class='icon move'></i></div><div class='myHandlerCopy'><i class='icon copy'></i></div><div class='myHandlerDelete'><i class='icon delete'></i></div></div>";
-                                                var myobject = meeIframeWindow.$(topHandlersHTML);
-                                                meeIframeWindow.$(oHtml).mouseover(function(e){
-                                                     e.stopPropagation();
-                                                    meeIframe.find(".topHandlers").remove();
-
-                                                    meeIframe.find(".topHandlers")
-
-                                                    if (!IsStyleActivated) {
-
-                                                        $(this).prepend(myobject);
-                                                        $(this).addClass("hover");
-                                                        $(this).parents(".csHaveData").removeClass("hover");
-
-                                                        //Assign DELETE functionality here
-                                                        InitializeDeleteButtonOnElement(meeIframeWindow.$(this).find(".topHandlers"));
-
-                                                        //Assign COPY functionality here
-                                                        InitializeCopyButtonOnElement(meeIframeWindow.$(this).find(".topHandlers"));
-
-
-                                                    }
-                                                });
-                                                meeIframeWindow.$(oHtml).mouseleave(function(e){
-                                                    $(this).find(myobject).remove();
-                                                    $(this).removeClass("hover");
-                                                })
-                                                /*oHtml.on({
-                                                    mouseover: function (e) {
+                                                var myobject = meeIframeWindow.$(topHandlersHTML);    
+                                                oHtml.hover(
+                                                    function (e) {
                                                         e.stopPropagation();
-                                                        meeIframe.find(".topHandlers").remove();
-                                                        
-                                                        meeIframe.find(".topHandlers")
+                                                        meeIframe.find(".topHandlers").remove();                                                                                                                
 
                                                         if (!IsStyleActivated) {
-                                                            
-                                                            $(this).prepend(myobject);
+                                                                                                                        
                                                             $(this).addClass("hover");
+                                                            $(this).prepend(myobject);
                                                             $(this).parents(".csHaveData").removeClass("hover");
                                                             
                                                             //Assign DELETE functionality here
                                                             InitializeDeleteButtonOnElement($(this).find(".topHandlers"));
 
                                                             //Assign COPY functionality here
-                                                            InitializeCopyButtonOnElement($(this).find(".topHandlers"));
-                                                            
-                                                            
-                                                        }
-
+                                                            InitializeCopyButtonOnElement($(this).find(".topHandlers"));                                                                                                                                                                                }
                                                     },
-                                                    mouseleave: function (e) {
-                                                        //e.stopPropagation();
-                                                        $(this).find(myobject).remove();
+                                                    function (e) {                                                      
+                                                        $(this).find(".topHandlers").remove();
                                                         $(this).removeClass("hover");
                                                     }
-                                                });*/
+                                                );
 
                                                 return oHtml;
                                             }
@@ -5860,69 +5828,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 },
                                 error: function (e) {
                                     console.log("GetDynamicBlocks Failed:" + e);
-                                }
-                            });
-                        },
-                        LoadDynamicBlockFields: function (args) {
-                            //GetDynamicBlocks
-
-                            $.ajax({
-                                url: "/pms/io/getMetaData/?" + BMSTOKEN + "&type=fields_all",
-                                data: "{}",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    args.dynamicBlockFields = e;
-                                    //console.log("LoadDynamicBlockFields success:" + e);
-
-                                },
-                                error: function (e) {
-                                    //console.log("LoadDynamicBlockFields Failed:" + e);
-                                }
-                            });
-                        },
-                        LoadDynamicBlockRuleConditions: function (args) {
-                            //GetDynamicBlocks
-
-                            $.ajax({
-                                url: "/pms/io/getMetaData/?" + BMSTOKEN + "&type=rules",
-                                data: "{}",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    args.dynamicBlockRuleConditions = e;
-                                    //console.log("LoadDynamicBlockRuleConditions success:" + e);
-
-                                },
-                                error: function (e) {
-                                    console.log("LoadDynamicBlockRuleConditions Failed:" + e);
-                                }
-                            });
-                        },
-                        LoadDynamicBlockFormats: function (args) {
-                            //GetDynamicBlocks
-
-                            $.ajax({
-                                url: "/pms/io/getMetaData/?" + BMSTOKEN + "&type=formats",
-                                data: "{}",
-                                type: "POST",
-                                contentType: "application/json; charset=latin1",
-                                dataType: "json",
-                                cache: false,
-                                async: false,
-                                success: function (e) {
-                                    args.dynamicBlockFormats = e;
-                                    //console.log("LoadDynamicBlockFormats success:" + e);
-
-                                },
-                                error: function (e) {
-                                    //console.log("LoadDynamicBlockFormats Failed:" + e);
                                 }
                             });
                         },

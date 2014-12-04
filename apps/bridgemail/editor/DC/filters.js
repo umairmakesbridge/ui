@@ -210,7 +210,7 @@ define(['text!editor/DC/html/filters.html'],
                 var URL = ""
                 var self = this        
                 if(this.basicFields.length===0){
-                    URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=fields_all";
+                    URL = "/pms/io/getMetaData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=merge_tags";
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){                        
                             var fields_json = jQuery.parseJSON(xhr.responseText);                                
@@ -222,11 +222,11 @@ define(['text!editor/DC/html/filters.html'],
                             var cust_field_html = '<optgroup label="Custom Fields">'                        
                             $.each(fields_json,function(key,val){
                                 selected_field = (params && params.fieldName==val[0]) ? "selected" : ""
-                                if(val[2]=="true"){                            
+                                if(val[2]=="B"){                            
                                     self.basicFields.push(val)                            
                                     bas_field_html +='<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'                           
                                 }
-                                else{
+                                else if(val[2]=="C"){                            
                                     self.customFields.push(val)
                                     cust_field_html += '<option value="'+val[0]+'" '+selected_field+'>'+val[1]+'</option>'
                                 }

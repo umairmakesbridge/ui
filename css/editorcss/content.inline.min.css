@@ -148,9 +148,9 @@ i.icon { float:left;/* height:30px; width:30px; */ background: url("../images/me
 .icon.preview  {background: url("../images/meeicons.png") no-repeat  -60px 0; }
 .icon.save  { background: url("../images/save.png") no-repeat scroll center center; }
 .icon.sendtest  { background: url("../images/sendtest.png") no-repeat scroll center center; }
-.icon.copy  { background: url("../images/copy.png") no-repeat scroll center center; margin:0px !important;}
-.icon.delete  { background: url("../images/delete.png") no-repeat scroll center center; }
-.icon.move  { background: url("../images/move.png") no-repeat scroll center center; }
+.icon.copy  { background: url("../images/copy.png") no-repeat scroll center center #03d3ff; margin:0px !important;}
+.icon.delete  { background: url("../images/delete.png") no-repeat scroll center center #03d3ff; }
+.icon.move  { background: url("../images/move.png") no-repeat scroll center center #03d3ff; }
 .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
@@ -648,8 +648,8 @@ ul.imageLib > li:hover .imageicons, ul.b-blocks > li:hover .imageicons { display
 
 }
 
-.topHandlers div { cursor:pointer;}
-.topHandlers div i { width:25px; height:25px;}
+.topHandlers div { cursor:pointer;height:25px;width:25px;background:#03d3ff;}
+.topHandlers div i { width:25px; height:25px;background:#03d3ff;}
 .topHandlers div.myHandle { cursor:move;}
 
 .myDroppable.hover { border:1px solid #03d3ff; 
