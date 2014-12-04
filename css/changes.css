@@ -3760,6 +3760,35 @@ ul.autobot-headbadge li.clickable_badge a:hover{
     .editor-new-template img{
         margin-top:5px;
     }
+    .watermark_tilt {
+    background: url("../img/landing-images.png");
+    width: 140px;
+    height: 140px;
+    position:absolute;
+    left:-20px;
+    top:-10px;
+    display:block; 
+    /* Rotate div */
+    -ms-transform: rotate(25deg);
+    -webkit-transform: rotate(25deg);
+    transform: rotate(25deg);
+}
+.template-tilt .watermark_tilt{
+    background-position :  -132px -566px;
+}
+.campaign-tilt .watermark_tilt{
+    background-position :  -132px -13px;
+}
+.nurtures-tilt .watermark_tilt{
+    background-position :  0 -428px;
+}
+.lists-tilt .watermark_tilt{
+    background-position :  -132px -283px;
+}
+.target-tilt .watermark_tilt{
+    background-position :  7px -568px;
+}
+
 /*
 -------------- ENDS HERE ----------
 */

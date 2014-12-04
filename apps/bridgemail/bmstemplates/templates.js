@@ -534,6 +534,7 @@ function (template,highlight,templateCollection,templateRowView) {
                       buttnText: 'Create',
                       plHolderText : 'Enter template name here',
                       emptyError : 'Template name can\'t be empty',
+                      bgClass :'template-tilt',
                       createURL : '/pms/io/campaign/saveUserTemplate/',
                       fieldKey : "templateName",
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},

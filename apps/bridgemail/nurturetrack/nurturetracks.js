@@ -78,8 +78,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 
                 this.tracksRequest.fetch({data:{type:'counts'},
                     success: _.bind(function (collection, response) {  
-      
-                        var header_part = $('<div><ul class="c-current-status">\n\
+                        this.ws_header.find('#nt-headbages').remove();
+                        var header_part = $('<div id="nt-headbages"><ul class="c-current-status">\n\
                         <li class="bmstrackcount showtooltip '+ this.app.getClickableClass(response.systemCount) +'" data-original-title="Click to view system templates"><a><span class="badge pclr2">'+response.systemCount+'</span>Templates</a></li>\n\
                         <li class="usertrackcount showtooltip '+ this.app.getClickableClass(response.userCount) +'"  data-original-title="Click to view user templates"><a class="font-bold"><span class="badge pclr18">'+response.userCount+'</span>My Nurture Tracks</a></li>\n\
                         </ul>\n\
@@ -533,19 +533,27 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                }
             },
             addNurtureTrack:function(){                                            
-                var dialog = this.app.showDialog({title:'New Nurture Track',
-                    css:{"width":"650px","margin-left":"-325px"},
-                    bodyCss:{"min-height":"100px"},							   
-                    headerIcon : 'new_headicon',
-                    buttons: {saveBtn:{text:'Create'} }                                                                           
-                });
-                this.app.showLoading("Loading...",dialog.getBody());
-                require(["nurturetrack/newnurturetrack"],_.bind(function(trackPage){                                     
-                    var mPage = new trackPage({page:this,newdialog:dialog});
-                    dialog.getBody().html(mPage.$el);
-                    mPage.$("input").focus();
-                    dialog.saveCallBack(_.bind(mPage.createNurtureTrack,mPage));
-                },this));
+                this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Nurture Track',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter nuture track name here',
+                      bgClass :'nurtures-tilt',
+                      emptyError : 'Nurture Track name can\'t be empty',
+                      createURL : '/pms/io/trigger/saveNurtureData/',
+                      fieldKey : "name",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createNurtureTrack,this) // Calling same view for refresh headBadge
+                    });
+            },
+            createNurtureTrack : function(fieldText, _json){
+                                if(this.addCountHeader){
+                                    this.addCountHeader();
+                                    this.fetchTracks();
+                                 }
+                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this,editable:true});
+                             
             },
             showBmsTracks:function(e){
                 var target = $.getObj(e,"li");
