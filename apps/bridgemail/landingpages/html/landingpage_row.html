@@ -5,7 +5,7 @@
                 <% if(model.get('status')!=='D'){ %>
                     <a class="scheduleOpn-camp show-detail showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>
                 <% }else{ %>
-                    <a class="campname show-detail showtooltip" title="<%= this.getPageStatus().tooltip %>"> <%= this.model.get('name')%> </a>
+                    <a class="edit-page showtooltip" title="<%= this.getPageStatus().tooltip %>"> <%= this.model.get('name')%> </a>
                 <% } %>
                 <a class="cstatus pclr3"> <%= this.model.get('category')%> </a><% if(model.get('status')=='R'){ %><span class="cstatus published">Published</span> <% } %></h3>  
                 <div class="tags tagscont">

@@ -1332,7 +1332,7 @@ ul.tabs-btns li.active a{
 }
 .wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
 .wtab-lpageslisting{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
-
+.wtab-lpages{background:url("../img/landingpg24.png") no-repeat scroll center center;}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;

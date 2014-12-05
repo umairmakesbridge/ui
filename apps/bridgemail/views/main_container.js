@@ -304,10 +304,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         params: {camp_id: camp_id},
                         wizard: {cssClass:'campaign_progress',rescheduled:reschedule,hidecalender:hidecalender,steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
-                        actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
-                            , {'iconCls': 'add-list', 'text': 'Add List', 'url': ''}, {'iconCls': 'forms', 'text': 'Create Form', 'url': ''}
-                            , {'iconCls': 'segments', 'text': 'Edit Segments', 'url': ''}, {'iconCls': 'reports', 'text': 'Reports', 'url': ''}
-                        ]
+                        actions: []
                     });
                     
                 },
@@ -321,10 +318,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         sub_title:'Contact Profile',
                         url: 'contacts/subscriber',
                         params: {sub_id: sub_id},
-                        actions: [{'iconCls': 'campaigns', 'text': 'New Campaign', 'url': ''}, {'iconCls': 'upload-subscribers', 'text': 'Upload Subscribers', 'url': ''}
-                            , {'iconCls': 'add-list', 'text': 'Add List', 'url': ''}, {'iconCls': 'forms', 'text': 'Create Form', 'url': ''}
-                            , {'iconCls': 'segments', 'text': 'Edit Segments', 'url': ''}, {'iconCls': 'reports', 'text': 'Reports', 'url': ''}
-                        ]
+                        actions: []
                     });
                 },
                 openNurtureTrack: function(opt) {
@@ -337,6 +331,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         workspace_id: 'nurturetrack_' + track_checksum,
                         url: 'nurturetrack/nurturetrack',
                         params: {track_id: track_id,parent:opt.parent,editable:opt.editable}
+                        
+                    });
+                },
+                openLandingPage: function(opt) {
+                    var page_id = opt.id ? opt.id : 0;
+                    var page_checksum = opt.checksum ? opt.checksum : 0;
+                    this.addWorkSpace({type: '',
+                        title: "Loading...",
+                        sub_title:'Landing Page',
+                        tab_icon: 'lpages',                        
+                        workspace_id: 'landingpage_' + page_checksum,
+                        url: 'landingpages/landingpage',
+                        params: {page_id: page_id,parent:opt.parent,editable:opt.editable}
                         
                     });
                 }

@@ -114,10 +114,11 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     
                 },
                 openPage: function () {
-                    var camp_id = this.model.get('campNum.encode');
-                    var camp_wsid = this.model.get('campNum.checksum');
-                    this.app.mainContainer.openCampaign(camp_id, camp_wsid);
-
+                    var editable = true;
+                    if(this.model.get("status")!=="D"){
+                        editable = false;
+                    }                
+                    this.app.mainContainer.openLandingPage({"id":this.model.get("pageId.encode"),"checksum":this.model.get("pageId.checksum"),"parent":this.parent,editable:editable});
                 },
                 copyPage: function ()
                 {

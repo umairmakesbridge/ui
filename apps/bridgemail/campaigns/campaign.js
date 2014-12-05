@@ -389,7 +389,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         //states.step1.change
                         camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));       
                         if(camp_json.isFooterText=='Y'){
-                            camp_obj.$("#campaign_footer_text").val(camp_json.footerText);
+                            camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(camp_json.footerText,true));
                         }
                         camp_obj.states.step2.htmlText = camp_json.htmlText;
                         camp_obj.states.step2.plainText = camp_json.plainText;
@@ -577,7 +577,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                 camp_obj.$el.parents(".ws-content.active").find(".overlay").remove();
                                 camp_obj.deleteCampaign(camp_obj.camp_id);
                         },camp_obj)},
-                        camp_obj.$el.parents(".ws-content.active"));
+                        $("body"));
                       //}
                   });
                   active_ws.find(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
@@ -2164,7 +2164,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
                 step2SlectSource:function(target_li){
-                    var camp_obj = this;
+                    
                     this.$(".step2 #choose_soruce li").removeClass("selected");
                     this.$(".step2 .soruces").hide();  
                     this.$(".step2 #area_"+target_li.attr("id")).fadeIn("fast");
@@ -2201,7 +2201,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.campobjData.editorType = post_editor["editorType"];
                         $.post(URL,post_editor)
                          .done(function(data) {
-                         });
+                        });
                      }
                 },
                 loadMEE:function(){

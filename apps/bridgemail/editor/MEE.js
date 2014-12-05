@@ -1229,7 +1229,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             //Email Width
                                             myElement.find(".btnContainerSize").click(function () {
                                                 var value = $(this).data("value");
-                                                myElement.find(".mainTable").css("width", value + "px");
+                                                meeIframe.find(".mainTable").css("width", value + "px");
                                                 if (value == "700") {
                                                     myElement.find("input#700").addClass("active");
                                                     myElement.find("input#700").siblings().removeClass("active");

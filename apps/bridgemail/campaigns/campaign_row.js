@@ -61,14 +61,14 @@ function (template,highlighter) {
                 var value = this.app.getCampStatus(this.model.get('status'));
                 var tooltipMsg = '';
                 if(this.model.get('status') == 'D' || this.model.get('status') == 'S')
-				{
-					tooltipMsg = "Click to edit";
-				}
-				else 
-				{
-					tooltipMsg = "Click to preview";
-				}
-                  return {status:value,tooltip:tooltipMsg}
+                {
+                        tooltipMsg = "Click to edit";
+                }
+                else 
+                {
+                        tooltipMsg = "Click to preview";
+                }
+                return {status:value,tooltip:tooltipMsg}
             },
             /*
              * 
@@ -131,7 +131,7 @@ function (template,highlighter) {
             openCampaign:function(){
                var camp_id = this.model.get('campNum.encode');
                var camp_wsid = this.model.get('campNum.checksum');
-               this.app.mainContainer.openCampaign(camp_id,camp_wsid);
+               this.app.mainContainer.openLandingPage(camp_id,camp_wsid);
                
             },
             copyCampaign: function()

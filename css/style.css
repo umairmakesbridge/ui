@@ -11254,3 +11254,92 @@ background-position:200px top;
 .search > .icon.lpage{
      background: url("../img/landingpg24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+/*-----------------------------------------------------*/
+
+.landing_top { background:; padding:10px 0; height:40px; border-radius: 2px;}
+
+.landing_top .category {
+    background: none repeat scroll 0 0 #d6ebf6;
+    border-radius: 2px;
+    float: left;
+    height: 39px;
+    padding: 3px 5px 3px 0;
+}
+
+.landing_top .category label {
+    float: left;
+    margin: 2px 0 0;
+    padding: 10px 20px 10px 5px;
+    width: 110px;
+}
+.landing_top .category .chosen-container-single-nosearch { float:left; }
+.landing_top .category .chosen-container-single .chosen-single {
+    border: 0 solid transparent;
+    margin: 2px 0 0;
+}
+
+.landing_top .category .btn-green { margin:2px 0 0 10px;}
+
+.landing_top .category .cstatus {
+    float: left;
+    font-size: 12px !important;
+    margin: 9px 0 0;
+    padding: 2px 12px 4px;
+}
+
+.landing_top .category a.addcat {
+    background: url("../img/addition.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    display: block;
+    float: left;
+    height: 18px;
+    margin: 10px 0 0 10px;
+    width: 18px;
+}
+
+.landing_top .category input[type="text"] {
+    border: 0 none;
+    float: left;
+    margin: 2px 0 0 15px;
+}
+
+
+
+.landing_top .status_tgl {
+    background: none repeat scroll 0 0 #91bed6;
+    border-radius: 20px;
+    float: right;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 16px;
+    margin: 9px 10px 0;
+    opacity: 1;
+	padding: 2px;
+}
+.landing_top .status_tgl a { float:left; color:#fff; display:block; padding: 4px 20px; border-radius: 20px; }
+
+.landing_top .status_tgl a.draft.active  { background: url("../img/draft18.png") no-repeat scroll 12px center #fff; 
+color: #91bed6;
+    padding-left: 35px;
+	border-radius: 20px;
+	}
+
+.landing_top .status_tgl a.published.active {
+    background: url("../img/check18.png") no-repeat scroll 12px center #fff;
+    border-radius: 20px;
+    color: #41ce20;
+    padding-left: 35px;
+}
+
+
+
+
+.lp_editor {background:#d6ebf6; padding:5px;  margin: 15px 0 0; border-radius: 2px;}
+
+
+.icon.contact-name {
+    background: url("../img/ccard.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    cursor: pointer;
+    height: 22px;
+    margin: 0 0 0 6px !important;
+}
+.icon.contact-name:hover { opacity:0.6;}
