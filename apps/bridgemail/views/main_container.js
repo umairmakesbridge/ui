@@ -619,7 +619,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                 },
                 createTarget: function(){                    
-                    var dialog_title = "New Target";
+                    /*var dialog_title = "New Target";
                     var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
                         bodyCss:{"min-height":"100px"},							   
@@ -631,7 +631,28 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var mPage = new newtargetPage({camp:this,app:this.app,newtardialog:dialog});
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
-                    },this));
+                    },this));*/
+                     this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Target',
+                      buttnText: 'Create',
+                      bgClass :'target-tilt',
+                      plHolderText : 'Enter target name here',
+                      emptyError : 'Target name can\'t be empty',
+                      createURL : '/pms/io/filters/saveTargetInfo/',
+                      fieldKey : "filterName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),filterFor:"C"},
+                      saveCallBack :  _.bind(this.addTarget,this) // Calling same view for refresh headBadge
+                    });
+                },
+                addTarget : function(fieldText, camp_json){
+                         var target_id = camp_json[1];
+                                        if (this.states) {
+                                            this.states.step3.isNewTarget = true;
+                                            this.states.step3.newTargetName = fieldText;
+                                        }
+                                        this.initCreateEditTarget(target_id);
                 },
                 createTemplateCall:function(fieldText, _json){
                     
