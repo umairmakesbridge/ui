@@ -88,7 +88,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Campaign',
+                      heading : 'Create a new Campaign',
                       buttnText: 'Create',
                       bgClass :'campaign-tilt',
                       plHolderText : 'Enter campaign name here',

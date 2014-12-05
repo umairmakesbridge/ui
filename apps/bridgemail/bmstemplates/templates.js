@@ -530,7 +530,7 @@ function (template,highlight,templateCollection,templateRowView) {
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Template',
+                      heading : 'Create a new Template',
                       buttnText: 'Create',
                       plHolderText : 'Enter template name here',
                       emptyError : 'Template name can\'t be empty',

@@ -498,7 +498,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Campaign',
+                      heading : 'Create a new Campaign',
                       buttnText: 'Create',
                       bgClass :'campaign-tilt',
                       plHolderText : 'Enter campaign name here',
@@ -515,7 +515,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Template',
+                      heading : 'Create a new Template',
                       buttnText: 'Create',
                       bgClass :'template-tilt',
                       plHolderText : 'Enter template name here',
@@ -642,7 +642,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                      this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Target',
+                      heading : 'Create a new Target',
                       buttnText: 'Create',
                       bgClass :'target-tilt',
                       plHolderText : 'Enter target name here',

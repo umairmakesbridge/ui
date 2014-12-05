@@ -644,15 +644,15 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     ,this.$nav = this.$('.editortoolbar')
                     ,this.$tools = this.$('.editortools')                                    
                     ,this.$editorarea =this.$('.editorbox')
-                    ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
+                    ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top                
                     ,this.isFixed = 0,this.scrollChanged=false;
 
                     this.processScroll=_.bind(function(){                                                       
                       if(this.$("#area_html_editor_mee").height() > 0 ){ 
                         if(this.$("#area_html_editor_mee").css("display")!=="none"){  
                           var i, scrollTop = this.$win.scrollTop();
-                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top;
-                          scrollTop = scrollTop - 220;
+                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top  ;
+                          
                           if (scrollTop >= this.navTop && !this.isFixed) {
                             this.isFixed = 1
                             this.$nav.addClass('editor-toptoolbar-fixed');                            

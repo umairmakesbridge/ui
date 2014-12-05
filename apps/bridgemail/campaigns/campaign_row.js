@@ -131,7 +131,7 @@ function (template,highlighter) {
             openCampaign:function(){
                var camp_id = this.model.get('campNum.encode');
                var camp_wsid = this.model.get('campNum.checksum');
-               this.app.mainContainer.openLandingPage(camp_id,camp_wsid);
+               this.app.mainContainer.openCampaign(camp_id,camp_wsid);
                
             },
             copyCampaign: function()

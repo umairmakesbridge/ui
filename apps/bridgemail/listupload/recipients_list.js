@@ -170,7 +170,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                  this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New List',
+                      heading : 'Create a new List',
                       buttnText: 'Create',
                       bgClass :'lists-tilt',
                       plHolderText : 'Enter list name here',

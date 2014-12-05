@@ -215,7 +215,7 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Target',
+                      heading : 'Create a new Target',
                       buttnText: 'Create',
                       bgClass :'target-tilt',
                       plHolderText : 'Enter target name here',

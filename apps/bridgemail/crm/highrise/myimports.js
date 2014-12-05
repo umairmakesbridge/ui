@@ -221,7 +221,7 @@ function (template,MyImports,moment) {
                      var new_import ='<div class="overlay"><div style="margin-left: -385px; width: 770px;" class="modal-open modal in"><div style="min-height: 300px;" class="modal-body">';
                         new_import +='<div class="sd_common highrise-tilt"><a class="closebtn close_import"></a>';
                         new_import +=' <div class="watermark_tilt" style="background-position:"></div>';
-                        new_import +='<h2>New Import</h2><div class="lp_name">';
+                        new_import +='<h2>Create a new Highrise Import</h2><div class="lp_name">';
                         new_import +=' <div class="inputcont" style="height:39px;float:left;width:324px;">';
                         new_import +='<input type="text" id="import_name" placeholder="Enter Highrise import name" name="_import" style="width:300px;" class="field-text">';
                         new_import +='</div><a class="btn-green g-btn create-button"><span style="min-width: 40px;"> Create </span><i class="icon next"></i></a></div><div class="clearfix"></div></div></div><br></div></div>';

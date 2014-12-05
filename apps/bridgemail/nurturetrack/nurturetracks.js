@@ -536,7 +536,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                 this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'New Nurture Track',
+                      heading : 'Create a new Nurture Track',
                       buttnText: 'Create',
                       plHolderText : 'Enter nuture track name here',
                       bgClass :'nurtures-tilt',
