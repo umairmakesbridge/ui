@@ -81,23 +81,7 @@ function (template,highlighter,tagView) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-               /* if(this.parent.searchString.searchType==="nameTag"){
-                        var searchVal = $.trim(this.parent.$("#search-template-input").val());
-                        this.$(".thumbnail .caption h3 a").highlight(searchVal);
-                        this.$(".thumbnail .caption p a").each(function(){
-                           $(this).highlight(searchVal);
-                       });
-                    }
-                 else if(this.parent.searchString.searchType ==="category"){
-                        this.$(".thumbnail .caption .cat").highlight(this.model.get('categoryID'));
-                    }
-                 else if(this.parent.searchString.searchType ==="tag"){
-                        var tagText = this.parent.searchString.searchText;
-                        this.$(".thumbnail .caption p a").each(function(){
-                           $(this).highlight(tagText);
-                       });
-                        
-                    }*/
+
                 this.showTagsTemplate();
                 
             },
@@ -233,6 +217,7 @@ function (template,highlighter,tagView) {
                     self.app.dialogArray[dialogArrayLength-1].copyCall=_.bind(self.copyTemplate,self); // New Dialog
                     self.app.dialogArray[dialogArrayLength-1].tags= mPage.jsonTag; // New Dialog
                     }); 
+                    this.parent.$el.find('#new_template').unbind( "click" ); // Unbind the add Tile event for reattach
                     this.parent.callTemplates(this.parent.offset,isTotal);
                 },
               deleteTemplate:function(){        

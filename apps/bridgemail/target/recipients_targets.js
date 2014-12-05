@@ -212,24 +212,27 @@ define(['text!target/html/recipients_targets.html', 'target/collections/recipien
                 },
                 createTarget: function() {
                     var camp_obj = this;
-                    var dialog_title = "New Target";
-                    var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'targetw',
-                        buttons: {saveBtn: {text: 'Create Target'}}
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New Target',
+                      buttnText: 'Create',
+                      bgClass :'target-tilt',
+                      plHolderText : 'Enter target name here',
+                      emptyError : 'Target name can\'t be empty',
+                      createURL : '/pms/io/filters/saveTargetInfo/',
+                      fieldKey : "filterName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),filterFor:"C"},
+                      saveCallBack :  _.bind(this.addTarget,this) // Calling same view for refresh headBadge
                     });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["target/newtarget"], function(newtargetPage) {
-                        var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
-                        dialog.getBody().append(mPage.$el);
-                        camp_obj.app.showLoading(false, mPage.$el.parent());
-                        var dialogArrayLength = camp_obj.app.dialogArray.length; // New Dialog
-                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
-                        camp_obj.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.createTarget, mPage); // New Dialog
-                        dialog.$el.find('#target_name').focus();
-                    });
+                },
+                addTarget : function(fieldText, camp_json){
+                         var target_id = camp_json[1];
+                                        if (this.states) {
+                                            this.states.step3.isNewTarget = true;
+                                            this.states.step3.newTargetName = fieldText;
+                                        }
+                                        this.initCreateEditTarget(target_id);
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;

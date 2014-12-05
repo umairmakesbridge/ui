@@ -215,34 +215,30 @@ function (template,MyImports,moment) {
                 },
                 newImport:function(){
                     var camp_obj = this;
-                    var dialog_width = 650;
-                    var dialog_height = 100;
-                    var dialog = camp_obj.app.showDialog({title:'New Import' ,
-                            css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20%"},
-                            headerEditable:false,
-                            headerIcon : 'import',
-                            bodyCss:{"min-height":dialog_height+"px"},
-                            buttons: {saveBtn:{text:'Create Import',btnicon:'save'} }
-                    });	
-                    var new_import ='<div style=" min-height:100px;"  class="clearfix template-container gray-panel" id="create-import-container">';
-                        new_import +='<div class="cont-box" style="margin-top:10px; top:0; left:53%; width:90%;">';
-                        new_import +='<div class="row campname-container">';
-                        new_import +='<label style="width:10%;">Name:</label>';
-                        new_import +='<div class="inputcont" style="text-align:right;">';
-                        new_import +='<input type="text" name="_import" id="import_name" placeholder="Enter Netsuite import name" style="width:83%;" />';
-                        new_import +='</div></div></div></div>';
+                   var new_import ='<div class="overlay"><div style="margin-left: -385px; width: 770px;" class="modal-open modal in"><div style="min-height: 300px;" class="modal-body">';
+                        new_import +='<div class="sd_common netsuit-tilt"><a class="closebtn close_import"></a>';
+                        new_import +=' <div class="watermark_tilt" style="background-position:"></div>';
+                        new_import +='<h2>New Import</h2><div class="lp_name">';
+                        new_import +=' <div class="inputcont" style="height:39px;float:left;width:324px;">';
+                        new_import +='<input type="text" id="import_name" placeholder="Enter Netsuit import name" name="_import" style="width:300px;" class="field-text">';
+                        new_import +='</div><a class="btn-green g-btn create-button"><span style="min-width: 40px;"> Create </span><i class="icon next"></i></a></div><div class="clearfix"></div></div></div><br></div></div>';
                         new_import = $(new_import);                                
-                        dialog.getBody().html(new_import);
+                        $('body').append(new_import);
                         new_import.find("#import_name").focus();                        
+                       new_import.find(".close_import").click(function(e){
+                            new_import.remove();
+                        });       
+                        new_import.find(".create-button").click(_.bind(function(e){
+                                this.editImport(new_import);
+                        },this));
                         new_import.find("#import_name").keydown(_.bind(function(e){
                             if(e.keyCode==13){
-                                this.editImport(dialog);
+                                this.editImport(new_import);
                             }
                         },this))
-                        dialog.saveCallBack(_.bind(this.editImport,this,dialog));
                 },
                 editImport:function(dialog){
-                    var importName = dialog.$("#import_name").val();
+                    var importName = dialog.find("#import_name").val();
                     var appMsgs = this.app.messages[0];
                     var el = this.$el;
                     if(importName){
@@ -250,7 +246,7 @@ function (template,MyImports,moment) {
                     this.parent.updateImport(importName);
                     }else{
                         this.app.showError({
-                            control: el.parents('.modal-open').find('.campname-container'),
+                            control: el.parents('body').find('.modal-open'),
                             message: appMsgs.MAPDATA_importlist_empty_error
                             });
                     }

@@ -90,28 +90,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                       app: this.app,
                       heading : 'New Campaign',
                       buttnText: 'Create',
+                      bgClass :'campaign-tilt',
                       plHolderText : 'Enter campaign name here',
                       emptyError : 'Campaign name can\'t be empty',
-                      createURL : '/pms/io/campaign/saveCampaignData/',
-                      fieldKey : "campName",
+                      createURL : '/pms/io/list/saveListData/',
+                      fieldKey : "listName",
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
                       saveCallBack :  _.bind(this.createCampaign,this) // Calling same view for refresh headBadge
                     });
-                    /*var camp_obj = this;
-                    var dialog_title = "New Campaign";
-                    var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'new_headicon',
-                        buttons: {saveBtn: {text: 'Create Campaign'}}
-                    });*
-                    //this.app.showLoading("Loading...", dialog.getBody());
-                    require(["campaigns/newcampaign"], function (newcampPage) {
-                        var mPage = new newcampPage({camp: camp_obj, app: camp_obj.app, newcampdialog: dialog});
-                        //dialog.getBody().html(mPage.$el);
-                        //mPage.$("input").focus();
-                        dialog.saveCallBack(_.bind(mPage.createCampaign, mPage));
-                    });*/
                 },
                 findCampaigns: function (obj)
                 {

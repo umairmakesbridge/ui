@@ -167,24 +167,25 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
            
             createList : function(){
                  var camp_obj = this;
-                    var dialog_title = "New List";
-                    var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'lists',
-                        buttons: {saveBtn: {text: 'Create List'}}
+                 this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'New List',
+                      buttnText: 'Create',
+                      bgClass :'lists-tilt',
+                      plHolderText : 'Enter list name here',
+                      emptyError : 'Enter list name',
+                      createURL : '/pms/io/list/saveListData/',
+                      fieldKey : "listName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.addlist,this) // Calling same view for refresh headBadge
                     });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["listupload/newlist"], function(newtargetPage) {
-                        var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
-                        dialog.getBody().append(mPage.$el);
-                        camp_obj.app.showLoading(false, mPage.$el.parent());
-                        var dialogArrayLength = camp_obj.app.dialogArray.length; // New Dialog
-                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.addlist, mPage));
-                        camp_obj.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.addlist, mPage); // New Dialog
-                        dialog.$el.find('#list_name').focus();
-                    });
+                  
+                
+            },
+            addlist : function(fieldText, _json){
+                this.newList = _json[1];
+                this.appendlist(fieldText);
             },
             appendlist:function(listName,ele){                    
                   
