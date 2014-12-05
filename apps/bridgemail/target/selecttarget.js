@@ -292,25 +292,27 @@ function (template, TargetsCollection, TargetView,moment) {
                     }
                 },
                 createTarget:function(){
-                    var camp_obj = this;
-                    var dialog_title = "New Target";
-                    var dialog = this.app.showDialog({title: dialog_title,
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'targetw',
-                        wrapDiv : 'new-target-view',
-                        buttons: {saveBtn: {text: 'Create Target'}}
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'Creat a new Target',
+                      buttnText: 'Create',
+                      bgClass :'target-tilt',
+                      plHolderText : 'Enter target name here',
+                      emptyError : 'Target name can\'t be empty',
+                      createURL : '/pms/io/filters/saveTargetInfo/',
+                      fieldKey : "filterName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),filterFor:"C"},
+                      saveCallBack :  _.bind(this.addTarget,this) // Calling same view for refresh headBadge
                     });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    //dialog.$el.next(".modal-backdrop").css('z-index','1001');
-                    require(["target/newtarget"], function(newtargetPage) {
-                        var mPage = new newtargetPage({camp: camp_obj, app: camp_obj.app, newtardialog: dialog});
-                        dialog.getBody().append(mPage.$el);
-                        mPage.$el.addClass('dialogWrap-'+camp_obj.app.dialogArray.length);
-                        camp_obj.app.showLoading(false, mPage.$el.parent());
-                        dialog.saveCallBack(_.bind(mPage.createTarget, mPage));
-                        dialog.$el.find('#target_name').focus();
-                    });
+                },
+                addTarget : function(fieldText, camp_json){
+                         var target_id = camp_json[1];
+                                        if (this.states) {
+                                            this.states.step3.isNewTarget = true;
+                                            this.states.step3.newTargetName = fieldText;
+                                        }
+                                        this.initCreateEditTarget(target_id);
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;
