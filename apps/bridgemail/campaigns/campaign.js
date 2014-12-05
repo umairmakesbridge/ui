@@ -2434,20 +2434,27 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }
                 },
     createTarget: function(){
-                    var camp_obj = this;
-                    var dialog_title = "New Target";
-                    var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},                
-            headerIcon : 'new_headicon',
-                        buttons: {saveBtn:{text:'Create Target'} }                                                                           
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'Creat a new Target',
+                      buttnText: 'Create',
+                      bgClass :'target-tilt',
+                      plHolderText : 'Enter target name here',
+                      emptyError : 'Target name can\'t be empty',
+                      createURL : '/pms/io/filters/saveTargetInfo/',
+                      fieldKey : "filterName",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),filterFor:"C"},
+                      saveCallBack :  _.bind(this.addTarget,this) // Calling same view for refresh headBadge
                     });
-                    this.app.showLoading("Loading...",dialog.getBody());
-                    require(["target/newtarget"],function(newtargetPage){                                     
-                        var mPage = new newtargetPage({camp:camp_obj,app:camp_obj.app,newtardialog:dialog});
-                        dialog.getBody().html(mPage.$el);
-                        dialog.saveCallBack(_.bind(mPage.createTarget,mPage));
-                    });
+                },
+                addTarget : function(fieldText, camp_json){
+                         var target_id = camp_json[1];
+                                        if (this.states) {
+                                            this.states.step3.isNewTarget = true;
+                                            this.states.step3.newTargetName = fieldText;
+                                        }
+                                        this.initCreateEditTarget(target_id);
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;
