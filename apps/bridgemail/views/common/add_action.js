@@ -5,7 +5,8 @@ function ($,Backbone, _, template) {
                 className :'overlay',                
                 events: {              
                     'click .closebtn': 'close',
-                    'click .create-button': 'create'
+                    'click .create-button': 'create',
+                    'keyup .field-text': 'onkeycreate'
                 },
                 initialize: function () {
                         this.app = this.options.app;
@@ -24,8 +25,13 @@ function ($,Backbone, _, template) {
                 init: function () {
                     this.$(".field-text").focus();
                 },
+                onkeycreate : function(e){
+                    if(e.keyCode==13){
+                        this.create();
+                    }
+                },
                 create: function(e){
-                    if($(e.target).hasClass("saving")) return false;
+                    if($(".create-button").hasClass("saving")) return false;
                     var field_text = $.trim(this.$(".field-text").val());
                     if(field_text){
                         this.app.hideError({control:this.$('.lp_name')});                        
