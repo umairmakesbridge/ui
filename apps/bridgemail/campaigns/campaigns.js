@@ -93,8 +93,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                       bgClass :'campaign-tilt',
                       plHolderText : 'Enter campaign name here',
                       emptyError : 'Campaign name can\'t be empty',
-                      createURL : '/pms/io/list/saveListData/',
-                      fieldKey : "listName",
+                      createURL : '/pms/io/campaign/saveCampaignData/',
+                      fieldKey : "campName",
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
                       saveCallBack :  _.bind(this.createCampaign,this) // Calling same view for refresh headBadge
                     });

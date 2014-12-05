@@ -425,7 +425,8 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                     _this.showHideTargetTitle();
                                     _this.app.showMessge("Templated Renamed");
                                     //_this.page.$("#template_search_menu li:first-child").removeClass("active").click();
-                                    _this.modelTemplate.model.set("name", template_name_input.val());
+                                   if(_this.modelTemplate){
+                                   _this.modelTemplate.model.set("name", template_name_input.val());}
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], _this.$el);
@@ -499,7 +500,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== 'err') {
                                     this.app.showMessge("Thumbnail Saved Successfully");
-                                    this.modelTemplate.model.set("thumbURL", this.iThumbImage);
+                                    if(this.modelTemplate){this.modelTemplate.model.set("thumbURL", this.iThumbImage);}
                                 } else {
                                     this.app.showAlert(_json[1], $("body"), {fixed: true});
                                 }
