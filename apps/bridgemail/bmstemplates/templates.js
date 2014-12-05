@@ -73,7 +73,7 @@ function (template,highlight,templateCollection,templateRowView) {
                     if(this.app.checkError(_json)){
                           return false;
                     }
-                    this.app.set("isAdmin",_json[1])
+                    this.app.set("isAdmin",_json[1]);
                 
                 },this));
             },

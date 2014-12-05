@@ -3788,6 +3788,18 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .target-tilt .watermark_tilt{
     background-position :  7px -568px;
 }
+.google-tilt .watermark_tilt{
+    background-position : 152px 138px;
+}
+.highrise-tilt .watermark_tilt{
+    background-position :  0 137px;
+}
+.netsuit-tilt .watermark_tilt{
+    background-position :  0 282px;
+}
+.salesforce-tilt .watermark_tilt{
+    background-position :  143px 282px;
+}
 
 /*
 -------------- ENDS HERE ----------

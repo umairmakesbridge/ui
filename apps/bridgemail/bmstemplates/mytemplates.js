@@ -74,20 +74,22 @@ function (template) {
             },
             createCampaign: function(obj)
             {
+                    var templateId =  $.getObj(obj,"a").attr("id").split("_")[1];
                     this.app.showAddDialog(
                     {
                       app: this.app,
                       heading : 'New Campaign',
                       buttnText: 'Create',
+                      bgClass :'campaign-tilt',
                       plHolderText : 'Enter campaign name here',
                       emptyError : 'Campaign name can\'t be empty',
                       createURL : '/pms/io/campaign/saveCampaignData/',
                       fieldKey : "campName",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),templateNumber:templateId},
                       saveCallBack :  _.bind(this.app.mainContainer.createCampaign,this.app.mainContainer) // Calling same view for refresh headBadge
                     });
-                   /* var templateId =  $.getObj(obj,"a").attr("id").split("_")[1];
-                    var camp_obj = this;
+                    
+                    /*var camp_obj = this;
                     var dialog_title = "New Campaign";
                     var dialog = this.app.showDialog({title:dialog_title,
                         css:{"width":"650px","margin-left":"-325px"},
