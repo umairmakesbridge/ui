@@ -5878,7 +5878,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                             //LoadFormBlocks
 
                             $.ajax({
-                                url: "/pms/io/form/getSignUpFormData/?" + BMSTOKEN + "&type=list",
+                                url: "/pms/io/form/getSignUpFormData/?" + BMSTOKEN + "&type=search",
                                 data: "{}",
                                 type: "POST",
                                 contentType: "application/json; charset=latin1",

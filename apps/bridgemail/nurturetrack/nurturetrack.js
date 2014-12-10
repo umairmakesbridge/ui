@@ -251,7 +251,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         this.app.showAlertDetail({heading:'Confirm Deletion',
                             detail:"Are you sure you want to delete this nurture track?",                                                
                                 callback: _.bind(function(){													
-                                        this.deleteTrack();
+                                    this.deleteTrack();
                                 },this)},
                         this.$el);    
                     }

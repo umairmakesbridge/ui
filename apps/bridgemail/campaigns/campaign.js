@@ -2206,7 +2206,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 loadMEE:function(){
                     if(!this.states.step2.meeEditor){
-                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
+                         this.app.showLoading("Loading Easy Editor...",this.$("#area_html_editor_mee"));                         
                          this.states.step2.meeEditor = true;               
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
@@ -2433,7 +2433,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                     }
                 },
-    createTarget: function(){
+                createTarget: function(){
                     this.app.showAddDialog(
                     {
                       app: this.app,
@@ -2449,12 +2449,12 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     });
                 },
                 addTarget : function(fieldText, camp_json){
-                         var target_id = camp_json[1];
-                                        if (this.states) {
-                                            this.states.step3.isNewTarget = true;
-                                            this.states.step3.newTargetName = fieldText;
-                                        }
-                                        this.initCreateEditTarget(target_id);
+                        var target_id = camp_json[1];
+                        if (this.states) {
+                            this.states.step3.isNewTarget = true;
+                            this.states.step3.newTargetName = fieldText;
+                        }
+                        this.initCreateEditTarget(target_id);
                 },
                 initCreateEditTarget:function(target_id){
                     var self = this;

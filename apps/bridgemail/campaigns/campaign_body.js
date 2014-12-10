@@ -188,7 +188,7 @@ function (template,editorView) {
             },
             loadMEE:function(){
                 if(!this.meeEditor){
-                     this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
+                     this.app.showLoading("Loading Easy Editor...",this.$("#area_html_editor_mee"));                         
                      this.meeEditor = true;               
                      setTimeout(_.bind(this.setMEEView,this),100);                        
                 }

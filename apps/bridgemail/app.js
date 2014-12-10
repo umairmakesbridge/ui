@@ -735,6 +735,13 @@ define([
                 return false;
             }
             event.preventDefault();
+        },
+        getIEVersion: function(){
+            var msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+            if (isNaN(msie)) {
+              msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+            }
+            return msie;
         }
     });
 

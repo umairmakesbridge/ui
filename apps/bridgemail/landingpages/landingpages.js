@@ -21,7 +21,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     this.offsetLength = 0;
                     this.total_fetch = 0;
                     this.loadingpages_request = null;
-                    this.status = "A";
+                    this.status = "";
                     this.actionType = "";
                     this.taglinkVal = false;
                     this.timeout = false;
@@ -94,15 +94,21 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                       app: this.app,
                       heading : 'Start with choosing a name for your Landing Page',
                       buttnText: 'Create',
+                      bgClass :'landingpage-tilt',
                       plHolderText : 'Enter landing page name here',
                       emptyError : 'Landing page name can\'t be empty',
-                      createURL : '',
-                      postData : {type:'create'},
+                      createURL : '/pms/io/publish/saveLandingPages/',
+                      fieldKey : "name",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),category:"Marketing"},
                       saveCallBack :  _.bind(this.createPage,this)
                     });
                 },
                 createPage: function(txt,json){
-                    
+                    if(json[0]=="success"){
+                        this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true});        
+                        this.headBadge();
+                        this.getLandingPages();
+                    }
                 },
                 refreshListing: function(){
                     this.app.addSpinner(this.$el);
@@ -127,6 +133,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     var _data = {offset: this.offset,type:'search'};                    
                     if (this.status) {                        
                         _data['status'] = this.status;                        
+                    }
+                    else {
+                        delete  _data['status'];
                     }
                     if(this.actionType){
                         _data['actionType'] = this.actionType;                        

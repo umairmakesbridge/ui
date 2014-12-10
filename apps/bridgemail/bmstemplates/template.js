@@ -85,7 +85,9 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
 
                     this.$(".add-cat").addbox({app: this.app,
                         addCallBack: _.bind(this.addCategory, this),
-                        placeholder_text: 'Please enter category'
+                        placeholder_text: 'Please enter category',
+                        fromDialog: this.dialog.$el,
+                        _eletop : 142
                     });
 
                     // Merge Field Abdullah 
@@ -221,7 +223,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                 params: {type: 'tags', templateNumber: _this.template_id, tags: ''}
                                 , showAddButton: true,
                                 tags: template_json.tags,
-                                fromDialog: _this.dialog.$el,
+                                fromDialog: _this.dialog.$el,                                
                                 callBack: _.bind(_this.newTags, _this),
                                 typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + _this.app.get('bms_token') + "&type=allTemplateTags"
                             });

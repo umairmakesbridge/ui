@@ -1,9 +1,8 @@
 <div class="landing_top">
         <div class="category">
         <label>Choose Category</label>
-         <select  data-placeholder="Choose a category" class="select-category">
-            <option value="">Marketing</option>
-            <option value="" selected="">Sales</option>
+         <select  data-placeholder="Choose a category" class="select-category" disabled="disabled">
+            <option value="">Loading...</option>            
          </select>        
         <a class="addcat"></a>
         <input type="text" name="" placeholder="Enter new category name...">
@@ -11,13 +10,11 @@
     </div>
 
     <div class="status_tgl">
-        <a class="draft active" href="">Draft</a>
-        <a class="published" href="">Published</a>
+        <a class="draft active">Draft</a>
+        <a class="published">Published</a>
     </div>
     
 </div>
-<div style="min-height:300px;" class="lp_editor">
-      
-   Easy Editor Here....
-      
+<div style="min-height:300px;" id="area_html_editor_mee">
+   <div id="mee_editor" class="MEE_EDITOR"></div>      
 </div>

@@ -1291,48 +1291,45 @@ ul.tabs-btns li.active a{
 }
 
 /*****workspace tabs icons ***/
+.tabs-menu li span{
+    background-image: url("../img/ws-icons.png");
+    background-color: transparent;
+}
 .wtab-campaignlisting{
-    background: url("../img/ws-icons.png") no-repeat scroll -29px -31px rgba(0, 0, 0, 0);
+    background-position:-30px -31px;
 }
 .wtab-campaign{
-    background: url("../img/ws-icons.png") no-repeat scroll 0 -30px rgba(0, 0, 0, 0);
+    background-position: 0 -30px;    
 }
 .wtab-contactlisting{
-    background: url("../img/ws-icons.png") no-repeat scroll 0 -179px rgba(0, 0, 0, 0);
+    background-position:0 -179px;        
 }
 .wtab-contactdetail{
-   background: url("../img/ws-icons.png") no-repeat scroll 0 -150px rgba(0, 0, 0, 0);
+   background-position:0 -150px;   
 }
 .wtab-mytemplates{
-    background: url("../img/ws-icons.png") no-repeat scroll -29px -90px rgba(0, 0, 0, 0)
+    background-position:-30px -90px;       
 }
 .wtab-reports{
-    background: url("../img/ws-icons.png") no-repeat scroll 0 -120px rgba(0, 0, 0, 0);
+    background-position:0 -120px;       
 }
 .wtab-csvupload{
-    background: url("../img/ws-icons.png") no-repeat scroll -30px -120px rgba(0, 0, 0, 0);
+    background-position:-30px -120px;    
 }
-.wtab-crm{
-    background:url("../img/connection.png") no-repeat scroll center center;
+.wtab-crm{    
+    background-position:0px -210px;
 }
 .wtab-salesforce{
-    background:url("../img/ws-icons.png") no-repeat scroll 0 -240px rgba(0, 0, 0, 0);
+    background-position:0 -240px;      
 }
-.wtab-netsuite{
-      background: url("../img/ws-icons.png") no-repeat scroll -30px -240px rgba(0, 0, 0, 0);
-}
-.wtab-nuturelisting{
-    background:url("../img/ws-icons.png") no-repeat scroll -30px -60px rgba(0, 0, 0, 0);
-}
-.wtab-nuturetrack{
-    background:url("../img/ws-icons.png") no-repeat scroll 0 -60px rgba(0, 0, 0, 0);
-}
-.wtab-autobotslisting{
-    background: url("../img/ws-icons.png") no-repeat scroll -30px 0 rgba(0, 0, 0, 0);
-}
-.wtab-subscribers{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
-.wtab-lpageslisting{background:url("../img/subscribers_wtab.png") no-repeat scroll center center;}
-.wtab-lpages{background:url("../img/landingpg24.png") no-repeat scroll center center;}
+.wtab-netsuite{background-position:-30px -240px;}
+.wtab-nuturelisting{background-position:-30px -60px;}
+.wtab-nuturetrack{background-position:0 -60px;}
+.wtab-autobotslisting{background-position: -30px -1px;}
+.wtab-subscribers{background-position: -30px -150px;}
+.wtab-lpageslisting{background-position: -30px -210px;}
+.wtab-lpages{background-position: -30px -180px}
+
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;
@@ -3800,6 +3797,9 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .salesforce-tilt .watermark_tilt{
     background-position :  143px 282px;
 }
+.landingpage-tilt .watermark_tilt{
+    background-position :  0 -283px;
+}
 
 /*
 -------------- ENDS HERE ----------
@@ -3986,4 +3986,7 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 }
 .ribbon-red:after {
   right: 0;
+}
+.landingpage-box .form{
+    background: none;
 }
