@@ -3,7 +3,7 @@
         <div class="name-type">              
             <h3>
                 <% if(model.get('status')!=='D'){ %>
-                    <a class="show-detail showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>
+                    <a class="edit-page showtooltip" title="Click to view"> <%= this.model.get('name')%> </a>
                 <% }else{ %>
                     <a class="edit-page showtooltip" title="<%= this.getPageStatus().tooltip %>"> <%= this.model.get('name')%> </a>
                 <% } %>

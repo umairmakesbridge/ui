@@ -223,6 +223,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var emailWidth = "600px";
                                 var undoredo = true;
                                 var _offset = 0;
+                                var forms_offset = 0;
                                 var tiny_editor_selection = null;
                                 var showStyle = false;
 
@@ -4318,9 +4319,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     }
                                                 }
                                                 else {
-
-
-
                                                     var dcContentVariationWindow = args.predefinedControl.Html.find(".dcVariationName");
                                                     dcContentVariationWindow.height(dcContentVariationWindow.parents("table.dynamicContentContainer").height())
                                                     dcContentVariationWindow.show();
@@ -5122,7 +5120,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                             var block = $("<li class='draggableControl ui-draggable droppedFormBlock' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
                                                     "<i class='icon myblck'></i> " +
-                                                    "<span class='font_75 bbName'>" + obj[0].name + "</span>" +
+                                                    "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
                                                     "<div class='imageicons' > " +
                                                     "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
                                                     "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
