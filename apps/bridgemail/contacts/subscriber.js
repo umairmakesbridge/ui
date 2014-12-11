@@ -38,6 +38,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     this.$el.html(this.template({}));                    
                     if (this.options.params && this.options.params.sub_id) {
                         this.sub_id = this.options.params.sub_id;
+                        this.sub_name = this.options.params.sub_name;
+                        
                     }
                     this.initControls();
                     this.loadData();
@@ -50,7 +52,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     this.current_ws = this.$el.parents(".ws-content");
                     this.tagDiv = this.current_ws.find("#campaign_tags");
                     this.tagDiv.show();
-
+                    
                     var editIconSub = $('<a class="icon edit"></a>');
                     var deleteIconSub = $('<a class="icon delete"></a>');
                     var action_icon = $('<div class="pointy"></div>")');
@@ -71,7 +73,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                 initControls: function() {
 
                     this.$(".connection-setup").chosen({width: "150px", disable_search: "true"})
-
+                    if(this.sub_name)
+                    {this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);}
                 },
                 /**
                  * Loading data from server to populate page info.
@@ -99,6 +102,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         _this.$(".s-date").html(create_date.date());
                         _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
                         _this.sub_fields = _json;
+                        
                         if(_json.score !== '0'){
                             _this.$('.score').html('<i class="icon score"></i>+<span class="score-value">'+_json.score+'</span>');
                         }else{
