@@ -22,7 +22,8 @@ function (template,highlighter) {
             events: {
                'click .more-detail':'showDetail',
                'click .closebtn': 'hideDetail',
-               'click .tag':'tagSearch'
+               'click .tag':'tagSearch',
+               'click .show-detail':'openContact'
             },
             /**
              * Initialize view - backbone
@@ -124,6 +125,19 @@ function (template,highlighter) {
             tagSearch:function(obj){
                 this.trigger('tagclick',$(obj.target).text());
                 return false;
+            },
+            openContact : function(){
+                      var sub_name = '';
+                      if(this.model.get("firstName")){
+                          sub_name = this.model.get("firstName");
+                      }else if(this.model.get("lastName")){
+                          sub_name = this.model.get("lastName");
+                      }else{
+                          sub_name = this.model.get("email");
+                      }
+                       
+                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name);
+                      
             }
             
         });

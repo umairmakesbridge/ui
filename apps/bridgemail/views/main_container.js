@@ -103,6 +103,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.footer = new FooterView();
                     this.news = new NewsView();
                     this.isRender = false;
+                    this.subscribe_name = '';
+                    this.subscribe_id = '';
                     this.lastActiveWorkSpace = "";
                     this.render();
                 }
@@ -155,7 +157,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             $(".ws-tabs li").removeClass('active');
                             var workspaceid = options.workspace_id ? ('workspace_id="' + options.workspace_id + '"') : "";
                             var tab_icon = (options.tab_icon) ? "wtab-" + options.tab_icon : "step1";
+                            
                             $('#wp_li_0').before('<li class="active" id="wp_li_' + wp_count + '" ' + workspaceid + '><a><span class="icon ' + tab_icon + '"></span></a><div class="detail"><div class="heading">' + options.title + '</div><div class="subheading">' + options.sub_title + '</div><i class="closehover" title="Close Workspace"></i></div></li>');
+                            if(this.subscribe_name){
+                                this.SubscriberName(this.subscribe_id,this.subscribe_name);
+                            }
                             /*--loading Spinneer--*/
                             this.lastActiveWorkSpace = "wp_li_" + wp_count;
                             wp_view.$el.attr("id", "workspace_" + wp_count);
@@ -308,8 +314,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
 
                 },
-                openSubscriber: function (sub_id) {
+                openSubscriber: function (sub_id,sub_name) {
                     var sub_id = sub_id ? sub_id : 0;
+                    this.subscribe_name = sub_name;
+                    this.subscribe_id = sub_id;
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         isLoadSpinner: true,
@@ -317,9 +325,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         workspace_id: 'subscriber_' + sub_id,
                         sub_title: 'Contact Profile',
                         url: 'contacts/subscriber',
-                        params: {sub_id: sub_id},
+                        params: {sub_id: sub_id,sub_name:sub_name},
                         actions: []
                     });
+                },
+                SubscriberName: function (sub_id,name){
+                    
+                    var tabObj = this.$('#wstabs').find('li[workspace_id="subscriber_'+sub_id+'"]');
+                     tabObj.find('a').html('<div class="letter_block l_n"><span>'+name.charAt(0)+'</span></div>');
                 },
                 openNurtureTrack: function (opt) {
                     var track_id = opt.id ? opt.id : 0;

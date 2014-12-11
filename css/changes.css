@@ -2937,7 +2937,30 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 
 .slidenav-dd > ul.quicklinks > li ul li.block { float:none; display:block; width:98%; clear:both; }
 
+div.letter_block {
+    background: none repeat scroll 0 0 #7b929f;
+    border-radius: 2px;
+    color: #fff;
+    float: left;
+    font-size: 24px;
+    height: 30px;
+    margin: 11px 16px 12px 10px;
+    text-align: center;
+    width: 30px;
 
+	-webkit-border-radius: 2px ;
+	-moz-border-radius:  2px;
+	border-radius:  2px;
+}
+div.letter_block span {
+    color: #fff;
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+	text-transform: uppercase;
+    line-height: 30px;
+    text-align: center;
+} 
  
 /* ------------------------------------------------------------------------------------- */
 

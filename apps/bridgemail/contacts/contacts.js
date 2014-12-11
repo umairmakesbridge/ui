@@ -12,12 +12,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
              * Attach events on elements in view.
             */            
             events: {				
-                'click .show-detail':function(obj){
-                    var target = $.getObj(obj,"div");
-                    if(target.attr("id")){
-                       this.app.mainContainer.openSubscriber(target.attr("id"));
-                    }
-                },
+                
                 "click .refresh_btn":function(){
                     this.app.addSpinner(this.$el);
                     this.fetchContacts();               
