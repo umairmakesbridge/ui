@@ -85,6 +85,20 @@
       else{
           this.options.app.showAlert('Value can\'t be empty',$("body"));
       }
+  },
+  showLoading:function(){
+     this.dialog.find(".input-field").prop("disabled",true);
+     this.dialog.find(".btn-add").addClass("saving");
+  },
+  hideLoading:function(removeValue,hideBox){
+     this.dialog.find(".input-field").prop("disabled",false)
+     this.dialog.find(".btn-add").removeClass("saving")
+     if(removeValue){
+        this.dialog.find(".input-field").val('')
+     }
+     if(hideBox){
+        this.hideBox()
+     }
   }
   ,
   hideBox:function(){

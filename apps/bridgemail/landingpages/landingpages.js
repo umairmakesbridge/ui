@@ -1,16 +1,18 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!landingpages/html/landingpages.html', 'bms-filters', 'moment', 'landingpages/collections/landingpages', 'landingpages/landingpage_row'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, moment, pagesCollection, pageRowView) {
+define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!landingpages/html/landingpages.html', 'bms-filters', 'moment', 'landingpages/collections/landingpages', 'landingpages/landingpage_row', 'landingpages/landingpage_template_row'],
+        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, moment, pagesCollection, pageRowView, tplPageRowView) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
                 events: {
-                    "click .refresh_btn": 'refreshListing',
+                    "click .refresh_mypages": 'refreshListing',
+                    "click .refresh_templates":'refreshTemplateListing',
                     "click .sortoption_expand": "toggleSortOption",
                     "click li.stattype": 'filterListing'
                 },
                 initialize: function () {
                     this.template = _.template(template);
                     this.pagesCollection = new pagesCollection();
+                    this.pagesTemplateCollection = new pagesCollection();     
                     this.render();
                 },
                 render: function ()
@@ -18,13 +20,18 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     this.$el.html(this.template({}));
                     this.app = this.options.app;                    
                     this.offset = 0;
+                    this.template_offset = 0;
                     this.offsetLength = 0;
                     this.total_fetch = 0;
+                    this.total_template_fetch = 0;
                     this.loadingpages_request = null;
+                    this.loadingpages_template_request = null;
+                    this.templateSearchTxt = "";
                     this.status = "";
                     this.actionType = "";
                     this.taglinkVal = false;
                     this.timeout = false;
+                    this.templateLoaded = false;
                     
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
@@ -43,7 +50,56 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         iconsource: 'lpage',
                         countcontainer: 'no_of_camps'
                     });
+                    this.$('div#pagestemplatelistsearch').searchcontrol({
+                        id: 'list-search',
+                        width: '300px',
+                        height: '22px',
+                        searchFunc: _.bind(this.searchTemplatePages, this),
+                        clearFunc: _.bind(this.clearSearchTemplatePages, this),
+                        placeholder: 'Search Template Landing Pages',
+                        showicon: 'yes',
+                        iconsource: 'lpage',
+                        countcontainer: 'no_of_camps'
+                    });
+                    
+                    $(window).scroll(_.bind(this.liveLoading, this));
+                    $(window).resize(_.bind(this.liveLoading, this));
+                    
+                    $(window).scroll(_.bind(this.liveLoadingTemplate, this));
+                    $(window).resize(_.bind(this.liveLoadingTemplate, this));
+                },
+                liveLoading: function () {
+                    var $w = $(window);
+                    var th = 200;
+                    var inview = this.$("#landingpages_grid tbody tr:last").filter(function () {
+                        var $e = $(this),
+                                wt = $w.scrollTop(),
+                                wb = wt + $w.height(),
+                                et = $e.offset().top,
+                                eb = et + $e.height();
+                        return eb >= wt - th && et <= wb + th;
+                    });
+                    if (inview.length && inview.attr("data-load") && this.$("#area_mylandingpages").height() > 0) {
+                        inview.removeAttr("data-load");
+                        this.getLandingPages(20);
+                    }
                 }, 
+                liveLoadingTemplate: function(){
+                   var $w = $(window);
+                    var th = 200;
+                    var inview = this.$("#templates_landingpages_grid tbody tr:last").filter(function () {
+                        var $e = $(this),
+                                wt = $w.scrollTop(),
+                                wb = wt + $w.height(),
+                                et = $e.offset().top,
+                                eb = et + $e.height();
+                        return eb >= wt - th && et <= wb + th;
+                    });
+                    if (inview.length && inview.attr("data-load") && this.$("#area_templatelandingpages").height() > 0) {
+                        inview.removeAttr("data-load");
+                        this.getTemplatesLandingPages(20);
+                    } 
+                },
                 toggleSortOption: function(e) {
                      this.$("#template_search_menu").slideToggle();
                      e.stopPropagation();
@@ -88,7 +144,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
 
                     }, this));
                 },
-                createLandingPage: function ( ) {
+                createLandingPage: function (  ) {
                     this.app.showAddDialog(
                     {
                       app: this.app,
@@ -115,12 +171,17 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     this.getLandingPages();
                     this.headBadge();  
                 },
+                refreshTemplateListing: function(){                    
+                    this.getTemplatesLandingPages();
+                    this.headBadge();  
+                },
                 getLandingPages: function ( fcount, filterObj ) {
                     if (!fcount) {
                         this.offset = 0;
+                        this.total_fetch = 0;
                         this.app.showLoading("Loading Landing Pages...", this.$("#target-camps"));
                         this.$el.find('#landingpages_grid tbody').html('');
-                        this.$(".notfound").remove();
+                        this.$("#area_mylandingpages .notfound").remove();
                     }
                     else {
                         this.offset = parseInt(this.offset) + this.offsetLength;
@@ -206,14 +267,27 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     var li = $.getObj(e,"li");           
                     if(li.hasClass("active")==false && li.hasClass("showhand")){
                         this.ws_header.find(".c-current-status li").removeClass("active");
-                        li.addClass("active");                        
-                        this.status = li.attr("data-search");                                                                                                                      
-                        this.getLandingPages();
+                        li.addClass("active");
+                        if(li.attr("data-search")!=="T"){
+                            this.status = li.attr("data-search");                                                                                                                      
+                            this.$("#area_mylandingpages").show();
+                            this.$("#area_templatelandingpages").hide();
+                            this.getLandingPages();                            
+                            this.$("#template_search_menu li").removeClass("active");
+                            var selectSort = this.$("#template_search_menu li[data-search='"+this.status+"']");
+                            selectSort.addClass("active");
+                            this.$(".sortoption_expand .spntext").html(selectSort.text());
+                            
+                        }
+                        else{
+                            this.$("#area_templatelandingpages").show();
+                            this.$("#area_mylandingpages").hide();
+                            if(this.templateLoaded==false){
+                                this.templateLoaded = true;
+                                this.getTemplatesLandingPages();                                
+                            }
+                        }
                         
-                        this.$("#template_search_menu li").removeClass("active");
-                        var selectSort = this.$("#template_search_menu li[data-search='"+this.status+"']");
-                        selectSort.addClass("active");
-                        this.$(".sortoption_expand .spntext").html(selectSort.text());
                     }
                 },
                 showTotalCount: function ( count ){
@@ -233,8 +307,82 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         this.$("#total_templates").html(text_count + _text);
                     }
                 },
-                searchPages:function(o, txt){
-                    this.type = '';
+                showTotalCountTemplate: function ( count ){
+                    
+                    var _text = parseInt(count) <= "1" ? "Template Landing page" : "Template Landing pages";
+                   
+                    var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
+
+                    if (this.templateSearchTxt) {
+                        this.$("#total_templates_pages").html(text_count + _text + " found containing text '<b>" + this.templateSearchTxt + "</b>'");
+                    }
+                    else {
+                        this.$("#total_templates_pages").html(text_count + _text);
+                    }
+                },
+                getTemplatesLandingPages: function(fcount){
+                    if (!fcount) {
+                        this.template_offset = 0;
+                        this.total_template_fetch = 0;
+                        this.app.showLoading("Loading Templates...", this.$("#template_landing_pages"));
+                        this.$el.find('#templates_landingpages_grid tbody').html('');
+                        this.$("#area_templatelandingpages .notfound").remove();
+                    }
+                    else {
+                        this.offset = parseInt(this.offset) + fcount;
+                        this.$("#templates_landingpages_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more template landing pages..</p></div></td></tr>');
+                    }
+                    if (this.loadingpages_template_request)
+                    {
+                        this.loadingpages_template_request.abort();
+                    }
+                    var _data = {offset: this.template_offset,type:'search',isAdmin:'Y'};                    
+                                        
+                    if (this.templateSearchTxt) {
+                        _data['searchText'] = this.templateSearchTxt;
+                    }                    
+                    _data['bucket'] = 20;
+
+                    this.loadingpages_request = this.pagesTemplateCollection.fetch({data: _data,
+                        success: _.bind(function (data1, collection) {
+                            // Display items
+                            this.$("#templates_landingpages_grid tbody").find('.loading-campagins').remove();
+                            if (this.app.checkError(data1)) {
+                                return false;
+                            }                            
+                            this.total_template_fetch = this.total_template_fetch + data1.length;                            
+
+                            this.app.showLoading(false, this.$("#template_landing_pages"));
+                            
+                            this.$("#total_templates_pages .badge").html(collection.totalCount);
+
+                            this.showTotalCountTemplate(collection.totalCount);                            
+
+                            _.each(data1.models, _.bind(function (model) {
+                                this.$el.find('#templates_landingpages_grid tbody').append(new tplPageRowView({model: model, sub: this}).el);
+                            }, this));
+                                                      
+                            
+                            if (this.total_template_fetch < parseInt(collection.totalCount)) {
+                                this.$(".landingpage-template-box").last().attr("data-load", "true");
+                            }
+
+                            if (parseInt(collection.totalCount) == 0) {
+                                var search_message = "";
+                                if (this.templateSearchTxt) {
+                                    search_message += " containing '" + this.templateSearchTxt + "'";
+                                }
+                                this.$('#total_templates_pages').html('<p class="notfound nf_overwrite">No Template Landing page found' + search_message + '</p>');
+                                this.$('#templates_landingpages_grid tbody').before('<p class="notfound">No Templates Landing page found' + search_message + '</p>');
+                            }
+
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    }); 
+                },
+                searchPages:function(o, txt){                    
                     this.searchTxt = txt;
                     this.total_fetch = 0;                    
                     if (this.taglinkVal) {
@@ -262,6 +410,35 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     this.searchTxt = '';
                     this.total_fetch = 0;                    
                     this.getLandingPages();
+                },               
+                searchTemplatePages:function(o, txt){                    
+                    this.templateSearchTxt = txt;
+                    this.total_template_fetch = 0;                    
+                    if (this.taglinkVal) {
+                        this.getTemplatesLandingPages();
+                        this.taglinkVal = false;
+                    } else {
+                        var keyCode = this.app.validkeysearch(o);
+                        if (keyCode) {
+                            if ($.trim(this.templateSearchTxt).length > 0) {
+                                this.timeout2 = setTimeout(_.bind(function () {
+                                    clearTimeout(this.timeout2);
+                                    this.getTemplatesLandingPages();
+                                }, this), 500);
+                            }
+                            this.$('#pagestemplatelistsearch input').keydown(_.bind(function () {
+                                clearTimeout(this.timeout2);
+                            }, this));
+                        } else {
+                            return false;
+                        }
+
+                    }
+                },
+                clearSearchTemplatePages: function(){
+                    this.templateSearchTxt = '';
+                    this.total_template_fetch = 0;                    
+                    this.getTemplatesLandingPages();
                 }
 
             });

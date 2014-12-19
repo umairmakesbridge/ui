@@ -19,7 +19,7 @@
   <div>
     <% if(this.model.get('status')!== 'D'){ %>  
     <div class="colico pgview">
-        <strong><span><em>Page Visitors</em><a> <%- this.model.get('viewCount') %></a></span></strong>
+        <strong><span><em>Page Visitors</em><%- this.model.get('viewCount') %></span></strong>
     </div>
     <% }%>     
   </div>
@@ -28,7 +28,7 @@
     <div>        
         <% if(this.model.get('status')!== 'D'){ %>  
         <div class="colico  form ">
-        <strong><span><em>Form Submissions</em> <a><%- this.model.get('submitCount') %></a></span></strong>
+        <strong><span><em>Form Submissions</em><%- this.model.get('submitCount') %></span></strong>
         </div>
         <% }%>     
     </div>

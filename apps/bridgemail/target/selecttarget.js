@@ -295,7 +295,7 @@ function (template, TargetsCollection, TargetView,moment) {
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Creat a new Target',
+                      heading : 'Create a new Target',
                       buttnText: 'Create',
                       bgClass :'target-tilt',
                       plHolderText : 'Enter target name here',

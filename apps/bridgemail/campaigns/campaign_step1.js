@@ -291,11 +291,11 @@ function (template) {
                         });
                         isValid = false;
                     }
-                    else if(this.$('#campaign_from_name').val().indexOf("{{") && this.$('#campaign_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1)
+                    else if(this.$('#campaign_from_name').val().indexOf("{{") && this.$('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1)
                     {           
                         this.app.showError({
                             control:this.$('.fname-container'),
-                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & +'
+                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
                         });
                         isValid = false;
                     }
@@ -311,10 +311,10 @@ function (template) {
                         });
                         isValid = false;
                     }
-                    else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1){
+                    else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1){
                         this.app.showError({
                             control:this.$('.fnamedefault-container'),
-                             message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & +'
+                             message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
                         });
                         isValid = false;
                     }

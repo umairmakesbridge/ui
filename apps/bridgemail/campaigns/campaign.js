@@ -826,7 +826,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                
                 fetchServerTime:function(){    
-                   this.app.showLoading("Loading Calender...",this.$(".schedule-box2")); 
+                   this.app.showLoading("Loading Calendar...",this.$(".schedule-box2")); 
                    require(["campaigns/schedule_campaign"],_.bind(function(templatePreview){
                             var tmPr =  new templatePreview({app:this.app,parent:this,currentStates:this.states.step4,campNum:this.camp_id,rescheduled:this.rescheduled,hidecalender:this.hidecalender,scheduleFlag:'draft'});
                            //tmPr.init(); // Call view functions
@@ -1090,10 +1090,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                         isValid = false;
                     }
-                    else if( el.find('#campaign_from_name').val().indexOf("{{") && el.find('#campaign_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1){
+                    else if( el.find('#campaign_from_name').val().indexOf("{{") && el.find('#campaign_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1){
                         app.showError({
                             control:el.find('.fname-container'),
-                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & +'
+                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & +\''
                         });
                         isValid = false;
                     }
@@ -1109,10 +1109,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         });
                         isValid = false;
                     }
-                    else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-!_\.\+&x x]*$/)==-1){
+                    else if(this.$('#campaign_from_name_default').css('display') == 'block' && this.$('#campaign_default_from_name').val().search(/^\w[A-Za-z0-9-'!_\.\+&x x]*$/)==-1){
                         app.showError({
                             control:el.find('.fnamedefault-container'),
-                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & +'
+                            message:'Name must start with alphanumeric value. Valid special characters are - _ . ! & + \''
                         });
                         isValid = false;
                     }
@@ -2437,7 +2437,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.app.showAddDialog(
                     {
                       app: this.app,
-                      heading : 'Creat a new Target',
+                      heading : 'Create a new Target',
                       buttnText: 'Create',
                       bgClass :'target-tilt',
                       plHolderText : 'Enter target name here',

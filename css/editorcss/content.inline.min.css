@@ -692,6 +692,8 @@ div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
 .mainContentHtmlGrand > .sortable > li.csHaveData.csContblock .topHandlers { top:-10px;   }
 
 
+
+
 /* ---------------------- *//* ---------------------- */
 /* ------------    TABLE   ---------- */
 /* ---------------------- *//* ---------------------- */
@@ -705,10 +707,8 @@ div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
     /*border-spacing: 5px;*/
 }
 
-.container > tbody > tr > td {
-    /* height: 30px;
-    border:1px solid #eee;
-    background: url("../images/pattern.png") repeat center center #f1f1f1;*/
+.container > tbody > tr > td {    
+    border:1px solid #eee;    
 }
 
 
@@ -721,6 +721,19 @@ div.csHaveData.hover  > .topHandlers { background:#03d3ff; display:block;  }
 
 .imagePlaceHolderAlone {
     background-color: #fff;
+    border:2px dashed #e5e5e5;
+    display: table-cell;
+    height: 250px;
+    vertical-align: middle;
+    width: 400px;
+    margin:5px;
+    text-align: center;
+}
+
+.formPlaceHolderAlone {
+    
+    background: url('../images/drop-form.png') no-repeat scroll center center #fff;
+    background-position: center center;
     border:2px dashed #e5e5e5;
     display: table-cell;
     height: 250px;
@@ -1899,7 +1912,7 @@ div.textcontent ol{
     right:0px;
     bottom:0px;
 }
-.resizableImage .ui-icon-gripsmall-diagonal-se{
+.resizableImage .ui-icon-gripsmall-diagonal-se,.formresizable  .ui-icon-gripsmall-diagonal-se{
     background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(0, 0, 0, 0);
 }
 .sortable > li{
@@ -2064,3 +2077,47 @@ i.icon{
 .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+
+.landingpage{
+    width:100% !important;
+    padding-right: 25px;
+}
+.MEEFORMCONTAINER{
+    position: relative;
+}
+.MEEFORMCONTAINER .editformpanel{
+    position: absolute;
+    top:0px;left:0px;
+    width:100%;
+    height:100%;
+    display: none;
+    background: url("../images/drop-form2.png") no-repeat scroll center 44% rgba(255, 255, 255, 0.6);
+}
+.MEEFORMCONTAINER .editformpanel div{
+    text-align: center;
+    color:#0d7298;
+    font-size:13px;    
+    margin-top:20px;    
+    position: absolute;    
+    top: 50%;
+    left:50%;
+    width:100px;
+    margin: 30px auto auto -50px;
+    font-family: 'PT Sans', sans-serif;
+    
+}
+
+.MEEFORMCONTAINER .editformpanel button{
+    font-family: 'PT Sans', sans-serif;
+    background-color: #00aff0;
+    border: 0 none;
+    color: #fff;
+    font-size: 14px;
+    left: 50%;
+    margin: 60px auto auto -51px;
+    padding: 10px;
+    position: absolute;     
+    top: 50%;
+    cursor: pointer;
+}
+

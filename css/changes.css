@@ -143,7 +143,9 @@ ol.progtrckr li.no-text{
     width:300px;
     margin-left: -150px;
 }
-
+.MEE_EDITOR .loading p{
+    margin-left: -150px;
+}
 .template-container{
   background: none;  
   margin-top:0;
@@ -4012,4 +4014,7 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 }
 .landingpage-box .form{
     background: none;
+}
+.btn-link .link{
+    background: url("images/link.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

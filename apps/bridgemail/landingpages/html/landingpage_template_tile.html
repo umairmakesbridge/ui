@@ -1,0 +1,31 @@
+<div class="thumbnail temp-thumbnail">
+  <div class="img">
+      
+      
+      <div class="gallery-action-btns two s-clr3">
+        <a class="usebtn use-track clr2"><span>Use</span></a>
+        <a class="previewbtn page-view clr1"><span>Preview</span></a>                
+      </div>
+            
+      
+      <% if(model.get('thumbURL')){  %> 
+      <span>
+       <img src="<%- this.app.decodeHTML(model.get('thumbURL').replace('http&#58;',''))%>" data-src="holder.js" alt="">
+       </span>
+     <% } else {
+       %>  
+       <img src="<%- this.app.get('path')%>img/templateimg.png" data-src="holder.js" alt="">       
+       
+      <%}
+      
+      %>      
+  </div>
+  <div class="caption nurture-caption">
+      <h3><a title="Click to view" class="view-template showtooltip"><%- this.app.decodeHTML(model.get('name'))%></a></h3>  
+      <a class="cstatus pclr3"><%- this.app.decodeHTML(model.get('category'))%> </a>
+   <div class="t-scroll"></div>    
+    <div class="btm-bar">        
+        <span><span class="icon time"></span><em title="Last edited on" class="showtooltip"><%- ntDate %></em></span>
+    </div>
+  </div>
+</div>

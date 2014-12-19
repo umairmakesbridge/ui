@@ -190,7 +190,7 @@
 
                     <div class="accordianbar">
                         <div>
-                            <div class="search" style="width: 223pxpx;">
+                            <div class="search" style="width: 223px;">
                                 <input type="text" value="" name="" style="width: 195px;" id="searchBB" />
                                 <a class="close-icon" id="clearsearch-blocks" style="display: none"></a>
                                 <a  class="search searchBBLink">
@@ -224,8 +224,8 @@
                     <div class="accordianbar">
                         <div>
                             <h5></h5>
-                            <div class="search" style="width:223pxpx;">
-                                <input type="text" value="" name="" style="width:195px;" id="searchDC"/>
+                            <div class="search" style="width:223px;">
+                                <input type="text" value="" name="" style="width:195px;" id="searchDC"/>                                
                                 <a  class="search searchDCLink">
                                     <i class="icon search"></i>
                                 </a>
@@ -261,7 +261,7 @@
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span>
                 Forms Library
             </h3>
-            <div class="scrollarea">
+            <div class="scrollarea forms-accordion">
                 <div class="accordian-content active formContent">
                     <div class="accordianbar">
                         <div>
@@ -283,15 +283,13 @@
                     <div class="clearfix">
                         <div id="FBResultDiv" class="no-results"  style="display: none;"> No results Found </div>
                     </div>
-                    <div class="clearfix">
-                        <div class="formDroppable">
-                            <div>
-                                <ul class="ulFormBlocks image-gallery b-blocks">
-                                </ul>
-                            </div>
+                    <div class="clearfix formDroppable">                        
+                        <ul class="ulFormBlocks b-blocks" style="display: inline-block;">
+                        </ul>
+                        <div style="display:none" class="footer-loading form-footer-loading">
+                            <hr>
+                            <div class="gridLoading"><img alt="" src="/pms/umair/img/loading.gif"> </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
@@ -568,15 +566,22 @@
                 <a  class="btn-gray">
                     <i class="icon redo"></i>
                 </a>
-            </li>
-            <li class="MenuCallPreview">
+            </li>     
+            <% if(options.landingPage) { %>
+             <li class="MenuCallTemplate">
                 <a  class="btn-blue">
-                    <i class="icon preview"></i><span>Preview</span>
+                    <i class="icon template"></i><span>Change Template</span>
                 </a>
             </li>
+            <% } %>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
                 <a  class="btn-green save-step2">
                     <i class="icon save"></i><span>Save</span>
+                </a>
+            </li>
+             <li class="MenuCallPreview" style="float:right">
+                <a  class="btn-blue">
+                    <i class="icon preview"></i><span>Preview</span>
                 </a>
             </li>
         </ul>
@@ -584,15 +589,7 @@
     <!--  tools  -->
 
     <div class="editorbox content" style="height: 1000px;">
-        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('complied')==0){ print('apps/bridgemail/')} %>editor/html/MEE_AREA.html"></iframe>
-        <!--<table style="width: 600px; height: 100%; vertical-align: top;" align="center" class="mainTable">
-            <tr>
-                <td class="mainContentHtmlGrand" valign="top">
-                    <ul class="sortable mainContentHtml" style="list-style: none; padding: 0; margin: 0;">
-                    </ul>
-                </td>
-            </tr>
-        </table>-->
+        <iframe class="mee-iframe" id="mee-iframe" frameborder="0" style="position: relative" src="<% if(options._app.get('complied')==0){ print('apps/bridgemail/')} %>editor/html/MEE_AREA.html"></iframe>        
     </div>
     <!--  editorpanel  -->
 

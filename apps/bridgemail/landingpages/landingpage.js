@@ -1,5 +1,5 @@
-define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
-        function(template) {
+define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout.html','jquery.chosen','bms-tags','bms-addbox'],
+        function(template,layout) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Nurture Track detail page view depends on 
@@ -10,8 +10,10 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                 /**
                  * Attach events on elements in view.addRowMessage
                  */
-                events: {
-                    "click .status_tgl":"statusToggle"
+                events: {                    
+                    "click .published" : "publishPage",
+                    "click .draft" : "draftPage",
+                    "click .btn-link" : "linkPageDialog"
                 },
                 /**
                  * Initialize view - backbone
@@ -50,10 +52,26 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                 init: function(notLoadData) {
                    this.current_ws = this.$el.parents(".ws-content"); 
                    this.ws_header = this.current_ws.find(".camp_header .edited"); 
-                   
+                   if(!notLoadData)  {                                             
+                        this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+                        this.initControls();
+                   }
+                   var publishStatus ="", draftStatus = "";
+                   this.$(".status_tgl a").removeClass("active");
+                   if(this.editable==true){
+                       publishStatus ="display:none";                       
+                       this.$(".status_tgl .draft").addClass("active").attr("data-original-title","");                
+                       this.$(".status_tgl .published").attr("data-original-title","Publish this Page");
+                   }
+                   else{
+                       draftStatus = "display:none"
+                       this.$(".status_tgl .published").addClass("active").attr("data-original-title","");
+                       this.$(".status_tgl .draft").attr("data-original-title","Mark as Draft");
+                   }
                    var deleteIcon = $('<a class="icon delete showtooltip" title="Delete Landing Page"></a>');
-                   var playIcon = $('<a class="icon play24 showtooltip" title="Publish Landing Page"></a>');
-                   var pauseIcon = $('<a class="icon pause24 showtooltip" title="Un publish Landing Page" style="display:none"></a>');
+                   
+                   var playIcon = $('<a class="icon play24 showtooltip" title="Publish Landing Page" style="'+draftStatus+'"></a>');
+                   var pauseIcon = $('<a class="icon pause24 showtooltip" title="Un publish Landing Page" style="'+publishStatus+'"></a>');
                    var action_icon = $('<div class="pointy"></div>")');                     
                    action_icon.append(pauseIcon);
                    action_icon.append(playIcon);
@@ -79,15 +97,13 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                     this.current_ws.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     playIcon.click(_.bind(this.publishPage,this));
                     pauseIcon.click(_.bind(this.draftPage,this));
-                   if(!notLoadData)  {
-                        this.loadCategories();
-                        this.loadData();
-                        this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
-                        this.initControls();
-                   }
+                                      
+                    this.loadData();
                   
                 },
-                loadCategories:function(){
+                loadCategories:function(val){
+                    this.$(".select-category").unbind("change",_.bind(this.changeCategory,this));
+                    this.$(".select-category").prop("disabled",true).html("<option>Loading...</option>").trigger("chosen:updated");                    
                     var bms_token = this.app.get('bms_token');     
                     var URL = "/pms/io/publish/getLandingPages/?BMS_REQ_TK=" + bms_token + "&type=categories"
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {
@@ -99,13 +115,17 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                         
                         var totalCount = parseInt(_json.totalCount);
                         var catHTML = "";
+                        var selected = ""
                         for(var i=1;i<=totalCount;i++){
-                            catHTML += "<option value='"+_json["cat"+i]+"'>"+_json["cat"+i]+"</option>";
+                            selected =val ==_json["cat"+i] ? "selected='selected'":""; 
+                            catHTML += "<option value='"+_json["cat"+i]+"' "+selected+" >"+_json["cat"+i]+"</option>";
                         }
                         this.$(".select-category").html(catHTML);
-                        this.$(".select-category").prop("disabled",false).trigger("chosen:updated");
+                        this.$(".select-category").bind("change",_.bind(this.changeCategory,this));                        
+                        this.$(".select-category").prop("disabled",!this.editable).trigger("chosen:updated");
+                        
                     },this));
-                },
+                },                
                 initTag:function(tags){                                    
                   var _tag_ele = this.current_ws.find(".camp_header #campaign_tags");
                   _tag_ele.tags({app:this.app,
@@ -142,7 +162,19 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                         this.initTag(tags); 
                         var workspace_id = this.current_ws.attr("id");
                         this.landinpageHTML = _json.html;
-                        this.loadMEE();
+                        this.formid = _json["formId.encode"];
+                        this.previewURL = _json["previewURL"];
+                        this.publishURL = _json["publishURL"];
+                        this.pageName = _json["name"];
+                        this.loadCategories(_json["category"]);   
+                        if(this.editable){
+                            this.loadMEE();
+                            this.$(".addcat").show();                            
+                        }
+                        else{
+                            this.$(".addcat").hide();
+                            this.previewPage();                            
+                        }
                         this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:_json.name,subheading:"Landing Page Detail"});                        
                         this.status= _json.status;                      
                         this.ws_header.find(".cstatus").remove();
@@ -154,8 +186,39 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                  */
                 initControls: function() {
                     this.$(".select-category").chosen({no_results_text:'Oops, nothing found!', width: "220px",disable_search: "true"});                             
+                    this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    this.$(".addcat").addbox({app: this.app,
+                        addCallBack: _.bind(this.addCategory, this),
+                        placeholder_text: 'Please enter category'
+                    });
                 }
                 ,
+                addCategory : function(category,ele){
+                    if(ele){
+                        ele.data('addbox').showLoading();
+                    }
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');                    
+                    $.post(URL, { type: "updateCategory",pageId:this.page_id,category:category })
+                      .done(_.bind(function(data) {                              
+                          var _json = jQuery.parseJSON(data);                              
+                          if(_json[0]!=="err"){   
+                              if(ele){
+                                ele.data('addbox').hideLoading(true,true);
+                                this.app.showMessge("Landing page category created Successfully!");                                  
+                                this.loadCategories(category);
+                              }                             
+                          }
+                          else{                                  
+                              this.app.showAlert(_json[1],this.$el);
+                          }							                            
+                     },this));
+                    
+                    return false; 
+                },
+                changeCategory:function(e){
+                    var selectbox_val = $(e.target).val();
+                    this.addCategory(selectbox_val);
+                },
                 showHideTitle:function(show,isNew){
                     if(this.editable==false){
                         return false;
@@ -173,6 +236,20 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                         current_ws.find(".tagscont").show();
                     }
                 },
+                formLandingPage:function(id){
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');                    
+                    $.post(URL, { type: "form",formId:id,pageId:this.page_id })
+                      .done(_.bind(function(data) {                              
+                          var _json = jQuery.parseJSON(data);                              
+                          if(_json[0]!=="err"){                                                               
+                             this.app.showMessge("Landing page updated Successfully!");                                  
+                          }
+                          else{                                  
+                              this.app.showAlert(_json[1],this.$el);
+
+                          }							                            
+                     },this));
+                },
                 renameLandingPage:function(obj){                    
                     var nt_name_input =  $(obj.target).parents(".edited").find("input");                                           
                     var workspace_head = this.current_ws.find(".camp_header");
@@ -188,12 +265,14 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                           }
                           else{                                  
                               this.app.showAlert(_json[1],this.$el);
-
                           }							  
                           $(obj.target).removeClass("saving");                              
                      },this));
                 },
                 publishPage:function(){
+                    if(this.editable==false){
+                        return false;
+                    }
                     this.app.showLoading("Publishing landing page...",this.$el);
                     var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'changeStatus',pageId:this.page_id,status:'P'})
@@ -203,7 +282,9 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                            if(!_json.err){
                                this.app.showMessge("Landing page is published.");
                                this.editable = false;                                
-                               this.init(true);                                 
+                               this.init(true);         
+                               this.parentWS.headBadge();   
+                               this.parentWS.getLandingPages();
                            }
                            else{
                                this.app.showAlert(_json.err1,$("body"),{fixed:true}); 
@@ -211,6 +292,9 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                    },this));
                 },
                 draftPage:function(){
+                    if(this.editable==true){
+                        return false;
+                    }
                     this.app.showLoading("Unpublishing landing page...",this.$el);
                     var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'changeStatus',pageId:this.page_id,status:'D'})
@@ -219,10 +303,11 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
                               this.app.showMessge("Landing page is draft.");
-                              this.editable = true;      
+                              this.editable = true;  
+                              this.meeEditor = false;
+                              this.init(true);         
                               this.parentWS.headBadge();   
-                              this.parentWS.getLandingPages();
-                              this.init(true);                                                              
+                              this.parentWS.getLandingPages();                                                                                   
                            }
                            else{
                               this.app.showAlert(_json[0],$("body"),{fixed:true}); 
@@ -264,10 +349,77 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
                 },
+                previewPage: function (isDialog) {                    
+                    var camp_obj = this.sub;                                        
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var previewArea = null;
+                    if(isDialog){
+                        var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
+                            css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                            headerEditable: false,
+                            headerIcon: 'dlgpreview',
+                            bodyCss: {"min-height": dialog_height + "px"}
+                        });
+                        previewArea = dialog.getBody();
+                    }
+                    else{
+                        previewArea = this.$("#mee_editor");
+                    }
+                    this.app.showLoading("Loading Preview...",previewArea );
+                    var preview_url =  this.app.decodeHTML(this.previewURL).replace("http","https");
+                    require(["common/templatePreview"], _.bind(function (templatePreview) {
+                        var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
+                        previewArea.html(tmPr.$el);
+                        if(!isDialog){
+                           tmPr.$("iframe").load(function(){
+                               $(this).height($(this).contents().height());
+                           })                           
+                        }
+                        tmPr.init();
+                    }, this));
+                },
+                linkPageDialog: function(){                    
+                    var dialog_title = "Link of Landing Page &quot;" + this.pageName + "&quot;";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "600px", "margin-left": "-300px"},
+                        bodyCss: {"min-height": "140px"},
+                        headerIcon: 'link'
+                    });
+                    var html = '<div style="margin-top:0px;" class="blockname-container">'
+                        html += '<div class="label-text">Page Link:</div>'
+                        html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'  
+                        html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.publishURL)+'" style="width:558px" readonly="readonly">'
+                        html += '</div></div>'
+                        html += '<div style="font-size: 12px;margin-top:10px">'
+                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";
+                        html += '<i>Press '+key+' + C to copy link.</i>'
+                        html += '</div> </div>'
+                        
+                        html = $(html);
+                        dialog.getBody().append(html);
+                        dialog.getBody().find("#page_link").select().focus();
+                        dialog.getBody().find("#page_link").mousedown(function(event){
+                            $(this).select().focus();
+                             event.stopPropagation();
+                             event.preventDefault();
+                        })
+                        
+                },
                 setMEEView:function(){
-                    var _html = this.landinpageHTML?$('<div/>').html(this.landinpageHTML).text().replace(/&line;/g,""):""; 
+                    var _html = "";
+                    
+                    if(this.landinpageHTML!==""){
+                        _html = this.landinpageHTML?$('<div/>').html(this.landinpageHTML).text().replace(/&line;/g,""):""; 
+                    }
+                    else{
+                        this.landinpageHTML = layout;
+                        _html = this.landinpageHTML;
+                    }
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app, _el:this.$("#mee_editor"), html:'' ,saveClick:_.bind(this.saveLandingPage,this),landingPage:true});                                    
+                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
+                            ,saveClick:_.bind(this.saveLandingPage,this),landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,
+                            changeTemplateClick: _.bind(this.templatesDialog,this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
@@ -361,6 +513,25 @@ define(['text!landingpages/html/landingpage.html','jquery.chosen','bms-tags'],
                        anchors.eq(1).removeClass('active');
                        this.status="D"
                     }
+                },
+                templatesDialog:function(){                                                       
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = this.app.showDialog({title: 'Choose New Template for landing page',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'template_gallery',
+                        bodyCss: {"min-height": dialog_height + "px"}
+                    });
+                    this.app.showLoading("Loading...",dialog.getBody());
+                    require(["landingpages/landingpage_templates"],_.bind(function(templates){
+                        var tmPr =  new templates({app:this.app,scrollElement:dialog.getBody(),dialog:dialog}); 
+                         dialog.getBody().html(tmPr.$el);
+                         tmPr.init();
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                   },this));
+                    
                 }
             });
         });
