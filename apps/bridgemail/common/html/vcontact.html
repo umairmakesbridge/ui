@@ -1,0 +1,115 @@
+<!-- template-container -->
+                  
+                
+                                      <div class="bmsgrid  ">
+                                        <div class="hDiv">
+                                          <div class="hDivBox">
+                                            <table cellspacing="0" cellpadding="0">
+                                            </table>
+                                          </div>
+                                        </div>
+                                        <div style="height: ;" class="bDiv">
+                                          <table cellspacing="0" cellpadding="0" border="0" id="camp_list_grid">
+                                            <tbody>
+                                            <a class="closebtn" style='z-index: 2;'></a>
+                                            
+                                            <tr class="erow" id="">
+                                            
+                                               
+                                                <td width="90px">
+                                                    <div class="img" style="margin-left:;">
+                                                       <span><%- this.getFirstAlphabet(_json) %></span>
+                                                    </div>
+                                                 </td>
+                                                    
+                                                
+                                                  <td width="100%"><div>
+                                                      <div class="name-type">
+                                                      
+                                                        <div class="title">
+                                                            <h3><a href=""><%- _json.firstName %>&nbsp;<%- _json.lastName %></a></h3>
+                                                            <% if(_json.salesStatus) { %>
+                                                        <a class="statusdd color3 vsalestatus"><%- _json.salesStatus %> <b class="caret"></b></a>
+                                                        <% } %>
+                                                         </div>
+                                                        
+                                                        <div class="clearfix"></div>
+                                                         <% if(_json.email) { %>
+														<span class="inf" style=""><i class="icon email"></i>
+                                                        <input type="text" value="<%- _json.email %>" onclick="this.focus();this.select()"></span>
+                                                        <% } %>
+                                                        
+                                                        
+                                                      </div>
+                                                    </div></td>
+                                                  
+                                                </tr>
+                                            
+                                            
+                                            
+                                            
+                                                <tr>
+                                                <td width="100%" colspan="2"><div>
+                                                      <div class="name-type">
+                                                      
+                                                      <div class=" tagscont"> 
+                                                        <ul>
+                                                          <% _.each(_json.tags.split(","),function(t){ %> 
+                                                          <li><a href="" class="tag"><%- this.app.decodeHTML(t) %></a> </li>
+                                                          <% },this)%> 
+                                                        </ul>
+                                                      </div>
+                                                      
+                                                      <% if(_json.company) { %>
+                                                      <span class="inf" style="margin-right:10px; margin-left:5px;"><i class="icon company"></i><input type="text" value="<%- _json.company %>" onclick="this.focus();this.select()"></span>
+                                                      <% }%>
+                                                      <% if(_json.telephone) { %>
+                                                    <span style="margin-left:6px;" class="inf "><i class="icon phone"></i><input type="text" value="<%- _json.telephone %>" onclick="this.focus();this.select()"> </span><% }%>
+                    <div class="clearfix"></div>
+                                                            
+                                                        
+                                                      
+                                                            <div style="margin-left:8px;display: none;" class="hotness">
+                                                                <span class="on"><strong class="pclr5 badge">4</strong></span>
+                                                                
+                                                            </div> <!--  hotness  --> 
+                                                            <div class="filterbar" style='display: none;'>
+                                                                <strong class="pclr5 badge">9</strong>
+                                                            </div>
+                                                            <% if(_json.score) { %>
+                                                            <div class="score" style="margin-left: 6px;">
+                                                                <i class="icon score"></i>
+                                                                <%- _json.score %>
+                                                            </div>
+                                                            <% }%>
+                                                            <div class="crms" style='display:none;'>
+                                                                <a class="" href=""><img alt="" src="img/nsicon2.png"></a>
+                                                                 <a class="" href=""><img alt="" src="img/inicon2.png"></a>
+                                                            </div>
+                                                         
+                                                         
+                                                         
+                                                      
+                                                         
+                                                        
+                                                      </div>
+                                                    </div></td>
+                                                
+                                                </tr>
+                                                
+                                    
+                                            
+                                            
+                                           
+                                           
+                                            </tbody>
+                                          </table>
+                                          <div style="display: none;" class="iDiv"></div>
+                                        </div>
+                                      </div>
+                                      
+                                         <div class="clearfix"></div>
+                                                         
+                                                          <a class="viewdetail ">View Detail</a>
+                                                         
+                                                         

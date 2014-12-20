@@ -72,6 +72,7 @@ function (template) {
                                                 if(curview.options.copycampsdialog){
                                                         curview.options.copycampsdialog.hide();
                                                         campview.getallcampaigns();
+                                                        campview.headBadge();
                                                 }
                                                 else{
                                                         curview.options.copycampdialog.hide();

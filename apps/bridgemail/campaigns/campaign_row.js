@@ -149,7 +149,7 @@ function (template,highlighter) {
                             this.sub.total_fetch = 0;
                            require(["campaigns/copycampaign"],_.bind(function(copycampaignPage){                                     
                                              var mPage = new copycampaignPage({camp:this.sub,camp_id:camp_id,app:this.app,copycampsdialog:dialog});
-                                             dialog.getBody().html(mPage.$el);
+                                             dialog.getBody().html(mPage.$el); 
                                              dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
                             },this));
 			},
@@ -246,7 +246,10 @@ function (template,highlighter) {
                                         //camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                         this.app.removeCache("campaigns");
                                         camp_obj.total_fetch = 0;
-                                        camp_obj.getallcampaigns();
+                                        //camp_obj.getallcampaigns();
+                                        this.$el.fadeOut(_.bind(function(){
+                                            this.$el.remove();
+                                         },this));
                                         camp_obj.headBadge();
                                          if($("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").length){
                                             var wp_id = $("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").attr('id').split("_")[2];

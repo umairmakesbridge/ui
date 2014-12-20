@@ -160,7 +160,7 @@ function (template,highlighter) {
                     },this));
                     this.sub.$("#html_editor").click();
                
-			},
+            },
             getFlagClass:function(){
                 var flag_class = '';
                 var chartIcon = '';
@@ -230,7 +230,10 @@ function (template,highlighter) {
                                         //camp_obj.$el.find("#area_copy_campaign .bmsgrid").remove();
                                         this.app.removeCache("campaigns");
                                         camp_obj.total_fetch = 0;
-                                        camp_obj.$el.find('.step2 .refresh_btn').click();
+                                        //camp_obj.$el.find('.step2 .refresh_btn').click();
+                                        this.$el.fadeOut(_.bind(function(){
+                                            this.$el.remove();
+                                         },this));
                                          if($("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").length){
                                             var wp_id = $("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").attr('id').split("_")[2];
                                             $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
