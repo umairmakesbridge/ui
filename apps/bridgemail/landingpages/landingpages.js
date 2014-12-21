@@ -62,6 +62,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         countcontainer: 'no_of_camps'
                     });
                     
+                    this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
+                    
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
                     

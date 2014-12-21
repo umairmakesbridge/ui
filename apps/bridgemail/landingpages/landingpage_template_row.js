@@ -14,7 +14,7 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                  */
                 events: {
                     'click .use-page': 'usePage',
-                    'click .edit-page': 'openPage',
+                    'click .edit-page': 'previewPage',
                     "click .preview-page": 'previewPage',
                     'click .taglink': 'tagClick'
                 },

@@ -46,6 +46,7 @@ function (template) {
                                          this.app.showMessge("Copy created successfully.");
                                          this.parent.sub.headBadge();   
                                          this.parent.sub.getLandingPages();
+                                         this.app.mainContainer.openLandingPage({"id":res[1],"checksum":res[2],"parent":this.parent.sub,editable:true});        
                                      }
                              },this));
                      }

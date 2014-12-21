@@ -12,7 +12,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                  */
                 events: {                    
                     "click .published" : "publishPage",
-                    "click .draft" : "draftPage",
+                    "click .draft" :     "draftPage",
                     "click .btn-link" : "linkPageDialog"
                 },
                 /**
