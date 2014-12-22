@@ -20,7 +20,8 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     "click .unpublish-page": 'unpublishPage',
                     'click .delete-page': 'deletePageDialoge',
                     'click .link-page' : 'linkPageDialog',
-                    'click .taglink': 'tagClick'
+                    'click .taglink': 'tagClick',
+                    'click .cstatus': 'categoryClick'
                 },
                 /**
                  * Initialize view - backbone
@@ -257,8 +258,12 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                 },
                 tagClick: function (obj) {
                     this.sub.taglinkVal = true;
+                    this.sub.actionType = "T";
                     this.tagTxt = $(obj.currentTarget).text();
                     this.app.initSearch(obj, this.sub.$el.find("#list-search"));
+                },
+                categoryClick: function(obj){
+                    this.trigger('categorySearch',$(obj.target).text());                    
                 }
 
             });

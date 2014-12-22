@@ -462,11 +462,12 @@ define([
             }
             return status;
         },
-        showTags: function (tags) {
+        showTags: function (tags,type) {
             var tag_array = tags.split(",");
             var tag_html = "<ul>";
+            var type = type ? type: "";
             $.each(tag_array, function (key, val) {
-                tag_html += "<li><a class='taglink'>" + val + "</a></li>";
+                tag_html += "<li title='Click to view "+type+" with \"<b>"+val+"</b>\" tag.' class='showtooltip'><a class='taglink'>" + val + "</a></li>";
             });
             tag_html += "</ul>";
             return tag_html;

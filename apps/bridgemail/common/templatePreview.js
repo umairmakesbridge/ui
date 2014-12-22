@@ -58,13 +58,14 @@ define(['text!common/html/templatePreview.html', 'common/ccontacts', 'jquery.ich
                     this.$("#campaign-prev-select").chosen();
 
                     // IFrame Loaded Successfully 
-                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>')
+                    this.$el.parents('.modal').find('.modal-header #dialog-title').append('<div class="loading-wheel" style="display: inline-block;left: 0.1%;position: relative;top: 0;z-index: 111;"></div>');
+                    if(typeof(this.options.prevFlag)!=="undefined"){
+                        this.$('#temp-camp-previewbar').delay(600).slideDown(500);
+                    }
                     this.$("#email-template-iframe").load(_.bind(function () {
-                        this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();
-                        if(typeof(this.options.prevFlag)!=="undefined"){
-                            this.$('#temp-camp-previewbar').delay(1000).slideDown(500);
-                        }
+                        this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').hide();                        
                     }, this));
+                    
                     //this.loadTemplates();
                     if (this.options.prevFlag === 'C')
                         this.loadContact();

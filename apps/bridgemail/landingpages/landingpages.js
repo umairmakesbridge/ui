@@ -7,7 +7,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     "click .refresh_mypages": 'refreshListing',
                     "click .refresh_templates":'refreshTemplateListing',
                     "click .sortoption_expand": "toggleSortOption",
-                    "click li.stattype": 'filterListing'
+                    "click li.stattype": 'filterListing'                    
                 },
                 initialize: function () {
                     this.template = _.template(template);
@@ -203,6 +203,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     if(this.actionType){
                         _data['actionType'] = this.actionType;                        
                     }
+                    else {
+                        delete  _data['actionType'];
+                    }
                     if (this.searchTxt) {
                         _data['searchText'] = this.searchTxt;
                     }                    
@@ -225,7 +228,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                             this.showTotalCount(collection.totalCount);                            
 
                             _.each(data1.models, _.bind(function (model) {
-                                this.$el.find('#landingpages_grid tbody').append(new pageRowView({model: model, sub: this}).el);
+                                var lpRow = new pageRowView({model: model, sub: this});
+                                this.$el.find('#landingpages_grid tbody').append(lpRow.el);
+                                lpRow.on('categorySearch',_.bind(this.searchByCategory,this));
                             }, this));
                             
                             /*-----Remove loading------*/
@@ -254,6 +259,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                 filterListing: function(e){                    
                     var li = $.getObj(e,"li");                                        
                     if(li.hasClass("active")==false){
+                        this.actionType = "";
                         this.status = li.attr("data-search");                        
                         this.$("#template_search_menu li").removeClass("active");
                         li.addClass("active");                                                
@@ -271,6 +277,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         this.ws_header.find(".c-current-status li").removeClass("active");
                         li.addClass("active");
                         if(li.attr("data-search")!=="T"){
+                            this.actionType = "";
                             this.status = li.attr("data-search");                                                                                                                      
                             this.$("#area_mylandingpages").show();
                             this.$("#area_templatelandingpages").hide();
@@ -342,7 +349,13 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                                         
                     if (this.templateSearchTxt) {
                         _data['searchText'] = this.templateSearchTxt;
-                    }                    
+                    }              
+                    if(this.actionTypeTemplate){
+                        _data['actionType'] = this.actionTypeTemplate;                        
+                    }
+                    else {
+                        delete  _data['actionType'];
+                    }
                     _data['bucket'] = 20;
 
                     this.loadingpages_request = this.pagesTemplateCollection.fetch({data: _data,
@@ -361,7 +374,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                             this.showTotalCountTemplate(collection.totalCount);                            
 
                             _.each(data1.models, _.bind(function (model) {
-                                this.$el.find('#templates_landingpages_grid tbody').append(new tplPageRowView({model: model, sub: this}).el);
+                                var lpRow = new tplPageRowView({model: model, sub: this});
+                                this.$el.find('#templates_landingpages_grid tbody').append(lpRow.el);
+                                lpRow.on('categoryTemplateSearch',_.bind(this.searchTemplateByCategory,this));
                             }, this));
                                                       
                             
@@ -385,12 +400,13 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     }); 
                 },
                 searchPages:function(o, txt){                    
-                    this.searchTxt = txt;
+                    this.searchTxt = txt;                    
                     this.total_fetch = 0;                    
                     if (this.taglinkVal) {
                         this.getLandingPages();
                         this.taglinkVal = false;
                     } else {
+                        this.actionType = "";
                         var keyCode = this.app.validkeysearch(o);
                         if (keyCode) {
                             if ($.trim(this.searchTxt).length > 0) {
@@ -410,7 +426,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                 },
                 clearSearchPages: function(){
                     this.searchTxt = '';
-                    this.total_fetch = 0;                    
+                    this.total_fetch = 0;  
+                    this.actionType = "";
                     this.getLandingPages();
                 },               
                 searchTemplatePages:function(o, txt){                    
@@ -420,6 +437,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         this.getTemplatesLandingPages();
                         this.taglinkVal = false;
                     } else {
+                        this.actionTypeTemplate = "";
                         var keyCode = this.app.validkeysearch(o);
                         if (keyCode) {
                             if ($.trim(this.templateSearchTxt).length > 0) {
@@ -439,7 +457,24 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                 },
                 clearSearchTemplatePages: function(){
                     this.templateSearchTxt = '';
+                    this.actionTypeTemplate = "";
                     this.total_template_fetch = 0;                    
+                    this.getTemplatesLandingPages();
+                },
+                searchByCategory:function(text){                    
+                    this.actionType = "C";
+                    this.searchTxt = $.trim(text);
+                    this.total_fetch = 0; 
+                    this.$("#pageslistsearch input").val(this.searchTxt);
+                    this.$("#pageslistsearch #clearsearch").show();
+                    this.getLandingPages();
+                },
+                searchTemplateByCategory : function(text){
+                    this.actionTypeTemplate = "C";
+                    this.templateSearchTxt = $.trim(text);
+                    this.total_template_fetch = 0; 
+                    this.$("#pagestemplatelistsearch input").val(this.templateSearchTxt);
+                    this.$("#pagestemplatelistsearch #clearsearch").show();
                     this.getTemplatesLandingPages();
                 }
 

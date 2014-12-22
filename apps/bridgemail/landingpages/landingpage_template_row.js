@@ -16,7 +16,8 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                     'click .use-page': 'usePage',
                     'click .edit-page': 'previewPage',
                     "click .preview-page": 'previewPage',
-                    'click .taglink': 'tagClick'
+                    'click .taglink': 'tagClick',
+                    'click .cstatus': 'categoryClick'
                 },
                 /**
                  * Initialize view - backbone
@@ -177,8 +178,12 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                 },
                 tagClick: function (obj) {
                     this.sub.taglinkVal = true;
+                    this.sub.actionTypeTemplate = "T";
                     this.tagTxt = $(obj.currentTarget).text();
                     this.app.initSearch(obj, this.sub.$el.find("#list-search"));
+                },
+                categoryClick: function(obj){
+                     this.trigger('categoryTemplateSearch',$(obj.target).text());            
                 }
 
             });
