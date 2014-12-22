@@ -17,7 +17,8 @@ function (template,moment,app) {
               'click .page-view':'loadPageViewsDialog',
               'click .metericon':'showProgressMeter',
               'click .closebtn':'closeProgressMeter',
-              'click .click-detail':'loadClickViewDialog'
+              'click .click-detail':'loadClickViewDialog',
+              'click .contact-name':'singleContact'
             },
             initialize: function () {
                 _.bindAll(this, 'getRightText', 'pageClicked');
@@ -34,6 +35,7 @@ function (template,moment,app) {
                  this.clickCount = 0;
                  this.isNurtureTrack = false;
                  this.logTime = "";
+                 this.isVisitcontactClick = false;
                  this.render();
             },
             render: function () {
@@ -426,5 +428,28 @@ function (template,moment,app) {
                        return false;
                 
             },
+            singleContact : function(obj){
+                 obj.stopPropagation();
+                             obj.preventDefault();
+               var vicon = $.getObj(obj, "i");
+                var ele_offset = vicon.offset();
+            var ele_width = vicon.width();
+            var ele_height = vicon.height();
+             var top = '';
+             $('body').find('#contact-vcard').remove();
+             var vcontact = $('<div id="contact-vcard" class="custom_popup activities_tbl contact_dd"></div>');
+             $('body').append(vcontact);
+             vcontact.click(function(event){ event.stopPropagation();event.preventDefault();});
+               require(["common/vcontact"],_.bind(function(page){                                     
+                        var visitcontact = new page({parent:this,app:this.app,campNum:this.camp_id,subNum:this.model.get('subNum.encode')});
+                         vcontact.append(visitcontact.$el);
+                         top = ele_offset.top + ele_height + 11;
+                         var left = ele_offset.left - 13;
+                         left = Math.round(left);
+                         $(vcontact).css({'top':top,'left':left,'z-index':'100'});
+                         this.isVisitcontactClick =true;
+                    },this));
+                
+            }
         });    
 });

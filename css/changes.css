@@ -3712,6 +3712,171 @@ ul.autobot-headbadge li.clickable_badge a:hover{
   }
 }
 /*
+----------------------Summary Visitor Contact-----------------------
+*/
+.contact_dd {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 2px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    right: 246px;
+    top: 65px;
+    width: 420px;
+
+	-webkit-border-radius: 2px ;
+	-moz-border-radius:  2px;
+	border-radius:  2px;
+	box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+}
+
+.contact_dd:before {
+    border-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0) #badaec;
+    border-style: solid;
+    border-width: 8px;
+    bottom: auto;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: 20px;
+    top: -16px;
+}
+.activities_tbl .bmsgrid div.bDiv td > div.img {
+    background: none repeat scroll 0 0 #5b9ac1;
+    color: #fff;
+    font-size: 24px;
+    text-align: center;
+    border-radius: 2px;
+    height: 56px;
+    width: 56px;
+}
+.activities_tbl .bmsgrid div.bDiv td > div.img span {
+    color: #fff;
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 56px;
+    text-align: center;
+}
+.contact_dd .viewdetail {
+    background: none repeat scroll 0 0 #eff7fb;
+    display: block;
+    margin: 10px 0 0;
+    padding: 5px 10px 5px 5px;
+    text-align: center;
+	
+}
+.activities_tbl .bmsgrid .name-type span.inf .email {
+    background: url("../img/email18.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.activities_tbl .bmsgrid .name-type span.inf input {
+    border: 0 none;
+    color: #738a9a;
+    float: left;
+    font-size: 13px;
+    height: 18px;
+    line-height: 18px;
+    margin: 0;
+    padding: 0;
+}
+.activities_tbl .bmsgrid .name-type span.inf {
+    color: #738a9a;
+    display: block;
+    float: left;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0 5px 5px 0;
+}
+.activities_tbl .bmsgrid .name-type span.inf .icon {
+    display: block;
+    float: left;
+    height: 18px;
+    margin-right: 3px !important;
+    width: 18px;
+}
+.contact_result .activities_tbl .bmsgrid .bDiv tr td:last-child div, .activities_tbl.contact_dd .bmsgrid .bDiv tr td:last-child div {
+    margin: 0;
+    min-height: 0;
+}
+.hotness, .satisfaction, .voicemail {
+    float: left;
+    margin: 0 10px 0 0;
+     background-position: center bottom;
+    position: relative;
+}
+.hotness span.on .badge, .filterbar .badge {
+    background: none repeat scroll 0 0 #eff7fb;
+    display: block;
+    font-size: 10px;
+    left: 10px;
+    padding: 0 5px;
+    position: absolute;
+    top: -2px;
+}
+.hotness span {
+    background: url("../img/flame.png") no-repeat scroll center top rgba(0, 0, 0, 0);
+}
+.activities_tbl .bmsgrid .name-type h3, .activities_tbl .bmsgrid .name-type h3 > a {
+    color: #02afef;
+    float: left;
+    font-size: 16px !important;
+    line-height: 18px;
+    margin: 0;
+    padding: 2px;
+}
+.activities_tbl .bmsgrid .name-type span.inf .company {
+    background: url("../img/company.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.contact_result .activities_tbl .bmsgrid .tagscont ul li a, .activities_tbl.contact_dd .bmsgrid .tagscont ul li a {
+    background: none repeat scroll 0 0 #eff7fb;
+     color: #01aeee;
+}
+.contact_sum .contact_result .bmsgrid .tagscont, .contact_sum .contact_result .bmsgrid .tagscont ul, .contact_result .activities_tbl .bmsgrid .tagscont, .contact_result .activities_tbl .bmsgrid .tagscont ul, .activities_tbl.contact_dd .bmsgrid .tagscont, .activities_tbl.contact_dd .bmsgrid .tagscont ul {
+    height: auto;
+    padding: 0;
+    width: 100%;
+}
+.contact_result .activities_tbl .bmsgrid .tagscont ul li a:hover, .activities_tbl.contact_dd .bmsgrid .tagscont ul li a:hover {
+    background: none repeat scroll 0 0 #19baf7;
+    color: #fff;
+}
+.contact_result .activities_tbl .bmsgrid div.bDiv td, .activities_tbl.contact_dd .bmsgrid div.bDiv td {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.bmsgrid div.bDiv tr:hover {
+    box-shadow: none;
+}
+.activities_tbl .bmsgrid .name-type span.inf .phone {
+    background: url("../img/phoneicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.contact_result .activities_tbl .bmsgrid .bDiv tr td .filterbar, .activities_tbl.contact_dd .bmsgrid .bDiv tr td .filterbar {
+    display: block;
+    float: left;
+    margin: 0 12px 0 20px !important;
+}
+.filterbar {
+    background: url("../img/filtericon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+    float: left;
+    margin-left: 15px;
+    padding-left: 20px !important;
+}
+.hotness span.on .badge, .filterbar .badge {
+    background: none repeat scroll 0 0 #eff7fb;
+    display: block;
+    font-size: 10px;
+    left: 10px;
+    padding: 0 5px;
+    position: absolute;
+    top: -2px;
+}
+.activities_tbl .filterbar {
+    float: left;
+    height: 22px;
+    position: relative;
+    margin-left: 15px;
+}
+/*
 -------------- Template view ----------
 */
 .left-wrap{
