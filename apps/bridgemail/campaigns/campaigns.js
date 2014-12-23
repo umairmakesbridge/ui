@@ -225,6 +225,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                     this.searchTxt = '';
                     this.taglinkVal = false;
                     this.timeout = null;
+                    this.total_Count = null;
                     var camp_obj = this;
                     camp_obj.getallcampaigns();
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
@@ -314,7 +315,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                             this.app.showLoading(false, this.$("#target-camps"));
                             //this.showTotalCount(response.totalCount);
                             this.$el.find("#total_templates .badge").html(collection.totalCount);
-
+                            this.total_Count = collection.totalCount;
                             this.showTotalCount(collection.totalCount);
                             //this.$campaginLoading.hide();
 
@@ -509,18 +510,23 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                     return false;
                                 }
                                 var header_title = active_ws.find(".camp_header .edited");
-                                header_title.find('ul').remove();
+                                header_title.find('div.workspace-field').remove();
+                                
+                                var sentClass = (parseInt(allStats['sent']) > 0) ? "showtooltip showhand" : "defaulthand";
+                                var pendingClass =  (parseInt(allStats['pending']) > 0) ? "showtooltip showhand" : "defaulthand";
+                                var scheduledClass = (parseInt(allStats['scheduled']) > 0) ? "showtooltip showhand" : "defaulthand" ;
+                                var draftClass = (parseInt(allStats['draft']) > 0) ? "showtooltip showhand" : "defaulthand" ;
                                 var stats = '<ul class="c-current-status">';
                                 
-                                stats += '<li search="C" class="showtooltip '+ this.app.getClickableClass(allStats['sent']) +'" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sent'] + '</span>Sent</li>';
-                                stats += '<li search="P" class="showtooltip '+ this.app.getClickableClass(allStats['pending']) +'" data-original-title="Click to view pending campaigns"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" >' + allStats['pending'] + '</span>Pending</li>';
-                                stats += '<li search="S" class="showtooltip '+ this.app.getClickableClass(allStats['scheduled']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
-                                stats += '<li search="D" class="showtooltip '+ this.app.getClickableClass(allStats['draft']) +'" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
+                                stats += '<li search="C" class="'+sentClass+' '+ this.app.getClickableClass(allStats['sent']) +'" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sent'] + '</span>Sent</li>';
+                                stats += '<li search="P" class="'+pendingClass+' '+ this.app.getClickableClass(allStats['pending']) +'" data-original-title="Click to view pending campaigns"><span class="badge pclr6 showtooltip stattype topbadges" tabindex="-1" search="P" >' + allStats['pending'] + '</span>Pending</li>';
+                                stats += '<li search="S" class="'+scheduledClass+' '+ this.app.getClickableClass(allStats['scheduled']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
+                                stats += '<li search="D" class="'+draftClass+' '+ this.app.getClickableClass(allStats['draft']) +'" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
                                 stats += '</ul>';
                                 header_title.append(stats);
+                                
                                 $(".c-current-status li").click(_.bind(this.findCampaigns, this));
                                 header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
                 },
@@ -531,6 +537,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                 createCampaign:function(fieldText, _json){                                 
                     if(this.headBadge){
                         this.headBadge();
+                       this.total_fetch = 0;
+                       this.getallcampaigns();
                     }
                     this.app.mainContainer.createCampaign(fieldText, _json);
                }

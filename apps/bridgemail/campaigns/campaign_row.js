@@ -251,6 +251,7 @@ function (template,highlighter) {
                                             this.$el.remove();
                                          },this));
                                         camp_obj.headBadge();
+                                        camp_obj.$el.find("#total_templates .badge").html(parseInt(camp_obj.total_Count) - 1);
                                          if($("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").length){
                                             var wp_id = $("#wstabs li[workspace_id=campaign_"+this.model.get('campNum.encode')+"]").attr('id').split("_")[2];
                                             $("#wp_li_"+wp_id+",#workspace_"+wp_id).remove();
