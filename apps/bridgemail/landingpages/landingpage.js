@@ -69,16 +69,18 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                        this.$(".status_tgl .draft").attr("data-original-title","Mark as Draft");
                    }
                    var deleteIcon = $('<a class="icon delete showtooltip" title="Delete Landing Page"></a>');
-                   
+                   var previewIconLP = $('<a class="icon preview showtooltip" title="Preview Page"></a>');  
                    var playIcon = $('<a class="icon play24 showtooltip" title="Publish Landing Page" style="'+draftStatus+'"></a>');
                    var pauseIcon = $('<a class="icon pause24 showtooltip" title="Un publish Landing Page" style="'+publishStatus+'"></a>');
-                   var action_icon = $('<div class="pointy"></div>")');                     
+                   var action_icon = $('<div class="pointy"></div>")');                                        
                    action_icon.append(pauseIcon);
                    action_icon.append(playIcon);
+                   this.ws_header.find("h2").append(previewIconLP);
                    this.ws_header.find(".pointy").remove();
                    action_icon.append(deleteIcon);
                    
-                   deleteIcon.click(_.bind(this.deletePageDialog,this))                                      
+                   deleteIcon.click(_.bind(this.deletePageDialog,this));
+                   
                    this.current_ws.find("h2").append(action_icon); 
                     if(this.current_ws.find("#workspace-header").hasClass("header-edible-campaign")===false){
                         this.current_ws.find(".camp_header #workspace-header").addClass("showtooltip").attr("title","Click to rename").click(_.bind(this.showHideTitle,this));                   
@@ -97,7 +99,8 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     this.current_ws.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     playIcon.click(_.bind(this.publishPage,this));
                     pauseIcon.click(_.bind(this.draftPage,this));
-                                      
+                    previewIconLP.click(_.bind(function(){this.previewPage(true)},this));
+                    
                     this.loadData();
                   
                 },
@@ -349,13 +352,12 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
                 },
-                previewPage: function (isDialog) {                    
-                    var camp_obj = this.sub;                                        
+                previewPage: function (isDialog) {                                                                                
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
                     var previewArea = null;
                     if(isDialog){
-                        var dialog = camp_obj.app.showDialog({title: 'Preview of landing page &quot;' + this.model.get('name') + '&quot;',
+                        var dialog = this.app.showDialog({title: 'Preview of landing page &quot;' + this.pageName + '&quot;',
                             css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                             headerEditable: false,
                             headerIcon: 'dlgpreview',

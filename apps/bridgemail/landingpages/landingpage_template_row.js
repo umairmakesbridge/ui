@@ -16,7 +16,8 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                     'click .use-page': 'usePage',
                     'click .edit-page': 'previewPage',
                     "click .preview-page": 'previewPage',
-                    'click .taglink': 'tagClick'
+                    'click .taglink': 'tagClick',
+                    'click .cstatus': 'categoryClick'
                 },
                 /**
                  * Initialize view - backbone
@@ -75,8 +76,17 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                  */
                 initControls: function () {
                     if (this.sub.templateSearchTxt) {
-                        this.$(".edit-page").highlight($.trim(this.sub.templateSearchTxt));
-                        this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                        if(this.sub.actionTypeTemplate=="T"){
+                            this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                        }
+                        else if(this.sub.actionTypeTemplate=="C"){
+                            this.$(".cstatus").highlight($.trim(this.sub.templateSearchTxt));
+                        }
+                        else {                             
+                            this.$(".edit-page").highlight($.trim(this.sub.templateSearchTxt));
+                            this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                            this.$(".cstatus").highlight($.trim(this.sub.templateSearchTxt));
+                        }
                     } else {
                         this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                     }
@@ -177,8 +187,12 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                 },
                 tagClick: function (obj) {
                     this.sub.taglinkVal = true;
+                    this.sub.actionTypeTemplate = "T";
                     this.tagTxt = $(obj.currentTarget).text();
                     this.app.initSearch(obj, this.sub.$el.find("#list-search"));
+                },
+                categoryClick: function(obj){
+                     this.trigger('categoryTemplateSearch',$(obj.target).text());            
                 }
 
             });
