@@ -6,15 +6,14 @@
  * Dependency: Contact Card HTML
  */
 
-define(['text!common/html/vcontact.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!common/html/vcontact.html','jquery.highlight', 'bms-tags'],
+function (template,highlighter,tags) {
         'use strict';
         return Backbone.View.extend({
             tagName:'div',
             
             events: {
               'click .view-profile , .viewdetail':"openContact",
-              //'click .page-view':'loadPageViewsDialog',
               'click .vsalestatus':'selectSalesStatus',
               'click .closebtn':'removeCard'
              
@@ -25,21 +24,13 @@ function (template,highlighter) {
                  this.parent = this.options.parent;
                  this.app = this.options.app;
                  this.sub_id = this.options.subNum;
+                 this.jSon = '';
                  this.render();
             },
             render: function () {
                  
                 this.loadContact();
                 this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
-                //this.template.id();
-                
-                //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
-                /* if(this.parent.searchText){
-                    this.$(".view-profile").highlight($.trim(this.parent.searchText));
-                    this.$(".tag").highlight($.trim(this.parent.searchText));
-                }else{
-                    this.$(".tag").highlight($.trim(this.parent.searchTags));
-                }*/
             },
             loadContact : function(){
                  var _this = this;
@@ -57,34 +48,8 @@ function (template,highlighter) {
                             
                            _this.$el.html(_this.template({_json: _json}));
                         }
-                        /*Contact Name on Header*/
-                        /*if (_json.firstName !== "" || _json.lastName !== "")
-                        {
-                            _this.$el.parents(".ws-content").find("#workspace-header").html(_json.firstName + " " + _json.lastName);
-                        } else {
-                            _this.$el.parents(".ws-content").find("#workspace-header").html(_json.email);
-                        }*/
-                        
-                        /*var create_date = moment(_this.app.decodeHTML(_json.creationDate), 'YYYY-M-D H:m');
-                        _this.$(".s-date").html(create_date.date());
-                        _this.$(".s-month-year").html("<strong>" + _this.app.getMMM(create_date.month()) + "</strong> " + create_date.year());
-                        _this.sub_fields = _json;
-                        
-                        if(_json.score !== '0'){
-                            _this.$('.score').html('<i class="icon score"></i>+<span class="score-value">'+_json.score+'</span>');
-                        }else{
-                            _this.$('.score').html('<i class="icon score"></i>&nbsp;<span class="score-value">0</span>');
-                        }*/
-                        //_this.showTags();
-                        //_this.showFields();
                     })
                 
-            },
-            openContact:function(event){
-                event.stopPropagation();
-                event.preventDefault();
-                this.removeCard();
-                this.app.mainContainer.openSubscriber(this.sub_id);
             },
             getFirstAlphabet : function(json){
                 var sub_name='';

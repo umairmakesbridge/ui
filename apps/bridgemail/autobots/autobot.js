@@ -125,14 +125,17 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 },
                 showPageViews: function(ev) {
                     var that = this;
+                    var sentAt ='';
                     var clickType;
                    if($(ev.target).hasClass('show-sent-views')){
                         clickType = "sent";
-                        var status = "P";
+                        var status = "S";
+                        sentAt = "Sent at";
                         var dialog_title = this.model.get("label") + " - Sent Population" ;
                     }else{
                         var status = "P";
                         clickType = "pending";
+                        sentAt = "Scheduled for";
                         var dialog_title = this.model.get("label") + " - Pending Population" ;
                     } 
                     
@@ -140,8 +143,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                            var camp_id=this.model.get('actionData')[0]['campNum.encode'];
                                         this.options.app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
                                     }
-                    return;
-                    
+                    //return;
+                    else{
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-182;
                     var dialog = that.options.app.showDialog({
@@ -159,8 +162,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         var objContacts = new Contacts({sentAt:sentAt,app: that.options.app,status:status, botId: botId, type: 'autobots',dialogHeight:dialog_height});
                         dialog.getBody().html(objContacts.$el);
                         that.options.app.showLoading(false, dialog.getBody());
-
                     });
+                   }
                 },
                 deleteAutobot: function(where, id, loc) {
                     var that = this;

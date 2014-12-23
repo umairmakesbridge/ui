@@ -3834,12 +3834,12 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 }
 .contact_sum .contact_result .bmsgrid .tagscont, .contact_sum .contact_result .bmsgrid .tagscont ul, .contact_result .activities_tbl .bmsgrid .tagscont, .contact_result .activities_tbl .bmsgrid .tagscont ul, .activities_tbl.contact_dd .bmsgrid .tagscont, .activities_tbl.contact_dd .bmsgrid .tagscont ul {
     height: auto;
-    padding: 0;
     width: 100%;
 }
 .contact_result .activities_tbl .bmsgrid .tagscont ul li a:hover, .activities_tbl.contact_dd .bmsgrid .tagscont ul li a:hover {
     background: none repeat scroll 0 0 #19baf7;
     color: #fff;
+    cursor:default;
 }
 .contact_result .activities_tbl .bmsgrid div.bDiv td, .activities_tbl.contact_dd .bmsgrid div.bDiv td {
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);

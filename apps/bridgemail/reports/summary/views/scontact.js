@@ -439,14 +439,16 @@ function (template,moment,app) {
              $('body').find('#contact-vcard').remove();
              var vcontact = $('<div id="contact-vcard" class="custom_popup activities_tbl contact_dd"></div>');
              $('body').append(vcontact);
+             top = ele_offset.top + ele_height + 11;
+             var left = ele_offset.left - 13;
+             left = Math.round(left);
+             $(vcontact).css({'top':top,'left':left,'z-index':'100','min-height': '170px'});
+             this.app.showLoading("Loading Contact Details...", vcontact);
              vcontact.click(function(event){ event.stopPropagation();event.preventDefault();});
                require(["common/vcontact"],_.bind(function(page){                                     
                         var visitcontact = new page({parent:this,app:this.app,campNum:this.camp_id,subNum:this.model.get('subNum.encode')});
-                         vcontact.append(visitcontact.$el);
-                         top = ele_offset.top + ele_height + 11;
-                         var left = ele_offset.left - 13;
-                         left = Math.round(left);
-                         $(vcontact).css({'top':top,'left':left,'z-index':'100'});
+                         vcontact.html(visitcontact.$el);
+                         
                          this.isVisitcontactClick =true;
                     },this));
                 
