@@ -76,8 +76,17 @@ define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highligh
                  */
                 initControls: function () {
                     if (this.sub.templateSearchTxt) {
-                        this.$(".edit-page").highlight($.trim(this.sub.templateSearchTxt));
-                        this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                        if(this.sub.actionTypeTemplate=="T"){
+                            this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                        }
+                        else if(this.sub.actionTypeTemplate=="C"){
+                            this.$(".cstatus").highlight($.trim(this.sub.templateSearchTxt));
+                        }
+                        else {                             
+                            this.$(".edit-page").highlight($.trim(this.sub.templateSearchTxt));
+                            this.$(".taglink").highlight($.trim(this.sub.templateSearchTxt));
+                            this.$(".cstatus").highlight($.trim(this.sub.templateSearchTxt));
+                        }
                     } else {
                         this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                     }

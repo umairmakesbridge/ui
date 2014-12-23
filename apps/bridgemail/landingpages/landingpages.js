@@ -201,10 +201,10 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         delete  _data['status'];
                     }
                     if(this.actionType){
-                        _data['actionType'] = this.actionType;                        
+                        _data['searchType'] = this.actionType;                        
                     }
                     else {
-                        delete  _data['actionType'];
+                        delete  _data['searchType'];
                     }
                     if (this.searchTxt) {
                         _data['searchText'] = this.searchTxt;
@@ -310,7 +310,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong><b>' + statusType + ' </b>';
 
                     if (this.searchTxt) {
-                        this.$("#total_templates").html(text_count + _text + " found containing text '<b>" + this.searchTxt + "</b>'");
+                        var typeText = "<u>text</u>";
+                        if(this.actionType=="C"){
+                            typeText = "<u>category</u>";
+                        }
+                        else if(this.actionType=="T"){
+                            typeText = "<u>tag</u>";
+                        }
+                        this.$("#total_templates").html(text_count + _text + " found containing "+typeText+" '<b>" + this.searchTxt + "</b>'");
                     }
                     else {
                         this.$("#total_templates").html(text_count + _text);
@@ -323,7 +330,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
 
                     if (this.templateSearchTxt) {
-                        this.$("#total_templates_pages").html(text_count + _text + " found containing text '<b>" + this.templateSearchTxt + "</b>'");
+                        var typeText = "<u>text</u>";
+                        if(this.actionTypeTemplate=="C"){
+                            typeText = "<u>category</u>";
+                        }
+                        else if(this.actionTypeTemplate=="T"){
+                            typeText = "<u>tag</u>";
+                        }
+                        this.$("#total_templates_pages").html(text_count + _text + " found containing "+typeText+" '<b>" + this.templateSearchTxt + "</b>'");
                     }
                     else {
                         this.$("#total_templates_pages").html(text_count + _text);
@@ -351,14 +365,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                         _data['searchText'] = this.templateSearchTxt;
                     }              
                     if(this.actionTypeTemplate){
-                        _data['actionType'] = this.actionTypeTemplate;                        
+                        _data['searchType'] = this.actionTypeTemplate;                        
                     }
                     else {
-                        delete  _data['actionType'];
+                        delete  _data['searchType'];
                     }
                     _data['bucket'] = 20;
 
-                    this.loadingpages_request = this.pagesTemplateCollection.fetch({data: _data,
+                    this.loadingpages_template_request = this.pagesTemplateCollection.fetch({data: _data,
                         success: _.bind(function (data1, collection) {
                             // Display items
                             this.$("#templates_landingpages_grid tbody").find('.loading-campagins').remove();

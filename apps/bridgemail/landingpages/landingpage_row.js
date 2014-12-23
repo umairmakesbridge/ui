@@ -21,7 +21,7 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     'click .delete-page': 'deletePageDialoge',
                     'click .link-page' : 'linkPageDialog',
                     'click .taglink': 'tagClick',
-                    'click .cstatus': 'categoryClick'
+                    'click .category-click': 'categoryClick'
                 },
                 /**
                  * Initialize view - backbone
@@ -102,8 +102,17 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                  */
                 initControls: function () {
                     if (this.sub.searchTxt) {
-                        this.$(".edit-page").highlight($.trim(this.sub.searchTxt));
-                        this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                        if(this.sub.actionType=="T"){
+                            this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                        }
+                        else if(this.sub.actionType=="C"){
+                            this.$(".category-click").highlight($.trim(this.sub.searchTxt));
+                        }
+                        else {                             
+                            this.$(".edit-page").highlight($.trim(this.sub.searchTxt));
+                            this.$(".taglink").highlight($.trim(this.sub.searchTxt));
+                            this.$(".category-click").highlight($.trim(this.sub.searchTxt));
+                        }
                     } else {
                         this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                     }
