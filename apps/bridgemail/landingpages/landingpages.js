@@ -187,7 +187,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     }
                     else {
                         this.offset = parseInt(this.offset) + this.offsetLength;
-                        this.$("#landingpages_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more landing pages..</p></div></td></tr>');
+                        this.$("#landingpages_grid tbody").append('<tr class="loading-campagins"><td colspan="4"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more landing pages..</p></div></td></tr>');
                     }
                     if (this.loadingpages_request)
                     {
@@ -353,7 +353,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!land
                     }
                     else {
                         this.offset = parseInt(this.offset) + fcount;
-                        this.$("#templates_landingpages_grid tbody").append('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more template landing pages..</p></div></td></tr>');
+                        this.$("#templates_landingpages_grid tbody").append('<tr class="loading-campagins"><td colspan="2"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more template landing pages..</p></div></td></tr>');
                     }
                     if (this.loadingpages_template_request)
                     {
