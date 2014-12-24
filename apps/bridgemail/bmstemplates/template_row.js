@@ -127,14 +127,14 @@ function (template,highlighter,tagView) {
                                 this.$('.thumbnail').addClass(adminTemplate);
                                 if(this.isAdmin === "Y"){
                                    returnClass = 'five s-clr6';
-                                   createCampClass = 'clr5';
+                                   createCampClass = 'clr9';
                                 }else{
                                    returnClass = 'three s-clr4';
-                                    createCampClass = 'clr3'
+                                    createCampClass = 'clr9'
                                 }
                             }else{
                                returnClass = 'five s-clr6';
-                               createCampClass = 'clr5'
+                               createCampClass = 'clr9'
                             }
                             return {returnClass:returnClass,campClass:createCampClass};
                 

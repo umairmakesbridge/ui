@@ -3432,6 +3432,7 @@ text-align:center;
 .gallery-action-btns a:nth-child(8) {
     background: none repeat scroll 0 0 #177FC7;
 }
+.gallery-action-btns a.clr9 { background-color: #98d028 !important; }
 .gallery-action-btns a.clr8 { background-color: #2FA4F6 !important; }
 .gallery-action-btns a.clr7 { background-color: #2A9EEF !important; }
 .gallery-action-btns a.clr6 { background-color: #2699E9 !important; }
