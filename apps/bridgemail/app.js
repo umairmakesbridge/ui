@@ -77,7 +77,7 @@ define([
                 window.BRIDGEMAIL = this;
             }
             //this.CRMGetStatus();
-
+              
         },
         start: function (Router, MainContainer, callback) {
             //Create the router
@@ -94,6 +94,8 @@ define([
                 this.dialogArray = [];
                 // Merge Tag
                 this.mergeRequest = 0;
+                // Workspace Tabs 
+                this.tabsArray = [];
                 //attaching main container in body                                
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);
@@ -743,6 +745,47 @@ define([
               msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
             }
             return msie;
+        },
+        /*-----------------------------
+         *          Tabs Switching and Scrolling  
+         * -------------------------------*/
+        pushWKSTabs : function(tabobj){
+            var tabarray = this.tabsArray;
+            var isTabExist = false;
+            var result = '';
+                    for(var i=0;i < tabarray.length; i++){
+                    if(tabarray[i].wks_id === tabobj.wks_id){
+                        isTabExist = true;
+                        result = this.switchToActiveWKS(i,tabobj.wks_id); // Call to remove value from array
+                       if(result){tabarray.push(result);} // push array value back again
+                    }
+                }
+            
+            if(!isTabExist){
+                tabarray.push(tabobj);
+            }
+            //console.log(tabarray);
+            /*-----Scrolling of Workspace-----*/
+            var currentTab = tabarray.pop();
+            $( window ).scrollTop( currentTab.wscroll );
+            tabarray.push(currentTab);
+        },
+        switchToActiveWKS : function(index,tabobj_id){
+             var tabarray = this.tabsArray;
+             var spliced = tabarray.splice(index, 1);
+             return spliced[0];
+        },
+        popWKSTabs: function(){
+            var tabarray = this.tabsArray;
+            var currentTab = tabarray.pop();
+           $('#wp_li_'+currentTab.wks_id).click();
+           $( window ).scrollTop( currentTab.wscroll );
+        },
+        scrollWKStab:function(et){
+            var tabarray = this.tabsArray;
+            var currentTab = tabarray.pop();
+            currentTab.wscroll = et;
+            tabarray.push(currentTab);
         }
     });
 

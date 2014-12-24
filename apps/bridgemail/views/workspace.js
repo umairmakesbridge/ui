@@ -23,8 +23,10 @@ function ($,Backbone, _,app,Wizard, template) {
                             });    
                         }
                         else{
-                           $("#wstabs li:first").click();
+                           //$("#wstabs li:first").click();
                            //$("#"+app.mainContainer.lastActiveWorkSpace).click();
+                           app.tabsArray.pop();
+                           app.popWKSTabs();
                            
                         }
                         $("body").css("overflow","auto");                                                    

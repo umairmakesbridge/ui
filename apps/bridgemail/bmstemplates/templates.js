@@ -334,6 +334,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     this.app.showLoading(false,this.$(".template-container"));
                                                     if(this.$el.find('.thumbnails #new_template').length == 0){
                                                         this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Template </span></div></div></li>');
+                                                        this.$('#new_template').click(_.bind(this.createTemplate,this));
                                                     }
                                                 _.each(collection.models, _.bind(function(model){
                                                         this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
@@ -343,7 +344,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     /*-----Remove loading------*/
                                                         this.app.removeSpinner(this.$el);
                                                     /*------------*/
-                                                    this.$('#new_template').click(_.bind(this.createTemplate,this));
+                                                   
                                                    newCount = this.totalCount - this.offset;
                                                    //console.log('Total Count : '+ this.totalCount + ' Offset : ' + this.offset + ' New Count : ' + newCount + ' Collection Length '+ collection.length);
                                                    if(collection.length<parseInt(newCount)){

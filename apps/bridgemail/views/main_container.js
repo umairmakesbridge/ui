@@ -115,7 +115,11 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.app = this.options.app;
                     this.template = _.template(LandingPage);
                     this.$el.append(this.header.$el, this.template({}));
-
+                    $(window).scroll(_.bind(function () { 
+                        //You've scrolled this much:
+                           var et = $(window).scrollTop();
+                           this.app.scrollWKStab(et);
+                    },this));
 
                 },
                 allowWorkspace: function (options) {
@@ -172,6 +176,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             /*-----*/
                             $("#workspace .ws-content.active").removeClass('active').css("display", "none");
                             $("#workspace .workspace").append(wp_view.$el);
+                            /*--------Push Workspace Tabs into array-------*/
+                            this.app.pushWKSTabs({wks_id:wp_count.toString(),wscroll:0});
                             //wp_view.initScroll(wp_view.$el);
                             //this.addMoreTabs( wp_count+1);
                             wp_view.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
@@ -281,6 +287,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             if (obj.data("viewObj") && obj.data("viewObj").refreshWorkSpace) {
                                 obj.data("viewObj").refreshWorkSpace(options);
                             }
+                            this.app.pushWKSTabs({wks_id:workspace_id,wscroll:0});
                         }
                     }
                 },
