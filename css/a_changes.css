@@ -3711,8 +3711,9 @@ box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
     font-style: normal;
     font-weight: normal;
     position: absolute;
-    right: 20px;
-    top: 25px;
+    right: 10px;
+    top: auto;
+    bottom:6px;
 }
 .announcement_dialogue h3 {
     clear: both;

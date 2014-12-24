@@ -4883,18 +4883,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 }
                                 mee.showFormWizard = function(formId){
                                      var dialog_width = $(document.documentElement).width()-60;
-                                    var dialog_height = $(document.documentElement).height()-182;
+                                    var dialog_height = $(document.documentElement).height()-162;
                                     var dialog = options._app.showDialog({title:'Form Wizard',
-                                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                               headerEditable:false,
                                               headerIcon : 'dlgpreview',
                                               bodyCss:{"min-height":dialog_height+"px"}
                                     });
                                     var formurl = formId ? "&formId="+formId : "";
-                                    var iframe_url = "https://" + options._app.get("host") + "/pms/landingpages/rformBuilderNew.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl;
+                                    dialog_height = parseFloat(dialog_height)-6 ;
+                                    var iframe_url = "https://" + options._app.get("host") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl;
                                     var iframe_html = "<iframe id=\"__iframe\" style=\"width:100%; height:"+dialog_height+"px\" src=\"" + iframe_url + "\" frameborder=\"0\"></iframe>"
-                                    dialog.getBody().html(iframe_html); 
-                                    e.stopPropagation();
+                                    dialog.getBody().html(iframe_html);                                     
                                 }
                                 mee.addUpdateContentBlock = function (args) {
                                     var dialog_title = mee._LastSelectedBuildingBlock ? "Edit Block" : "Add Block";
