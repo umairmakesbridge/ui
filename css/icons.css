@@ -804,6 +804,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.copy-header {   background: url("../img/copy48.png") no-repeat scroll center center ;}
 .icon.template {   background: url("../img/template.png") no-repeat scroll center center ;}
 .icon.template_gallery {   background: url("../img/template2.png") no-repeat scroll center center ;}
+.icon.dlgformwizard {   background: url("../img/formwizard-w.png") no-repeat scroll center center ;}
 
 .icon.salesforce {   background: url("../img/sficon.png") no-repeat scroll center center ;}
 .icon.netsuite {   background: url("../img/nsicon.png") no-repeat scroll center center ;}

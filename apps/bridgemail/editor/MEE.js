@@ -4074,10 +4074,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     args.droppedElement.removeClass("formPlaceHolderAlone");
                                                                     args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
                                                                     oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                    args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId).click(function(){
+                                                                    args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)/*.click(function(){
                                                                         var form_id = $(this).attr("data-formid");
                                                                         mee.showFormWizard(form_id);
-                                                                    })
+                                                                    })*/
                                                                 }
                                                                 else {
                                                                     var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
@@ -4887,7 +4887,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var dialog = options._app.showDialog({title:'Form Wizard',
                                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                               headerEditable:false,
-                                              headerIcon : 'dlgpreview',
+                                              headerIcon : 'dlgformwizard',
                                               bodyCss:{"min-height":dialog_height+"px"}
                                     });
                                     var formurl = formId ? "&formId="+formId : "";
