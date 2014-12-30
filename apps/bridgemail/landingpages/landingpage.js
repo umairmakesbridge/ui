@@ -1,4 +1,4 @@
-define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout.html','jquery.chosen','bms-tags','bms-addbox'],
+define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout.html','jquery.chosen','bms-tags','bms-addbox','bms-dragfile'],
         function(template,layout) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
@@ -13,6 +13,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                 events: {                    
                     "click .published" : "publishPage",
                     "click .draft" :     "draftPage",
+                    'click .message-image':'imageDialog',
                     "click .btn-link" : "linkPageDialog"
                 },
                 /**
@@ -169,6 +170,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         this.previewURL = _json["previewURL"];
                         this.publishURL = _json["publishURL"];
                         this.pageName = _json["name"];
+                        this.thumbURL = _json["thumbURL"];
                         this.loadCategories(_json["category"]);   
                         if(this.editable){
                             this.loadMEE();
@@ -178,6 +180,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                             this.$(".addcat").hide();
                             this.previewPage();                            
                         }
+                        this.setImage();
                         this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:_json.name,subheading:"Landing Page Detail"});                        
                         this.status= _json.status;                      
                         this.ws_header.find(".cstatus").remove();
@@ -534,6 +537,74 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                          tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                    },this));
                     
+                },
+                setImage: function(){
+                     if(this.editable){
+                        this.$(".accordion-body").dragfile({
+                             post_url:'/pms/io/publish/saveImagesData/?BMS_REQ_TK='+this.app.get('bms_token')+'&type=add&allowOverwrite=N&th_width=240&th_height=320',
+                             callBack : _.bind(this.showSelectedImage,this),
+                             app:this.app,
+                             module:'template',
+                             progressElement:this.$('.nurtureimg')
+                         });
+                    }
+                    if(this.thumbURL){
+                        this.showImage(this.app.decodeHTML(this.thumbURL));
+                    }
+                },
+                showSelectedImage:function(data){
+                     var _image= jQuery.parseJSON(data);
+                    if(_image.success){
+                        var img_obj = _image.images[0].image1[0];
+                        var img_thmbnail = this.app.decodeHTML(img_obj.thumbURL);
+                        this.showImage(img_thmbnail)
+                        this.saveImage(img_obj['imageId.encode']);                        
+                    }
+                },
+                showImage:function(img_thmbnail){
+                    this.$(".no-image").hide();
+                    this.$("#message-image").show();
+                    this.$("#message-image img").attr("src",img_thmbnail);
+                },
+                saveImage: function(image_id){
+                    var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $.post(URL, {type:'thumbnail',pageId:this.page_id,imageId:image_id})
+                    .done(_.bind(function(data) {                                             
+                           var _json = jQuery.parseJSON(data);        
+                           if(_json[0]!=='err'){
+                                this.app.showMessge("Landing page image updated successfully!");                          
+                           }
+                           else{
+                               this.app.showAlert(_json[0],$("body"),{fixed:true}); 
+                           }
+                   },this));
+                },
+                imageDialog:function(e){                    
+                    var app = this.app;
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-162;
+                        var dialog = this.app.showDialog({title:'Images',
+                                    css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                                    headerEditable:true,
+                                    headerIcon : '_graphics',
+                                    bodyCss:{"min-height":dialog_height+"px"}                                                                          
+                         });                        
+                     this.app.showLoading("Loading...",dialog.getBody());
+                     require(["userimages/userimages",'app'],_.bind(function(pageTemplate,app){                                                              
+                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:this,callBack:_.bind(this.insertImage,this)});
+                         dialog.getBody().append(mPage.$el);
+                         this.app.showLoading(false, mPage.$el.parent());
+                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                        
+                     },this));                    
+                     
+                },
+                insertImage:function(obj){
+                   this.showImage(obj.imgthumb);
+                   this.saveImage(obj.imgencode);
                 }
             });
         });

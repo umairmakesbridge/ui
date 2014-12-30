@@ -10,7 +10,7 @@
       
       <% if(model.get('thumbURL')){  %> 
       <span>
-       <img src="<%- this.app.decodeHTML(model.get('thumbURL').replace('http&#58;',''))%>" data-src="holder.js" alt="">
+       <img src="<%- this.app.decodeHTML(model.get('thumbURL'))%>" data-src="holder.js" alt="">
        </span>
      <% } else {
        %>  

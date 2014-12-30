@@ -10,13 +10,34 @@
         <input type="text" name="" placeholder="Enter new category name...">
         <a class="btn-green left"><span>Save</span><i class="icon save"></i></a>-->
     </div>
-
+    <% if(this.app.get("user").userId !== 'admin') { %>
     <div class="status_tgl">
         <a class="draft active showtooltip" title="Mark as Draft">Draft</a>
         <a class="published showtooltip" title="Publish this Page">Published</a>
     </div>
-    
+    <% } %>       
 </div>
-<div style="min-height:300px;" id="area_html_editor_mee">
+<% if(this.app.get("user").userId === 'admin') { %>
+    <div class="dropareamessage" style="position:absolute;top:0px;right:5px">
+        <div class="nurtureimg" style="width:172px;position: relative">
+            <div class="no-image">
+                 <% if(this.editable===true) { %>
+                    <div class="droppanel" style="height: 132px"><h4><img alt="" src="<%- this.app.get('path')%>img/droparrow.png" width="30">
+                    <br class="clearfix">Drag and drop<br/>an image</h4></div>  
+                <% } else { %>
+                    <div class="noimagebox" style="height: 132px"><h4>
+                    <br class="clearfix">No image</h4></div>  
+                <% } %>
+            </div>
+            <div style="display: none;height:150px;overflow: hidden" id="message-image" >
+                <img  width="150" height="170" alt="" src="">
+            </div>
+            <% if(this.editable===true) { %>
+                <a class="btn-blue message-image" style="margin-top:5px;"><span>Browse Images</span><i style="padding-top:" class="icon update"></i></a>                       
+            <% } %>     
+        </div>
+    </div>                
+<% } %>       
+<div style="min-height:300px;<% if(this.app.get("user").userId === 'admin') { print('margin-top:140px') } %> " id="area_html_editor_mee">
    <div id="mee_editor" class="MEE_EDITOR"></div>      
 </div>
