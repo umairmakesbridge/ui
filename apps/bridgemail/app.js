@@ -784,8 +784,10 @@ define([
         scrollWKStab:function(et){
             var tabarray = this.tabsArray;
             var currentTab = tabarray.pop();
+            if(currentTab){
             currentTab.wscroll = et;
             tabarray.push(currentTab);
+            }
         }
     });
 

@@ -420,6 +420,7 @@ function (template) {
                                         linkedInShareIcon :this.$("#campaign_linkedin")[0].checked?'Y':'N',
                                         googlePlusShareIcon :this.$("#campaign_gplus")[0].checked?'Y':'N',
                                         pinterestShareIcon: this.$("#campaign_pintrest")[0].checked?'Y':'N',
+                                        useCustomFooter :this.$("#campaign_useCustomFooter")[0].checked?'Y':'N',
                                         isShareIcons :this.$("#campaign_socail_share input[type='checkbox']:checked").length?'Y':'N'
                                   })
                                  .done(_.bind(function(data) {                                 

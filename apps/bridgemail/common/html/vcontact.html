@@ -11,8 +11,9 @@
                                         <div style="height: ;" class="bDiv">
                                           <table cellspacing="0" cellpadding="0" border="0" id="camp_list_grid">
                                             <tbody>
+                                           <%  if(!this.options.isOTOFlag){ %>     
                                             <a class="closebtn" style='z-index: 2;'></a>
-                                            
+                                            <% } %>
                                             <tr class="erow" id="">
                                             
                                                
@@ -26,8 +27,8 @@
                                                   <td width="100%"><div>
                                                       <div class="name-type">
                                                       
-                                                        <div class="title">
-                                                            <h3><a href=""><%- _json.firstName %>&nbsp;<%- _json.lastName %></a></h3>
+                                                        <div class="title view-profile">
+                                                            <h3><a><%- _json.firstName %>&nbsp;<%- _json.lastName %></a></h3>
                                                             <% if(_json.salesStatus) { %>
                                                         <a class="statusdd color3 vsalestatus"><%- _json.salesStatus %> <b class="caret"></b></a>
                                                         <% } %>

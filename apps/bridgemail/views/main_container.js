@@ -73,6 +73,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-graphics': 'createGraphics',
                     'click .view-contacts': 'viewContacts',
                     'click .campaign-listing': 'campaignListing',
+                    'click .one-one-listing': 'one_one_listings',
                     'click .template-gallery': 'templateGallery',
                     'click .camapign-report': 'camapignReport',
                     'click .csv-upload': 'csvUpload',
@@ -337,9 +338,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
                 },
                 SubscriberName: function (sub_id,name){
-                    
-                    var tabObj = this.$('#wstabs').find('li[workspace_id="subscriber_'+sub_id+'"]');
-                     tabObj.find('a').html('<div class="letter_block l_n"><span>'+name.charAt(0)+'</span></div>');
+                     var tabObj = this.$('#wstabs').find('li[workspace_id="subscriber_'+sub_id+'"]');
+                     tabObj.find('a').html('<div class="letter_block l_'+name.charAt(0).toLowerCase()+'"><span>'+name.charAt(0)+'</span></div>');  
                 },
                 openNurtureTrack: function (opt) {
                     var track_id = opt.id ? opt.id : 0;
@@ -554,6 +554,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 campaignListing: function () {
                     this.addWorkSpace({type: '', title: 'Campaigns', sub_title: 'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
+                },
+                one_one_listings : function(){
+                   this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'campaignlisting'}); 
                 },
                 templateGallery: function () {
                     this.addWorkSpace({type: '', title: 'Template Gallery', sub_title: 'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});

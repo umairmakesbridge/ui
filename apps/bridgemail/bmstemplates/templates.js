@@ -38,6 +38,7 @@ function (template,highlight,templateCollection,templateRowView) {
                this.templates = null;  
                this.totalCount = 0;
                this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
+               this.OnOFlag = this.options.isOTO;
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
                //              
@@ -332,12 +333,20 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     }
                                                     this.showTotalCount(this.totalCount,isTotal);
                                                     this.app.showLoading(false,this.$(".template-container"));
+                                                    
                                                     if(this.$el.find('.thumbnails #new_template').length == 0){
-                                                        this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Template </span></div></div></li>');
-                                                        this.$('#new_template').click(_.bind(this.createTemplate,this));
+                                                        if(this.OnOFlag){
+                                                            this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag"><div class="droppanel" style="height: 375px;"><h4 style="margin: 0px; padding: 150px 0px 0px;"><img alt="" src="'+this.app.get('path')+'img/easyeditor-g.png"><br class="clearfix"><span>Use EasyEditor </span></h4></div><a class="btn-blue g-btn ono-built-scratch" style="width: 190px;"><span>Start from Scratch </span><i class="icon next"></i></a></div></div></li>');
+                                                            this.$('#new_template').find('.ono-built-scratch').click(_.bind(this.createOTODialog,this));
+                                                            this.$('.create-tempalte').click(_.bind(this.createOTODialog,this));
+                                                        }
+                                                        else{
+                                                            this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Template </span></div></div></li>');
+                                                            this.$('#new_template').click(_.bind(this.createTemplate,this));
+                                                            }
                                                     }
                                                 _.each(collection.models, _.bind(function(model){
-                                                        this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass});
+                                                        this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass,OnOFlag:this.OnOFlag});
                                                         this.$el.find('.thumbnails').append(this.rowView.$el);
                                                        this.rowView.tmPr.trimTags();
                                                     },this));
@@ -622,6 +631,30 @@ function (template,highlight,templateCollection,templateRowView) {
                 toggleSortOption: function(ev) {
                     $(this.el).find("#template_search_menu").slideToggle();
                     ev.stopPropagation();
+                },
+                createOTODialog : function(){
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'New Message',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                        headerEditable:false,
+                        headerIcon : 'messageicon',
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        tagRegen:false,
+                        buttons: {saveBtn:{text:'Save'} }
+                        });
+                        this.app.showLoading("Loading...",dialog.getBody());
+                        var _this = this;
+                        require(["onetooneemails/createmessage"],function(createMessagePage){                                                     
+                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog});               
+                           var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
+                           dialog.getBody().append(mPage.$el);
+                           mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                           _this.app.showLoading(false, mPage.$el.parent());                     
+                            mPage.init();
+                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                        })
                 }
         });
 });
