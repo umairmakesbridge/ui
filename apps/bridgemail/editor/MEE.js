@@ -5411,8 +5411,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 mee.deleteForm = function (element, form_id) {
                                     var URL = "/pms/landingpages/rFormSaver.jsp?" + options._BMSTOKEN+"&ukey="+options._app.get("user_Key");
                                     var post_data = {
-                                        delete: true,
-                                        mformId: form_id                                        
+                                        "delete": true,
+                                        "mformId": form_id                                        
                                     };
                                     $.post(URL, post_data)
                                         .done(function (data) {                                            
