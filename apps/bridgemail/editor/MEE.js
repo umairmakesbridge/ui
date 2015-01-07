@@ -189,8 +189,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     render: function () {
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
-                                            mee.iframeLoaded = true;
+                                            mee.iframeLoaded = true;    
+                                            $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                            
                                         })
+                                        
                                     }
 
                                 });
@@ -287,12 +289,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mainTable.find("div.ui-resizable-s").remove();
                                     mainTable.find("div.ui-resizable-se").remove();
                                     mainTable.find("div.textcontent").removeClass('mce-content-body');
+                                    console.log("going to call resize");
                                     undoManager.registerAction(mainTable);
-                                    resizeHeight();
+                                     mee.resizeHeight();
+                                    
                                     return false;
                                 }
-
-                                function resizeHeight() {
+                                mee.setScrollHeight = function(){                                    
+                                    if($(meeIframeWindow).height()<$(meeIframeWindow.document).height()){
+                                        this.resizeHeight();
+                                    }
+                                }
+                                mee.resizeHeight = function() {
                                     var ul_container = meeIframe.find(".mainContentHtml");
                                     var main_container = myElement.find(".editorbox");
                                     if (ul_container.height() > ($(".tabcontent").height() - 100)) {
@@ -328,8 +336,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
                                         }
-                                        resizeHeight();
-
+                                         mee.resizeHeight();
                                     }
                                 });
                                 myElement.find(".redo_li").click(function () {
@@ -354,7 +361,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 meeIframeWindow.tinymce.get(editorfocused.attr("id")).focus();
                                             }
                                         }
-                                        resizeHeight();
+                                         mee.resizeHeight();
 
                                     }
                                 });
@@ -1858,6 +1865,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         },
                                         $("body"));
                                     }
+                                    else if (type == "fbdel") {
+                                        var element = $(obj).parents("li");
+                                        var form_id = imageObj["formid.encode"];
+                                        options._app.showAlertDetail({
+                                            heading: 'Confirm Deletion',
+                                            detail: "Do you want to delete this Form ?",
+                                            callback: _.bind(function () {
+                                                this.deleteForm(element, form_id);
+                                            }, mee)
+                                        },
+                                        $("body"));
+                                    }
                                     else if (type == "bbedit") {
                                         mee._LastSelectedBuildingBlock = imageObj;
                                         InitializeBuildingBlockUpdatePopup();
@@ -2887,7 +2906,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var OnFilterClick = function (element) {
                                         element.find("i.filter").click(function (event) {
 
-                                            event.stopPropagation();
+                                            //event.stopPropagation();
 
                                             var parentLi = $(this).parents("li:first");
                                             args.clickedLi = parentLi;
@@ -4047,47 +4066,62 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             buildingBlock: null
                                                         };
                                                        
-                                                        if (ui.draggable.hasClass("droppedFormBlock")) {
+                                                        if (ui.draggable.data("type")=="formBlock") {
                                                             
                                                             var oControl = new Object();
                                                             var controlID = ui.draggable.data("id");
+                                                            
+                                                            var isNew = ui.draggable.data("isnew");
                                                             console.log(controlID);
                                                             //need to apply each for this and then search on each [0]
-                                                            args.FormId = controlID;
-                                                            if (options.LoadFormContents != null) {
-                                                                options.LoadFormContents(args);
-                                                            }
                                                             
-                                                            
+                                                            if(!isNew){                                                                
+                                                                args.FormId = controlID;
+                                                                if (options.LoadFormContents != null) {
+                                                                    options.LoadFormContents(args);
+                                                                }
 
-                                                            if (args.formContents != undefined) {
-                                                                //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                                var fContents = args.formContents;
-                                                                
-                                                                if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
-                                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-                                                                    oControl.Html = preview_iframe;                                                                
-                                                                    oControl.Type = "formBlock";
-                                                                    oControl.ID = args.FormId;                                                                
-                                                                    args.predefinedControl = oControl;
-                                                                    args.droppedElement.html(oControl.Html);
-                                                                    args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                    args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                    args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)/*.click(function(){
-                                                                        var form_id = $(this).attr("data-formid");
-                                                                        mee.showFormWizard(form_id);
-                                                                    })*/
+                                                                if (args.formContents != undefined) {
+                                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                                    var fContents = args.formContents;
+
+                                                                    if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
+                                                                        var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                                        oControl.Html = preview_iframe;                                                                
+                                                                        oControl.Type = "formBlock";
+                                                                        oControl.ID = args.FormId;                                                                
+                                                                        args.predefinedControl = oControl;
+                                                                        args.droppedElement.html(oControl.Html);
+                                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                        args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)
+                                                                        /*.click(function(){
+                                                                            var form_id = $(this).attr("data-formid");
+                                                                            mee.showFormWizard(form_id);
+                                                                        })*/
+                                                                    }
+                                                                    else {
+                                                                        var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
+                                                                        form_ele.find("iframe").attr("src",options._app.decodeHTML(fContents));
+                                                                        form_ele.find(".editformpanel button").attr("data-formid",args.FormId);
+                                                                    }
+                                                                    options.formCallBack(args.FormId);
                                                                 }
-                                                                else {
-                                                                    var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
-                                                                    form_ele.find("iframe").attr("src",options._app.decodeHTML(fContents));
-                                                                    form_ele.find(".editformpanel button").attr("data-formid",args.FormId);
-                                                                }
-                                                                options.formCallBack(args.FormId);
-                                                            }
-                                                            
+                                                           }else {
+                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");  
+                                                                mee.showFormWizard('');
+                                                                oControl.Html = preview_iframe;                                                                
+                                                                oControl.Type = "formBlock";
+                                                                oControl.ID = args.FormId;                                                                
+                                                                args.predefinedControl = oControl;
+                                                                args.droppedElement.html(oControl.Html);
+                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                oInitDestroyEvents.InitAll(args.droppedElement);
+                                                           }                                                            
                                                         }
+                                                        
                                                         mee.dragElement = null;
                                                     });
 
@@ -4336,9 +4370,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     options.LoadFormContents(args);
                                                 }
 
-
+                                                var isNew = ui.draggable.data("isnew");
 
                                                 if (args.formContents != undefined) {
+                                                    
                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
                                                     var fContents = args.formContents;
 
@@ -4881,13 +4916,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
                                 }
+                                mee.CloseFormWizard = function(){
+                                   if(meeIframe.find(".MEEFORMCONTAINER #email-iframe").length && meeIframe.find(".MEEFORMCONTAINER #email-iframe").attr("src")=="about:blank"){
+                                         meeIframe.find(".MEEFORMCONTAINER").addClass("formPlaceHolderAlone").children().remove();
+                                    }
+                                }
                                 mee.showFormWizard = function(formId){
                                      var dialog_width = $(document.documentElement).width()-60;
                                     var dialog_height = $(document.documentElement).height()-162;
-                                    var dialog = options._app.showDialog({title:'Form Wizard',
+                                    var dialog = options._app.showDialog({title:'Form Builder',
                                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                                               headerEditable:false,
                                               headerIcon : 'dlgformwizard',
+                                              closeCallBack: _.bind(mee.CloseFormWizard,mee), 
                                               bodyCss:{"min-height":dialog_height+"px"}
                                     });
                                     var formurl = formId ? "&formId="+formId : "";
@@ -5255,43 +5296,52 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     _AjaxParameters.Url = "/pms/io/form/getSignUpFormData/?" + options._BMSTOKEN + "&type=search&offset=" + forms_offset;
                                     returnData = SendServerRequest(_AjaxParameters);
                                     options._app.showLoading(false, myElement.find(".ulFormBlocks"));
-                                    if(returnData.totalCount!="0"){
-                                        $.each(returnData.forms[0], function (i, obj) {
-
-                                            //Assigning unique ID here:
-                                            obj[0].ID = obj[0]["formId.encode"];
-
-
-                                            var block = $("<li class='draggableControl ui-draggable droppedFormBlock' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
-                                                    "<i class='icon myblck'></i> " +
-                                                    "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
-                                                    "<div class='imageicons' > " +
-                                                    "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
-                                                    "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
-                                                    " </div>" +
-                                                    "</li>");
-
-
-
-                                            //Initialize with default draggable:
-                                            InitializeMainDraggableControls(block);
-
-                                            // listOfBuildingBlocksHtml.append(block);
-                                            ulFormBlocks.append(block);
-
-
-                                        });   
-
-                                        if (myElement.find(".ulFormBlocks li").length < parseInt(returnData.totalCount)) {
-                                            myElement.find(".ulFormBlocks li:last-child").attr("data-load", "true");
-                                        }
-                                    }
-                                    if(searchFormTxt!==""){
-                                        myElement.find("#FBResultDiv").html(returnData.totalCount + " records Found");
+                                    if(returnData[0] && returnData[0]=="err"){
+                                        myElement.find("#FBResultDiv").html(returnData[1]);
                                         myElement.find("#FBResultDiv").show();      
+                                        myElement.find(".formDroppable").hide();
                                     }
                                     else{
-                                        myElement.find("#FBResultDiv").hide();      
+                                        if(returnData.totalCount!="0"){
+                                            $.each(returnData.forms[0], function (i, obj) {
+
+                                                //Assigning unique ID here:
+                                                obj[0].ID = obj[0]["formId.encode"];
+
+
+                                                var block = $("<li class='draggableControl ui-draggable droppedFormBlock' draggable='true' data-type='formBlock' data-id='" + obj[0]["formId.encode"] + "'>" +
+                                                        "<i class='icon myblck'></i> " +
+                                                        "<a><span class='font_75 bbName'>" + obj[0].name + "</span></a>" +
+                                                        "<div class='imageicons' > " +
+                                                        "<i class='imgicons edit action' data-actiontype='fbedit'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
+                                                        "<i class='imgicons delete right action' data-actiontype='fbdel'  data-index='" + i + "' data-id='" + obj[0]["formId.encode"] + "'></i> " +
+                                                        " </div>" +
+                                                        "</li>");
+
+
+
+                                                //Initialize with default draggable:
+                                                InitializeMainDraggableControls(block);
+
+                                                // listOfBuildingBlocksHtml.append(block);
+                                                ulFormBlocks.append(block);
+
+
+                                            });   
+
+                                            if (myElement.find(".ulFormBlocks li").length < parseInt(returnData.totalCount)) {
+                                                myElement.find(".ulFormBlocks li:last-child").attr("data-load", "true");
+                                            }
+                                        }
+                                        if(searchFormTxt!==""){
+                                            myElement.find("#FBResultDiv").html(returnData.totalCount + " records Found");
+                                            myElement.find("#FBResultDiv").show();      
+                                            myElement.find(".formDroppable").hide();
+                                        }
+                                        else{
+                                            myElement.find("#FBResultDiv").hide();
+                                            myElement.find(".formDroppable").show();
+                                        }
                                     }
                                     myElement.find(".form-footer-loading").hide();
                                     

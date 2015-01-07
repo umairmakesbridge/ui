@@ -48,7 +48,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
                         that.dialog = that.options.dialog;
                         that.targetsModel = null;
                         that.filterNumber = null;
-                         that.alertMessage = that.model.get('actionData')[0].alertMessage;
+                        that.alertMessage = that.model.get('actionData')[0].alertMessage;
                         that.alertEmails = that.model.get('actionData')[0].alertEmails;
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
@@ -1255,7 +1255,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
       //this.showTooltips(filter)
      // if(this.webforms.length===0){
      var that = this;
-      var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=list"                  
+      var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=search"                  
             jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){
                   var _json = jQuery.parseJSON(xhr.responseText);

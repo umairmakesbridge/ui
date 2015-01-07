@@ -1913,7 +1913,7 @@ div.textcontent ol{
     bottom:0px;
 }
 .resizableImage .ui-icon-gripsmall-diagonal-se,.formresizable  .ui-icon-gripsmall-diagonal-se{
-    background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(0, 0, 0, 0);
+    background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(255, 255, 255, 1);
 }
 .sortable > li{
     border: 1px dotted rgba(0, 0, 0, 0.2);    
@@ -1984,7 +1984,7 @@ div.textcontent ol{
     top: -5px;
 }
 .resizableImage .ui-icon-gripsmall-diagonal-se{
-    background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(0, 0, 0, 0);
+    background:url("../images/resize-se.png") no-repeat scroll right bottom rgba(255, 255, 255, 1);
 }
 ul.show-droppables > li:last-child{
     height:150px !important;

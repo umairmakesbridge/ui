@@ -730,7 +730,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     
                 },
                 initScroll:function(el){
-            
+                    this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
                     this.$win=$(window)
                     ,this.$nav = this.$('.editortoolbar')
                     ,this.$tools = this.$('.editortools')                    
@@ -2326,38 +2326,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     params:{type:'tags',filterNumber:'',tags:''}
                                 });                            
                           break;
-                        case 'choose_targets':                                                                
-                                /*if(this.checkRecipientsSaved("target")){
-                                    return false;
-                                }
-                                if(!this.app.getAppData("targets")){                                    
-                                    camp_obj.app.showLoading("Loading Targets...",camp_obj.$el.find('#area_choose_targets .leftcol'));
-                                     this.app.getData({
-                                        "URL":"/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list&filterFor=C",
-                                        "key":"targets",
-                                        "callback":_.bind(this.createTargetsTable,this)
-                                    });
-                                }
-                                else{
-                                    this.createTargetsTable();
-                                }*/
-                                    this.choseTargets();
+                        case 'choose_targets':                                                                                               
+                                this.choseTargets();
                                 break;
-                        case 'choose_lists':               
-                                /*if(this.checkRecipientsSaved("list")){
-                                    return false;
-                                }                
-                                if(!this.app.getAppData("lists")){
-                                    this.app.showLoading("Loading Lists...",camp_obj.$el.find('#area_choose_lists .leftcol'));                                    
-                                    this.app.getData({
-                                        "URL":"/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all",
-                                        "key":"lists",
-                                        "callback":_.bind(this.createListTable,this)
-                                    });
-                                }
-                                else{
-                                    this.createListTable();
-                                }*/
+                        case 'choose_lists':                                              
                                 this.choseLists();
                                 break;
                         case 'upload_csv':

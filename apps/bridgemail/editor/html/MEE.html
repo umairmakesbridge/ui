@@ -274,16 +274,25 @@
                                 </a>
 
                             </div>
-                            <a  class="addNewFormLink">
+                            <a  class="addNewFormLink" style="display: none">
                                 <i class="icon add"></i>
                             </a>
                         </div>
 
                     </div>
-                    <div class="clearfix">
-                        <div id="FBResultDiv" class="no-results"  style="display: none;"> No results Found </div>
+                    <div class="clearfix" style="padding-top: 0px">
+                        <div id="FBResultDiv" class="no-results"  style="display: none;margin-top:15px"> No results Found </div>
                     </div>
                     <div class="clearfix formDroppable">                        
+                        <ul class="b-blocks">
+                            <li class="draggableControl ui-draggable newblock" data-type="formBlock" data-isnew="true" draggable="true">
+                                <i class="icon plus"></i>
+                                <a >
+                                    <span class=" font_75">Add New Form</span>
+                                </a>
+                            </li>
+
+                        </ul>
                         <ul class="ulFormBlocks b-blocks" style="display: inline-block;">
                         </ul>
                         <div style="display:none" class="footer-loading form-footer-loading">

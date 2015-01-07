@@ -170,6 +170,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("body").css("overflow-y","hidden");
                         },
                         hide:function(){
+                            
+                           if(this.option.closeCallBack){
+                               this.option.closeCallBack();
+                           }
+                           
                            if(this.app.dialogArray.length>1){
                             this.showPrevious();
                            
