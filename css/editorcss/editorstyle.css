@@ -271,8 +271,8 @@ a,
     -moz-border-radius: 0 0 2px 2px;
     border-radius: 0 0 2px 2px; }
 
-.MEE_EDITOR .accordian-content div { padding: 15px 0 0;}
-.MEE_EDITOR .accordian-content div:first-child { padding: 5px 0 0;}
+.MEE_EDITOR .accordian-content > div { padding: 15px 0 0;}
+.MEE_EDITOR .accordian-content > div:first-child { padding: 5px 0 0;}
 
 .MEE_EDITOR .accordian-content h4 {
     color: #1d91bc;

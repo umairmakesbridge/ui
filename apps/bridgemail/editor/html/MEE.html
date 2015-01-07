@@ -370,9 +370,8 @@
 
                     <div class="clearfix"  style="padding:5px;">
                         <h4 class="">Parent Layers</h4>
-                        <select class="nosearch ddlBackgroundLayers">
-                            <option value="">Select Parent Layers</option>
-
+                        <select class="nosearch ddlBackgroundLayers" data-placeholder="Select Parent Layer">
+                            <option value=""></option>
                         </select>
                         <br class="clearfix"/> <br/>
                         <div class="clearfix"></div>
@@ -530,8 +529,8 @@
                     </div>
                 </div>
             </div>
+            <% if(!options.landingPage){ %>
             <!--  accordian-content  -->
-
             <h3 class="">
                 <span class="ui-accordion-header-icon ui-icon ui-icon-triangle-1-s"></span> Email Width
             </h3>
@@ -554,7 +553,7 @@
                 </div>
             </div>
             <!--  accordian-content  -->
-
+           <% } %> 
         </div>
         
     </div>

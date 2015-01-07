@@ -8,7 +8,7 @@
     transition: background-color .3s linear;	
 }
 .mainContentHtml{
-    background:#fff;
+    background:rgba(255, 255, 255, 0.2);
     z-index: 1;
 }
 

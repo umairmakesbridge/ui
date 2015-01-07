@@ -222,6 +222,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var leftPlus = options.leftPlus;
                                 var $element = null;
                                 var emailWidth = options.landingPage? "100%":"600px";
+                                var pageBackgroundColor = "#fff";
                                 var undoredo = true;
                                 var _offset = 0;
                                 var forms_offset = 0;
@@ -288,8 +289,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mainTable.find("div.ui-resizable-e").remove();
                                     mainTable.find("div.ui-resizable-s").remove();
                                     mainTable.find("div.ui-resizable-se").remove();
-                                    mainTable.find("div.textcontent").removeClass('mce-content-body');
-                                    console.log("going to call resize");
+                                    mainTable.find("div.textcontent").removeClass('mce-content-body');                                    
                                     undoManager.registerAction(mainTable);
                                      mee.resizeHeight();
                                     
@@ -388,13 +388,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' width='"+parseFloat(emailWidth)+"'><tr><td  width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
                                     header_section.find("link").remove();
-                                    outputHTML = "<html><head>"+header_section.html()+"</head><body>"+outputHTML+"</body></html>"
-                                    
+                                    outputHTML = "<html><head>"+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+"'>"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
                                     return outputHTML;
@@ -403,7 +402,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 $.fn.setMEEHTML = function (html) {
                                     var htmlOBJ = $(html);
-                                    var innerHTML = htmlOBJ.find("#__OUTERTD").length? $.trim(htmlOBJ.find("#__OUTERTD").html()) : html;
+                                    var outerTD = htmlOBJ.find("#__OUTERTD");
+                                    var innerHTML = outerTD.length? $.trim(outerTD.html()) : html;
+                                    //get background color of body
+                                    pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
                                     mee.setHTML();                                    
@@ -416,6 +418,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var mainObj = meeIframe.find(".mainContentHtml");
                                         var htmlOBJ = $(oHtml);
                                         var innerHTML = htmlOBJ.find("#__OUTERTD").length? htmlOBJ.find("#__OUTERTD").html() : oHtml;
+                                        //Set background color of body
+                                        if(pageBackgroundColor){
+                                            meeIframe.find("body").css("background-color",pageBackgroundColor);
+                                        }
                                         mainObj.html(innerHTML);
                                         IsStyleActivated = false;
                                         oInitDestroyEvents.InitAll(mainObj);
@@ -428,6 +434,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
+                                }
+                                
+                                $.fn.seFormIdForPages = function (id) {
+                                   options.formCallBack(id);
                                 }
 
                                 $.fn.setAccordian = function (diff) {
@@ -1094,7 +1104,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     ddlBackgroundLayers.find("option").remove();
 
                                                     ddlBackgroundLayers.append(
-                                                            $('<option></option>').val("-1").html("Select Parent Layer"));
+                                                            $('<option value=""></option>'));                                                    
 
 
                                                     //Add Self
@@ -1125,6 +1135,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         }
 
                                                     });
+                                                    ddlBackgroundLayers.append(
+                                                            $('<option value="body">BODY</option>'));
                                                     myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
                                                     //////////////////////////////////////////////////
 
@@ -1136,8 +1148,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                         if (eventsApplied === false) {
                                             myElement.find(".ddlBackgroundLayers").chosen();
-
-
                                             //Border
                                             myElement.find(".sBorderLine").click(function () {
 
@@ -1233,9 +1243,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                             ddlBackgroundLayers.on('change', function () {
                                                 if ($(this).find(':selected').val() != "-1") {
-                                                    RemoveAllOutline();
-                                                    SelectedElementForStyle = $(this).find(':selected').data('el');
-                                                    SelectedElementForStyle.css("outline", "2px solid #6298be");
+                                                    RemoveAllOutline();                                                    
+                                                    SelectedElementForStyle = $(this).find(':selected').val()=="body"? meeIframe.find("body"): $(this).find(':selected').data('el');
+                                                    SelectedElementForStyle.css("outline", "2px solid #6298be");                                                    
                                                     // undoManager.registerAction(mainContentHtmlGrand.html());
                                                     makeCloneAndRegister();
                                                 }
@@ -1301,16 +1311,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         } //End of attached events 
                                         var ddlBackgroundLayers = myElement.find(".ddlBackgroundLayers");
                                         ddlBackgroundLayers.find("option").remove();
-                                        ddlBackgroundLayers.append($('<option></option>').val("-1").html("Select Parent Layer"));
+                                        ddlBackgroundLayers.append($('<option value=""></option>'));                                        
                                         ddlBackgroundLayers.append(
                                                 $('<option></option>')
                                                 .val(mainContentHtmlGrand.prop("tagName"))
                                                 .html("Parent: " + mainContentHtmlGrand.prop("tagName"))
                                                 .data("el", mainContentHtmlGrand)
                                                 );
-                                        myElement.find(".ddlBackgroundLayers").trigger("chosen:updated");
+                                        ddlBackgroundLayers.append($('<option value="body" selected="selected">BODY</option>'));
+                                        myElement.find(".ddlBackgroundLayers").trigger("chosen:updated").change();
                                         //Load Colors
                                         _LoadMyColors();
+                                        
+                                        
                                     }
 
 
@@ -1627,6 +1640,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
 
                                         SelectedElementForStyle.css("background-color", hex);
+                                        if(SelectedElementForStyle[0].tagName.toLowerCase()=="body"){
+                                            pageBackgroundColor = hex;
+                                        }
                                     }
                                 }
                                 InitializeStyleControls();
@@ -1866,8 +1882,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         $("body"));
                                     }
                                     else if (type == "fbdel") {
-                                        var element = $(obj).parents("li");
-                                        var form_id = imageObj["formid.encode"];
+                                        var element = $(obj).parents("li");                                        
+                                        var form_id = _ele.data("id");
                                         options._app.showAlertDetail({
                                             heading: 'Confirm Deletion',
                                             detail: "Do you want to delete this Form ?",
@@ -2676,7 +2692,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         loadForm(imgid);
                                     }
                                     else if (type === "fbdel") {                                        
-                                        deleteForm(imgid);
+                                        var form_id = element.data("id");
+                                        var element = $(element).parents("li");                                                                                
+                                        options._app.showAlertDetail({
+                                            heading: 'Confirm Deletion',
+                                            detail: "Do you want to delete this Form ?",
+                                            callback: _.bind(function () {
+                                                this.deleteForm(element, form_id);
+                                            }, mee)
+                                        },
+                                        $("body"));
                                     }
                                     return false;
                                 });
@@ -4095,11 +4120,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                         args.droppedElement.removeClass("formPlaceHolderAlone");
                                                                         args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
                                                                         oInitDestroyEvents.InitAll(args.droppedElement);
-                                                                        args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)
-                                                                        /*.click(function(){
-                                                                            var form_id = $(this).attr("data-formid");
-                                                                            mee.showFormWizard(form_id);
-                                                                        })*/
+                                                                        args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)                                                                        
                                                                     }
                                                                     else {
                                                                         var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
@@ -5384,29 +5405,28 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     loadForm('');
                                 });
 
-                                function loadForm(formId) {
-                                    var formPara = "";
-                                    if (formId != '') {
-                                        formPara = "&formId=" + formId;
-                                    }
-                                    mee.showFormWizard(formId);
-                                   /* var url = options.formWizURL;
-                                    url = url + formPara;
-                                    window.open(url);*/
-                                }
-
-
-                                function deleteForm(formId) {
-
-                                    var formPara = "";
-                                    if (formId != '') {
-                                        formPara = "&mformId=" + formId;
-                                    }
-                                    var url = options.formDeleteURL;
-                                    url = url + formPara + "&delete=true";
-
-                                    window.open(url);
-                                }
+                                function loadForm(formId) {                                   
+                                    mee.showFormWizard(formId);                                   
+                                }                                
+                                mee.deleteForm = function (element, form_id) {
+                                    var URL = "/pms/landingpages/rFormSaver.jsp?" + options._BMSTOKEN+"&ukey="+options._app.get("user_Key");
+                                    var post_data = {
+                                        delete: true,
+                                        mformId: form_id                                        
+                                    };
+                                    $.post(URL, post_data)
+                                        .done(function (data) {                                            
+                                            if (data && data.success) {
+                                                element.fadeOut("slow", function () {
+                                                    var obj = $(this);
+                                                    obj.remove();
+                                                })
+                                            }
+                                            else {
+                                                options._app.showAlert("An error occured, Please try again!", $("body"));
+                                            }
+                                        });
+                                }                               
 
                                 myElement.find('.searchFormLink').click(function () {
                                     _searchFormBlocks();
