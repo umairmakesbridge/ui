@@ -706,11 +706,21 @@
                              var select_html = ''
                              $.each(_json.links[0], function(index, val) {            
                                   selected_link = (params && params['pageURL']==val[0]["url"]) ? "selected" : ""
-                                  select_html += '<option value="'+val[0]["url"]+'" '+selected_link+'>'+val[0].title+'</option>'
-                                  self.pageUrls.push({"id":val[0]["url"],"title":val[0].title})
+                                  var url = val[0]["url"] ? self.options.app.decodeHTML(val[0]["url"]) : ""
+                                  var title = val[0].title ? self.options.app.decodeHTML(val[0].title) : ""
+                                  select_html += '<option value="'+url+'" '+selected_link+'>'+(title? title : url)+'</option>'
+                                  self.pageUrls.push({"id":url,"title":title})
                               })
-
-                             filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")
+                                                                                                                      
+                             filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")                            
+                           
+                             if( filter.find(".pagelink-box").find("option").length < parseInt(_json.totalCount)){
+                                    filter.find(".pagelink-box").find("option:last-child").attr("data-load","true");
+                             }
+                             if(params && params['pageURL'] &&  filter.find(".pagelink-box").val()!== self.options.app.decodeHTML(params['pageURL'])){
+                                 filter.find(".pagelink-box").attr("data-selected",self.options.app.decodeHTML(params['pageURL']));
+                                 filter.find(".pagelink-box").trigger("chosen:select")
+                             }
                         }
                   }).fail(function() { console.log( "error in loading page urls" ); });
                 }
@@ -799,7 +809,10 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      filter.find(".pagelink-box").chosen({width:"400px"}).change(function(){
+      filter.find(".pagelink-box").chosen({width:"400px",is_remote:true
+                                           ,remote_url:"/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=listLinkLibrary",
+                                           page_urls : self.pageUrls
+                                          }).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })

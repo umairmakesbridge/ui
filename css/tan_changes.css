@@ -311,8 +311,8 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
     text-shadow: none;
 }
 .addnew_btn > a strong { font-size:0px; font-weight:bold; position:relative; background:url("../img/plus.png") no-repeat scroll center center rgba(0, 0, 0, 0); width:12px; height:16px; display:block; }
-.chosen-search #searchbtn { width:30px; height:32px; margin-left:-31px; }
-.chosen-search .searchbtn .icon-search { margin-top:-3px; }
+.chosen-search #searchbtn { width:30px; height:34px; margin-left:-31px; }
+.chosen-search .searchbtn .icon-search { margin-top:-1px; }
 .chosen-container .chosen-results { max-height:230px; }
 #salesforce_setup .heading,#netsuite_setup .heading  { color:#6494AF; }
 .global_messages{

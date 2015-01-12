@@ -25,6 +25,8 @@
         return this.add_option(child);
       }
     };
+    
+  
 
     SelectParser.prototype.add_group = function(group) {
       var group_position, option, _i, _len, _ref, _results;
@@ -112,6 +114,26 @@
     }
     return parser.parsed;
   };
+  
+   SelectParser.decodeHTML = function (str,lineFeed){        
+            //decoding HTML entites to show in textfield and text area 				
+            str = str.replace(/&#58;/g, ":");
+            str = str.replace(/&#39;/g, "\'");
+            str = str.replace(/&#61;/g, "=");
+            str = str.replace(/&#40;/g, "(");
+            str = str.replace(/&#41;/g, ")");
+            str = str.replace(/&lt;/g, "<");
+            str = str.replace(/&gt;/g, ">");
+            str = str.replace(/&gt;/g, ">");
+            str = str.replace(/&#9;/g, "\t");
+            str = str.replace(/&nbsp;/g, " ");
+            str = str.replace(/&quot;/g, "\"");
+            if (lineFeed) {
+                str = str.replace(/&line;/g, "\n");
+            }
+            return str;
+        
+    }
 
   AbstractChosen = (function() {
     function AbstractChosen(form_field, options) {
@@ -138,10 +160,12 @@
         return _this.activate_field(evt);
       };
       this.active_field = false;
+      this.remote_page = 20;
       this.mouse_on_container = false;
       this.results_showing = false;
       this.result_highlighted = null;
       this.result_single_selected = null;
+      this.is_remote =   this.options.is_remote || false;
       this.allow_single_deselect = (this.options.allow_single_deselect != null) && (this.form_field.options[0] != null) && this.form_field.options[0].text === "" ? this.options.allow_single_deselect : false;
       this.disable_search_threshold = this.options.disable_search_threshold || 0;
       this.disable_search = this.options.disable_search || false;
@@ -188,6 +212,26 @@
           return this.activate_field();
         }
       }
+    };
+    
+    AbstractChosen.prototype.initScroll = function(evt) {
+      var _this = this;
+      var $w = $(window);
+        var th = 200;
+        var inview = _this.search_results_div.find("li:last-child").filter(function() {
+            var $e = $(this),
+                wt = $w.scrollTop(),
+                wb = wt + $w.height(),
+                et = $e.offset().top,
+                eb = et + $e.height();
+
+            return eb >= wt - th && et <= wb + th;
+          });
+        if(inview.length && $(_this.form_field).find("option:last-child").attr("data-load")){
+           $(_this.form_field).find("option:last-child").removeAttr("data-load");
+           _this.search_results_div.append($("<li class='loading-li active-result'><div></div></li>"));
+           _this.fetch_records(20); 
+        }  
     };
 
     AbstractChosen.prototype.input_blur = function(evt) {
@@ -275,6 +319,10 @@
         return this.winnow_results();
       }
     };
+    
+    AbstractChosen.prototype.result_update_selected = function (){
+        this.fetch_records(20);
+    }
 
     AbstractChosen.prototype.results_toggle = function() {
       if (this.results_showing) {
@@ -538,7 +586,8 @@
       this.form_field_jq.hide().after(this.container);
       this.dropdown = this.container.find('div.chosen-drop').first();
       this.search_field = this.container.find('input').first();
-      this.search_results = this.container.find('ul.chosen-results').first();
+      this.search_results_div = this.container.find('ul.chosen-results');
+      this.search_results = this.container.find('ul.chosen-results').first();      
       this.search_field_scale();
       this.search_no_results = this.container.find('li.no-results').first();
       if (this.is_multiple) {
@@ -586,6 +635,9 @@
       this.form_field_jq.bind("chosen:updated.chosen", function(evt) {
         _this.results_update_field(evt);
       });
+      this.form_field_jq.bind("chosen:select.chosen", function(evt) {
+        _this.result_update_selected(evt);
+      });
       this.form_field_jq.bind("chosen:activate.chosen", function(evt) {
         _this.activate_field(evt);
       });
@@ -604,6 +656,11 @@
       this.search_field.bind('focus.chosen', function(evt) {
         _this.input_focus(evt);
       });
+      if(this.is_remote){
+          this.search_results_div.bind('scroll', function(evt) {
+              _this.initScroll(evt);
+          });
+      }
       if (this.is_multiple) {
         return this.search_choices.bind('click.chosen', function(evt) {
           _this.choices_click(evt);
@@ -704,6 +761,55 @@
       this.active_field = true;
       this.search_field.val(this.search_field.val());
       return this.search_field.focus();
+    };
+    
+    Chosen.prototype.fetch_records = function(page) {
+      var selected_link ="";
+      var _this = this;
+      var offset = 0;
+      var s_top =0;
+      if(page){
+          offset = this.remote_page;
+          this.remote_page = this.remote_page + 20;
+      }
+      else{
+          offset = 0;
+          this.remote_page = 20;
+      }
+      if(this.options.remote_url){
+        var URL = this.options.remote_url + "&offset="+offset;  
+        jQuery.getJSON(URL,  function(tsv, state, xhr){
+              if(xhr && xhr.responseText){                        
+                  var _json = jQuery.parseJSON(xhr.responseText);                                                 
+                  var select_html = ''
+                  _this.search_results_div.find(".loading-li").remove();
+                  $.each(_json.links[0], function(index, val) {            
+                       selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
+                       if(selected_link){
+                           $(_this.form_field).removeAttr("data-selected");
+                       }
+                       var url = val[0]["url"] ? SelectParser.decodeHTML(val[0]["url"]) : ""
+                       var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""
+                       select_html += '<option value="'+url+'" '+selected_link+'>'+ (title ? title : url)+'</option>'                      
+                       _this.options.page_urls.push({"id":url,"title":title})
+                   })
+                   $(_this.form_field).append(select_html);
+                   s_top = _this.search_results_div.scrollTop();
+                   _this.results_update_field();
+                   _this.search_results_div.scrollTop(s_top);
+                   
+                   if( $(_this.form_field).find("option").length < parseInt(_json.totalCount)){
+                       $(_this.form_field).find("option:last-child").attr("data-load","true");
+                   }     
+                   else{
+                        $(_this.form_field).removeAttr("data-selected");
+                   }
+                   if($(_this.form_field).attr("data-selected")){
+                        _this.result_update_selected();
+                   }
+              }
+        }).fail(function() { console.log( "error in loading page urls" ); });
+      }
     };
 
     Chosen.prototype.test_active_click = function(evt) {
