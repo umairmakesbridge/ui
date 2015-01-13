@@ -288,38 +288,38 @@ function (template,contactsView) {
                 },
                 initScroll:function(){            
                     this.$win=this.$el.parents(".modal-body")
-                ,this.$nav = this.$('.editortoolbar')
-                ,this.$tools = this.$('.editortools')                                    
-                ,this.$editorarea =this.$('.editorbox')
-                ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top                
-                ,this.isFixed = 0,this.scrollChanged=false;
+                    ,this.$nav = this.$('.editortoolbar')
+                    ,this.$tools = this.$('.editortools')                                    
+                    ,this.$editorarea =this.$('.editorbox')
+                    ,this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top                
+                    ,this.isFixed = 0,this.scrollChanged=false;
 
-                this.processScroll=_.bind(function(){                                                       
-                  if(this.$("#area_html_editor_mee").height() > 0 ){ 
-                    if(this.$("#area_html_editor_mee").css("display")!=="none"){  
-                      var i, scrollTop = this.$win.scrollTop();
-                      this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').offset().top  
-                      if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                          scrollTop = scrollTop - 500;
+                    this.processScroll=_.bind(function(){                                                       
+                      if(this.$("#area_html_editor_mee").height() > 0 ){ 
+                        if(this.$("#area_html_editor_mee").css("display")!=="none"){  
+                          var i, scrollTop = this.$win.scrollTop();
+                          this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top  ;
+                          
+                          if (scrollTop >= this.navTop && !this.isFixed) {
+                            this.isFixed = 1
+                            this.$nav.addClass('editor-toptoolbar-fixed');                            
+                            this.$nav.css("width",this.$(".editorpanel").width());
+                            this.$tools.addClass('editor-lefttoolbar-fixed');                        
+                            this.$editorarea.addClass('editor-panel-fixed');                                                
+                            this.$nav.css("top","60px");this.$tools.css("top","60px");
+                          } else if (scrollTop <= this.navTop && this.isFixed) {
+                            this.isFixed = 0
+                            this.$nav.removeClass('editor-toptoolbar-fixed');
+                            this.$nav.css("top","0px");this.$tools.css("top","0px");
+                            this.$nav.css("width","100%");
+                            this.$tools.removeClass('editor-lefttoolbar-fixed');                        
+                            this.$editorarea.removeClass('editor-panel-fixed');                        
+                          }                      
+                        }
                       }
-                      if (scrollTop >= this.navTop && !this.isFixed) {
-                        this.isFixed = 1
-                        this.$nav.addClass('editor-toptoolbar-fixed');
-                        this.$nav.css("width",this.$(".editorpanel").width());
-                        this.$tools.addClass('editor-lefttoolbar-fixed');                        
-                        this.$editorarea.addClass('editor-panel-fixed');                                                
-                      } else if (scrollTop <= this.navTop && this.isFixed) {
-                        this.isFixed = 0
-                        this.$nav.removeClass('editor-toptoolbar-fixed');
-                        this.$nav.css("width","100%");
-                        this.$tools.removeClass('editor-lefttoolbar-fixed');                        
-                        this.$editorarea.removeClass('editor-panel-fixed');                        
-                      }                      
-                    }
-                  }
-                },this);
-                this.processScroll();
-                this.$win.on('scroll', this.processScroll);                               
+                    },this);
+                    this.processScroll();
+                    this.$win.on('scroll', this.processScroll);                                
                 },
              sendEmail : function(){
                     var isValid = true;

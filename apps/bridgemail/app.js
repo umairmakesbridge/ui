@@ -218,11 +218,11 @@ define([
                 else {
                     this.mainContainer.$(".local-adds").hide();
                 }
-                /*if(this.mainContainer){
-                 this.NTusers();
+                if(this.mainContainer){
+                    this.showFeatures();
                  }else{
-                 setTimeout(_.bind(this.NTusers,this),200);
-                 }*/
+                    setTimeout(_.bind(this.showFeatures,this),200);
+                 }
 
             }, this));
             this.checkFromCRM();
@@ -234,13 +234,13 @@ define([
                 setTimeout(_.bind(this.fromCRM, this), 200);
             }
         },
-        NTusers: function () {
+        showFeatures: function () {
             var allowedUser = ['admin', 'jayadams', 'demo'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
-                this.mainContainer.$(".autobots-gallery").show();
+                this.mainContainer.$(".one-one-listing,.landing-pages").show();
             }
             else {
-                this.mainContainer.$(".autobots-gallery").hide();
+                this.mainContainer.$(".one-one-listing,.landing-pages").hide();
             }
         },
         fromCRM: function () {
