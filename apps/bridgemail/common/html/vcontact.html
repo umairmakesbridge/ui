@@ -18,7 +18,7 @@
                                             
                                                
                                                 <td width="90px">
-                                                    <div class="img" style="margin-left:;">
+                                                    <div class="single-oneOone letter_block l_<%- this.getFirstAlphabet(_json).toLowerCase() %>" style="margin-left:;">
                                                        <span><%- this.getFirstAlphabet(_json) %></span>
                                                     </div>
                                                  </td>
@@ -27,7 +27,7 @@
                                                   <td width="100%"><div>
                                                       <div class="name-type">
                                                       
-                                                        <div class="title view-profile">
+                                                        <div class="title <%  if(!this.options.isOTOFlag){ %> view-profile <% } %>">
                                                             <h3><a><%- _json.firstName %>&nbsp;<%- _json.lastName %></a></h3>
                                                             <% if(_json.salesStatus) { %>
                                                         <a class="statusdd color3 vsalestatus"><%- _json.salesStatus %> <b class="caret"></b></a>

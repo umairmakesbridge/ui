@@ -1,13 +1,15 @@
 
     <a class="closebtn"></a>
-    <div class="elevel">
+    <div class="elevel" style="<% if(this.meterClass === 'meterdd-two'){ %>margin:28px 0 0;<% } %>">
         <h4>Engagement level</h4>
         <ul>
            
             <li data-original-title="First opened on" class="open showtooltip"><i class="icon"></i> <%- this.openDate %> </li>
-            <li data-click="&lt;a&gt;&lt;b&gt;1&lt;/b&gt;&lt;/a&gt; " data-original-title="Unique click count" class="click showtooltip click-detail"><i class="icon"></i> <b><% if(this.clicked != 0){ %><a><%- this.clicked %></a><% }else {%><%- this.clicked %> <% } %></b> </li>
+            <li data-click="&lt;a&gt;&lt;b&gt;1&lt;/b&gt;&lt;/a&gt; " data-original-title="Unique click count" class="click showtooltip click-detail"><i class="icon"></i> <b><% if(this.clicked != 0){ %><a><%- this.clicked %></a><% }else {%><%- this.clicked %>0 <% } %></b> </li>
+            <% if(this.meterClass !== 'meterdd-two'){ %>
             <li data-view="&lt;b&gt;0&lt;/b&gt;" data-original-title="Page Views" data-id="xhDfZt33Op26Bl17Ip20Kq21Pm30Rl33Lm26xqwE" class="pageview showtooltip page-view"><i class="icon"></i><b>0</b></li>
             <li data-original-title="Converted on" class="conversion showtooltip"><i class="icon"></i>- </li>
+            <% } %>
         </ul>
     </div>
     <%
@@ -19,7 +21,7 @@
       bkgroundPosition = '0px 0 !important';
     }
     %>
-    <div style="background-position: <%- bkgroundPosition %>" class="meterdd pageview">
+    <div style="background-position: <%- bkgroundPosition %>" class="<%- this.meterClass %>  pageview">
         <span class="open showtooltip" data-original-title="Opened "></span>
         <span class="click showtooltip" data-original-title="Clicked"></span>
         <span class="pageview showtooltip" data-original-title="Page Viewed"></span>

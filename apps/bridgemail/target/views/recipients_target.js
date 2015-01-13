@@ -171,6 +171,7 @@ function (template) {
                                self.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.saveTargetFilter,mPage); // New Dialog
                            mPage.$el.find('.addfilter').hide();
                            mPage.$el.find('#c_c_target .filter-div').append('<div class="block-mask"></div>');
+                           dialog.$el.find('#dialog-title .pointy .delete').hide();
                       });
                 },
             showPercentDiv:function(ev){

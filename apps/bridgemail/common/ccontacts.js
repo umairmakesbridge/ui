@@ -212,7 +212,7 @@ function (template,Contacts,viewContact) {
                        if(this.parent.subNum != null){
                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                            this.parent.subNum=null;
-                           this.parent.setiFrameSrc();
+                           if(!this.isOTOFlag){this.parent.setiFrameSrc();}
                        }
                    };
                    this.$el.find("#total_subscriber span").html("contacts found");

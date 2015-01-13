@@ -37,8 +37,9 @@ function (template,highlight,templateCollection,templateRowView) {
                this.searchTxt = "";
                this.templates = null;  
                this.totalCount = 0;
+               this.parent = '';
                this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
-               this.OnOFlag = this.options.isOTO;
+               this.OnOFlag = (this.options.isOTO) ? this.options.isOTO : '';
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
                //              
@@ -338,7 +339,8 @@ function (template,highlight,templateCollection,templateRowView) {
                                                         if(this.OnOFlag){
                                                             this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag"><div class="droppanel" style="height: 375px;"><h4 style="margin: 0px; padding: 150px 0px 0px;"><img alt="" src="'+this.app.get('path')+'img/easyeditor-g.png"><br class="clearfix"><span>Use EasyEditor </span></h4></div><a class="btn-blue g-btn ono-built-scratch" style="width: 190px;"><span>Start from Scratch </span><i class="icon next"></i></a></div></div></li>');
                                                             this.$('#new_template').find('.ono-built-scratch').click(_.bind(this.createOTODialog,this));
-                                                            this.$('.create-tempalte').click(_.bind(this.createOTODialog,this));
+                                                            
+                                                           // this.$('.create-tempalte').click(_.bind(this.createOTODialog,this));
                                                         }
                                                         else{
                                                             this.$el.find('.thumbnails').append('<li class="span3" id="new_template" class="create_temp"><div style="height:475px;" class="thumbnail browse"><div style="" class="drag create"><span>Add Template </span></div></div></li>');
@@ -632,28 +634,35 @@ function (template,highlight,templateCollection,templateRowView) {
                     $(this.el).find("#template_search_menu").slideToggle();
                     ev.stopPropagation();
                 },
-                createOTODialog : function(){
+                createOTODialog : function(obj){
+                    if(obj){
+                        var currentobj = $.getObj(obj,"a");
+                        if(currentobj.hasClass('ono-built-scratch')){
+                            this.parent.template_id='';
+                        }
+                    }
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
+                        this.parent = this.options.page;
                         var dialog = this.app.showDialog({title:'New Message',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                         headerEditable:false,
                         headerIcon : 'messageicon',
                         bodyCss:{"min-height":dialog_height+"px"},
-                        tagRegen:false,
-                        buttons: {saveBtn:{text:'Save'} }
+                        buttons: {saveBtn:{text:'Send Message',btnicon:'next',btncolor:'btn-green'} }
                         });
                         this.app.showLoading("Loading...",dialog.getBody());
                         var _this = this;
                         require(["onetooneemails/createmessage"],function(createMessagePage){                                                     
-                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog});               
+                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id});               
                            var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
                            _this.app.showLoading(false, mPage.$el.parent());                     
                             mPage.init();
                             mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                            _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                             // dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
+                            dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
                         })
                 }
         });

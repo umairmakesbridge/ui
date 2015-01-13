@@ -114,7 +114,7 @@ function (template,highlighter,tagView) {
                             }
                             else if(this.options.OnOFlag){
                                templates_html +='<a class="previewbtn clr2"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
-                                    templates_html +='<a class="copybtn clr1"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
+                               templates_html +='<a class="deletebtn clr1" style="width:50%" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
                             }
                             else{
                                 templates_html +='<a class="previewbtn clr4" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
@@ -264,6 +264,7 @@ function (template,highlighter,tagView) {
                         }
             },
             selectTemplate : function(obj){
+                
                if(this.selectCallback){                            
                           this.selectCallback(obj);
                         }

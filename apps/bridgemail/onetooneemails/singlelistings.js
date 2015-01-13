@@ -14,6 +14,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     "click #clearcal": function (obj) {
                         this.$el.find('#clearcal').hide();
                         this.$el.find('#daterange').val('');
+                         this.$('.ui-daterangepickercontain').find('li.ui-state-active').removeClass('ui-state-active')
                         this.findEmails(obj);
                     },
                     "click .refresh_btn": function () {
@@ -101,27 +102,55 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                         this.app.showLoading("Loading Templates...",dialog.getBody());
                         var _this = this;
                         require(["bmstemplates/templates"],function(templatesPage){                                                     
-                            var mPage = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true});               
+                             _this.templateView = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true});               
                            var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
-                           dialog.getBody().append(mPage.$el);
-                           mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
-                           _this.app.showLoading(false, mPage.$el.parent());                     
-                            mPage.init();
-                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                            _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                           dialog.getBody().append( _this.templateView.$el);
+                            _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                           _this.app.showLoading(false,  _this.templateView.$el.parent());                     
+                             _this.templateView.init();
+                             _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].currentView = _this.templateView; // New Dialog
                         })
                  
                 },
                 selectTemplate:function(obj){
-                    this.setEditor();
+                   // this.setEditor();
                     var target = $.getObj(obj,"a");
                     var bms_token =this.app.get('bms_token');
-                    this.app.showLoading('Loading HTML...',this.$el);
-                    this.states.editor_change = true;
-                    var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
-                    jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
-
+                   // this.app.showLoading('Loading HTML...',this.$el);
+                    //this.states.editor_change = true;
+                   // var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+                             
+                   // jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
+                     this.template_id = target.attr("id").split("_")[1]; 
+                     this.templateView.createOTODialog();
+                    
                 },
+                /*setEditor: function() {
+                    if (_tinyMCE && _tinyMCE.get('bmseditor_' + this.wp_id)) {
+                        this.bmseditor.showEditor(this.wp_id);
+                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent("");
+                        this.$("#bmstexteditor").val(this.app.decodeHTML(this.parent.plainText, true));
+                        this.$(".textdiv").hide();
+                    }
+                    else {
+                        setTimeout(_.bind(this.setEditor, this), 200);
+                    }
+                },
+                setEditorHTML: function(tsv, state, xhr) {
+                    this.app.showLoading(false, this.$el);
+                    var html_json = jQuery.parseJSON(xhr.responseText);
+                    if (html_json.htmlText) {
+                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText, true));
+                    }
+                },
+                setContents: function() {
+                    if (_tinyMCE.get('bmseditor_' + this.wp_id)) {
+                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText, true));
+                    }
+                    else {
+                        setTimeout(_.bind(this.setContents, this), 200);
+                    }
+                },*/
                 findEmails: function (obj)
                 {
                     var olist_obj = this;
@@ -251,7 +280,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     this.isSubjectText = false;
                     this.timeout = null;
                     this.total_Count = null;
+                    this.subNum = '';
+                    this.returnDataValue = '';
                     var camp_obj = this;
+                    this.template_id='';
+                    this.templateView  = '';
                     camp_obj.getallemails();
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
                         id: 'list-search',
@@ -369,68 +402,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     });
 
                 },
-                showChart: function (obj) {
-                    var _ele = $.getObj(obj.evobj, "div");
-                    var left_minus = 96;
-                    var ele_offset = _ele.offset();
-                    var ele_height = _ele.height();
-                    var top = ele_offset.top + ele_height - 134;
-                    var left = ele_offset.left - left_minus;
-                    var _this = this;
-                    var camp_id = obj.camp_id;
-                    this.$(".campaign-name").html(obj.camp_name); //Setting name of Campaign in Chart
-                    this.app.showLoading("Loading Chart...", this.$(".cstats .chart-area"));
-                    if (!this.chartPage) {
-                        require(["reports/campaign_pie_chart"], function (chart) {
-                            _this.chartPage = new chart({page: _this, legend: 'none', chartArea: {width: "95%", height: "95%", left: '0px', top: '0px'}});
-                            _this.$(".campaign-chart").html(_this.chartPage.$el);
-                            _this.chartPage.$el.css({"width": "280px", "height": "280px"});
-                            _this.loadChart(camp_id);
-                        });
-                    }
-                    else {
-                        this.loadChart(camp_id);
-                    }
-
-
-                    this.$(".cstats").css({"left": left + "px", "top": top + "px"}).show();
-                },
-                closeChart: function () {
-                    this.$(".cstats").hide();
-                },
-                loadChart: function (camp_id) {
-                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=stats";
-                    URL += "&campNums=" + camp_id;
-                    if (this.states_call) {
-                        this.states_call.abort();
-                        this.states_call = null;
-                    }
-                    this.chart_data = {clickCount: 0, conversionCount: 0, openCount: 0, pageViewsCount: 0, sentCount: 0};
-                    this.states_call = jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
-                        var camp_json = jQuery.parseJSON(xhr.responseText);
-                        this.app.showLoading(false, this.$(".cstats .chart-area"));
-                        _.each(camp_json.campaigns[0], function (val) {
-                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                            this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(val[0].conversionCount);
-                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(val[0].openCount);
-                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(val[0].pageViewsCount);
-                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(val[0].sentCount);
-                        }, this);
-                        var _data = [
-                            ['Action', 'Count'],
-                            ['Opens', this.chart_data["openCount"]],
-                            ['Page Views', this.chart_data["pageViewsCount"]],
-                            ['Conversions', this.chart_data["conversionCount"]],
-                            ['Clicks', this.chart_data["clickCount"]]
-                        ];
-
-                        this.chartPage.createChart(_data);
-                        _.each(this.chart_data, function (val, key) {
-                            this.$("." + key).html(this.app.addCommas(val));
-                        }, this);
-
-                    }, this));
-                },
+                
                 liveLoading: function () {
                     var $w = $(window);
                     var th = 200;
@@ -494,12 +466,17 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                  
                     var _text = parseInt(count) <= "1" ? "Email" : "Emails";
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong>';
-                    if (this.fromDate && this.toDate) {
+                    
+                     if (this.fromDate && this.toDate) {
                         var toDate = moment(this.app.decodeHTML(this.toDate),'M/D/YYYY');														
-                        var toDateFormat = toDate.format("DD MMM, YYYY");
-                        var fromDate = moment(this.app.decodeHTML(this.fromDate),'M/D/YYYY');														
-                        var fromDateFormat = fromDate.format("DD MMM, YYYY");
+                        var toDateFormat = toDate.format("DD MMM, YY");
+                         var fromDate = moment(this.app.decodeHTML(this.fromDate),'M/D/YYYY');														
+                        var fromDateFormat = fromDate.format("DD MMM, YY");
                         this.$("#total_templates").html(text_count + _text + " sent from '<b>" + fromDateFormat + ' - ' + toDateFormat  +"</b>'");
+                    }else if(this.fromDate){
+                         var fromDate = moment(this.app.decodeHTML(this.fromDate),'M/D/YYYY');														
+                        var fromDateFormat = fromDate.format("DD MMM, YY");
+                        this.$("#total_templates").html(text_count + _text + " sent from '<b>" + fromDateFormat +"</b>'");
                     }
                     else if (this.searchTxt && this.isSubjectText) {
                         this.$("#total_templates").html(text_count + _text + " found containing Subject '<b>" + this.searchTxt + "</b>'");
@@ -549,23 +526,63 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                                 header_title.find('ul.progress-loading').remove();
                                 header_title.append(stats);
                                 
-                                $(".c-current-status li").click(_.bind(this.findEmails, this));
+                                $(".c-current-status li:first-child").click(_.bind(this.getSendEmails, this));
+                                $(".c-current-status li:last-child").click(_.bind(this.getOpenEmails, this));
                                 header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
                 },
+                getOpenEmails :function(){
+                    this.type = 'getOpenMessageList';
+                    this.total_fetch = 0;
+                    this.getallemails();
+                },
+                
+                getSendEmails :function(){
+                  
+                    this.type = 'getMessageList';
+                    this.total_fetch = 0;
+                    this.getallemails();
+                },
+                
                 toggleSortOption: function (ev) {               
                     $(this.el).find("#template_search_menu").slideToggle();
                     ev.stopPropagation();
                 },
-                createCampaign:function(fieldText, _json){                                 
-                    if(this.headBadge){
-                        this.headBadge();
-                       this.total_fetch = 0;
-                       this.getallemails();
+                getSingleSubEmails : function(fcount,childView){
+                    if (!fcount) {
+                        this.offset = 0;
                     }
-                    this.app.mainContainer.createCampaign(fieldText, _json);
-               }
+                    else {
+                        this.offset = parseInt(this.offset) + this.offsetLength;
+                        //this.$("#camp_list_grid tbody").append('<tr class="loading-campagins"><td colspan="6"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading more emails.</p></div></td></tr>');
+                    }
+                    var _data = {type: this.type};
+                    _data['offset'] = this.offset;
+                    _data['bucket'] = 20;
+                    _data['subNum'] = this.subNum;
+                    this.campaigns_request = this.singlelistingCollection.fetch({data: _data,
+                        success: _.bind(function (data1, collection) {
+                            // Display items
+                            this.$("#camp_list_grid tbody").find('.loading-campagins').remove();
+                            if (this.app.checkError(data1)) {
+                                return false;
+                            }
+                            //console.log('Data : '+data1 + ' Collection : '+ collection);
+                           this.returnDataValue = {data:data1,collection:collection};
+                            childView.showSingleContactMessages();
+                            /*_.each(data1.models, _.bind(function (model) {
+                                this.$el.find('#camp_list_grid tbody').append(new singlelistingRowView({model: model, sub: this}).el);
+                            }, this));*/
+                            
+                        }, this),
+                        error: function (collection, resp) {
+
+                        }
+                    });
+                           // console.log('from single listings : '+this.campaigns_request);
+                    
+                }
 
             });
         });

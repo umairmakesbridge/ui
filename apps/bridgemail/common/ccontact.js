@@ -94,10 +94,10 @@ function (template,highlighter) {
             openVisitCard:function(){
                 
              this.parent.parent.$el.find('#contact-vcard').remove();
-             
+             this.parent.parent.subNum = this.model.get('subNum');
              var vcontact = $('<div id="contact-vcard" class="activities_tbl contact_dd"></div>');
              this.parent.parent.$el.find('.oto-message-contact-wrap').append(vcontact);
-             $(vcontact).css({'z-index': '100', 'min-height': '170px', 'position': 'relative', 'top': '56px','left':'0'});
+             $(vcontact).css({'background':'none repeat scroll 0 0 transparent','z-index': '100', 'min-height': '170px', 'position': 'relative', 'top': '35px','left':'0'});
              this.app.showLoading("Loading Contact Details...", vcontact);
              this.parent.parent.$el.find('#contact-search').val('');
              this.parent.parent.$el.find('#clearsearch').hide();

@@ -24,6 +24,7 @@ function (template,highlighter,tags) {
                  this.parent = this.options.parent;
                  this.app = this.options.app;
                  this.sub_id = this.options.subNum;
+                 this.DialogView = this.options.dialog;
                  this.sub_name = '';
                  this.jSon = '';
                  this.render();
@@ -31,7 +32,7 @@ function (template,highlighter,tags) {
             render: function () {
                 
                 this.loadContact();
-                this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
+                //this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
             },
             loadContact : function(){
                  var _this = this;
@@ -67,6 +68,10 @@ function (template,highlighter,tags) {
                      return this.sub_name.charAt(0);
             },
             openContact:function(){
+                if(this.DialogView){
+                    var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                    console.log(dialogArrayLength);
+                }
                 this.$el.parents('body').find('#contact-vcard').remove();
                 this.app.mainContainer.openSubscriber(this.sub_id,this.sub_name);
             },

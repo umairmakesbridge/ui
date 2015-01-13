@@ -1332,6 +1332,9 @@ ul.tabs-btns li.active a{
 .wtab-lpageslisting{background-position: -30px -210px;}
 .wtab-lpages{background-position: -30px -180px}
 
+.wtab-onetoonelisting{
+    background-position:-60px -58px;
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;
@@ -4074,6 +4077,18 @@ div.engage-meter-wrap li i {
     height: 18px;
     width: 22px;
 }
+.ono-engager-wrap .metericon-two {
+    background: url("../img/metericons-email.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.meterdd-two {
+    background: url("../img/meter-email.png") no-repeat scroll 0 0 #ffffff;
+    border-radius: 2px;
+    float: left;
+    height: 95px;
+    margin: 14px 8px 0;
+    position: relative;
+    width: 140px;
+}
 div.engage-meter-wrap li.open i {
     background: url("../img/openicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
 }
@@ -4105,9 +4120,7 @@ div.engage-meter-wrap li.conversion i {
 }
 
 .logpanel {
-    height: 400px;
-    overflow: hidden;
-    padding: 10px 0;
+   
 }
 .logpanel .mCSB_container {
     margin-right: 20px;
@@ -4141,7 +4154,7 @@ div.engage-meter-wrap li.conversion i {
 }
 .logpanel_boxinner .settings .cont {
     background: #fff;
-    min-height: auto;
+    min-height: 230px;
 }
 .logpanel_boxinner .settings {
     margin-top: 0px;
@@ -4179,6 +4192,16 @@ div.engage-meter-wrap li.conversion i {
 }
 .oto-message-contact-wrap .contact_dd {
     box-shadow: none !important;
+}
+#contact-vcard .bmsgrid  .bDiv {
+   background : none repeat scroll 0 0 transparent !important;
+}
+.error-contact{
+     border: 2px solid #fb8080 !important;
+}
+/*-----Create Message------*/
+.logpanel h2 .icon.easyeditor {
+    background: url("../img/easyeditr-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
 /*=======================
 ****************

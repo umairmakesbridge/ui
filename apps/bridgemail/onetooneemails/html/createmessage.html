@@ -1,7 +1,4 @@
-<div class="logpanel ">
-    <div style="position:relative; height:100%; overflow:hidden; max-width:100%;" id="mCSB_1" class="mCS-light"><div style="position: relative; top: 0px;" class="mCSB_container">
-      
-      
+<div class="logpanel">   
       <h2><i class="icon sendto"></i>Send To</h2>
             		
                      <div style="display:;" class="logpanel_box">
@@ -29,8 +26,8 @@
                                                  
                                                  
                                                  
-                                                 <div class="span6 settings" style="min-height:255px;">
-                            				<div class="cont step1col1">
+  <div class="span6 settings oto-message-fields-wrap" style="min-height:255px;margin-top: 0px;">
+      <div class="cont step1col1" id="oto_email_fields">
             <div class="row">
                 <label id="lblSubject">Subject</label>
                 <div class="campaign-fields-right-wrapper" style="" >
@@ -38,10 +35,10 @@
                     <div class="input-append adv_dd sort-options subject-container" id="campaign_subject-wrap">
                         <div class="inputcont" style="float:right;width:100%;">              	
                             <input type="text" style="width:100%" placeholder="Subject line goes here ..." id="campaign_subject" class="header-info campaign-headerinfo-input">
-                            <div class="btn-group subject-group">
+                            <!-- <div class="btn-group subject-group">
                                 <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
 
-                            </div>
+                            </div>-->
                         </div>
                         <!--<span id="subject_erroricon" class="erroricon"></span>-->
                     </div>
@@ -84,9 +81,9 @@
                     <div class="input-append adv_dd sort-options fname-container" id="campaign_from_name-wrap">
                         <div class="inputcont" style="width:100%;float:right;">              	
                             <input type="text" placeholder="Enter from name" style="width:100%;" id="campaign_from_name" class="header-info campaign-headerinfo-input" />
-                            <div class="btn-group fromname-group">
+                            <!-- <div class="btn-group fromname-group">
                                 <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon"></span> <span class="caret"></span> </button>
-                            </div>
+                            </div>-->
                         </div>
                         <!--<span id="fromname_erroricon" class="erroricon"></span>-->
                     </div>
@@ -106,9 +103,9 @@
                     <div class="input-append adv_dd sort-options replyto-container" id="campaign_reply_to-wrap">
                         <div class="inputcont" style="width:100%;float:right;">              	
                             <input type="text" placeholder="Enter reply to" id="campaign_reply_to" style="width:100%" class="header-info campaign-headerinfo-input" />                
-                            <div class="btn-group replyto-group">
+                            <!--<div class="btn-group replyto-group">
                                 <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon" ></span> <span class="caret"></span> </button>
-                            </div>
+                            </div>-->
                         </div>
                         <!--<span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
                     </div>
@@ -124,6 +121,32 @@
             </div>
         </div>			
 
+        <div class="cont step1col1 sumry" id="oto_email_preview" style="display: none;" style="padding:20px 10px;">
+                    <div>
+                            <div class="row">
+                                <label>Subject</label>
+                                <span class="text" id="campaign_preview_subject"></span></div>
+                            <div class="row">
+                                <label>From Email</label>
+                                <span class="text" id="campaign_preview_fromEmail"></span></div>
+                            <div id="femail_default" class="row" style="display:none;">
+                                <label>Default From Email</label>
+                                <span class="text" id="campaign_preview_fromEmail_default"></span></div>
+                            <div class="row">
+                                <label>From Name</label>
+                                <span class="text" id="campaign_preview_defaultSenderName"></span></div>
+                            <div id="fromname_default" class="row" style="display:none;">
+                                <label>Default From Name</label>
+                                <span class="text" id="campaign_preview_sendername_default"></span></div>
+                            <div class="row">
+                                <label>Reply To</label>
+                                <span class="text" id="campaign_preview_defaultReplyTo"></span></div>                
+                            <div id="replyto_default" class="row" style="display:none;">
+                                <label>Default Reply To</label>
+                                <span class="text" id="campaign_preview_replyto_default"></span></div>
+                        </div>                                        
+                                                         
+        </div>                                            
                                                   </div>  <!-- span6  --> 
                                                   
                                                   
@@ -151,20 +174,51 @@
                      
                         
  
-
-                            <h2><i class="icon easyeditor"></i>Easy Editor </h2>
+                            <% if(this.isPreviewEmail){ %>
+                            <h2 style="line-height: 35px;"><i class="icon preview left"></i>Message Preview </h2>
+                            <% }else{ %>
+                            <h2 style="line-height: 35px;"><i class="icon easyeditor left"></i>Easy Editor </h2>
+                            <% } %>
                             <div class="logpanel_box">
-                                                    <div class="logpanel_boxinner">
+                                                    <div class="logpanel_boxinner" id="mee-iframe-wrapper">
                                                             
-                                                                      
-                                                                      
-                                                                      Easy Editor Here...           
-                                                                 <!--  -->
-                                                            
-                                                            
-                                                            
-                                                            
-                                                            
+                                                    <!-- <div id="area_html_editor_mee" class="content-inner soruces" style="">
+                                                            <div id="mee_editor" class="MEE_EDITOR" data-original-title=""></div>
+                                                        </div>-->
+                                                        <div class="clearfix"></div>
+                                                        <div class="merge-fields-wrapper" style="position: relative;">
+                                                        <div id="merge_field_plugin-wrap" style="float:left;"></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                        <div class="tabpanel-wrapper">
+                                                            <div role="tabpanel">
+                                                                <!-- Nav tabs -->
+                                                                <ul id="myTab" role="tablist" class="left nav nav-tabs">
+                                                                    <li class="active MEE-Editor" role="presentation"><img class="left" src="<%- this.app.get('path')%>img/mee-w.PNG" /><a data-toggle="tab" role="tab" aria-controls="area_html_editor_mee" href="#area_html_editor_mee">Easy Editor</a></li>
+                                                                    <li role="presentation" class="tinymce-editor"><img class="left" src="<%- this.app.get('path')%>img/tiny-w.PNG" /><a data-toggle="tab" role="tab" aria-controls="Tiny" href="#Tiny">HTML Editor</a></li>
+                                                                </ul>
+                                                                <!-- Tab panes -->
+                                                                <div class="tab-content">
+                                                                    <div class="clearfix"></div>
+                                                                    <div id="area_html_editor_mee" class="tab-pane active" role="tabpanel">
+                                                                        <div id="mee_editor" class="MEE_EDITOR"></div>
+                                                                    </div>
+                                                                    <div id="Tiny" class="tab-pane" role="tabpanel">
+
+                                                                        <div style="margin:0px 5px 0 0;clear:both;" class="content-inner">
+                                                                            <div class="">
+                                                                                <!--<label style=" width:140px">Paste your HTML here</label>-->    
+                                                                                <form action="somepage" method="post">
+                                                                                    <textarea style="width:100%; min-height:100px;" name="content" id="bmseditor_template"></textarea>
+                                                                                </form>                            
+                                                                            </div>
+                                                                        </div>  
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- End of Tabpanel -->
                                                         <div class="clearfix"></div>
                                                     </div>
                                                 </div>  <!-- logpanel_box  //////////////////////// -->
@@ -175,4 +229,4 @@
 
 
       
-    </div><div style="position: absolute; display: block;" class="mCSB_scrollTools"><div class="mCSB_draggerContainer"><div oncontextmenu="return false;" style="position: absolute; height: 352px; top: 0px;" class="mCSB_dragger"><div style="position: relative; line-height: 352px;" class="mCSB_dragger_bar"></div></div><div class="mCSB_draggerRail"></div></div></div></div></div>
+    </div>    

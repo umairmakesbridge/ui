@@ -16,7 +16,8 @@ function (template) {
             events: {
               //'click .view-profile,.viewdetail':"openContact",
               //'click .vsalestatus':'selectSalesStatus',
-              'click .closebtn':'closeProgressMeter'
+              'click .closebtn':'closeProgressMeter',
+              'click .click-detail':'showclickDetails'
              
             },
             initialize: function () {
@@ -24,10 +25,11 @@ function (template) {
                  this.template = _.template(template);
                  this.parent = this.options.parent;
                  this.app = this.options.app;
-                 //this.sub_id = this.options.subNum;
+                 this.meterClass = (this.options.meterClass)?  this.options.meterClass: "meterdd";
                  this.openDate = (this.options.params.isOpen) ? this.renderDates(this.options.params.openDate) : "0";
                  this.clicked = (this.options.params.clicked) ? this.options.params.clicked : "0";
                  this.render();
+                 
             },
             render: function () {
                  //this.renderDates();
@@ -35,6 +37,7 @@ function (template) {
                 //this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
             },
             renderDates : function(date){
+                   if(!date){return false;}
                  var decodeDate = moment(this.app.decodeHTML(date),'M/D/YYYY H:m a');														
                  var formatDate = decodeDate.format("DD MMM, YYYY");
                  return formatDate;
@@ -42,6 +45,10 @@ function (template) {
              closeProgressMeter:function(){
                 this.$el.parents('body').find('#engagment-meter-view').remove();
             },
-               
+              showclickDetails : function(){
+                  if(this.meterClass === 'meterdd-two'){
+                     this.parent.getEmailSubDetail(this.$el);
+                  }
+              } 
         });
 });
