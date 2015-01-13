@@ -19,6 +19,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     },
                     "click .refresh_btn": function () {
                         this.app.addSpinner(this.$el);
+                        this.type='getMessageList';
                         this.getallemails();
                         this.headBadge();
                     },
@@ -61,6 +62,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                         //this.status = type;
                         this.fromDate = fromDate;
                         this.toDate = toDate;
+                        this.type='getMessageList';
                         /*if (this.status !== prevStatus) {
                             this.$el.find('#list-search').val('');
                             this.$el.find('#clearsearch').hide();
@@ -125,32 +127,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                      this.templateView.createOTODialog();
                     
                 },
-                /*setEditor: function() {
-                    if (_tinyMCE && _tinyMCE.get('bmseditor_' + this.wp_id)) {
-                        this.bmseditor.showEditor(this.wp_id);
-                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent("");
-                        this.$("#bmstexteditor").val(this.app.decodeHTML(this.parent.plainText, true));
-                        this.$(".textdiv").hide();
-                    }
-                    else {
-                        setTimeout(_.bind(this.setEditor, this), 200);
-                    }
-                },
-                setEditorHTML: function(tsv, state, xhr) {
-                    this.app.showLoading(false, this.$el);
-                    var html_json = jQuery.parseJSON(xhr.responseText);
-                    if (html_json.htmlText) {
-                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText, true));
-                    }
-                },
-                setContents: function() {
-                    if (_tinyMCE.get('bmseditor_' + this.wp_id)) {
-                        _tinyMCE.get('bmseditor_' + this.wp_id).setContent(this.app.decodeHTML(this.parent.htmlText, true));
-                    }
-                    else {
-                        setTimeout(_.bind(this.setContents, this), 200);
-                    }
-                },*/
+              
                 findEmails: function (obj)
                 {
                     var olist_obj = this;
@@ -253,7 +230,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                             this.searchTxt = '';
                         }*/
                         this.total_fetch = 0;
-                       
+                        this.type='getMessageList';
                         this.getallemails();
                     }
                 },
@@ -292,7 +269,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                         height: '22px',
                         searchFunc: _.bind(this.searchEmails, this),
                         clearFunc: _.bind(this.clearSearchEmails, this),
-                        placeholder: 'Search Emails',
+                        placeholder: 'Search emails by subject',
                         showicon: 'yes',
                         iconsource: 'campaigns',
                         countcontainer: 'no_of_camps'
@@ -416,6 +393,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     });
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
+                        this.type = 'getMessageList';
                         this.getallemails(this.offsetLength);
                     }
                 },

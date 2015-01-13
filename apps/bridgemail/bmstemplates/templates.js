@@ -40,6 +40,7 @@ function (template,highlight,templateCollection,templateRowView) {
                this.parent = '';
                this.scrollElement = this.options.scrollElement ? this.options.scrollElement :$(window);
                this.OnOFlag = (this.options.isOTO) ? this.options.isOTO : '';
+               this.otoTemplateFlag = false;
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
                //              
@@ -638,8 +639,10 @@ function (template,highlight,templateCollection,templateRowView) {
                     if(obj){
                         var currentobj = $.getObj(obj,"a");
                         if(currentobj.hasClass('ono-built-scratch')){
-                            this.parent.template_id='';
+                            this.otoTemplateFlag=false;
                         }
+                    }else{
+                        this.otoTemplateFlag=true;
                     }
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
@@ -654,7 +657,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         this.app.showLoading("Loading...",dialog.getBody());
                         var _this = this;
                         require(["onetooneemails/createmessage"],function(createMessagePage){                                                     
-                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id});               
+                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id,otoTemplateFlag:_this.otoTemplateFlag});               
                            var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 

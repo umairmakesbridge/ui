@@ -85,7 +85,8 @@ function (template,highlighter) {
                     this.$(".taglink").highlight($.trim(this.parent.tagTxt));
                 }
                 this.subNum = this.model.get('subNum');
-              
+                this.options.clicked = this.model.get('clicked');
+               
             },
             
             
@@ -126,6 +127,7 @@ function (template,highlighter) {
                                  }else{
                                      this.sub_name = this.model.get('email');
                                  }
+                                this.$el.parents('div.oto-single-wrapper').find('.contactnm').html('<strong>'+this.sub_name+'</strong>');
                                 return this.sub_name.charAt(0);
                        },
                     

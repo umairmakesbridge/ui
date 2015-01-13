@@ -59,11 +59,11 @@ function (template,highlighter,tags) {
             getFirstAlphabet : function(json){
 
                  if(json.firstName){
-                          this.sub_name = json.firstName;
+                          this.sub_name = this.app.decodeHTML(json.firstName);
                       }else if(json.lastName){
-                          this.sub_name = json.lastName;
+                          this.sub_name = this.app.decodeHTML(json.lastName);
                       }else{
-                          this.sub_name = json.email;
+                          this.sub_name = this.app.decodeHTML(json.email);
                       }
                      return this.sub_name.charAt(0);
             },

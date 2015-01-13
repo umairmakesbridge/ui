@@ -28,16 +28,16 @@
                                                       <div class="name-type">
                                                       
                                                         <div class="title <%  if(!this.options.isOTOFlag){ %> view-profile <% } %>">
-                                                            <h3><a><%- _json.firstName %>&nbsp;<%- _json.lastName %></a></h3>
+                                                            <h3><a><%- this.app.decodeHTML(_json.firstName) %>&nbsp;<%- this.app.decodeHTML(_json.lastName) %></a></h3>
                                                             <% if(_json.salesStatus) { %>
-                                                        <a class="statusdd color3 vsalestatus"><%- _json.salesStatus %> <b class="caret"></b></a>
+                                                        <a class="statusdd color3 vsalestatus"><%- this.app.decodeHTML(_json.salesStatus) %> <b class="caret"></b></a>
                                                         <% } %>
                                                          </div>
                                                         
                                                         <div class="clearfix"></div>
                                                          <% if(_json.email) { %>
 														<span class="inf" style=""><i class="icon email"></i>
-                                                        <input type="text" value="<%- _json.email %>" onclick="this.focus();this.select()"></span>
+                                                        <input type="text" value="<%- this.app.decodeHTML(_json.email) %>" onclick="this.focus();this.select()"></span>
                                                         <% } %>
                                                         
                                                         
@@ -62,10 +62,10 @@
                                                       </div>
                                                       
                                                       <% if(_json.company) { %>
-                                                      <span class="inf" style="margin-right:10px; margin-left:5px;"><i class="icon company"></i><input type="text" value="<%- _json.company %>" onclick="this.focus();this.select()"></span>
+                                                      <span class="inf" style="margin-right:10px; margin-left:5px;"><i class="icon company"></i><input type="text" value="<%- this.app.decodeHTML(_json.company) %>" onclick="this.focus();this.select()"></span>
                                                       <% }%>
                                                       <% if(_json.telephone) { %>
-                                                    <span style="margin-left:6px;" class="inf "><i class="icon phone"></i><input type="text" value="<%- _json.telephone %>" onclick="this.focus();this.select()"> </span><% }%>
+                                                    <span style="margin-left:6px;" class="inf "><i class="icon phone"></i><input type="text" value="<%- this.app.decodeHTML(_json.telephone) %>" onclick="this.focus();this.select()"> </span><% }%>
                     <div class="clearfix"></div>
                                                             
                                                         
@@ -80,7 +80,7 @@
                                                             <% if(_json.score) { %>
                                                             <div class="score" style="margin-left: 6px;">
                                                                 <i class="icon score"></i>
-                                                                <%- _json.score %>
+                                                                <%- this.app.decodeHTML(_json.score) %>
                                                             </div>
                                                             <% }%>
                                                             <div class="crms" style='display:none;'>

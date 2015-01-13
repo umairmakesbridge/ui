@@ -90,6 +90,7 @@ function (template,highlighter,singleSubRowView) {
                     this.$(".taglink").highlight($.trim(this.parent.tagTxt));
                 }
                 this.subNum = this.model.get('subNum');
+                this.clicked = this.model.get('clicked');
               
             },
             
@@ -189,7 +190,7 @@ function (template,highlighter,singleSubRowView) {
                                         event.preventDefault();
                                     });
                                     require(["common/engagemeter"], _.bind(function(page) {
-                                        var visitcontact = new page({parent: this, app: this.app,meterClass:'meterdd-two',params:{isOpen : this.model.get('isOpen'),subNum:this.model.get('subNum'),clicked:this.model.get('clicked'),openDate:this.model.get('openDate')}});
+                                        var visitcontact = new page({parent: this, app: this.app,meterClass:'meterdd-two',params:{isOpen : this.model.get('isOpen'),subNum:this.model.get('subNum'),clicked:this.clicked,openDate:this.model.get('openDate')}});
                                         engview.html(visitcontact.$el);
                                     }, this));
             },
@@ -235,10 +236,10 @@ function (template,highlighter,singleSubRowView) {
                                 
                                 var dialog_width = $(document.documentElement).width()-60;
 		 var dialog_height = $(document.documentElement).height()-182;
-		 var dialog = email_obj.app.showDialog({title: this.sub_name ,
+		 var dialog = email_obj.app.showDialog({title: 'Send Messages' ,
 						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
 						  headerEditable:false,
-						  headerIcon : 'messageicon',
+						  headerIcon : 'preview3',
                                                   //buttons: {saveBtn:{text:'Send Message',btnicon:'next',btncolor:'btn-green'} },
 						  bodyCss:{"min-height":dialog_height+"px"}
 				});
@@ -251,9 +252,9 @@ function (template,highlighter,singleSubRowView) {
                  var email_obj = this.parent;
                  //console.log(email_obj.returnDataValue);
                  
-                 var html = $('<div id="oto-single-wrapper"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div><div style="height: " class="bDiv"><table cellpadding="0" cellspacing="0" width="100%" id="camp_list_contactemail"><tbody></tbody></table><div style="display: none;" class="iDiv"></div></div></div></div>');
+                 var html = $('<div id="oto-single-wrapper"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div><div style="height: " class="bDiv"><div class="contacttitle"> <i class="icon contact left"></i> <a class="contactnm showtooltip" data-original-title="Click to view profile"><strong>abdullah@makesbridge.com</strong></a> <a class="statusdd color2 salestatus"></a></div><div class="bmsgrid" id="records-found" style="margin-left: 5px;"><strong class="badge">'+email_obj.returnDataValue.data.models.length+'</strong>  <span>Messages Sent</span></div><table cellpadding="0" cellspacing="0" width="100%" id="camp_list_contactemail"><tbody></tbody></table><div style="display: none;" class="iDiv"></div></div></div></div>');
                   _.each(email_obj.returnDataValue.data.models, _.bind(function (model) {
-                                html.find('#camp_list_contactemail').append(new singleSubRowView({model: model, sub: this }).el);
+                                html.find('#camp_list_contactemail').append(new singleSubRowView({model: model, sub: this,clicked:this.clicked }).el);
                             }, this));
                   var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                   this.dialogView.getBody().append(html);
@@ -304,7 +305,7 @@ function (template,highlighter,singleSubRowView) {
                  
              },
              genmeterUrl : function(dialog,data1, collection){
-                   var _html = $('<div class="contacttitle"> <i class="icon contact left"></i> <a data-original-title="Click to view profile" class="contactnm showtooltip"><strong>'+this.sub_name+'</strong></a> <a class="statusdd color2 salestatus"></a> </div><div class=" shadow_panel clicks-listing"><div class=" stats_listing" id=""><div class="bmsgrid"><div style="height: ;" class="bDiv"><table cellspacing="0" cellpadding="0" border="0" id="oto_urlclicked_table"><tbody></tbody></table></div></div></div><div class="shadowbtm"></div></div>')
+                   var _html = $('<div class="contacttitle"> <i class="icon contact left"></i> <a data-original-title="Click to view profile" class="contactnm showtooltip"><strong>'+this.sub_name+'</strong></a> <a class="statusdd color2 salestatus"></a> </div><div class="bmsgrid" style="margin-left: 5px;" id="records-found"><strong class="badge">'+data1.length+'</strong>  <span>Clicks found after receiving message</span></div><div class=" shadow_panel clicks-listing"><div class=" stats_listing" id=""><div class="bmsgrid"><div style="height: ;" class="bDiv"><table cellspacing="0" cellpadding="0" border="0" id="oto_urlclicked_table"><tbody></tbody></table></div></div></div><div class="shadowbtm"></div></div>')
                   _.each(data1.models, _.bind(function (model) {
                                _html.find('table#oto_urlclicked_table tbody').append('<tr class="erow"><td width=""><div><div class="colico link"> <strong><span><em>Link URL</em><a target="_blank" href="'+model.get('url')+'" data-original-title="'+model.get('url')+'" class="showtooltip">'+model.get('url')+'</a></span></strong> </div></div></td></tr>');
                             }, this));

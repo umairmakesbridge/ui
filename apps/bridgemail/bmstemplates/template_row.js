@@ -264,7 +264,6 @@ function (template,highlighter,tagView) {
                         }
             },
             selectTemplate : function(obj){
-                
                if(this.selectCallback){                            
                           this.selectCallback(obj);
                         }

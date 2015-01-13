@@ -37,6 +37,7 @@ function (template,contactsView) {
                     this.tinymceEditor = false;
                     this.meeEditor = false; 
                     this.isloadMeeEditor =false;
+                    this.otoTemplateFlag = this.options.otoTemplateFlag;
                     this.template_id = (this.options.template_id) ? this.options.template_id : '';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
@@ -80,7 +81,7 @@ function (template,contactsView) {
                  this.loadData();
                  this.initMergeFields();
                  //this.$('#myTab li:nth-child(2) a').click();
-                 if(this.template_id){
+                 if(this.otoTemplateFlag){
                      this.loadTemplate();
                  }else{
                      this.$('#myTab li:nth-child(2) a').click();
@@ -101,11 +102,10 @@ function (template,contactsView) {
                    //this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 
                 },
             loadData:function(){
-               this.app.showLoading("Loading Email...",this.$el);  
+               this.app.showLoading("Loading Email...",this.dialog.getBody());  
                var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
-                            this.app.showLoading(false,this.$el);  
                             var defaults_json = jQuery.parseJSON(xhr.responseText);
                             if(this.app.checkError(defaults_json)){
                                 return false;
@@ -137,6 +137,7 @@ function (template,contactsView) {
                             setTimeout(_.bind(this.setFromNameField,this),300);                            
                             
                             var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
+                            this.app.showLoading(false,this.dialog.getBody());  
                             //this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
                             
                             
@@ -211,16 +212,16 @@ function (template,contactsView) {
                     var _this = this;
                     var bms_token = this.app.get('bms_token');
                     //Load subscriber details, fields and tags
-                    this.app.showLoading("Loading Email Details...", this.$el);
+                    this.app.showLoading("Loading Email Details...", this.dialog.getBody());
                     var URL = "/pms/io/subscriber/getSingleEmailData/?BMS_REQ_TK=" + bms_token + "&type=getMessageDetail&subNum=" + this.subNum + "&msgId="+this.msgID;
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
-                        _this.app.showLoading(false, _this.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
                         if (_this.app.checkError(_json)) {
                             return false;
                         }
                         else{
                            _this.subEmailDetails = _json;
+                           _this.app.showLoading(false, _this.dialog.getBody());
                             if(_json.body.indexOf("__OUTERTD") != -1){
                                  _this.$('#myTab li:nth-child(1) a').click();
                                  _this.emailHTML = _json.body;
@@ -250,13 +251,15 @@ function (template,contactsView) {
              loadEditor : function(obj){
                   var target_li =$.getObj(obj,"li");   
                   if(target_li.hasClass("tinymce-editor")){
-                      this.app.showLoading("Loading HTML Editor...",this.$("#area_html_editor_mee"));  
+                      //this.app.showLoading("Loading HTML Editor...",this.$("#area_html_editor_mee"));  
+                      this.isloadMeeEditor = false;
                       this.initEditor();
                   }
                   else{
+                      this.isloadMeeEditor = true;
                       if(!this.meeEditor){
-                         this.app.showLoading("Loading MEE Editor...",this.$("#area_html_editor_mee"));                         
-                         this.meeEditor = true;               
+                         this.app.showLoading("Loading MEE Editor...",this.dialog.getBody());                         
+                         this.meeEditor = true; 
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
                      
@@ -272,7 +275,7 @@ function (template,contactsView) {
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
-                        this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                        this.app.showLoading(false,this.dialog.getBody()); 
                     },this));  
                 },
                 setMEE:function(html){
@@ -490,7 +493,7 @@ function (template,contactsView) {
                         var fromEmail = this.$('#campaign_from_email').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val():"";
                         //if( this.settingchange || this.parent.camp_id==0){
-                                this.app.showLoading("Sending message...",this.$el);
+                                this.app.showLoading("Sending message...",this.dialog.getBody());
                                 var URL = "/pms/io/subscriber/saveSingleEmailData/?BMS_REQ_TK="+this.app.get('bms_token');
                                 $.post(URL, { type: "sendMessage",
                                         subject : this.$("#campaign_subject").val(),
@@ -506,8 +509,9 @@ function (template,contactsView) {
                                   })
                                  .done(_.bind(function(data) {                                 
                                     var step1_json = jQuery.parseJSON(data);
-                                    this.app.showLoading(false,this.$el);
-                                    if(step1_json[0]!=="err"){   
+                                    this.app.showLoading(false,this.dialog.getBody());
+                                    if(step1_json[0]!=="err"){ 
+                                            this.parent.parent.type='getMessageList';
                                             this.parent.parent.getallemails();
                                             this.parent.parent.headBadge();
                                            /* if(this.parent.dialog){
@@ -515,6 +519,7 @@ function (template,contactsView) {
                                             }
                                             else{*/
                                                 this.app.showMessge("Email send successfully!");
+                                                this.closeDialog();
                                            // }
                                             //camp_obj.states.step1.change=false;
                                                                                        
@@ -532,8 +537,9 @@ function (template,contactsView) {
                  this.$('.tabpanel-wrapper').hide();
                  this.$('#mee-iframe-wrapper').html(iframe);
              },
-             initEditor: function () {
-                    if(this.tinymceEditor==true){return false}
+             initEditor: function () {                 
+                    if(this.tinymceEditor==true){return false;}
+                    this.app.showLoading("Loading HTML Editor...",this.dialog.getBody());
                     this.tinymceEditor = true;
                     this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");                  
                     var _this = this;
@@ -615,7 +621,7 @@ function (template,contactsView) {
                                 if (_this.editorContent) {
                                     _tinyMCE.get('bmseditor_template').setContent(_this.editorContent);
                                 }
-                                 _this.app.showLoading(false, _this.$el);
+                                 _this.app.showLoading(false, _this.dialog.getBody());
                             })
                         }
 
@@ -633,7 +639,7 @@ function (template,contactsView) {
                 loadTemplate: function (o, txt) {
                     var _this = this;
                     
-                    this.app.showLoading("Loading Template...", this.$el);
+                    this.app.showLoading("Loading Template...", this.dialog.getBody());
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&templateNumber=" + this.template_id;
                     this.getTemplateCall = jQuery.getJSON(URL, function (tsv, state, xhr) {
                         if (xhr && xhr.responseText) {
@@ -653,7 +659,7 @@ function (template,contactsView) {
                                 _this.$('#myTab li:nth-child(1) a').click();
                                  _this.emailHTML = template_json.htmlText;
                                  _this.isloadMeeEditor = true;
-                                 _this.app.showLoading(false, _this.$el);
+                                 _this.app.showLoading(false, _this.dialog.getBody());
                             }
                             
                             if (_this.app.get("isMEETemplate")) {
@@ -670,6 +676,12 @@ function (template,contactsView) {
                      this.dialog.$(".savebtn").click(_.bind(function (obj) {
                         this.sendEmail()
                     }, this));
+                },
+                closeDialog : function(){
+                    var arraylength = this.app.dialogArray.length;
+                    for(var i = 0; i < arraylength; i++) {
+                        this.dialog.hide();
+                    }
                 }
     });   
 });

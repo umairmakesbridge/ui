@@ -4453,6 +4453,9 @@ div.letter_block span{
 .defaulthand{
     cursor: default;
 }
+.defaulthand:hover{
+    cursor: default;
+}
 .c-current-status li.active {
     font-weight: bold;
 }

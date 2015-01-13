@@ -23,7 +23,7 @@
                                         
                                             <a class="icon metericon-two  pageview showtooltip" data-list="" style="margin:0px!important;"> </a>  
                                         </div>
-                            <strong style="padding:5px 10px 5px 45px;"><span><em style="margin: 0px 0px 0px -40px;">Subject</em><a class="oto-subject"><%= this.model.get('subject')%></a></span></strong> 
+                            <strong style="padding:5px 10px 5px 45px;"><span><em style="margin: 0px 0px 0px -40px;">Subject</em><a class="oto-subject showtooltip" title="Click to search"><%= this.model.get('subject')%></a></span></strong> 
                         </div>
                       </div>
 </td>
@@ -50,7 +50,7 @@
 <td width="132px">
     <div>
         <div style="width:105px" class="colico messages">
-            <strong><span><em>Messages</em><a class="oto-single-contact-count"><%= this.model.get('subscriberMessageCount')%></a></span></strong>
+            <strong><span><em>Messages</em><a class="oto-single-contact-count  showtooltip" title="Click to view"><%= this.model.get('subscriberMessageCount')%></a></span></strong>
         </div>
         <div class="slide-btns two s-clr3">
               <span class="icon setting"></span>
