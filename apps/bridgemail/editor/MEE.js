@@ -653,7 +653,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     oHtml.find(".container > tbody > tr > td").each(function (index, element) {
                                         var elem = $(element);
                                         var html = elem.html();
-                                        var newHtml = "<div class='sortable' style='list-style: none;'><div class='csHaveData ui-draggable ui-droppable'>" + html + "</div></div>";
+                                        var newHtml = "<div class='csHaveData ui-draggable ui-droppable'>" + html + "</div>";
                                         elem.html(newHtml);
 
                                     });
@@ -747,22 +747,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         InitializeDynamicControl(args);
                                         variation.replaceWith(args.predefinedControl.Html.clone(true, true));
                                     });
+                                    /*    
+                                        oHtml.find("li").each(function (i, e) {
 
-                                    oHtml.find("li").each(function (i, e) {
+                                            var li = $(e);
+                                            if (li.parent()[0].nodeName == "UL" || li.parent()[0].nodeName == "OL") {
 
-                                        var li = $(e);
-                                        if (li.parent()[0].nodeName == "UL" || li.parent()[0].nodeName == "OL") {
+                                            }
+                                            else {
 
-                                        }
-                                        else {
+                                                var newParent = $("<ul class='sortable'/>");
+                                                li.parent().children().wrapAll(newParent);
+                                            }
 
-                                            var newParent = $("<ul class='sortable'/>");
-                                            li.parent().children().wrapAll(newParent);
-
-
-                                        }
-
-                                    });
+                                        });
+                                     */
                                     return oHtml;
                                 }
 
