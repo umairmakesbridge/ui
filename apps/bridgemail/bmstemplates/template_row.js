@@ -111,7 +111,12 @@ function (template,highlighter,tagView) {
                                     templates_html +='<a class="previewbtn clr2"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
                                     templates_html +='<a class="copybtn clr1"  style="width:50%" id="copy_'+this.tempNum+'" ><span >Copy</span></a>'; 
                                 }
-                            }else{
+                            }
+                            else if(this.options.OnOFlag){
+                               templates_html +='<a class="previewbtn clr2"  style="width:50%" id="preview_'+this.tempNum+'"  ><span >Preview</span></a>';
+                               templates_html +='<a class="deletebtn clr1" style="width:50%" id="delete_'+this.tempNum+'"><span >Delete</span></a>';
+                            }
+                            else{
                                 templates_html +='<a class="previewbtn clr4" id="preview_'+this.tempNum+'" ><span >Preview</span></a>';
                                 templates_html +='<a class="editbtn clr3" id="edit_'+this.tempNum+'"><span >Edit</span></a>';
                                 templates_html +='<a class="copybtn clr2" id="copy_'+this.tempNum+'" ><span >Copy</span></a>';
@@ -132,7 +137,12 @@ function (template,highlighter,tagView) {
                                    returnClass = 'three s-clr4';
                                     createCampClass = 'clr9'
                                 }
-                            }else{
+                            }
+                 else if(this.options.OnOFlag){
+                                    returnClass = 'three s-clr4';
+                                   createCampClass = 'clr9';
+                 }         
+                 else{
                                returnClass = 'five s-clr6';
                                createCampClass = 'clr9'
                             }

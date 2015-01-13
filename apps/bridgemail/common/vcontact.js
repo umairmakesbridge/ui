@@ -13,7 +13,7 @@ function (template,highlighter,tags) {
             tagName:'div',
             
             events: {
-              'click .view-profile , .viewdetail':"openContact",
+              'click .view-profile,.viewdetail':"openContact",
               'click .vsalestatus':'selectSalesStatus',
               'click .closebtn':'removeCard'
              
@@ -24,13 +24,15 @@ function (template,highlighter,tags) {
                  this.parent = this.options.parent;
                  this.app = this.options.app;
                  this.sub_id = this.options.subNum;
+                 this.DialogView = this.options.dialog;
+                 this.sub_name = '';
                  this.jSon = '';
                  this.render();
             },
             render: function () {
-                 
+                
                 this.loadContact();
-                this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
+                //this.$el.css({'position':'relative','background-color': '#fff','min-height':'170px','width':'100%'});
             },
             loadContact : function(){
                  var _this = this;
@@ -47,20 +49,31 @@ function (template,highlighter,tags) {
                         else{
                             
                            _this.$el.html(_this.template({_json: _json}));
+                                        if(_this.options.isOTOFlag){
+                                 _this.hideElements();
+                             }
                         }
                     })
                 
             },
             getFirstAlphabet : function(json){
-                var sub_name='';
+
                  if(json.firstName){
-                          sub_name = json.firstName;
+                          this.sub_name = this.app.decodeHTML(json.firstName);
                       }else if(json.lastName){
-                          sub_name = json.lastName;
+                          this.sub_name = this.app.decodeHTML(json.lastName);
                       }else{
-                          sub_name = json.email;
+                          this.sub_name = this.app.decodeHTML(json.email);
                       }
-                     return sub_name.charAt(0);
+                     return this.sub_name.charAt(0);
+            },
+            openContact:function(){
+                if(this.DialogView){
+                    var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                    console.log(dialogArrayLength);
+                }
+                this.$el.parents('body').find('#contact-vcard').remove();
+                this.app.mainContainer.openSubscriber(this.sub_id,this.sub_name);
             },
             getFullName:function(){
                 var name = this.model.get('firstName') + " " + this.model.get('lastName');
@@ -103,6 +116,9 @@ function (template,highlighter,tags) {
             },
             selectSalesStatus : function(){
                 this.parent.$el.find('.salestatus').click();
+            },
+            hideElements : function(){
+                this.$('.viewdetail').hide();
             }
             
         });

@@ -1332,6 +1332,9 @@ ul.tabs-btns li.active a{
 .wtab-lpageslisting{background-position: -30px -210px;}
 .wtab-lpages{background-position: -30px -180px}
 
+.wtab-onetoonelisting{
+    background-position:-60px -58px;
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;
@@ -3991,6 +3994,331 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .landingpage-tilt .watermark_tilt{
     background-position :  0 -283px;
 }
+/*-------------------------------
+    Styling Of One to One Email 
+--------------------------------*/
+.bmsgrid div.bDiv td > div.single-oneOone {
+    border-radius: 2px;
+    height: 50px;
+    width: 50px;
+    margin: 0;
+}
+.bmsgrid div.bDiv td > div.single-oneOone span {
+    color: #fff;
+    display: block;
+    font-family: "proxima_nova_semibold";
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 50px;
+    text-align: center;
+}
+div.colico > .email_status {
+    float: none;
+    left: 5px;
+    margin: 0;
+    position: absolute;
+    top: 18px;
+}
+.bmsgrid .colico.messages > strong {
+    background: url("../img/messagesicon-p.png") no-repeat scroll 8px 23px rgba(0, 0, 0, 0);
+}
+.bmsgrid .name-type a.email {
+    color: #5b9ac1;
+    display: block;
+    margin: -2px 0 0;
+    padding: 0 5px;
+}
+div.engage-meter-wrap {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px rgba(121, 150, 168, 0.6);
+    display: none;
+    left: -1px;
+    padding: 12px;
+    position: absolute;
+    top: 30px;
+    width: 330px;
+    z-index: 9;
+}
+div.engage-meter-wrap:after {
+    border-bottom: 7px solid #fff;
+    border-left: 7px solid rgba(255, 255, 255, 0);
+    border-right: 7px solid rgba(255, 255, 255, 0);
+    content: "";
+    display: block;
+    left: 9px;
+    position: absolute;
+    top: -6px;
+}
+div.engage-meter-wrap .elevel {
+    float: right;
+    margin: 3px 0 0;
+    width: 160px;
+}
+div.engage-meter-wrap h4 {
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+div.engage-meter-wrap ul {
+    overflow: hidden;
+    padding: 3px 0 0;
+    z-index: 9;
+}
+
+div.engage-meter-wrap li {
+    color: #94b0c1;
+    font-size: 12px;
+    line-height: 18px;
+}
+div.engage-meter-wrap li i {
+    display: block;
+    float: left;
+    height: 18px;
+    width: 22px;
+}
+.ono-engager-wrap .metericon-two {
+    background: url("../img/metericons-email.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+}
+.meterdd-two {
+    background: url("../img/meter-email.png") no-repeat scroll 0 0 #ffffff;
+    border-radius: 2px;
+    float: left;
+    height: 95px;
+    margin: 14px 8px 0;
+    position: relative;
+    width: 140px;
+}
+div.engage-meter-wrap li.open i {
+    background: url("../img/openicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+}
+
+div.engage-meter-wrap li.click i {
+    background: url("../img/clickicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+}
+div.engage-meter-wrap li.pageview i {
+    background: url("../img/pageviewicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+}
+
+div.engage-meter-wrap li.pageview i {
+    background: url("../img/pageviewicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+}
+div.engage-meter-wrap li.conversion i {
+    background: url("../img/conversionicon.png") no-repeat scroll 0 center rgba(0, 0, 0, 0);
+}
+.slide-btns .icon.sendmail {
+    background-image: url("../img/mail48.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+/*-----------Template Gallery for 1:1 email-----------*/
+#new_template .thumbnail.browse .droppanel,#new_template .thumbnail.browse .droppanel:hover{
+    border: none !important;
+}
+.icon.messageicon {
+    background: url("../img/messageicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+
+.logpanel {
+   
+}
+.logpanel .mCSB_container {
+    margin-right: 20px;
+}
+.logpanel h2 {
+    color: #3e7598;
+    font-family: "proxima_nova_semibold";
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 30px;
+
+}
+.logpanel h2 .icon.sendto {
+    float:left;
+    background: url("../img/sendto-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.logpanel_box {
+    margin: 10px 0 20px;
+}
+.logpanel_boxinner {
+    background: none repeat scroll 0 0 #f1f9fd;
+    border-radius: 2px;
+    padding: 15px;
+}
+.contact_sum .contact_result .span6 {
+    background: none repeat scroll 0 0 #fff;
+    border-radius: 2px;
+}
+.contact_sum .contact_result .span6 > div {
+    padding: 10px;
+}
+.logpanel_boxinner .settings .cont {
+    background: #fff;
+    min-height: 230px;
+}
+.logpanel_boxinner .settings {
+    margin-top: 0px;
+}
+.oto-message-contact .contacts-div .search{
+    float :left !important;
+    margin:0;
+}
+.oto-message-contact-wrap{
+    position: relative;
+}
+.oto-message-contact-wrap #camp-prev-contact-search{
+    padding: 0;
+}
+.oto-message-contact .bmsgrid div.bDiv td {
+    background: none repeat scroll 0 0 #eff7fb !important;
+}
+.oto-message-contact {
+    left: 15px;
+    top: 40px;
+}
+.oto-message-contact-wrap > h2 {
+    margin-left: 5px;
+}
+.oto-message-contact-wrap .contact_dd:before {
+    border-color: transparent !important;
+    border-style: none !important;
+    border-width: 0px !important;
+    bottom: none;
+    content: "";
+    display: inline-block;
+    left: 0px;
+    position: relative;
+    top: 0px;
+}
+.oto-message-contact-wrap .contact_dd {
+    box-shadow: none !important;
+}
+#contact-vcard .bmsgrid  .bDiv {
+   background : none repeat scroll 0 0 transparent !important;
+}
+.error-contact{
+     border: 2px solid #fb8080 !important;
+}
+/*-----Create Message------*/
+.logpanel h2 .icon.easyeditor {
+    background: url("../img/easyeditr-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+/*=======================
+****************
+    Color Palletes for Letters
+**************
+=====================*/
+div.letter_block.l_a {
+    background: none repeat scroll 0 0 #c59c8e;
+}
+div.letter_block.l_b {
+    background: none repeat scroll 0 0 #de9792;
+}
+div.letter_block.l_c {
+    background: none repeat scroll 0 0 #fa7564;
+}
+div.letter_block.l_d {
+    background: none repeat scroll 0 0 #fb8976;
+}
+div.letter_block.l_e {
+    background: none repeat scroll 0 0 #ff9e73;
+}
+div.letter_block.l_f {
+    background: none repeat scroll 0 0 #ffb960;
+}
+div.letter_block.l_g {
+    background: none repeat scroll 0 0 #fbd87c;
+}
+div.letter_block.l_h {
+    background: none repeat scroll 0 0 #d9e58b;
+}
+div.letter_block.l_i {
+    background: none repeat scroll 0 0 #b3dc6c;
+}
+div.letter_block.l_j {
+    background: none repeat scroll 0 0 #95da6d;
+}
+div.letter_block.l_k {
+    background: none repeat scroll 0 0 #5bc193;
+}
+div.letter_block.l_l {
+    background: none repeat scroll 0 0 #60dda4;
+}
+div.letter_block.l_m {
+    background: none repeat scroll 0 0 #92e1c0;
+}
+div.letter_block.l_n {
+    background: none repeat scroll 0 0 #84d5dc;
+}
+div.letter_block.l_o {
+    background: none repeat scroll 0 0 #9fc6e7;
+}
+div.letter_block.l_p {
+    background: none repeat scroll 0 0 #5992ee;
+}
+div.letter_block.l_q {
+    background: none repeat scroll 0 0 #a6a8ff;
+}
+div.letter_block.l_r {
+    background: none repeat scroll 0 0 #c0a4ff;
+}
+div.letter_block.l_s {
+    background: none repeat scroll 0 0 #9a75d0;
+}
+div.letter_block.l_t {
+    background: none repeat scroll 0 0 #da98ec;
+}
+div.letter_block.l_u {
+    background: none repeat scroll 0 0 #f691b2;
+}
+div.letter_block.l_v {
+    background: none repeat scroll 0 0 #f28fc9;
+}
+div.letter_block.l_w {
+    background: none repeat scroll 0 0 #c9959e;
+}
+div.letter_block.l_x {
+    background: none repeat scroll 0 0 #cca6ac;
+}
+div.letter_block.l_y {
+    background: none repeat scroll 0 0 #cabdbf;
+}
+div.letter_block.l_z {
+    background: none repeat scroll 0 0 #c2c2c2;
+}
+div.letter_block.l_0 {
+    background: none repeat scroll 0 0 #c7c7c7;
+}
+div.letter_block.l_1 {
+    background: none repeat scroll 0 0 #6ed292;
+}
+div.letter_block.l_2 {
+    background: none repeat scroll 0 0 #9ce59e;
+}
+div.letter_block.l_3 {
+    background: none repeat scroll 0 0 #92a8d1;
+}
+div.letter_block.l_4 {
+    background: none repeat scroll 0 0 #7cb7e3;
+}
+div.letter_block.l_5 {
+    background: none repeat scroll 0 0 #fd94bf;
+}
+div.letter_block.l_6 {
+    background: none repeat scroll 0 0 #fdafc7;
+}
+div.letter_block.l_7 {
+    background: none repeat scroll 0 0 #deacb7;
+}
+div.letter_block.l_8 {
+    background: none repeat scroll 0 0 #f4c957;
+}
+div.letter_block.l_9 {
+    background: none repeat scroll 0 0 #fabf76;
+}
+div.letter_block span{
+    background-image: none !important;
+}
 
 /*
 -------------- ENDS HERE ----------
@@ -4123,6 +4451,9 @@ ul.autobot-headbadge li.clickable_badge a:hover{
     cursor: pointer;
 }
 .defaulthand{
+    cursor: default;
+}
+.defaulthand:hover{
     cursor: default;
 }
 .c-current-status li.active {

@@ -34,6 +34,7 @@ function (template,Contacts,viewContact) {
                  this.app = this.options.page.app;
                  this.parent = this.options.page;
                  this.searchWidth = this.options.searchCss ? this.options.searchCss:'415px';
+                 this.isOTOFlag = (this.options.isOTOFlag) ? this.options.isOTOFlag  : false;
                  this.contactHeight = this.options.contactHeight;
                  this.placeholderText = this.options.placeholderText ? this.options.placeholderText:'Search Contacts &amp; Tags';
                  this.isHideCross = this.options.hideCross;
@@ -211,7 +212,7 @@ function (template,Contacts,viewContact) {
                        if(this.parent.subNum != null){
                            this.$el.parents('.modal').find('.modal-header #dialog-title .loading-wheel').show();
                            this.parent.subNum=null;
-                           this.parent.setiFrameSrc();
+                           if(!this.isOTOFlag){this.parent.setiFrameSrc();}
                        }
                    };
                    this.$el.find("#total_subscriber span").html("contacts found");

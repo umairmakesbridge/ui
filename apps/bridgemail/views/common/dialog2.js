@@ -130,6 +130,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                     if(this.option.buttons.saveBtn.btnicon){
                                         this.$(".modal-footer .btn-save i").removeClass("save").addClass(this.option.buttons.saveBtn.btnicon);
                                     }
+                                    if(this.option.buttons.saveBtn.btncolor){
+                                        this.$(".modal-footer .btn-save").removeClass("btn-blue").addClass(this.option.buttons.saveBtn.btncolor);
+                                    }
                                 }
                                 if(this.option.buttons.playBtn){
                                     if(this.option.buttons.playBtn.text){
