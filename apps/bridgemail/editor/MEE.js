@@ -15,7 +15,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                 events: {
                 },
                 initialize: function () {
-                    this.app = this.options.app;
+                    this.app = this.options.app;                    
                     this.leftMinus = 80;
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
@@ -5605,6 +5605,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         topPlus : this.options.margin ? this.options.margin.top:0,
                         leftPlus : this.options.margin? this.options.margin.left:0,    
                         landingPage: this.options.landingPage ? true : false,
+                        otopage : this.options.isOTOFlag ? true: false, 
                         formWizURL: _formWizURL,
                         fromDialog: this.fromDialog,
                         reAttachEvents: reattachEvents,
