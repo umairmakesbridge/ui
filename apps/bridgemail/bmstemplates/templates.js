@@ -666,6 +666,9 @@ function (template,highlight,templateCollection,templateRowView) {
                             mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                              // dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
                             dialog.saveCallBack(_.bind(mPage.sendEmail,mPage));
+                            _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.sendEmail,mPage); // New Dialog
                         })
                 }
         });

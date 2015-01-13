@@ -28,9 +28,9 @@
                                                       <div class="name-type">
                                                       
                                                         <div class="title <%  if(!this.options.isOTOFlag){ %> view-profile <% } %>">
-                                                            <h3><a><%- this.app.decodeHTML(_json.firstName) %>&nbsp;<%- this.app.decodeHTML(_json.lastName) %></a></h3>
+                                                            <h3><a  class="<%  if(this.options.isOTOFlag){ %>defaulthand <% } %>"><%- this.app.decodeHTML(_json.firstName) %>&nbsp;<%- this.app.decodeHTML(_json.lastName) %></a></h3>
                                                             <% if(_json.salesStatus) { %>
-                                                        <a class="statusdd color3 vsalestatus"><%- this.app.decodeHTML(_json.salesStatus) %> <b class="caret"></b></a>
+                                                        <a class="statusdd color3 <%  if(this.options.isOTOFlag){ %>defaulthand <% }else{%>vsalestatus<% } %>"><%- this.app.decodeHTML(_json.salesStatus) %> <b class="caret"></b></a>
                                                         <% } %>
                                                          </div>
                                                         
