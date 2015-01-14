@@ -4527,6 +4527,7 @@ div.letter_block span{
 .refresh-list{
     display: inline-block;
     margin-left:15px;   
+    position: relative;
 }
 .refresh-list span{
     font-weight: bold;

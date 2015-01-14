@@ -361,9 +361,9 @@ function (Wizard,template,moment) {
                         post_data['frequency']=import_type;
                         post_data['hour']=_hour;
                         post_data['minute']=_min;
-                        if(import_type!==""){
-                            post_data['isRefresh'] = this.$("#refresh_list:checked").length?'Y':'N';
-                        }
+                        
+                        post_data['isRefresh'] = this.$("#refresh_list:checked").length?'Y':'N';
+                        
                         if(import_type=='O'){                                                      
                             post_data['day']=this.$(".step3 .s-days button.selected").map(function(){
                                                         return $(this).attr("value");
@@ -526,7 +526,7 @@ function (Wizard,template,moment) {
                         this.$(".refresh-list").show();
                     }
                     else{
-                        this.$(".refresh-list").hide();
+                        this.$(".refresh-list").show();
                     }
                 }
                 
