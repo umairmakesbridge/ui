@@ -1,4 +1,4 @@
-define(['views/common/wizard','text!crm/salesforce/html/newimport.html','moment','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight','bms-addbox','jquery.chosen','jquery-ui'],
+define(['views/common/wizard','text!crm/salesforce/html/newimport.html','moment','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight','bms-addbox','jquery.chosen','jquery-ui','jquery.icheck'],
 function (Wizard,template,moment) {
         'use strict';
         return Backbone.View.extend({                                
@@ -46,7 +46,7 @@ function (Wizard,template,moment) {
                     this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                     this.getLists();
                     this.setHeaderDialog();
-                    this.showHideButton(false);
+                    this.showHideButton(false);                    
                                       
                 },        
                 getLists:function(){
@@ -140,10 +140,14 @@ function (Wizard,template,moment) {
                             if(icheck_val!=="S"){
                                 _this.$(".step3 .control-area select").attr("disabled",true);    
                                 _this.$(".step3 .control-area button").attr("disabled",true);    
+                                _this.showHideRefreshList(false);
                             }    
                             else{
                                 _this.$(".step3 .control-area button").attr("disabled",false);  
                                 _this.$(".step3 .control-area select").attr("disabled",false);
+                                if(_this.$(".step3 .frequency-type").val()!==""){
+                                    _this.showHideRefreshList(true);
+                                }
                             }
                             _this.$(".step3 .nosearch").trigger("chosen:updated");
                         });
@@ -167,6 +171,7 @@ function (Wizard,template,moment) {
                                 this.$(".step3 .import-day").val(this.editImport.day);
                             }
                         }
+                        this.$('input#refresh_list').prop("checked",this.editImport.isRefresh=='Y'?true:false);
                     }
                     this.$(".step3 .nosearch").chosen({disable_search_threshold: 25});
                       _this.$(".step3 .s-days button").unbind("click").click(function(){
@@ -179,6 +184,7 @@ function (Wizard,template,moment) {
                             _this.$(".step3 .s-days button").unbind("click").click(function(){
                                 $(this).toggleClass("selected");
                             });
+                            _this.showHideRefreshList(true);
                             _this.$(".step3 .date-row").hide();
                         }
                         else if(freq_val=="T"){
@@ -191,20 +197,28 @@ function (Wizard,template,moment) {
                                $(this).parent().find(".selected").removeClass("selected");
                                $(this).addClass("selected");
                             });
+                            _this.showHideRefreshList(true);
                             _this.$(".step3 .date-row").hide();
                         }
                         else if(freq_val=="M"){
                             _this.$(".step3 .week-days-row").hide();
                             _this.$(".step3 .date-row").show();
                             _this.$(".step3 .date-row .month-year").hide();
+                            _this.showHideRefreshList(true);
                         }
                         else {
                             _this.$(".step3 .week-days-row").hide();
                             _this.$(".step3 .date-row").show();
                             _this.$(".step3 .date-row .month-year").show();
+                            _this.showHideRefreshList(false);
                         }
                     })
                     this.$(".step3 .frequency-type").change();
+                    
+                    this.$('input#refresh_list').iCheck({
+                        checkboxClass: 'checkinput'                        
+                    }); 
+                    
                     this.fetchServerTime();   
                     
                     
@@ -347,6 +361,9 @@ function (Wizard,template,moment) {
                         post_data['frequency']=import_type;
                         post_data['hour']=_hour;
                         post_data['minute']=_min;
+                        if(import_type!==""){
+                            post_data['isRefresh'] = this.$("#refresh_list:checked").length?'Y':'N';
+                        }
                         if(import_type=='O'){                                                      
                             post_data['day']=this.$(".step3 .s-days button.selected").map(function(){
                                                         return $(this).attr("value");
@@ -502,6 +519,14 @@ function (Wizard,template,moment) {
                         this.$(".cancel-import").css({display:"none"});
                         this.$(".update-import").css({display:"none"});
                         this.$(".activate-import").css({display:"block"});
+                    }
+                },
+                showHideRefreshList: function(show){
+                    if(show){
+                        this.$(".refresh-list").show();
+                    }
+                    else{
+                        this.$(".refresh-list").hide();
                     }
                 }
                 

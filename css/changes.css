@@ -4524,3 +4524,12 @@ div.letter_block span{
     text-align: center;	
     width:100%;
 }
+.refresh-list{
+    display: inline-block;
+    margin-left:15px;   
+}
+.refresh-list span{
+    font-weight: bold;
+    margin-left:5px;
+    color:#414f58;
+}
