@@ -195,12 +195,12 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                                 var cld = "";
                                 if(key === "CMP_C")
                                     cld = "icon campaign";
-                                
-                                if(key ==="TG_PCT")
-                                    cld="icon target";
-                                
-                                if(key === "CSV")
+                                else if(key ==="TG_PCT")
+                                    cld="icon target";                              
+                                else if(key === "CSV")
                                     cld= "icon csvicon";
+                                else 
+                                    cld = "icon campaign";
                                 
                                 $("#template_search_menu_expand").append("<li data-search='"+key+"' ><a data-warn='"+value+"'  data-search='"+key+"'>"+value+"<i class='"+cld+"'></i></a></li>");                  
                             });

@@ -48,8 +48,10 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     }
                     var img = "";
                       switch (this.model.get('eventType')) {
-                        case "CMP_C":
-                            
+                        case "CMP_C": 
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":    
                             img = this.options.app.get("path")+"img/campaign-"+colorName+".png";
                             break;
                         case "TG_PCT":
@@ -134,6 +136,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":
                             label = "<strong>Campaign Name</strong> <span data-original-title='"+this.model.get('campaignName')+"' class='text-truncated showtooltip'>" + this.model.get('campaignName') + "</span><a id='campaign_analytics' style='display: inline-block; margin-bottom:-3px;' data-original-title='Click to view message report' class='icon report showtooltip'></a>"
                             break;
                         case "TG_PCT":
@@ -151,6 +156,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":    
                             label = "<strong>Sent Count</strong> <span style='font-weight:normal'>" + this.options.app.addCommas(this.model.get('sentCount')) + "</span>"
                             break;
                         case "TG_PCT":
@@ -167,6 +175,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":    
                             label = "<strong>Schedule Date</strong> <span>" + this.dateSetting(this.model.get('scheduledDate')) + "</span>"
                             break;
                         case "TG_PCT":
@@ -201,6 +212,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                     var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":      
                             label = "<strong>Subject</strong> <span data-original-title='"+this.model.get('subject')+"' class='text-truncated showtooltip'>" + this.model.get('subject') + "</span><a id='campaign_analytics' style='display: inline-block; margin-bottom:-3px;' data-original-title='Click to view message report' class='icon report showtooltip'></a>"
                             break;
                         case "TG_PCT":
@@ -230,15 +244,38 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             caption = this.model.get('campaignName');
                             noun = "has been "
                             to = "Sent to";
-                            count ="&nbsp;"+this.options.app.addCommas(this.model.get('sentCount'))+"&nbsp;";
-                            date = this.dateSetting(this.model.get('scheduledDate'));
+                            count ="&nbsp;"+this.options.app.addCommas(this.model.get('sentCount'))+"&nbsp;";                            
                             nameOf = "Contacts On &nbsp;";
+                            date = this.dateSetting(this.model.get('scheduledDate'));
+                            break;
+                        case "CMP_ZERO":
+                            caption = this.model.get('campaignName');
+                            noun = "has been "
+                            to = "Sent to";
+                            count ="&nbsp;"+this.options.app.addCommas(this.model.get('sentCount'))+"&nbsp;";
+                            date = "";
+                            nameOf = "Contacts.";
+                            break;
+                        case "CMP_RR":    
+                            caption = this.model.get('campaignName');
+                            noun = "has been started"
+                            to = " to ";
+                            count ="Dispense.";
+                            date = "";
+                            nameOf = "";
+                            break;
+                        case "CMP_ANZ":     
+                            caption = this.model.get('campaignName');
+                            noun = "<b>Analysis</b> has been "
+                            to = "";
+                            count ="Started";
+                            date = "";
+                            nameOf = "";
                             break;
                         case "TG_PCT":
                               caption = this.options.app.addCommas(this.model.get("currentPopulationCount"))+"&nbsp;Target Population";
                              noun = "Calculated in "
-                             to = "";
-                             
+                             to = "";                             
                              count = "";
                             //count = this.options.app.addCommas(this.model.get('processCount'));
                             date = this.model.get("filterName");
@@ -265,6 +302,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                           
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":     
                             label = " <div class='info-p'><a class='btn-blue preview-campaign' style='display:block; width:190px;float: right;margin-top:-100px;'><i class='icon preview3'></i><span>Preview Campaign</span></a></div>";
                             break;
                         case "TG_PCT":
@@ -280,6 +320,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                   var label = "";
                     switch (this.model.get('eventType')) {
                         case "CMP_C":
+                        case "CMP_ZERO":
+                        case "CMP_RR":    
+                        case "CMP_ANZ":     
                             label = "<strong>isTextOnly</strong> <span>" + this.model.get('isTextOnly') + "</span>"
                             break;
                        
@@ -301,17 +344,13 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                                   headerIcon : 'dlgpreview',
                                   bodyCss:{"min-height":dialog_height+"px"},
                                   //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                        });
-                        //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
+                        });                        
                         var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.model.get('campaignNumber.encode');
                         require(["common/templatePreview"],_.bind(function(templatePreview){
                             var tmPr =  new templatePreview({frameSrc:preview_url,app:that.options.app,frameHeight:dialog_height,prevFlag:'C',tempNum:that.model.get('campaignNumber.encode')});
                              dialog.getBody().html(tmPr.$el);
                              tmPr.init();
-                         },this));       
-//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-//                        dialog.getBody().html(preview_iframe);               
-//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                         },this));       //                                        
                         e.stopPropagation();    
                 },
                 getContactsPopulation:function(ev){
@@ -329,13 +368,9 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                       $('#div_pageviews').css('right','');
                       $('#div_pageviews').css({left:offset.left-200, top:offset.top - 40});      
                       require(["recipientscontacts/rcontacts"],function(Contacts){
-                         var objContacts = new Contacts({type:type,app:that.options.app,listNum:listNumber});
-                        
-                   
+                         var objContacts = new Contacts({type:type,app:that.options.app,listNum:listNumber});                        
                           $('#div_pageviews').css('padding-top','0');
-                          $('#div_pageviews').html(objContacts.$el);
-                          //  $('#div_pageviews .temp-filters').append("<img style='margin-top:-65px; position:relative;' id='imgCorner' src='img/arrow-up-light.png'>");
-                         // $('#div_pageviews .temp-filters #imgCorner').css({left:offset.left-420});
+                          $('#div_pageviews').html(objContacts.$el);                          
                       });
                 },
                 editTarget:function(){

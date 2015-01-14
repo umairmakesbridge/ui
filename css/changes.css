@@ -1294,7 +1294,7 @@ ul.tabs-btns li.active a{
 
 /*****workspace tabs icons ***/
 .tabs-menu li span{
-    background-image: url("../img/ws-icons.png");
+    background-image: url("../img/_ws-icons.png");
     background-color: transparent;
 }
 .wtab-campaignlisting{

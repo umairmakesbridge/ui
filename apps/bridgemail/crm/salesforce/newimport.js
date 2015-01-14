@@ -139,14 +139,13 @@ function (Wizard,template,moment) {
                             var icheck_val = $(this).attr("value");
                             if(icheck_val!=="S"){
                                 _this.$(".step3 .control-area select").attr("disabled",true);    
-                                _this.$(".step3 .control-area button").attr("disabled",true);    
-                                _this.showHideRefreshList(false);
+                                _this.$(".step3 .control-area button").attr("disabled",true);                                    
                             }    
                             else{
                                 _this.$(".step3 .control-area button").attr("disabled",false);  
                                 _this.$(".step3 .control-area select").attr("disabled",false);
                                 if(_this.$(".step3 .frequency-type").val()!==""){
-                                    _this.showHideRefreshList(true);
+                                    
                                 }
                             }
                             _this.$(".step3 .nosearch").trigger("chosen:updated");
@@ -183,8 +182,7 @@ function (Wizard,template,moment) {
                             _this.$(".step3 .week-days-row").show();
                             _this.$(".step3 .s-days button").unbind("click").click(function(){
                                 $(this).toggleClass("selected");
-                            });
-                            _this.showHideRefreshList(true);
+                            });                            
                             _this.$(".step3 .date-row").hide();
                         }
                         else if(freq_val=="T"){
@@ -196,21 +194,18 @@ function (Wizard,template,moment) {
                            _this.$(".step3 .s-days button").unbind("click").click(function(){
                                $(this).parent().find(".selected").removeClass("selected");
                                $(this).addClass("selected");
-                            });
-                            _this.showHideRefreshList(true);
+                            });                            
                             _this.$(".step3 .date-row").hide();
                         }
                         else if(freq_val=="M"){
                             _this.$(".step3 .week-days-row").hide();
                             _this.$(".step3 .date-row").show();
-                            _this.$(".step3 .date-row .month-year").hide();
-                            _this.showHideRefreshList(true);
+                            _this.$(".step3 .date-row .month-year").hide();                            
                         }
                         else {
                             _this.$(".step3 .week-days-row").hide();
                             _this.$(".step3 .date-row").show();
-                            _this.$(".step3 .date-row .month-year").show();
-                            _this.showHideRefreshList(false);
+                            _this.$(".step3 .date-row .month-year").show();                            
                         }
                     })
                     this.$(".step3 .frequency-type").change();
@@ -521,13 +516,10 @@ function (Wizard,template,moment) {
                         this.$(".activate-import").css({display:"block"});
                     }
                 },
-                showHideRefreshList: function(show){
-                    if(show){
-                        this.$(".refresh-list").show();
-                    }
-                    else{
-                        this.$(".refresh-list").show();
-                    }
+                positionRefreshList: function(top){
+                    
+                  this.$(".refresh-list-container").css("top",top+"px");
+                    
                 }
                 
         });
