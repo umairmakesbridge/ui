@@ -133,10 +133,7 @@ function (template,icheck) {
                                   }
                                });
                                return false;
-                              }
-                             
-                                 
-                            
+                              }                                                                                         
                                 var list = "";
                                 if(((result.type == "List") || (result.type == "Target")) && result.count != "0"){
                                       var res = "";
@@ -170,8 +167,15 @@ function (template,icheck) {
               
             },
             fetchLists:function(lists,type){ 
-                var that = this; 
-                 var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list_csv&listNum_csv="+lists;
+                    var that = this; 
+                    
+                    var URL = "";
+                    if(type.toLowerCase()=="target"){
+                      URL =  "/pms/io/filters/getTargetInfo/?BMS_REQ_TK="+this.app.get('bms_token')+"&offset=0&type=list_csv&filterNumber_csv="+lists
+                    }
+                    else{
+                        URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=list_csv&listNum_csv="+lists;
+                    }
                     jQuery.getJSON(URL,  function(tsv, state, xhr){
                         if(xhr && xhr.responseText){
                             var result = jQuery.parseJSON(xhr.responseText);                            
@@ -180,11 +184,11 @@ function (template,icheck) {
                             }
                             var span = "";
                             if(result.count !="0"){
-                                _.each(result.lists[0],function(key){
+                                var results = type=="List"?result.lists[0]:result.filters[0];
+                                  _.each(results,function(key){
                                     _.each(key,function(value){
                                         span += "<span>"+value.name+"</span>"
-                                    })
-                                       
+                                    })                                       
                                     
                                 })
                                     var str = "<i class='icon "+type.toLowerCase()+"'></i>"; 
