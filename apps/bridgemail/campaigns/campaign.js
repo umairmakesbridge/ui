@@ -722,6 +722,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         this.$("#html_editor_mee").click();
                     }else if(this.campobjData.editorType=="H"){
                         this.$("#html_code").click();
+                        this.$("textarea#handcodedhtml").val(this.app.decodeHTML(this.states.step2.htmlText,true));
                     }                    
                     var _height = $(window).height()-431;
                     var _width = this.$el.width()-24;

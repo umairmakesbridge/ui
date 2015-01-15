@@ -497,8 +497,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                     var header_title = active_ws.find(".camp_header .edited  h2");                                     
                     if (active_ws.find('ul.c-current-status').length) {
                         var header_title = active_ws.find(".camp_header .edited");
-                        header_title.find('ul').remove();
-                        // this.$('.c-current-status').remove();
+                        header_title.find('ul').remove();                        
                         var progress = $("<ul class='c-current-status'><li style='margin-left:5px;'><a><img src='" + this.options.app.get("path") + "img/greenloader.gif'></a></li></ul>");
                         header_title.append(progress)
                     }
@@ -523,6 +522,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                                 stats += '<li search="S" class="'+scheduledClass+' '+ this.app.getClickableClass(allStats['scheduled']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['scheduled'] + '</span>Scheduled</li>';
                                 stats += '<li search="D" class="'+draftClass+' '+ this.app.getClickableClass(allStats['draft']) +'" data-original-title="Click to view draft campaigns"><span class="badge pclr1 showtooltip stattype topbadges" tabindex="-1" search="D" >' + allStats['draft'] + '</span>Draft</li>';
                                 stats += '</ul>';
+                                header_title.find(".c-current-status").remove();
                                 header_title.append(stats);
                                 
                                 $(".c-current-status li").click(_.bind(this.findCampaigns, this));
