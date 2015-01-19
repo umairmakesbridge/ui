@@ -89,7 +89,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         fromDialog: this.dialog.$el,
                         _eletop : 142
                     });
-
+                    //console.log(this.options.isMobileCom);
                     // Merge Field Abdullah 
                     this.$('#merge_field_plugin-wrap').mergefields({app: this.app, view: this, config: {links: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: 'Merge Tags'});
                     copyIconTemplate.click(_.bind(function (e) {
@@ -185,13 +185,15 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
 
                             _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                             _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
-                            if(template_json.isEasyEditorCompatible=="N"){                                     
+                            if(template_json.isEasyEditorCompatible=="N" && template_json.isMobile == 'N'){                                     
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
                                 _this.$(".tinymce-editor a").click();
                             }
-                            else{
+                            else if(template_json.isEasyEditorCompatible=="Y"){
                                 _this.editorContentMEE = template_json.htmlText
                                 _this.loadMEE(); 
+                            }else{
+                                _this.loadMEE();
                             }
                             if (template_json.isFeatured == 'Y') {
                                 _this.$(".featured").iCheck('check');

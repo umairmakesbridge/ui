@@ -43,7 +43,7 @@ function (template,highlighter,tagView) {
                     this.selectCallback = this.options.selectCallback;
                     this.selectTextClass = this.options.selectTextClass?this.options.selectTextClass:'';
                     this.isAdmin = this.app.get("isAdmin");
-                    
+                    this.isMobComp = '';
                     this.tagCount = 0;
                     //this.isAdmin = 'Y';
                     this.render();
@@ -94,7 +94,7 @@ function (template,highlighter,tagView) {
                                     helpText : 'Templates',
                                     tags:this.model.get('tags')});
                       this.$('.t-scroll').append(this.tmPr.$el);
-                      
+                     
                 },
             
              showCPCEDButtons : function(){
@@ -196,6 +196,7 @@ function (template,highlighter,tagView) {
                 updateTemplate:function(tempNum,isTotal){                                   
                    var _this = this.parent;
                    var self = this;
+                   var isMobileCom = this.model.get('isMobile');
                    if(typeof(tempNum)==="object"){
                         _this.template_id = this.model.get('templateNumber.encode');                         
                     }else{
@@ -213,7 +214,7 @@ function (template,highlighter,tagView) {
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["bmstemplates/template"],function(templatePage){
-                    var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self});
+                    var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self,isMobileCom:isMobileCom});
                     var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                     dialog.getBody().append(mPage.$el);
                     mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
