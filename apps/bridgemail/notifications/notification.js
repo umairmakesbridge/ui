@@ -117,7 +117,7 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                             messages = parseInt(messages) - 1;
                             $(".messagesbtn sup").html(messages);
                             $(".messagesbtn").removeClass('swing');                            
-                            $(".messagesbtn sup").css({right:"5px",left:"144px"});
+                            //$(".messagesbtn sup").css({right:"5px",left:"144px"});
                             if(messages == 0)
                                 $(".messagesbtn sup").hide();
                             $(that.el).parents('.messages_dialogue').find('h4').find('.badge').html(messages);

@@ -4110,7 +4110,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     var fContents = args.formContents;
 
                                                                     if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
-                                                                        var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                                        var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
                                                                         oControl.Html = preview_iframe;                                                                
                                                                         oControl.Type = "formBlock";
                                                                         oControl.ID = args.FormId;                                                                
@@ -4128,17 +4128,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     }
                                                                     options.formCallBack(args.FormId);
                                                                 }
-                                                           }else {
-                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");  
-                                                                mee.showFormWizard('');
-                                                                oControl.Html = preview_iframe;                                                                
-                                                                oControl.Type = "formBlock";
-                                                                oControl.ID = args.FormId;                                                                
-                                                                args.predefinedControl = oControl;
-                                                                args.droppedElement.html(oControl.Html);
-                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
-                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
-                                                                oInitDestroyEvents.InitAll(args.droppedElement);
+                                                           }else {                                                                                                                                   
+                                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");                                                                      
+                                                                    mee.showFormWizard('');
+                                                                    if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length==0){
+                                                                        oControl.Html = preview_iframe;                                                                
+                                                                        oControl.Type = "formBlock";
+                                                                        oControl.ID = args.FormId;                                                                
+                                                                        args.predefinedControl = oControl;
+                                                                        args.droppedElement.html(oControl.Html);
+                                                                        args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                        args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                        oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                    }
                                                            }                                                            
                                                         }
                                                         
@@ -4397,7 +4399,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
                                                     var fContents = args.formContents;
 
-                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' ><iframe id=\"email-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' ><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
 
                                                     oControl.Html = preview_iframe;
                                                     //oControl.Html.addClass("container");
@@ -4937,7 +4939,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 }
                                 mee.CloseFormWizard = function(){
-                                   if(meeIframe.find(".MEEFORMCONTAINER #email-iframe").length && meeIframe.find(".MEEFORMCONTAINER #email-iframe").attr("src")=="about:blank"){
+                                   if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length && meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src")=="about:blank"){
                                          meeIframe.find(".MEEFORMCONTAINER").addClass("formPlaceHolderAlone").children().remove();
                                     }
                                 }
