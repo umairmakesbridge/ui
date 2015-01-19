@@ -16,7 +16,7 @@ function (template,contactsView) {
              * Attach events on elements in view.
             */
             events: {
-              'click #myTab li': 'loadEditor'
+              
             },
             /**
              * Initialize view - backbone
@@ -66,10 +66,7 @@ function (template,contactsView) {
                   this.initCreateEmail();
               }
               
-             // this.loadData();  
-              /*if(this.editable===false){
-                this.$(".block-mask").show();
-              }*/
+            
             },
             initPreviewEmail : function(){
                 this.loadVContact(); // Call when subNum is available
@@ -79,12 +76,12 @@ function (template,contactsView) {
             initCreateEmail : function(){
                  this.loadContact();
                  this.loadData();
-                 this.initMergeFields();
+                 
                  //this.$('#myTab li:nth-child(2) a').click();
                  if(this.otoTemplateFlag){
                      this.loadTemplate();
                  }else{
-                     this.$('#myTab li:nth-child(2) a').click();
+                     this.loadEditor();
                  }
             },
             initSendEmail : function(){
@@ -92,15 +89,9 @@ function (template,contactsView) {
                  this.getEmailSubDetail();
                  this.loadVContact();
                  this.loadData();
-                 this.initMergeFields();
+                
             },
-            initMergeFields: function() {
-                this.$('#merge_field_plugin-wrap').mergefields({app: this.app, view: this, config: {links: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: 'Merge Tags'});
-                    //this.$('#campaign_subject-wrap').mergefields({app:this.app,elementID:'campaign_subject',config:{state:'dialog',isrequest:true,parallel:true},placeholder_text:'Enter subject'});
-                   //this.$('#campaign_reply_to-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_reply_to',placeholder_text:'Enter reply to'});
-                   //this.$('#campaign_from_name-wrap').mergefields({app:this.app,config:{salesForce:true,state:'dialog'},elementID:'campaign_from_name',placeholder_text:'Enter from name'});
-                   //this.$('#campaign_from_email-wrap').mergefields({app:this.app,config:{salesForce:true,emailType:true,state:'dialog'},elementID:'campaign_from_email',placeholder_text:'Enter from email'}); 
-                },
+            
             loadData:function(){
                this.app.showLoading("Loading Email...",this.dialog.getBody());  
                var URL = "/pms/io/user/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=campaignDefaults";
@@ -137,7 +128,7 @@ function (template,contactsView) {
                             setTimeout(_.bind(this.setFromNameField,this),300);                            
                             
                             var subj_w = this.$el.find('#campaign_subject').innerWidth(); // Abdullah CHeck                               
-                            this.app.showLoading(false,this.dialog.getBody());  
+                            //this.app.showLoading(false,this.dialog.getBody());  
                             //this.$el.find('#campaign_from_email_chosen').width(parseInt(subj_w+40)); // Abdullah Try
                             
                             
@@ -155,10 +146,7 @@ function (template,contactsView) {
             initChosenPlug : function(){
               this.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: "true"});
                 var message_obj = this;
-                /*this.$("#campaign_from_email").chosen().change(function(){
-                    camp_obj.fromNameSelectBoxChange(this)
-                    camp_obj.$("#campaign_from_email_input").val($(this).val());
-                });*/
+                
                 this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "62%",disable_search: "true"});                                        
                 this.$("#fromemail_default").chosen().change(function(){                       
                     message_obj.$("#fromemail_default_input").val($(this).val());
@@ -223,13 +211,13 @@ function (template,contactsView) {
                            _this.subEmailDetails = _json;
                            _this.app.showLoading(false, _this.dialog.getBody());
                             if(_json.body.indexOf("__OUTERTD") != -1){
-                                 _this.$('#myTab li:nth-child(1) a').click();
                                  _this.emailHTML = _json.body;
                                  _this.isloadMeeEditor = true;
+                                 _this.loadEditor();
                              }
                             else{
-                                _this.editorContent = _this.app.decodeHTML(_json.body, true);
-                               _this.$('#myTab li:nth-child(2) a').click();
+                               // _this.editorContent = _this.app.decodeHTML(_json.body, true);
+                               // _this.$('#myTab li:nth-child(2) a').click();
                             }
                           if(_this.isPreviewEmail)
                            {
@@ -248,14 +236,8 @@ function (template,contactsView) {
                  this.$('#campaign_preview_defaultReplyTo').html(_json.replyTo);
                  //this.$('#campaign_preview_replyto_default').html(_json.toEmail);
              },
-             loadEditor : function(obj){
-                  var target_li =$.getObj(obj,"li");   
-                  if(target_li.hasClass("tinymce-editor")){
-                      //this.app.showLoading("Loading HTML Editor...",this.$("#area_html_editor_mee"));  
-                      this.isloadMeeEditor = false;
-                      this.initEditor();
-                  }
-                  else{
+             loadEditor : function(){
+                 
                       this.isloadMeeEditor = true;
                       if(!this.meeEditor){
                          this.app.showLoading("Loading MEE Editor...",this.dialog.getBody());                         
@@ -263,12 +245,13 @@ function (template,contactsView) {
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
                      
-                  }
+                  
                 },
              
              setMEEView:function(){
                     var _html = "";
                     _html = this.emailHTML?$('<div/>').html(this.emailHTML).text().replace(/&line;/g,""):""; 
+                     this.app.showLoading("Loading MEE Editor...",this.dialog.getBody());       
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
                             ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,isOTOFlag:true,isSaveHide:true});                                    
@@ -537,96 +520,7 @@ function (template,contactsView) {
                  this.$('.tabpanel-wrapper').hide();
                  this.$('#mee-iframe-wrapper').html(iframe);
              },
-             initEditor: function () {                 
-                    if(this.tinymceEditor==true){return false;}
-                    this.app.showLoading("Loading HTML Editor...",this.dialog.getBody());
-                    this.tinymceEditor = true;
-                    this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");                  
-                    var _this = this;
-                    _tinyMCE.init({
-                        // General options
-                        mode: "exact",
-                        elements: "bmseditor_template",
-                        theme: "advanced",
-                        plugins: "contextmenu,fullscreen,inlinepopups,paste,searchreplace,iespell,style,table,visualchars,fullpage,preview,imagemanager",
-                        //browsers : "msie,gecko,opera,safari",
-
-                        doctype: '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">',
-                        element_format: "html",
-                        //plugins : "safari",
-                        convert_urls: false,
-                        relative_urls: false,
-                        remove_script_host: false,
-                        // paste options
-                        paste_auto_cleanup_on_paste: true,
-                        paste_retain_style_properties: "none",
-                        paste_convert_middot_lists: false,
-                        paste_strip_class_attributes: "all",
-                        paste_remove_spans: true,
-                        paste_remove_styles: true,
-                        paste_text_use_dialog: true,
-                        //paste_text_sticky : false,
-                        paste_text_linebreaktype: "<br>",
-                        // for <br>
-                        forced_root_block: "",
-                        force_br_newlines: true,
-                        force_p_newlines: false,
-                        // clean code
-                        //apply_source_formatting : true,
-                        //convert_newlines_to_brs : true,
-                        convert_fonts_to_spans: false,
-                        valid_elements: "*[*]",
-                        height: 450,
-                        // Theme options
-                        theme_advanced_buttons1: "newdocument,bold,italic,underline,justifyleft,justifycenter,justifyright,justifyfull,formatselect,fontselect,fontsizeselect",
-                        theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,search,replace,bullist,numlist,outdent,indent,blockquote,undo,redo,hr,removeformat,sub,sup,forecolor,backcolor,link,unlink,anchor,image,cleanup,code,fullscreen,preview",
-                        theme_advanced_buttons3: "",
-                        //preview options
-                        plugin_preview_width: "950",
-                        plugin_preview_height: "750",
-                        //theme_advanced_buttons4 : "styleprops",
-                        theme_advanced_toolbar_location: "top",
-                        theme_advanced_toolbar_align: "left",
-                        theme_advanced_statusbar_location: "bottom",
-                        theme_advanced_font_sizes: "8=8px,9=9px,10=10px,11=11px,12=12px,13=13px,14=14px,15=15px,16=16px,18=18px,20=20px,22=22px,24=24px,26=26px,28=28px,30=30px,36=36px",
-                        theme_advanced_fonts: "Arial=Arial;Comic Sans MS=Comic Sans MS;Courier=Courier;Courier New=Courier New;Georgia=Georgia;Tahoma=Tahoma;" +
-                                "Times New Roman=Times New Roman;Trebuchet MS=Trebuchet MS;Lucinda Sans Unicode=Lucinda Sans Unicode;Verdana=Verdana",
-                        theme_advanced_resizing: true,
-                        // Example content CSS (should be your site CSS)
-                        content_css: "/pms/css/tiny_mce.css",
-                        //font_size_style_values : "10px,12px,13px,14px,16px,18px,20px",
-
-                        // Drop lists for link/image/media/template dialogs
-                        template_external_list_url: "/pms/js/tiny_mce_templates.js",
-                        external_link_list_url: "lists/link_list.js",
-                        external_image_list_url: "lists/image_list.js",
-                        media_external_list_url: "lists/media_list.js",
-                        // Replace values for the template plugin
-                        template_replace_values: {
-                            username: "Some User",
-                            staffid: "991234"
-                        },
-                        setup: function (ed) {
-                            /*ed.onChange.add(function(ed, l) {
-                             editor.page.states.editor_change = true;                                               
-                             });*/
-                            ed.onInit.add(function (ed, l) {
-                                var _height = _this.$("#area_create_template").parents(".modal-body").height();
-                                var editor_heigt = _height - 350;
-                                if (editor_heigt < 600) {
-                                    editor_heigt = 504;
-                                }
-                                _this.$("#bmseditor_template_ifr").css("height", (editor_heigt) + "px");
-                                _this.$("#bmseditor_template_tbl").css("height", (editor_heigt - 100) + "px");
-                                if (_this.editorContent) {
-                                    _tinyMCE.get('bmseditor_template').setContent(_this.editorContent);
-                                }
-                                 _this.app.showLoading(false, _this.dialog.getBody());
-                            })
-                        }
-
-                    });
-                },
+            
                  /**
                  * Load template contents and flag doing a get Ajax call.
                  *
@@ -656,7 +550,7 @@ function (template,contactsView) {
                                 _this.$(".tinymce-editor a").click();
                             }
                             else{
-                                _this.$('#myTab li:nth-child(1) a').click();
+                                _this.loadEditor();
                                  _this.emailHTML = template_json.htmlText;
                                  _this.isloadMeeEditor = true;
                                  _this.app.showLoading(false, _this.dialog.getBody());

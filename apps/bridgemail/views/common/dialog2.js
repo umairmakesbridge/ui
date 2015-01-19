@@ -173,7 +173,12 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("body").css("overflow-y","hidden");
                         },
                         hide:function(){
-                            
+                            if(this.option.closeCD){
+                               this.$el.modal("hide");
+                               if($("body > .overlay,.modal-backdrop").length==0){
+                                $("body").css("overflow-y","auto");
+                                 }
+                            }
                            if(this.option.closeCallBack){
                                this.option.closeCallBack();
                            }

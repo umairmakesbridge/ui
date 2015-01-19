@@ -32,6 +32,7 @@ function (template,highlight,templateCollection,templateRowView) {
                this.template = _.template(template);		
                this.offset = 0;
                this.totalcount = 0;
+               this.templateTotalCount = 0;
                this.searchValue = "";
                this.searchString = "";
                this.searchTxt = "";
@@ -257,19 +258,27 @@ function (template,highlight,templateCollection,templateRowView) {
                 },
                 loadTemplates:function(search,searchType,options){
                     var camp_obj = this;
+                    var emailtext ='';
+                          if(this.OnOFlag){
+                              emailtext = 'email';
+                          }
                     var _data = {type:'search'}
                     if(!this.templates || search){
                         this.$(".thumbnails").children().remove();                        
                         this.app.showLoading('Loading Templates....',this.$(".template-container"));
                         if(camp_obj.$("#template_search_menu li.active").length){
                             var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":this.$("#template_search_menu li.active").attr("text-info").toLowerCase();
-                            this.$("#total_templates").html("<img src='img/recurring.gif'> "+text+" templates");                         
+                            this.$("#total_templates").html("<img src='img/recurring.gif'>  "+text+" "+emailtext+" templates");                         
                         }
                         else{
                             this.$("#total_templates").html("<img src='img/recurring.gif'> templates");                         
                         }
+                        if(this.OnOFlag){
+                              _data['searchType'] = "easyEditorCompatible";
+                          }else{
+                              _data['searchType'] = "recent";
+                          }
                         
-                        _data['searchType'] = "recent";
                         if(search && searchType){
                             _data['searchType'] = searchType;
                             if(options && options.layout_id){
@@ -294,7 +303,11 @@ function (template,highlight,templateCollection,templateRowView) {
                             if(searchType=="returnpath"){
                                 _data['isReturnPath'] ="Y";
                             }
+                            if(this.OnOFlag){
+                              _data['searchType'] = "easyEditorCompatible";
+                          }
                         }
+                        
                         this.offset = 0;
                         this.totalcount = 0;
                         this.searchString = _data;
@@ -333,6 +346,12 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     if(response.totalCount){
                                                         this.totalCount = response.totalCount;
                                                     }
+                                                    if(this.templateTotalCount === 0){
+                                                        this.templateTotalCount  = response.totalCount;
+                                                        if(this.OnOFlag){
+                                                            this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn();
+                                                        }
+                                                    }
                                                     this.showTotalCount(this.totalCount,isTotal);
                                                     this.app.showLoading(false,this.$(".template-container"));
                                                     
@@ -364,12 +383,16 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     }
                                                     if(collection.length==0){
                                                         var search_message  ="";
-                                                        if(this.searchString){
+                                                        var email = "";
+                                                        if(this.searchString && this.searchString.searchText){
                                                           search_message +=" containing '"+this.searchString.searchText+"'" ;
+                                                        }
+                                                        if(this.OnOFlag){
+                                                            email = "email";
                                                         }
                                                         //console.log(this.searchString);
                                                         //this.$(".template-container").append('<p class="notfound">No Templates found'+search_message+'</p>');
-                                                        this.$("#total_templates").html('<p class="notfound nf_overwrite">No Templates found'+search_message+'</p>');
+                                                        this.$("#total_templates").html('<p class="notfound nf_overwrite">No '+email+' Templates found'+search_message+'</p>');
                                                     }
                                                     this.$(".footer-loading").hide();
                                                     
@@ -589,6 +612,10 @@ function (template,highlight,templateCollection,templateRowView) {
                    showTotalCount:function(count,isTotal){                    
                         // var _text = parseInt(count)<="1"?"Template":"Templates";
                         // var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong>';
+                          var emailtext ='';
+                          if(this.OnOFlag){
+                              emailtext = 'email';
+                          }
                          if(this.page.total_count==0){
                                 this.page.total_count=count;
                                 this.trigger('updatecount');
@@ -597,28 +624,28 @@ function (template,highlight,templateCollection,templateRowView) {
                             }
                     if(this.$("#template_search_menu li.active").length){
                         var text = (this.$("#template_search_menu li.active").attr("text-info").toLowerCase().indexOf("templates")>-1)?"":(this.$("#template_search_menu li.active").attr("text-info").toLowerCase()+" ");  
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>"+text+"</b> templates found");  
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b> "+text+"</b> "+emailtext+" templates found");  
                     }
                     else if(this.searchString.searchText && this.searchString.searchType ==="nameTag"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for '"+$.trim(this.$("#search-template-input").val())+"'</b>");                         
                     }    
                     else if(this.searchString.searchType==='tag'){                        
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> templates found <b>for tag '"+this.searchString.searchText+"'</b>");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for tag '"+this.searchString.searchText+"'</b>");                         
                     }
                     else if(this.searchString.searchType === 'category'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> templates found <b>for category '"+ this.categoryName+"'</b>");                         
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for category '"+ this.categoryName+"'</b>");                         
                         
                     }else if(this.searchString.searchType === 'mobile'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong><b>Mobile</b> enabled templates found");                             
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Mobile</b> enabled templates found");                             
                     }
                     else if(this.searchString.searchType === 'admin'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong><b>Makesbridge</b> templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Makesbridge</b> templates found"); 
                     }
                     else if(this.searchString.searchType.searchType === "returnpath"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong><b>Return Path</b> enabled templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Return Path</b> enabled templates found"); 
                     }
                     else{
-                        this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> templates");
+                        this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> "+emailtext+" templates");
                         this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                     }
                    // Creating Copy/deleting template update the total count 
@@ -651,6 +678,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                         headerEditable:false,
                         headerIcon : 'messageicon',
+                        closeCD: true,
                         bodyCss:{"min-height":dialog_height+"px"},
                         buttons: {saveBtn:{text:'Send Message',btnicon:'next',btncolor:'btn-green'} }
                         });

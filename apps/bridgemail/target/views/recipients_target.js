@@ -5,7 +5,7 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!target/html/recipients_target.html'],
+define(['text!target/html/recipients_target.html','jquery.highlight'],
 function (template) {
         'use strict';
         return Backbone.View.extend({
@@ -14,6 +14,7 @@ function (template) {
                 "click .percent":'showPercentDiv',
                 "click .pageview":'showPageViews',
                 "click .edit-target":"editTarget",
+                "click .copy-target":"copyTarget",
                 "click .delete-target":"deleteTarget",
                 "click .refresh":"refreshTarget",
                 "click .preview":"previewTarget",
@@ -36,6 +37,12 @@ function (template) {
                 this.$el.html(this.template(this.model.toJSON())); 
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 
+                if(this.parent.searchText){
+                    this.$(".edit-target").highlight($.trim(this.parent.searchText));
+                    this.$(".tag").highlight($.trim(this.parent.searchText));
+                }else{
+                    this.$(".tag").highlight($.trim(this.parent.searchTags));
+                }
             },
             
                deleteTarget:function(ev){
@@ -136,6 +143,28 @@ function (template) {
                           }
                       });
                        
+                },
+                copyTarget: function(ev) {
+                    var target_id = $(ev.target).data('id');
+                    var curview = this;
+                    var camp_obj = this.parent;
+                    var dialog_title = "Copy Target";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "650px", "margin-left": "-325px"},
+                        bodyCss: {"min-height": "100px"},
+                        headerIcon: 'copycamp',
+                        buttons: {saveBtn: {text: 'Copy Target'}}
+                    });
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    require(["target/copytarget"], function(copytargetPage) {
+                        var mPage = new copytargetPage({camp: camp_obj, app: curview.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit'});
+                        var dialogArrayLength = curview.app.dialogArray.length; // New Dialog
+                        dialog.getBody().append(mPage.$el);
+                        curview.app.showLoading(false, mPage.$el.parent());
+                        mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                        curview.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTarget,mPage); // New Dialog
+                        dialog.saveCallBack(_.bind(mPage.copyTarget, mPage));
+                    });
                 },
                previewTarget:function(ev){
                       if(this.options.type == "autobots_listing"){
