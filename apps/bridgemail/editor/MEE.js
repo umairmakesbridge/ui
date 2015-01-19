@@ -393,7 +393,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
                                     header_section.find("link").remove();
-                                    outputHTML = "<html><head>"+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+"'>"+outputHTML+"</body></html>";                                    
+                                    outputHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en"><head>'+header_section.html()+"</head><body style='background-color:"+pageBackgroundColor+"'>"+outputHTML+"</body></html>";                                    
                                     
                                      //"" + outputter.outerHTML();
                                     return outputHTML;
@@ -540,8 +540,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             });
                                         }
 
-                                        var content = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-                                        content += '<html xmlns="http://www.w3.org/1999/xhtml">'
+                                        var content = '<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="en">';                                        
                                         content += '<head><title></title></head><body>'
                                         content += outputHTML
                                         content += '</body>'
