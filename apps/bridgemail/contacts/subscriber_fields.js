@@ -141,7 +141,8 @@ function (template,jqueryui,addbox) {
                        var _json = jQuery.parseJSON(data);                         
                        _this.app.showLoading(false,dialog.$el);
                        _this.updateValues();
-                       _this.subscriber.showFields();                       
+                       _this.subscriber.showFields();
+                        _this.updateSubscriberLetter();
                        _this.refreshContactList();
                        dialog.hide();
                });
@@ -158,6 +159,7 @@ function (template,jqueryui,addbox) {
                        _this.updateValues();
                        _this.subscriber.showFields();                       
                        _this.refreshContactList();
+                      _this.updateSubscriberLetter();
                        dialog.hide();
                });
             },
@@ -178,6 +180,19 @@ function (template,jqueryui,addbox) {
                 this.$el.parents('.modal-body').scrollTop(this.$el.height());
                 newCustomField.find("input").focus();
                 return true;
+            },
+            updateSubscriberLetter : function(){
+                
+                var subName = '';
+                
+                if(this.subscriber.sub_fields.firstName){
+                          subName = this.subscriber.sub_fields.firstName;
+                      }else if(this.subscriber.sub_fields.lastName){
+                          subName = this.subscriber.sub_fields.lastName;
+                      }else{
+                          subName = this.subscriber.sub_fields.email;
+                      }
+                this.app.mainContainer.SubscriberName(this.subscriber.sub_id,subName);
             }
         });
 });

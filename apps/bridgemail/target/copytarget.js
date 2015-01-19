@@ -56,9 +56,12 @@ function (template) {
 										  if(app.checkError(selected_target)){
 											return false;
 										  }
-										  if(selected_target){											  
+										  if(selected_target){
+                                                                                        if(editview.dialog){
+                                                                                            
 											editview.dialog.$el.find("#dialog-title span").html(selected_target.name);
 											campview.states.step3.targetDialog.target_id = selected_target["filterNumber.encode"];											   
+                                                                                        }
 										  }
                     				 });									
 								}

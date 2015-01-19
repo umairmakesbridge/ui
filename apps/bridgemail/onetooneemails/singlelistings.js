@@ -28,6 +28,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                         var appMsgs = this.app.messages[0];
                         var target = $.getObj(obj, "a");
                         var prevStatus = this.searchTxt;
+                        this.searchBadgeTxt = target.attr('search');
                         if (target.parent().hasClass('active')) {
                             return false;
                         }
@@ -93,7 +94,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                 loadTemplatesView:function(){
                         var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
-                        var dialog = this.app.showDialog({title:'Templates',
+                        var dialog = this.app.showDialog({title:'Templates'+'<strong id="oto_total_templates" class="cstatus pclr18 right" style="margin-left:5px;display:none;"> Total <b></b> </strong>',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                         headerEditable:false,
                         headerIcon : 'template',
@@ -154,28 +155,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                                   target.removeClass('font-bold');
                                   return false;
                               }
-                            olist_obj.$el.find('.stattype').parent().removeClass('active');
-                            
-                            /*switch (target.attr("search"))
-                            {
-                                case "C":
-                                    olist_obj.$el.find('.sent').parent().addClass('active');
-                                    olist_obj.$el.find(".sortoption_expand").find('.spntext').html(olist_obj.$el.find('.sent').text());
-                                    break;
-                                case "P":
-                                    olist_obj.$el.find('.pending').parent().addClass('active');
-                                    olist_obj.$el.find(".sortoption_expand").find('.spntext').html(olist_obj.$el.find('.pending').text());
-                                    break;
-                                case "S":
-                                    olist_obj.$el.find('.scheduled').parent().addClass('active');
-                                    olist_obj.$el.find(".sortoption_expand").find('.spntext').html(olist_obj.$el.find('.scheduled').text());
-                                    break;
-                                case "D":
-                                    olist_obj.$el.find('.draft').parent().addClass('active');
-                                    olist_obj.$el.find(".sortoption_expand").find('.spntext').html(olist_obj.$el.find('.draft').text());
-                                    break;
-                            }*/
-                          
+                            olist_obj.$el.find('.stattype').parent().removeClass('active');  
                         }
                         var dateStart = target.attr('dateStart');
                         var dateEnd = target.attr('dateEnd');
@@ -262,6 +242,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     var camp_obj = this;
                     this.template_id='';
                     this.templateView  = '';
+                    this.searchBadgeTxt = '';
                     camp_obj.getallemails();
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
                         id: 'list-search',
@@ -459,11 +440,16 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     else if (this.searchTxt && this.isSubjectText) {
                         this.$("#total_templates").html(text_count + _text + " found containing Subject '<b>" + this.searchTxt + "</b>'");
                         this.isSubjectText = false;
-                    }else if(this.searchTxt){
+                    }
+                    else if(this.searchTxt){
                         this.$("#total_templates").html(text_count + _text + " found containing text '<b>" + this.searchTxt + "</b>'");
                     }
                     else {
                         this.$("#total_templates").html(text_count + _text);
+                    }
+                    if(this.searchBadgeTxt){
+                        this.$("#total_templates").html(text_count +  this.searchBadgeTxt +" "+ _text);
+                        this.searchBadgeTxt = '';
                     }
 
                 },
@@ -498,8 +484,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                                
                                 var stats = '<ul class="c-current-status">';
                                 
-                                stats += '<li search="C" class="'+sentClass+' '+ this.app.getClickableClass(allStats['sentCount']) +'" data-original-title="Click to view sent campaigns"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="C" >' + allStats['sentCount'] + '</span>Sent</li>';
-                                stats += '<li search="S" class="'+openCount+' '+ this.app.getClickableClass(allStats['openCount']) +'" data-original-title="Click to view scheduled campaigns"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="S" >' + allStats['openCount'] + '</span>Open</li>';
+                                stats += '<li search="Sent" class="'+sentClass+' '+ this.app.getClickableClass(allStats['sentCount']) +'" data-original-title="Click to view sent emails"><span class="badge pclr18  stattype topbadges" tabindex="-1" search="Sent" >' + allStats['sentCount'] + '</span>Sent</li>';
+                                stats += '<li search="Opened" class="'+openCount+' '+ this.app.getClickableClass(allStats['openCount']) +'" data-original-title="Click to view open emails"><span class="badge pclr2 showtooltip stattype topbadges" tabindex="-1" search="Opened" >' + allStats['openCount'] + '</span>Open</li>';
                                 stats += '</ul>';
                                 header_title.find('ul.progress-loading').remove();
                                 header_title.append(stats);
@@ -510,14 +496,17 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                                 //header_title.find(".c-current-status li a").click(_.bind(camp_obj.$el.find('.stattype').click(),camp_obj));
                             }, this));
                 },
-                getOpenEmails :function(){
+                getOpenEmails :function(obj){
                     this.type = 'getOpenMessageList';
+                    var target = $.getObj(obj, "li");
+                    this.searchBadgeTxt = target.attr('search');
                     this.total_fetch = 0;
                     this.getallemails();
                 },
                 
-                getSendEmails :function(){
-                  
+                getSendEmails :function(obj){
+                    var target = $.getObj(obj, "li");
+                    this.searchBadgeTxt = target.attr('search');
                     this.type = 'getMessageList';
                     this.total_fetch = 0;
                     this.getallemails();
