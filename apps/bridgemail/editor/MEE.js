@@ -388,7 +388,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedupHTML = CleanCode(constructedHTML).html();
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
