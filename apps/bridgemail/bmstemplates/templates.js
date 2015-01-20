@@ -365,7 +365,8 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     if(this.templateTotalCount === 0){
                                                         this.templateTotalCount  = response.totalCount;
                                                         if(this.OnOFlag){
-                                                            this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn();
+                                                            this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn().css('cursor','pointer');
+                                                            this.$el.parents('.modal').find('#oto_total_templates').click(_.bind(function(){this.loadTemplates();},this))
                                                         }
                                                     }
                                                     this.showTotalCount(this.totalCount,isTotal);
@@ -625,22 +626,22 @@ function (template,highlight,templateCollection,templateRowView) {
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for category '"+ this.categoryName+"'</b>");                         
                         
                     }else if(this.searchString.isFeatured === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Featured</b> enabled templates found");                             
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong><b>Featured</b> enabled  "+emailtext+" templates found");                             
                     }
                     else if(this.searchString.isMobile === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Mobile</b> enabled templates found");                             
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Mobile</b> enabled "+emailtext+" templates found");                             
                     }
                     else if(this.searchString.isAdmin === 'Y'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Makesbridge</b> templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Makesbridge</b> "+emailtext+" templates found"); 
                     }
                     else if(this.searchString.userType === 'A'){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Makesbridge</b> templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Makesbridge</b> "+emailtext+" templates found"); 
                     }
                     else if(this.searchString.isReturnPath === "Y"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Return Path</b> enabled templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Return Path</b> "+emailtext+" enabled templates found"); 
                     }
                     else if(this.searchString.isMEE === "Y"){
-                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Easy Editor</b> enabled templates found"); 
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> <b>Easy Editor</b> enabled "+emailtext+" templates found"); 
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> "+emailtext+" templates");
@@ -696,6 +697,12 @@ function (template,highlight,templateCollection,templateRowView) {
                             _this.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
                             _this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.sendEmail,mPage); // New Dialog
                         })
-                }
+                },
+                ReattachEvents: function () {
+                    this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn().css('cursor','pointer');
+                    this.$el.parents('.modal').find('#oto_total_templates').click(_.bind(function(){this.loadTemplates();},this))
+                   
+                },
+                
         });
 });
