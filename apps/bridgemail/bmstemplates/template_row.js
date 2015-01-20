@@ -84,7 +84,12 @@ function (template,highlighter,tagView) {
             initControls:function(){
 
                 this.showTagsTemplate();
-                
+                if(this.parent.searchString){
+                    this.$(".template-name").highlight($.trim(this.parent.searchString.searchText));
+                    this.$(".tag").highlight($.trim(this.parent.searchString.searchText));
+                }else{
+                    this.$(".tag").highlight($.trim(this.parent.searchTags));
+                }
             },
             showTagsTemplate:function(){
                     this.tmPr =  new tagView(
