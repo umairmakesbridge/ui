@@ -76,7 +76,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                 
                 this.request = this.objRecipients.fetch({data:_data,success:function(data){
                     _.each(data.models, function(model){
-                        that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app}).el);
+                        that.$el.find('#list_grid tbody').append(new recipientView({model:model,app:app,parent:that}).el);
                      });
                       /*-----Remove loading------*/
                     that.app.removeSpinner(that.$el);

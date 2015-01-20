@@ -28,6 +28,7 @@ function (template,highlighter,tagView) {
                'click .mail':'mailIconClick',
                'click .view':'viewIconClick',
                'click .selecttemp':'selectTemplate',
+               'click .easyEditorCompatible':'meeClick',
                //'click .t-scroll p i.ellipsis':'expandTags',
                'mouseleave .thumbnail':'collapseTags'
             },
@@ -277,7 +278,10 @@ function (template,highlighter,tagView) {
                              this.parent.loadTemplates('search','category',{category_id:this.model.get('categoryID')});  
                       },
           featureClick : function(){
-                            this.parent.$("#template_search_menu li:nth-child(3)").click(); 
+                            this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
+                            this.parent.$('#search-template-input').val('');
+                            this.parent.$('#clearsearch').hide();
+                            this.parent.loadTemplates('search','featured');
           },
           returnPath: function(){
                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");  
@@ -304,7 +308,12 @@ function (template,highlighter,tagView) {
           viewIconClick : function(){
                             this.parent.$("#template_search_menu li:nth-child(4)").click();
           },
-        
+          meeClick : function(){
+                             this.parent.$("#template_layout_menu li,#template_search_menu li").removeClass("active");
+                             this.parent.$('#search-template-input').val('');
+                             this.parent.$('#clearsearch').hide();
+                             this.parent.loadTemplates('search','easyeditor');
+          }
          
          
         });
