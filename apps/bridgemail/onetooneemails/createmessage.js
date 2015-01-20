@@ -216,6 +216,9 @@ function (template,contactsView) {
                                  _this.loadEditor();
                              }
                             else{
+                                _this.showIframe();
+                                _this.$('#oto-easyeditor').html('<i class="icon preview left"></i>Message Preview<label style="position:absolute;top: 0px; left: 110px;" class="step2-lists"><span style="display: block;" class="fieldinfo"><i class="icon"></i><em>HTML is not compatible with the Easy Editor.</em></span></label>');
+                                
                                // _this.editorContent = _this.app.decodeHTML(_json.body, true);
                                // _this.$('#myTab li:nth-child(2) a').click();
                             }

@@ -29,6 +29,12 @@ function (template,tags) {
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
                  this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                 if(this.parent.searchText){
+                    this.$(".edit-list").highlight($.trim(this.parent.searchText));
+                    this.$(".tag").highlight($.trim(this.parent.searchText));
+                }else{
+                    this.$(".tag").highlight($.trim(this.parent.searchTags));
+                }
             },
             editList:function(ev){
                 

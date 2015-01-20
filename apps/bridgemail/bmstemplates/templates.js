@@ -44,7 +44,7 @@ function (template,highlight,templateCollection,templateRowView) {
                this.otoTemplateFlag = false;
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
-               //              
+               this.orderBy = 'usageDate';             
                this.render();
             },
             /**
@@ -253,6 +253,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         }
                         this.$el.find("#template_search_menu").hide();
                         li.addClass("active");
+                        this.orderBy = searchType;
                         this.loadTemplates('search',searchType);                       
                     }
                 },
@@ -273,41 +274,58 @@ function (template,highlight,templateCollection,templateRowView) {
                         else{
                             this.$("#total_templates").html("<img src='img/recurring.gif'> templates");                         
                         }
-                        if(this.OnOFlag){
-                              _data['searchType'] = "easyEditorCompatible";
-                          }else{
-                              _data['searchType'] = "recent";
-                          }
+                        
+                        _data['orderBy'] = "usageDate";
+                          
                         
                         if(search && searchType){
-                            _data['searchType'] = searchType;
+                            if(searchType === 'tag' || searchType=== 'nameTag'){
+                            _data['searchType'] = searchType;    
+                            }else{
+                                if(searchType === 'name'){
+                                    _data['orderBy'] = '';
+                                }else{
+                                    _data['orderBy'] = searchType;
+                                }
+                            }
                             if(options && options.layout_id){
                                 _data['layoutId'] = options.layout_id;
+                                _data['orderBy'] = this.orderBy;
                             }
                             else if(options && options.text){
                                 _data['searchText'] = options.text;
+                                _data['orderBy'] = this.orderBy;
                             }
                             else if(options && options.user_type){
                                 _data['userType'] = options.user_type;
+                                _data['orderBy'] = this.orderBy;
                             }
                             else if(options && options.category_id){
                                 this.categoryName = this.app.encodeHTML(options.category_id);
                                 _data['categoryId'] = this.categoryName;
+                                _data['orderBy'] = this.orderBy;
                             }                            
                             if(searchType=="featured"){
-                                _data['isFeatured'] = "Y"                                
+                                _data['isFeatured'] = "Y";
+                                _data['orderBy'] = this.orderBy;
                             }
                             if(searchType=="mobile"){
-                                 _data['isMobile'] ="Y";                                
+                                 _data['isMobile'] ="Y";
+                                 _data['orderBy'] = this.orderBy;
                             }
                             if(searchType=="returnpath"){
                                 _data['isReturnPath'] ="Y";
+                                _data['orderBy'] = this.orderBy;
                             }
-                            if(this.OnOFlag){
-                              _data['searchType'] = "easyEditorCompatible";
-                          }
+                            if(searchType=="easyeditor"){
+                                _data['isMEE'] ="Y";
+                                _data['orderBy'] = this.orderBy;
+                            }
                         }
-                        
+                        if(this.OnOFlag){
+                              _data['isMEE'] = "Y";
+                              _data['orderBy'] = this.orderBy;
+                          }
                         this.offset = 0;
                         this.totalcount = 0;
                         this.searchString = _data;
@@ -323,8 +341,6 @@ function (template,highlight,templateCollection,templateRowView) {
                 if(!tcount){
                     remove_cache = true;
                     this.offset = 0;
-                    //this.$contactList.children(".contactbox").remove();
-                    //this.app.showLoading("Loading Contacts...",this.$contactList);             
                     this.$(".notfound").remove();
                 }
                 else{
@@ -418,7 +434,7 @@ function (template,highlight,templateCollection,templateRowView) {
                        this.callTemplates(20); 
                     }  
                 },
-                drawTemplates:function(){
+                /*drawTemplates:function(){
                     var templates =  this.templates.templates;
                     var vars = [], hash;
                     var camp_obj = this;
@@ -493,9 +509,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         template_html.find(".template-type").click(_.bind(function(obj){
                             var target = $.getObj(obj,"div");                           
                         },this));                        
-                        template_html.find(".feat_temp").click(_.bind(function(obj){
-                             this.$("#template_search_menu li:nth-child(3)").click();   
-                        },this));
+                        
                         
                         
                         
@@ -546,13 +560,7 @@ function (template,highlight,templateCollection,templateRowView) {
                     if((this.offset + parseInt(this.templates.count))<parseInt(this.totalcount)){
                         this.$(".thumbnails li:last-child").attr("data-load","true");
                     }
-                    
-                        
-                    
-                    
-                   
-                    
-                },
+                },*/
                 
                 showCategoryTemplate:function(categories){
                      var _array = categories.split(",");
@@ -576,24 +584,6 @@ function (template,highlight,templateCollection,templateRowView) {
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
                       saveCallBack :  _.bind(this.app.mainContainer.createTemplateCall,this) // Calling same view for refresh headBadge
                     });
-                    /*var dialog_width = 650;
-                    var dialog_height = 100;
-                    var dialog = this.app.showDialog({title:'New Template',
-                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10%"},                     
-                        bodyCss:{"min-height":dialog_height+"px"},
-                        headerIcon : 'template',
-                        buttons: {saveBtn:{text:'Create Template'} }                                                                           
-                    });
-                    var create_new_template = this.$("#create-template-container").clone();
-                    create_new_template.css("display","block");
-                    dialog.getBody().html(create_new_template);
-                    create_new_template.find("input").focus();
-                    dialog.saveCallBack(_.bind(this.createTemplateCall,this,dialog));
-                    create_new_template.find("input").keydown(_.bind(function(e){
-                        if(e.keyCode==13){
-                            this.createTemplateCall(dialog);
-                        }
-                    },this));*/
                 },     
                  keyvalid:function(event){
                         var regex = new RegExp("^[A-Z,a-z,0-9]+$");
@@ -610,8 +600,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         event.preventDefault();
                    },
                    showTotalCount:function(count,isTotal){                    
-                        // var _text = parseInt(count)<="1"?"Template":"Templates";
-                        // var text_count = '<strong class="badge">'+this.app.addCommas(count)+'</strong>';
+                       
                           var emailtext ='';
                           if(this.OnOFlag){
                               emailtext = 'email';
@@ -632,21 +621,30 @@ function (template,highlight,templateCollection,templateRowView) {
                     else if(this.searchString.searchType==='tag'){                        
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for tag '"+this.searchString.searchText+"'</b>");                         
                     }
-                    else if(this.searchString.searchType === 'category'){
+                    else if(this.searchString.categoryId){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+" templates found <b>for category '"+ this.categoryName+"'</b>");                         
                         
-                    }else if(this.searchString.searchType === 'mobile'){
+                    }else if(this.searchString.isFeatured === 'Y'){
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Featured</b> enabled templates found");                             
+                    }
+                    else if(this.searchString.isMobile === 'Y'){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Mobile</b> enabled templates found");                             
                     }
-                    else if(this.searchString.searchType === 'admin'){
+                    else if(this.searchString.isAdmin === 'Y'){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Makesbridge</b> templates found"); 
                     }
-                    else if(this.searchString.searchType.searchType === "returnpath"){
+                    else if(this.searchString.userType === 'A'){
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Makesbridge</b> templates found"); 
+                    }
+                    else if(this.searchString.isReturnPath === "Y"){
                         this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Return Path</b> enabled templates found"); 
+                    }
+                    else if(this.searchString.isMEE === "Y"){
+                        this.$("#total_templates").html("<strong class='badge'>"+count+"</strong> "+emailtext+"<b>Easy Editor</b> enabled templates found"); 
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> "+emailtext+" templates");
-                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
+                        //this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                     }
                    // Creating Copy/deleting template update the total count 
                    if(isTotal){

@@ -4,7 +4,7 @@
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html','bms-tags'],
+define(['text!listupload/html/recipient_list.html','bms-tags','jquery.highlight'],
 function (template,tags) {
         'use strict';
         return Backbone.View.extend({
@@ -17,6 +17,7 @@ function (template,tags) {
             },
             initialize: function () {
                 this.app = this.options.app;
+                this.parents = this.options.parent;
                 this.template = _.template(template);	
                 this.model.bind("change", this.render, this);
                 this.render();
@@ -24,6 +25,12 @@ function (template,tags) {
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                if(this.parents.searchText){
+                    this.$(".edit-list").highlight($.trim(this.parents.searchText));
+                    this.$(".tag").highlight($.trim(this.parents.searchText));
+                }else{
+                    this.$(".tag").highlight($.trim(this.parents.searchTags));
+                }
             },
             editList:function(ev){
                if (this.model.get('isSupressList') =="true" || this.model.get('isBounceSupressList')=="true" ) return;

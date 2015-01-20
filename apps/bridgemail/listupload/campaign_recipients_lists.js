@@ -6,7 +6,7 @@
  */
 
 define(['text!listupload/html/campaign_recipients_lists.html','listupload/collections/recipients_lists', 'listupload/views/campaign_recipients_list','moment','jquery.bmsgrid','bms-shuffle'],
-function (template, ListsCollection, TargetView,moment) {
+function (template, ListsCollection, ListsView,moment) {
         'use strict';
         return Backbone.View.extend({  
                 'className':'ListsViewWrap',
@@ -101,7 +101,7 @@ function (template, ListsCollection, TargetView,moment) {
                             _.each(data.models, function(model) {
                                 var _view_obj ={model: model, app: that.app,page:that,hidePopulation:true};
                                 _view_obj["showUse"]=that.col2;
-                               var _view = new TargetView(_view_obj);  
+                               var _view = new ListsView(_view_obj);  
                                //that.totalListArray.push(that._view);
                                 _view.$el.attr("_checksum",model.get("listNumber.checksum")); 
                                 that.$el.find('#list_grid tbody').append(_view.$el);
@@ -143,7 +143,7 @@ function (template, ListsCollection, TargetView,moment) {
                     this.$el.find('.recp_empty_info').hide();
                     var _view_obj ={model: model, app: this.app,page:this,hidePopulation:true};
                      _view_obj["showRemove"]=this.col1;
-                     var _view = new TargetView(_view_obj);                                          
+                     var _view = new ListsView(_view_obj);                                          
                      this.$(this.col2).find(".bDiv tbody").append(_view.$el);
                      _view.$el.attr("_checksum",model.get("listNumber.checksum"));
                      this.listsModelArray.push(model);
