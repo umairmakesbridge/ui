@@ -112,6 +112,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                            _this.app.showLoading(false,  _this.templateView.$el.parent());                     
                              _this.templateView.init();
                              _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                             _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
                             _this.app.dialogArray[dialogArrayLength-1].currentView = _this.templateView; // New Dialog
                         })
                  
@@ -549,7 +550,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                     });
                            // console.log('from single listings : '+this.campaigns_request);
                     
-                }
+                }, 
 
             });
         });
