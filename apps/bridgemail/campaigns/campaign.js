@@ -1282,7 +1282,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         button.addClass("saving");
                     }                                                                                      
                 },
-                saveStep2:function(gotoNext){                 
+                saveStep2:function(gotoNext,htmlText){                 
                  var camp_obj = this; 
                  var proceed = -1;
                  var html = "",plain="";                  
@@ -1308,6 +1308,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;                         
+                     }
+                     
+                     if(typeof(htmlText)!=="undefined"){
+                         post_data['htmlCode'] = "";
                      }
                           
                  if(this.states.editor_change ===true || typeof(gotoNext)!=="undefined"){
@@ -2153,7 +2157,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 step2TileClick:function(obj){
                     var camp_obj = this;
                     var target_li =$.getObj(obj,"li"); 
-                    if(this.$(".step2 #choose_soruce li.selected").length==0){
+                    var selected_li = this.$(".step2 #choose_soruce li.selected");                                        
+                    if(selected_li.length==0){
                         var slider_width = "840px";
                         this.$(".step2 .selection-boxes").animate({width:slider_width,margin:'0px auto'}, "medium",function(){
                             $(this).removeClass("create-temp");                                                                                        
@@ -2163,8 +2168,48 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     else{                                                                               
                         this.step2SlectSource(target_li);
                     }
+                    
+                   
+                    
                 },
-                step2SlectSource:function(target_li){
+                showChangeEditorDialog: function(msg,target_li){
+                  this.app.showAlertPopup({heading:'Confirm Change of Editor',
+                    detail:msg,  
+                    text: "Continue",
+                    btnClass:"btn-yellow",
+                    icon: "next",
+                    callback: _.bind(function(){                  
+                            
+                            this.$("#mee_editor").setMEEHTML("");
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                            this.states.step2.htmlText = "";     
+                            this.step2SlectSource(target_li,true);                            
+                            this.saveStep2(false,"");
+                            
+                        },this)
+                    },
+                    $('body'));  
+                },
+                showChangeEditorWarning: function(target_li){
+                  var selected_li = this.$(".step2 #choose_soruce li.selected");           
+                  if(selected_li.length && selected_li.attr("id")=="html_editor_mee" && target_li.attr("id")=="html_editor"  && this.$("#mee_editor").getMEEBody() !== ""){
+                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>HTML Editor</b>. Are you sure you want to continue?",target_li);
+                        return true;    
+                  }  
+                  else if(selected_li.length && selected_li.attr("id")=="html_editor_mee" && target_li.attr("id")=="html_code" && this.$("#mee_editor").getMEEBody() !== ""){
+                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
+                        return true;    
+                  }  
+                  else if(selected_li.length && ( (selected_li.attr("id")=="html_editor" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().innerHTML!="<br>") || ( selected_li.attr("id")=="html_code" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
+                      this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
+                      return true;    
+                  }
+                  return false;
+                },
+                step2SlectSource:function(target_li,byPass){
+                    if(!byPass && this.states.step2.htmlText && this.showChangeEditorWarning(target_li)){                        
+                        return;
+                    }                    
                     
                     this.$(".step2 #choose_soruce li").removeClass("selected");
                     this.$(".step2 .soruces").hide();  

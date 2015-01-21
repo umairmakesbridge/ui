@@ -29,16 +29,36 @@ if(userInfo == null) {
 String _path = "/pms/umair/";
 %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="loading-html">
 <head>
     <meta charset="utf-8">
-    <title>Bridgemail System</title>
-    
+    <title>Bridgemail System</title>    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <meta name="author" content="">    
-    <link rel="shortcut icon" href="img/favicon.ico">
-    
+    <meta name="author" content="">     
+    <style>
+            html {
+                -webkit-transition: background-color 1s;
+                transition: background-color 1s;
+            }
+            html, body { min-height: 100%; }
+            html.loading-html {
+                background: #fff url('img/mb-loading.gif') no-repeat 50% 50%;
+                -webkit-transition: background-color 0;
+                transition: background-color 0;
+            }
+            body {
+                -webkit-transition: opacity 1s ease-in;
+                transition: opacity 1s ease-in;
+            }
+            html.loading-html body {
+                opacity: 0;
+                -webkit-transition: opacity 0;
+                transition: opacity 0;
+            }
+            
+    </style>
+    <link rel="shortcut icon" href="img/favicon.ico">    
     <link href="<%= _path %>css/bootstrap.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link href="<%= _path %>css/icons.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link href="<%= _path %>css/style.css?bust=1.362" rel="stylesheet" type="text/css" >  
@@ -82,6 +102,7 @@ String _path = "/pms/umair/";
     <script type="text/javascript" src="https://test.bridgemailsystem.com/tinymce_3/tiny_mce_old.js"></script>
 </head>
 <body>
+
     
     
 </body>

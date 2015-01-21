@@ -383,6 +383,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 $.fn.setChange = function (states) {
                                     changFlag = states;
                                 };
+                                
+                                $.fn.getMEEBody = function(){
+                                    var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
+                                    var constructedHTML = $(mainHTMLELE.outerHTML());                                    
+                                    return CleanCode(constructedHTML).html();
+                                }
 
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");

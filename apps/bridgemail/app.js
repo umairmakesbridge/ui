@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -102,7 +102,13 @@ define([
                 this.mainContainer.dashBoardScripts();
                 this.getUser();
                 this.initScript();
-                //call the callback
+                try{
+                    $("html").removeClass("loading-html")
+                }
+                catch(e){
+                    
+                }
+                
                 (callback || $.noop)();
             }, this));
         },
@@ -356,7 +362,8 @@ define([
         showAlertPopup: function (message, container) {
             if (message) {
                 var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete"><h3>' + message.heading + '</h3>';
-                var btn = '<div class="btns"><a class="btn-red btn-ok"><span>Yes, ' + message.text + '</span><i class="icon ' + message.icon + '"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
+                var btn_class= message.btnClass?message.btnClass:"btn-red"; 
+                var btn = '<div class="btns"><a class="'+btn_class+' btn-ok"><span>Yes, ' + message.text + '</span><i class="icon ' + message.icon + '"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
                 dialogHTML += '<p>' + message.detail + '</p>' + btn + '</div>';
                 var dialog = $(dialogHTML);
                 $(container).append(dialog);
