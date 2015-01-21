@@ -28,6 +28,8 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                  */
                 render: function () {
                     this.app = this.options.template.app;
+                    this.createTempOnly = this.options.createTempOnly;
+                    this.isEasyEditorCompatibleFlag = (this.options.isEasyEditorCompatibleFlag == 'Y') ? true : false;
                     this.$el.html(this.template({}));
                     this.page = this.options.template;
                     this.editor_change = false;
@@ -153,9 +155,10 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 loadEditor : function(obj){
-                  var target_li =$.getObj(obj,"li");   
-                  if(target_li.hasClass("tinymce-editor")){
+                  //var target_li =$.getObj(obj,"li");   
+                  if(obj==='editor'){
                       this.initEditor();
+                      
                   }
                   else{
                       this.loadMEE();
@@ -177,7 +180,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&templateNumber=" + this.template_id;
                     this.getTemplateCall = jQuery.getJSON(URL, function (tsv, state, xhr) {
                         if (xhr && xhr.responseText) {
-                            _this.app.showLoading(false, _this.$el);
+                            
                             var template_json = jQuery.parseJSON(xhr.responseText);
                             if (_this.app.checkError(template_json)) {
                                 return false;
@@ -185,9 +188,9 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
 
                             _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                             _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
-                            if(template_json.isEasyEditorCompatible=="N"){                                     
+                            if(template_json.isEasyEditorCompatible=="N" && !_this.createTempOnly){                                     
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
-                                _this.$(".tinymce-editor a").click();
+                               _this.loadEditor('editor');
                             }
                             else{
                                 _this.editorContentMEE = template_json.htmlText
@@ -227,6 +230,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                 callBack: _.bind(_this.newTags, _this),
                                 typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + _this.app.get('bms_token') + "&type=allTemplateTags"
                             });
+                            _this.app.showLoading(false, _this.$el);
                         }
                     }).fail(function () {
                         console.log("error in loading template");
@@ -302,7 +306,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         isMobile: isMobile,
                         categoryID: this.$(".category-input").val()
                     };
-                    if (this.$(".MEE-Editor").hasClass("active")) {
+                    if (this.isEasyEditorCompatibleFlag || this.createTempOnly) {
                         this.dataObj["isMEE"] = 'Y';
                         this.dataObj["templateHtml"] = this.$("#mee_editor").getMEEHTML();
                     }
@@ -412,6 +416,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         }
 
                     });
+                    this.$('#Tiny').show();
                 },
                 saveTemplateName: function (obj) {
                     var _this = this;

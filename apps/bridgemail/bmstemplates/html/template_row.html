@@ -58,16 +58,16 @@
             </span>
             <span class="left">
                 <em><%= this.model.get('usageCount') %></em>
-                <span class="icon mail showtooltip" data-original-title="Used Count"></span>
+                <span class="icon mail showtooltip" data-original-title="Click to View Used Count Templates"></span>
             </span>
             <% if(this.model.get('isAdmin')==='Y'){ %>
                         <a class="icon builtin right showtooltip" title="Click to View All Makesbridge Templates"></a>                                                                                                 
                           <%  } %>  
             <% if(this.model.get('isMobile')==='Y'){ %>
-                        <a class="icon mobile right showtooltip" title="Click to View All Mobile Enabled Templates"></a>                                                                 
+                        <a class="icon mobile right showtooltip" title="Click to View All Mobile Compatible Templates"></a>                                                                 
                          <%  } %>
              <% if(this.model.get('isEasyEditorCompatible')==='Y'){ %>
-                        <a class="icon easyEditorCompatible right showtooltip" style="" title="Easy Editor Compitable Template"></a>                                                                 
+                        <a class="icon easyEditorCompatible right showtooltip" style="" title="Click to View Easy Editor Compatible Templates"></a>                                                                 
                          <%  } %>            
         </div>
     </div>
