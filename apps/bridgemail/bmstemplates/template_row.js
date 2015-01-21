@@ -219,7 +219,7 @@ function (template,highlighter,tagView) {
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["bmstemplates/template"],function(templatePage){
-                    var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self});
+                    var mPage = new templatePage({template:_this,dialog:dialog,rowtemplate:self,isEasyEditorCompatibleFlag:self.model.get('isEasyEditorCompatible')});
                     var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                     dialog.getBody().append(mPage.$el);
                     mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
@@ -234,7 +234,8 @@ function (template,highlighter,tagView) {
                     self.app.dialogArray[dialogArrayLength-1].tags= mPage.jsonTag; // New Dialog
                     }); 
                     this.parent.$el.find('#new_template').unbind( "click" ); // Unbind the add Tile event for reattach
-                    this.parent.callTemplates(this.parent.offset,isTotal);
+                    this.parent.templateTotalFlag=true;
+                    this.parent.loadTemplates(this.parent.offset,isTotal);
                 },
               deleteTemplate:function(){        
                   this.app.showAlertDetail({heading:'Confirm Deletion',
@@ -253,9 +254,14 @@ function (template,highlighter,tagView) {
                           this.app.showLoading(false,this.$el);   
                            var _json = jQuery.parseJSON(data);        
                            if(_json[0]!=='err'){
-            
+                              this.parent.templateTotalFlag=true;
                               this.parent.offset = 0;
-                              this.parent.callTemplates(this.parent.offset,true);
+                              this.$el.fadeOut(_.bind(function(){this.$el.remove();},this));
+                              var Tcount = this.$el.parents('.ws-content.active').find('.temp-count').html();
+                              var count = this.parent.$el.find('#total_templates strong').html();
+                              this.$el.parents('.ws-content.active').find('.temp-count').html(parseInt(Tcount)-1);
+                              this.parent.$el.find('#total_templates strong').html(parseInt(count)-1);
+                              //this.parent.loadTemplates();
                               //this.parent.$el.find("#template_search_menu li:first-child").removeClass("active").click();
 
                            }

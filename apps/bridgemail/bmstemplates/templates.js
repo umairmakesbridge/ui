@@ -44,7 +44,8 @@ function (template,highlight,templateCollection,templateRowView) {
                this.otoTemplateFlag = false;
                this.templateCollection = new templateCollection(); 
                this.getTemplateCall = null;
-               this.orderBy = 'usageDate';             
+               this.orderBy = 'usageDate';    
+               this.templateTotalFlag = false;
                this.render();
             },
             /**
@@ -181,7 +182,9 @@ function (template,highlight,templateCollection,templateRowView) {
                                 }, this));
                             }
                             else{
-                                this.$("#template_search_menu li:first-child").click();
+                                this.loadTemplates();
+                                this.$("#search-template-input").val('');
+                                //this.$("#template_search_menu li:first-child").click();
                             }
                       }
                       else
@@ -199,7 +202,9 @@ function (template,highlight,templateCollection,templateRowView) {
                                 this.loadTemplates();
                             }
                             else{
-                                this.$("#template_search_menu li:first-child").click();
+                                this.loadTemplates();
+                                this.$("#search-template-input").val('');
+                                //this.$("#template_search_menu li:first-child").click();
                             }
                         }
                     }
@@ -275,8 +280,8 @@ function (template,highlight,templateCollection,templateRowView) {
                             this.$("#total_templates").html("<img src='img/recurring.gif'> templates");                         
                         }
                         
-                        _data['orderBy'] = "usageDate";
-                          
+                        _data['orderBy'] = this.orderBy;
+                         
                         
                         if(search && searchType){
                             if(searchType === 'tag' || searchType=== 'nameTag'){
@@ -362,7 +367,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                     if(response.totalCount){
                                                         this.totalCount = response.totalCount;
                                                     }
-                                                    if(this.templateTotalCount === 0){
+                                                    if(this.templateTotalCount === 0 || this.templateTotalFlag){
                                                         this.templateTotalCount  = response.totalCount;
                                                         if(this.OnOFlag){
                                                             this.$el.parents('.modal').find('#oto_total_templates').html('Total <b>'+this.templateTotalCount+'</b>').fadeIn().css('cursor','pointer');
@@ -645,10 +650,10 @@ function (template,highlight,templateCollection,templateRowView) {
                     }
                     else{
                         this.$("#total_templates").html("<strong class='badge'>"+count +"</strong> "+emailtext+" templates");
-                        //this.$el.parents('.ws-content.active').find('.temp-count').text(count);
+                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                     }
                    // Creating Copy/deleting template update the total count 
-                   if(isTotal){
+                   if(isTotal || this.templateTotalFlag){
                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
                    }
                 },

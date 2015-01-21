@@ -688,7 +688,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.app.showLoading("Loading...", dialog.getBody());
                     this.$el.parents('body').find("#template_search_menu li:first-child").removeClass("active").click();
                     require(["bmstemplates/template"], function (templatePage) {
-                        var mPage = new templatePage({template: _this, dialog: dialog});
+                        var mPage = new templatePage({template: _this, dialog: dialog,createTempOnly:true});
                         var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
                         dialog.getBody().append(mPage.$el);
                         mPage.$el.addClass('dialogWrap-' + dialogArrayLength);

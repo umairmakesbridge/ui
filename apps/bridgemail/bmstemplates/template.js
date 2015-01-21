@@ -28,6 +28,8 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                  */
                 render: function () {
                     this.app = this.options.template.app;
+                    this.createTempOnly = this.options.createTempOnly;
+                    this.isEasyEditorCompatibleFlag = (this.options.isEasyEditorCompatibleFlag == 'Y') ? true : false;
                     this.$el.html(this.template({}));
                     this.page = this.options.template;
                     this.editor_change = false;
@@ -65,7 +67,11 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.head_action_bar.find(".delete").attr('data-original-title', 'Delete template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.head_action_bar.append(previewIconTemplate);                                        
                     this.tagDiv.addClass("template-tag");
-                    this.loadTemplate();
+                    if(this.createTempOnly){
+                         this.loadMEE();
+                    }else{
+                         this.loadTemplate();
+                    }
                     this.iThumbnail = this.$(".droppanel");
                     this.iThumbImage = null;
                     this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
@@ -153,9 +159,10 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 loadEditor : function(obj){
-                  var target_li =$.getObj(obj,"li");   
-                  if(target_li.hasClass("tinymce-editor")){
+                  //var target_li =$.getObj(obj,"li");   
+                  if(obj==='editor'){
                       this.initEditor();
+                      this.$('#Tiny').show();
                   }
                   else{
                       this.loadMEE();
@@ -187,7 +194,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                             _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
                             if(template_json.isEasyEditorCompatible=="N"){                                     
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
-                                _this.$(".tinymce-editor a").click();
+                               _this.loadEditor('editor');
                             }
                             else{
                                 _this.editorContentMEE = template_json.htmlText
