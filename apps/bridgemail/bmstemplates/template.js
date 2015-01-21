@@ -158,7 +158,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                   //var target_li =$.getObj(obj,"li");   
                   if(obj==='editor'){
                       this.initEditor();
-                      this.$('#Tiny').show();
+                      
                   }
                   else{
                       this.loadMEE();
@@ -180,7 +180,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=get&templateNumber=" + this.template_id;
                     this.getTemplateCall = jQuery.getJSON(URL, function (tsv, state, xhr) {
                         if (xhr && xhr.responseText) {
-                            _this.app.showLoading(false, _this.$el);
+                            
                             var template_json = jQuery.parseJSON(xhr.responseText);
                             if (_this.app.checkError(template_json)) {
                                 return false;
@@ -230,6 +230,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                                 callBack: _.bind(_this.newTags, _this),
                                 typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + _this.app.get('bms_token') + "&type=allTemplateTags"
                             });
+                            _this.app.showLoading(false, _this.$el);
                         }
                     }).fail(function () {
                         console.log("error in loading template");
@@ -415,6 +416,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         }
 
                     });
+                    this.$('#Tiny').show();
                 },
                 saveTemplateName: function (obj) {
                     var _this = this;
