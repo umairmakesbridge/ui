@@ -18,6 +18,7 @@ function (template,highlight,templateCollection,templateRowView) {
                 "click .refresh_btn":function(){
                     this.app.addSpinner(this.$el);
                     this.loadTemplates();
+                    this.templateTotalFlag = true;
                 },
                 'click #clearsearch':'searchTemplateNameTag',
                 "click .sortoption_expand": "toggleSortOption",
@@ -655,6 +656,7 @@ function (template,highlight,templateCollection,templateRowView) {
                    // Creating Copy/deleting template update the total count 
                    if(isTotal || this.templateTotalFlag){
                        this.$el.parents('.ws-content.active').find('.temp-count').text(count);
+                       this.$el.parents('.modal').find('#oto_total_templates').text(count);
                    }
                 },
                 triggerAll: function(){

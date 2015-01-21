@@ -67,11 +67,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.head_action_bar.find(".delete").attr('data-original-title', 'Delete template').tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.head_action_bar.append(previewIconTemplate);                                        
                     this.tagDiv.addClass("template-tag");
-                    if(this.createTempOnly){
-                         this.loadMEE();
-                    }else{
-                         this.loadTemplate();
-                    }
+                    this.loadTemplate();
                     this.iThumbnail = this.$(".droppanel");
                     this.iThumbImage = null;
                     this.$("textarea").css("height", (this.$("#area_create_template").height() - 270) + "px");
@@ -192,7 +188,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
 
                             _this.modal.find(".dialog-title").html(template_json.name).attr("data-original-title", "Click to rename").addClass("showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                             _this.app.dialogArray[_this.app.dialogArray.length - 1].title = template_json.name;                            
-                            if(template_json.isEasyEditorCompatible=="N"){                                     
+                            if(template_json.isEasyEditorCompatible=="N" && !_this.createTempOnly){                                     
                                 _this.editorContent = _this.app.decodeHTML(template_json.htmlText, true);
                                _this.loadEditor('editor');
                             }
@@ -309,7 +305,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         isMobile: isMobile,
                         categoryID: this.$(".category-input").val()
                     };
-                    if (this.$(".MEE-Editor").hasClass("active")) {
+                    if (this.isEasyEditorCompatibleFlag || this.createTempOnly) {
                         this.dataObj["isMEE"] = 'Y';
                         this.dataObj["templateHtml"] = this.$("#mee_editor").getMEEHTML();
                     }
