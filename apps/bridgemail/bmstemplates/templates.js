@@ -588,7 +588,7 @@ function (template,highlight,templateCollection,templateRowView) {
                       bgClass :'template-tilt',
                       createURL : '/pms/io/campaign/saveUserTemplate/',
                       fieldKey : "templateName",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),isMEE:'Y'},
                       saveCallBack :  _.bind(this.app.mainContainer.createTemplateCall,this) // Calling same view for refresh headBadge
                     });
                 },     

@@ -542,7 +542,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 emptyError: 'Template name can\'t be empty',
                                 createURL: '/pms/io/campaign/saveUserTemplate/',
                                 fieldKey: "templateName",
-                                postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token')},
+                                postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'),isMEE:'Y'},
                                 saveCallBack: _.bind(this.createTemplateCall, this) // Calling same view for refresh headBadge
                             });
                     e.stopPropagation();
