@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -361,7 +361,8 @@ define([
         },
         showAlertPopup: function (message, container) {
             if (message) {
-                var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete"><h3>' + message.heading + '</h3>';
+                var dialogWidth = message.dialogWidth? "width:"+message.dialogWidth: "";
+                var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete" style="'+dialogWidth+'"><h3>' + message.heading + '</h3>';
                 var btn_class= message.btnClass?message.btnClass:"btn-red"; 
                 var btn = '<div class="btns"><a class="'+btn_class+' btn-ok"><span>Yes, ' + message.text + '</span><i class="icon ' + message.icon + '"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
                 dialogHTML += '<p>' + message.detail + '</p>' + btn + '</div>';

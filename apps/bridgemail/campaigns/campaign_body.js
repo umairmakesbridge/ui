@@ -116,8 +116,7 @@ function (template,editorView) {
                 }else if(this.campobjData.editorType=="H"){
                     this.$("#html_code").click();
                     this.$("#handcodedhtml").val(this.app.decodeHTML(this.parent.htmlText,true));
-                }  
-                
+                }                  
             },
             init:function(){
               this.$("#editorhtml").append(this.bmseditor.$el);
@@ -143,8 +142,47 @@ function (template,editorView) {
                 else{                                                                               
                     this.step2SlectSource(target_li);
                 }
+            },            
+             showChangeEditorDialog: function(msg,target_li){
+                  this.app.showAlertPopup({heading:'Confirm Change of Editor',
+                    detail:msg,  
+                    text: "Continue",
+                    btnClass:"btn-yellow",
+                    dialogWidth: "460px",
+                    icon: "next",
+                    callback: _.bind(function(){                  
+                            if(this.$("#mee_editor").setMEEHTML){
+                                this.$("#mee_editor").setMEEHTML("")
+                            }
+                            _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
+                            this.parent.htmlText = "";     
+                            this.step2SlectSource(target_li,true);                            
+                            this.parent.saveStep2(false,"");
+                            
+                        },this)
+                    },
+                    $('body'));  
+                },
+                showChangeEditorWarning: function(target_li){
+                  var selected_li = this.$("#choose_soruce li.selected");           
+                  if(selected_li.length && this.campobjData.editorType=="MEE" && target_li.attr("id")=="html_editor"  && this.$("#mee_editor").getMEEBody() !== ""){
+                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>HTML Editor</b>. Are you sure you want to continue?",target_li);
+                        return true;    
+                  }  
+                  else if(selected_li.length && this.campobjData.editorType=="MEE" && target_li.attr("id")=="html_code" && this.$("#mee_editor").getMEEBody() !== ""){
+                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
+                        return true;    
+                  }  
+                  else if(selected_li.length && ( (this.campobjData.editorType=="W" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || ( this.campobjData.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
+                      this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
+                      return true;    
+                  }
+                  return false;
             },
-            step2SlectSource:function(target_li){                
+            step2SlectSource:function(target_li,byPass){ 
+                if(!byPass && (this.parent.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)){                        
+                    return;
+                }
                 this.$("#choose_soruce li").removeClass("selected");
                 this.$(".soruces").hide();  
                 this.$("#area_"+target_li.attr("id")).fadeIn("fast");
@@ -165,8 +203,7 @@ function (template,editorView) {
                          break;
                      default:
                      break;
-                }
-                
+                }                
                 var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');
                 var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
                 var selected_li = target_li.attr("id");
@@ -178,6 +215,7 @@ function (template,editorView) {
                  else if(selected_li=="html_editor_mee"){                        
                      post_editor['editorType'] = 'MEE';
                  }
+                 this.campobjData.editorType = post_editor['editorType'];
                  if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
                     this.campobjData.editorType = post_editor["editorType"];
                     $.post(URL,post_editor)

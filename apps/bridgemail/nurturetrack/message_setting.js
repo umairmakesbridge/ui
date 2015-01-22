@@ -166,7 +166,7 @@ function (template) {
                    },this));
                  }
             },
-            saveStep2:function(showLoading){                                                   
+            saveStep2:function(showLoading,htmlText){                                                   
                  var html = "",plain="";                  
                  var post_data = {type: "saveStep2",campNum:this.camp_id}
                  var selected_li = this.$("#choose_soruce li.selected").attr("id");
@@ -186,7 +186,10 @@ function (template) {
                      }else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;                                                  
-                     }                 
+                     }  
+                     if(typeof(htmlText)!=="undefined"){
+                         post_data['htmlCode'] = "";
+                     }
                         
                  if(this.messagebody_page.states.editor_change ===true || typeof(showLoading)!=="undefined"){
                    if(typeof(showLoading)=="undefined"){  
@@ -206,7 +209,9 @@ function (template) {
                                     this.camp_json.isTextOnly = 'Y';
                                 }
                                 else{
-                                    this.htmlText = html;
+                                    if(typeof(htmlText) =="undefined"){
+                                        this.htmlText = html;
+                                    }
                                     this.plainText = plain;                                    
                                     this.camp_json.isTextOnly = 'N';
                                 }

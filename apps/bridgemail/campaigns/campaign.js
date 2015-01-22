@@ -71,7 +71,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.allowedUser = ['admin','jayadams','demo'];  
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
-                        "step2":{"templates":false,htmlText:'',plainText:'',change:false},
+                        "step2":{"templates":false,htmlText:'',plainText:'',change:false,editorType:''},
                         "step3":{"target_id":0,highrise:false,salesforce:false,netsuite:false,recipientType:"",recipientDetial:null,change:false,netsuitegroups:null,targetDialog:null,
                                              csvupload:null,mapdataview:null,tags:null,sf_filters:{lead:"",contact:"",opportunity:""},
                                              ns_filters:{customer:"",contact:"",parnter:"",nsObject:"",isNewTarget:false,newTargetName:''}
@@ -393,7 +393,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                         camp_obj.states.step2.htmlText = camp_json.htmlText;
                         camp_obj.states.step2.plainText = camp_json.plainText;
-                        
+                        camp_obj.states.step2.editorType = camp_json.editorType;
                         
                         camp_obj.states.step3.recipientType = camp_json.recipientType;
                         if(camp_json.defaultSenderName != '')
@@ -1331,9 +1331,11 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                                     camp_obj.states.step2.htmlText = "";
                                 }
                                 else{
-                                    camp_obj.states.step2.htmlText = html;
+                                    if(typeof(htmlText) =="undefined"){
+                                        camp_obj.states.step2.htmlText = html;
+                                    }
                                     camp_obj.states.step2.plainText = plain;                                    
-                                }
+                                }                                
                                 camp_obj.states.editor_change = false;
                                 if(typeof(gotoNext)=="undefined"){
                                     camp_obj.wizard.next();
@@ -2177,10 +2179,13 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     detail:msg,  
                     text: "Continue",
                     btnClass:"btn-yellow",
+                    dialogWidth: "460px",
                     icon: "next",
                     callback: _.bind(function(){                  
                             
-                            this.$("#mee_editor").setMEEHTML("");
+                            if(this.$("#mee_editor").setMEEHTML){
+                                this.$("#mee_editor").setMEEHTML("")
+                            }
                             _tinyMCE.get('bmseditor_'+this.wp_id).setContent("");
                             this.states.step2.htmlText = "";     
                             this.step2SlectSource(target_li,true);                            
@@ -2192,22 +2197,22 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 showChangeEditorWarning: function(target_li){
                   var selected_li = this.$(".step2 #choose_soruce li.selected");           
-                  if(selected_li.length && selected_li.attr("id")=="html_editor_mee" && target_li.attr("id")=="html_editor"  && this.$("#mee_editor").getMEEBody() !== ""){
+                  if(selected_li.length && this.states.step2.editorType=="MEE" && target_li.attr("id")=="html_editor"  && this.$("#mee_editor").getMEEBody() !== ""){
                         this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>HTML Editor</b>. Are you sure you want to continue?",target_li);
                         return true;    
                   }  
-                  else if(selected_li.length && selected_li.attr("id")=="html_editor_mee" && target_li.attr("id")=="html_code" && this.$("#mee_editor").getMEEBody() !== ""){
+                  else if(selected_li.length && this.states.step2.editorType=="MEE" && target_li.attr("id")=="html_code" && this.$("#mee_editor").getMEEBody() !== ""){
                         this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
                         return true;    
                   }  
-                  else if(selected_li.length && ( (selected_li.attr("id")=="html_editor" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().innerHTML!="<br>") || ( selected_li.attr("id")=="html_code" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
+                  else if(selected_li.length && ( (this.states.step2.editorType=="W" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || ( this.states.step2.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
                       this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
                       return true;    
                   }
                   return false;
                 },
                 step2SlectSource:function(target_li,byPass){
-                    if(!byPass && this.states.step2.htmlText && this.showChangeEditorWarning(target_li)){                        
+                    if(!byPass && (this.states.step2.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)){                        
                         return;
                     }                    
                     
@@ -2243,6 +2248,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      else if(selected_li=="html_editor_mee"){                        
                          post_editor['editorType'] = 'MEE';
                      }
+                     this.states.step2.editorType = post_editor['editorType'];
                      if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
                         this.campobjData.editorType = post_editor["editorType"];
                         $.post(URL,post_editor)
