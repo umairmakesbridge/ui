@@ -360,7 +360,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         this.app.showLoading("Loading Templates...",dialog.getBody());
                         var _this = this;
                         require(["bmstemplates/templates"],function(templatesPage){                                                     
-                             _this.templateView = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true,subNum:_this.sub_id});               
+                             _this.templateView = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true,subNum:_this.sub_id,directContactFlag:true});               
                            var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
                            dialog.getBody().append( _this.templateView.$el);
                             _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); 

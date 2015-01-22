@@ -39,6 +39,8 @@ function (template,contactsView) {
                     this.isloadMeeEditor =false;
                     this.otoTemplateFlag = this.options.otoTemplateFlag;
                     this.template_id = (this.options.template_id) ? this.options.template_id : '';
+                    this.directContactFlag = (this.options.directContactFlag) ? this.options.directContactFlag : false;
+                    
                     this.render();
                     //this.model.on('change',this.renderRow,this);
             },
@@ -499,9 +501,12 @@ function (template,contactsView) {
                                     var step1_json = jQuery.parseJSON(data);
                                     this.app.showLoading(false,this.dialog.getBody());
                                     if(step1_json[0]!=="err"){ 
-                                            this.parent.parent.type='getMessageList';
-                                            this.parent.parent.getallemails();
-                                            this.parent.parent.headBadge();
+                                            if(!this.directContactFlag){
+                                                this.parent.parent.type='getMessageList';
+                                                this.parent.parent.getallemails();
+                                                this.parent.parent.headBadge();
+                                            }
+                                            
                                            /* if(this.parent.dialog){
                                                 this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
                                             }
