@@ -19,6 +19,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                 events: {
                     'click .toggleinfo': 'toggleFieldsView',
                     'click .edit-profile': 'editProfile',
+                    'click .oto-sendmail': 'sendEmail',
                     'click .manage-lists': 'manageLists'
                 },
                 /**
@@ -39,8 +40,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     if (this.options.params && this.options.params.sub_id) {
                         this.sub_id = this.options.params.sub_id;
                         this.sub_name = this.options.params.sub_name;
-                        
                     }
+                    this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.initControls();
                     this.loadData();
                 }
@@ -343,7 +344,45 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         var page = new timeline({sub: _this});
                         _this.$(".colright").html(page.$el);
                     });
-                }
+                },
+                sendEmail : function(){
+                                // Loading templates 
+                                var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'Templates'+'<strong id="oto_total_templates" class="cstatus pclr18 right" style="margin-left:5px;display:none;"> Total <b></b> </strong>',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                        headerEditable:false,
+                        headerIcon : 'template',
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        tagRegen:false,
+                        reattach : false
+                        });
+                        this.app.showLoading("Loading Templates...",dialog.getBody());
+                        var _this = this;
+                        require(["bmstemplates/templates"],function(templatesPage){                                                     
+                             _this.templateView = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true,subNum:_this.sub_id});               
+                           var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
+                           dialog.getBody().append( _this.templateView.$el);
+                            _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                           _this.app.showLoading(false,  _this.templateView.$el.parent());                     
+                             _this.templateView.init();
+                             _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                             _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].currentView = _this.templateView; // New Dialog
+                        })
+                 },
+                 selectTemplate:function(obj){
+                   // this.setEditor();
+                    var target = $.getObj(obj,"a");
+                    var bms_token =this.app.get('bms_token');
+                   // this.app.showLoading('Loading HTML...',this.$el);
+                    //this.states.editor_change = true;
+                   // var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+                             
+                   // jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
+                     this.template_id = target.attr("id").split("_")[1]; 
+                     this.templateView.createOTODialog();
+                    
+                },
 
             });
         });
