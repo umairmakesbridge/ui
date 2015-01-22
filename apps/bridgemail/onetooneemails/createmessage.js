@@ -76,7 +76,9 @@ function (template,contactsView) {
             initCreateEmail : function(){
                  this.loadContact();
                  this.loadData();
-                 
+                 if(this.subNum){
+                     this.loadVContact();
+                 }
                  //this.$('#myTab li:nth-child(2) a').click();
                  if(this.otoTemplateFlag){
                      this.loadTemplate();
