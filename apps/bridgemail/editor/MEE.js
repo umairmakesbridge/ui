@@ -959,7 +959,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     //Click on overall element:
                                     myElement.click(function () {
-
                                         if (!isElementClicked) {
                                             //Sohaib 
                                             RemovePopups();
@@ -4419,8 +4418,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                     oInitDestroyEvents.InitAll(args.droppedElement);
 
-
                                                 }
+                                                                                                
                                             }
                                             else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
 
@@ -4745,7 +4744,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }                                        
                                         RemovePopups();                                        
 
-                                        if (draggedControlType != "droppedImage" && draggedControlType !="formBlock") {
+                                        if (draggedControlType != "droppedImage" && (draggedControlType !="formBlock" || meeIframe.find(".MEEFORMCONTAINER").length==0) ) {
                                             ShowDroppables(meeIframe);
                                             if (meeIframe.find(".mainContentHtml li.myDroppable").length > 1) {
                                                 meeIframe.find(".mainContentHtml").addClass("show-droppables")
@@ -4766,9 +4765,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             });
                                         }
                                         else if(draggedControlType =="formBlock"){
+                                            
                                             meeIframe.find(".MEEFORMCONTAINER").css({"outline": "2px dashed #01aeee"});
                                             meeIframe.find(".editformpanel,.drop-here").show();
                                             meeIframe.find(".editformpanel .edit-form").hide();
+                                            
+                                            
                                         }
 
                                     }).on('dragend', function (event) {

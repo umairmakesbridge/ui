@@ -358,7 +358,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     var that = this;
                     if (this.targetsModel.get('filterNumber.encode')) {
                         this.$el.find("#autobot_targets_grid tbody").children().remove();
-                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots_listing', editable: that.editable, model: this.targetsModel, app: that.options.app}).el);
+                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({page:this,type: 'autobots_listing', editable: that.editable, model: this.targetsModel, app: that.options.app}).el);
                         if (that.status != "D") {
                             if (that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0)
                                 that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');

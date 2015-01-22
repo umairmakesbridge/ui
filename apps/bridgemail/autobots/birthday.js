@@ -330,7 +330,7 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     if (this.targets) {
                         this.$el.find("#autobot_targets_grid tbody").children().remove();
                         _.each(this.targetsModelArray, function(val, key) {
-                            that.$el.find('#autobot_targets_grid tbody').append(new recipientView({type: 'autobots', model: val, app: that.options.app}).el);
+                            that.$el.find('#autobot_targets_grid tbody').append(new recipientView({page:this, type: 'autobots', model: val, app: that.options.app}).el);
                             that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
                                 that.targetsModelArray.length = 0
                                 that.changeTargetText();
