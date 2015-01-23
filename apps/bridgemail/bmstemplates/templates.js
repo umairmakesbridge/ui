@@ -48,6 +48,7 @@ function (template,highlight,templateCollection,templateRowView) {
                this.orderBy = 'usageDate';    
                this.templateTotalFlag = false;
                this.subNum = this.options.subNum ? this.options.subNum : '';
+               this.directContactFlag = this.options.directContactFlag ? this.options.directContactFlag : false;
                this.render();
             },
             /**
@@ -692,7 +693,7 @@ function (template,highlight,templateCollection,templateRowView) {
                         this.app.showLoading("Loading...",dialog.getBody());
                         var _this = this;
                         require(["onetooneemails/createmessage"],function(createMessagePage){                                                     
-                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id,otoTemplateFlag:_this.otoTemplateFlag,subNum:_this.subNum});               
+                           var mPage = new createMessagePage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,template_id:_this.parent.template_id,otoTemplateFlag:_this.otoTemplateFlag,subNum:_this.subNum,directContactFlag:_this.directContactFlag});               
                            var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); 
