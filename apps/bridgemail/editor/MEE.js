@@ -3750,7 +3750,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             var ele_offset = meeIframe.find('#'+_ele).offset();
                                                            // var ele_height = _ele.height();
                                                             if(isDialog.length){
-                                                                var top = ele_offset.top + 430 + topPlus;
+                                                                var top = ele_offset.top + 390 + topPlus;
                                                              var left = ele_offset.left + 414+ leftPlus;
                                                             }else{
                                                                var top = ele_offset.top + 94 + topPlus;
@@ -3826,7 +3826,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             var ele_offset = meeIframe.find('#'+_ele).offset();
                                                            // var ele_height = _ele.height();
                                                             if(isDialog.length){
-                                                                var top = ele_offset.top + 430 + topPlus;
+                                                                var top = ele_offset.top + 390 + topPlus;
                                                              var left = ele_offset.left + 449+ leftPlus;
                                                             }
                                                             else{
@@ -5273,8 +5273,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var left = ele_offset.left + 297 + leftPlus;
                                     if(isDialog.length)
                                     {
-                                       var top = ele_offset.top + 418 + topPlus;
-                                       var left = ele_offset.left + 307 + leftPlus;
+                                       var top = ele_offset.top + 375 + topPlus;
+                                       var left = ele_offset.left + 310 + leftPlus;
                                     }
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");

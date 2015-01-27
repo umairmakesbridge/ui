@@ -241,7 +241,7 @@ define([
             }
         },
         showFeatures: function () {
-            var allowedUser = ['admin', 'jayadams', 'demo','hawaiilife'];
+            var allowedUser = ['admin', 'jayadams', 'demo','hawaiilife','MKS-Training2','mansoor@makesbridge.com'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
                 this.mainContainer.$(".one-one-listing,.landing-pages").show();
             }

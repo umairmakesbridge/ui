@@ -109,6 +109,7 @@ function (template,contactsView) {
                             this.$("#campaign_footer_text").val(this.app.decodeHTML(defaults_json.footerText));
                             this.$("#campaign_from_email").val(this.app.decodeHTML(defaults_json.fromEmail));
                             this.$("#campaign_from_name").val(this.app.decodeHTML(defaults_json.fromName));
+                            this.$('#campaign_reply_to').val(this.app.decodeHTML(defaults_json.fromEmail));
                             var fromEmails = defaults_json.fromEmail;
                             if(defaults_json.optionalFromEmails)
                                     fromEmails += ',' + defaults_json.optionalFromEmails;
@@ -125,6 +126,7 @@ function (template,contactsView) {
                                      fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
                             }
                             this.$el.find('#campaign_from_email').append(fromOptions);
+                            
                             this.$el.find('#fromemail_default').append(fromOptions);
                             this.$("#campaign_from_email").trigger("chosen:updated");
                             this.$('#fromemail_default').trigger("chosen:updated");
@@ -247,7 +249,7 @@ function (template,contactsView) {
                  
                       this.isloadMeeEditor = true;
                       if(!this.meeEditor){
-                         this.app.showLoading("Loading MEE Editor...",this.dialog.getBody());                         
+                         this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());                         
                          this.meeEditor = true; 
                          setTimeout(_.bind(this.setMEEView,this),100);                        
                     }
@@ -258,7 +260,7 @@ function (template,contactsView) {
              setMEEView:function(){
                     var _html = "";
                     _html = this.emailHTML?$('<div/>').html(this.emailHTML).text().replace(/&line;/g,""):""; 
-                     this.app.showLoading("Loading MEE Editor...",this.dialog.getBody());       
+                     this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());       
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
                             ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,isOTOFlag:true,isSaveHide:true});                                    
@@ -427,6 +429,7 @@ function (template,contactsView) {
                     {           
                         this.app.hideError({control:this.$(".replyto-container")});
                     }
+                    
                     if(replyto === '')
                     {           
                         this.app.showError({
@@ -435,10 +438,19 @@ function (template,contactsView) {
                         });
                         isValid = false;
                     }
+                    else if(replyto !== '' && !this.app.validateEmail(replyto))
+                    {           
+                        this.app.showError({
+                            control:this.$('.replyto-container'),
+                            message:this.app.messages[0].CAMP_defaultreplyto_format_error
+                        });
+                        isValid = false;
+                    }
                     else
                     {           
                         this.app.hideError({control:this.$(".replyto-container")});
                     }
+                    
                     if(!subNum)
                     {           
                         this.$el.find('#contact-search').addClass('error-contact');
@@ -452,6 +464,7 @@ function (template,contactsView) {
                        this.$el.find('#searchbtn').removeAttr('style');
                         this.$el.find('#contact-search').parent().find('.errortext').remove();
                     }
+                    
                     if(this.$('#campaign_reply_to_default').css('display') == 'block' && email_addr == '')
                     {           
                         this.app.showError({
@@ -460,6 +473,7 @@ function (template,contactsView) {
                         });
                         isValid = false;
                     }
+                    
                     else if(this.$('#campaign_reply_to_default').css('display') == 'block' && !this.app.validateEmail(email_addr))
                     {           
                         this.app.showError({
