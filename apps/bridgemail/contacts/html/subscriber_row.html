@@ -62,11 +62,11 @@
             </span>
             <span class="fields">
                 Company
-            <strong><%- model.get('company')%></strong>
+            <strong><%- this.app.decodeHTML(model.get('company'))%></strong>
             </span>
             <span class="fields">
                 Title
-            <strong><%- model.get('title')%></strong>            
+            <strong><%- this.app.decodeHTML(model.get('title'))%></strong>            
             </span>
             
             </div>                        

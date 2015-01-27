@@ -27,6 +27,7 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                     this.eventType= "";
                     this.offsetLength = 0;
                     this.notificationData = [];
+                    this.notificationText = '';
                     this.render();
                 },
                 render: function() {
@@ -56,7 +57,8 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                         this.notifyType = null;
                     }
                     var html = $(ev.target).data('warn');
-                     $(this.el).find(".sortoption_expand").html(html);
+                    this.notificationText = html;
+                     $(this.el).find(".sortoption_expand").html(html+'<b style="position:absolute; top:11px; right:70px" class="caret right"> </b>');
                     $(ev.target).parents('li').addClass('active');
                     this.toggleMenu();
                      
@@ -92,10 +94,14 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                             that.total_fetch = that.total_fetch + data.length;
                             
                             if(objNotifications.unreadCount != "0"){
-                                $(that.el).find('h4').find('span').html('new messages');
+                                if(that.notificationText === 'All'){
+                                    $(that.el).find('h4').find('span').html('new messages');
+                                }else{
+                                     $(that.el).find('h4').find('span').html(that.notificationText+' messages');
+                                }
                                 $(that.el).find('h4').find('.badge').html(objNotifications.unreadCount);
                             }else{
-                                $(that.el).find('h4').find('span').html('messages');
+                                $(that.el).find('h4').find('span').html(that.notificationText+' messages');
                                 $(that.el).find('h4').find('.badge').html(objNotifications.total);
                             }
                             

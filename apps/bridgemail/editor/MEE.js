@@ -3744,11 +3744,20 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         //selectcmd: 'ForeColor',
 
                                                         onClick: function (e) {
-
+                                                            var isDialog = parent.$('#mee_editor').parents('body').find('.modal');
                                                             dialogForTextColor = true;
+                                                            var _ele = e.currentTarget.id; //element which is clicked
+                                                            var ele_offset = meeIframe.find('#'+_ele).offset();
+                                                           // var ele_height = _ele.height();
+                                                            if(isDialog.length){
+                                                                var top = ele_offset.top + 430 + topPlus;
+                                                             var left = ele_offset.left + 414+ leftPlus;
+                                                            }else{
+                                                               var top = ele_offset.top + 94 + topPlus;
+                                                               var left = ele_offset.left + 400+ leftPlus; 
+                                                            }
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();
-
+                                                            myElement.find("#ColorPickerpop").show().css({'left':left,'top':top});;
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
                                                             divFontColorPicker.minicolors({
@@ -3812,10 +3821,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         icon: 'txtbg',
                                                         selectcmd: 'HiliteColor',
                                                         onClick: function (e) {
-
+                                                           var isDialog = parent.$('#mee_editor').parents('body').find('.modal');
+                                                            var _ele = e.currentTarget.id; //element which is clicked
+                                                            var ele_offset = meeIframe.find('#'+_ele).offset();
+                                                           // var ele_height = _ele.height();
+                                                            if(isDialog.length){
+                                                                var top = ele_offset.top + 430 + topPlus;
+                                                             var left = ele_offset.left + 449+ leftPlus;
+                                                            }
+                                                            else{
+                                                                var top = ele_offset.top + 94 + topPlus;
+                                                             var left = ele_offset.left + 434+ leftPlus;
+                                                            }
+                                                            
                                                             dialogForTextColor = false;
+                                                            
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();
+                                                            myElement.find("#ColorPickerpop").show().css({'left':left,'top':top});
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
@@ -5244,10 +5266,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var showAlertButtons = function (obj, url) {
                                     var _ele = $(obj); //element which is clicked
                                     var left_minus = 15;      //static space to minus to show dialog on exact location
+                                    var isDialog = parent.$('#mee_editor').parents('body').find('.modal'); //Grab the modal
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
                                     var top = ele_offset.top + 74 + topPlus;
                                     var left = ele_offset.left + 297 + leftPlus;
+                                    if(isDialog.length)
+                                    {
+                                       var top = ele_offset.top + 418 + topPlus;
+                                       var left = ele_offset.left + 307 + leftPlus;
+                                    }
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");
                                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");

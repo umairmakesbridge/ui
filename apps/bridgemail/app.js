@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -241,7 +241,7 @@ define([
             }
         },
         showFeatures: function () {
-            var allowedUser = ['admin', 'jayadams', 'demo'];
+            var allowedUser = ['admin', 'jayadams', 'demo','hawaiilife'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
                 this.mainContainer.$(".one-one-listing,.landing-pages").show();
             }
