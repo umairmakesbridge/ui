@@ -166,15 +166,15 @@ function (template,editorView) {
                 showChangeEditorWarning: function(target_li){
                   var selected_li = this.$("#choose_soruce li.selected");           
                   if(selected_li.length && this.campobjData.editorType=="MEE" && target_li.attr("id")=="html_editor"  && this.$("#mee_editor").getMEEBody() !== ""){
-                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>HTML Editor</b>. Are you sure you want to continue?",target_li);
+                        this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>HTML Editor</b>. Are you sure you want to continue?",target_li);
                         return true;    
                   }  
                   else if(selected_li.length && this.campobjData.editorType=="MEE" && target_li.attr("id")=="html_code" && this.$("#mee_editor").getMEEBody() !== ""){
-                        this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
+                        this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?",target_li);
                         return true;    
                   }  
                   else if(selected_li.length && ( (this.campobjData.editorType=="W" && _tinyMCE.get('bmseditor_'+this.wp_id).getBody().childNodes.length!==1) || ( this.campobjData.editorType=="H" && this.$("textarea#handcodedhtml").val()!="")) && target_li.attr("id")=="html_editor_mee" ){
-                      this.showChangeEditorDialog("Your current email source will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
+                      this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?",target_li);
                       return true;    
                   }
                   return false;
