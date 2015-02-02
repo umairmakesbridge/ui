@@ -234,7 +234,7 @@ function (template,editorView) {
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),margin:{top:100,left:-20},html:'',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();

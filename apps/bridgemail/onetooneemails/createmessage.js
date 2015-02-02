@@ -241,7 +241,7 @@ function (template,contactsView) {
                  this.$('#campaign_preview_subject').html(_json.subject);
                  this.$('#campaign_preview_fromEmail').html(_json.fromEmail);
                  this.$('#campaign_preview_defaultSenderName').html(_json.firstName);
-                 //this.$('#campaign_preview_sendername_default').html(_json.senderName);
+                // this.$('#campaign_preview_bcc').html(_json.senderName);
                  this.$('#campaign_preview_defaultReplyTo').html(_json.replyTo);
                  //this.$('#campaign_preview_replyto_default').html(_json.toEmail);
              },
@@ -262,7 +262,7 @@ function (template,contactsView) {
                     _html = this.emailHTML?$('<div/>').html(this.emailHTML).text().replace(/&line;/g,""):""; 
                      this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());       
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
+                        var MEEPage = new MEE({app:this.app,margin:{top:482,left:0}, _el:this.$("#mee_editor"), html:''
                             ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,isOTOFlag:true,isSaveHide:true});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
@@ -329,6 +329,7 @@ function (template,contactsView) {
                     var fromEmail = this.$('#campaign_from_email').val();
                     var fromEmailDefault = this.$('#fromemail_default_input').val();
                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}","ig");
+                    var bccEmail = this.$('#campaign_bcc').val();
                     
                     if(this.$('#campaign_subject').val() == '')
                     {            
@@ -451,6 +452,27 @@ function (template,contactsView) {
                         this.app.hideError({control:this.$(".replyto-container")});
                     }
                     
+                    if(bccEmail !== '' )
+                    {     
+                        var bccEmailArray = bccEmail.split(',');
+                        _.each(bccEmailArray,_.bind(function(val){
+                               if(!this.app.validateEmail(val)){
+                                    this.app.showError({
+                                    control:this.$('.bcc-container'),
+                                    message:this.app.messages[0].CAMP_defaultreplyto_format_error
+                                });
+                                isValid = false;
+                                
+                               }
+                               else
+                                    {           
+                                        this.app.hideError({control:this.$(".bcc-container")});
+                                    }
+                        },this));
+                       
+                    }
+                    
+                    
                     if(!subNum)
                     {           
                         this.$el.find('#contact-search').addClass('error-contact');
@@ -508,6 +530,7 @@ function (template,contactsView) {
                                         replyTo :this.$("#campaign_reply_to").val(),
                                         defaultReplyToEmail :defaultReplyToEmail,
                                         subNum:subNum,
+                                        bccEmail:bccEmail,
                                         htmlCode:html,
                                         msgId:msgId
                                   })

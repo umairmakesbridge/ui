@@ -72,7 +72,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                  count_header += '<li search="T" ><span class="badge pclr18 tempCount tcount">0</span>Total Contacts</li>';
                  count_header += '<li search="S"><span class="badge pclr11 tempCount suppressCount">0</span>Suppressed</li>';
                  count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';
-                 count_header += '<li search="A"><span class="badge pclr23 tempCount addCount">0</span>Added in Last 24hrs </li>';
+                 count_header += '<li search="A" style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>';
+                  count_header += '<li search="CK" ><span class="badge pclr23 tempCount clickCount">0</span>Clickers </li>';
+                  count_header += '<li search="WV" ><span class="badge pclr19 tempCount visitCount">0</span>Visitors </li>';
                  count_header += '</ul>';  
                  var $countHeader = $(count_header);                                                        
                  this.ws_header.append($countHeader);
@@ -163,10 +165,19 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         _data['order'] = 'asc';
                         _data['orderBy'] = this.sortBy;
                     }
-                    _data['orderBy'] = this.sortBy;
+                     if((this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV") && !this.searchTxt){
+                            _data['filterBy'] = this.sortBy.split("_")[0];
+                            _data['lastXDays'] = this.sortBy.split("_")[1];
+                     }
+                          _data['orderBy'] = this.sortBy;
+                     
+                   
                 }
                 if(this.filterBy && this.filterBy != "T"){
                    _data['filterBy']  = this.filterBy;
+                   if(this.filterBy==="CK" || this.filterBy==="WV"){
+                       _data['lastXDays'] = 1;
+                   }
                 }
                 if(this.contacts_request){
                     this.contacts_request.abort();
@@ -307,11 +318,36 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     this.ws_header.find(".tcount").parent().addClass(this.app.getClickableClass(count));
                 }
                 var _text = count=="1"?"Contact":"Contacts";
+                var _clickers = count=="1"?"Clicker":"Clickers";
+                var _visitor = count=="1"?"Visitor":"Visitors";
                 if(this.tagTxt){
                     this.$(".total-text").html(_text+" found containing tag '<b>"+this.tagTxt+"</b>'");
                 }
                 else if(this.searchTxt){
                     this.$(".total-text").html(_text+" found containing text or tag '<b>"+this.searchTxt+"</b>'");
+                }else if(this.sortBy == 'score'){
+                    this.$(".total-text").html(_text+" sorted out by '<b>"+this.sortBy+"</b>'");
+                }
+                else if(this.sortBy == 'firstName'){
+                    this.$(".total-text").html(_text+" sorted out by '<b>First name</b>'");
+                }
+                 else if(this.sortBy == 'creationTime'){
+                    this.$(".total-text").html(_text+" sorted out by '<b>Creation Date and Time</b>'");
+                }
+                 else if(this.filterBy==="CK" || this.sortBy.split("_")[0]=="CK"){
+                     if(!this.sortBy.split("_")[1]){
+                         this.$(".total-text").html(_clickers+" found in '<b>Last 24hrs</b>'");
+                     }else{
+                         this.$(".total-text").html(_clickers+" found in '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
+                     }
+                    
+                }else if(this.filterBy==="WV" || this.sortBy.split("_")[0]=="WV"){
+                     if(!this.sortBy.split("_")[1]){
+                         this.$(".total-text").html(_visitor+" found in '<b>Last 24hrs</b>'");
+                     }else{
+                         this.$(".total-text").html(_visitor+" found ing '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
+                     }
+                    
                 }
                 else{
                     this.$(".total-text").html(_text)

@@ -3750,7 +3750,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             var ele_offset = meeIframe.find('#'+_ele).offset();
                                                            // var ele_height = _ele.height();
                                                             if(isDialog.length){
-                                                                var top = ele_offset.top + 390 + topPlus;
+                                                                var top = ele_offset.top + topPlus;
                                                              var left = ele_offset.left + 414+ leftPlus;
                                                             }else{
                                                                var top = ele_offset.top + 94 + topPlus;
@@ -3825,8 +3825,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             var _ele = e.currentTarget.id; //element which is clicked
                                                             var ele_offset = meeIframe.find('#'+_ele).offset();
                                                            // var ele_height = _ele.height();
+                                             
                                                             if(isDialog.length){
-                                                                var top = ele_offset.top + 390 + topPlus;
+                                                                var top = ele_offset.top + topPlus;
                                                              var left = ele_offset.left + 449+ leftPlus;
                                                             }
                                                             else{
@@ -5269,13 +5270,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var isDialog = parent.$('#mee_editor').parents('body').find('.modal'); //Grab the modal
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
-                                    var top = ele_offset.top + 74 + topPlus;
-                                    var left = ele_offset.left + 297 + leftPlus;
                                     if(isDialog.length)
                                     {
-                                       var top = ele_offset.top + 375 + topPlus;
+                                       var top = ele_offset.top + topPlus;
                                        var left = ele_offset.left + 310 + leftPlus;
+                                    }else{
+                                        var top = ele_offset.top + 74 + topPlus;
+                                        var left = ele_offset.left + 297 + leftPlus;
                                     }
+                                    
+                                    
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");
                                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");

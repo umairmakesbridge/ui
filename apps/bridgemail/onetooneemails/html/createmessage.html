@@ -111,6 +111,20 @@
                     </div>
                 </div>
             </div>
+             <div class="row">
+                <label id="lblReplyto">Bcc </label>
+                <div class="campaign-fields-right-wrapper" style="">
+                    <div class="input-append adv_dd sort-options bcc-container" id="campaign_bcc-wrap">
+                        <div class="inputcont" style="width:100%;float:right;">              	
+                            <input type="text" placeholder="Use commas to separate multiple addresses" id="campaign_bcc" style="width:100%" class="header-info campaign-headerinfo-input" />                
+                            <!--<div class="btn-group replyto-group">
+                                <button class="btn dropdown-toggle open mergefields-box showtooltip" tabindex="-1" title="Use Merge Tags"> <span class="icon mergeicon" ></span> <span class="caret"></span> </button>
+                            </div>-->
+                        </div>
+                        <!--<span id="replyto_erroricon" class="erroricon" data-original-title="Please supply correct reply to field"></span>-->
+                    </div>
+                </div>
+            </div>
             <div class="row addrow replyemail-container" id="campaign_reply_to_default" style="display:none">
                 <label>&nbsp;</label>
                 <span class="directarrow"></span>
@@ -140,7 +154,10 @@
                                 <span class="text" id="campaign_preview_sendername_default"></span></div>
                             <div class="row">
                                 <label>Reply To</label>
-                                <span class="text" id="campaign_preview_defaultReplyTo"></span></div>                
+                                <span class="text" id="campaign_preview_defaultReplyTo"></span></div>    
+                                <div class="row">
+                                <label>Bcc</label>
+                                <span class="text" id="campaign_preview_bcc"  style="display:none;"></span></div> 
                             <div id="replyto_default" class="row" style="display:none;">
                                 <label>Default Reply To</label>
                                 <span class="text" id="campaign_preview_replyto_default"></span></div>
