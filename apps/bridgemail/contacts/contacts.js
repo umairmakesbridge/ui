@@ -153,22 +153,28 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     this.offset = this.offset + 20;
                 }
                 var _data = {offset:this.offset};
+               
                 if(this.searchTxt){
                     _data['searchValue'] = this.searchTxt;
+                    if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){  
+                        this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
+                        this.sortBy = 'lastActivityDate';
+                    }
                 }
                 else if(this.tagTxt){
                     _data['searchTag'] = this.tagTxt;
                 }
+                 if((this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV") && !this.searchTxt){
+                            _data['filterBy'] = this.sortBy.split("_")[0];
+                            _data['lastXDays'] = this.sortBy.split("_")[1];
+                     }
                 delete _data['order'];
                 if(this.sortBy){
                     if(this.sortBy=='firstName'){
                         _data['order'] = 'asc';
                         _data['orderBy'] = this.sortBy;
                     }
-                     if((this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV") && !this.searchTxt){
-                            _data['filterBy'] = this.sortBy.split("_")[0];
-                            _data['lastXDays'] = this.sortBy.split("_")[1];
-                     }
+                     
                           _data['orderBy'] = this.sortBy;
                      
                    
@@ -176,6 +182,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 if(this.filterBy && this.filterBy != "T"){
                    _data['filterBy']  = this.filterBy;
                    if(this.filterBy==="CK" || this.filterBy==="WV"){
+                       this.searchTxt = '';
+                       this.$('#contact-search').val('');
+                       this.$('#clearsearch').hide();
                        _data['lastXDays'] = 1;
                    }
                 }
@@ -297,6 +306,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             */
             sortContacts:function(){                                
                 this.sortBy = this.$(".recent-activities").val();
+                 if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){
+                     this.searchTxt = '';
+                            this.$('#contact-search').val('');
+                            this.$('#clearsearch').hide();
+                 }
                 this.fetchContacts();
             }
             ,
@@ -307,6 +321,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 target.addClass('font-bold');
                 var targetName = target.attr('search');
                 this.filterBy = targetName;
+                 if(this.filterBy==="CK" || this.filterBy==="WV"){
+                       this.searchTxt = '';
+                       this.$('#contact-search').val('');
+                       this.$('#clearsearch').hide();
+                   }
                 this.fetchContacts();
             },
             showTotalCount:function(count){
