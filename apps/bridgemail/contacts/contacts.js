@@ -355,14 +355,14 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 }
                  else if(this.filterBy==="CK" || this.sortBy.split("_")[0]=="CK"){
                      if(!this.sortBy.split("_")[1]){
-                         this.$(".total-text").html(_clickers+" found in '<b>Last 24hrs</b>'");
+                         this.$(".total-text").html(_clickers+" found in '<b>Last 24 hrs</b>'");
                      }else{
                          this.$(".total-text").html(_clickers+" found in '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
                      }
                     
                 }else if(this.filterBy==="WV" || this.sortBy.split("_")[0]=="WV"){
                      if(!this.sortBy.split("_")[1]){
-                         this.$(".total-text").html(_visitor+" found in '<b>Last 24hrs</b>'");
+                         this.$(".total-text").html(_visitor+" found in '<b>Last 24 hrs</b>'");
                      }else{
                          this.$(".total-text").html(_visitor+" found ing '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
                      }
