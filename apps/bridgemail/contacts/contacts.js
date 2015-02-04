@@ -69,7 +69,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             },
             addCountHeader:function(){
                var count_header =  '<ul class="c-current-status">';
-                 count_header += '<li search="T" ><span class="badge pclr18 tempCount tcount">0</span>Total Contacts</li>';
+                 count_header += '<li search="T" ><span class="badge pclr18 tempCount tcount totalCount">0</span>Total Contacts</li>';
                  count_header += '<li search="S"><span class="badge pclr11 tempCount suppressCount">0</span>Suppressed</li>';
                  count_header += '<li style="display:none"><span class="badge pclr15 tempCount hiddenCount" >0</span>Hidden</li>';
                  count_header += '<li search="A" style="border-left:1px solid #fff;padding-left:15px;">Last 24 hrs :</li>';
@@ -379,7 +379,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                      if(!this.sortBy.split("_")[1]){
                          this.$(".total-text").html(_visitor+" found in '<b>Last 24 hrs</b>'");
                      }else{
-                         this.$(".total-text").html(_visitor+" found ing '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
+                         this.$(".total-text").html(_visitor+" found in '<b>Last "+this.sortBy.split("_")[1]+" days</b>'");
                      }
                     
                 }

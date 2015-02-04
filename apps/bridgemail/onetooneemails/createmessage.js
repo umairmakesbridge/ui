@@ -455,23 +455,24 @@ function (template,contactsView) {
                     if(bccEmail !== '' )
                     {     
                         var bccEmailArray = bccEmail.split(',');
+                        var validFlag = true;
                         _.each(bccEmailArray,_.bind(function(val){
                                if(!this.app.validateEmail(val)){
+                                isValid = false;
+                                validFlag = false;
+                               }
+                        },this));
+                       if(!validFlag){
                                     this.app.showError({
                                     control:this.$('.bcc-container'),
                                     message:this.app.messages[0].CAMP_defaultreplyto_format_error
-                                });
-                                isValid = false;
-                                
-                               }
-                               else
+                                    });
+                            }
+                             else
                                     {           
                                         this.app.hideError({control:this.$(".bcc-container")});
                                     }
-                        },this));
-                       
-                    }
-                    
+                    }   
                     
                     if(!subNum)
                     {           
