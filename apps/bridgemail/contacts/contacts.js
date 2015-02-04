@@ -36,9 +36,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.searchTxt = '';
                this.tagTxt = '';
                this.tempCount = null;
-               this.filterBy = null;
+               this.filterBy = 'CK';
                this.contacts_request = null;
-               this.sortBy = 'lastActivityDate';
+               this.sortBy = '';
                this.render();
             },
             /**
@@ -148,12 +148,17 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     this.$contactList.children(".contactbox").remove();
                     this.app.showLoading("Loading Contacts...",this.$contactList);             
                     this.$(".notfound").remove();
+                    this.$('.filter_seven').parent().remove();
                 }
                 else{
                     this.offset = this.offset + 20;
                 }
                 var _data = {offset:this.offset};
-               
+                /*if(!this.sortBy){
+                   this.filterBy="CK";
+                }else{
+                    this.filterBy="";
+                }*/
                 if(this.searchTxt){
                     _data['searchValue'] = this.searchTxt;
                     if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){  
@@ -221,7 +226,16 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                             if(this.searchTxt){
                               search_message +=" containing '"+this.searchTxt+"'" ;
                             }
-                            this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
+                            if(this.filterBy==="CK" && this.sortBy !=="CK_7"){
+                                 this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 17px;"><a class="filter_seven">Show last 7 days Clickers</a></p>');
+                                 this.$('.filter_seven').click(_.bind(function(){
+                                     this.$('.recent-activities').val('CK_7').trigger('chosen:updated');
+                                     this.$('.recent-activities option:nth-child(5)').trigger('change');
+                                 },this))
+                            }else{
+                                         this.$('.filter_seven').parent().remove();
+                                         this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
+                            }
                         }                               
                         
                     }, this),
@@ -306,6 +320,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             */
             sortContacts:function(){                                
                 this.sortBy = this.$(".recent-activities").val();
+                this.filterBy='';
                  if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){
                      this.searchTxt = '';
                             this.$('#contact-search').val('');

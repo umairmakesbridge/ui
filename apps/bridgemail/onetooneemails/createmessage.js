@@ -262,7 +262,7 @@ function (template,contactsView) {
                     _html = this.emailHTML?$('<div/>').html(this.emailHTML).text().replace(/&line;/g,""):""; 
                      this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());       
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,margin:{top:482,left:0}, _el:this.$("#mee_editor"), html:''
+                        var MEEPage = new MEE({app:this.app,margin:{top:373,left:0}, _el:this.$("#mee_editor"), html:''
                             ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,isOTOFlag:true,isSaveHide:true});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
