@@ -631,7 +631,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                 setMEEView:function(){
                         var _html = this.editorContent!==""?$('<div/>').html(this.editorContentMEE).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                                              
-                            var MEEPage = new MEE({app:this.app,margin:{top:320,left:0},_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
+                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
                             this.initScroll();

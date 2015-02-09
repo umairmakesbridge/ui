@@ -3744,20 +3744,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         //selectcmd: 'ForeColor',
 
                                                         onClick: function (e) {
-                                                            var isDialog = parent.$('#mee_editor').parents('body').find('.modal');
+
                                                             dialogForTextColor = true;
-                                                            var _ele = e.currentTarget.id; //element which is clicked
-                                                            var ele_offset = meeIframe.find('#'+_ele).offset();
-                                                           // var ele_height = _ele.height();
-                                                            if(isDialog.length){
-                                                                var top = ele_offset.top + topPlus;
-                                                             var left = ele_offset.left + 414+ leftPlus;
-                                                            }else{
-                                                               var top = ele_offset.top + 94 + topPlus;
-                                                               var left = ele_offset.left + 400+ leftPlus; 
-                                                            }
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show().css({'left':left,'top':top});;
+                                                            myElement.find("#ColorPickerpop").show();
+
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
                                                             divFontColorPicker.minicolors({
@@ -3821,24 +3812,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         icon: 'txtbg',
                                                         selectcmd: 'HiliteColor',
                                                         onClick: function (e) {
-                                                           var isDialog = parent.$('#mee_editor').parents('body').find('.modal');
-                                                            var _ele = e.currentTarget.id; //element which is clicked
-                                                            var ele_offset = meeIframe.find('#'+_ele).offset();
-                                                           // var ele_height = _ele.height();
-                                             
-                                                            if(isDialog.length){
-                                                                var top = ele_offset.top + topPlus;
-                                                             var left = ele_offset.left + 449+ leftPlus;
-                                                            }
-                                                            else{
-                                                                var top = ele_offset.top + 94 + topPlus;
-                                                             var left = ele_offset.left + 434+ leftPlus;
-                                                            }
-                                                            
+
                                                             dialogForTextColor = false;
-                                                            
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show().css({'left':left,'top':top});
+                                                            myElement.find("#ColorPickerpop").show();
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
@@ -4410,39 +4387,58 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 $(this).before(CreateDroppableWithAllFunctions());
                                                 $(this).after(CreateDroppableWithAllFunctions());
                                                 ///////
+                                            
+                                                
+                                                  var oControl = new Object();
+                                                    var controlID = ui.draggable.data("id");
 
-                                                var controlID = ui.draggable.data("id");
-                                                console.log(controlID);
-                                                //need to apply each for this and then search on each [0]
-                                                args.FormId = controlID;
-                                                if (options.LoadFormContents != null) {
-                                                    options.LoadFormContents(args);
-                                                }
+                                                    var isNew = ui.draggable.data("isnew");
+                                                    console.log(controlID);
+                                                    //need to apply each for this and then search on each [0]
 
-                                                var isNew = ui.draggable.data("isnew");
+                                                    if(!isNew){                                                                
+                                                        args.FormId = controlID;
+                                                        if (options.LoadFormContents != null) {
+                                                            options.LoadFormContents(args);
+                                                        }
 
-                                                if (args.formContents != undefined) {
-                                                    
-                                                    //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                    var fContents = args.formContents;
+                                                        if (args.formContents != undefined) {
+                                                            //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
+                                                            var fContents = args.formContents;
 
-                                                    var preview_iframe = $("<div style='overflow:hidden;height:auto;' ><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
-
-                                                    oControl.Html = preview_iframe;
-                                                    //oControl.Html.addClass("container");
-                                                    oControl.Type = "formBlock";
-                                                    oControl.ID = args.FormId;
-
-                                                    console.log(oControl);
-
-                                                    args.predefinedControl = oControl;
-
-                                                    args.droppedElement.html(oControl.Html);
-
-                                                    oInitDestroyEvents.InitAll(args.droppedElement);
-
-                                                }
-                                                                                                
+                                                            if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
+                                                                var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
+                                                                oControl.Html = preview_iframe;                                                                
+                                                                oControl.Type = "formBlock";
+                                                                oControl.ID = args.FormId;                                                                
+                                                                args.predefinedControl = oControl;
+                                                                args.droppedElement.html(oControl.Html);
+                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                oInitDestroyEvents.InitAll(args.droppedElement);
+                                                                args.droppedElement.find(".editformpanel button").attr("data-formid",args.FormId)                                                                        
+                                                            }
+                                                            else {
+                                                                var form_ele = args.droppedElement.parents(".MEEFORMCONTAINER");
+                                                                form_ele.find("iframe").attr("src",options._app.decodeHTML(fContents));
+                                                                form_ele.find(".editformpanel button").attr("data-formid",args.FormId);
+                                                            }
+                                                            options.formCallBack(args.FormId);
+                                                        }
+                                                   }else {                                                                                                                                   
+                                                            var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"about:blank\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");                                                                      
+                                                            mee.showFormWizard('');
+                                                            if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length==0){
+                                                                oControl.Html = preview_iframe;                                                                
+                                                                oControl.Type = "formBlock";
+                                                                oControl.ID = args.FormId;                                                                
+                                                                args.predefinedControl = oControl;
+                                                                args.droppedElement.html(oControl.Html);
+                                                                args.droppedElement.removeClass("formPlaceHolderAlone");
+                                                                args.droppedElement.append("<div class='editformpanel'><span class='edit-form'><div>Edit Form</div><button>Form Wizard</button></span> <div class='drop-here'>Drop Form here</div></div>");
+                                                                oInitDestroyEvents.InitAll(args.droppedElement);
+                                                            }
+                                                   }
                                             }
                                             else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
 
@@ -5267,19 +5263,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var showAlertButtons = function (obj, url) {
                                     var _ele = $(obj); //element which is clicked
                                     var left_minus = 15;      //static space to minus to show dialog on exact location
-                                    var isDialog = parent.$('#mee_editor').parents('body').find('.modal'); //Grab the modal
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
-                                    if(isDialog.length)
-                                    {
-                                       var top = ele_offset.top + topPlus;
-                                       var left = ele_offset.left + 310 + leftPlus;
-                                    }else{
-                                        var top = ele_offset.top + 74 + topPlus;
-                                        var left = ele_offset.left + 297 + leftPlus;
-                                    }
-                                    
-                                    
+                                    var top = ele_offset.top + 74 + topPlus;
+                                    var left = ele_offset.left + 297 + leftPlus;
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");
                                     var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");

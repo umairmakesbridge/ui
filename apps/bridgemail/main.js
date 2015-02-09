@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,
-       urlArgs: "bust=1.457" ,
+       urlArgs: "bust=1.458" ,
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
