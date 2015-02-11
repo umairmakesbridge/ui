@@ -392,8 +392,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
+                                    mainHTMLELE.find(".bgimage").each(function(){
+                                        $(this).attr("mee-style",$(this).attr("style"));
+                                        $(this).removeAttr("style");
+                                    });
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
-                                    var cleanedupHTML = CleanCode(constructedHTML).html();
+                                    var cleanedCode = CleanCode(constructedHTML);
+                                    
+                                    var cleanedupHTML = cleanedCode.html().replace(/mee-style=/g, "style=");
+                                    mainHTMLELE.find(".bgimage").each(function(){
+                                        $(this).attr("style",$(this).attr("mee-style"));
+                                        $(this).removeAttr("mee-style");
+                                    });
                                     var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
@@ -909,6 +919,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     oHtml.addClass("MEE_DOCUMENT");
                                     oHtml.removeClass("mainTable");
+                                    
+                                    
 
 
                                     // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");
