@@ -552,7 +552,8 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                                     this.addCountHeader();
                                     this.fetchTracks();
                                  }
-                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":this,editable:true});
+                                 var isCreateNT = true;
+                                 this.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],isCreateNT:isCreateNT,"parent":this,editable:true});
                              
             },
             showBmsTracks:function(e){

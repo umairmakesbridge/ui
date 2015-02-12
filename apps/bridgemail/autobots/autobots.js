@@ -41,6 +41,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.basicFilters = null;
                     this.basicFormats = null;
                     this.isTileFlag = false;
+                    this.isCreateAB = false;
                     this.request = null;
                     this.app = app;
                     this.render();
@@ -105,7 +106,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     this.sortText = html.html();
                     this.fetchBots();
                 },
-                fetchBots: function(offset,botId) {
+                fetchBots: function(offset,botId,isCreateAB) {
                     var _data = {};
                     _data['type'] = this.type;
                     var that = this;
@@ -128,6 +129,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         this.actionType = "";
                         this.sortText = "";
                     }
+                   
                     if (this.request)
                         this.request.abort();
                     var that = this;
@@ -182,6 +184,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                  
                             } 
                             if(botId){
+                                 if(isCreateAB){
+                                     that.isCreateAB = isCreateAB;
+                                 }
+                                 else if(that.options.params.isCreateAB){
+                                     that.isCreateAB = that.options.params.isCreateAB;
+                                 }
+                                 else{
+                                     that.isCreateAB = false;
+                                 }
                                  that.$el.find(".thumbnails li").find("#bottileid_"+botId).click();
                             }
                              if (!offset) {

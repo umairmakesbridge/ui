@@ -78,7 +78,10 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         case "PRE.3":
                             this.icon = 'autorespbotbotc18';
                             break;
-                       
+                        case "PRE.4":
+                            this.icon = 'salesalertbotc18';
+                            label = "<img src='"+this.options.app.get("path")+"img/salesalertbot-icon.png' style='max-width:none!important;'>";
+                            break;
                     }
                     if (this.model.get('botType') == "B" && this.model.get('actionType') == "E")
                         label = "<img src='"+this.options.app.get("path")+"img/bdaybot-icon.png' style='max-width:none!important;'>"

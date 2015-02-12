@@ -46,6 +46,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     this.targetsModelArray = [];
                     this.netsuiteCampaignId= 0;
                     this.$messageWaitContainer = this.$(".message-wait-container");
+                    this.isCreateNT = null;
                     this.targets = null
                     if (this.options.params) {
                         if(this.options.params.track_id){
@@ -54,7 +55,13 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                         if(this.options.params.parent){
                             this.parentWS = this.options.params.parent;
                         }
+                        if(this.options.params.isCreateNT){
+                            this.isCreateNT = this.options.params.isCreateNT;
+                        }else{
+                            this.isCreateNT = false;
+                        }
                     }
+                    //console.log(this.isCreateNT);
                     this.initControls();
                     
                 }
@@ -405,7 +412,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                     }
                     bView = buttonsView.$el
                                     
-                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,object:model,editable:this.editable});  
+                    var messageView = new MessageView({page:this,buttonRow:bView,triggerOrder:tOrder,isCreateNT:this.isCreateNT,object:model,editable:this.editable});  
                     this.messages.push(messageView);
                     this.$messageWaitContainer.append(messageView.$el);                                          
                     

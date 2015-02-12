@@ -187,7 +187,7 @@ function (template) {
                 var dialog = this.app.showDialog(dialog_object);                        
                 this.app.showLoading("Loading Settings...",dialog.getBody());
                 require(["nurturetrack/message_setting"],_.bind(function(settingPage){
-                    var sPage = new settingPage({page:this,dialog:dialog,editable:this.editable,triggerOrder:this.triggerOrder});    
+                    var sPage = new settingPage({page:this,dialog:dialog,isCreateNT:this.options.isCreateNT,editable:this.editable,triggerOrder:this.triggerOrder});    
                     dialog.getBody().append(sPage.$el);
                     this.app.showLoading(false, sPage.$el.parent());
                     dialog.saveCallBack(_.bind(sPage.saveCall,sPage));
@@ -255,6 +255,9 @@ function (template) {
                   }
                   
                   this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.replyTo));
+                  if(this.options.isCreateNT){
+                      this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.fromEmail));
+                  }
                   if(camp_json.defaultReplyTo){                    
                     this.$(".camp-replyto").append($('<em >Default Value: <i >'+this.app.encodeHTML(camp_json.defaultReplyTo)+'</i></em>'))
                   }

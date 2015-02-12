@@ -1107,7 +1107,7 @@ define(['text!autobots/html/preset.html','jquery.icheck','bms-tags'],
           filter_html += '<div class="btn-group days-container" style="display:'+gap_display+'"><div class="inputcont"><input id="timespandays" type="text" value="'+gapValue+'" name="" class="gap" style="width:30px;" /></div></div>'
           filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><select class="selectbox formats"><option>Loading...</option>'                    
           filter_html +='</select></div></div>'
-          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="Lead" name="" class="matchValue" style="width:240px;" /></div></div></div>'
+          filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="LEAD" name="" class="matchValue" style="width:240px;" /></div></div></div>'
    
      // filter_html += '<div class="match row days-container" style="display:none;clear:both"> in last '
             //filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  

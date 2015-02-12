@@ -109,9 +109,12 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                                 that.$el.find('#quick_txtcampaign').removeAttr('disabled');
                                 var camp_json = jQuery.parseJSON(data);                              
                                 if(camp_json[0]!=="err"){                                 
-                                   var camp_id = camp_json[1];                                 
+                                   var camp_id = camp_json[1];
+                                   var camp_wsid = camp_json[2];
+                                   var isCreateCamp = true;
                                     that.toggleVisibility();
-                                    that.app.mainContainer.openCampaign(camp_id);
+                                    that.$('#quick_txtcampaign').val('');
+                                    that.app.mainContainer.openCampaign(camp_id,camp_wsid,isCreateCamp);
                                    
                                 }
                                 else{
@@ -156,7 +159,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                                             //that.app.showLoading(false, $("#new_autobot"));
                                             if (_json[0] !== "err") {
                                                 that.$el.find('.quick-autobot-add').removeClass('saving');
-                                                that.app.mainContainer.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots',tab_icon:'autobotslisting',params: {botId: _json[2]}});
+                                                that.app.mainContainer.addWorkSpace({type:'',title:'Autobots',sub_title:'Listing',url : 'autobots/autobots',workspace_id: 'autobots',tab_icon:'autobotslisting',params: {botId: _json[2],isCreateAB : true}});
                                                 that.toggleVisibility();
                                                 
                                             }
@@ -195,9 +198,11 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                                 .done(_.bind(function(data) {  
                                    this.$el.find('.quick-nurturetrack-add').removeClass('saving');
                                    this.$el.find('#quick_txtnurturetrack').removeAttr('disabled');
+                                   
                                     var _json = jQuery.parseJSON(data);                              
-                                    if(_json[0]!=="err"){                                                                  
-                                       that.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":that.options.page,editable:true});
+                                    if(_json[0]!=="err"){ 
+                                       that.$el.find('#quick_txtnurturetrack').val('');
+                                       that.app.mainContainer.openNurtureTrack({"id":_json[1],"checksum":_json[2],"parent":that.options.page,editable:true,isCreateNT:true});
                                        that.toggleVisibility();
                                     }else{
                                        that.app.showError({

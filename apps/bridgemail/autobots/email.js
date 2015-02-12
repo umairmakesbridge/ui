@@ -116,7 +116,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             this.showHideTargetTitle();
                         }
                     }, this));
-                    
+          
                     this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
                     this.$el.find("#txtRecurPeriod").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "100px", disable_search: "true"});
                     this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
@@ -601,7 +601,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     this.app.showLoading("Loading Settings...", dialog.getBody());
                     var that = this;
                     require(["nurturetrack/message_setting"], _.bind(function(settingPage) {
-                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "autobots", campNum: this.campNum});
+                        var sPage = new settingPage({page: this, dialog: dialog, editable: isEdit, type: "autobots", campNum: this.campNum,isCreateNT:this.options.isCreateAB});
                         dialog.getBody().append(sPage.$el);
                         this.app.showLoading(false, sPage.$el.parent());
                         dialog.saveCallBack(_.bind(sPage.saveCall, sPage));
@@ -648,10 +648,14 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         }
 
                         this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.replyTo));
+                        //console.log(this.options.isCreateAB);
+                        if(this.options.isCreateAB){
+                            this.$(".camp-replyto").html(this.app.encodeHTML(camp_json.fromEmail));
+                        }
                         if (camp_json.defaultReplyTo) {
                             this.$(".camp-replyto").append($('<em >Default Value: <i >' + this.app.encodeHTML(camp_json.defaultReplyTo) + '</i></em>'))
                         }
-
+                        
                     }, this));
                 },
                 showButtons: function() {

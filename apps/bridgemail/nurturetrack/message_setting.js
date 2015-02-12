@@ -29,6 +29,7 @@ function (template) {
                 this.plainText = "";
                 this.htmlText = "";   
                 this.type = this.options.type;
+                this.isCreateCamp = (this.options.isCreateNT) ? this.options.isCreateNT : '';
                 if(this.options.type !="undefined" && this.options.type == "autobots")
                      this.camp_id = this.options.campNum;     
                  else
@@ -122,7 +123,7 @@ function (template) {
                 this.app.showLoading("Loading...",this.$settingInner);                
                 require(["campaigns/campaign_step1"],_.bind(function(page){    
                      this.app.showLoading(false,this.$settingInner);                    
-                     this.step1_page = new page({page:this,camp_obj:this.camp_obj,editable:this.editable})                       
+                     this.step1_page = new page({page:this,camp_obj:this.camp_obj,editable:this.editable,isCreateCamp:this.isCreateCamp})                       
                      this.$settingInner.append(this.step1_page.$el);         
                      this.step1_page.init();                     
                      this.validateStep1();

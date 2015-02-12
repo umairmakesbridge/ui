@@ -102,7 +102,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 },
                 render: function () {
                     this.$el.html(this.template({}));                                                   
-                    this.wizard = this.options.wizard;    
+                    this.wizard = this.options.wizard;  
+                   
                     if(this.options.params && this.options.params.camp_id){
                         this.camp_id = this.options.params.camp_id;
                     }
@@ -387,7 +388,10 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.states.step1.change=true;
                         }
                         //states.step1.change
-                        camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));       
+                        camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.replyTo));
+                        if(camp_obj.wizard.options.isCreateCamp){
+                                camp_obj.$("#campaign_reply_to").val(camp_obj.app.decodeHTML(camp_json.fromEmail));
+                        }
                         if(camp_json.isFooterText=='Y'){
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(camp_json.footerText,true));
                         }
@@ -414,7 +418,6 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         else{
                              camp_obj.$("#campaign_reply_to_default").hide();
                         }
-                        
                         camp_obj.$("#campaign_socail_networks").prop("checked",camp_json.isShareIcons=="N"?false:true);
                         camp_obj.$("#campaign_fb").prop("checked",camp_json.facebook=="N"?false:true);                        
                         camp_obj.$("#campaign_twitter").prop("checked",camp_json.twitter=="N"?false:true);                        
