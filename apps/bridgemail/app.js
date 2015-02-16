@@ -419,6 +419,7 @@ define([
             str = str.replace(/</g, "&lt;");
             str = str.replace(/>/g, "&gt;");
             str = str.replace(/\"/g, "&quot;");
+            str = str.replace(/\‘/g,"&#8216;");
             return str;
         }
         ,
@@ -435,6 +436,7 @@ define([
             str = str.replace(/&#9;/g, "\t");
             str = str.replace(/&nbsp;/g, " ");
             str = str.replace(/&quot;/g, "\"");
+            str = str.replace(/&#8216;/g, "‘");
             if (lineFeed) {
                 str = str.replace(/&line;/g, "\n");
             }

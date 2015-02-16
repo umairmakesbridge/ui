@@ -69,7 +69,7 @@ String _path = "/pms/umair/";
     <link href="<%= _path %>css/custom_2.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link href="<%= _path %>css/chosen.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link href="<%= _path %>css/changes.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/skins/lightgray/skin.min.css?bust=1.362" rel="stylesheet">
+    <link href="<%= _path %>css/editorcss/skin.min.css?bust=1.362" rel="stylesheet">
     <link href="<%= _path %>css/tan_changes.css?bust=1.362" rel="stylesheet" type="text/css" >
     <link rel="stylesheet" href="<%= _path %>css/ui.daterangepicker.css?bust=1.362" type="text/css" />
     <link rel="stylesheet" href="<%= _path %>css/animate.css?bust=1.362" type="text/css" />

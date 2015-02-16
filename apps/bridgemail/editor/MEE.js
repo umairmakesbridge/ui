@@ -216,7 +216,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var myColorsFromServiceGlobal = "";
                                 var txtColorCode = myElement.find(".txtColorCode");
                                 var ulMyColors = myElement.find(".myColors");
-                                var personalizedTagsGlobal = "";
+                                var personalizedTagsGlobal = new Array();var customTagsGlobal = new Array();var linksTagsGlobal = new Array();var basicTagsGlobal=new Array();
                                 var formBlocksGlobal = "";
                                 var topPlus = options.topPlus;
                                 var leftPlus = options.leftPlus;
@@ -370,7 +370,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
                                     removeDialogs();    
                                     mainContentHtmlGrand.mouseup(function () {
-                                        changFlag.editor_change = true;
+                                        if(changFlag){
+                                            changFlag.editor_change = true;
+                                        }
                                     })
                                     //*****************************************Landing page options***********************************************************************************///
                                     if (options.landingPage) {
@@ -399,7 +401,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedCode = CleanCode(constructedHTML);
                                     
-                                    var cleanedupHTML = cleanedCode.html().replace(/mee-style=/g, "style=");
+                                    var cleanedupHTML = cleanedCode.html().replace(/mee-style=/g, "style=").replace(/\‘/g,"&#8216;");
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("style",$(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
@@ -498,9 +500,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     lnkPreviewCode.click(function () {
                                         var mainHTMLELE = meeIframe.find(".mainContentHtml");
+                                        mainHTMLELE.find(".bgimage").each(function(){
+                                            $(this).attr("mee-style",$(this).attr("style"));
+                                            $(this).removeAttr("style");
+                                        });
                                         var constructedHTML = $(mainHTMLELE.outerHTML());
 
-                                        var cleanedupHTML = CleanCode(constructedHTML).html();
+                                        var cleanedupHTML = CleanCode(constructedHTML).html().replace(/mee-style=/g, "style=").replace(/\‘/g,"&#8216;");
 
                                         var outputter = $("<div style='margin:0px auto;width:" + emailWidth + "'></div>");
                                         outputter.wrapInner(cleanedupHTML);
@@ -3429,26 +3435,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     //Getting building blocks from provided block:
                                     if (args.personalizeTags != null) {
-
-                                        var listOfPersonalizeTagsHtml = new Array();
+                                        
+                                        
                                         //listOfPersonalizeTagsHtml.push("{ text: 'Personalize', value: '' }");
                                         var personalizeTagsFromService = args.personalizeTags;
 
                                         //$.parseJSON Takes a well-formed JSON string and returns the resulting JavaScript object.
-                                        $.each(personalizeTagsFromService, function (i, obj) {
-
-                                            var entry = {
-                                                text: $('<div/>').html(obj[1]).text(),
-                                                value: obj[0]
-                                            }
-                                            if (obj[2] == "B") {
-                                                listOfPersonalizeTagsHtml.push(entry);
-                                            }
-
-
-
-                                        });
-                                        personalizedTagsGlobal = listOfPersonalizeTagsHtml;
+                                        
+                                        personalizedTagsGlobal = personalizeTagsFromService;
 
                                     }
 
@@ -3707,9 +3701,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 inline: true,
                                                 theme: "modern",
                                                 skin_url: options._app.get("path") + "css/editorcss",
-                                                plugins: 'textcolor table anchor autolink advlist',
+                                                plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: "LinksButton | mybutton123 | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
+                                                toolbar1: "LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
                                                         meeIframe.find("#" + editor.id).data('tinymce', true);
@@ -3755,11 +3749,16 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         icon: 'txtcolor',
                                                         //selectcmd: 'ForeColor',
 
-                                                        onClick: function (e) {
-
+                                                        onClick: function (e) {                                                            
+                                                            var ele_offset = $(e.target).offset();                                                            
+                                                            var top = ele_offset.top + 100 + topPlus;
+                                                            var left = ele_offset.left + 85 + leftPlus;
                                                             dialogForTextColor = true;
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();
+                                                            myElement.find("#ColorPickerpop").css({
+                                                                top:top+"px",
+                                                                left:left+"px"
+                                                            }).show();
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
@@ -3824,10 +3823,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         icon: 'txtbg',
                                                         selectcmd: 'HiliteColor',
                                                         onClick: function (e) {
-
+                                                            var ele_offset = $(e.target).offset();                                                            
+                                                            var top = ele_offset.top + 100 + topPlus;
+                                                            var left = ele_offset.left + 85 + leftPlus;
                                                             dialogForTextColor = false;
                                                             myElement.find(".modalDialog").show();
-                                                            myElement.find("#ColorPickerpop").show();
+                                                            myElement.find("#ColorPickerpop").css({
+                                                                top:top+"px",
+                                                                left:left+"px"
+                                                            }).show();
 
                                                             var divFontColorPicker = myElement.find(".divFontColorPicker");
                                                             var selectedFontColor = myElement.find(".selectedFontColor");
@@ -3893,17 +3897,35 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         }
 
                                                     });
+                                                    
+                                                    if(basicTagsGlobal.length==0){
+                                                        $.each(personalizedTagsGlobal, function (i, obj) {
+                                                            var entry = {
+                                                                text: $('<div/>').html(obj[1]).text(),
+                                                                value: obj[0],                                                
+                                                                onclick: function(){
+                                                                   meeIframeWindow.tinyMCE.activeEditor.insertContent(this.settings.value);
+                                                                }
+                                                            }
+                                                            if (obj[2] == "B") {
+                                                                basicTagsGlobal.push(entry);
+                                                            }
+                                                            else if (obj[2] == "C") {
+                                                                customTagsGlobal.push(entry)
+                                                            }
+                                                            else if (obj[2] == "U") {
+                                                                linksTagsGlobal.push(entry)
+                                                            }
 
-                                                    editor.addButton('mybutton123', {
-                                                        type: 'listbox',
+                                                        });
+                                                    }
+
+                                                    editor.addButton('personalizeMenu', {
+                                                        type: 'menubutton',
                                                         title: 'Personalize',
                                                         text: 'Personalize',
                                                         icon: false,
-                                                        onselect: function (e) {
-                                                            editor.insertContent(this.value());
-                                                            this.value('');
-                                                        },
-                                                        values: personalizedTagsGlobal,
+                                                        menu: [{text:"Personal Fields", menu:basicTagsGlobal,_editor:editor},{text:"Custom Fields", menu:customTagsGlobal,_editor:editor},{text:"Link Fields", menu:linksTagsGlobal,_editor:editor}],
                                                         onPostRender: function () {
 
                                                         }
