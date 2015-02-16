@@ -164,10 +164,15 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){  
                         this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
                         this.sortBy = 'lastActivityDate';
+                         _data['filterBy']="";
+                         _data['lastXDays'] = "";
                     }
                 }
                 else if(this.tagTxt){
                     _data['searchTag'] = this.tagTxt;
+                    this.sortBy = 'lastActivityDate';
+                    _data['filterBy']="";
+                    _data['lastXDays'] = "";
                 }
                  if((this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV") && !this.searchTxt){
                             _data['filterBy'] = this.sortBy.split("_")[0];
