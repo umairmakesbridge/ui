@@ -278,7 +278,7 @@ function (template,editorView) {
                 this.setEditor();
                 var target = $.getObj(obj,"a");
                 var bms_token =this.app.get('bms_token');
-                this.app.showLoading('Loading HTML...',this.$el);
+                this.app.showLoading('Loading HTML...',this.$el.parents(".modal"));
                 this.states.editor_change = true;
                 var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                 jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
@@ -308,11 +308,32 @@ function (template,editorView) {
               }
             },
             setEditorHTML:function(tsv, state, xhr){
-                this.app.showLoading(false,this.$el);
+                this.app.showLoading(false,this.$el.parents(".modal"));
                 var html_json = jQuery.parseJSON(xhr.responseText);
-                if(html_json.htmlText){
-                    _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
+                if(html_json.htmlText){                        
+                    if(html_json.isEasyEditorCompatible=="Y"){                        
+                        post_editor['editorType'] = 'MEE';
+                        this.$("#html_editor_mee").click();
+                        this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
+                        this.states.editor_change = true;                           
+                    }
+                    else{
+                        post_editor['editorType'] = 'W';                       
+                        this.$("#html_editor").click();
+                        _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                    }         
+                    
+                    var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK="+this.app.get('bms_token');                                        
+                    this.campobjData.editorType = post_editor["editorType"];
+                    $.post(URL,post_editor)
+                     .done(function(data) {
+                     });
+                    
                 }
+                /*if(html_json.htmlText){
+                    _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
+                }*/
             },
             TryDialog:function(){
                  var that = this;

@@ -401,7 +401,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var constructedHTML = $(mainHTMLELE.outerHTML());
                                     var cleanedCode = CleanCode(constructedHTML);
                                     
-                                    var cleanedupHTML = cleanedCode.html().replace(/mee-style=/g, "style=").replace(/\‘/g,"&#8216;");
+                                    var cleanedupHTML =  mee.encodeSpecialHTML(cleanedCode.html());
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("style",$(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
@@ -424,10 +424,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var innerHTML = outerTD.length? $.trim(outerTD.html()) : html;
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
+                                    emailWidth = options.landingPage? "100%":outerTD.attr("width");
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
                                     mee.setHTML();                                    
                                 };
+                                
+                                mee.encodeSpecialHTML = function(str){
+                                    str = str.replace(/mee-style=/g, "style=");
+                                    str = str.replace(/\‘/g,"&#8216;");
+                                    str = str.replace(/\’/g,"&#8217;");
+                                    str = str.replace(/\“/g,"&#8220;");
+                                    str = str.replace(/\”/g,"&#8221;");
+                                    str = str.replace(/\„/g,"&#8222;");
+                                    str = str.replace(/\€/g,"&#8364;");
+                                    str = str.replace(/\™/g,"&#8482;");
+                                    return str;
+                                }
                                 
                                 mee.setHTML =  function(){
                                     if(myElement.find("#mee-iframe").contents().find(".mainContentHtml").length){
@@ -440,7 +453,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         if(pageBackgroundColor){
                                             meeIframe.find("body").css("background-color",pageBackgroundColor);
                                         }
-                                        mainObj.html(innerHTML);
+                                        meeIframe.find(".mainTable").css("width",emailWidth+"px");
+                                        mainObj.html(innerHTML);                          
+                                        if(!options.landingPage && emailWidth){
+                                            myElement.find(".email-width input.btnContainerSize").removeClass("active");
+                                            if( myElement.find(".email-width input.btnContainerSize#"+emailWidth).length ){                                            
+                                                myElement.find(".email-width input.btnContainerSize#"+emailWidth).addClass("active");
+                                            }
+                                            else{
+                                                 myElement.find(".email-width input.txtContSize").val(emailWidth)
+                                            }
+                                        }
                                         IsStyleActivated = false;
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
@@ -506,7 +529,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         });
                                         var constructedHTML = $(mainHTMLELE.outerHTML());
 
-                                        var cleanedupHTML = CleanCode(constructedHTML).html().replace(/mee-style=/g, "style=").replace(/\‘/g,"&#8216;");
+                                        var cleanedupHTML = mee.encodeSpecialHTML(CleanCode(constructedHTML).html());
 
                                         var outputter = $("<div style='margin:0px auto;width:" + emailWidth + "'></div>");
                                         outputter.wrapInner(cleanedupHTML);
@@ -1280,16 +1303,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 var value = $(this).data("value");
                                                 meeIframe.find(".mainTable").css("width", value + "px");
                                                 if (value == "700") {
+                                                    myElement.find(".email-width input.txtContSize").val('');
                                                     myElement.find("input#700").addClass("active");
                                                     myElement.find("input#700").siblings().removeClass("active");
                                                     emailWidth = "700px";
                                                 }
-                                                if (value == "600") {
+                                                else if (value == "600") {
+                                                    myElement.find(".email-width input.txtContSize").val('');
                                                     myElement.find("input#600").addClass("active");
                                                     myElement.find("input#600").siblings().removeClass("active");
                                                     emailWidth = "600px";
                                                 }
-                                                if (value == "500") {
+                                                else if (value == "500") {
+                                                    myElement.find(".email-width input.txtContSize").val('');
                                                     myElement.find("input#500").addClass("active");
                                                     myElement.find("input#500").siblings().removeClass("active");
                                                     emailWidth = "500px";
