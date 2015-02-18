@@ -164,10 +164,13 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     if(this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV"){  
                         this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
                         this.sortBy = 'lastActivityDate';
+                         this.filterBy = "";
                     }
                 }
                 else if(this.tagTxt){
                     _data['searchTag'] = this.tagTxt;
+                    this.sortBy = 'lastActivityDate';
+                    this.filterBy = "";
                 }
                  if((this.sortBy.split("_")[0]=="CK" || this.sortBy.split("_")[0]=="WV") && !this.searchTxt){
                             _data['filterBy'] = this.sortBy.split("_")[0];
@@ -277,7 +280,10 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             */
             searchContacts:function(o,txt){
                 this.tagTxt = '';
-                this.searchTxt = txt;                                
+                this.filterBy = '';
+                this.searchTxt = txt;  
+                this.sortBy = 'lastActivityDate';
+                this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
                     this.search(o);                
             },
             search:function(o){
@@ -338,6 +344,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.filterBy = targetName;
                  if(this.filterBy==="CK" || this.filterBy==="WV"){
                        this.searchTxt = '';
+                       this.tagTxt = '';
                        this.$('#contact-search').val('');
                        this.$('#clearsearch').hide();
                    }

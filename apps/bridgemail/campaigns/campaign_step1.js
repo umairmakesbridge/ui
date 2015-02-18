@@ -38,7 +38,7 @@ function (template) {
                     model: this.model
                 }));                               
                 this.initControls();  
-               
+            
             },
             init:function(){
               this.setFromNameField();  
@@ -152,7 +152,10 @@ function (template) {
                  if(camp_json.senderName != ''){
                      this.$("#campaign_from_name").val(this.app.decodeHTML(camp_json.senderName));                        
                  }                    
-                 this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.replyTo));       
+                 this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.replyTo));
+                 if(this.options.isCreateCamp){
+                     this.$("#campaign_reply_to").val(this.app.decodeHTML(camp_json.fromEmail));
+                 }
                  this.$("#campaign_profileUpdate").prop("checked",camp_json.profileUpdate=="N"?false:true);
                  this.$("#campaign_useCustomFooter").prop("checked",camp_json.useCustomFooter=="N"?false:true);
                  this.$("#campaign_isFooterText").prop("checked",camp_json.isFooterText=="N"?false:true);

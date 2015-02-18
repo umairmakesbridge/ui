@@ -302,7 +302,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $("#wp_li_" + wp_id + " .subheading").html(params.subheading);
                     }
                 },
-                openCampaign: function (camp_id, camp_wsid, schFlag, reschedule, hidecalender) {
+                openCampaign: function (camp_id, camp_wsid,isCreateCamp ,schFlag, reschedule, hidecalender) {
                     var camp_id = camp_id ? camp_id : 0;
                     var active_step = 1;
                     if (schFlag) {
@@ -316,7 +316,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         tab_icon: 'campaign',
                         sub_title: 'Campaing Wizard',
                         params: {camp_id: camp_id},
-                        wizard: {cssClass: 'campaign_progress', rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
+                        wizard: {cssClass: 'campaign_progress', isCreateCamp:isCreateCamp,rescheduled: reschedule, hidecalender: hidecalender, steps: 4, active_step: active_step, step_text: ["Settings", "Create", "Recipients", "Schedule"], step_tooltip: ["Basic message setup.",
                                 "Create email with a template, copying an existing campaign or use your own html.", "Set who should receive this campaign.", "Schedule date and time for email transmission."]},
                         actions: []
                     });
@@ -344,13 +344,14 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 openNurtureTrack: function (opt) {
                     var track_id = opt.id ? opt.id : 0;
                     var track_checksum = opt.checksum ? opt.checksum : 0;
+                    var isCreateNT = opt.isCreateNT;
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         sub_title: 'Nurture Track Wizard',
                         tab_icon: 'nuturetrack',
                         workspace_id: 'nurturetrack_' + track_checksum,
                         url: 'nurturetrack/nurturetrack',
-                        params: {track_id: track_id, parent: opt.parent, editable: opt.editable}
+                        params: {track_id: track_id, isCreateNT:isCreateNT ,parent: opt.parent, editable: opt.editable}
 
                     });
                 },
@@ -719,7 +720,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 createCampaign: function (fieldText, _json) {
                     var camp_id = _json[1];
                     var camp_wsid = _json[2];
-                    this.openCampaign(camp_id, camp_wsid);
+                    var isCreateCamp = true;
+                    this.openCampaign(camp_id, camp_wsid , isCreateCamp);
 
                 },
                 initCreateEditTarget: function (target_id) {

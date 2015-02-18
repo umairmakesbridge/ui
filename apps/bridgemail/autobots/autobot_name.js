@@ -85,9 +85,9 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                     this.saveAutobotData(this.options.actionType, this.options.botType);                    
 
                 },
-                chooseAutobotType: function(botId) {
+                chooseAutobotType: function(botId,isCreateAB) {
                     this.botId = botId;
-                    this.options.listing.fetchBots(0,botId);
+                    this.options.listing.fetchBots(0,botId,isCreateAB);
                     //this.getAutobotModel(botId) ;
                     return;
                     switch (this.options.actionType) {
@@ -137,7 +137,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                                 var _json = jQuery.parseJSON(data);
                                 that.options.app.showLoading(false, $("#new_autobot"));
                                 if (_json[0] !== "err") {
-                                    that.chooseAutobotType(_json[2]);
+                                    that.chooseAutobotType(_json[2],true);
                                     that.closeAutobot();
                                 }
                                 else {
@@ -199,7 +199,7 @@ define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.
                     });
                     that.options.app.showLoading('Loading Email Autobots....', dialog.getBody());
                     require(["autobots/email", ], function(Alert) {
-                        var mPage = new Alert({refer: that, dialog: dialog, botId: that.botId, name: that.autobotName, botType: that.options.botType, app: that.options.app, campNum: that.campNum, model: that.model});
+                        var mPage = new Alert({refer: that, dialog: dialog, botId: that.botId, name: that.autobotName, botType: that.options.botType, app: that.options.app, campNum: that.campNum, model: that.model,isCreatAB:true});
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.saveEmailAutobot, mPage));
                         that.options.app.showLoading(false, dialog.getBody());

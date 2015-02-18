@@ -461,6 +461,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                         var botId = this.model.get('botId.encode');
                     }
                     this.botId = botId;
+                    
                     if(this.model.get('isPreset') == "Y"){
                         if(this.model.get('presetType') == "PRE.1")
                         this.chooseBotToEdit('autobots/birthday');
@@ -508,7 +509,7 @@ define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','comm
                     this.dialog = dialog;
                     that.options.app.showLoading('Loading Autobots....', dialog.getBody());
                     require([files], function(Alert) {
-                        var mPage = new Alert({refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model});
+                        var mPage = new Alert({refer: that, dialog: dialog, type: "edit", botId: that.model.get('botId.encode'), botType: that.model.get('botType'), app: that.options.app, model: that.model,isCreateAB : that.parent.isCreateAB});
                         dialog.getBody().html(mPage.$el);
                         //console.log('Ok start From here for bot : ' + that.model.get('actionType'));
                         var dialogArrayLength = that.options.app.dialogArray.length; // New Dialog
