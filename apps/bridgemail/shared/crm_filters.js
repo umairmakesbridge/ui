@@ -76,7 +76,7 @@
             filter_html +='</select></div>'                              
           }
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:140px;" />'
-          filter_html += '<select data-placeholder="Choose opportuinity value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
+          filter_html += '<select data-placeholder="Choose value" class="selectbox matchValueSelect" disabled="disabled"><option value="">Loading...</option>'                      
           filter_html +='</select></div>'
       var self = this     
       if(params && self.options.filterFor=="S"){
@@ -110,8 +110,32 @@
       })
       filter.find(".rules").chosen({disable_search: "true",width:'170px'}).change(function(){
           $(this).val($(this).val())
-          $(this).trigger("chosen:updated")  
-           self.updateAdvanceFilter()
+          $(this).trigger("chosen:updated")
+          self.updateAdvanceFilter()
+          if(filter.find(".fields").val().toLowerCase()=="createddate" || filter.find(".fields").val().toLowerCase()=="lastmodifieddate"){
+              if(self.checkDateTimeCheck(filter,params)){
+                     filter.find(".matchValue").hide();                     
+                     var picklist_values = '';
+                     if(self.fields.length){
+                         picklist_values = self.fields[filter.find(".fields option:selected").index()-1].picklist;
+                     }
+                     else{
+                         picklist_values = self.filterFields[filter.find(".fields option:selected").index()-1].picklist;
+                     }
+                     if(picklist_values){
+                         var picklist_html = "";
+                         $.each(picklist_values[0],function(key,val){                                
+                                 picklist_html +='<option value="'+val+'">'+val+'</option>'                                                                      
+                           })
+                     }                     
+                     filter.find(".matchValueSelect").next().show();
+                     filter.find(".matchValueSelect").html(picklist_html).prop("disabled",false).trigger("chosen:updated");                     
+                }
+                else{
+                    filter.find(".matchValueSelect").next().hide();
+                    filter.find(".matchValue").show();
+                }
+          }
       })
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
@@ -146,12 +170,13 @@
         if(attr_type=="id"){attr_type="double"}
                 $.each(self.rules,function(key,val){
                      if(attr_type==val.type.toLowerCase()){
-                          rule_html +='<option value="'+val.name+'" rule_type="'+val.type+'">'+val.label+'</option>'                           
+                          var _selected = (params && params.fieldCondition && params.fieldCondition.toLowerCase()==val.name.toLowerCase()) ? 'selected="selected"':'';
+                          rule_html +='<option value="'+val.name+'" rule_type="'+val.type+'" '+_selected+'>'+val.label+'</option>'                           
                      }           
                 })
                 
                 filter.find(".rules").html(rule_html).prop("disabled",false).trigger("chosen:updated")
-                if(attr_type=="picklist"){
+                if(attr_type=="picklist" || self.checkDateTimeCheck(filter,params)){
                      filter.find(".matchValue").hide();
                      filter.find(".rules").val("equal").trigger("chosen:updated");
                      var picklist_values = '';
@@ -184,6 +209,20 @@
                 
                 self.updateAdvanceFilter()
                 
+   },
+   checkDateTimeCheck: function(filter,params){
+       var isDateTime = false;
+       
+       if((filter.find(".fields").val().toLowerCase()=="createddate" || filter.find(".fields").val().toLowerCase()=="lastmodifieddate") 
+               && (filter.find(".rules").val().toLowerCase()=="lessthan" || 
+               filter.find(".rules").val().toLowerCase()=="greaterthan" ||
+               filter.find(".rules").val().toLowerCase()=="lessthanequal" || 
+               filter.find(".rules").val().toLowerCase()=="greaterthanequal" || 
+               filter.find(".rules").val().toLowerCase()=="duration")){
+           isDateTime = true;
+       }
+       
+       return isDateTime;
    }
   ,addSalesForceField:function(filter,params){
       var URL = ""
@@ -198,12 +237,12 @@
                          return false;
                      }       
                     var field_html ='<option value=""></option>'                                            
-                    var isPicklist = false;
+                    var updateRules = false;
                     $.each(fields_json.fldList[0],function(key,val){
                         selected_field = (params && params.fieldName==val[0].name) ? "selected" : ""                        
                         if(self.objType && self.objType===val[0].sfObject.toLowerCase()){
                             if(selected_field){
-                                isPicklist = val[0].type=="picklist"?true:false;
+                                updateRules = (val[0].type!=="string" )?true:false;
                             }
                             self.fields.push(val[0])                                  
                             field_html +='<option value="'+val[0].name+'" '+selected_field+' field_type="'+val[0].type+'">'+val[0].label+'</option>'                           
@@ -212,7 +251,7 @@
                     });
                     
                     filter.find(".fields").html(field_html).prop("disabled",false).trigger("chosen:updated")
-                    if(params && params.fieldName && isPicklist){                        
+                    if(params && params.fieldName && updateRules){                        
                         self.updateRules(filter,params)
                     }
                 }
