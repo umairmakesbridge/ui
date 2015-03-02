@@ -11400,15 +11400,74 @@ ul.mng_acct li.selected a { background:#97d61d; }
     line-height: 36px;
 	 padding: 0 12px;
 }
-
 .manage_account .boxinner .row .inputcont em { color:#6292ad; }
 
 
-
 .manage_account .boxinner .inputlabel {}
-.manage_account .boxinner .inputlabel label { padding:0; font-weight:bold;}
+.manage_account .boxinner .inputlabel label {
+    font-weight: bold;
+    line-height: 20px;
+    padding: 0;
+    text-align: left;
+}
+
+.manage_account .boxinner input[readonly] {
+    background: none repeat scroll 0 0 #fff;
+    color: #666;
+    cursor: text;
+}
+
+/*---*/
+.manage_account .boxinner .row label { width:28%;}
+.manage_account .boxinner .row .input-append  { width:70%;}
+/*---*/
+.manage_account .boxinner  .app_subs { float:left; margin-left:20px; width: 100%;}
+.manage_account .boxinner  .app_subs > span {
+    background: none repeat scroll 0 0 #DDEDF5;
+    display: block;
+    float: left;
+    margin: 8px 10px 0 0;
+	min-width: 200px;
+	height: 32px;
+	   -webkit-border-radius: 2px;
+     -moz-border-radius: 2px;
+    border-radius:2px;
+}
+.manage_account .boxinner  .app_subs > span label {
+    color: #6494AF;
+    font-weight: normal;
+    line-height: 32px;
+	float:left !important;
+    margin: 0;
+	text-align:left !important;
+    padding: 0 15px !important;
+    width: auto !important;
+	
+}	
+.manage_account .boxinner  .app_subs > span  .checkpanelinput {  margin: 2px 0 2px 2px !important;
+    min-height: 28px;
+    min-width: 28px;
+}
+
+.manage_account .boxinner  .app_subs > span  .checkpanelinput.checked {   height: 32px !important;
+    margin: 0 0px 0 0 !important;
+    min-width: 30px;
+}
+	
+
+.manage_account .boxinner  .app_subs span.icon {
+    float: left;
+    height: 30px;
+    margin: 0 4px 0 -7px;
+    width: 30px;
+}
+
+
 #changepassword-form input,.campaign-settings input{
     width:300px;
+}
+.manage_account input[type='text'],.manage_account input[type='password']{
+    width:250px;
 }
 .change-password.saving {
     background:url("../img/greenloader.gif") no-repeat scroll 69px center #94cf1e;

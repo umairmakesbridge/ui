@@ -24,7 +24,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                    this.loadData();                   
                 },
                 loadData:function(){
-                   var bms_token = this.app.get('bms_token');                    
+                    var bms_token = this.app.get('bms_token');                    
                     this.app.showLoading("Loading Account Details...", this.$el);
                     var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + bms_token + "&type=get";
                     jQuery.getJSON(URL, _.bind(function(tsv, state, xhr) {

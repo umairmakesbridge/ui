@@ -854,7 +854,9 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.nsicon {
     background: url("../img/netsuiteicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
-
+.icon.manageaccount-w {
+    background: url("../img/manageaccount-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 
 
 

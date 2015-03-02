@@ -54,7 +54,7 @@ define(['text!account/html/bridgemailapis.html'],
                     $('body'));   
                 },
                 regenerateKey: function(e){
-                     var btn = $.getObj(e,"a");
+                    var btn = $.getObj(e,"a");
                     if(btn.hasClass("saving")==false){
                         btn.addClass("saving");                        
                         var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');                               
