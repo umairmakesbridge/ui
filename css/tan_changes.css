@@ -329,7 +329,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
 .header-icon .dlgpreview { background-position:39% -301px; height:33px; }
 .inputcont .errortext em {    
 	margin-top:1px;
-	color:#fff;
+	color:#fff !important;
 }
 .inputcont .errortext:hover em { display:block !important;}
 .settings .pspa-text { width:95.3%; }

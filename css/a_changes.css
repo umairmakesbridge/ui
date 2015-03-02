@@ -686,7 +686,7 @@ ul.chartstatdetail li.active { background:#97D61D;}
 .tagsdddiv .stats_listing { margin:0; }
 
 
-.tagsdddiv .stats_listing .bmsgrid .tagscont { width:250px; }
+.tagsdddiv .stats_listing .bmsgrid .tagscont { width:100%; }
 
 .tagsdddiv .search {
     float: left;

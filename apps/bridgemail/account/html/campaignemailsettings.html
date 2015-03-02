@@ -1,0 +1,37 @@
+<h3>Email Settings for Campaign</h3>
+<p> </p>
+
+<div class="boxinner campaign-settings">
+    <div class="row">
+        <label>Sender Name</label>
+        <div class="input-append  ">
+            <div class="inputcont left">
+                <input type="text" placeholder=""  class="sender-name" value="<%-this.postObject.senderName%>">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <label>From Email </label>
+        <div class="input-append  ">
+            <div class="inputcont">
+                <span><%-this.postObject.fromEmail%></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <label> Reply to </label>
+        <div class="input-append  ">
+            <div class="inputcont left">
+                <input type="text" placeholder=""  class="reply-to" value="<%-this.postObject.replyToEmail%>">
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+<br/>
+<div class="btns"> 
+    <a class="btn-green left save-settings"><span>Save</span><i class="icon save"></i></a>
+</div>
+<div class="clearfix"></div>

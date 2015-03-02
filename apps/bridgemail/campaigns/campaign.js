@@ -3315,8 +3315,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                              }
                      }).fail(function() { console.log( "Receipts data load failed" ); });
                     
-               },               
-               
+               },                              
                TryDialog:function(){
                     var that = this;
                     var app = this.options.app;
@@ -3336,12 +3335,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                          dialog.getBody().append(mPage.$el);
                          that.app.showLoading(false, mPage.$el.parent());
                          var dialogArrayLength = that.app.dialogArray.length; // New Dialog
-                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
-                         //that.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
-                         that.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog
-                        // $('.modal .modal-body').append("<button class='ScrollToTop' style='display:none;display: block;position: relative;left: 95%;bottom: 70px;' type='button'></button>");
-                       // this.$el.parents(".modal").find(".modal-footer").find(".ScrollToTop").remove();
-                         //dialog.saveCallBack(_.bind(mPage.returnURL,mPage,dialog,_.bind(that.useImage,that)));
+                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog                         
+                         that.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New Dialog                       
                      });
                      
                 },

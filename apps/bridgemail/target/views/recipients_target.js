@@ -19,7 +19,8 @@ function (template) {
                 "click .refresh":"refreshTarget",
                 "click .preview":"previewTarget",
                 "click .row-move":"addRowToCol2",
-                "click .row-remove":"removeRowToCol2"
+                "click .row-remove":"removeRowToCol2",
+                "click .stop-target":"stopTargetDialog"
                    
             },
             initialize: function () {
@@ -308,6 +309,32 @@ function (template) {
                         this.$el.remove();
                     },this));
                 }
+            },
+            stopTargetDialog: function(){
+                this.app.showAlertPopup({heading: 'Confirm Target Stop',
+                    detail: "Are you sure you want to stop this target refresh?",
+                    text: "Stop",
+                    icon: "stop-w",
+                    callback: _.bind(this.stopTarget, this)},
+                $('body'));
+            },
+            stopTarget: function(){
+                var URL = '/pms/io/filters/saveTargetInfo/?BMS_REQ_TK=' + this.app.get('bms_token');
+                this.app.showLoading("Stoping target...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                $.post(URL, {type: 'stop', filterNumber: this.model.get('filterNumber.encode')})
+                .done(_.bind(function (data) {
+                    this.app.showLoading(false, this.$el.parents(".ws-content.active"));
+                    var _json = jQuery.parseJSON(data);                    
+                    if (_json[0] !== "err") {
+                        this.app.showMessge("Target has been Stopped successfully!");                            
+                        this.model.set('status',"D");
+                        this.render();
+                    }
+                    else {
+                        this.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                    }
+
+                }, this));
             }
                 
         });    

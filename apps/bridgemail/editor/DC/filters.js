@@ -380,8 +380,7 @@ define(['text!editor/DC/html/filters.html'],
                          rules["listNumber.encode"]= filter.find(".sub-date-container").attr("list_id")
                     }
                     this.args.DynamicContent.ListOfDynamicRules.push(rules); 
-                }
-                
+                }                
                 return filters_post;
             },
             saveFilters:function(){

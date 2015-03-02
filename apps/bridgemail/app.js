@@ -219,7 +219,7 @@ define([
                 this.set("user", _json);
                 var allowedUser = ['admin', 'jayadams', 'demo'];
                 if (allowedUser.indexOf(this.get("user").userId) > -1) {
-                    this.mainContainer.$(".local-adds").hide();
+                    this.mainContainer.$(".local-adds").show();
                 }
                 else {
                     this.mainContainer.$(".local-adds").hide();

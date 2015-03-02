@@ -83,17 +83,18 @@
 
                     </div>
               </div> <%}else{%>
-                <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton){print('two s-clr3')}else{print('one s-clr2')} %>" style="width:;">
+                <div class="slide-btns <% if(this.showUseButton || this.showRemoveButton){print('three s-clr4')}else{print('two s-clr3')} %>" style="width:;">
                         <span  class="icon setting"></span>
                         <div>
                             
                                 <% if(this.showUseButton) {%>
-                                    <a class="icon check clr2 row-move" ><span>Use</span></a>
+                                    <a class="icon check clr3 row-move" ><span>Use</span></a>
                                 <% } %>  
                                 <% if(this.showRemoveButton) {%>
-                                    <a class="icon remove clr2 row-remove" ><span>Remove</span></a>
+                                    <a class="icon remove clr3 row-remove" ><span>Remove</span></a>
                                 <% } %>  
-                                <a class="icon preview preview-target clr1" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
+                                <a class="icon uncheck stop-target clr1" ><span>Stop</span></a>
+                                <a class="icon preview preview-target clr2" data-id="<%=this.model.get('filterNumber.encode')%>" ><span>Preview</span></a>
                        
                           
                         </div> <!-- slide-btns two  -->

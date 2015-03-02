@@ -2977,10 +2977,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     var OnFilterClick = function (element) {
                                         element.find("i.filter").click(function (event) {
-
-                                            //event.stopPropagation();
-
-                                            var parentLi = $(this).parents("li:first");
+                                            var parentLi = $(event.target).parents("li:first");
+                                            parentLi.click();
+                                            event.stopPropagation();                                                                                        
                                             args.clickedLi = parentLi;
 
                                             args.IsUpdate = true;
@@ -2990,7 +2989,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             var ele_offset = _ele.offset();
                                             var top = ele_offset.top + 80;
                                             var left = ele_offset.left + 50;
-                                            OpenRulesWindow(args, top, left);
+                                            OpenRulesWindow(args, top, left);                                            
                                         });
                                     }
 

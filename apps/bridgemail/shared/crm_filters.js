@@ -141,7 +141,11 @@
       this.showTooltips(filter)
       filter.find(".matchValue").keyup(function(){
           self.updateAdvanceFilter()
-      })      
+      })
+      
+      filter.find(".matchValueSelect").change(function(){
+          self.updateAdvanceFilter()
+      })
       
       //Load Elements 
       if(this.options.filterFor==="S"){

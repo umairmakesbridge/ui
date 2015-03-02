@@ -1,0 +1,24 @@
+<h3>Salesforce</h3>
+<p> </p>
+
+<div class="boxinner">
+    <p>Tell us if you would like to synch MakesBridge data back into Salesforce. MakesBridge data includes email campaign activity - sent, opens, clicks, and bounces, subscription information, clicked links, and Hot List status.</p>
+    <div class=""> 
+        <div class="input-append  ">
+            <div class="inputcont">
+                <div class="inputlabel" style="margin-top:10px;">
+                    <input type="checkbox" class="salesforce-sync" value="" <% if(this.postObject.hasSFDataSyncAccess=='Y'){print('checked="checked"')} %> >
+                    <label for="syncsalesforce">Synch data back to Salesforce </label>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+<br/>
+<div class="btns"> 
+    <a class="btn-green left save-settings"><span>Save</span><i class="icon save"></i></a>
+</div>
+<div class="clearfix"></div>

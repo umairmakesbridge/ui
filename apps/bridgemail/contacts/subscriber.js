@@ -20,7 +20,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     'click .toggleinfo': 'toggleFieldsView',
                     'click .edit-profile': 'editProfile',
                     'click .oto-sendmail': 'sendEmail',
-                    'click .manage-lists': 'manageLists'
+                    'click .manage-lists': 'manageLists',
+                    'click .suppress-sub' : 'suppressDialog'
                 },
                 /**
                  * Initialize view - backbone
@@ -109,6 +110,13 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         }else{
                             _this.$('.score').html('<i class="icon score"></i>&nbsp;<span class="score-value">0</span>');
                         }
+                        if(_json.supress=="S"){
+                            _this.$('.suppress-sub').parent().hide();
+                        }
+                        else{
+                            _this.$('.suppress-sub').parent().show();
+                        }
+                        
                         _this.showTags();
                         _this.showFields();
                     })
@@ -383,6 +391,33 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                      this.templateView.createOTODialog();
                     
                 },
+                suppressDialog:function(){
+                    this.app.showAlertPopup({heading: 'Confirm Suppress',
+                            detail: "Are you sure you want to suppress this subscriber?",
+                            text: "Suppress",
+                            icon: "supress-w",
+                            callback: _.bind(function () {                                
+                                this.suppressSub();
+                            }, this)},
+                        $('body'));   
+                },
+                suppressSub:function(){
+                    var URL = '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token');
+                    this.app.showLoading("Suppressing Subscriber...", this.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                    $.post(URL, {type: 'suppress', subNum: this.sub_id})
+                    .done(_.bind(function (data) {
+                        this.app.showLoading(false, this.$el.parents(".ws-content.active"));
+                        var _json = jQuery.parseJSON(data);
+                        if (_json[0] !== "err") {
+                            this.app.showMessge("Subscriber has been successfully suppressed!");    
+                            this.$('.suppress-sub').parent().hide();
+                        }
+                        else {
+                            this.app.showAlert(_json[1], $("body"));
+                        }
+
+                    }, this));
+                }
 
             });
         });

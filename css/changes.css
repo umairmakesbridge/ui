@@ -1294,7 +1294,7 @@ ul.tabs-btns li.active a{
 
 /*****workspace tabs icons ***/
 .tabs-menu li span{
-    background-image: url("../img/_ws-icons.png");
+    background-image: url("../img/ws-icons.png");
     background-color: transparent;
 }
 .wtab-campaignlisting{
@@ -1331,6 +1331,7 @@ ul.tabs-btns li.active a{
 .wtab-subscribers{background-position: -30px -150px;}
 .wtab-lpageslisting{background-position: -30px -210px;}
 .wtab-lpages{background-position: -30px -180px}
+.wtab-accountpage{background-position: -60px -150px}
 
 .wtab-onetoonelisting{
     background-position:-60px -58px;

@@ -11343,3 +11343,83 @@ color: #91bed6;
     margin: 0 0 0 6px !important;
 }
 .icon.contact-name:hover { opacity:0.6;}
+
+/*-------------------- Manage Account  -------------------*/
+.manage_account { }
+
+ul.mng_acct { }
+
+ul.mng_acct li {
+	display:block;  
+	margin: 0 0 5px;  
+}
+
+ul.mng_acct li a { 
+	background: none repeat scroll 0 0 #a9c2d5;
+    border-radius: 2px;
+    font-size: 14px;
+	font-weight: 600;
+    height: 35px;
+	line-height:35px;
+	display:block;
+	color:#fff;
+    list-style: outside none none; 
+    padding: 3px 10px 3px 12px;
+	}
+
+ul.mng_acct li a:hover { background: none repeat scroll 0 0 #7797ac; }
+ul.mng_acct li.selected a { background:#97d61d; }
+
+
+/*-----------*/
+
+
+
+.manage_account .boxinner {
+    background: none repeat scroll 0 0 #eff7fb;
+    border-radius: 2px;
+    min-height: 225px;
+    padding: 40px 20px;
+}
+.manage_account .boxinner .row label  { 
+    color: #6494af;
+    cursor: default;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 12px 2% 0 0;
+    position: relative;
+    text-align: right;
+    width: 18%;
+}
+.manage_account .boxinner .row .input-append  { width:80%;}
+
+.manage_account .boxinner .row .inputcont span { 
+    font-size: 14px;
+    line-height: 36px;
+	 padding: 0 12px;
+}
+
+.manage_account .boxinner .row .inputcont em { color:#6292ad; }
+
+
+
+.manage_account .boxinner .inputlabel {}
+.manage_account .boxinner .inputlabel label { padding:0; font-weight:bold;}
+#changepassword-form input,.campaign-settings input{
+    width:300px;
+}
+.change-password.saving {
+    background:url("../img/greenloader.gif") no-repeat scroll 69px center #94cf1e;
+}
+
+.regenerate-key.saving {
+    width:132px;
+    background:url("../img/greenloader.gif") no-repeat scroll 75px center #94cf1e;
+}
+
+.regenerate-key.saving span{
+    font-size:0px !important;
+}
+
