@@ -11,6 +11,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                 initialize: function () {
                     this.template = _.template(template);    
                     this.postObject = {};
+                    this.appsStaus = {};
                     this.render();
                 },
                 render: function ()
@@ -67,6 +68,20 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         
                         this.postObject['webAddress']= this.app.decodeHTML(_json.webAddress);
                         this.postObject['hasSFDataSyncAccess']= this.app.decodeHTML(_json.hasSFDataSyncAccess);
+                        
+                        if(_json.apps){
+                            _.each(_json.apps[0],function(val,key){
+                                if(val[0].appShortName=="BridgeMail System"){
+                                  this.appsStaus['bridgemail']= true;
+                                }                 
+                                else if(val[0].appShortName=="BridgeStatz"){
+                                    this.appsStaus['bridgestatz']= true;
+                                }
+                                else if(val[0].appShortName=="SAM"){
+                                    this.appsStaus['sam']= true;
+                                }
+                            },this)            
+                        }
                                                
                         
                     },this))  
@@ -108,7 +123,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                              this.app.showLoading("Loading...",this.$(".setting-container"));
                              require(["account/"+key],_.bind(function(page){
                                 this.app.showLoading(false,this.$(".setting-container"));
-                                var settingpage =  new page({app:this.app,postObj:this.postObject});                                                                  
+                                var settingpage =  new page({app:this.app,postObj:this.postObject,apps:this.appsStaus});                                                                  
                                 this.$(".setting-section").hide();
                                 this.$(".setting-container").append(settingpage.$el); 
                                 if(settingpage.init){

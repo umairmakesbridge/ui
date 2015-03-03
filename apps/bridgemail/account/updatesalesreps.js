@@ -5,6 +5,8 @@ define(['text!account/html/updatesalesreps.html','account/collections/salesrep',
                 tags: 'div',
                 className:'updatesalesreps setting-section',                
                 events: {                    
+                    'click .create_new':function(){this.updateSalerep()},
+                    'click .add-salerep-field':'createSalerepField'
                 },
                 initialize: function () {
                     this.template = _.template(template);       
@@ -43,6 +45,50 @@ define(['text!account/html/updatesalesreps.html','account/collections/salesrep',
 
                         }
                   });
+                },
+                updateSalerep:function(id,readonly){
+                    var dialog_width = 1100;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var _title = id? 'Update Sales Rep' : 'Add Sales Rep';
+                    var btn_prp = {title: _title,
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "20px"},
+                        headerEditable: false,
+                        headerIcon: 'manageaccount-w',
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        buttons: {saveBtn: {text: _title, btnicon: 'save'}}
+                    }
+                    if(readonly){
+                        delete btn_prp['buttons'].saveBtn;
+                    }
+                    var dialog = this.app.showDialog(btn_prp);
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    require(["account/addeditsalerep"], _.bind(function(page) {
+                        var pageView = new page({sub: this,user_id:id,readonly:readonly});
+                        dialog.getBody().html(pageView.$el);
+                        dialog.saveCallBack(_.bind(pageView.updateSalerep, pageView, dialog));
+                        pageView.init();
+                    },this));
+                },
+                createSalerepField: function (  ) {
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'Add Sales Rep Field',
+                      buttnText: 'Add',
+                      bgClass :'no-tilt',
+                      plHolderText : 'Enter field name here',
+                      emptyError : 'Field name can\'t be empty',
+                      createURL : '/pms/io/user/setSalesrepData/',
+                      fieldKey : "fName",
+                      createNote:'New field will be added against all SalesReps.',
+                      postData : {type:'addField',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createField,this)
+                    });
+                },
+                createField: function(txt,json){
+                    if(json[0]=="success" || json.success){                        
+                        this.app.showMessge("Sales rep field created Successfully!");
+                    }
                 }
             });
         });

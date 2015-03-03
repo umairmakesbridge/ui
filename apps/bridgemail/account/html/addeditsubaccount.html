@@ -6,7 +6,7 @@
             <div class="row">
                 <label>User ID </label>
                 <div class="input-append  ">
-                    <div class="inputcont">
+                    <div class="inputcont left">
                         <input type="text" value="" class="subacc-userid" placeholder="Enter User ID here">
                     </div>
                 </div>
@@ -14,7 +14,7 @@
             <div class="row">
                 <label>Password </label>
                 <div class="input-append  ">
-                    <div class="inputcont">
+                    <div class="inputcont left">
                         <input type="password" value="" class="subacc-password" placeholder="">
                     </div>
                 </div>
@@ -23,7 +23,7 @@
             <div class="row">
                 <label>Confirm Password </label>
                 <div class="input-append  ">
-                    <div class="inputcont">
+                    <div class="inputcont left">
                         <input type="password" value="" class="subacc-confirm-password" placeholder="">
                     </div>
                 </div>
@@ -42,7 +42,7 @@
             <div class="row">
                 <label>Email </label>
                 <div class="input-append  ">
-                    <div class="inputcont">
+                    <div class="inputcont left">
                         <input type="text" value="" class="subacc-email" placeholder="">
                     </div>
                 </div>
@@ -128,7 +128,7 @@
                     <label>From Email </label>
                     <div class="input-append  ">
                         <div class="inputcont">
-                            <span>sales@makesbridge.com</span>
+                            <span class="subacc-fromemail"><%-this.parent_acc['fromEmail']%></span>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                 <label>Web Address</label>
                 <div class="input-append  ">
                     <div class="inputcont">
-                        <input type="text" value="" class="" placeholder=""><br/> <span><em>example: <b>mywebsite.com</b></em></span>
+                        <input type="text" value="" class="subacc-webaddress" placeholder=""><br/> <span><em>example: <b>mywebsite.com</b></em></span>
                     </div>
 
                 </div>
@@ -168,18 +168,24 @@
         <div class="row">
 
             <div class="app_subs">
+                <% if(this.apps.bridgemail) { %>
                 <span class="btnunchecked">
-                    <input type="checkbox" id="o-BridgeMailSystem" class="checkpanel" value=""/>
+                    <input type="checkbox" id="o-BridgeMailSystem" class="checkpanel" value="" data-appid="1" />
                     <label for="o-BridgeMailSystem">BridgeMail System - Email Marketing</label>
                 </span>
+                <% } %>
+                <% if(this.apps.bridgestatz) { %>
                 <span class="btnunchecked">
-                    <input type="checkbox" id="o-BridgeStatz" class="checkpanel" value=""/>
+                    <input type="checkbox" id="o-BridgeStatz" class="checkpanel" value="" data-appid="2"/>
                     <label for="o-BridgeStatz">BridgeStatz - Web Analytics</label>
                 </span>
+                <% } %>
+                <% if(this.apps.sam) { %>
                 <span class="btnunchecked" id="o-sam-btn">
-                    <input type="checkbox" id="o-sam" class="checkpanel" value=""/>
+                    <input type="checkbox" id="o-sam" class="checkpanel" value="" data-appid="3" />
                     <label for="o-sam">Sales Automation Module (SAM)</label>
                 </span>
+                <% } %>
             </div>
         </div>  <!--  row -->
         <br/>

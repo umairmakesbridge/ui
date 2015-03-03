@@ -19,7 +19,8 @@ function ($,Backbone, _, template) {
                     var buttonText = this.options.buttnText ? this.options.buttnText : "Create";
                     var plHolderText = this.options.plHolderText ? this.options.plHolderText : "Enter name";
                     var bgClass = this.options.bgClass ? this.options.bgClass :"";
-                    this.$el.html(this.template({heading:headText,button:buttonText,placeholdertext:plHolderText,bgClass:bgClass}));
+                    var note = this.options.createNote ? this.options.createNote: "";
+                    this.$el.html(this.template({heading:headText,button:buttonText,placeholdertext:plHolderText,bgClass:bgClass,note:note}));
                     this.init();    
                 },
                 init: function () {

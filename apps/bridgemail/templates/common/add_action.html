@@ -9,6 +9,10 @@
                     <input type="text" placeholder="<%- placeholdertext %>" style="width:300px;" class="field-text">
                 </div>
                 <a class="btn-green g-btn create-button"><span style="min-width: 40px;"> <%- button %> </span><i class="icon next"></i></a>
+                <% if(note!=="") {%>
+                <em class="create-note" style="text-align:center; color:#999; padding:15px; clear:both; display:block;" ><strong>Note:</strong> <%-note%></em>
+                
+                <% } %>    
             </div>
             <div class="clearfix"></div>
         </div>            

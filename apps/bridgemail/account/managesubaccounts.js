@@ -7,8 +7,10 @@ define(['text!account/html/managesubaccounts.html','account/collections/subaccou
                 events: {                    
                     'click .create_new':function(){this.updateSubAccount()}
                 },
-                initialize: function () {
+                initialize: function () {                    
                     this.template = _.template(template);                       
+                    this.apps = this.options.apps;      
+                    this.postObject = this.options.postObj;
                     this.subaccountRequest = new subaccountCollection();  
                     this.render();
                 },
@@ -59,10 +61,10 @@ define(['text!account/html/managesubaccounts.html','account/collections/subaccou
                     }
                     var dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", dialog.getBody());
-                    require(["account/updatesubaccount"], _.bind(function(page) {
-                        var pageView = new page({sub: this,user_id:id});
+                    require(["account/addeditsubaccount"], _.bind(function(page) {
+                        var pageView = new page({sub: this,user_id:id,apps:this.apps,parent_acc:this.postObject});
                         dialog.getBody().html(pageView.$el);
-                        dialog.saveCallBack(_.bind(pageView.updateSubAccount, page, dialog));
+                        dialog.saveCallBack(_.bind(pageView.updateSubAccount, pageView, dialog));
                         pageView.init();
                     },this));
                 }

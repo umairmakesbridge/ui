@@ -40,7 +40,7 @@ define(['text!account/html/salesforcesettings.html','jquery.icheck'],
                               this.$(".boxinner input").prop("readonly",false);
                               var _json = jQuery.parseJSON(data);                              
                               if(_json[0]!=="err"){                                                                         
-                                   this.app.showMessge("Web address updated Successfully!");               
+                                   this.app.showMessge("Salesforce settings updated Successfully!");               
                                    this.postObject['hasSFDataSyncAccess'] = this.$(".salesforce-sync")[0].checked?"Y":"N";                                   
                               }
                               else{                                  

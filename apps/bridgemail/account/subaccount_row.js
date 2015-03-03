@@ -57,23 +57,24 @@ function (template,highlighter) {
                             callback: _.bind(function(){													
                                     this.delSubaccount();
                             },this)},
-                    this.parent.$el);                                                         
+                    $("body"));                                                         
             },
             editSubaccount:function(){                
                 this.parent.updateSubAccount(this.model.get('userId'));
                 
             },
             delSubaccount:function(){
-               this.app.showLoading("Deleting Nurture Track...",this.parent.$el);
-               var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-               $.post(URL, {type:'delete',trackId:this.model.get("trackId.encode")})
+               this.app.showLoading("Deleting sub account...",this.parent.$el);
+               var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');
+               $.post(URL, {type:'deleteOperator',opUserId:this.model.get("userId")})
                 .done(_.bind(function(data) {                  
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
-                            this.app.showMessge("Nurture track deleted.");
-                            this.parent.fetchTracks();   
-                            this.parent.addCountHeader();
+                            this.app.showMessge("Sub accounted deleted.");
+                            this.$el.fadeOut(function(){
+                                $(this).remove();
+                            })
                        }
                        else{
                            this.app.showAlert(_json[1],$("body"),{fixed:true}); 

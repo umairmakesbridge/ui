@@ -1,5 +1,5 @@
-define(['text!account/html/salesrep_row.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!account/html/salesrep_row.html','moment'],
+function (template,moment) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Sal Rep Row View to show on salesrep listing (Sub Account Management)
@@ -12,9 +12,9 @@ function (template,highlighter) {
              * Attach events on elements in view.
             */
             events: {
-              'click .delete-subaccount':'deleteSalerep',
-              'click .edit-subaccount':'editSalerep',
-              'click .copy-subaccount':'copySalerep'
+              'click .delete-salesrep':'confirmDelete',
+              'click .edit-salesrep':'editSalerep',
+              'click .view-salesrep':'viewSalerep'
             },
             /**
              * Initialize view - backbone
@@ -29,9 +29,11 @@ function (template,highlighter) {
              * Render view on page.
             */
             render: function () {                    
-                
+                var _dateTime = this.getDate();
                 this.$el.html(this.template({
-                    model: this.model
+                    model: this.model,
+                    time : _dateTime.time,
+                    date : _dateTime.date
                 }));                
                 this.initControls();  
                
@@ -48,37 +50,44 @@ function (template,highlighter) {
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
-            tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).text());
-                return false;
+            getDate:function(){
+                var updationTime = this.model.get("updationTime")?this.model.get("updationTime"):this.model.get("creationTime");
+                if(updationTime){
+                    var _date = moment(this.app.decodeHTML(updationTime),'YYYY-MM-DD HH:mm');
+                    return {date:_date.format("DD MMM, YYYY"),time:_date.format("HH:mm")};
+                }
+                else{
+                    return {date:"_",time:"_"};
+                }
+                                
             },
-            deleteSubaccount:function(){
+            confirmDelete:function(){
                 this.app.showAlertDetail({heading:'Confirm Deletion',
-                        detail:"Are you sure you want to delete this Sub Account?",                                                
+                        detail:"Are you sure you want to delete this Sales Rep?",                                                
                             callback: _.bind(function(){													
-                                    this.delSubaccount();
+                                    this.delSalesrep();
                             },this)},
-                    this.parent.$el);                                                         
+                    $("body"));                                                         
             },
-            editSubaccount:function(){
-                var editable = true;
-                if(this.model.get("status")!=="D"){
-                    editable = false;
-                }                
-                this.app.mainContainer.openNurtureTrack({"id":this.model.get("trackId.encode"),"checksum":this.model.get("trackId.checksum"),"parent":this.parent,editable:editable});
-                
+            editSalerep:function(){                
+                this.parent.updateSalerep(this.model.get('salesrepNumber.encode'));
+                                            
             },
-            delSubaccount:function(){
-               this.app.showLoading("Deleting Nurture Track...",this.parent.$el);
-               var URL = "/pms/io/trigger/saveNurtureData/?BMS_REQ_TK="+this.app.get('bms_token');
-               $.post(URL, {type:'delete',trackId:this.model.get("trackId.encode")})
+            viewSalerep: function(){
+                this.parent.updateSalerep(this.model.get('salesrepNumber.encode'),true);
+            },
+            delSalesrep:function(){
+               this.app.showLoading("Deleting Sales Rep...",this.parent.$el);
+               var URL = "/pms/io/user/setSalesrepData/?BMS_REQ_TK="+this.app.get('bms_token');
+               $.post(URL, {type:'delete',salesrepNumber:this.model.get("salesrepNumber.encode")})
                 .done(_.bind(function(data) {                  
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        
                        if(_json[0]!=='err'){
-                            this.app.showMessge("Nurture track deleted.");
-                            this.parent.fetchTracks();   
-                            this.parent.addCountHeader();
+                            this.app.showMessge("Sales rep deleted Successfully!");
+                            this.$el.fadeOut(function(){
+                                $(this).remove();
+                            })
                        }
                        else{
                            this.app.showAlert(_json[1],$("body"),{fixed:true}); 

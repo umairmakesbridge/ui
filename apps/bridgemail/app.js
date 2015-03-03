@@ -648,7 +648,7 @@ define([
             if (this.get("user")) {
                 var _user = this.get("user");
                 var fullName = _user.firstName + " " + _user.lastName;
-                this.mainContainer.$(".user-name").addClass("showtooltip").attr('data-original-title', fullName).html(this.stringTruncate(fullName, 20)).tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)).tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 if (!_user.firstName && !_user.lastName) {
                     this.mainContainer.$(".user-name").html(_user.firstName);
                 }

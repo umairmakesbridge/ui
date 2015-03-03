@@ -3995,6 +3995,9 @@ ul.autobot-headbadge li.clickable_badge a:hover{
 .landingpage-tilt .watermark_tilt{
     background-position :  0 -283px;
 }
+.no-tilt .watermark_tilt{
+    background: none !important;
+}
 /*-------------------------------
     Styling Of One to One Email 
 --------------------------------*/
