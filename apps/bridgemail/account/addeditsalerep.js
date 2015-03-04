@@ -67,8 +67,8 @@ define(['text!account/html/addeditsalerep.html','jquery.icheck'],
                           var _json = jQuery.parseJSON(data);                              
                           if(_json[0]!=="err"){                                 
                               this.app.showMessge(this.user_id?"Sales Rep updated Successfully!":"Sales Rep added Successfully!"); 
-                              if(!this.user_id){
-                                  this.options.sub.loadSalesRep()
+                              this.options.sub.loadSalesRep();
+                              if(!this.user_id){                                  
                                   dialog.hide();
                               }
                           }

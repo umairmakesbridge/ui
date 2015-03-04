@@ -24,7 +24,13 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon" style="margin:5px 0 0 5px"></div>'
                     });
-                                       
+                    
+                   this.$('.btnunchecked input#o-sam').on('ifChecked', _.bind(function(){
+                        this.$("#select-sam-users").show();
+                   },this));
+                   this.$('.btnunchecked input#o-sam').on('ifUnchecked', _.bind(function(){
+                        this.$("#select-sam-users").hide();
+                   },this));                    
                 },
                 init: function () {      
                    this.$(".subacc-userid").focus();
@@ -63,7 +69,13 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                                     this.$('[data-appid="2"]').iCheck('check')  
                                 }
                                 else if(val[0].appShortName=="SAM"){
-                                    this.$('[data-appid="3"]').iCheck('check')  
+                                    this.$('[data-appid="3"]').iCheck('check');
+                                    this.$("#select-sam-users").show();
+                                    if(val[0].salesreps){
+                                        _.each(val[0].salesreps[0],function(val,key){
+                                                this.$("[data-checksum='"+val+"']").iCheck("check");
+                                        },this)
+                                    }
                                 }
                             },this)            
                         }
@@ -81,7 +93,7 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                                     ,address2:this.$(".subacc-address2").val(),url:this.$(".subacc-url").val()
                                     ,senderName:this.$(".subacc-sendername").val(),webAddress:this.$(".subacc-webaddress").val()
                                     ,replyTo:this.$(".subacc-replyto").val()
-                                    ,salesRep:this.$("._salesrep_grid input:checked").map(function() {return $(this).attr("data-salerep");}).get().join(",")
+                                    ,salesrep:this.$("._salesrep_grid input:checked").map(function() {return $(this).attr("data-salerep");}).get().join(",")
                                     ,pass1:this.$(".subacc-password").val(),pass2:this.$(".subacc-confirm-password").val(),
                                     appId:this.$(".app_subs input:checked").map(function() {return $(this).attr("data-appid");}).get().join(",")};
                         if(this.user_id && this.$(".subacc-password").val()=="" && this.$(".subacc-confirm-password").val()==""){
@@ -94,8 +106,8 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                               var _json = jQuery.parseJSON(data);                              
                               if(_json[0]!=="err"){                                 
                                   this.app.showMessge(this.user_id?"Sub Account updated Successfully!":"Sub Account added Successfully!"); 
-                                  if(!this.user_id){
-                                        this.options.sub.loadSubAccounts()
+                                  this.options.sub.loadSubAccounts();
+                                  if(!this.user_id){                                        
                                         dialog.hide();
                                     }
                               }

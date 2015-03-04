@@ -29,6 +29,7 @@ define(['text!account/html/managesubaccounts.html','account/collections/subaccou
                 loadSubAccounts:function(){
                     var remove_cache = false;      
                     this.offset = 0;
+                    this.$subaccountsContainer.html('<tr class="loading-campagins"><td colspan="3"><div class="loadmore"><img src="img/loading.gif" alt=""/><p>Please wait, loading sub accounts...</p></div></td></tr>');
                     var _data = {offset:this.offset,type:'allOperators'};                                        
                     this.subaccountRequest.fetch({data:_data,remove: remove_cache,
                     success: _.bind(function (collection, response) {                                

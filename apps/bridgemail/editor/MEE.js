@@ -221,7 +221,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var topPlus = options.topPlus;
                                 var leftPlus = options.leftPlus;
                                 var $element = null;
-                                var emailWidth = options.landingPage? "100%":"600px";
+                                var emailWidth = options.landingPage? "100%":"600px";                              
                                 var pageBackgroundColor = "#fff";
                                 var undoredo = true;
                                 var _offset = 0;
@@ -425,6 +425,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
+                                    if(!emailWidth){
+                                        var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
+                                        emailWidth = parseFloat(mainTable.css("width"));
+                                    }
                                     options.preDefinedHTML = innerHTML;
                                     oHtml = reConstructCode(options.preDefinedHTML);                                                                                                        
                                     mee.setHTML();                                    
