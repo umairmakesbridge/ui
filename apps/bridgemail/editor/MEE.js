@@ -187,6 +187,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         this.render();
                                     },
                                     render: function () {
+                                        
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
                                             mee.iframeLoaded = true;    
@@ -203,6 +204,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 //$this = element;
                                 $this.html(mainView.el);
                                 var myElement = $this;
+ 
                                 var meeIframe = myElement.find("#mee-iframe").contents();
                                 var meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                 var oInitDestroyEvents = new InitializeAndDestroyEvents();
@@ -5692,6 +5694,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         topPlus : this.options.margin ? this.options.margin.top:0,
                         leftPlus : this.options.margin? this.options.margin.left:0,    
                         landingPage: this.options.landingPage ? true : false,
+                        saveBtnText: this.options.saveBtnText,
                         otopage : this.options.isOTOFlag ? true: false, 
                         formWizURL: _formWizURL,
                         fromDialog: this.fromDialog,
