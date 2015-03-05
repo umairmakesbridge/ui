@@ -11481,4 +11481,33 @@ ul.mng_acct li.selected a { background:#97d61d; }
 .regenerate-key.saving span{
     font-size:0px !important;
 }
+.avatarimg {
+    background: none repeat scroll 0 0 #f8fdff;
+    border-radius: 2px;
+    float: right;
+    padding: 5px;
+    position: absolute;
+    right: 50px;
+    z-index:99;
+}
 
+.avatarimg .droppanel {
+    border: 2px dashed #a9c2d5;
+    border-radius: 2px;
+    color: #666666;
+    font-size: 13px;
+    margin: 0;
+    padding: 5px;
+    position: relative;
+    text-align: center;
+    width: 165px;
+}
+
+.avatarimg .droppanel h4 {
+    line-height: 18px;
+    margin: 50px 0 40px;
+}
+.avatarimg .btn-blue.g-btn {
+    margin: 10px 0 0;
+    width: 154px;
+}

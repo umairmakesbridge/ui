@@ -1,27 +1,36 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!account/html/account.html'],
+define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!account/html/account.html', 'bms-dragfile'],
         function (bmsgrid, jqhighlight, jsearchcontrol, template) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
                 events: {
-                    'click .btn-unsubscribe-logo':"setImage",
+                    'click .btn-unsubscribe-logo':function(){this.setImage()},
                     'click ul.mng_acct li':'loadtab',
-                    'click .save-profile':'updateProfile'
+                    'click .save-profile':'updateProfile',
+                    'click .btn-opengallery':'openImageGallery'
                 },
                 initialize: function () {
                     this.template = _.template(template);    
                     this.postObject = {};
-                    this.appsStaus = {};
+                    this.appsStaus = {};                    
                     this.render();
                 },
                 render: function ()
                 {
                     this.$el.html(this.template({}));
-                    this.app = this.options.app;                    
-                                        
+                    this.app = this.options.app;                                                            
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    
+                    this.$(".droppanel").dragfile({
+                        post_url: '/pms/io/publish/saveImagesData/?BMS_REQ_TK=' + this.app.get('bms_token') + '&type=add&allowOverwrite=N&th_width=100&th_height=100',
+                        callBack: _.bind(this.processUpload, this),
+                        app: this.app,
+                        module: 'template',
+                        progressElement: this.$('.droppanel')
+                    });
                 },
-                init: function () {                   
+                init: function () {     
+                   this.iThumbnail = this.$(".droppanel");
                    this.loadData();                   
                 },
                 loadData:function(){
@@ -64,7 +73,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         
                         this.postObject['senderName']= this.app.decodeHTML(_json.senderName);
                         this.postObject['fromEmail']= this.app.decodeHTML(_json.fromEmail);                        
-                        this.postObject['replyToEmail']= this.app.decodeHTML(_json.replyToEmail);
+                        this.postObject['replyToEmail']= this.app.decodeHTML(_json.replyToEmail);                        
+                        
+                        if (_json.thumbURL) {
+                            this.postObject['imageId'] = _json['imageId.encode'];
+                            this.iThumbnail.find("h4").hide();
+                            this.iThumbnail.find("img").attr("src", this.app.decodeHTML(_json.thumbURL)).show();
+                            this.iThumbImage = this.app.decodeHTML(_json.thumbURL);
+                        }
                         
                         this.postObject['webAddress']= this.app.decodeHTML(_json.webAddress);
                         this.postObject['hasSFDataSyncAccess']= this.app.decodeHTML(_json.hasSFDataSyncAccess);
@@ -86,8 +102,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         
                     },this))  
                 },               
-               
-                setImage:function(){
+                openImageGallery: function(obj){
+                    this.image_obj = $.getObj(obj, "a");
+                    this.setImage(_.bind(this.insertImage,this));
+                },
+                setImage:function(callback){                    
                     var that = this;
                     var app = this.options.app;
                     var dialog_width = $(document.documentElement).width()-60;
@@ -101,7 +120,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                          });                        
                      this.options.app.showLoading("Loading...",dialog.getBody());
                      require(["userimages/userimages",'app'],function(pageTemplate,app){                                     
-                         var mPage = new pageTemplate({app:app,fromDialog:true,_select_dialog:dialog,_select_page:that});
+                         var _prp = {app:app,fromDialog:true,_select_dialog:dialog,_select_page:that};
+                         if(callback){
+                             _prp['callBack'] = callback;
+                         }
+                         var mPage = new pageTemplate(_prp);
                          dialog.getBody().append(mPage.$el);
                          that.app.showLoading(false, mPage.$el.parent());
                          var dialogArrayLength = that.app.dialogArray.length; // New Dialog
@@ -112,6 +135,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                 },
                 useImage:function(url){                    
                    this.$(".acc-unsubscribed-logo").val(url);                    
+                },
+                insertImage: function (data) {                   
+                    this.iThumbnail.remove("file-border");
+                    this.imageId = data.imgencode;
+                    this.iThumbnail.find("h4").hide();
+                    this.iThumbImage = data.imgthumb;
+                    this.iThumbnail.find("img").attr("src", this.iThumbImage).show();
+                                                            
                 },
                 loadtab: function(e){
                      var clickedli = $.getObj(e,"li"); 
@@ -145,7 +176,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');                               
                         $.post(URL, {"type":"set","email":this.$(".acc-email").val(),"firstName":this.$(".acc-firstname").val(),"lastName":this.$(".acc-lastname").val(),
                                     "phone":this.$(".acc-telephone").val(),"url":this.$(".acc-url").val(),"customerName":this.$(".acc-company").val()
-                                    ,"customerLogo":this.$(".acc-unsubscribed-logo").val(),"address1":this.$(".acc-addressline1").val(),"address2":this.$(".acc-addressline2").val(),
+                                    ,"customerLogo":this.$(".acc-unsubscribed-logo").val(),"address1":this.$(".acc-addressline1").val(),"address2":this.$(".acc-addressline2").val(),imageId:this.imageId,
                                     "senderName":this.postObject['senderName'],"replyToEmail":this.postObject['replyToEmail'],"webAddress":this.postObject['webAddress'],"hasSFDataSyncAccess":this.postObject['hasSFDataSyncAccess']})
                           .done(_.bind(function(data) {               
                               btn.removeClass("saving");
@@ -162,6 +193,11 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                                    this.postObject['customerLogo'] = this.$(".acc-unsubscribed-logo").val();
                                    this.postObject['address1'] = this.$(".acc-addressline1").val();
                                    this.postObject['address2'] = this.$(".acc-addressline2").val();                                   
+                                   this.postObject['imageId'] =this.imageId;
+                                   this.app.mainContainer.$(".user-name").html(this.$(".acc-firstname").val()+" "+this.$(".acc-lastname").val());
+                                   if(this.iThumbImage){
+                                      this.app.mainContainer.$(".profile img").attr("src",this.iThumbImage);
+                                   }
                               }
                               else{                                  
                                   this.app.showAlert(_json[1],this.$el);
@@ -190,8 +226,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                     }
                     else{
                         this.app.hideError({control:this.$('.acc-email').parents(".input-append")}); 
-                    }
-                    
+                    }                    
                     if(company==""){
                         this.app.showError({
                             control:this.$('.acc-company').parents(".input-append"),
@@ -204,6 +239,24 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                     }
                     
                     return isValid ;
+                },
+                processUpload: function (data) {
+                    var _image = jQuery.parseJSON(data);
+                    this.$('.droppanel #progress').remove();
+                    this.$('.csv-opcbg').hide();
+                    if (_image.success) {
+                        _.each(_image.images[0], function (val) {
+                            this.iThumbnail.remove("file-border");
+                            this.imageId = val[0]['imageId.encode'];
+                            this.iThumbnail.find("h4").hide();
+                            this.iThumbnail.find("img").attr("src", this.app.decodeHTML(val[0]['thumbURL'])).show();
+                            this.iThumbImage = this.app.decodeHTML(val[0]['thumbURL']);                            
+
+                        }, this)
+                    }
+                    else {
+                        this.app.showAlert(_image.err1, $("body"), {fixed: true});
+                    }
                 }                
 
             });

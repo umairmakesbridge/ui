@@ -649,6 +649,9 @@ define([
                 var _user = this.get("user");
                 var fullName = _user.firstName + " " + _user.lastName;
                 this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)).tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                if(_user.thumbURL){
+                    this.mainContainer.$(".profile img").attr("src",this.decodeHTML(_user.thumbURL));
+                }
                 if (!_user.firstName && !_user.lastName) {
                     this.mainContainer.$(".user-name").html(_user.firstName);
                 }
