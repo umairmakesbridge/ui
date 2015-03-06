@@ -21,6 +21,7 @@
            'jquery.highlight': 'shared/libs/jquery.highlight',           
            'jquery.searchcontrol': 'shared/searchcontrol',
            'jquery-ui': 'shared/libs/jquery-ui',
+           'bms-remote': 'shared/libs/remote',
            'fileuploader': 'shared/libs/jquery.form',
            'bms-shuffle': 'shared/shuffle',
            'bms-filters': 'shared/filters',

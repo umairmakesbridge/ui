@@ -8,7 +8,7 @@
  * * Section7 - Editor Functions
  * * Section8 - Landing page Forms
  ****/
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery-ui', 'mee-helper', 'mincolors'],
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery-ui', 'mee-helper', 'mincolors','bms-remote'],
         function ($, Backbone, _, template) {
             'use strict';
             return Backbone.View.extend({
@@ -5044,9 +5044,38 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     });
                                     var formurl = formId ? "&formId="+formId : "";
                                     dialog_height = parseFloat(dialog_height)-6 ;
-                                    var iframe_url = "https://" + options._app.get("host") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl;
-                                    var iframe_html = "<iframe id=\"__iframe\" style=\"width:100%; height:"+dialog_height+"px\" src=\"" + iframe_url + "\" frameborder=\"0\"></iframe>"
-                                    dialog.getBody().html(iframe_html);                                     
+                                    var transport = new easyXDM.Socket({           
+                                        remote:  window.location.protocol+'//'+options._app.get("content_domain")+"/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl,
+                                        onReady: function(){
+
+                                        },
+                                        onMessage: _.bind(function(message, origin){
+                                            var response = jQuery.parseJSON(message);
+                                            if(response.isRefresh || response.formURL){
+                                                if(response.isRefresh){
+                                                    if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length){
+                                                        meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src =meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src; 
+                                                    }
+                                                }
+                                                else{
+                                                   meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL);                                   
+                                                   if(meeIframe.find(".MEEFORMCONTAINER .editformpanel button").length){
+                                                        meeIframe.find(".MEEFORMCONTAINER .editformpanel button").attr("data-formid",response.formId);
+                                                   }
+                                                   options.formCallBack(response.formId); 
+                                                }
+                                            }
+                                            else if(response.showMessage){
+                                                options._app.showMessge(response.msg);
+                                            }
+                                           
+                                        },mee),
+                                        props:{style:{width:"100%",height:dialog_height+"px"},frameborder:0},
+                                        container : dialog.getBody()[0]
+                                    });
+                                    //var iframe_url = "https://" + options._app.get("host") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl;
+                                    //var iframe_html = "<iframe id=\"__iframe\" style=\"width:100%; height:"+dialog_height+"px\" src=\"" + iframe_url + "\" frameborder=\"0\"></iframe>"
+                                    //dialog.getBody().html(iframe_html);                                     
                                 }
                                 mee.addUpdateContentBlock = function (args) {
                                     var dialog_title = mee._LastSelectedBuildingBlock ? "Edit Block" : "Add Block";
