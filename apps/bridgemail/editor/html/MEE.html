@@ -585,7 +585,11 @@
             <% if (!options.otopage) { %>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
                 <a  class="btn-green save-step2">
-                    <i class="icon save"></i><span>Save</span>
+                    <% if(options.saveBtnText){ %>
+                    <i class="icon save"></i><span><%= options.saveBtnText %></span>
+                    <% }else{ %>
+                    <i class="icon save"></i><span>Save email body</span>
+                    <% } %>
                 </a>
             </li>
             <% } %>

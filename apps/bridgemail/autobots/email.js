@@ -595,7 +595,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                         bodyCss: {"min-height": dialog_height + "px"}
                     };
 
-                    dialog_object["buttons"] = {saveBtn: {text: 'Save'}}
+                    dialog_object["buttons"] = {saveBtn: {text: 'Save Message'}}
 
                     var dialog = this.app.showDialog(dialog_object);
                     this.app.showLoading("Loading Settings...", dialog.getBody());

@@ -146,7 +146,7 @@ function (template,editorView) {
              showChangeEditorDialog: function(msg,target_li){
                   this.app.showAlertPopup({heading:'Confirm Change of Editor',
                     detail:msg,  
-                    text: "Continue",
+                    text: "Start from scratch",
                     btnClass:"btn-yellow",
                     dialogWidth: "460px",
                     icon: "next",
@@ -234,7 +234,7 @@ function (template,editorView) {
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveBtnText:'Save message body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();
