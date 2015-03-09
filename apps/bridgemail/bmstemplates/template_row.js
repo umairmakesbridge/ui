@@ -215,7 +215,7 @@ function (template,highlighter,tagView) {
                     headerIcon : 'template',
                     bodyCss:{"min-height":dialog_height+"px"},
                     tagRegen:true,
-                    buttons: {saveBtn:{text:'Save'} }
+                    buttons: {saveBtn:{text:'Save Template'} }
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["bmstemplates/template"],function(templatePage){
