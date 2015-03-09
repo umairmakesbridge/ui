@@ -503,10 +503,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             else {
                                 self.$(".local").css("top", "-180px");
                             }
-                        }
-                        this.$(".local").css("top", "-180px");
+                        }                        
                     });
-
+                    this.$(".local").css("top", "-180px");
                 },
                 showPopup: function (e) {
 
