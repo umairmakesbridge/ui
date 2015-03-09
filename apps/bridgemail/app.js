@@ -217,12 +217,22 @@ define([
                     return false;
                 }
                 this.set("user", _json);
-                var allowedUser = ['admin', 'jayadams', 'demo'];
+                var allowedUser = ['admin', 'jayadams', 'demo','bayshoresolutions'];
                 if (allowedUser.indexOf(this.get("user").userId) > -1) {
+                    if(this.get("user").userId === 'bayshoresolutions'){
+                        this.mainContainer.$(".local-adds").addClass('bayshore-toggle');   
+                    }
                     this.mainContainer.$(".local-adds").show();
+                    require(["common/localTile"],_.bind(function(localTile){
+                                var tmPr =  new localTile({app:this,userId:this.get("user").userId}); // isText to Dynamic
+                                 this.mainContainer.$("#tiles").append(tmPr.$el);
+                                 this.mainContainer.initializeIsotops();
+                                // tmPr.init();
+                               },this));
                 }
                 else {
                     this.mainContainer.$(".local-adds").hide();
+                    this.mainContainer.initializeIsotops();
                 }
                 if(this.mainContainer){
                     this.showFeatures();

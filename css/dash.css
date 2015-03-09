@@ -2165,3 +2165,38 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
     -webkit-box-shadow:0 8px 8px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: 0 8px 8px rgba(0, 0, 0, 0.15);
 }
+
+/* LOCAL TILE NEW CSS FOR BAYSHORE */
+.tipntest {
+    background: url("../img/tipntest.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.baychat {
+    background: url("../img/baychat.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.submitproject {
+    background: url("../img/submitproject.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+#tiles .local-bayshore {
+    background: url("../img/bayshore.jpg") no-repeat scroll center top #1b78af;
+    height: 50px;
+    overflow: hidden;
+    width: 830px;
+}
+#tiles .box.local-bayshore.expanded {
+    background-position: 200px top;
+    height: 200px;
+    padding: 0;
+    width: 830px;
+}
+#tiles .box.local-bayshore .tile-shortcuts ul li:hover { background:#1b78af;}
+
+a.bayshore-toggle{
+    background : #1b78af;
+}
+a.bayshore-toggle i {
+    background: url("../img/bayshore-icon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+    opacity: 1;
+    transition: opacity 0.3s ease-out 0s;
+    width: 30px;
+}
