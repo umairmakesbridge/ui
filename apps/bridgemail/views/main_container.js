@@ -451,6 +451,27 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         event.stopPropagation();
                     });
 
+                    
+                    
+                    this.$(".popup").click(_.bind(this.showPopup, this));
+
+                    this.$('.loacl-toggle ').click(_.bind(function () {
+                        if (this.$("#tiles .local").hasClass("expanded")) {
+                            this.$("#tiles .local .tile-shortcuts").fadeOut();
+                            setTimeout(_.bind(function () {
+                                this.$('#tiles .local ').removeClass("expanded");
+                            }, this), 500);
+                        }
+                        else {
+                            this.$("#tiles .local").addClass("expanded");
+                            this.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
+                        }
+                    }, this));
+                    
+
+
+                },
+                initializeIsotops:function(){
                     var $tiles = this.$('#tiles');
                     $tiles.isotope({
                         itemSelector: '.box',
@@ -483,23 +504,8 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 self.$(".local").css("top", "-180px");
                             }
                         }
+                        this.$(".local").css("top", "-180px");
                     });
-
-                    this.$(".popup").click(_.bind(this.showPopup, this));
-
-                    this.$('.loacl-toggle ').click(_.bind(function () {
-                        if (this.$("#tiles .local").hasClass("expanded")) {
-                            this.$("#tiles .local .tile-shortcuts").fadeOut();
-                            setTimeout(_.bind(function () {
-                                this.$('#tiles .local ').removeClass("expanded");
-                            }, this), 500);
-                        }
-                        else {
-                            this.$("#tiles .local").addClass("expanded");
-                            this.$("#tiles .local .tile-shortcuts").delay('slow').fadeIn();
-                        }
-                    }, this));
-                    this.$(".local").css("top", "-180px");
 
                 },
                 showPopup: function (e) {
