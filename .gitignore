@@ -18,3 +18,5 @@ Thumbs.db
 apps/shared/.DS_Store
 
 .DS_Store
+
+js/myUsers.js

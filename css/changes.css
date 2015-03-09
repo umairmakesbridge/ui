@@ -4539,3 +4539,7 @@ div.letter_block span{
     margin-left:5px;
     color:#414f58;
 }
+.messagebox_ .chosen-search #searchbtn{
+    margin-top:-5px;
+    margin-left:-30px;
+}

@@ -71,7 +71,7 @@ define([
                 path: _path,
                 session: null,
                 app_data: {}
-            }, window.sz_config || {}));
+            }, window.sz_config || {} ));
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {

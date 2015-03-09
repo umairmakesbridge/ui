@@ -98,10 +98,19 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     var _data = {};
                     _data['type'] = self.type;
                     _data['campNum'] = self.campNum;
-                    self.objSummary.fetch({data:_data,success:function(dataS){
-                        self.$el.html(self.template({stats:data,summary:dataS}));
-                        //self.options.app.showLoading('Loading Links....',self.$el.find('.links-container'));
-                        //self.options.app.showLoading('Loading Chart....',self.$el.find('.col-cstats'));
+                    
+                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get("bms_token")+"&campNum="+self.campNum+"&type=basic";
+                     $.get(URL,  function(xhrData){
+                        var result= xhrData.replace(//g, "");
+                        var camp_json = jQuery.parseJSON(result);
+                        var Model = Backbone.Model.extend({});
+                        var Collection = Backbone.Collection.extend({
+                            model:Model
+                         });
+                        var collection = new Collection(camp_json);
+                        var dataS = collection.models[0];
+                        self.objSummary = dataS;
+                        self.$el.html(self.template({stats:data,summary:dataS}));                        
                         self.addGraphs(data);
                         self.setHeader(self);
                         self.options.app.showLoading(false,self.active_ws);
@@ -130,8 +139,13 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                         } 
                          
                         self.addLinks();
+                        
+                    });
+                    /*self.objSummary.fetch({data:_data,success:function(dataS){
+                            
+                      
 
-                    }});
+                    }});*/
                     self.active_ws = self.$el.parents(".ws-content");
                    
                  }});

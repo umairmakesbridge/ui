@@ -1,4 +1,4 @@
-define(['text!account/html/salesrep_row.html','moment'],
+define(['text!account/html/salesrep_row.html','moment','jquery.chosen'],
 function (template,moment) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -62,12 +62,25 @@ function (template,moment) {
                                 
             },
             confirmDelete:function(){
+                var _html = "Are you sure you want to delete this Sales Rep? <br/><br/> You can select a different Sale Rep for your subscriber from the list below.<br/>";
+                _html += '<div class="row" style="margin-top:10px;margin-left: -14px"><label>Select Sale Rep</label><div class="input-append  "><div class="inputcont">';                
+                _html += '<select style="width:250px" class="salesrep-combo" data-placeholder="Choose a Sales Rep...">';
+                _html += '<option value=""></option>'
+                _.each(this.parent.salesrepRequest.models,function(val){
+                    if(this.model.get("salesrepNumber.encode")!==val.get("salesrepNumber.encode")){
+                        _html += '<option value="'+val.get("salesrepNumber.encode")+'">'+val.get("name")+'</option>';
+                    }
+                },this);
+                _html +=  '</select></div></div></div>';
+                
                 this.app.showAlertDetail({heading:'Confirm Deletion',
-                        detail:"Are you sure you want to delete this Sales Rep?",                                                
+                        detail:_html,                                                
                             callback: _.bind(function(){													
                                     this.delSalesrep();
                             },this)},
-                    $("body"));                                                         
+                    $("body"));                   
+                    
+                $(".salesrep-combo").chosen({no_results_text:'Oops, nothing found!', width: "250px"});   
             },
             editSalerep:function(){                
                 this.parent.updateSalerep(this.model.get('salesrepNumber.encode'));
@@ -79,7 +92,11 @@ function (template,moment) {
             delSalesrep:function(){
                this.app.showLoading("Deleting Sales Rep...",this.parent.$el);
                var URL = "/pms/io/user/setSalesrepData/?BMS_REQ_TK="+this.app.get('bms_token');
-               $.post(URL, {type:'delete',salesrepNumber:this.model.get("salesrepNumber.encode")})
+               var _postData = {type:'delete',salesrepNumber:this.model.get("salesrepNumber.encode")};
+               if( $(".salesrep-combo").val()){
+                   _postData['newSalesrepNumber'] = $(".salesrep-combo").val();
+               }
+               $.post(URL,_postData )
                 .done(_.bind(function(data) {                  
                        this.app.showLoading(false,this.parent.$el);   
                        var _json = jQuery.parseJSON(data);        

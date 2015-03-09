@@ -17,8 +17,8 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                 },
                 render: function ()
                 {
-                    this.$el.html(this.template({}));
-                    this.app = this.options.app;                                                            
+                    this.app = this.options.app;      
+                    this.$el.html(this.template({}));                                                                          
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     
                     this.$(".droppanel").dragfile({
@@ -52,38 +52,100 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         this.$(".account-expiry").html(_json["accountExpiry"]);
                         
                         this.$(".acc-email").val(this.app.decodeHTML(_json.userEmail));
-                        this.postObject['email']= this.app.decodeHTML(_json.userEmail);                        
-                        this.$(".acc-firstname").val(this.app.decodeHTML(_json.firstName));
-                        this.postObject['firstName']= this.app.decodeHTML(_json.firstName);
-                        this.$(".acc-lastname").val(this.app.decodeHTML(_json.lastName));
-                        this.postObject['lastName']= this.app.decodeHTML(_json.lastName);
-                        this.$(".acc-telephone").val(this.app.decodeHTML(_json.phone));
-                        this.postObject['phone']= this.app.decodeHTML(_json.phone);
-                        this.$(".acc-url").val(this.app.decodeHTML(_json.url));
-                        this.postObject['url']= this.app.decodeHTML(_json.url);
-                        this.$(".acc-company").val(this.app.decodeHTML(_json.customerName));
-                        this.postObject['customerName']= this.app.decodeHTML(_json.customerName);
-                        this.$(".acc-unsubscribed-logo").val(this.app.decodeHTML(_json.customerLogo));
-                        this.postObject['customerLogo']= this.app.decodeHTML(_json.customerLogo);
-                        this.$(".acc-addressline1").val(this.app.decodeHTML(_json.address1));
-                        this.postObject['address1']= this.app.decodeHTML(_json.address1);
-                        this.$(".acc-addressline2").val(this.app.decodeHTML(_json.address2));
-                        this.postObject['address2']= this.app.decodeHTML(_json.address2);
+                        this.postObject['email']= this.app.decodeHTML(_json.userEmail); 
+                        if(_json.firstName){
+                            this.$(".acc-firstname").val(this.app.decodeHTML(_json.firstName));
+                            this.postObject['firstName']= this.app.decodeHTML(_json.firstName);
+                        }
+                        else{
+                            this.postObject['firstName']= "";
+                        }
+                        if(_json.lastName){
+                            this.$(".acc-lastname").val(this.app.decodeHTML(_json.lastName));
+                            this.postObject['lastName']= this.app.decodeHTML(_json.lastName);
+                        }
+                        else{
+                            this.postObject['lastName']= "";
+                        }
+                        if(_json.phone){
+                            this.$(".acc-telephone").val(this.app.decodeHTML(_json.phone));
+                            this.postObject['phone']= this.app.decodeHTML(_json.phone);
+                        }
+                        else{
+                            this.postObject['phone']= "";
+                        }
+                        if(_json.url){
+                            this.$(".acc-url").val(this.app.decodeHTML(_json.url));
+                            this.postObject['url']= this.app.decodeHTML(_json.url);
+                        }
+                        else{
+                            this.postObject['url']= "";
+                        }
+                        if(_json.customerName){
+                            this.$(".acc-company").val(this.app.decodeHTML(_json.customerName));
+                            this.postObject['customerName']= this.app.decodeHTML(_json.customerName);
+                        }
+                        else{
+                            this.postObject['customerName']=""; 
+                        }
+                        if(_json.customerLogo){
+                            this.$(".acc-unsubscribed-logo").val(this.app.decodeHTML(_json.customerLogo));
+                            this.postObject['customerLogo']= this.app.decodeHTML(_json.customerLogo);
+                        }
+                        else{
+                            this.postObject['customerLogo']= "";
+                        }
+                        if(_json.address1){
+                            this.$(".acc-addressline1").val(this.app.decodeHTML(_json.address1));
+                            this.postObject['address1']= this.app.decodeHTML(_json.address1);
+                        }
+                        else{
+                            this.postObject['address1']= "";
+                        }
+                        if(_json.address2){
+                            this.$(".acc-addressline2").val(this.app.decodeHTML(_json.address2));
+                            this.postObject['address2']= this.app.decodeHTML(_json.address2);
+                        }
+                        else{
+                            this.postObject['address2'] ="";
+                        }
                         
-                        
-                        this.postObject['senderName']= this.app.decodeHTML(_json.senderName);
-                        this.postObject['fromEmail']= this.app.decodeHTML(_json.fromEmail);                        
-                        this.postObject['replyToEmail']= this.app.decodeHTML(_json.replyToEmail);                        
-                        
+                        if(_json.senderName){
+                            this.postObject['senderName']= this.app.decodeHTML(_json.senderName);
+                        }
+                        else{
+                            this.postObject['senderName'] ="";
+                        }
+                        if(_json.fromEmail){
+                            this.postObject['fromEmail']= this.app.decodeHTML(_json.fromEmail);                        
+                        }
+                        else{
+                            this.postObject['fromEmail']=""
+                        }
+                        if(_json.replyToEmail){
+                            this.postObject['replyToEmail']= this.app.decodeHTML(_json.replyToEmail);                        
+                        }
+                        else{
+                            this.postObject['replyToEmail'] ="";
+                        }
                         if (_json.thumbURL) {
                             this.postObject['imageId'] = _json['imageId.encode'];
                             this.iThumbnail.find("h4").hide();
                             this.iThumbnail.find("img").attr("src", this.app.decodeHTML(_json.thumbURL)).show();
                             this.iThumbImage = this.app.decodeHTML(_json.thumbURL);
                         }
-                        
-                        this.postObject['webAddress']= this.app.decodeHTML(_json.webAddress);
-                        this.postObject['hasSFDataSyncAccess']= this.app.decodeHTML(_json.hasSFDataSyncAccess);
+                        else{
+                            this.postObject['imageId'] ="";
+                        }
+                        if(_json.webAddress){
+                            this.postObject['webAddress']= this.app.decodeHTML(_json.webAddress);
+                        }
+                        else{
+                            this.postObject['webAddress'] ="";
+                        }
+                        if(_json.hasSFDataSyncAccess){
+                            this.postObject['hasSFDataSyncAccess']= this.app.decodeHTML(_json.hasSFDataSyncAccess);
+                        }
                         
                         if(_json.apps){
                             _.each(_json.apps[0],function(val,key){
