@@ -395,8 +395,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         if(camp_json.isFooterText=='Y'){
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(camp_json.footerText,true));
                         }
-                        camp_obj.states.step2.htmlText = camp_json.htmlText;
-                        camp_obj.states.step2.plainText = camp_json.plainText;
+                        camp_obj.states.step2.htmlText = camp_obj.app.decodeJSON(camp_json["htmlText"]);
+                        camp_obj.states.step2.plainText = camp_obj.app.decodeJSON(camp_json.plainText);
                         camp_obj.states.step2.editorType = camp_json.editorType;
                         
                         camp_obj.states.step3.recipientType = camp_json.recipientType;
@@ -2330,16 +2330,17 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 setEditorHTML:function(tsv, state, xhr){
                     this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
-                    if(html_json.htmlText){
+                    var htmlText = this.app.decodeJSON(html_json.htmlText);
+                    if(htmlText){
                         
                           if(html_json.isEasyEditorCompatible=="Y"){
                               this.$("#html_editor_mee").click();
-                              this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
+                              this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g,""));
                               this.states.editor_change = true;                           
                           }
                           else{
                               this.$("#html_editor").click();
-                              _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));                            
+                              _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(htmlText,true));                            
                           }                      
                     }
                     

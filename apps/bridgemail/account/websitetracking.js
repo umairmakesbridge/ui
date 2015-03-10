@@ -1,4 +1,4 @@
-define(['text!account/html/websitetracking.html'],
+define(['text!account/html/websitetracking.html','jquery.icheck'],
         function (template) {
             'use strict';
             return Backbone.View.extend({
@@ -20,7 +20,9 @@ define(['text!account/html/websitetracking.html'],
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {                   
-                 
+                     this.$('.webtracking-enable').iCheck({
+                        checkboxClass: 'checkinput'
+                    });
                 },
                 saveSettings: function(e){
                     var btn = $.getObj(e,"a");
@@ -30,7 +32,7 @@ define(['text!account/html/websitetracking.html'],
                         var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');                               
                         $.post(URL, {"type":"set","email":this.postObject['email'],"firstName":this.postObject['firstName'],"lastName":this.postObject['lastName'],
                                     "phone":this.postObject['phone'],"url":this.postObject['url'],"customerName":this.postObject['customerName']
-                                    ,"customerLogo":this.postObject['customerLogo'],"address1":this.postObject['address1'],"address2":this.postObject['address2'],
+                                    ,"customerLogo":this.postObject['customerLogo'],"address1":this.postObject['address1'],"address2":this.postObject['address2'],"isWebTrack":this.$(".webtracking-enable")[0].checked?"Y":"N",
                                     "senderName":this.postObject['senderName'],"replyToEmail":this.postObject['replyToEmail'],"webAddress":this.$(".web-address").val(),"hasSFDataSyncAccess":this.postObject['hasSFDataSyncAccess']
                                 })
                           .done(_.bind(function(data) {               

@@ -7,7 +7,24 @@
         <div class="input-append  ">
             <div class="inputcont">
                 <input type="text" placeholder=""  class="web-address" value="<%-this.postObject.webAddress%>"> <span><em>example: <b>mywebsite.com</b></em></span>
-            </div>            
+            </div>                        
+        </div>
+    </div>
+    <div class="row" style="margin-top:3px">
+        <label>&nbsp;</label>
+        <div class="input-append" style="margin-bottom: -2px">
+            <div class="inputcont">
+                <input type="checkbox" class="webtracking-enable" value="" <% if(this.postObject.isWebTrack=='Y'){print('checked="checked"')} %> >
+                <label for="syncsalesforce"  style="padding:3px 1% 0 6px">Start tracking page visits for my website </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <label>Snippet</label>
+        <div class="input-append  ">
+            <div class="inputcont">
+                <textarea style="width:85%;height:220px;cursor:default;background:#fff" class="tracking-snippet" readonly="readonly" onclick="this.select()"><%-this.postObject['snippet']%></textarea>
+            </div>
         </div>
     </div>
     <div class="clearfix"></div>

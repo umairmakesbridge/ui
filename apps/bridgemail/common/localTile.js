@@ -19,14 +19,14 @@ define(['text!common/html/localTile.html'],
                  * Initialize view - backbone .
                  */
                 initialize: function () {
+                    this.app = this.options.app;
                     this.template = _.template(template);
                     //this.url = '';
                     //this.bms_token = null;
                     //this.tempNum = null;
                     //this.original = 'N';
                     //this.html = 'Y';
-                   // this.subNum = null;
-                    this.app = this.options.app;
+                   // this.subNum = null;                    
                     this.userid = this.options.userId;
                     if(this.userid==='bayshoresolutions'){
                         this.$el.removeClass('local-adds');

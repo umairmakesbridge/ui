@@ -32,7 +32,7 @@ define(['text!account/html/salesforcesettings.html','jquery.icheck'],
                         var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');                               
                         $.post(URL, {"type":"set","email":this.postObject['email'],"firstName":this.postObject['firstName'],"lastName":this.postObject['lastName'],
                                     "phone":this.postObject['phone'],"url":this.postObject['url'],"customerName":this.postObject['customerName']
-                                    ,"customerLogo":this.postObject['customerLogo'],"address1":this.postObject['address1'],"address2":this.postObject['address2'],
+                                    ,"customerLogo":this.postObject['customerLogo'],"address1":this.postObject['address1'],"address2":this.postObject['address2'],"isWebTrack":this.postObject['isWebTrack'],
                                     "senderName":this.postObject['senderName'],"replyToEmail":this.postObject['replyToEmail'],"webAddress":this.postObject['webAddress'],"hasSFDataSyncAccess":this.$(".salesforce-sync")[0].checked?"Y":"N"
                                 })
                           .done(_.bind(function(data) {               

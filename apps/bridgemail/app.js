@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -225,11 +225,11 @@ define([
                     }
                     this.mainContainer.$(".local-adds").show();
                     require(["common/localTile"],_.bind(function(localTile){
-                                var tmPr =  new localTile({app:this,userId:this.get("user").userId}); // isText to Dynamic
-                                 this.mainContainer.$("#tiles").append(tmPr.$el);
-                                 this.mainContainer.initializeIsotops();
-                                // tmPr.init();
-                               },this));
+                        var tmPr =  new localTile({app:this,userId:this.get("user").userId}); // isText to Dynamic
+                         this.mainContainer.$("#tiles").append(tmPr.$el);
+                         this.mainContainer.initializeIsotops();
+                        // tmPr.init();
+                       },this));
                 }
                 else {
                     this.mainContainer.$(".local-adds").hide();
@@ -447,10 +447,21 @@ define([
             str = str.replace(/&#9;/g, "\t");
             str = str.replace(/&nbsp;/g, " ");
             str = str.replace(/&quot;/g, "\"");
-            str = str.replace(/&#8216;/g, "‘");
+            str = str.replace(/&#8216;/g, "‘");          
             if (lineFeed) {
                 str = str.replace(/&line;/g, "\n");
             }
+            return str;
+        },
+        decodeJSON: function(str){
+            str = str.replace(/\\t/g, "\t"); 
+            str = str.replace(/\\n/g, "\n");
+            str = str.replace(/\\r/g, "\r");
+            str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
+            str = str.replace(/\\/g, "");
+            str = str.replace(/&amp;/g, "&");
+            str = str.replace(/\r\n/g, "\n");
+            
             return str;
         },
         getMMM: function (month) {

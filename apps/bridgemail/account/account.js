@@ -147,6 +147,14 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                             this.postObject['hasSFDataSyncAccess']= this.app.decodeHTML(_json.hasSFDataSyncAccess);
                         }
                         
+                        if(_json.isWebTrack){
+                            this.postObject['isWebTrack']= this.app.decodeHTML(_json.isWebTrack);
+                        }
+                        
+                        if(_json.snippet){
+                            this.postObject['snippet']= this.app.decodeHTML(_json.snippet,true);
+                        }
+                        
                         if(_json.apps){
                             _.each(_json.apps[0],function(val,key){
                                 if(val[0].appShortName=="BridgeMail System"){
@@ -238,7 +246,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                         var URL = "/pms/io/user/setData/?BMS_REQ_TK="+this.app.get('bms_token');                               
                         $.post(URL, {"type":"set","email":this.$(".acc-email").val(),"firstName":this.$(".acc-firstname").val(),"lastName":this.$(".acc-lastname").val(),
                                     "phone":this.$(".acc-telephone").val(),"url":this.$(".acc-url").val(),"customerName":this.$(".acc-company").val()
-                                    ,"customerLogo":this.$(".acc-unsubscribed-logo").val(),"address1":this.$(".acc-addressline1").val(),"address2":this.$(".acc-addressline2").val(),imageId:this.imageId,
+                                    ,"customerLogo":this.$(".acc-unsubscribed-logo").val(),"address1":this.$(".acc-addressline1").val(),"address2":this.$(".acc-addressline2").val(),imageId:this.imageId,"isWebTrack":this.postObject['isWebTrack'],
                                     "senderName":this.postObject['senderName'],"replyToEmail":this.postObject['replyToEmail'],"webAddress":this.postObject['webAddress'],"hasSFDataSyncAccess":this.postObject['hasSFDataSyncAccess']})
                           .done(_.bind(function(data) {               
                               btn.removeClass("saving");
