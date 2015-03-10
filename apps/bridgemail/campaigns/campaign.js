@@ -68,7 +68,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     this.scrollApply = false;
                     this.campobjData = null;
                     this.campDefaults = {};
-                    this.allowedUser = ['admin','jayadams','demo'];  
+                    this.allowedUser = ['admin','jayadams','demo']; 
+                    this.campFromName = '';
                     this.states = { 
                         "step1":{change:false,sf_checkbox:false,ns_checkbox:false,sfCampaignID:'',nsCampaignID:'',hasResultToSalesCampaign:false,hasResultToNetsuiteCampaign:false,pageconversation_checkbox:false,hasConversionFilter:false},
                         "step2":{"templates":false,htmlText:'',plainText:'',change:false,editorType:''},
@@ -381,6 +382,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         var subj_w = camp_obj.$el.find('#campaign_subject').innerWidth(); // Abdullah Check
                         var fegb_w = camp_obj.$el.find('#fecol3').width();
                         //camp_obj.$('#campaign_from_email_chosen').width(parseInt(subj_w-fegb_w)+25);
+                        if(camp_obj.campFromName){
+                            camp_obj.$("#campaign_from_name").val(camp_obj.campFromName);
+                        }
                         if(camp_json.senderName != ''){
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(camp_json.senderName));                        
                         }
@@ -1476,6 +1480,7 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             camp_obj.$("#campaign_footer_text").val(camp_obj.app.decodeHTML(defaults_json.footerText));                          
                             camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(defaults_json.fromEmail));
                             camp_obj.$("#campaign_from_name").val(camp_obj.app.decodeHTML(defaults_json.fromName));
+                            camp_obj.campFromName = camp_obj.app.decodeHTML(defaults_json.fromName);
                             var fromEmails = defaults_json.fromEmail;
                             if(defaults_json.optionalFromEmails)
                                     fromEmails += ',' + defaults_json.optionalFromEmails;
