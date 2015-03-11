@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 0,
+                complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -72,6 +72,7 @@ define([
                 session: null,
                 app_data: {}
             }, window.sz_config || {} ));
+            this.testUsers = ['admin', 'jayadams', 'demo'];
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {
@@ -218,8 +219,8 @@ define([
                     return false;
                 }
                 this.set("user", _json);
-                var allowedUser = ['admin', 'jayadams', 'demo','bayshoresolutions'];
-                if (allowedUser.indexOf(this.get("user").userId) > -1) {
+                var allowedUser = ['bayshoresolutions'];
+                if (allowedUser.indexOf(this.get("user").userId) > -1 || this.testUsers.indexOf(this.get("user").userId)>-1) {
                     if(this.get("user").userId === 'bayshoresolutions'){
                         this.mainContainer.$(".local-adds").addClass('bayshore-toggle');   
                     }
@@ -670,7 +671,12 @@ define([
             if (this.get("user")) {
                 var _user = this.get("user");
                 var fullName = _user.firstName + " " + _user.lastName;
-                this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)).tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                if(this.testUsers.indexOf(this.get("user").userId)>-1){
+                   this.mainContainer.$(".profiledd").attr("title","Click for account management").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                   this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)); 
+                }else{
+                    this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)).attr('title', fullName).tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                }
                 if(_user.thumbURL){
                     this.mainContainer.$(".profile img").attr("src",this.decodeHTML(_user.thumbURL));
                 }
