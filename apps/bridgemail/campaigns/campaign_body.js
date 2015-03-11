@@ -146,7 +146,7 @@ function (template,editorView) {
              showChangeEditorDialog: function(msg,target_li){
                   this.app.showAlertPopup({heading:'Confirm Change of Editor',
                     detail:msg,  
-                    text: "Start from scratch",
+                    text: "Start From Scratch",
                     btnClass:"btn-yellow",
                     dialogWidth: "460px",
                     icon: "next",
