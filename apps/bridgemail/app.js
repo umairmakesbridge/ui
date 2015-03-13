@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2','views/common/add_action'
-], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog) {
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2','views/common/add_action','moment'
+], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog,moment) {
     'use strict';
     var App = Backbone.Model.extend({
         messages: [{'CAMP_subject_empty_error': 'Subject cannot be empty',
@@ -461,8 +461,7 @@ define([
             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
             str = str.replace(/\\/g, "");
             str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n");
-            
+            str = str.replace(/\r\n/g, "\n");            
             return str;
         },
         getMMM: function (month) {
@@ -682,6 +681,20 @@ define([
                 }
                 if (!_user.firstName && !_user.lastName) {
                     this.mainContainer.$(".user-name").html(_user.firstName);
+                }
+                if(_user.packageType && _user.packageType.toLowerCase()==="trial"){
+                    var expiry_date = moment(_user.accountExpiry, 'YYYY-MM-DD  HH:mm');
+                    if(expiry_date.format("YYYY")!=="Invalid date"){
+                        var current_date = moment(new Date());
+                        var expiryDaysLeft = expiry_date.diff(current_date,'days');
+                        if(expiryDaysLeft<=30){
+                            if(this.mainContainer.header.$(".announcementbtn").css("display")=="none"){                            
+                                this.mainContainer.header.$(".announcementbtn").show();
+                                this.mainContainer.header.$('.announcement_dialogue').show();
+                            }
+                            this.mainContainer.header.$('.announcement_dialogue').append("<div class='expire-message'><p>Your Trial Account expires in <b>"+expiryDaysLeft+" Days</b>. Please contact support to upgrade your account.</p></div>")                        
+                        }
+                    }
                 }
             }
             else {

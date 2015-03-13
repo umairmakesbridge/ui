@@ -4543,3 +4543,9 @@ div.letter_block span{
     margin-top:-5px;
     margin-left:-30px;
 }
+.announcement_dialogue .expire-message{
+    margin-bottom: 12px;
+}
+.announcement_dialogue .sys-maintain-message{
+    padding-bottom: 5px;
+}

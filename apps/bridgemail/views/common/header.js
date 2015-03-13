@@ -85,6 +85,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                     this.firstTime = false;
                     this.timeOut = false;
                     this.newMessages = null;
+                    this.mntMessage = "";
                     this.isForceHide = false;
                     this.criticalMessageTime = '';
                     this.isQuickMenuLoaded = false;
@@ -217,7 +218,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                             var dt = new Date();
                             var time = dt;//{'h':dt.getHours() ,'m':dt.getMinutes() ,'s': dt.getSeconds()}
                             that.criticalMessageTime = time;
-                        }
+                        }                        
                         if (that.newMessages < data['notify.unread.count'] && that.firstTime == false) {
                             that.$el.find('.messagesbtn').addClass('swing');
 
@@ -238,15 +239,20 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         if (data['system.message'] != "" && that.isForceHide == false) {
                             that.$el.find(".announcementbtn").show();
                             that.$el.find('.announcement_dialogue').show();
-                            that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
+                            that.$el.find('.announcement_dialogue').find('p.sys-maintain-message').html(data['system.message']);
                         } else {
-                            that.$el.find('.announcement_dialogue').find('p').html(data['system.message']);
+                            that.$el.find('.announcement_dialogue').find('p.sys-maintain-message').html(data['system.message']);
                             that.$el.find('.announcement_dialogue').hide()
                             if (that.isForceHide == true && data['system.message'] != "")
                                 that.$el.find('.announcementbtn').show();
-                            else
+                            else if(that.$el.find('.announcement_dialogue div.expire-message').length==0){
                                 that.$el.find('.announcementbtn').hide();
+                            }
+                            if(that.mntMessage!=data['system.message'] && data['system.message']!==""){
+                                that.$el.find('.announcement_dialogue').show()
+                            }                            
                         }
+                        that.mntMessage = data['system.message'];
 
                         if (data['notify.unread.count'] == "0" || data['notify.unread.count'] == 0) {
                             that.$el.find('.messagesbtn sup').hide();
