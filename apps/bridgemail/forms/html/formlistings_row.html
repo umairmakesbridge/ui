@@ -1,0 +1,51 @@
+
+<td width="">
+    <div>
+         <div class="name-type">
+              
+                <h3>
+                    
+                         <a class="scheduleOpn-camp show-detail showtooltip " title="Click to view"> <%= this.model.get('name') %> </a>
+                   </h3>  
+                 
+         </div>
+    </div>
+</td>
+                              
+<td width="90px">
+   <% if(this.model.get('isOpen')==='Y'){ %>
+   <div>
+       <div class="time">
+           <strong><span><em>Open Date</em><%= this.getTimeShow().dtOpen %></span></strong>
+       </div>
+       <% }%>     
+   </div>
+</td>
+<td width="90px"><div>
+                              
+                              	
+                                <div style="" class="colico time ">
+                                <strong><span><em>Creation Date</em><%= this.model.get('creationDate') %></span></strong>
+                               </div>
+                               
+                                
+                              </div></td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="colico messages">
+            <strong><span><em>Updation Message</em><a class="oto-single-contact-count  showtooltip" title="Click to view"><%= this.model.get('updationDate')%></a></span></strong>
+        </div>
+        <div class="slide-btns two s-clr3">
+              <span class="icon setting"></span>
+              <div>                 
+               <a class="icon preview-camp preview clr2"><span>Preview</span></a>  
+               <a class="icon sendmail clr1"><span>Send Email</span></a>
+
+      
+               </div>   
+        </div> 
+        
+    </div>
+</td>
+
+
