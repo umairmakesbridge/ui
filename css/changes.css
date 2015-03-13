@@ -1336,6 +1336,9 @@ ul.tabs-btns li.active a{
 .wtab-onetoonelisting{
     background-position:-60px -58px;
 }
+.wtab-signupforms{
+    background-position: -60px -180px
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;
@@ -4548,4 +4551,7 @@ div.letter_block span{
 }
 .announcement_dialogue .sys-maintain-message{
     padding-bottom: 5px;
+}
+.search > .icon.sforms{
+    background: url("../img/sforms.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

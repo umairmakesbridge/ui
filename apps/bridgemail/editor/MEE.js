@@ -5035,7 +5035,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     }
                                 }
                                 mee.showFormWizard = function(formId){
-                                     var dialog_width = $(document.documentElement).width()-60;
+                                    var dialog_width = $(document.documentElement).width()-60;
                                     var dialog_height = $(document.documentElement).height()-162;
                                     var dialog = options._app.showDialog({title:'Form Builder',
                                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},

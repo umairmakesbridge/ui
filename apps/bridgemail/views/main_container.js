@@ -74,7 +74,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .view-contacts': 'viewContacts',
                     'click .campaign-listing': 'campaignListing',
                     'click .one-one-listing': 'one_one_listings',
-                    'click .forms': 'forms_listings',
+                    'click .signup-forms': 'forms_listings',
                     'click .template-gallery': 'templateGallery',
                     'click .camapign-report': 'camapignReport',
                     'click .csv-upload': 'csvUpload',
@@ -565,7 +565,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                 forms_listings : function(){
-                   this.addWorkSpace({type: '', title: 'Forms', sub_title: 'Forms', url: 'forms/formlistings', workspace_id: 'forms', 'addAction': true, tab_icon: 'onetoonelisting'}); 
+                   this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 
                 },
                 templateGallery: function () {
                     this.addWorkSpace({type: '', title: 'Template Gallery', sub_title: 'Gallery', url: 'bmstemplates/mytemplates', workspace_id: 'mytemplates', 'addAction': true, tab_icon: 'mytemplates'});
