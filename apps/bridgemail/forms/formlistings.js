@@ -4,10 +4,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
             return Backbone.View.extend({
                 id: 'forms_list',
                 tags: 'div',
-                events: {
-                    "click #addnew_campaign": function () {
-                        
-                    },
+                events: {                    
                     "click .refresh_btn": function () {
                         this.app.addSpinner(this.$el);
                         this.type='search';
@@ -22,20 +19,18 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                 render: function ()
                 {
                     this.$el.html(this.template({}));
-                    this.app = this.options.app;
-                    this.$campaginLoading = this.$(".loadmore");
+                    this.app = this.options.app;                    
                     this.offset = 0;
                     this.offsetLength = 0;
                     this.total_fetch = 0;
-                    //this.status = "A";
-                    this.toDate = '';
-                    this.type = 'search';
-                    this.fromDate = '';
+                    //this.status = "A";                    
+                    this.type = 'search';                    
                     this.searchTxt = '';                    
                     this.timeout = null;
                     this.total_Count = null;                    
                                         
                     this.searchBadgeTxt = '';
+                    this.taglinkVal = false;
                     this.fetchForms();
                     this.$el.find('div#formlistsearch').searchcontrol({
                         id: 'list-search',
@@ -67,7 +62,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                     this.$el.find("#template_search_menu").hide();
                     if (!fcount) {
                         this.offset = 0;
-                        this.showHeadLoading();
+                        if(!this.searchTxt){
+                            this.showHeadLoading();
+                        }
                         this.app.showLoading("Loading Forms...", this.$("#target-camps"));
                         this.$el.find('#forms_list_grid tbody').html('');
                         this.$(".notfound").remove();
@@ -84,6 +81,10 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                     var _data = {type: this.type};
                     _data['offset'] = this.offset;                   
                     _data['bucket'] = 20;
+                    
+                    if (this.searchTxt) {
+                        _data['searchText'] = this.searchTxt;
+                    }
 
                     this.forms_request = this.formsCollection.fetch({data: _data,
                         success: _.bind(function (data1, collection) {
@@ -99,7 +100,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                             this.$el.find("#total_templates .badge").html(collection.totalCount);
                             this.total_Count = collection.totalCount;
                             this.showTotalCount(collection.totalCount);
-                            if(this.offset==0){
+                            if(this.offset==0 && !this.searchTxt){
                                 this.headBadge(collection.totalCount);
                             }
 
@@ -149,7 +150,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                         stats += '<li class="showhand showtooltip" title="Click to view all forms"><span class="badge pclr18 topbadges total_forms" tabindex="-1">'+count+'</span>Total Forms</li>';                            
                     stats += '</ul>';
                     header_title.append(stats);
-                    this.ws_header.find(".c-current-status li").click(_.bind(function(){this.fetchForms(0)}, this));
+                    this.ws_header.find(".c-current-status li").click(_.bind(function(){this.$("#list-search").val('');this.$("#clearsearch").hide();this.clearSearchEmails();}, this));
                     header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                    
                 },
                 
@@ -171,15 +172,13 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                     }
                 },
                 searchEmails: function (o, txt) {
-
                     this.type = '';
                     this.searchTxt = txt;
                     this.total_fetch = 0;
-                    this.type = 'searchMessage';
-                    if (this.subjectlinkVal) {
-                        this.isSubjectText=true;
-                        this.getallemails();
-                        this.subjectlinkVal = false;
+                    this.type = 'search';
+                    if (this.taglinkVal) {
+                        this.fetchForms();
+                        this.taglinkVal = false;
                     } else {
                         var keyCode = this.app.validkeysearch(o);
                         if (keyCode) {
@@ -206,11 +205,10 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                  * @returns .
                  */
                 clearSearchEmails: function () {
-
                     this.searchTxt = '';
                     this.total_fetch = 0;
                     this.type = 'search';
-                    this.getallemails();
+                    this.fetchForms();
                 },
                 showTotalCount: function (count) {
                  

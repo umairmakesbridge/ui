@@ -55,11 +55,8 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                  */
                 initControls: function () {
                     if (this.parent.searchTxt) {
-                        this.$(".oto-subject").highlight($.trim(this.parent.searchTxt));
-                        this.$(".taglink").highlight($.trim(this.parent.searchTxt));
-                    } else {
-                        this.$(".taglink").highlight($.trim(this.parent.tagTxt));
-                    }
+                        this.$(".form-name").highlight($.trim(this.parent.searchTxt));                        
+                    } 
                 },
                 editForm: function () {
                     this.parent.openFormDialog(this.model.get("formId.encode"))
@@ -136,12 +133,12 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                     }
                 },
                 deleteForm: function () {
-                    var camp_obj = this.parent;
+                    var parent_view = this.parent;
                     var URL = '/pms/io/form/saveSignUpFormData/?BMS_REQ_TK=' + this.app.get('bms_token');
-                    this.app.showLoading("Deleting Form...", camp_obj.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                    this.app.showLoading("Deleting Form...", parent_view.$el.parents(".ws-content.active"), {fixed: 'fixed'});
                     $.post(URL, {type: 'delete', formId: this.model.get('formId.encode')})
                             .done(_.bind(function (data) {
-                                this.app.showLoading(false, camp_obj.$el.parents(".ws-content.active"));
+                                this.app.showLoading(false, parent_view.$el.parents(".ws-content.active"));
                                 var _json = jQuery.parseJSON(data);
                                 if (this.app.checkError(_json)) {
                                     return false;
@@ -151,14 +148,14 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                                     this.$el.fadeOut(_.bind(function () {
                                         this.$el.remove();
                                     }, this));
-                                    var total_count = camp_obj.$("#total_templates .badge");
+                                    var total_count = parent_view.$("#total_templates .badge");
                                     var r_count = parseInt(total_count.text()) - 1;
                                     total_count.html(r_count);
-                                    camp_obj.$el.parents(".ws-content.active").find(".total_forms").html(r_count)
+                                    parent_view.$el.parents(".ws-content.active").find(".total_forms").html(r_count)
 
                                 }
                                 else {
-                                    camp_obj.app.showAlert(_json[1], camp_obj.$el.parents(".ws-content.active"));
+                                    parent_view.app.showAlert(_json[1], parent_view.$el.parents(".ws-content.active"));
                                 }
 
                             }, this));
