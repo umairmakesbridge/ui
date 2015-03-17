@@ -62,6 +62,7 @@ define([
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
+                tipId : $.getUrlVar(false,'tipId'),
                 preview_domain: previewDomain,                
                 content_domain: contentDomain,
                 user_Key: userKey,
@@ -105,7 +106,8 @@ define([
                 this.getUser();
                 this.initScript();
                 try{
-                    $("html").removeClass("loading-html")
+                    $("html").removeClass("loading-html");
+                   
                 }
                 catch(e){
                     
@@ -209,7 +211,7 @@ define([
             //Cache Clear time set
             this.clearCache();
             this.mainContainer.$el.css("min-height", $(document.documentElement).height() - 35);
-
+            
         },
         getUser: function () {
             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.get("bms_token") + "&type=get";
@@ -236,6 +238,9 @@ define([
                     this.mainContainer.$(".local-adds").hide();
                     this.mainContainer.initializeIsotops();
                 }
+                 if(this.get("tipId")){
+                        this.mainContainer.tip_test();
+                    }
                 if(this.mainContainer){
                     this.showFeatures();
                  }else{

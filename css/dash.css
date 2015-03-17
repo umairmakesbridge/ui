@@ -2025,7 +2025,9 @@ a.n_link i.icon { float:left; height:24px; width:24px; margin:0 5px 0 0;
 
 
 /* --------------------------------- */
-
+.tipntest {
+    background: url("../images/tipntest.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
 
 .alertmsg   .info-p {
     margin: 10px 0 0;

@@ -1,0 +1,326 @@
+@import url('animate.css'); 
+@import url('../fonts/fonts.css');
+*{
+    padding: 0;
+    margin: 0;
+}
+html, body {
+    background: none repeat scroll 0 0 #e9edf6;
+    height: 100%;
+    min-height: 500px;
+    overflow: hidden;
+    width: 100%;
+}
+body * {
+    font-family: "proxima_nova_regular";
+}
+.overlay {
+    background: none repeat scroll 0 0 rgba(47, 63, 74, 0.8);
+    position: fixed;
+}
+.loading, .overlay {
+    background: url("../img/trans_white.png") repeat scroll center 0 transparent;
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+a {
+    color: #01aeee;
+    outline: 0 none;
+}
+a:hover, a:focus {
+    color: #009fda;
+    text-decoration: none;
+}
+.modal {
+    border: 0 none;
+    border-radius: 2px;
+    overflow: hidden;
+    top: 8%;
+    z-index: 1001;
+}
+.modal-body {
+    padding: 10px 10px 0;
+}
+.modal-body {
+    max-height: none;
+}
+a.logo {
+    background: url("../img/logo_mksn.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    float: left;
+    font-size: 0;
+    height: 45px;
+    line-height: 0;
+    margin: 10px 10px 10px 0;
+    text-indent: -999em;
+    width: 225px;
+}
+.dashbg { background: url("../img/dashbg.png") no-repeat scroll center top ; width:1005; height:100%; background-size:cover;  } 
+.checkpanelinput, .radiopanelinput {
+    /*background: url("../img/checkcons.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);*/
+    border: medium none;
+    border-radius: 2px 0 0 2px;
+    cursor: pointer;
+    display: block;
+    float: left;
+    margin: 0;
+    min-height: 45px;
+    min-width: 45px;
+    padding: 0;
+}
+.checkpanelinput .icheck_line-icon, .radiopanelinput .icheck_radio-icon {
+
+    border: medium none;
+    height: 20px;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    width: 20px;
+}
+.checkpanelinput.checked .icheck_line-icon {
+    background: url("../img/checkiconsbig.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background-position: -20px 0;
+
+}
+.tooltip-inner {
+    background-color: #000;
+    border-radius: 4px;
+    color: #fff;
+    max-width: 200px;
+    padding: 3px 8px;
+    text-align: center;
+    text-decoration: none;
+}
+.tooltip.bottom .tooltip-arrow {
+    border-bottom-color: #000;
+    border-width: 0 5px 5px;
+    left: 50%;
+    margin-left: -5px;
+    top: 0;
+}
+
+@media (max-width: 1400px) {
+	
+	.dashbg { background-size:contain;}
+}
+
+.welcome { padding:20px; text-align:center;}
+
+.welcome .logo { float:none; margin:20px auto 30px; }
+
+
+.welcome > h1 {
+    color: #333;
+    font-family: "proxima_nova_regular";
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 36px;
+}
+.welcome h1 strong { font-family: 'proxima_nova_semibold'; font-size:24px; text-transform:uppercase; display:block;  }
+.welcome h1 span { font-family: 'proxima_nova_semibold'; }
+
+
+.welcome h3 { color:#005685; margin:20px 0 0;font-size: 18px;}
+
+
+
+.welcome .btnunchecked {
+    display: inline-block;
+    margin: 60px -8px 10px 0;
+}
+.welcome .checkpanelinput {
+    background-color: #ddedf5;
+    border: 2px solid #b9c7ce;
+    border-radius: 2px;
+    min-height: 26px;
+    min-width: 26px;
+}
+.welcome .checkpanelinput.checked {   background-color: #94cf1e; border:0;
+min-height: 30px;
+    min-width: 30px;}
+
+label {
+    color: #6494af;
+    cursor: default;
+    float: left;
+    font-size: 13px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 12px 8px 0 0;
+    position: relative;
+    text-align: right;
+    width: 23%;
+}
+.welcome label {
+    font-family: "proxima_nova_regular";
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 32px;
+    padding: 0 15px;
+    width: auto;
+}
+.welcome label a:hover { border-bottom:1px solid #00aaff;}
+
+.welcome .button {
+    background: none repeat scroll 0 0 #00a843;
+    border: 0 solid #94cf1e;
+    border-radius: 2px;
+    color: #fff;
+	display:inline-block;
+    float: none;
+    font-family: "proxima_nova_semibold";
+    font-size: 20px;
+    font-weight: normal;
+    margin: 10px 0;
+    padding: 12px 35px;
+    transition: background-color 0.3s linear 0s; 
+}
+
+
+.email{
+     color: #01aeee;
+}
+
+.tipntest {}
+
+
+.tipntest h1 { font-weight:normal; font-family: 'proxima_nova_regular'; font-size:24px; text-align:center; color:#292929; margin:70px 0 0; }
+
+
+.tipntest h3 { font-weight:normal; font-family: 'proxima_nova_regular'; text-align:center; }
+
+
+
+
+.tipntest ol.progressbar { width:80%; margin:8% auto 0; min-height: 220px;}
+.tipntest ol.progressbar li {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    margin: 50px -0.2% 0;
+}
+
+/*--two-*/
+.tipntest ol.progressbar.two { width:600px;}
+.tipntest ol.progressbar.two::before {left: 25%; width:50%;}
+.tipntest ol.progressbar.two li { width:50%;}
+
+/*---*/
+
+
+/*--three-*/
+.tipntest ol.progressbar.three { width:800px;}
+.tipntest ol.progressbar.three::before {left: 15%; width:67%;}
+.tipntest ol.progressbar.three li { width:33.33%;}
+
+/*---*/
+
+/*--Four-*/
+.tipntest ol.progressbar.four { width:800px;}
+.tipntest ol.progressbar.four::before {left: 12%; width:72%;}
+.tipntest ol.progressbar.four li { width:24%;}
+
+/*---*/
+
+/*--Five-*/
+.tipntest ol.progressbar.five { width:850px;}
+.tipntest ol.progressbar.five::before {left: 10%; width:80%;}
+.tipntest ol.progressbar.five li { width:20%;}
+
+
+/*---*/
+
+/*--six-*/
+.tipntest ol.progressbar.six { width:900px;}
+.tipntest ol.progressbar.six::before {left: 8%; width:82%;}
+.tipntest ol.progressbar.six li { width:16.66%;}
+
+/*---*/
+/*--Seven-*/
+.tipntest ol.progressbar.seven { width:1000px;}
+.tipntest ol.progressbar.seven::before {left: 6%; width:84%;}
+.tipntest ol.progressbar.seven li {width:14.28%; }
+/*---*/
+
+
+
+
+.tipntest ol.progressbar::before {
+    background: none repeat scroll 0 0 #c2dae6;
+    border-radius: 5px;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 12%;
+	box-sizing: border-box;
+    position: absolute;
+    top: 2px;
+    width: 76%;
+}
+
+.tipntest ol.progressbar li:before {
+    background: none repeat scroll 0 0 #fff;
+    border: 2px solid #8bbacf;
+    border-radius: 30px;
+    color: #8bbacf;
+    display: block;
+    font-size: 18px;
+	font-family: 'proxima_nova_semibold';
+    font-weight: normal;
+    height: 35px;
+    left: 50%;
+	box-sizing: border-box;
+    line-height: 34px;
+    margin: 0 0 0 -21px;
+    position: absolute;
+    text-align: center;
+    top: -64px;
+    width: 35px;
+}
+
+
+
+.tipntest ol.progressbar li a { font-size:14px; color:#5d8495; padding:35px 20px; border-radius:2px; cursor:pointer;}
+.tipntest ol.progressbar li a:hover { background:#e9edf6;}
+.tipntest ol.progressbar li a i.icon { float:none !important; margin:0 auto 10px!important; background:none;}
+.tipntest ol.progressbar li a span { display:block;}
+
+.tipntest ol.progressbar li.active::before {
+    background: none repeat scroll 0 0 #fff;
+    border: 2px solid #4cb334;
+	color:#4cb334;
+}
+
+
+
+
+
+.tipntest .goalbar {
+    background: url("../img/goal-w.png") no-repeat scroll 15px center #90bdd1;
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    font-family: "proxima_nova_semibold";
+    font-size: 20px;
+    margin: 50px auto 20px;
+    min-width: 500px;
+    padding: 35px 45px;
+    text-align: center;
+    width: 40%;
+}
+
+.tipntest .goalbar.active { background-color:#4cb334; }
+
+.gray{
+    background: #333 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
