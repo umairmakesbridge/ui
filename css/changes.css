@@ -4328,6 +4328,143 @@ div.letter_block span{
     background-image: none !important;
 }
 
+/*========================
+TIP N TEST
+=========================*/
+.wtab-tipntest {
+    background: url("../img/ws-icons.png") no-repeat scroll -60px -240px rgba(0, 0, 0, 0);
+}
+.tipntest {}
+
+
+.tipntest h1 { font-weight:normal; font-family: 'proxima_nova_regular'; font-size:24px; text-align:center; color:#292929; margin:70px 0 0; }
+
+
+.tipntest h3 { font-weight:normal; font-family: 'proxima_nova_regular'; text-align:center; }
+
+
+
+
+.tipntest ol.progressbar { width:80%; margin:8% auto 0; min-height: 220px;}
+.tipntest ol.progressbar li {
+    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+    margin: 50px -0.2% 0;
+}
+
+/*--two-*/
+.tipntest ol.progressbar.two { width:600px;}
+.tipntest ol.progressbar.two::before {left: 25%; width:50%;}
+.tipntest ol.progressbar.two li { width:50%;}
+
+/*---*/
+
+
+/*--three-*/
+.tipntest ol.progressbar.three { width:800px;}
+.tipntest ol.progressbar.three::before {left: 15%; width:67%;}
+.tipntest ol.progressbar.three li { width:33.33%;}
+
+/*---*/
+
+/*--Four-*/
+.tipntest ol.progressbar.four { width:800px;}
+.tipntest ol.progressbar.four::before {left: 12%; width:72%;}
+.tipntest ol.progressbar.four li { width:24%;}
+
+/*---*/
+
+/*--Five-*/
+.tipntest ol.progressbar.five { width:850px;}
+.tipntest ol.progressbar.five::before {left: 10%; width:80%;}
+.tipntest ol.progressbar.five li { width:20%;}
+
+
+/*---*/
+
+/*--six-*/
+.tipntest ol.progressbar.six { width:900px;}
+.tipntest ol.progressbar.six::before {left: 8%; width:82%;}
+.tipntest ol.progressbar.six li { width:16.66%;}
+
+/*---*/
+/*--Seven-*/
+.tipntest ol.progressbar.seven { width:1000px;}
+.tipntest ol.progressbar.seven::before {left: 6%; width:84%;}
+.tipntest ol.progressbar.seven li {width:14.28%; }
+/*---*/
+
+
+
+
+.tipntest ol.progressbar::before {
+    background: none repeat scroll 0 0 #c2dae6;
+    border-radius: 5px;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 12%;
+	box-sizing: border-box;
+    position: absolute;
+    top: 2px;
+    width: 76%;
+}
+
+.tipntest ol.progressbar li:before {
+    background: none repeat scroll 0 0 #fff;
+    border: 2px solid #8bbacf;
+    border-radius: 30px;
+    color: #8bbacf;
+    display: block;
+    font-size: 18px;
+	font-family: 'proxima_nova_semibold';
+    font-weight: normal;
+    height: 35px;
+    left: 50%;
+	box-sizing: border-box;
+    line-height: 34px;
+    margin: 0 0 0 -21px;
+    position: absolute;
+    text-align: center;
+    top: -64px;
+    width: 35px;
+}
+
+
+
+.tipntest ol.progressbar li a { font-size:14px; color:#5d8495; padding:35px 20px; border-radius:2px; cursor:pointer;display:block;}
+.tipntest ol.progressbar li a:hover { background:#e9edf6;}
+.tipntest ol.progressbar li a i.icon { float:none !important; margin:0 auto 10px!important; background:none;}
+.tipntest ol.progressbar li a span { display:block;}
+
+.tipntest ol.progressbar li.active::before {
+    background: none repeat scroll 0 0 #fff;
+    border: 2px solid #4cb334;
+	color:#4cb334;
+}
+
+
+
+
+
+.tipntest .goalbar {
+    background: url("../img/goal-w.png") no-repeat scroll 15px center #90bdd1;
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    font-family: "proxima_nova_semibold";
+    font-size: 20px;
+    margin: 50px auto 20px;
+    min-width: 500px;
+    padding: 35px 45px;
+    text-align: center;
+    width: 40%;
+}
+
+.tipntest .goalbar.active { background-color:#4cb334; }
+
+
 /*
 -------------- ENDS HERE ----------
 */
