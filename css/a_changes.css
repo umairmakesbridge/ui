@@ -2022,6 +2022,7 @@ position:relative;
 .slide-btns .icon.copy { background-image: url("../img/copy48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.draft { background-image: url("../img/draft48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.preview { background-image: url("../img/preview48.png"); background-position:center center; background-repeat:no-repeat; }
+.slide-btns .icon.snippet { background-image: url("../img/snippet.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.edit { background-image: url("../img/edit48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.delete { background-image: url("../img/delete48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.play { background-image: url("../img/play48.png"); background-position:center center; background-repeat:no-repeat; }

@@ -15,7 +15,8 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                 events: {
                     "click .edit-form": 'editForm',
                     "click .preview-form": 'previewForm',
-                    "click .link-form": "snippetFormDialog",
+                    "click .link-form": "linkFormDialog",
+                    "click .snippet-form": "snippetFormDialog",
                     "click .copy-form": "copyForm",
                     "click .delete-form": 'deleteFormDialog'
                 },
@@ -71,7 +72,7 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                         bodyCss: {"min-height": dialog_height + "px"}
                     });
                     this.app.showLoading("Loading Form...", dialog.getBody());
-                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL'));
+                    var preview_url = this.app.decodeHTML(this.model.get('formPreviewURL'))+"?preview=Y";
                     require(["common/templatePreview"], _.bind(function (templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: this.app, frameHeight: dialog_height}); // isText to Dynamic
                         dialog.getBody().html(tmPr.$el);
@@ -83,12 +84,39 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "642px", "margin-left": "-300px"},
                         bodyCss: {"min-height": "170px"},
-                        headerIcon: 'link'
+                        headerIcon: 'dlgsnippet'
                     });
                     var html = '<div style="margin-top:0px;" class="blockname-container">'
                     html += '<div class="label-text">Form Snippet:</div>'
                     html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'
                     html += '<textarea id="form_link" style="width:600px;height:60px" readonly="readonly">' + this.app.decodeHTML(this.model.get("snippet")) + '</textarea>'
+                    html += '</div></div>'
+                    html += '<div style="font-size: 12px;margin-top:10px">'
+                    var key = navigator.platform.toUpperCase().indexOf("MAC") > -1 ? "Command" : "Ctrl";
+                    html += '<i>Press ' + key + ' + C to copy link.</i>'
+                    html += '</div> </div>'
+
+                    html = $(html);
+                    dialog.getBody().append(html);
+                    dialog.getBody().find("#form_link").select().focus();
+                    dialog.getBody().find("#form_link").mousedown(function (event) {
+                        $(this).select().focus();
+                        event.stopPropagation();
+                        event.preventDefault();
+                    })
+
+                },
+                linkFormDialog: function () {
+                    var dialog_title = "Link of form &quot;" + this.model.get('name') + "&quot;";
+                    var dialog = this.app.showDialog({title: dialog_title,
+                        css: {"width": "642px", "margin-left": "-300px"},
+                        bodyCss: {"min-height": "100px"},
+                        headerIcon: 'link'
+                    });
+                    var html = '<div style="margin-top:0px;" class="blockname-container">'
+                    html += '<div class="label-text">Form Link:</div>'
+                    html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'
+                    html += '<input id="form_link" style="width:600px" readonly="readonly" value="'+this.app.decodeHTML(this.model.get("formPreviewURL"))+'"></input>'
                     html += '</div></div>'
                     html += '<div style="font-size: 12px;margin-top:10px">'
                     var key = navigator.platform.toUpperCase().indexOf("MAC") > -1 ? "Command" : "Ctrl";
