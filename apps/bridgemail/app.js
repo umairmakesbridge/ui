@@ -260,10 +260,10 @@ define([
         showFeatures: function () {
             var allowedUser = ['admin', 'jayadams', 'demo','hawaiilife','MKS-Training2','mansoor@makesbridge.com'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
-                this.mainContainer.$(".one-one-listing").show();
+                this.mainContainer.$(".one-one-listing,.signup-forms").show();
             }
             else {
-                this.mainContainer.$(".one-one-listing").hide();
+                this.mainContainer.$(".one-one-listing,.signup-forms").hide();
             }
         },
         fromCRM: function () {
@@ -460,13 +460,13 @@ define([
             return str;
         },
         decodeJSON: function(str){
-            str = str.replace(/\\t/g, "\t"); 
+            /*str = str.replace(/\\t/g, "\t"); 
             str = str.replace(/\\n/g, "\n");
             str = str.replace(/\\r/g, "\r");
             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
             str = str.replace(/\\/g, "");
             str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n");            
+            str = str.replace(/\r\n/g, "\n");            */
             return str;
         },
         getMMM: function (month) {

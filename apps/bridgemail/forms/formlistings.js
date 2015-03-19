@@ -54,6 +54,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                     $(window).scroll(_.bind(this.liveLoading, this));
                     $(window).resize(_.bind(this.liveLoading, this));
                     this.app.scrollingTop({scrollDiv: 'window', appendto: this.$el});
+                    this.ws_header.find(".workspace-field").remove();
                     this.current_ws.find("#addnew_action").attr("data-original-title", "Create Signup Form").click(_.bind(this.createFormDialog, this));
                     this.$("div.create_new").click(_.bind(this.createFormDialog, this));  
                     
@@ -133,6 +134,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                 showHeadLoading : function(){
                     var active_ws = this.$el.parents(".ws-content");
                     var header_title = active_ws.find(".camp_header .edited  h2");                                     
+                    active_ws.find('ul.c-current-status').remove();
                     if (active_ws.find('ul.c-current-status').length) {
                         var header_title = active_ws.find(".camp_header .edited");
                         header_title.find('ul').remove();                        

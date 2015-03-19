@@ -1334,10 +1334,13 @@ ul.tabs-btns li.active a{
 .wtab-accountpage{background-position: -60px -150px}
 
 .wtab-onetoonelisting{
-    background-position:-60px -58px;
+    background-position:-60px -60px;
 }
 .wtab-signupforms{
     background-position: -60px -180px
+}
+.wtab-workflowlisting{
+    background-position: -60px -210px
 }
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
@@ -4691,4 +4694,7 @@ TIP N TEST
 }
 .search > .icon.sforms{
     background: url("../img/sforms.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+}
+.search > .icon.workflow-sicon{
+    background: url("../img/workflow24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

@@ -21,7 +21,7 @@ function (template) {
              * Initialize view - backbone
             */
             initialize: function () {
-                    this.editorEl = this.options._el;
+                    this.editorEl = this.options._el.find("#mee-iframe").contents();
                     this.hiddenObj = $(this.editorEl.find("#imageDataSavingObject").data("myWorkingObject"));
                     this.activeTab = "_addHyperLink";
                     this.meeIframeWindow = this.options.meeIframeWindow;
@@ -320,8 +320,8 @@ function (template) {
                         lineNameStr = "";
                     }
                     var url_val = $.trim(_hyperlinkInput.val());
-                    if(url_val!=="" && (/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url_val) ||url_val=="#" )){
-                        if(url_val!=="#"){ 
+                    if(url_val!=="" && (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-{}]*)*\/?$/i.test(url_val) || url_val=="#" || /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val) )){
+                        if(url_val!=="#" && /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val)==false){ 
                             if ( url_val.startsWith("http://")){
                                 link = url_val + lineNameStr;
                             }
@@ -333,7 +333,12 @@ function (template) {
                            }
                        }
                        else{
-                           link ="#";
+                           if(/^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val)==true){
+                               link = url_val;
+                           }
+                           else{
+                                link ="#";
+                           }
                        }
                    }
                    else{

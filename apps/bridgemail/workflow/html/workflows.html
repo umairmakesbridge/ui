@@ -1,0 +1,19 @@
+<div class="content-inner soruces"  id="area_copy_campaign" style="margin: 0px 0 0;">
+    <div class="temp-filters clearfix">
+        <h2 id="total_templates"><strong class="badge">-</strong> <b></b> Workflows</h2>
+        <div style=" " class="srt-div">
+          <a class="refresh_btn showtooltip" title="Refresh listing"><i>Refresh</i></a>                                    
+          <!--  search  --> 
+          <div id="workflowlistsearch" class="input-append search"></div>    
+          <!--  search  --> 
+        </div>
+    </div>
+    <div class="template-container">
+        <div id="target-camps" class="target-listing copy_camp workflow_listing">
+            <div class="create_new">                                   
+                <span>Create Workflow</span>                                 
+            </div>
+           <iframe src="/pms/trigger/WorkflowList.jsp?BMS_REQ_TK=<%-this.app.get('bms_token')%>&fromNewUI=true" width="100%" class="workflowiframe" frameborder="0" style="height:100%;overflow:hidden"></iframe>
+        </div>
+    </div>
+</div>

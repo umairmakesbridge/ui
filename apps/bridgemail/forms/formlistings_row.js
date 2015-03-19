@@ -177,9 +177,11 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                                         this.$el.remove();
                                     }, this));
                                     var total_count = parent_view.$("#total_templates .badge");
+                                    var badge_total_count = parent_view.$el.parents(".ws-content.active").find(".total_forms");
                                     var r_count = parseInt(total_count.text()) - 1;
+                                    var top_r_count = parseInt(badge_total_count.text())-1;
                                     total_count.html(r_count);
-                                    parent_view.$el.parents(".ws-content.active").find(".total_forms").html(r_count)
+                                    badge_total_count.html(top_r_count);
 
                                 }
                                 else {

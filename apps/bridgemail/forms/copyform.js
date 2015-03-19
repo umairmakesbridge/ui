@@ -44,8 +44,8 @@ function (template) {
                                      else{
                                          this.dialog.hide();
                                          this.app.showMessge("Copy created successfully.");                                         
-                                         this.parent.sub.fetchForms();
-                                         this.parent.sub.openFormDialog(res[1]);                                         
+                                         this.parent.parent.fetchForms();
+                                         this.parent.parent.openFormDialog(res[1]);                                         
                                      }
                              },this));
                      }

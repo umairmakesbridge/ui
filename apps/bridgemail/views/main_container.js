@@ -95,6 +95,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-alertbot': 'newAutobot',
                     'click .new-scorebot': 'newAutobot',
                     'click .landing-pages': 'landingPageslist',
+                    'click .workflow-listing': 'workflowListing',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -560,6 +561,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 campaignListing: function () {
                     this.addWorkSpace({type: '', title: 'Campaigns', sub_title: 'Listing', url: 'campaigns/campaigns', workspace_id: 'campaigns', 'addAction': true, tab_icon: 'campaignlisting'});
+                },
+                workflowListing: function () {
+                    this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
                 },
                 one_one_listings : function(){
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
