@@ -565,7 +565,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                 tip_test : function(){
-                   this.addWorkSpace({type: '', title: '', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test_id', 'addAction': false, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '', title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test_id', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 
