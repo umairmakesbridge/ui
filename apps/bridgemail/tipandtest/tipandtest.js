@@ -13,7 +13,8 @@ define(['text!tipandtest/html/tipandtest.html'],
                 tag:'div',
                 className:'tip_test',
                 events: {
-                    //'click .contact-remove-prev': 'removeContact'
+                    'click .csvupload': 'uploadCSV',
+                    'click .open-campaigns':'openCampaigns'
                 },
                 /**
                  * Initialize view - backbone .
@@ -34,9 +35,15 @@ define(['text!tipandtest/html/tipandtest.html'],
                    this.init();
                 },
                 init: function () {
-                        this.$el.parents('.ws-content').find('.camp_header').remove();
+                        //this.$el.parents('.ws-content').find('.camp_header').remove();
                         this.app.removeSpinner(this.$el);
                 },
+                uploadCSV : function(){
+                    this.app.mainContainer.csvUpload();
+                },
+                openCampaigns : function(){
+                    this.app.mainContainer.campaignListing();
+                }
                
             });
 
