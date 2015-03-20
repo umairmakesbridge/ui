@@ -5,6 +5,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                 tags: 'div',
                 events: {                    
                         "click .refresh_btn": function () {
+                           this.showLoadingMask();
                            this.$('iframe').attr('src', this.$('iframe').attr('src'));
                         }
                 },
@@ -30,12 +31,16 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                   this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {
+                    this.showLoadingMask();
                     this.current_ws = this.$el.parents(".ws-content");                                        
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
                     this.current_ws.find("#campaign_tags").remove();
-                    this.app.removeSpinner(this.$el);
+                    this.app.removeSpinner(this.$el);                    
                     this.current_ws.find("#addnew_action").attr("data-original-title", "Create Workflow").click(_.bind(this.createWorkflowDialog, this));
                     this.$("div.create_new").click(_.bind(this.createWorkflowDialog, this));  
+                    this.$(".workflowiframe").load(_.bind(function () {
+                        this.app.showLoading(false,this.$el);
+                    },this))
                 },
                 resizeHeight:function(height){
                     this.$(".workflowiframe").css("height",height+"px");
@@ -80,7 +85,9 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                     
                 },
                 createWorkflowDialog: function(){
-                    this.app.showAddDialog(
+                    this.showLoadingMask("Creating New Workflow...",true);                    
+                    this.$(".workflowiframe").attr("src","/pms/trigger/workflow.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true");
+                    /*this.app.showAddDialog(
                     {
                       app: this.app,
                       heading : 'Enter name for your Workflow',
@@ -92,10 +99,26 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                       fieldKey : "name",
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
                       saveCallBack :  _.bind(this.createWorkflow,this)
-                    });
+                    });*/
                 },
-                createWorkflow:function(){
+                showWorkflowWizard:function(){
+                    this.$(".temp-filters,.create_new").hide();
+                    this.current_ws.find(".c-current-status").hide();
+                    this.current_ws.find(".add-action").attr("style","display:none !important");
+                    this.current_ws.find("#workspace-header").addClass("single").html("Workflow Wizard");
                     
+                },
+                hideWorkflowWizard:function(){
+                    this.$(".temp-filters,.create_new").show();
+                    this.current_ws.find(".c-current-status").show();
+                    this.current_ws.find(".add-action").attr("style","display:none");
+                    this.current_ws.find("#workspace-header").removeClass("single").html("Workflows");
+                },
+                showLoadingMask:function(msg,reduceHeight){
+                    if(reduceHeight){
+                        this.$(".workflowiframe").attr("src","about:blank").css("height","400px");
+                    }
+                    this.app.showLoading(msg?msg:"Loading Workflows...",this.$el);    
                 }
 
             });

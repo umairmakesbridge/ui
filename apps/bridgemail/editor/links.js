@@ -320,7 +320,7 @@ function (template) {
                         lineNameStr = "";
                     }
                     var url_val = $.trim(_hyperlinkInput.val());
-                    if(url_val!=="" && (/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-{}]*)*\/?$/i.test(url_val) || url_val=="#" || /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val) )){
+                    if(url_val!=="" && (/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i.test(url_val) || url_val=="#" || /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val))){
                         if(url_val!=="#" && /^{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}/i.test(url_val)==false){ 
                             if ( url_val.startsWith("http://")){
                                 link = url_val + lineNameStr;
