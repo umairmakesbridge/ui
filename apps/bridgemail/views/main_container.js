@@ -36,7 +36,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 $('#workspace').show();
                                 $('#workspace').animate({left: '0px'});
                             $("[workspace_id='tip_test']").click();
-
+                            if(!this.openTipnTest){
+                                this.tip_test();
+                            }
 
                     }
                     ,
@@ -119,6 +121,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.subscribe_id = '';
                     this.lastActiveWorkSpace = "";
                     this.isTipnTestFlag = false;
+                    this.openTipnTest = false;
                     this.render();
                 }
                 ,
