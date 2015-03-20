@@ -29,6 +29,7 @@ function ($,Backbone, _,app,Wizard, template) {
                            app.popWKSTabs();
                            
                         }
+                        app.mainContainer.openTipnTest=false;
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        
                     },

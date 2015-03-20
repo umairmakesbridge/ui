@@ -36,7 +36,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                                 $('#workspace').show();
                                 $('#workspace').animate({left: '0px'});
                             $("[workspace_id='tip_test']").click();
-
+                            if(!this.openTipnTest){
+                                this.tip_test();
+                            }
 
                     }
                     ,
@@ -120,6 +122,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.subscribe_id = '';
                     this.lastActiveWorkSpace = "";
                     this.isTipnTestFlag = false;
+                    this.openTipnTest = false;
                     this.render();
                 }
                 ,
@@ -580,7 +583,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                 tip_test : function(){
-                   this.addWorkSpace({type: '', title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': true, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '',single_row: true ,title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 

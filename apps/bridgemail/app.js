@@ -99,6 +99,8 @@ define([
                 this.mergeRequest = 0;
                 // Workspace Tabs 
                 this.tabsArray = [];
+                // Salesforce Merge Allowed 
+                this.salesMergeAllowed = false;
                 //attaching main container in body                                
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);
@@ -242,8 +244,13 @@ define([
                         this.mainContainer.tip_test();
                         this.mainContainer.$(".tipntest-toggle").show();
                         this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
+                        this.mainContainer.openTipnTest=true;
                         this.mainContainer.isTipnTestFlag=true;
+                       
                     }
+                if(_json.fromEmailMergeAllowed == "Y"){
+                    this.salesMergeAllowed = true;
+                }
                 if(this.mainContainer){
                     this.showFeatures();
                  }else{
