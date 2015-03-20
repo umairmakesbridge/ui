@@ -4331,6 +4331,29 @@ div.letter_block span{
 /*========================
 TIP N TEST
 =========================*/
+a.tipntest-toggle {
+    background: none repeat scroll 0 0 #4cb334;
+    border: 0 solid #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    left: 10px;
+    padding: 4px;
+    position: absolute;
+    top: 150px;
+    z-index: 99;
+}
+
+a.tipntest-toggle i {
+    background: url("../img/tipntesticon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 30px;
+    opacity: 1;
+    transition: opacity 0.3s ease-out 0s;
+    width: 30px;
+}
+a.tipntest-toggle:hover i { opacity:0.7;}
+
+
+
 .wtab-tipntest {
     background: url("../img/ws-icons.png") no-repeat scroll -60px -240px rgba(0, 0, 0, 0);
 }
