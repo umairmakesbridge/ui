@@ -164,6 +164,7 @@ function (template) {
             },
             showLinkDetails:function(anchorObj){                
                 var _a_href = anchorObj.attr("href").toLowerCase();
+                var actual_href = anchorObj.attr("href");
                 if(_a_href.startsWith("mailto:")){
                     var showSubject = $.getUrlVar(_a_href,'subject');
                     _a_href = _a_href.replace("?subject="+showSubject,"");
@@ -194,10 +195,11 @@ function (template) {
                     //handle hyper link population
                     var showName = $.getUrlVar(_a_href,'campaignkw');
                     if(showName){
-                        _a_href = _a_href.replace("?campaignkw="+showName,"");
+                        actual_href = actual_href.replace("?campaignkw="+showName,"");
+                        actual_href = actual_href.replace("&campaignkw="+showName,"");
                     }
-                    this.$("input.linkHyperLinkURL").val(_a_href);
-                    this.$(".visitlink").attr("href",_a_href);
+                    this.$("input.linkHyperLinkURL").val(actual_href);
+                    this.$(".visitlink").attr("href",actual_href);
                     this.$("input.linkName").val(showName);
                 }
             },
@@ -314,7 +316,16 @@ function (template) {
                     var link = "";
                     var _hyperlinkInput = this.$("input.linkHyperLinkURL");
                     var linkName = this.$("input.linkName").val();
-                    var lineNameStr = linkName?"?campaignkw=" + linkName:"";                    
+                    //var lineNameStr = linkName?"?campaignkw=" + linkName:"";   
+                    var lineNameStr ="";
+                    if(linkName){
+                        lineNameStr = $.trim(_hyperlinkInput.val()).indexOf("?") ? "&campaignkw=" + linkName : "?campaignkw=" + linkName;
+                    }
+                    else{
+                        lineNameStr = "";
+                    }
+                    
+                    
                     if(noName){
                         //set url without link name param
                         lineNameStr = "";
