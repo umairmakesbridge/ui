@@ -240,6 +240,9 @@ define([
                 }
                  if(this.get("tipId")){
                         this.mainContainer.tip_test();
+                        this.mainContainer.$(".tipntest-toggle").show();
+                        this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
+                        this.mainContainer.isTipnTestFlag=true;
                     }
                 if(this.mainContainer){
                     this.showFeatures();

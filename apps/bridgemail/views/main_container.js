@@ -28,6 +28,16 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
 
                         }
 
+                    },
+                    'click .tipntest-toggle': function (obj) {
+                        var $a = $.getObj(obj, "a");
+                        $('.tw-toggle').removeClass("active");
+                             $("#tiles").hide();
+                                $('#workspace').show();
+                                $('#workspace').animate({left: '0px'});
+                            $("[workspace_id='tip_test']").click();
+
+
                     }
                     ,
                     'click #activities ul.tabnav > li > a': function () {
@@ -109,6 +119,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.subscribe_name = '';
                     this.subscribe_id = '';
                     this.lastActiveWorkSpace = "";
+                    this.isTipnTestFlag = false;
                     this.render();
                 }
                 ,
@@ -569,7 +580,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                 tip_test : function(){
-                   this.addWorkSpace({type: '', title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test_id', 'addAction': false, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '', title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': true, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 
