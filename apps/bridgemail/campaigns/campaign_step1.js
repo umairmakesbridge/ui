@@ -129,16 +129,16 @@ function (template) {
                      {
                          var merge_field = this.app.decodeHTML(camp_json.fromEmail);                                                                    
                          if(this.campDefaults.fromEmail){
-                            this.$("#campaign_from_email").val(this.app.decodeHTML(this.campDefaults.fromEmail)).trigger("chosen:updated");
+                            this.$("#campaign_from_email").val(this.app.decodeHTML(camp_json.fromEmail)).trigger("chosen:updated");
                          }
                          else{
                            this.$("#campaign_from_email").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
                          }
                         
-                         //this.$("#campaign_from_email_input").val(merge_field);
-                         //this.$("#campaign_from_email_default").show();
-                         //this.$("#fromemail_default").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                         //this.$("#fromemail_default_input").val(this.app.decodeHTML(camp_json.defaultFromEmail));
+                         this.$("#campaign_from_email_input").val(merge_field);
+                         this.$("#campaign_from_email_default").show();
+                         this.$("#fromemail_default").val(this.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                         this.$("#fromemail_default_input").val(this.app.decodeHTML(camp_json.defaultFromEmail));
                          //setTimeout(_.bind(this.setFromNameField,this),300);
                      }
                      else
@@ -221,6 +221,9 @@ function (template) {
                             var fromEmailsArray = fromEmails.split(',');
                             var fromOptions = '';
                             var selected_fromEmail = '';
+                            if(this.app.salesMergeAllowed){
+                                fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                            }
                             for(var i=0;i<fromEmailsArray.length;i++)
                             {
                                 if(fromEmailsArray[i] == defaults_json.fromEmail){
@@ -231,7 +234,17 @@ function (template) {
                                      fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
                             }
                             this.$el.find('#campaign_from_email').append(fromOptions);
+                            if(this.app.salesMergeAllowed){
+                                this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
+                                    if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
+                                        this.$('#campaign_from_email_default').show();
+                                    }else{
+                                        this.$('#campaign_from_email_default').hide();
+                                    }
+                                },this));
+                            }
                             this.$el.find('#fromemail_default').append(fromOptions);
+                            this.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
                             this.$("#campaign_from_email").trigger("chosen:updated");
                             this.$('#fromemail_default').trigger("chosen:updated");
                             this.$(".flyinput").val(selected_fromEmail);
