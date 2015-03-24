@@ -1,4 +1,4 @@
-define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
+define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.highlight'],
         function (template) {
             'use strict';
             return Backbone.View.extend({
@@ -20,7 +20,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                    this.$el.find('div#workflowlistsearch').searchcontrol({
                         id: 'workflow-search',
                         width: '300px',
-                        height: '22px',
+                        height: '22px',                        
                         searchFunc: _.bind(this.searchWorkflow, this),
                         clearFunc: _.bind(this.clearSearchWorkflow, this),
                         placeholder: 'Search workflow by name',
@@ -40,16 +40,39 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                     this.$("div.create_new").click(_.bind(this.createWorkflowDialog, this));  
                     this.$(".workflowiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);
+                        this.$("#workflowlistsearch #clearsearch").click();
+                        
                     },this))
                 },
                 resizeHeight:function(height){
                     this.$(".workflowiframe").css("height",height+"px");
                 },
-                searchWorkflow:function(){
+                searchWorkflow:function(o, txt){
+                    var workflow_tr = this.$('.workflowiframe').contents().find("#mainWrapper tr.workflow-row");
+                    var count= 0;
+                    workflow_tr.hide();
+                    workflow_tr.filter(function() {
+                        if($(this).find(".sectionHeader a").text().toLowerCase().indexOf(txt) > -1)
+                        {
+                            count++;
+                            return $(this);
+                        }
+                    }).show();	
+
+                    workflow_tr.each(function(i) {                    
+                        $(this).find(".sectionHeader a").removeHighlight().highlight(txt);
+                    });
                     
+                    this.$("#total_templates").html("<strong class='badge'>"+count+"</strong>Workflows found containing text '<b>"+txt+"</b>'");
+                                        
                 },
                 clearSearchWorkflow:function(){
-                    
+                    var workflow_tr = this.$('.workflowiframe').contents().find("#mainWrapper tr.workflow-row")
+                    workflow_tr.show();                    
+                    workflow_tr.find(".sectionHeader a").each(function(i) {                    
+                        $(this).removeHighlight()
+                    });
+                    this.$("#total_templates").html("<strong class='badge'>"+workflow_tr.length+"</strong>Workflows");
                 },
                 headBadge: function ( count ) {                    
                     var active_ws = this.$el.parents(".ws-content");
@@ -61,10 +84,14 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                         stats += '<li class="showhand showtooltip" title="Click to view all workflows"><span class="badge pclr18 topbadges total_forms" tabindex="-1">'+count+'</span>Total Workflows</li>';                            
                     stats += '</ul>';
                     header_title.append(stats);
-                    this.ws_header.find(".c-current-status li").click(_.bind(function(){}, this));
+                    this.ws_header.find(".c-current-status li").click(_.bind(function(){
+                           this.showLoadingMask();
+                           this.$('iframe').attr('src', this.$('iframe').attr('src'));
+                    }, this));
                     header_title.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                    
                     
-                    this.$("#total_templates .badge").html(count)
+                    this.$("#total_templates").html("<strong class='badge'>"+count+"</strong>Workflows");
+                    
                 },
                 openWorkflow: function(url){
                     var dialog_width = $(document.documentElement).width() - 60;
@@ -120,6 +147,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol'],
                     }
                     this.app.showLoading(msg?msg:"Loading Workflows...",this.$el);    
                 }
+                
 
             });
         });
