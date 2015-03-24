@@ -359,16 +359,16 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             if(merge_field_patt.test(camp_obj.app.decodeHTML(camp_json.fromEmail)))
                             {
                                 var merge_field = camp_obj.app.decodeHTML(camp_json.defaultFromEmail);                                                                    
-                                //camp_obj.$("#campaign_from_email_input").val(merge_field);
+                                camp_obj.$("#campaign_from_email_input").val(merge_field);
                                 if(camp_obj.campDefaults.fromEmail){
-                                     camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_obj.campDefaults.fromEmail)).trigger('chosen:updated');
+                                     camp_obj.$("#campaign_from_email").val(camp_obj.app.decodeHTML(camp_json.fromEmail)).trigger('chosen:updated');
                                 }
                                 else{
                                     camp_obj.$("#campaign_from_email").val(merge_field).trigger('chosen:updated');
                                 }
-                                //camp_obj.$("#campaign_from_email_default").show();
-                                //camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
-                                //camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
+                                camp_obj.$("#campaign_from_email_default").show();
+                                camp_obj.$("#fromemail_default").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail)).trigger("chosen:updated");
+                                camp_obj.$("#fromemail_default_input").val(camp_obj.app.decodeHTML(camp_json.defaultFromEmail));
                                 //setTimeout(_.bind(camp_obj.setFromNameField,camp_obj),300);    
                                     
                             }
@@ -1488,6 +1488,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             var fromOptions = '';
                             var selected_fromEmail = '';
                             fromEmailsArray.sort();
+                            if(camp_obj.app.salesMergeAllowed){
+                                fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                            }
                             for(var i=0;i<fromEmailsArray.length;i++)
                             {
                                 if(fromEmailsArray[i] == defaults_json.fromEmail){
@@ -1499,7 +1502,18 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                             }
                             
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
+                            //console.log(fromOptions);
+                            if(camp_obj.app.salesMergeAllowed){
+                                camp_obj.$("#campaign_from_email").chosen().change(function(obj){
+                                    if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
+                                        camp_obj.$('#campaign_from_email_default').show();
+                                    }else{
+                                        camp_obj.$('#campaign_from_email_default').hide();
+                                    }
+                                });
+                            }
                             camp_obj.$el.find('#fromemail_default').append(fromOptions);
+                            camp_obj.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
                             camp_obj.$("#campaign_from_email").chosen({no_results_text:'Oops, nothing found!', disable_search: (fromEmailsArray.length<=5)?true:false});
                             camp_obj.$("#campaign_from_email").css("visibility","visible");
                             camp_obj.$('#fromemail_default').trigger("chosen:updated");
