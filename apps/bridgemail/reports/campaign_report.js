@@ -13,11 +13,12 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
             */            
             events: {				
               'click .slidetoggle': "slidePanel",
-              'click .filter-camp li': "getCampaigns",
+              'click #template_search_menu li': "getCampaigns",
               "keyup #daterange":'showDatePicker',
               "click #clearcal":'hideDatePicker',
               "click .calendericon":'showDatePickerFromClick',
-              "click .chart-dialog .closebtn":"closeChart"
+              "click .chart-dialog .closebtn":"closeChart",
+              "click .sortoption_expand": "toggleSortOption"
             },
             /**
              * Initialize view - backbone .
@@ -78,6 +79,7 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                 if(_target.hasClass("active")===false){                    
                     this.$(".filter-camp li.active").removeClass("active");
                     _target.addClass("active");
+                    this.$(".spntext").html(_target.text());
                     this.getAllCampaigns(parseInt(_target.attr("last")));
                 }
                 
@@ -478,7 +480,11 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                    },this);
 
                 },this));
-          }
+          },
+            toggleSortOption: function (ev) {               
+                $(this.el).find(".filter-camp").slideToggle();
+                ev.stopPropagation();
+            }
             
         });
 });

@@ -22,7 +22,7 @@ function (template) {
             */
             initialize: function () {
                     this.editorEl = this.options._el.find("#mee-iframe").contents();
-                    this.hiddenObj = $(this.editorEl.find("#imageDataSavingObject").data("myWorkingObject"));
+                    this.hiddenObj = $(this.options._el.find("#imageDataSavingObject").data("myWorkingObject"));
                     this.activeTab = "_addHyperLink";
                     this.meeIframeWindow = this.options.meeIframeWindow;
                     this.template = _.template(template);	
@@ -319,7 +319,7 @@ function (template) {
                     //var lineNameStr = linkName?"?campaignkw=" + linkName:"";   
                     var lineNameStr ="";
                     if(linkName){
-                        lineNameStr = $.trim(_hyperlinkInput.val()).indexOf("?") ? "&campaignkw=" + linkName : "?campaignkw=" + linkName;
+                        lineNameStr = $.trim(_hyperlinkInput.val()).indexOf("?")>-1 ? "&campaignkw=" + linkName : "?campaignkw=" + linkName;
                     }
                     else{
                         lineNameStr = "";
