@@ -4721,3 +4721,8 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .search > .icon.workflow-sicon{
     background: url("../img/workflow24.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
+#tiles .tile-shortcuts ul li.loading-tile > a span
+{
+    background: url("../img/greenloader.gif") no-repeat scroll center 0 transparent;
+    font-size:0px;
+}

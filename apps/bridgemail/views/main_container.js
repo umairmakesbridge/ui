@@ -108,6 +108,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .new-scorebot': 'newAutobot',
                     'click .landing-pages': 'landingPageslist',
                     'click .workflow-listing': 'workflowListing',
+                    'click .bridge-statz': 'openBridgeStatz',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -692,6 +693,37 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         postData: {type: 'create', BMS_REQ_TK: this.app.get('bms_token'), filterFor: "C"},
                         saveCallBack: _.bind(this.addTarget, this) // Calling same view for refresh headBadge
                     });
+                },
+                openBridgeStatz: function(e){
+                    var target = $.getObj(e, "li");
+                    if(target.hasClass("loading-tile")){return false}
+                    if(app.get("bridgestatz") && app.get("bridgestatz").id){
+                        var __json = app.get("bridgestatz");
+                        sharedObject.log = __json.webAddress;
+                        sharedObject.pass = __json.pass;
+                        window.open("/pms/report/BridgeStatz.html", '_blank'); 
+                    }else{    
+                        target.addClass("loading-tile");
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + app.get("bms_token") + "&type=bridgestatz";
+                        jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                            var _json = jQuery.parseJSON(xhr.responseText);
+                            target.removeClass("loading-tile");
+                            if (app.checkError(_json)) {
+                                return false;
+                            }
+                            app.set("bridgestatz", _json);
+                            if(_json.id){
+                               sharedObject.log = _json.webAddress;
+                               sharedObject.pass = _json.pass;
+                               window.open("/pms/report/BridgeStatz.html", '_blank');                            
+                            }
+                            else{
+                                app.showAlert("Your Bridge Statz Account is not activated. Please contact support to activate.",$("body")); 
+                            }
+
+                        }, this));
+                    }
+                    
                 },
                 addTarget: function (fieldText, camp_json) {
                     var target_id = camp_json[1];

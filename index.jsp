@@ -88,6 +88,7 @@ String _path = "/pms/umair/";
         var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>"; 
         var contentDomain = "<%=PMSResources.getInstance().getEventsDomain()%>"
         var userKey =  "<%=userInfo.getUserKey()%>"; 
+        var sharedObject = {};
     </script>
     <script type="text/javascript" src="<%= _path %>js/require.js" data-main="apps/bridgemail/main"></script>
 
