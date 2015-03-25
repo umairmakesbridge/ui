@@ -55,7 +55,7 @@ function (template) {
                     camp_obj.fromNameSelectBoxChange(this)
                     camp_obj.$("#campaign_from_email_input").val($(this).val());
                 });*/
-                this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "62%",disable_search: "true"});                                        
+                this.$("#fromemail_default").chosen({no_results_text:'Oops, nothing found!', width: "67%",disable_search: "true"});                                        
                 this.$("#fromemail_default").chosen().change(function(){                       
                     camp_obj.$("#fromemail_default_input").val($(this).val());
                 });

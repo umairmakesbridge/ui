@@ -2200,6 +2200,12 @@ i.contact-name-prev {
     .adv_dd {
     width: 80%;
     }
+     .defaultemail-camp {
+        width: 57.4% !important;
+    }
+    .defaultemail-one {
+        width: 56.4% !important;
+    }
 }
 @media (max-width: 1199px) { 
    .addrow input[type="text"] { width: 59.3%; }
@@ -4490,6 +4496,8 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 
 .tipntest .goalbar.active { background-color:#4cb334; }
 
+
+/*CAMPAIGN INPUT TO BE RESPONSIVE*/
 
 /*
 -------------- ENDS HERE ----------
