@@ -476,7 +476,7 @@ define([
             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
             str = str.replace(/\\/g, "");
             str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n");*/            
+            str = str.replace(/\r\n/g, "\n");     */      
             return str;
         },
         getMMM: function (month) {
@@ -710,6 +710,10 @@ define([
                             this.mainContainer.header.$('.announcement_dialogue').append("<div class='expire-message'><p>Your Trial Account expires in <b>"+expiryDaysLeft+" Days</b>. Please contact support to upgrade your account.</p></div>")                        
                         }
                     }
+                }
+                if(_user["tipntest"] && _user["tipntest"].toLowerCase()=="y"){
+                    this.mainContainer.$(".ws-tabs").css("top","140px");
+                    this.mainContainer.$(".tipntest-toggle").show();
                 }
             }
             else {

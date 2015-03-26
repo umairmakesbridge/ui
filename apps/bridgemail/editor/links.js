@@ -96,12 +96,13 @@ function (template) {
                             dialog.showPrevious();  
                         }
                         else{
-                            dialog.hide();      
+                            dialog.hide();                                  
                         }
                      }
                      else{
-                         dialog.hide();      
+                         dialog.hide();                               
                      }
+                     setTimeout(_.bind(function(){this.editorEl.find("[data-mce-type='bookmark']").remove();},this),200);
                 }
             },
             showHyperLink:function(){
@@ -225,7 +226,8 @@ function (template) {
             },
             attachLinkToImg:function(){
                 var myImageLink = ""; 
-                myImageLink = this.getLink();                
+                myImageLink = this.getLink();     
+                if(!myImageLink){return false}
                 //Add link to editor
                 if (myImageLink != "" && myImageLink != null) {
                     var imgObj = this.hiddenObj.is("img")?this.hiddenObj:this.hiddenObj.find("img");
@@ -242,6 +244,7 @@ function (template) {
                  var postBackupLink = "";
                  var myTextLink = "";
                  postBackupLink = this.getLink(); 
+                 if(!postBackupLink){return false}
                  myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {

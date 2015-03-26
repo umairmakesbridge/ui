@@ -21,7 +21,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     'click .edit-profile': 'editProfile',
                     'click .oto-sendmail': 'sendEmail',
                     'click .manage-lists': 'manageLists',
-                    'click .suppress-sub' : 'suppressDialog'
+                    'click .suppress-sub' : 'suppressDialog',
+                    'click .coursecorrect-sub':'courseCorrectDialog'
                 },
                 /**
                  * Initialize view - backbone
@@ -354,8 +355,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     });
                 },
                 sendEmail : function(){
-                                // Loading templates 
-                                var dialog_width = $(document.documentElement).width()-60;
+                         // Loading templates 
+                        var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Templates'+'<strong id="oto_total_templates" class="cstatus pclr18 right" style="margin-left:5px;display:none;"> Total <b></b> </strong>',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
@@ -417,6 +418,20 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         }
 
                     }, this));
+                },
+                courseCorrectDialog:function(){                     
+                        var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'Course Correct',
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgcoursecorrect',
+                                  bodyCss:{"min-height":dialog_height+"px"}
+                        });
+                        var coursecorrect_url = "/pms/trigger/CourseCorrect.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+ this.sub_id+"&fromNewUI=true&popup=Y";
+                        var iframHTML = "<iframe src=\""+coursecorrect_url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        dialog.getBody().html(iframHTML);
+                                                
                 }
 
             });

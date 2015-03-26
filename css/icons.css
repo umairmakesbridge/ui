@@ -787,7 +787,9 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 
 .icon.mlist {   background: url("../img/mlists.png") no-repeat scroll center center ;}
 .icon.mlist2 {   background: url("../img/mlists2.png") no-repeat scroll center center ;}
+.icon.dlgcoursecorrect {   background: url("../img/coursecontacts30.png") no-repeat scroll center center ;}
 .icon.supress-w {   background: url("../img/suppress-w.png") no-repeat scroll center center ;}
+.icon.coursecorrect-w { background: url("../img/coursecorrect-w.png") no-repeat scroll center center ;}
 .icon.stop-w {   background: url("../img/unpublish24.png") no-repeat scroll center center ;}
 .icon.otolist {   background: url("../img/1-1emails.png") no-repeat scroll 2px center rgba(0, 0, 0, 0)}
 .icon.mworkflow {   background: url("../img/mworkflows.png") no-repeat scroll center center ;}
