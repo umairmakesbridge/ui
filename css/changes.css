@@ -1342,6 +1342,15 @@ ul.tabs-btns li.active a{
 .wtab-workflowlisting{
     background-position: -60px -210px
 }
+.wtab-linkfilters {
+     background-position: -89px -272px;
+}
+.wtab-bouncedemails {
+     background-position: -89px -210px;
+}
+.wtab-exportsubscribers{
+     background-position: -89px -153px;
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;

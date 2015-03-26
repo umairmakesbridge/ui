@@ -109,6 +109,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .landing-pages': 'landingPageslist',
                     'click .workflow-listing': 'workflowListing',
                     'click .bridge-statz': 'openBridgeStatz',
+                    'click .exportsubscribers': 'exportsubscribers',
+                    'click .bounced-email': 'bouncedEmail',
+                    'click .linkfilters': 'linkfilters',                    
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -579,6 +582,15 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 workflowListing: function () {
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
+                },
+                exportsubscribers: function () {
+                    this.addWorkSpace({type: '',single_row: true, title: 'Export Subscribers', sub_title: '', url: 'common/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
+                },
+                bouncedEmail: function () {
+                    this.addWorkSpace({type: '',single_row: true, title: 'Bounced Campaign Report', sub_title: '', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
+                },
+                linkfilters: function () {
+                    this.addWorkSpace({type: '',single_row: true, title: 'Link Filters', sub_title: '', url: 'common/linkFilter', workspace_id: 'linkfilter', 'addAction': false, tab_icon: 'linkfilters'});
                 },
                 one_one_listings : function(){
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
