@@ -584,19 +584,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
                 },
                 exportsubscribers: function () {
-                    this.addWorkSpace({type: '',single_row: true, title: 'Export Subscribers', sub_title: '', url: 'common/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
+                    this.addWorkSpace({type: '',single_row: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'common/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
                 },
                 bouncedEmail: function () {
-                    this.addWorkSpace({type: '',single_row: true, title: 'Bounced Campaign Report', sub_title: '', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
+                    this.addWorkSpace({type: '',single_row: true, title: 'Bounced Emails', sub_title: 'Bounced Campaign Report', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
                 },
                 linkfilters: function () {
-                    this.addWorkSpace({type: '',single_row: true, title: 'Link Filters', sub_title: '', url: 'common/linkFilter', workspace_id: 'linkfilter', 'addAction': false, tab_icon: 'linkfilters'});
+                    this.addWorkSpace({type: '',single_row: true, title: 'Link Filters', sub_title: 'Manage Link Filters', url: 'common/linkFilter', workspace_id: 'linkfilter', 'addAction': false, tab_icon: 'linkfilters'});
                 },
                 one_one_listings : function(){
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                 tip_test : function(){
-                   this.addWorkSpace({type: '',single_row: true ,title: 'Tip and Test', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '',single_row: true ,title: 'Proven Processes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 
