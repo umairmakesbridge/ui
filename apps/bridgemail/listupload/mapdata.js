@@ -286,11 +286,21 @@ function (template,chosen,addbox) {
 			{
 				list_array = app.getAppData("lists");
 				if(list_array != '')
-				{					
+				{	
+                                        var $i = 0;
 					$.each(list_array.lists[0], function(index, val) { 
-						list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-					});
-					curview.$el.find("#existing_lists").html(list_html);								
+                                                if(val[0].isSupressList  == "false"){
+                                                    list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+                                                }else{
+                                                    $i++; // count total supress list
+                                                }
+                                            });
+                                         var total_count = parseInt(list_array.count) - $i ;
+                                         if(total_count != 0){
+                                                        curview.$el.find("#existing_lists").html(list_html);
+                                                    }else{
+                                                      curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+                                                    }							
 				}
 				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
                                 if(curview.csv){
@@ -310,11 +320,22 @@ function (template,chosen,addbox) {
                                             }
                                             list_array = jQuery.parseJSON(xhr.responseText);
                                             if(list_array != '')
-                                            {							
+                                            {		
+                                                    var $i = 0;
                                                     $.each(list_array.lists[0], function(index, val) { 
+                                                            if(val[0].isSupressList == "false"){
                                                             list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-                                                    })
-                                                    curview.$el.find("#existing_lists").html(list_html);							
+                                                        }else{
+                                                                $i++; // count total supress list
+                                                            }
+                                                    });
+                                                    var total_count = parseInt(list_array.count) - $i ;
+                                                    if(total_count != 0){
+                                                        curview.$el.find("#existing_lists").html(list_html);
+                                                    }else{
+                                                        curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+                                                    }
+                                                    							
                                             }
                                             app.setAppData('lists',list_array);
                                             curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
