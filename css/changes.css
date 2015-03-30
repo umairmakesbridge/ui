@@ -1337,19 +1337,22 @@ ul.tabs-btns li.active a{
     background-position:-60px -60px;
 }
 .wtab-signupforms{
-    background-position: -60px -180px
+    background-position: -90px -180px;
 }
 .wtab-workflowlisting{
-    background-position: -60px -210px
+    background-position: -60px -210px;
+}
+.wtab-customreports{
+    background-position: -90px -180px;
 }
 .wtab-linkfilters {
-     background-position: -89px -272px;
+     background-position: -90px -272px;
 }
 .wtab-bouncedemails {
-     background-position: -89px -210px;
+     background-position: -90px -210px;
 }
 .wtab-exportsubscribers{
-     background-position: -89px -153px;
+     background-position: -90px -153px;
 }
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);

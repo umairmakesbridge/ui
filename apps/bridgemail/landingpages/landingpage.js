@@ -76,6 +76,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                    var action_icon = $('<div class="pointy"></div>")');                                        
                    action_icon.append(pauseIcon);
                    action_icon.append(playIcon);
+                   this.ws_header.find("h2 .preview").remove();
                    this.ws_header.find("h2").append(previewIconLP);
                    this.ws_header.find(".pointy").remove();
                    action_icon.append(deleteIcon);
@@ -423,7 +424,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     }
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
-                            ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,
+                            ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
                             changeTemplateClick: _.bind(this.templatesDialog,this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);

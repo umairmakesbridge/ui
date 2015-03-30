@@ -4176,7 +4176,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                                 if (args.formContents != undefined) {
                                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                                    var fContents = args.formContents;
+                                                                    var fContents = args.formContents+options.pageId+"/";
 
                                                                     if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
                                                                         var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
@@ -5738,6 +5738,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,
                         _app: this.app,
+                        pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,
                         OnDropElementOnBuildingBlock: function (args, callBack) {
                         },
