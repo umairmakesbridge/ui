@@ -63,6 +63,7 @@ define([
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
                 tipId : $.getUrlVar(false,'tipId'),
+                workId : $.getUrlVar(false,'workId'),
                 preview_domain: previewDomain,                
                 content_domain: contentDomain,
                 user_Key: userKey,
@@ -80,6 +81,9 @@ define([
                 window.BRIDGEMAIL = this;
             }
             //this.CRMGetStatus();
+            //Exposes Workspaces 
+            this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
+                            ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots"};
               
         },
         start: function (Router, MainContainer, callback) {
@@ -241,13 +245,17 @@ define([
                     this.mainContainer.initializeIsotops();
                 }
                  if(this.get("tipId")){
-                        this.mainContainer.tip_test();
-                        this.mainContainer.$(".tipntest-toggle").show();
-                        this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
-                        this.mainContainer.openTipnTest=true;
-                        this.mainContainer.isTipnTestFlag=true;
-                       
+                    this.mainContainer.tip_test();
+                    this.mainContainer.$(".tipntest-toggle").show();
+                    this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
+                    this.mainContainer.openTipnTest=true;
+                    this.mainContainer.isTipnTestFlag=true;
+                }
+                if(this.get("workId")){
+                    if(this.workid[this.get("workId")] && this.mainContainer[this.workid[this.get("workId")]]){
+                        this.mainContainer[this.workid[this.get("workId")]]();
                     }
+                }
                 if(_json.fromEmailMergeAllowed == "Y"){
                     this.salesMergeAllowed = true;
                 }

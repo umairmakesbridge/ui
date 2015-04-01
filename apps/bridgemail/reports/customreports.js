@@ -24,7 +24,7 @@ define(['text!reports/html/customreports.html'],
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
                     this.current_ws.find("#campaign_tags").remove();
                     this.app.removeSpinner(this.$el);                    
-                                       
+                    this.current_ws.find("#addnew_action").attr("data-original-title", "Add Chart").click(_.bind(this.addChart, this));
                     this.$(".customreportsiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);                        
                     },this))
@@ -37,6 +37,12 @@ define(['text!reports/html/customreports.html'],
                         this.$(".customreportsiframe").attr("src","about:blank").css("height","400px");
                     }
                     this.app.showLoading(msg?msg:"Loading Custom Reports...",this.$el);    
+                },
+                addChart:function(){
+                    var addChartButton = this.$(".customreportsiframe").contents().find("#showWindowChartTop");
+                    if(addChartButton.length){
+                        addChartButton.click();
+                    }
                 }
 
             });

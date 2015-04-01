@@ -1337,7 +1337,7 @@ ul.tabs-btns li.active a{
     background-position:-60px -60px;
 }
 .wtab-signupforms{
-    background-position: -90px -180px;
+    background-position: -60px -180px;
 }
 .wtab-workflowlisting{
     background-position: -60px -210px;
@@ -3477,6 +3477,7 @@ text-align:center;
    /* FIXES FOR SALES FORCE */
    .modal .modal-header .c-name h2 span{
       /* float:none;*/
+      
    }
    .modal .salesforce_campaigns .radiopanelinput span{
       /* float:none;*/
@@ -4746,3 +4747,9 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     background: url("../img/greenloader.gif") no-repeat scroll center 0 transparent;
     font-size:0px;
 }
+.modal .modal-header .c-name h2 span{
+    max-width:80%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;      
+  }

@@ -113,20 +113,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                 },
                 createWorkflowDialog: function(){
                     this.showLoadingMask("Creating New Workflow...",true);                    
-                    this.$(".workflowiframe").attr("src","/pms/trigger/workflow.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true");
-                    /*this.app.showAddDialog(
-                    {
-                      app: this.app,
-                      heading : 'Enter name for your Workflow',
-                      buttnText: 'Create',
-                      bgClass :'no-tilt',
-                      plHolderText : 'Enter workflow name here',
-                      emptyError : 'Workflow name can\'t be empty',
-                      createURL : '/pms/io/form/saveSignUpFormData/',
-                      fieldKey : "name",
-                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
-                      saveCallBack :  _.bind(this.createWorkflow,this)
-                    });*/
+                    this.$(".workflowiframe").attr("src","/pms/trigger/workflowNew.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true");                    
                 },
                 showWorkflowWizard:function(){
                     this.$(".temp-filters,.create_new").hide();

@@ -585,7 +585,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
                 },
                 customReprots: function(){
-                    this.addWorkSpace({type: '', title: 'Custom Reports', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': false, tab_icon: 'customreports', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Custom Reports', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'customreports', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '',single_row: true, title: 'Export Subscribers', sub_title: '', url: 'common/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
