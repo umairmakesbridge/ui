@@ -593,11 +593,20 @@
                 </a>
             </li>
             <% } %>
+            
              <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
                 <a  class="btn-blue">
                     <i class="icon preview"></i><span>Preview</span>
                 </a>
             </li>
+            <% if (!options.otopage && !options.landingPage) { %>
+            <li class="MenuCallTextVersion" style="float:right">
+                <a  class="btn-blue">
+                    <i class="icon plaintext"></i><span>Text Version</span>
+                </a>
+            </li>
+            <% } %>
+            
         </ul>
     </div>
     <!--  tools  -->

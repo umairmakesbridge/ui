@@ -245,7 +245,7 @@ define(['text!crm/google/html/myimports.html', 'crm/google/collections/myimports
                     var el = this.$el;
                     var importName = dialog.find("#import_name").val();
                     if(importName){
-                            dialog.hide();
+                            dialog.remove();
                             this.parent.updateImport(importName);
                         }else{
                             this.app.showError({

@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target'],
+define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target','jquery.icheck'],
         function(template, recipientView, tags, ModelRecipient) {
             'use strict';
             return Backbone.View.extend({
@@ -47,6 +47,9 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         that.alertEmails = that.model.get('actionData')[0].alertEmails;
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
+                        if(that.isAlertSalesRep=="Y"){
+                            that.$(".alert-salesrep").iCheck('check');
+                        }
                         that.filterNumber = that.model.get('filterNumber.encode');
                         if (that.status == "D") {
                             that.editable = false;
@@ -117,6 +120,9 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     this.$el.find('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
                     this.$el.find('#merge_field_plugin').css('width', '72%!important');
                     this.$el.find("#txtRecurTimes").ForceNumericOnly();
+                    this.$(".alert-salesrep").iCheck({
+                        checkboxClass: 'checkinput'
+                    });
                 },
                 changeSetting: function(ev) {
                     var selected = $(ev.target).val();
@@ -285,6 +291,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var alertemails = this.$el.find("#alertemails").val();
                     var alertmessages = this.$el.find("#alertmessage").val();
+                    var alertSalesRep = this.$(".alert-salesrep")[0].checked? "Y":"N";
 
                     var emails = alertemails.split(',');
                     var that = this;
@@ -308,7 +315,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                             control: $(that.el).find('.uid-container')
                         })
                     }
-                    var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, alertMessage: alertmessages, alertEmails: alertemails};
+                    var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, alertMessage: alertmessages, alertEmails: alertemails,isAlertSalesRep:alertSalesRep};
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;
                     var that = this;

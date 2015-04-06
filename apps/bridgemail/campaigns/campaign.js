@@ -717,8 +717,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         }
                     }
                 },
-                initStep2:function(){                    
-                    if(this.states.step2.plainText){
+                initStep2:function(){                                        
+                    if(this.campobjData.isTextOnly=="Y"){
                         this.$("#plain_text").click();
                         this.$("#plain-text").val(this.app.decodeHTML(this.states.step2.plainText,true));
                     }
@@ -730,7 +730,8 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                     }else if(this.campobjData.editorType=="H"){
                         this.$("#html_code").click();
                         this.$("textarea#handcodedhtml").val(this.app.decodeHTML(this.states.step2.htmlText,true));
-                    }                    
+                    }
+                    
                     var _height = $(window).height()-431;
                     var _width = this.$el.width()-24;
                     this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
@@ -1300,23 +1301,24 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                         plain = this.$("#bmstexteditor").val();
                         post_data['htmlCode'] = html;                         
                         post_data['plainText'] = plain;
+                        post_data['isCampaignText'] = 'N';   
                         //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
                      }else if(selected_li=="html_code"){
                         html = this.$("textarea#handcodedhtml").val();                     
                         post_data['htmlCode'] = html;                        
-                        //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
+                        post_data['isCampaignText'] = 'N';                           
                      }else if(selected_li=="plain_text"){
                         plain = this.$("textarea#plain-text").val();      
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'Y';   
-                        post_data['htmlCode'] = '';
-                        //this.$("#campaign_isTextOnly").prop("checked",true).iCheck('check');
+                        post_data['htmlCode'] = '';                        
                      }                 
                      else if(selected_li=="html_editor_mee"){
                          html =this.$("#mee_editor").getMEEHTML();
                          post_data['htmlCode'] = html;                         
-                     }
-                     
+                         post_data['plainText'] = this.states.step2.plainText;
+                         post_data['isCampaignText'] = 'N';   
+                     }                     
                      if(typeof(htmlText)!=="undefined"){
                          post_data['htmlCode'] = "";
                      }
@@ -2270,6 +2272,9 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                      else if(selected_li=="html_editor_mee"){                        
                          post_editor['editorType'] = 'MEE';
                      }
+                     else if(selected_li=="plain_text"){ 
+                        post_editor['editorType'] = 'P';    
+                     }
                      this.states.step2.editorType = post_editor['editorType'];
                      if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
                         this.campobjData.editorType = post_editor["editorType"];
@@ -2288,12 +2293,15 @@ function (bmsgrid,calendraio,chosen,icheck,bmsSearch,jqhighlight,jqueryui,templa
                 setMEEView:function(){
                         var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g,""):""; 
                          require(["editor/MEE"],_.bind(function(MEE){                                              
-                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveForStep2,this)});                                    
+                            var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',text:this.states.step2.plainText,saveClick:_.bind(this.saveForStep2,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
                             this.initScroll();
                             this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                         },this));  
+                },
+                setTextVersion:function(text){
+                    this.states.step2.plainText = text;
                 },
                 getcampaignscopy:function(){
                     // Abdullah 

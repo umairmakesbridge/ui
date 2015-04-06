@@ -447,7 +447,7 @@ function (template) {
                                             if(this.parent.dialog){
                                                 this.parent.dialog.$(".dialog-title").html("'"+this.$("#campaign_subject").val()+"' Settings")
                                             }
-                                            if(this.parent.messagebody_page.states.editor_change ===true ){
+                                            if(this.parent.messagebody_page.states.editor_change === true ){
                                                 this.parent.saveStep2();                                                
                                             }
                                             else{

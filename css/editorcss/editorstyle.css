@@ -150,6 +150,7 @@ a,
 .editorbar i.icon.redo  { background-position:-180px 0;  }
 .MEE_EDITOR .icon.preview  {background: url("../images/meeicons.png") no-repeat  -60px 0; }
 .MEE_EDITOR .icon.save  { background: url("../images/save.png") no-repeat scroll center center; }
+.MEE_EDITOR .icon.plaintext { background: url("../../img/plaing.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.sendtest  { background: url("../images/sendtest.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.copy  { background: url("../images/copy.png") no-repeat scroll center center; margin:0px !important;}
 .MEE_EDITOR .icon.delete  { background: url("../images/delete.png") no-repeat scroll center center; }

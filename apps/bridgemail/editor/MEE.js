@@ -523,6 +523,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 function InitializePreviewControls() {
                                     var lnkPreviewCode = myElement.find(".MenuCallPreview");
+                                    var lnkTextVersion = myElement.find(".MenuCallTextVersion");
                                     var divPreviewCode = myElement.find(".divPreviewCode");
 
                                     //previeCodeTabs.tabs();
@@ -601,6 +602,57 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         iframe.write(content);
                                         iframe.close();
                                         dialog.getBody().find(".divHtmlCode").val(outputHTML);
+
+                                    });
+                                    
+                                    lnkTextVersion.click(function () {
+                                        
+                                        var dialog_width = $(document.documentElement).width() - 60;
+                                        var dialog_height = $(document.documentElement).height() - 182;
+                                        var dialog = options._app.showDialog({
+                                            title: 'Create Text version',
+                                            css: {
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height + "px"
+                                            },
+                                            headerEditable: false,
+                                            headerIcon: 'textversion',
+                                            buttons: {
+                                                saveBtn: {
+                                                    text: 'Save Text Version'
+                                                }
+                                            }
+                                        });
+                                        var preview_html = '<div class="divTextVersion">';                                        
+                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 28) + 'px;margin-bottom:0px;border:2px solid #eaf4f9" class="divHtmlCode" cols="1000" rows="250" placeholder="Enter text version....">'+options.textVersion+'</textarea>';
+                                        preview_html += '</div>';
+                                        preview_html = $(preview_html);
+                                        dialog.getBody().append(preview_html);
+                                        dialog.saveCallBack(_.bind(function(obj){
+                                            options.textVersion = preview_html.find("textarea").val();
+                                            options.saveTextVersionCallBack(preview_html.find("textarea").val());
+                                            if (options.fromDialog) {
+                                                dialog.showPrevious();
+                                            }
+                                            else {
+                                                dialog.hide();
+                                            }
+                                        }, this, dialog));
+
+                                        if (options.fromDialog) {
+                                            var dialogArrayLength = options._app.dialogArray.length; // New Dialog
+                                            dialog.getBody().find(".divTextVersion").addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].currentView = preview_html; // New Dialog
+                                            options._app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(setHTML, this, dialog); // New Dialog
+                                            preview_html.ReattachEvents = options.reAttachEvents;
+                                            
+                                        }
+                                        
 
                                     });
 
@@ -818,7 +870,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function CleanCode(html) {
 
                                     var oHtml = $(html);
-                                    //oHtml.find("[data-mce-type='bookmark']").remove();
+                                    oHtml.find("[data-mce-type='bookmark']").remove();
                                     oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("visibility");
                                     oHtml.find(".csHaveData").removeClass("csHaveData ui-draggable ui-droppable").addClass("MEE_ELEMENT");
                                     oHtml.find(".mainContentHtmlGrand").removeClass("mainContentHtmlGrand").addClass("MEE_DOCUMENT_CONTENTS");
@@ -2188,7 +2240,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     });
                                     args.droppedElement.html(htmlToPlace);
                                     makeCloneAndRegister();
-
+                                    if(changFlag){
+                                        changFlag.editor_change = true;
+                                    }
                                 }
 
                                 var OnClickedOnElement = function (event) {
@@ -4149,6 +4203,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         event.stopPropagation();
                                                         event.preventDefault();
                                                         var ui = {draggable: null};
+                                                        if(changFlag){
+                                                            changFlag.editor_change = true;
+                                                         }
                                                         ui.draggable = mee.dragElement;
                                                         $(this).removeInlineStyle("outline");
                                                         var args = {
@@ -4321,6 +4378,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         //restore the dropzone after dropevent                                    
                                         event.stopPropagation();
                                         event.preventDefault();
+                                        if(changFlag){
+                                            changFlag.editor_change = true;
+                                         }
                                         meeIframe.find(".mainContentHtml").removeClass("show-droppables")
                                         var ui = {draggable: null};
                                         ui.draggable = mee.dragElementIframe ? mee.dragElementIframe : mee.dragElement;                                        
@@ -5556,6 +5616,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 myElement.find('.MenuCallBackSave').click(function (obj) {
                                     options.saveCallBack(obj);
                                 });
+                                                                
                                 
                                  myElement.find('.MenuCallTemplate').click(function (obj) {
                                     options.templatesCallBack(obj);
@@ -5735,6 +5796,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         formDeleteURL: _formDeleteURL,
                         saveCallBack: this.options.saveClick,
                         templatesCallBack: this.options.changeTemplateClick,
+                        saveTextVersionCallBack: this.options.textVersionCallBack,
+                        textVersion:this.options.text,
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,
                         _app: this.app,

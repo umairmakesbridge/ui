@@ -104,11 +104,11 @@ function (template,editorView) {
                    this.$('#merge_field_plugin-wrap-plain').mergefields({app:this.app,view:this,config:{links:true,state:'workspace'},elementID:'merge-field-plain',placeholder_text:'Merge tags'});
                 },
             populateBody:function(){           
-                if(this.parent.plainText && this.parent.htmlText===""){
+                
+                if(this.campobjData.isTextOnly=="Y" ){
                     this.$("#plain_text").click();
                     this.$("#plain-text").val(this.app.decodeHTML(this.parent.plainText,true));
-                }
-                else if(this.campobjData.editorType=="W"){
+                } else if(this.campobjData.editorType=="W"){
                     this.$("#html_editor").click();
                 }
                 else if(this.campobjData.editorType=="MEE"){
@@ -116,7 +116,9 @@ function (template,editorView) {
                 }else if(this.campobjData.editorType=="H"){
                     this.$("#html_code").click();
                     this.$("#handcodedhtml").val(this.app.decodeHTML(this.parent.htmlText,true));
-                }                  
+                }
+                
+                
             },
             init:function(){
               this.$("#editorhtml").append(this.bmseditor.$el);
@@ -214,14 +216,14 @@ function (template,editorView) {
                  }                 
                  else if(selected_li=="html_editor_mee"){                        
                      post_editor['editorType'] = 'MEE';
-                 }
-                 this.campobjData.editorType = post_editor['editorType'];
+                 }                 
                  if(post_editor["editorType"] && this.campobjData.editorType!=post_editor["editorType"]){
                     this.campobjData.editorType = post_editor["editorType"];
                     $.post(URL,post_editor)
                      .done(function(data) {
                      });
                  }
+                 this.campobjData.editorType = post_editor['editorType'];
 
             },
             loadMEE:function(){
@@ -234,12 +236,15 @@ function (template,editorView) {
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                     },this));  
+            },
+            setTextVersion:function(text){
+                this.parent.plainText = text;
             },
             setMEE:function(html){
                if(this.$("#mee_editor").setMEEHTML){

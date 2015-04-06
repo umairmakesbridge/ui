@@ -40,7 +40,7 @@ define(['text!workflow/html/workflows.html', 'jquery.searchcontrol','jquery.high
                     this.$("div.create_new").click(_.bind(this.createWorkflowDialog, this));  
                     this.$(".workflowiframe").load(_.bind(function () {
                         this.app.showLoading(false,this.$el);
-                        this.$("#workflowlistsearch #clearsearch").click();
+                        //this.$("#workflowlistsearch #clearsearch").click();
                         
                     },this))
                 },

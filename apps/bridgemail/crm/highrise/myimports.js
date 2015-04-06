@@ -245,7 +245,7 @@ function (template,MyImports,moment) {
                     var appMsgs = this.app.messages[0];
                     var el = this.$el;
                     if(importName){
-                        dialog.hide();
+                        dialog.remove();
                         this.parent.updateImport(importName);
                     }else{
                          this.app.showError({

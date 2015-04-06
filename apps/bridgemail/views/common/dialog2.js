@@ -25,38 +25,16 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                 
 				this.render();
 			},
-			render: function () {
-                             //console.log(this.optionObj);
+			render: function () {                             
                              this.$el.html(this.template({}));              
-                             this.dialogHeader();                           
-                             //this.$el.css(this.option.css ? this.option.css:{});
-                            // this.$(".dialog-title").html(this.option.title?this.option.title:'');                             
-                             //this.$(".modal-body").css(this.option.bodyCss ? this.option.bodyCss:{});
-                             
-                             /*if(this.option.headerEditable){
-                                 this.$(".modal-header").removeClass("ws-notags").addClass('header-editable-highlight');
-                             }*/
+                             this.dialogHeader();                                                      
                              if(this.option.buttons){
-                                 this.dialogFooter();
-                                /*if(this.option.buttons.saveBtn){ 
-                                    this.$(".modal-footer .btn-save").show();
-                                    if(this.option.buttons.saveBtn.text){
-                                        this.$(".modal-footer .btn-save span").html(this.option.buttons.saveBtn.text);
-                                    }
-                                    if(this.option.buttons.saveBtn.btnicon){
-                                        this.$(".modal-footer .btn-save i").removeClass("save").addClass(this.option.buttons.saveBtn.btnicon);
-                                    }
-                                }*/
+                                 this.dialogFooter();                               
                                 if(this.option.buttons.closeBtn){
                                     if(this.option.buttons.saveButtn.text){
                                         this.$(".modal-footer .btn-close span").html(this.option.buttons.closeBtn.text);
                                     }
-                                }
-                                /*if(this.option.buttons.playBtn){
-                                    if(this.option.buttons.playBtn.text){
-                                        this.$(".modal-footer .btn-play span").html(this.option.buttons.playBtn.text);
-                                    }
-                                }*/
+                                }                                
                              }
                             
                              if(this.option.overlay){
@@ -174,11 +152,13 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                         },
                         hide:function(){
                             if(this.option.closeCD){
-                               this.$el.modal("hide");
+                               this.$el.modal("hide");                               
+                               setTimeout(function(){                               
                                if($("body > .overlay,.modal-backdrop").length==0){
-                                $("body").css("overflow-y","auto");
-                                 }
-                            }
+                                        $("body").css("overflow-y","auto");
+                                   }
+                               },100);
+                              }
                            if(this.option.closeCallBack){
                                this.option.closeCallBack();
                            }
@@ -189,9 +169,11 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                            }else{    
                             this.$el.modal("hide");
                             this.doubleBlackOut(false);
-                           if($("body > .overlay,.modal-backdrop").length==0){
-                                $("body").css("overflow-y","auto");
-                            }
+                           setTimeout(function(){                                     
+                               if($("body > .overlay,.modal-backdrop").length==0){
+                                    $("body").css("overflow-y","auto");
+                               }
+                           },100);                           
                           }  
                         },
                         getBody:function(){

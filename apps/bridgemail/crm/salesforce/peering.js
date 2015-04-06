@@ -44,11 +44,11 @@ function (template) {
                         if(peer_details.alert!=="n"){
                             this.$('input#notialert').iCheck('check');
                         }
-                        if(peer_details.status=='D'){
-                            this.showHideButton(false);
+                        if(peer_details.status=='S'){
+                            this.showHideButton(true);
                         }
                         else{
-                            this.showHideButton(true);
+                            this.showHideButton(false);
                         }
                         this.createListSelectBox();
                     },this));

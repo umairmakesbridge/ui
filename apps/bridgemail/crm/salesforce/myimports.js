@@ -51,12 +51,10 @@ function (template,MyImports,moment) {
                                     myimports_html += '<img src="img/recurring2.gif"  class="recurring2img" alt=""/>';                                
                                 }
                                 myimports_html += '</td>';
-                                myimports_html += '<td>';
-                                    if(val.get("status")=='S'){
-                                        var daysDisplay = this.getDate(val.get("scheduledDate"),val.get("frequency"),val.get("day"));
-                                        myimports_html += '<div class="sched" data-original-title='+daysDisplay+'><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
-                                        myimports_html += '<div class="slide-btns two s-clr3" style="width:;"><span class="icon setting"></span><div><a class="icon delete clr2  deactivate-import" id="deact_' + val.get("tId") + '"><span>Delete</span></a><a class="icon edit clr1 get-import" id="edit_' + val.get("tId") + '"><span>Edit</span> </a></div></div>';  
-                                    }
+                                myimports_html += '<td>';                                    
+                                    var daysDisplay = this.getDate(val.get("scheduledDate"),val.get("frequency"),val.get("day"));
+                                    myimports_html += '<div class="sched" data-original-title='+daysDisplay+'><strong><span><em><b>'+this.getFrequency(val.get("frequency"))+'</b></em>'+daysDisplay+'</span></strong></div>';                                    
+                                    myimports_html += '<div class="slide-btns two s-clr3" style="width:;"><span class="icon setting"></span><div><a class="icon delete clr2  deactivate-import" id="deact_' + val.get("tId") + '"><span>Delete</span></a><a class="icon edit clr1 get-import" id="edit_' + val.get("tId") + '"><span>Edit</span> </a></div></div>';                                      
                                 myimports_html += '</td>';
                               myimports_html += '</tr>';
                           },this);
@@ -102,7 +100,10 @@ function (template,MyImports,moment) {
                         statusHTML = '<a class="cstatus pclr2">Scheduled </a>'
                     }
                     else if(status=='P'){
-                        statusHTML = '<a class="cstatus pclr6">Pending </a>'
+                        statusHTML = '<a class="cstatus pclr1">Pending </a>'
+                    }
+                    else if(status=='E'){
+                        statusHTML = '<a class="cstatus pclr6">Error </a>'
                     }
                     
                     return statusHTML;
@@ -238,28 +239,15 @@ function (template,MyImports,moment) {
                             if(e.keyCode==13){
                                 this.editImport(new_import);
                             }
-                        },this))
-                        /*dialog.saveCallBack(_.bind(this.editImport,this,dialog));*/
-                   
-    
-        
-            
-           
-            
-            
-               
-                    
-                
-                
-            
+                        },this))                        
                 },
                 editImport:function(dialog){
                     var importName = dialog.find("#import_name").val();
                     var appMsgs = this.app.messages[0];
                     var el = this.$el;
                     if(importName){
-                    dialog.hide();
-                    this.parent.updateImport(importName);
+                        dialog.remove();
+                        this.parent.updateImport(importName);
                     }else{
                         this.app.showError({
                             control: el.parents('body').find('.modal-open'),
