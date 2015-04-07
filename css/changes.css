@@ -350,6 +350,33 @@ div.tags-div:before {
     position: relative;
     left:0px; 
 }
+#campaign_tag_camp ul {
+    width:353px !important;
+}
+#campaign_tag_camp .ellipsis {
+    background: none repeat scroll 0 0 #fff;
+    color: #19baf7;
+    line-height: 16px;
+    margin: 0 10px 0 2px;
+    padding: 0 3px 4px 5px;
+}
+#campaign_tag_camp .ellipsis:hover {
+    background: none repeat scroll 0 0 #19baf7;
+    color: #fff;
+}
+#campaign_tag_camp:hover .ellipsis{
+    display:block;
+}
+#campaign_tag_camp ul.overflow {
+    background: none repeat scroll 0 0 #01aeee;
+    height: auto;
+    left: 0;
+    max-width: 300px;
+    opacity: 1;
+    overflow: visible;
+    padding-bottom: 5px;
+    position: relative;
+}
 .tagscont .ellipsis{
     
 }
@@ -2804,7 +2831,7 @@ ul.leftnav > li.icon-menu:hover .slidenav-dd { display:block; }
 }
 .slidenav-dd >  ul.quicklinks > li ul li:hover a  span { color: #fff; opacity:1; 
 	-webkit-transition: opacity .5s ease-out;
-    -moz-transition: opacity .5s ease-out;c
+    -moz-transition: opacity .5s ease-out;
     -o-transition: opacity .5s ease-out;
     transition: opacity .5s ease-out;
 	}
@@ -4510,7 +4537,8 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .tipntest .goalbar.active { background-color:#4cb334; }
 
 
-/*CAMPAIGN INPUT TO BE RESPONSIVE*/
+/*CAMPAIGNS ROW*/
+
 
 /*
 -------------- ENDS HERE ----------

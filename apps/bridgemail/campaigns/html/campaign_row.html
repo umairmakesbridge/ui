@@ -10,8 +10,9 @@
                     <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
                     <% } %>
                     <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
-                 <div class="tags tagscont">
+                 <div class="tags tagscont" id="campaign_tag_camp">
                      <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>
+                     
                  </div>
          </div>
     </div>

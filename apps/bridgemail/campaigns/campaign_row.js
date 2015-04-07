@@ -48,7 +48,7 @@ function (template,highlighter) {
                 }));
                
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-
+                
                 this.initControls();  
                
             },
@@ -126,6 +126,7 @@ function (template,highlighter) {
                 }else{
                     this.$(".taglink").highlight($.trim(this.sub.tagTxt));
                 }
+                
                 
             },
             openCampaign:function(){
@@ -360,6 +361,23 @@ function (template,highlighter) {
                                              var mPage = new reschedulePage({app:this.app,parent:this,currentStates:campstates,campNum:camp_id,rescheduled:true,hidecalender:this.hidecalender,scheduleFlag:'reschedule'});
                                              this.$el.parents('body').find('.reschedule-dialog-wrap').html(mPage.$el);
                             },this));
+                        },
+                        showEllipsis : function(){
+                                var totalTagsWidth = 0;
+                                var isElipsis = true;
+                                $.each(this.$el.find("#campaign_tag_camp li a"),_.bind(function(k,val){
+                                    totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth);
+                                    if(totalTagsWidth > 284){
+                                        if(isElipsis){
+                                             var eplisis = $('<i class="ellipsis">...</i><div class="clearfix"></div>');
+                                           $(val).parent().before(eplisis);
+                                           //eplisis.click(_.bind(this.expandTags,this));
+                                           isElipsis = false;
+                                           this.$el.find("#campaign_tag_camp ul").addClass('overflow');
+                                        }
+                                      }
+                                },this));
+                                console.log(totalTagsWidth);
                         }
             
         });

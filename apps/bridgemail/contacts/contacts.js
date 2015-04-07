@@ -347,7 +347,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                        this.tagTxt = '';
                        this.$('#contact-search').val('');
                        this.$('#clearsearch').hide();
+                   }else{
+                       this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
+                       this.sortBy = '';
                    }
+                
                 this.fetchContacts();
             },
             showTotalCount:function(count){
