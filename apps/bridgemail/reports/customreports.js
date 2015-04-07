@@ -39,9 +39,9 @@ define(['text!reports/html/customreports.html'],
                     this.app.showLoading(msg?msg:"Loading Custom Reports...",this.$el);    
                 },
                 addChart:function(){
-                    var addChartButton = this.$(".customreportsiframe").contents().find("#showWindowChartTop");
-                    if(addChartButton.length){
-                        addChartButton.click();
+                    var addChartButton = this.$(".customreportsiframe")[0].contentWindow;
+                    if(addChartButton.showChartWindow){
+                        addChartButton.showChartWindow();
                     }
                 }
 

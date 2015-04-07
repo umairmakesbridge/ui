@@ -319,7 +319,7 @@
             filter_html += '<div class="row nolabel campaign-url-container" style="display:none"><div class="btn-group "><select data-placeholder="Select URL" class="campaign-url"></select></div>'              
           filter_html += '<a  class="icon view showtooltip" title="Preview Link"></a></div>'
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Email Activity</span>');        
@@ -567,7 +567,7 @@
           filter_html += '</div>'          
             
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'                  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'                  
           filter_html += '</div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Form Submission</span>');                
       filter.find(".filter-cont").append(filter_html)
@@ -684,7 +684,7 @@
             filter_html += '</select></div>'                        
           filter_html += '</div>'
           filter_html += '<div class="match row"> Happened in last '
-                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan(30)+'</select></div> days'  
+                filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
       filter.find(".filter-cont").append('<span class="timelinelabel">Website Action</span>')    
@@ -1200,11 +1200,12 @@
              clearSearchLists:function(){
                   $('#total_subscriber strong').text($('#filter_list_grid tr').length);          
             }
-  , getTimeSpan:function(val){
+  , getTimeSpan:function(val,count){
       var spanHTML = ""
       var selected_val = ""
       spanHTML +=''
-      for(var i=1;i<=30;i++){         
+      var counter = count ? count:30;
+      for(var i=1;i<=counter;i++){         
          selected_val = (i==val) ?"selected":""
          spanHTML +='<option value="'+i+'" '+selected_val+'>'+i+'</option>'
       }

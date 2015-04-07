@@ -47,8 +47,8 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         that.alertEmails = that.model.get('actionData')[0].alertEmails;
                         that.status = that.model.get('status');
                         that.botId = that.model.get('botId.encode');
-                        if(that.isAlertSalesRep=="Y"){
-                            that.$(".alert-salesrep").iCheck('check');
+                        if(that.model.get("actionData") && that.model.get("actionData")[0].isAlertSalesRep=="Y"){
+                            that.isAlertSalesRep=true;                            
                         }
                         that.filterNumber = that.model.get('filterNumber.encode');
                         if (that.status == "D") {
@@ -69,27 +69,30 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
 
                     if (this.options.type == "edit") {
                         this.getTargets();
-                        this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));
-                        this.$el.find("#ddlRecurType").val(this.model.get('recurType'));
-                        this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod'));
+                        this.$("#ddlIsRecur").val(this.model.get('isRecur'));
+                        this.$("#ddlRecurType").val(this.model.get('recurType'));
+                        this.$("#txtRecurPeriod").val(this.model.get('recurPeriod'));
                         if (this.model.get('recurTimes') != "0") {
-                            this.$el.find("#ddlendless").val("1");
-                            this.$el.find(".show-recur-period").css('display', 'inline-block');
+                            this.$("#ddlendless").val("1");
+                            this.$(".show-recur-period").css('display', 'inline-block');
                         }
                         if (this.model.get('isRecur') != "N") {
-                            this.$el.find("#show_other").show();
-                            this.$el.find("#spnhelptext").hide();
+                            this.$("#show_other").show();
+                            this.$("#spnhelptext").hide();
                         } else {
-                            this.$el.find("#spnhelptext").show();
-                            this.$el.find("#show_other").hide();
+                            this.$("#spnhelptext").show();
+                            this.$("#show_other").hide();
                         }
-                        this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
-                        this.$el.find("#alertemails").val(this.options.app.decodeHTML(this.alertEmails,true));
-                        this.$el.find("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage,true));
-                        this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
+                        this.$("#txtRecurTimes").val(this.model.get('recurTimes'));
+                        this.$("#alertemails").val(this.options.app.decodeHTML(this.alertEmails,true));
+                        this.$("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage,true));
+                        this.model.get('isSweepAll') == "Y" ? this.$("#chkIsSweepAll").iCheck('check') : this.$("#chkIsSweepAll").iCheck('uncheck');
+                        if(this.isAlertSalesRep){
+                            this.$(".alert-salesrep").iCheck('check');
+                        }
                     }
                     if (!this.alertMessage) {
-                        this.$el.find("#alertmessage").attr('placeholder', 'Type your alert message here. You can also insert merge tags in your message.');
+                        this.$("#alertmessage").attr('placeholder', 'Type your alert message here. You can also insert merge tags in your message.');
                     }
                     this.showTags();
                     if (this.status == "D") {
@@ -111,15 +114,15 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         }
                     }, this));
 
-                    this.$el.find("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
-                    this.$el.find("#txtRecurPeriod").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "100px", disable_search: "true"});
-                    this.$el.find("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
-                    this.$el.find("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
+                    this.$("#ddlIsRecur").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "120px", disable_search: "true"});
+                    this.$("#txtRecurPeriod").chosen({no_results_text: 'Oops, nothing found!', style: "float:none!important", width: "100px", disable_search: "true"});
+                    this.$("#ddlRecurType").chosen({no_results_text: 'Oops, nothing found!', width: "100px", disable_search: "true"});
+                    this.$("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.$el.find('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
-                    this.$el.find('#merge_field_plugin').css('width', '72%!important');
-                    this.$el.find("#txtRecurTimes").ForceNumericOnly();
+                    this.$('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
+                    this.$('#merge_field_plugin').css('width', '72%!important');
+                    this.$("#txtRecurTimes").ForceNumericOnly();
                     this.$(".alert-salesrep").iCheck({
                         checkboxClass: 'checkinput'
                     });
@@ -127,20 +130,20 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                 changeSetting: function(ev) {
                     var selected = $(ev.target).val();
                     if (selected == "N") {
-                        this.$el.find("#show_other").hide();
-                        this.$el.find("#spnhelptext").show();
+                        this.$("#show_other").hide();
+                        this.$("#spnhelptext").show();
                     } else {
-                        this.$el.find("#show_other").show();
-                        this.$el.find("#spnhelptext").hide();
+                        this.$("#show_other").show();
+                        this.$("#spnhelptext").hide();
                     }
                 },
                 showRecurInput: function(ev) {
                     var selected = $(ev.target).val();
                     if (selected == "0") {
-                        this.$el.find(".show-recur-period").hide();
+                        this.$(".show-recur-period").hide();
 
                     } else {
-                        this.$el.find(".show-recur-period").css('display', 'inline-block');
+                        this.$(".show-recur-period").css('display', 'inline-block');
                     }
                 },
                 loadTargets: function() {
@@ -159,8 +162,8 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         this.app.showLoading(false, targetsPage.$el.parent());
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                         targetsPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.$el.find('.modal-header .cstatus').remove();
-                        dialog.$el.find('.modal-footer').find('.btn-play').hide();
+                        dialog.$('.modal-header .cstatus').remove();
+                        dialog.$('.modal-footer').find('.btn-play').hide();
 
                     }, this));
 
@@ -279,18 +282,18 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         btnPlay.removeClass('saving-blue');
                         return;
                     }
-                    var isRecur = this.$el.find("#ddlIsRecur").val();
-                    var recurType = this.$el.find("#ddlRecurType").val();
-                    if (this.$el.find("#ddlendless").val() == "1") {
-                        var recurTimes = this.$el.find("#txtRecurTimes").val();
+                    var isRecur = this.$("#ddlIsRecur").val();
+                    var recurType = this.$("#ddlRecurType").val();
+                    if (this.$("#ddlendless").val() == "1") {
+                        var recurTimes = this.$("#txtRecurTimes").val();
 
                     } else {
                         var recurTimes = 0;
                     }
-                    var recurPeriod = this.$el.find("#txtRecurPeriod").val();
-                    var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
-                    var alertemails = this.$el.find("#alertemails").val();
-                    var alertmessages = this.$el.find("#alertmessage").val();
+                    var recurPeriod = this.$("#txtRecurPeriod").val();
+                    var isSweepAll = this.$("#chkIsSweepAll").is(':checked') ? "Y" : "N";
+                    var alertemails = this.$("#alertemails").val();
+                    var alertmessages = this.$("#alertmessage").val();
                     var alertSalesRep = this.$(".alert-salesrep")[0].checked? "Y":"N";
 
                     var emails = alertemails.split(',');
@@ -364,20 +367,20 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                 createTargets: function(save) {
                     var that = this;
                     if (this.targetsModel.get('filterNumber.encode')) {
-                        this.$el.find("#autobot_targets_grid tbody").children().remove();
-                        that.$el.find('#autobot_targets_grid tbody').append(new recipientView({page:this,type: 'autobots_listing', editable: that.editable, model: this.targetsModel, app: that.options.app}).el);
+                        this.$("#autobot_targets_grid tbody").children().remove();
+                        that.$('#autobot_targets_grid tbody').append(new recipientView({page:this,type: 'autobots_listing', editable: that.editable, model: this.targetsModel, app: that.options.app}).el);
                         if (that.status != "D") {
-                            if (that.$el.find('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0)
-                                that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
+                            if (that.$('#autobot_targets_grid tbody tr td .slide-btns .preview-target').length > 0)
+                                that.$('#autobot_targets_grid tbody tr td .slide-btns').addClass('one').removeClass('three');
                             else
-                                that.$el.find('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
+                                that.$('#autobot_targets_grid tbody tr td .slide-btns').addClass('two').removeClass('three');
 
-                            that.$el.find('#autobot_targets_grid tbody tr td .remove-target').remove();
+                            that.$('#autobot_targets_grid tbody tr td .remove-target').remove();
                         }
-                        that.$el.find('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
+                        that.$('#autobot_targets_grid tbody tr td .remove-target').on('click', function() {
                             that.targetsModel = null;
                             that.changeTargetText();
-                            that.$el.find('#autobot_targets_grid tbody').html('');
+                            that.$('#autobot_targets_grid tbody').html('');
                             that.loadTargets();
                         });
                         if (that.status != "D")
@@ -506,16 +509,16 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                 },
                 disableAllEvents: function() {
 
-                    this.$el.find("#hrfchangetarget").on('click', function() {
+                    this.$("#hrfchangetarget").on('click', function() {
                         return false;
                     });
-                    this.$el.find(".add-tag").on('click', function() {
+                    this.$(".add-tag").on('click', function() {
                         return false;
                     });
-                    this.$el.find(".add-targets").on('click', function() {
+                    this.$(".add-targets").on('click', function() {
                         return false;
                     });
-                    //that.$el.find('#autobot_targets_grid tbody tr td .remove-target');('click',function(){return false;});
+                    //that.$('#autobot_targets_grid tbody tr td .remove-target');('click',function(){return false;});
                     this.modal = $('.modal');
                     this.modal.find('.modal-header').find("#dialog-title span").on('click', function() {
                         return false;

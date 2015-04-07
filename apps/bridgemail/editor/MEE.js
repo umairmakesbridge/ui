@@ -4233,7 +4233,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                                 if (args.formContents != undefined) {
                                                                     //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                                    var fContents = args.formContents+options.pageId+"/";
+                                                                    var fContents = options._app.decodeHTML(args.formContents).replace("https:","")+options.pageId+"/";
 
                                                                     if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
                                                                         var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
@@ -4529,7 +4529,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                         if (args.formContents != undefined) {
                                                             //Assign here predefined control into OBJECT TYPE and pass it to OnNewElementDropped.                                                                
-                                                            var fContents = args.formContents;
+                                                            var fContents = options._app.decodeHTML(args.formContents).replace("https:","")+options.pageId+"/";
 
                                                             if(args.droppedElement.hasClass("MEEFORMCONTAINER")){
                                                                 var preview_iframe = $("<div style='overflow:hidden;height:auto;' class='formresizable'><iframe id=\"form-iframe\" style=\"width:100%; height:100%\" src=\"" + fContents + "\" frameborder=\"0\" ></iframe><br style='clear:both;' /></div>");
@@ -5116,11 +5116,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             if(response.isRefresh || response.formURL){
                                                 if(response.isRefresh){
                                                     if(meeIframe.find(".MEEFORMCONTAINER #form-iframe").length){
-                                                        meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src =meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src; 
+                                                        meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src =meeIframe.find(".MEEFORMCONTAINER #form-iframe")[0].src.replace("https:",""); 
                                                     }
                                                 }
                                                 else{
-                                                   meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL);                                   
+                                                   meeIframe.find(".MEEFORMCONTAINER #form-iframe").attr("src", response.formURL.replace("http:",""));                                   
                                                    if(meeIframe.find(".MEEFORMCONTAINER .editformpanel button").length){
                                                         meeIframe.find(".MEEFORMCONTAINER .editformpanel button").attr("data-formid",response.formId);
                                                    }
@@ -5134,10 +5134,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         },mee),
                                         props:{style:{width:"100%",height:dialog_height+"px"},frameborder:0},
                                         container : dialog.getBody()[0]
-                                    });
-                                    //var iframe_url = "https://" + options._app.get("host") + "/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl;
-                                    //var iframe_html = "<iframe id=\"__iframe\" style=\"width:100%; height:"+dialog_height+"px\" src=\"" + iframe_url + "\" frameborder=\"0\"></iframe>"
-                                    //dialog.getBody().html(iframe_html);                                     
+                                    });                              
                                 }
                                 mee.addUpdateContentBlock = function (args) {
                                     var dialog_title = mee._LastSelectedBuildingBlock ? "Edit Block" : "Add Block";

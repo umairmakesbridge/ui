@@ -107,13 +107,15 @@
             <div class="cont">
                 <div class="row-fluid">
                     <div class="">
-                        <div id="unsubscribe" class="btn-group subs-dd">
+                        <div id="unsubscribe" class="btn-group subs-dd inlineBlock">
                             <select id="campaign_unSubscribeType" class="nosearch">
                                 <option value="S" >Simple Unsubscribe </option>
                                 <option value="U">Universal Subscriber Management</option>
-                            </select>
+                            </select>                            
                         </div>
-
+                        <div class="inlineBlock" style="margin-left: 20px">
+                            <a class="opt-selection">Opt-In List Selection</a>
+                        </div>
                         <!--span6  -->
                         <div class="step1-settings">
                             <div class="inputlabel" style="margin-top:10px; display:none;">
@@ -127,6 +129,11 @@
                             <div class="inputlabel" style="display:none">
                                 <input type="checkbox" id="campaign_isTextOnly" class="checkinput"  value="">
                                 <label for="campaign_isTextOnly">Send Text version only </label>
+                            </div>
+                            <div class="inputlabel">
+                                <input type="checkbox" id="campaign_subscribeInfoUpdate" class="checkinput"  value="">
+                                <label for="campaign_subscribeInfoUpdate">Subscribe Information update </label>
+                                <a class="edit-fields">Edit Profile Layout</a>
                             </div>
                             <div class="inputlabel" >
                                 <input type="checkbox" id="campaign_isWebVersion" class="checkinput"  value="">

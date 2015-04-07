@@ -4767,3 +4767,9 @@ a.tipntest-toggle:hover i { opacity:0.7;}
       color:#6494af;
       font-size:16px;
   }
+  .edit-fields{
+      margin-left:115px;
+  }
+  .inlineBlock {
+      display: inline-block;
+  }
