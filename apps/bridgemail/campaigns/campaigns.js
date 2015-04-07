@@ -320,7 +320,9 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                             //this.$campaginLoading.hide();
 
                             _.each(data1.models, _.bind(function (model) {
-                                this.$el.find('#camps_grid tbody').append(new campaignRowView({model: model, sub: this}).el);
+                                var rowView = new campaignRowView({model: model, sub: this});
+                                this.$el.find('#camps_grid tbody').append(rowView.el);
+                               // rowView.showEllipsis();
                             }, this));
                             /*-----Remove loading------*/
                             this.app.removeSpinner(this.$el);

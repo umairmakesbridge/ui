@@ -289,7 +289,7 @@ function (template,chosen,addbox) {
 				{	
                                         var $i = 0;
 					$.each(list_array.lists[0], function(index, val) { 
-                                                if(val[0].isSupressList  == "false"){
+                                                if(val[0].isSupressList  == "false" || val[0].isBounceSupressList =="false"){
                                                     list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
                                                 }else{
                                                     $i++; // count total supress list
@@ -323,7 +323,7 @@ function (template,chosen,addbox) {
                                             {		
                                                     var $i = 0;
                                                     $.each(list_array.lists[0], function(index, val) { 
-                                                            if(val[0].isSupressList == "false"){
+                                                            if(val[0].isSupressList == "false" || val[0].isBounceSupressList =="false"){
                                                             list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
                                                         }else{
                                                                 $i++; // count total supress list
