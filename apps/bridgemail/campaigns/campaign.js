@@ -4225,7 +4225,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                               bodyCss:{"min-height":dialog_height+"px"},
                               buttons: {saveBtn: {text: 'Save'}}
                     });
-                    var URL = "/pms/list/UpdateSubscriberProfileLayout.jsp?campaignNumber="+this.camp_id+"&origin=EditCampaignOptions.jsp&x=cccjsp&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true";
+                    var URL = "/pms/list/UpdateSubscriberProfileLayout.jsp?campaignNumber="+this.camp_id+"&origin=EditCampaignOptions.jsp&x=cccjsp&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
                     var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"fieldsLayoutIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
                     dialog.saveCallBack(function(){
@@ -4242,7 +4242,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                               bodyCss:{"min-height":dialog_height+"px"},
                               buttons: {saveBtn: {text: 'Save'}}
                     });
-                    var URL = "/pms/list/DesignateLists.jsp?campaignNumber="+this.camp_id+"&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true";
+                    var URL = "/pms/list/DesignateLists.jsp?campaignNumber="+this.camp_id+"&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
                     var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"optlistiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
                     dialog.saveCallBack(function(){

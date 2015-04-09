@@ -1,4 +1,4 @@
-define(['text!common/html/exportsubscribers.html', 'jquery.searchcontrol','jquery.highlight'],
+define(['text!contacts/html/removesubscribers.html', 'jquery.searchcontrol','jquery.highlight'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

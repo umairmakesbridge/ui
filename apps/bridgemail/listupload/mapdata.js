@@ -289,18 +289,43 @@ function (template,chosen,addbox) {
 				{	
                                         var $i = 0;
 					$.each(list_array.lists[0], function(index, val) { 
-                                                if(val[0].isSupressList  == "false" || val[0].isBounceSupressList =="false"){
-                                                    list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+                                                /*=========
+                                                 * Check if Supress List to be show
+                                                 * ========*/
+                                                if(curview.isSupressListFlag){
+                                                    if(val[0].isSupressList  === "true"){
+                                                        list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+                                                        $i++; // count total supress list
+                                                    }
                                                 }else{
-                                                    $i++; // count total supress list
+                                                        if(val[0].isSupressList  == "false" || val[0].isBounceSupressList =="false"){
+                                                        list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
+                                                    }else{
+                                                        $i++; // count total supress list
+                                                    }
                                                 }
                                             });
+                                            
                                          var total_count = parseInt(list_array.count) - $i ;
-                                         if(total_count != 0){
+                                         /*=========
+                                         * Check if Supress List available
+                                         * ========*/
+                                        if(curview.isSupressListFlag){
+                                                    if(total_count == 0 || total_count==parseInt(list_array.count)){
+                                                        curview.$el.find("#existing_lists").html('<option>No Supress List Available</option>')
+                                                        curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+                                                       
+                                                    }else{
+                                                         curview.$el.find("#existing_lists").html(list_html);
+                                                    }
+                                        }else{
+                                           if(total_count != 0){
                                                         curview.$el.find("#existing_lists").html(list_html);
                                                     }else{
                                                       curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
-                                                    }							
+                                                    }	 
+                                        }
+                                         						
 				}
 				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
                                 if(curview.csv){
@@ -323,18 +348,41 @@ function (template,chosen,addbox) {
                                             {		
                                                     var $i = 0;
                                                     $.each(list_array.lists[0], function(index, val) { 
-                                                            if(val[0].isSupressList == "false" || val[0].isBounceSupressList =="false"){
-                                                            list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-                                                        }else{
-                                                                $i++; // count total supress list
-                                                            }
+                                                        /*=========
+                                                        * Check if Supress List to be show
+                                                        * ========*/    
+                                                                if (curview.isSupressListFlag) {
+                                                                    if (val[0].isSupressList === "true") {
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                        $i++; // count total supress list
+                                                                    }
+                                                                } else {
+                                                                    if (val[0].isSupressList == "false" || val[0].isBounceSupressList == "false") {
+                                                                        list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
+                                                                    } else {
+                                                                        $i++; // count total supress list
+                                                                    }
+                                                                }
                                                     });
                                                     var total_count = parseInt(list_array.count) - $i ;
-                                                    if(total_count != 0){
-                                                        curview.$el.find("#existing_lists").html(list_html);
-                                                    }else{
-                                                        curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
-                                                    }
+                                                    /*=========
+                                                     * Check if Supress List available
+                                                     * ========*/
+                                                if(curview.isSupressListFlag){
+                                                            if(total_count == 0 || total_count==parseInt(list_array.count)){
+                                                                curview.$el.find("#existing_lists").html('<option>No Supress List Available</option>')
+                                                                curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+
+                                                            }else{
+                                                                 curview.$el.find("#existing_lists").html(list_html);
+                                                            }
+                                                }else{
+                                                   if(total_count != 0){
+                                                                curview.$el.find("#existing_lists").html(list_html);
+                                                            }else{
+                                                              curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
+                                                            }	 
+                                                }
                                                     							
                                             }
                                             app.setAppData('lists',list_array);
@@ -348,6 +396,8 @@ function (template,chosen,addbox) {
 		   this.render();
 		   var curview = this;
 		   var app = this.app;
+  
+                  
 		   var campview = this.options.camp;
                    if(typeof(this.options.params) != 'undefined' ){
                        this.rows = curview.options.params.rows
@@ -372,13 +422,18 @@ function (template,chosen,addbox) {
                         placeholder_text:appMsgs.MAPDATA_customfield_placeholder
 		   });
 		   var curview = this;
-                   
+                   this.isSupressListFlag = this.$el.parents(".ws-content.active").find('.camp_header').hasClass('orange-head');
+                   if(this.isSupressListFlag){
+                       this.$('.map-toggle').hide();
+                   }
 		   curview.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
 		},
 		render: function () {
 			this.$el.html(this.template({}));
+                         
 			this.app = this.options.app;                        
 			this.camp_obj = this.options.camp;
+                        this.isSupressListFlag = false;
                        if(typeof(this.options.params) != 'undefined' ){
                             this.csv = this.options.params.csv;
                         }else{
@@ -391,6 +446,8 @@ function (template,chosen,addbox) {
                             var alertEmail = this.app.get("user").alertEmail?this.app.get("user").alertEmail:this.app.get("user").userEmail;
                             this.$("#alertemail").val(alertEmail);
                         }
+                       
+                        
 		}
 		,
 		init:function(){
