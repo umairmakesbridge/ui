@@ -22,7 +22,8 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 "click .open-views":"openViews",
                 "click .sent-views":"sentViews",
                 "click .pending-views":"pendingViews",
-                "click .closebtn":"closeContactsListing"
+                "click .closebtn":"closeContactsListing",
+                "click .s-report":"openSnapshotReport"
             },
             initialize: function () {
                this.template = _.template(template);				
@@ -536,28 +537,40 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                    });
 		 },
                  copyCampaign: function(camp_id)
-			{
-                            var camp_obj = this;
-                            var dialog_title = "Copy Campaign";
-                            var dialog = this.options.app.showDialog({title:dialog_title,
-                                              css:{"width":"600px","margin-left":"-300px"},
-                                              bodyCss:{"min-height":"260px"},							   
-                                              headerIcon : 'copycamp',
-                                              buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
-                            });
-                            this.options.app.showLoading("Loading...",dialog.getBody());
-                            require(["campaigns/copycampaign"],function(copycampaignPage){                                     
-                                             var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
-                                             dialog.getBody().html(mPage.$el);
-                                             dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
-                            });
-			},
-                        truncateHeader:function(header){
-                             
-                            if(header.length > 47) 
-                            return header.substring(0,47)+ '...';
-                            else return header;
-                        },
+                {
+                    var camp_obj = this;
+                    var dialog_title = "Copy Campaign";
+                    var dialog = this.options.app.showDialog({title:dialog_title,
+                                      css:{"width":"600px","margin-left":"-300px"},
+                                      bodyCss:{"min-height":"260px"},							   
+                                      headerIcon : 'copycamp',
+                                      buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
+                    });
+                    this.options.app.showLoading("Loading...",dialog.getBody());
+                    require(["campaigns/copycampaign"],function(copycampaignPage){                                     
+                                     var mPage = new copycampaignPage({camp:camp_obj,camp_id:camp_id,app:camp_obj.options.app,copycampsdialog:dialog});
+                                     dialog.getBody().html(mPage.$el);
+                                     dialog.saveCallBack(_.bind(mPage.copyCampaign,mPage));
+                    });
+                },
+                truncateHeader:function(header){
+
+                    if(header.length > 47) 
+                    return header.substring(0,47)+ '...';
+                    else return header;
+                },
+                openSnapshotReport:function(){
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.options.app.showDialog({title:'Snapshot Report',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:false,                              
+                              bodyCss:{"min-height":dialog_height+"px"}
+                    });
+                    var URL = "/pms/report/SnapshotReport.jsp?viewBy=campaign&selectCampaign="+this.campNum+"&BMS_REQ_TK="+this.options.app.get('bms_token')+"&fromNewUI=true&ft=y&as=y&doPreview=n";
+                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    dialog.getBody().html(iframHTML);
+                }        
 
             
         });    

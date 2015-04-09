@@ -32,6 +32,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     'click .preview-camp': 'previewCampaignstep4',
                     'click .prev-iframe-campaign': 'htmlTextClick',
                     'click .save-step2': 'saveForStep2',
+                    'click .dynamic-cotnent-items':'dcItemsDialog',
                     'click .editorbtnshow': function () {
                         this.$(".textdiv").hide();
                         this.$(".editor_box").show();
@@ -4248,6 +4249,20 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     dialog.saveCallBack(function(){
                         dialog.$(".optlistiframe")[0].contentWindow.document.designateLists.submit();
                     });
+                }
+                ,
+                dcItemsDialog:function(){
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.app.showDialog({title:'Dynamic Content Items',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:false,                              
+                              bodyCss:{"min-height":dialog_height+"px"}
+                    });
+                    var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true";
+                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    dialog.getBody().html(iframHTML);
+                    
                 }
 
             });

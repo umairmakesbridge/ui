@@ -150,7 +150,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         allow = true;
                     }
                     else {
-                        if (options.url == "contacts" || options.url == "contacts/subscriber") {
+                        if (options.url == "contacts/contacts" || options.url == "contacts/subscriber") {
                             allow = true;
                         }
                     }

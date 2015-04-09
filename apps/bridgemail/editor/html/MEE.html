@@ -601,10 +601,19 @@
             </li>
             <% if (!options.otopage && !options.landingPage) { %>
             <li class="MenuCallTextVersion" style="float:right">
-                <a  class="btn-blue">
+                <a  class="btn-green">
                     <i class="icon plaintext"></i><span>Text Version</span>
                 </a>
             </li>
+            <% if (options._app.dcItemsUsers.indexOf(options._app.get("user").userId)>-1 ) { %>
+            <li class="MenuCallDCItems" style="float:right">
+                <a  class="btn-yellow">
+                    <i class="icon dcitems"></i>
+                    <span>Dynamic Content Items</span>
+                </a>
+            </li>
+            <% } %>
+            
             <% } %>
             
         </ul>

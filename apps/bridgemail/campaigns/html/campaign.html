@@ -351,7 +351,9 @@
             <li><a  data-toggle="tab" href="#editortext">Text</a></li>
         </ul>
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save Email Body</span></a>
-
+        <% if(this.app.dcItemsUsers.indexOf(this.app.get("user").userId)>-1) {  %>
+        <a class="btn-yellow right dynamic-cotnent-items" style=" margin-left:5px;margin-top:2px;"><span>Dynamic Content Items</span></a>
+        <% } %>
         <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px;margin-left:10px">
             <div class="inputcont "><input type="text"  id="image_url" placeholder="Image's  Public URL" style="padding-right: 67px !important;
                                            width: 244px;" ></div>
@@ -393,6 +395,9 @@
     <!-- content-inner   -->
     <div class="content-inner soruces"  id="area_html_code" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save HTML</span></a>
+        <% if(this.app.dcItemsUsers.indexOf(this.app.get("user").userId)>-1) {  %>
+        <a class="btn-yellow right dynamic-cotnent-items" style=" margin-left:5px;margin-top:2px;"><span>Dynamic Content Items</span></a>
+        <% } %>
         <div class="input-append adv_dd sort-options right step2-mergefields" style="width:325px;margin-left:10px">
             <div class="inputcont "><input type="text"  id="image_url2" placeholder="Image's  Public URL" style="padding-right: 67px !important;
                                            width: 244px;" ></div>
@@ -418,6 +423,9 @@
 
     <div class="content-inner soruces"  id="area_plain_text" style="margin: 20px 0 0;display: none" >
         <a class="btn-green right save-step2" style=" margin-left:5px;margin-top:2px;"><span>Save Text</span></a>
+        <% if(this.app.dcItemsUsers.indexOf(this.app.get("user").userId)>-1) {  %>
+        <a class="btn-yellow right dynamic-cotnent-items" style=" margin-left:5px;margin-top:2px;"><span>Dynamic Content Items</span></a>
+        <% } %>
         <div class="input-append adv_dd sort-options right step2-mergefields" id="merge_field_plugin-wrap-plain" style="width:325px">
             <div class="inputcont "><input type="text" class="bms-input-tags" id="merge-field-plain" placeholder="Merge Tags" ></div>
             <div class="btn-group">
@@ -433,8 +441,7 @@
     <!-- content-inner   --> 
 
 </div>
-<div class="wizard-steps step3">  
-   
+<div class="wizard-steps step3">     
      <div class="selection-boxes" style=" "> <!--<a class="prev"><span></span></a>-->
         <div style="width:auto; margin:0 5px;" class="messagebox info animated"><p>Choose one of the "<strong>Recipients</strong>"  options from  below.</p></div>
               <div class="scroll-text">   

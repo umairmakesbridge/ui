@@ -75,6 +75,7 @@ define([
                 app_data: {}
             }, window.sz_config || {} ));
             this.testUsers = ['admin', 'jayadams', 'demo','MKS-Training2','mansoor@makesbridge.com'];
+            this.dcItemsUsers = ['admin', 'jayadams', 'demo','fisglobal'];
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {
@@ -83,7 +84,8 @@ define([
             //this.CRMGetStatus();
             //Exposes Workspaces 
             this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
-                            ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots"};
+                            ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
+                            "reports":"camapignReport"};
               
         },
         start: function (Router, MainContainer, callback) {
@@ -624,10 +626,12 @@ define([
             return dialog;           
         },
         showAddDialog: function (options) {                        
-            var dialog = new addDialog(options);            
-            $("body").append(dialog.$el);            
-            dialog.init();
-            return dialog;           
+            if (this.get("user") && this.get("user").hasSalesOnlyAccess == "N") {
+                var dialog = new addDialog(options);            
+                $("body").append(dialog.$el);            
+                dialog.init();
+                return dialog;           
+            }
         },       
         enableValidation: function (options)
         {

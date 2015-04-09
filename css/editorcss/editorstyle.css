@@ -155,6 +155,7 @@ a,
 .MEE_EDITOR .icon.copy  { background: url("../images/copy.png") no-repeat scroll center center; margin:0px !important;}
 .MEE_EDITOR .icon.delete  { background: url("../images/delete.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.move  { background: url("../images/move.png") no-repeat scroll center center; }
+.MEE_EDITOR .icon.dcitems { background: url("../images/dynamic-content.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.cross {
     background: url("../images/cross.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }

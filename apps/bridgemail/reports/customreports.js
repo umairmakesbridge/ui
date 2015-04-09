@@ -43,6 +43,21 @@ define(['text!reports/html/customreports.html'],
                     if(addChartButton.showChartWindow){
                         addChartButton.showChartWindow();
                     }
+                },
+                openChart:function(url){
+                    var dialog_width = $(document.documentElement).width()-60;
+                    var dialog_height = $(document.documentElement).height()-182;
+                    var dialog = this.app.showDialog({title:'Custom Charts',
+                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                              headerEditable:false,                              
+                              bodyCss:{"min-height":dialog_height+"px"}
+                              
+                    });                    
+                    var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"customChartIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    dialog.getBody().html(iframHTML);
+                    dialog.saveCallBack(function(){
+                        //dialog.$(".customChartIframe")[0].contentWindow.saveUpdateData();
+                    });
                 }
 
             });

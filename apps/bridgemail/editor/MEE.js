@@ -524,6 +524,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function InitializePreviewControls() {
                                     var lnkPreviewCode = myElement.find(".MenuCallPreview");
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
+                                    var lnkDCItems = myElement.find(".MenuCallDCItems");    
                                     var divPreviewCode = myElement.find(".divPreviewCode");
 
                                     //previeCodeTabs.tabs();
@@ -654,6 +655,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
                                         
 
+                                    });
+                                    
+                                    lnkDCItems.click(function(){
+                                        var dialog_width = $(document.documentElement).width() - 60;
+                                        var dialog_height = $(document.documentElement).height() - 182;
+                                        var dialog = options._app.showDialog({
+                                            title: 'Dynamic Content Items',
+                                            css: {
+                                                "width": dialog_width + "px",
+                                                "margin-left": "-" + (dialog_width / 2) + "px",
+                                                "top": "20px"
+                                            },
+                                            bodyCss: {
+                                                "min-height": dialog_height + "px"
+                                            },
+                                            headerEditable: false                                            
+                                            
+                                        });
+                                        var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK="+options._app.get('bms_token')+"&fromNewUI=true";
+                                        var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                                        dialog.getBody().html(iframHTML);
                                     });
 
                                 }

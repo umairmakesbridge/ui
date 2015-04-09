@@ -1100,6 +1100,9 @@
               if(filter.find(".campaign-list").val()!=="-1" && filter.find(".filter-by").val()=="CK"){
                 filters_post[N+".articleNumber"]=filter.find(".campaign-url").val()
               }
+              else{
+                  filters_post[N+".articleNumber"]="-1";
+              }
               var emailTimeSpan = filter.find(".emailTimeSpan").val()
               filters_post[N+".isEmailTimeSpan"]= ((emailTimeSpan!=="-1") ?"Y":"N")
               if(emailTimeSpan!=="-1"){
