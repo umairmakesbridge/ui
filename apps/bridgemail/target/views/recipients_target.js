@@ -161,10 +161,17 @@ function (template) {
                         var mPage = new copytargetPage({camp: camp_obj, app: curview.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit'});
                         var dialogArrayLength = curview.app.dialogArray.length; // New Dialog
                         dialog.getBody().append(mPage.$el);
+                        mPage.$el.find('#copy_name').focus();
+                        
                         curview.app.showLoading(false, mPage.$el.parent());
                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                         curview.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTarget,mPage); // New Dialog
                         dialog.saveCallBack(_.bind(mPage.copyTarget, mPage));
+                        mPage.$el.find("#copy_name").keyup(function (e) {
+                        if (e.keyCode == 13) {
+                            dialog.$el.find(".btn-save").click();
+                            }
+                        });
                     });
                 },
                previewTarget:function(ev){

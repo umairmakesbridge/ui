@@ -90,6 +90,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .template-gallery': 'templateGallery',
                     'click .camapign-report': 'camapignReport',
                     'click .csv-upload': 'csvUpload',
+                    'click .supress-list': 'supressList',
                     'click .connect-crm': 'connectCrm',
                     'click .crm-salesforce': 'salesforceCrm',
                     'click .crm-netsuite': 'netsuiteCrm',
@@ -110,6 +111,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .workflow-listing': 'workflowListing',
                     'click .bridge-statz': 'openBridgeStatz',
                     'click .exportsubscribers': 'exportsubscribers',
+                    'click .removesubscribers': 'removeSubscribers',
                     'click .bounced-email': 'bouncedEmail',
                     'click .linkfilters': 'linkfilters',
                     'click .custom-reports': 'customReprots',
@@ -588,7 +590,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Custom Reports', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'customreports', noTags: true});
                 },
                 exportsubscribers: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'common/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
+                    this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
+                },
+                removeSubscribers: function () {
+                    this.addWorkSpace({type: '', noTags: true, title: 'Remove Subscribers', sub_title: 'Remove Contacts', url: 'contacts/removesubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
                 },
                 bouncedEmail: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Bounced Emails', sub_title: 'Bounced Campaign Report', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
@@ -613,6 +618,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 csvUpload: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload'});
+                },
+                supressList: function () {
+                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload To Suppress List', sub_title: 'Show Supress List', url: 'listupload/csvupload', workspace_id: 'supress_list', tab_icon: 'csvupload',headerclass:'orange-head'});
                 },
                 connectCrm: function () {
                     this.addWorkSpace({type: '', title: 'Connections', sub_title: 'CRM', url: 'crm/crm', workspace_id: 'crm', tab_icon: 'crm', single_row: true});
