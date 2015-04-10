@@ -101,7 +101,7 @@ function (template) {
                 
                 },
                 editTarget:function(ev){
-                    var target_id = $(ev.target).data('id');
+                    var target_id = this.model.get('filterNumber.encode');
                     var self = this;
                     var isEditable = false;
                     if(this.options.type == "autobots_listing"){

@@ -305,7 +305,7 @@ define([
             return isError;
         },
         autoLoadImages: function () {
-            var preLoadArray = ['img/trans_gray.png', 'img/recurring.gif', 'img/loading.gif', 'img/spinner-medium.gif', 'img/greenloader.gif', 'img/loader.gif', 'img/refresh-g.gif']
+            var preLoadArray = ['img/trans_gray.png', 'img/recurring.gif', 'img/loading.gif', 'img/spinner-medium.gif', 'img/greenloader.gif', 'img/refresh-g.gif']
             $(preLoadArray).each(function () {
                 var image = $('<img />').attr('src', this);
             });

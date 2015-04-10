@@ -59,27 +59,13 @@ String _path = "/pms/umair/";
             
     </style>
     <link rel="shortcut icon" href="img/favicon.ico">    
+    
     <link href="<%= _path %>css/bootstrap.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/icons.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/style.css?bust=1.362" rel="stylesheet" type="text/css" >  
-    <link rel="stylesheet" href="<%= _path %>css/isotope.css?bust=1.362" rel="stylesheet" />    
-    <link href="<%= _path %>css/bmsgrid.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/jquery-ui.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/calendar.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/custom_2.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/chosen.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/changes.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link href="<%= _path %>css/editorcss/skin.min.css?bust=1.362" rel="stylesheet">
-    <link href="<%= _path %>css/tan_changes.css?bust=1.362" rel="stylesheet" type="text/css" >
-    <link rel="stylesheet" href="<%= _path %>css/ui.daterangepicker.css?bust=1.362" type="text/css" />
-    <link rel="stylesheet" href="<%= _path %>css/animate.css?bust=1.362" type="text/css" />
-    <link rel="stylesheet" href="<%= _path %>css/dash.css?bust=1.362" rel="stylesheet" />
-    <link rel="stylesheet" href="<%= _path %>css/a_changes.css?bust=1.362" rel="stylesheet" />        
-    <link rel="stylesheet" href="<%= _path %>css/jquery.mCustomScrollbar.css?bust=1.362" rel="stylesheet" />        
-        
-    <link href="<%= _path %>css/editorcss/jquery.minicolors.css?bust=1.362" rel="stylesheet" />
-    <link href="<%= _path %>css/editorcss/style.css?bust=1.362" rel="stylesheet" />
-    <link href="<%= _path %>css/editorcss/editorstyle.css?bust=1.362" rel="stylesheet" />
+    <link href="<%= _path %>css/bridgemail.css?bust=1.362" rel="stylesheet" type="text/css" >   
+    <link href="<%= _path %>css/plugins.css?bust=1.362" rel="stylesheet" />        
+    <link href="<%= _path %>css/changes.css?bust=1.362" rel="stylesheet" type="text/css" >    
+    <link href="<%= _path %>css/editorcss/mee.css?bust=1.362" rel="stylesheet"> 
+    
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
         var _path = '<%= _path %>'
