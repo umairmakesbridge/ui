@@ -1,7 +1,11 @@
-<div class="camp_header <%=this.options.headerclass%>">                  
+<div class="camp_header <%if(this.options.headerObj){ %> <%= this.options.headerObj.headerclass %> <% } %>">                  
             
     <div class="row c-name edited active"> 
+        <%if(this.options.headerObj && this.options.headerObj.headericon){ %>
+            <span class="icon <%= this.options.headerObj.headericon %>" title=""></span>
+        <% }else{ %>
           <span class="icon fav" title=""></span>
+          <% } %>
           <h2><span id="workspace-header"></span>                 
               <div class="pointy add add-action" style="display:none">
                 <a id="addnew_action" class="icon plus showtooltip"></a>

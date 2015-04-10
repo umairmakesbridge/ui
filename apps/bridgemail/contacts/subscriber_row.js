@@ -136,7 +136,7 @@ function (template,highlighter) {
                           sub_name = this.model.get("email");
                       }
                        
-                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name);
+                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name,this.model.get("supress"));
                       
             }
             

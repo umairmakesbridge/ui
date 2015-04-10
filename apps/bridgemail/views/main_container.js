@@ -345,10 +345,17 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
 
                 },
-                openSubscriber: function (sub_id,sub_name) {
+                openSubscriber: function (sub_id,sub_name,isSupress) {
                     var sub_id = sub_id ? sub_id : 0;
                     this.subscribe_name = sub_name;
                     this.subscribe_id = sub_id;
+                    this.isSupress = isSupress;
+                    var headclass;
+                    var headicon;
+                    if(isSupress === "S"){
+                        headclass = 'orange-head'; 
+                        headicon = 'supress-w'; 
+                    }
                     this.addWorkSpace({type: '',
                         title: "Loading...",
                         isLoadSpinner: true,
@@ -356,13 +363,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         workspace_id: 'subscriber_' + sub_id,
                         sub_title: 'Contact Profile',
                         url: 'contacts/subscriber',
+                        headerObj:{headerclass:headclass,headericon:headicon},
                         params: {sub_id: sub_id,sub_name:sub_name},
                         actions: []
                     });
                 },
                 SubscriberName: function (sub_id,name){
                      var tabObj = this.$('#wstabs').find('li[workspace_id="subscriber_'+sub_id+'"]');
-                     tabObj.find('a').html('<div class="letter_block l_'+name.charAt(0).toLowerCase()+'"><span>'+name.charAt(0)+'</span></div>');  
+ 
+                     if(this.isSupress==="S"){
+                       tabObj.find('a').html('<div class="letter_block l_'+name.charAt(0).toLowerCase()+'"><span>'+name.charAt(0)+'</span></div>');
+                     }else{
+                     tabObj.find('a').html('<div class="letter_block l_'+name.charAt(0).toLowerCase()+'"><span>'+name.charAt(0)+'</span></div>'); 
+                 }
                 },
                 openNurtureTrack: function (opt) {
                     var track_id = opt.id ? opt.id : 0;
@@ -620,7 +633,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload', sub_title: 'Add Contacts', url: 'listupload/csvupload', workspace_id: 'csv_upload', tab_icon: 'csvupload'});
                 },
                 supressList: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload To Suppress List', sub_title: 'Show Supress List', url: 'listupload/csvupload', workspace_id: 'supress_list', tab_icon: 'csvupload',headerclass:'orange-head'});
+                    this.addWorkSpace({type: '', noTags: true, title: 'CSV Upload To Suppress List', sub_title: 'Show Supress List', url: 'listupload/csvupload', workspace_id: 'supress_list', tab_icon: 'csvupload',headerObj:{headerclass:'orange-head'}});
                 },
                 connectCrm: function () {
                     this.addWorkSpace({type: '', title: 'Connections', sub_title: 'CRM', url: 'crm/crm', workspace_id: 'crm', tab_icon: 'crm', single_row: true});

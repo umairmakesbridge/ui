@@ -207,7 +207,7 @@ function (template,chosen,addbox) {
 		   if(isValid)
 		   {					 
 			   var alertemail = el.find('#alertemail').val();
-			   app.showLoading("Uploading file",curview.$el);
+			   app.showLoading("Uploading file",this.$el);
                            var that= this;
 			   var importURL = '/pms/io/subscriber/uploadCSV/?BMS_REQ_TK='+app.get('bms_token')+'&stepType=two';                           
 			   $.post(importURL, { type: "import",listNumber:listid,optionalEmail:alertemail,newListName:newlist,fileName:curview.fileName,layout:layout_map })
