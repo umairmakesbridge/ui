@@ -85,7 +85,11 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                         this.showHideTargetTitle(true);
                     }, this));
                     this.dialog.$(".savebtn").click(_.bind(function(obj) {
-                        this.saveTarget(obj)
+                        this.saveTarget(obj);
+                    }, this));
+                    this.dialog.$(".modal-footer").find('.btn-save').addClass('btn-target-save').removeClass('btn-save');
+                    this.dialog.$(".modal-footer").find('.btn-target-save').click(_.bind(function(obj) {
+                        this.saveTargetFilter()
                     }, this));
                 },
                 saveTarget: function(obj) {
@@ -240,6 +244,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                     var target_id = this.target_id;
                     var curview = this;
                     var camp_obj = this.options.camp;
+                    var camp_parent_obj = this.options.camp_parent_obj;
                     var dialog_title = "Copy Target";
                     var dialog = this.app.showDialog({title: dialog_title,
                         css: {"width": "650px", "margin-left": "-325px"},
@@ -249,13 +254,21 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["target/copytarget"], function(copytargetPage) {
-                        var mPage = new copytargetPage({camp: camp_obj, app: camp_obj.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit'});
+                        var mPage = new copytargetPage({camp: camp_obj, app: camp_obj.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit',camp_parent_obj:camp_parent_obj});
                         var dialogArrayLength = curview.app.dialogArray.length; // New Dialog
                         dialog.getBody().append(mPage.$el);
+                        mPage.$el.find('#copy_name').focus();
                         curview.app.showLoading(false, mPage.$el.parent());
                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
                         curview.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(mPage.copyTarget,mPage); // New Dialog
+                        curview.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                        curview.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
                         dialog.saveCallBack(_.bind(mPage.copyTarget, mPage));
+                        mPage.$el.find("#copy_name").keyup(function (e) {
+                        if (e.keyCode == 13) {
+                            dialog.$el.find(".btn-save").click();
+                            }
+                        });
                     });
                 },
                 loadTarget: function(target_id) {

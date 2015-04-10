@@ -77,7 +77,9 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
 
                     this.$(".connection-setup").chosen({width: "150px", disable_search: "true"})
                     if(this.sub_name)
-                    {this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);}
+                    {
+                        this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);
+                    }
                 },
                 /**
                  * Loading data from server to populate page info.
@@ -112,7 +114,11 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                             _this.$('.score').html('<i class="icon score"></i>&nbsp;<span class="score-value">0</span>');
                         }
                         if(_json.supress=="S"){
-                            _this.$('.suppress-sub').parent().hide();
+                            //_this.$('.suppress-sub').parent().hide();
+                            _this.$('.suppress-sub').addClass('disabled-btn');
+                            _this.$('.suppress-sub').html('<i class="icon supress-w disabled-btn"></i>');
+                            _this.$('.suppress-sub').attr('data-original-title','Contact already suppressed');
+                            _this.$('.suppress-sub').removeClass('suppress-sub');
                         }
                         else{
                             _this.$('.suppress-sub').parent().show();

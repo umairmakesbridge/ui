@@ -104,6 +104,7 @@ function (template) {
                     var target_id = this.model.get('filterNumber.encode');
                     var self = this;
                     var isEditable = false;
+                    var camp_parent_obj = this.parent;
                     if(this.options.type == "autobots_listing"){
                         if(this.options.editable == true){
                             this.previewTarget(target_id); 
@@ -127,7 +128,7 @@ function (template) {
                         });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
-                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable});
+                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable,camp_parent_obj:camp_parent_obj});
                            var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
