@@ -89,10 +89,10 @@ function (template,jqueryui,addbox) {
                             tabindex++;
                        });
 
-                    });
-                    this.$(".custom-field-container").append(col1);
-                    this.$(".custom-field-container").append(col2);
+                    });                    
                 }
+                this.$(".custom-field-container").append(col1);
+                this.$(".custom-field-container").append(col2);
             },
             /**
             * Update fields value in cache.
