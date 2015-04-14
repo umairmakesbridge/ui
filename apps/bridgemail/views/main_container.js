@@ -606,7 +606,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
                 },
                 removeSubscribers: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'Remove Subscribers', sub_title: 'Remove Contacts', url: 'contacts/removesubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
+                    this.addWorkSpace({type: '', noTags: true, title: 'Remove Subscribers', sub_title: 'Remove Contacts', url: 'contacts/removesubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'removesubscribers'});
                 },
                 bouncedEmail: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Bounced Emails', sub_title: 'Bounced Campaign Report', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});

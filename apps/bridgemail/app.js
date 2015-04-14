@@ -246,7 +246,14 @@ define([
                     this.mainContainer.$(".local-adds").hide();
                     this.mainContainer.initializeIsotops();
                 }
-                 if(this.get("tipId")){
+                if(this.testUsers.indexOf(this.get("user").userId)>-1){
+                    this.mainContainer.$(".slidenav-dd .workflow-listing,.linkfilters,.bounced-email,.custom-reports,.supress-list,.slidenav-dd  .exportsubscribers").show();
+                    this.mainContainer.$(".tile-shortcuts .workflow-listing,.tile-shortcuts .exportsubscribers,.removesubscribers").css("visibility","visible");
+                }
+                else{
+                    this.mainContainer.$(".reports-section").css("margin-top","-70px");
+                }
+                if(this.get("tipId")){
                     this.mainContainer.tip_test();
                     this.mainContainer.$(".tipntest-toggle").show();
                     this.mainContainer.$(".workspace .ws-tabs").css('top','140px');

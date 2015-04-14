@@ -1373,13 +1373,17 @@ ul.tabs-btns li.active a{
     background-position: -90px -180px;
 }
 .wtab-linkfilters {
-     background-position: -90px -272px;
+     background-position: -90px -270px;
 }
 .wtab-bouncedemails {
      background-position: -90px -210px;
 }
 .wtab-exportsubscribers{
-     background-position: -90px -153px;
+     background-position: -90px -150px;
+}
+.wtab-removesubscribers{
+     background-position: -90px -90px;
+
 }
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
