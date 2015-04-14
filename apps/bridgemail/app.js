@@ -99,6 +99,8 @@ define([
                 this.isDialogExists = false;
                 // Dialog view 
                 this.dialogView = '';
+                // Add Dialog view 
+                this.addDialogView = '';
                 // Dialog Array
                 this.dialogArray = [];
                 // Merge Tag
@@ -186,6 +188,13 @@ define([
                 });
                 $("#template_search_menu").hide();
             });
+            $("body").keyup(_.bind(function(e){
+            if(e.keyCode == 27)
+              if(this.dialogArray.length > 0){
+                  this.dialogView.hide();
+              }
+              $('body').find('.moda-v2').parent().remove();
+            },this));
             $("body").mousedown(function () {
                 $(".MEE_EDITOR .alertButtons").hide();
             })
@@ -634,10 +643,10 @@ define([
         },
         showAddDialog: function (options) {                        
             if (this.get("user") && this.get("user").hasSalesOnlyAccess == "N") {
-                var dialog = new addDialog(options);            
-                $("body").append(dialog.$el);            
-                dialog.init();
-                return dialog;           
+                this.addDialogView = new addDialog(options);            
+                $("body").append(this.addDialogView.$el);            
+                this.addDialogView.init();
+                return this.addDialogView;           
             }
         },       
         enableValidation: function (options)
