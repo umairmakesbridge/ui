@@ -215,7 +215,7 @@ function (template,MyImports,moment) {
                 },
                 newImport:function(){
                     var camp_obj = this;
-                   var new_import ='<div class="overlay"><div style="margin-left: -385px; width: 770px;" class="modal-open modal in"><div style="min-height: 300px;" class="modal-body">';
+                   var new_import ='<div class="overlay"><div style="margin-left: -385px; width: 770px;" class="modal-open modal in moda-v2"><div style="min-height: 300px;" class="modal-body">';
                         new_import +='<div class="sd_common netsuit-tilt"><a class="closebtn close_import"></a>';
                         new_import +=' <div class="watermark_tilt" style="background-position:"></div>';
                         new_import +='<h2>Create a new Netsuite Import</h2><div class="lp_name">';
