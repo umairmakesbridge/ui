@@ -5919,7 +5919,7 @@ p {
 
 .filter-row {
 	border:0px solid #2da9ff;
-	background:#f1f9fd;
+	background:#f1f9fd !important;
 	min-height:30px;
 	margin:25px 0 0 60px;
 	position: relative;

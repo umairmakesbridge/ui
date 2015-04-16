@@ -60,7 +60,7 @@ function ($,Backbone, _,app,Wizard, template) {
                         this.$(".camp_header .showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});	
                 },
                 render: function () {
-                        this.$el.html(this.template({}));
+                        this.$el.html(this.template({app:app}));
                         var page_container = null;
                         //Render workspace title
                         if(this.options.title){

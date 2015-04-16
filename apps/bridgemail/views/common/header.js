@@ -292,10 +292,14 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                                 };
 
                         evt = evt || window.event;
-                        if (evt.type in evtMap)
-                            document.body.className = evtMap[evt.type];
-                        else
-                            document.body.className = this[hidden] ? "hidden" : "visible";
+                        if(!app.get("newWin")){
+                            if (evt.type in evtMap){
+                                    document.body.className = evtMap[evt.type];
+                                }
+                            else{
+                                document.body.className = this[hidden] ? "hidden" : "visible";
+                               }
+                       }
                     }
                 },
                 toggleAnnouncement: function () {

@@ -138,7 +138,12 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     //this.$el.append(this.header.$el,LandingPage, this.footer.$el,this.news.$el);          
                     this.app = this.options.app;
                     this.template = _.template(LandingPage);
-                    this.$el.append(this.header.$el, this.template({}));
+                    if(!this.app.get("newWin")){
+                        this.$el.append(this.header.$el, this.template({}));
+                    }
+                    else{
+                        this.$el.append(this.template({}));
+                    }
                     $(window).scroll(_.bind(function () { 
                         //You've scrolled this much:
                            var et = $(window).scrollTop();
@@ -347,14 +352,28 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 openSubscriber: function (sub_id,sub_name,isSupress) {
                     var sub_id = sub_id ? sub_id : 0;
-                    this.subscribe_name = sub_name;
-                    this.subscribe_id = sub_id;
-                    this.isSupress = isSupress;
-                    var headclass;
-                    var headicon;
-                    if(isSupress === "S"){
-                        headclass = 'orange-head'; 
-                        headicon = 'supress-w'; 
+                    if(this.app.get("newWin")){
+                        if(this.app.get("subNum")){
+                            sub_id = this.app.get("subNum");
+                            this.subscribe_name = "Contact";
+                            this.subscribe_id = this.app.get("subNum");
+                            this.isSupress = false;
+                        }
+                        else{
+                            this.app.showAlert("subNum parameter is missing in url",$("body"));
+                            return false;
+                        }
+                    }
+                    else{
+                        this.subscribe_name = sub_name;
+                        this.subscribe_id = sub_id;
+                        this.isSupress = isSupress;
+                        var headclass;
+                        var headicon;
+                        if(isSupress === "S"){
+                            headclass = 'orange-head'; 
+                            headicon = 'supress-w'; 
+                        }
                     }
                     this.addWorkSpace({type: '',
                         title: "Loading...",

@@ -58,12 +58,14 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 0,
+                complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
                 tipId : $.getUrlVar(false,'tipId'),
                 workId : $.getUrlVar(false,'workId'),
+                newWin : $.getUrlVar(false,'newWin'),
+                subNum : $.getUrlVar(false,'subNum'),
                 preview_domain: previewDomain,                
                 content_domain: contentDomain,
                 user_Key: userKey,
@@ -85,7 +87,7 @@ define([
             //Exposes Workspaces 
             this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
                             ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
-                            "reports":"camapignReport"};
+                            "reports":"camapignReport",subscriber:"openSubscriber"};
               
         },
         start: function (Router, MainContainer, callback) {
@@ -112,6 +114,9 @@ define([
                 //attaching main container in body                                
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);
+                if(this.get("newWin")){
+                    $("body").addClass("new-win");
+                }
                 this.mainContainer.dashBoardScripts();
                 this.getUser();
                 this.initScript();
@@ -189,11 +194,12 @@ define([
                 $("#template_search_menu").hide();
             });
             $("body").keyup(_.bind(function(e){
-            if(e.keyCode == 27)
-              if(this.dialogArray.length > 0){
-                  this.dialogView.hide();
-              }
-              $('body').find('.moda-v2').parent().remove();
+                if(e.keyCode == 27){
+                  if(this.dialogArray.length > 0){
+                      this.dialogView.hide();
+                  }
+                  $('body').find('.moda-v2').parent().remove();
+                }
             },this));
             $("body").mousedown(function () {
                 $(".MEE_EDITOR .alertButtons").hide();
@@ -502,7 +508,7 @@ define([
             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
             str = str.replace(/\\/g, "");
             str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n");    
+            str = str.replace(/\r\n/g, "\n");  
             return str;
         },
         getMMM: function (month) {

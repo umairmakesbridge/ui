@@ -4808,6 +4808,13 @@ a.tipntest-toggle:hover i { opacity:0.7;}
       display: inline-block;
   }
   
+  .new-win #workspace{
+      top:0px !important;
+  }
+  .new-win .workspace{
+      margin:5px !important;
+  }
+  
   /* ================================================Start tan_a_changes.css================================================ */
   h2.header-list {
     padding: 5px 1px 3px 10px;
