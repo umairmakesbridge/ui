@@ -51,7 +51,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!templates/common/header
                         app.mainContainer.addWorkSpace({type: '', title: this.getTitle(obj)});
                     },
                     'click .profiledd': function () {
-                        if(app.testUsers.indexOf(app.get("user").userId)>-1){
+                        if(app.testUsers.indexOf(app.get("user").userId)>-1 ||  app.get("user").userId === 'hawaiilife'){
                             app.mainContainer.addWorkSpace({type: '', title: 'Manage Account', sub_title: 'Settings', url: 'account/account', workspace_id: 'accountpage', tab_icon: 'accountpage', single_row: true});
                         }
                     }

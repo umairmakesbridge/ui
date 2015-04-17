@@ -58,7 +58,7 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'developement',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -719,7 +719,7 @@ define([
             if (this.get("user")) {
                 var _user = this.get("user");
                 var fullName = _user.firstName + " " + _user.lastName;
-                if(this.testUsers.indexOf(this.get("user").userId)>-1){
+                if(this.testUsers.indexOf(this.get("user").userId)>-1 ||  this.get("user").userId === 'hawaiilife'){
                    this.mainContainer.$(".profiledd").attr("title","Click for account management").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                    this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)); 
                 }else{
