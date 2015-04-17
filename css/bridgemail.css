@@ -5955,6 +5955,9 @@ p {
 .filter-div .filter-row.list{
     background: none repeat scroll 0 0 #f1f9fd !important;
 }
+.filter-div .filter-row.form {
+    background: url("../images/form.png") no-repeat scroll center center #f1f9fd;
+}
 .filter-row .head-icon .list {
 	background-position:-270px -840px;
 }
