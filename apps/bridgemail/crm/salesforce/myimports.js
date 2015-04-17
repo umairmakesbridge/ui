@@ -60,9 +60,7 @@ function (template,MyImports,moment) {
                           },this);
                             myimports_html +="</tbody></table>";
                             this.$myImportsContainer.html(myimports_html);
-                            /*-----Remove loading------*/
-                          this.app.removeSpinner(this.$myImportsContainer);
-                        /*------------*/
+                            
                             this.$("#myimports_list_grid_salesforce").bmsgrid({
                                     useRp : false,
                                     resizable:false,
@@ -80,13 +78,10 @@ function (template,MyImports,moment) {
                           }
                           else{
                              this.$myImportsContainer.html('<div class="create_new"><span>Add import</span></div><p class="notfound">No imports found</p>');
-                          }
-                          
-                          
-                          
-                          
-                          
-                            
+                          }       
+                          /*-----Remove loading------*/
+                          this.app.removeSpinner(this.$myImportsContainer);
+                        /*------------*/
                       }, this),
                       error: function (collection, resp) {
 

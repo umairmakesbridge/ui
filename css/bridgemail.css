@@ -5919,7 +5919,7 @@ p {
 
 .filter-row {
 	border:0px solid #2da9ff;
-	background:#f1f9fd !important;
+	background:#f1f9fd ;
 	min-height:30px;
 	margin:25px 0 0 60px;
 	position: relative;
@@ -5951,6 +5951,9 @@ p {
 }
 .filter-row .head-icon .email {
 	background-position:-240px -840px;
+}
+.filter-div .filter-row.list{
+    background: none repeat scroll 0 0 #f1f9fd !important;
 }
 .filter-row .head-icon .list {
 	background-position:-270px -840px;

@@ -194,12 +194,13 @@ define([
                 $("#template_search_menu").hide();
             });
             $("body").keyup(_.bind(function(e){
-                if(e.keyCode == 27){
-                  if(this.dialogArray.length > 0){
-                      this.dialogView.hide();
-                  }
-                  $('body').find('.moda-v2').parent().remove();
-                }
+
+            if(e.keyCode == 27){
+                     if(this.dialogArray.length > 0){
+                        this.dialogView.hide();
+                    }
+                    $('body').find('.moda-v2').parent().remove();
+                }  
             },this));
             $("body").mousedown(function () {
                 $(".MEE_EDITOR .alertButtons").hide();
