@@ -50,17 +50,12 @@ function (Wizard,template,moment) {
                                       
                 },        
                 getLists:function(){
-                  if(!this.app.getAppData("lists")){
                         this.app.showLoading("Loading Lists...",this.$(".bms-lists"));                                    
                         this.app.getData({
                             "URL":"/pms/io/list/getListData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=all",
                             "key":"lists",
                             "callback":_.bind(this.createListTable,this)
                         });
-                    }
-                    else{
-                        this.createListTable();
-                    }  
                 },
                 setHeaderDialog:function(){
                    if(!this.dialog) return;                                      
@@ -255,17 +250,25 @@ function (Wizard,template,moment) {
                 },
                 createListTable:function(xhr){                
                     var camp_list_json = this.app.getAppData("lists");
-                    this.app.showLoading(false,this.$el);                                                        			
+                    this.app.showLoading(false,this.$el);    
+                    var i=0;
                     var list_html = '<table cellpadding="0" cellspacing="0" width="100%" id="import-list-grid"><tbody>';                    
-                    $.each(camp_list_json.lists[0], _.bind(function(index, val) {     
+                    $.each(camp_list_json.lists[0], _.bind(function(index, val) {  
+                        if(val[0]["isBounceSupressList"]==="false" && val[0]["isSupressList"]==="false"){
                         list_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';                        
                         list_html += '<td><div class="name-type"><h3>'+val[0].name+'</h3><div class="tags tagscont">'+ this.app.showTags(val[0].tags) +'</div></div></td>';                        
                         list_html += '<td><div class="subscribers show" style="min-width:70px;"><strong><span><em>Contacts</em>'+val[0].subscriberCount+'</span></strong></div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green add select-list"><span>Select</span><i class="icon next"></i></a></div></td>';                        
 						
                         list_html += '</tr>';
+                        }else{
+                          i++;
+                        }
                     },this));
+                    if(parseInt(camp_list_json.count)===i){
+                          list_html += '<tr><td colspan="2"><p class="notfound">No lists found.Please create new list</p><a class="btn-green left create-new-list" style="width: 139px; float: none ! important; margin: 5px auto;"><span>Create New</span><i class="icon plus"></i></td></tr>';  
+                    }
                     list_html += '</tbody></table>';										
-					
+                     
                     this.$(".bms-lists").html(list_html);
                     
                     var listgridHeight = parseInt(this.dialog.options.bodyCss["min-height"])-228;
@@ -279,6 +282,7 @@ function (Wizard,template,moment) {
                         colWidth : ['100%','90px']
                     });				
                     this.$(".bms-lists .select-list").click(_.bind(this.markSelectList,this));
+                    this.$('.create-new-list').addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});
                     this.loadData(this.editImport);
                     if(this.newList){
                         this.$(".bms-lists tr").removeClass("selected");

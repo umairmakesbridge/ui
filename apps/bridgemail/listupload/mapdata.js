@@ -281,59 +281,7 @@ function (template,chosen,addbox) {
 			var list_html = "";
 			var campview = this.camp_obj;
 			var app = this.app;
-			var curview = this;
-			if(app.getAppData("lists"))
-			{
-				list_array = app.getAppData("lists");
-				if(list_array != '')
-				{	
-                                        var $i = 0;
-					$.each(list_array.lists[0], function(index, val) { 
-                                                /*=========
-                                                 * Check if Supress List to be show
-                                                 * ========*/
-                                                if(curview.isSupressListFlag){
-                                                    if(val[0].isSupressList  === "true"){
-                                                        list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-                                                        $i++; // count total supress list
-                                                    }
-                                                }else{
-                                                        if(val[0].isSupressList  == "false" || val[0].isBounceSupressList =="false"){
-                                                        list_html +="<option value='"+val[0]["listNumber.encode"]+"'>"+val[0].name+"</option>";
-                                                    }else{
-                                                        $i++; // count total supress list
-                                                    }
-                                                }
-                                            });
-                                            
-                                         var total_count = parseInt(list_array.count) - $i ;
-                                         /*=========
-                                         * Check if Supress List available
-                                         * ========*/
-                                        if(curview.isSupressListFlag){
-                                                    if(total_count == 0 || total_count==parseInt(list_array.count)){
-                                                        curview.$el.find("#existing_lists").html('<option>No Supress List Available</option>')
-                                                        curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
-                                                       
-                                                    }else{
-                                                         curview.$el.find("#existing_lists").html(list_html);
-                                                    }
-                                        }else{
-                                           if(total_count != 0){
-                                                        curview.$el.find("#existing_lists").html(list_html);
-                                                    }else{
-                                                      curview.$el.find('#existing_lists').prop('disabled', true).trigger("chosen:updated");
-                                                    }	 
-                                        }
-                                         						
-				}
-				curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
-                                if(curview.csv){
-                                    app.showLoading(false,curview.csv.$el);
-                                }
-			}
-			else
-			{				
+			var curview = this;				
                             URL = "/pms/io/list/getListData/?BMS_REQ_TK="+app.get('bms_token')+"&type=all";				
                             jQuery.getJSON(URL,  function(tsv, state, xhr){				
                                     if(xhr && xhr.responseText){
@@ -351,18 +299,20 @@ function (template,chosen,addbox) {
                                                         /*=========
                                                         * Check if Supress List to be show
                                                         * ========*/    
-                                                                if (curview.isSupressListFlag) {
+                                                         if (curview.isSupressListFlag) {
                                                                     if (val[0].isSupressList === "true") {
                                                                         list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
                                                                         $i++; // count total supress list
                                                                     }
-                                                                } else {
-                                                                    if (val[0].isSupressList == "false" || val[0].isBounceSupressList == "false") {
+                                                                }
+                                                          if(!curview.isSupressListFlag){
+                                                              if (val[0].isSupressList == "false" && val[0].isBounceSupressList == "false") {
                                                                         list_html += "<option value='" + val[0]["listNumber.encode"] + "'>" + val[0].name + "</option>";
                                                                     } else {
                                                                         $i++; // count total supress list
                                                                     }
-                                                                }
+                                                          }
+                                                                
                                                     });
                                                     var total_count = parseInt(list_array.count) - $i ;
                                                     /*=========
@@ -389,7 +339,7 @@ function (template,chosen,addbox) {
                                             curview.$el.find("#existing_lists").chosen({no_results_text:'Oops, nothing found!', width: "288px"});
                                     }
                             }).fail(function() { console.log( "error lists listing" ); });
-			}			
+						
 		},
 		initialize:function(){                    
 		   this.template = _.template(template);
