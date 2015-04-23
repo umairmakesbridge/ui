@@ -119,6 +119,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                             _this.$('.suppress-sub').html('<i class="icon supress-w disabled-btn"></i>');
                             _this.$('.suppress-sub').attr('data-original-title','Contact already suppressed');
                             _this.$('.suppress-sub').removeClass('suppress-sub');
+                            _this.$el.parents('body').find('.camp_header').addClass('orange-head');
                         }
                         else{
                             _this.$('.suppress-sub').parent().show();

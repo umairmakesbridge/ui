@@ -1,16 +1,16 @@
 <div class="camp_header <%if(this.options.headerObj){ %> <%= this.options.headerObj.headerclass %> <% } %>">                  
             
     <div class="row c-name edited active"> 
-        <%if(this.options.headerObj && this.options.headerObj.headericon){ %>
-            <span class="icon <%= this.options.headerObj.headericon %>" title=""></span>
-        <% }else{ %>
-          <span class="icon fav" title=""></span>
-          <% } %>
-          <h2><span id="workspace-header"></span>                 
+        <span class="icon fav" title=""></span>
+          <h2>
+              <span id="workspace-header"></span><%if(this.options.headerObj && this.options.headerObj.headericon){ %>
+            <span style="margin:0px;" class="icon <%= this.options.headerObj.headericon %>" title=""></span>
+         <% } %>               
               <div class="pointy add add-action" style="display:none">
                 <a id="addnew_action" class="icon plus showtooltip"></a>
               </div>
           </h2>
+           
           <div class="edited workspace-field" style="display:none;">
             <input type="text" placeholder="" id="header_wp_field">
             <a class="btn-green savebtn" id="save_campaign_btn"><span>Save</span></a>
