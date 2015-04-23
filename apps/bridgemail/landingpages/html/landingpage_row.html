@@ -7,7 +7,9 @@
                 <% }else{ %>
                     <a class="edit-page showtooltip" title="<%= this.getPageStatus().tooltip %>"> <%= this.model.get('name')%> </a>
                 <% } %>
-                <a class="cstatus pclr3 category-click showtooltip" title="Click to view Pages with '<b><%= this.model.get('category')%></b>' category"> <%= this.model.get('category')%> </a> <% if(model.get('status')=='P'){ %> <span class="cstatus published">Published</span> <% } %>
+                <a class="cstatus pclr3 category-click showtooltip" title="Click to view Pages with '<b><%= this.model.get('category')%></b>' category"> <%= this.model.get('category')%> </a> <% if(model.get('status')=='P'){ %> <span class="cstatus published showtooltip" title="Click to view published Pages">Published</span> <% }  else {%>
+                <a class="cstatus cflag showtooltip pclr1 draf-badge" title="Click to view draft Pages">Draft</a>
+                <% } %>
             </h3>  
                 <div class="tags tagscont">
                     <%= this.app.showTags(this.model.get('tags'),'Pages') %>

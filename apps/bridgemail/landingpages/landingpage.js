@@ -276,17 +276,27 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                           $(obj.target).removeClass("saving");                              
                      },this));
                 },
-                publishPage:function(){
+                publishPage:function(dialog){
                     if(this.editable==false){
                         return false;
                     }
-                    this.app.showLoading("Publishing landing page...",this.$el);
+                    var element = this.$el;
+                    if(dialog.$el){
+                        element = dialog.$el;
+                    }
+                    this.app.showLoading("Publishing landing page...",element);
                     var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'changeStatus',pageId:this.page_id,status:'P'})
                     .done(_.bind(function(data) {                  
-                           this.app.showLoading(false,this.$el);   
+                           this.app.showLoading(false,element);   
                            var _json = jQuery.parseJSON(data);        
                            if(!_json.err){
+                               if(dialog.$el){
+                                   dialog.$(".pointy").remove();
+                                   dialog.$("#page_link").val(this.app.decodeHTML(_json[1]));
+                                   dialog.$(".copy-message").show();
+                                   dialog.$(".btn-save").remove();
+                               }
                                this.app.showMessge("Landing page is published.");
                                this.editable = false;                                
                                this.init(true);         
@@ -384,22 +394,39 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         }
                         tmPr.init();
                     }, this));
+                    if(this.editable){
+                        var publishButton = $(' <div class="pointy" style="display:inline-block !important;opacity:1;position:absolute;margin-left:10px"> <a class="icon play24 showtooltip" title="Publish Landing Page" ></a> </div>');
+                        dialog.$el.find("#dialog-title").append(publishButton);
+                        publishButton.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                        publishButton.find(".play24").click(_.bind(this.publishPage,this,dialog));
+                    }
                 },
                 linkPageDialog: function(){                    
-                    var dialog_title = "Link of Landing Page &quot;" + this.pageName + "&quot;";
-                    var dialog = this.app.showDialog({title: dialog_title,
+                    var dialog_title = "Link of &quot;" + this.pageName + "&quot;";
+                    var config = {title: dialog_title,
                         css: {"width": "600px", "margin-left": "-300px"},
                         bodyCss: {"min-height": "140px"},
                         headerIcon: 'link'
-                    });
+                    };
+                    if(this.editable){
+                        config.buttons ={saveBtn: {text: 'Publish', btnicon: 'check'}};                       
+                    }
+                    var dialog = this.app.showDialog(config);
+                     
                     var html = '<div style="margin-top:0px;" class="blockname-container">'
                         html += '<div class="label-text">Page Link:</div>'
-                        html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'  
-                        html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.publishURL)+'" style="width:558px" readonly="readonly">'
+                        html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'
+                        if(this.editable){
+                            html += '<input type="text" id="page_link" value="Page is not published yet." style="width:558px" readonly="readonly">'
+                        }
+                        else{
+                            html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.publishURL)+'" style="width:558px" readonly="readonly">'
+                        }
                         html += '</div></div>'
-                        html += '<div style="font-size: 12px;margin-top:10px">'
-                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";
-                        html += '<i>Press '+key+' + C to copy link.</i>'
+                        var message_display =(this.editable)?"none":"block";
+                        html += '<div class="copy-message" style="font-size: 12px;margin-top:10px;display:'+message_display+'">'
+                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";                        
+                        html += '<i>Press '+key+' + C to copy link.</i>'                       
                         html += '</div> </div>'
                         
                         html = $(html);
@@ -410,6 +437,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                              event.stopPropagation();
                              event.preventDefault();
                         })
+                        dialog.saveCallBack(_.bind(this.publishPage, this, dialog));
                         
                 },
                 setMEEView:function(){

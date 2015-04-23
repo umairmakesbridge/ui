@@ -11670,6 +11670,7 @@ background-position:200px top;
     background: url("../img/check18.png") no-repeat scroll 3px center #fff;
     color: #41ce20;
     padding-left: 22px;
+    cursor:pointer;
 }
 .sd_common { } 
 .sd_common  h2 {

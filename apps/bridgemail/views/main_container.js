@@ -756,7 +756,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var __json = app.get("bridgestatz");
                         sharedObject.log = __json.webAddress;
                         sharedObject.pass = __json.pass;
-                        window.open("/pms/report/BridgeStatz.jsp?BMS_REQ_TK="+this.app.get('bms_token'), 'BRIDGESTATZ',"menubar=0,toolbar=0");                            
+                        window.open("http://content.bridgemailsystem.com/pms/report/BridgeStatz.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&ukey="+this.app.get('user_Key'), 'BRIDGESTATZ',"menubar=0,toolbar=0");                            
                     }else{    
                         target.addClass("loading-tile");
                         var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + app.get("bms_token") + "&type=bridgestatz";
@@ -770,7 +770,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             if(_json.id){
                                sharedObject.log = _json.webAddress;
                                sharedObject.pass = _json.pass;
-                               window.open("/pms/report/BridgeStatz.jsp?BMS_REQ_TK="+this.app.get('bms_token'), 'BRIDGESTATZ',"menubar=0,toolbar=0");                            
+                               window.open("http://content.bridgemailsystem.com/pms/report/BridgeStatz.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&ukey="+this.app.get('user_Key'), 'BRIDGESTATZ',"menubar=0,toolbar=0");                            
                             }
                             else{
                                 app.showAlert("Your Bridge Statz Account is not activated. Please contact support to activate.",$("body")); 

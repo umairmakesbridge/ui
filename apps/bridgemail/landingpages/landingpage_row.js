@@ -21,7 +21,9 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     'click .delete-page': 'deletePageDialoge',
                     'click .link-page' : 'linkPageDialog',
                     'click .taglink': 'tagClick',
-                    'click .category-click': 'categoryClick'
+                    'click .category-click': 'categoryClick',
+                    'click .published':'publishBadgeClick',
+                    'click .draf-badge' : 'draftBadgeClick'
                 },
                 /**
                  * Initialize view - backbone
@@ -118,14 +120,24 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     }
 
                 },
-                publishPage: function(){
-                    this.app.showLoading("Publishing landing page...",this.$el.parents(".ws-content.active"));
+                publishPage: function(dialog){
+                    var element =  this.$el.parents(".ws-content.active");
+                    if(dialog.$el){
+                        element = dialog.$el;
+                    }
+                    this.app.showLoading("Publishing landing page...",element);
                     var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
                     $.post(URL, {type:'changeStatus',pageId:this.model.get("pageId.encode"),status:'P'})
                     .done(_.bind(function(data) {                  
-                           this.app.showLoading(false,this.$el.parents(".ws-content.active"));   
+                           this.app.showLoading(false,element);   
                            var _json = jQuery.parseJSON(data);        
                            if(!_json.err){
+                               if(dialog.$el){
+                                   dialog.$(".pointy").remove();
+                                   dialog.$("#page_link").val(this.app.decodeHTML(_json[1]));
+                                   dialog.$(".copy-message").show();
+                                   dialog.$(".btn-save").remove();
+                               }
                                this.app.showMessge("Landing page is published.");
                                this.sub.headBadge();                                                                
                                this.sub.getLandingPages();                                                                
@@ -195,22 +207,40 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
                     }, this));
+                    dialog.$el.find(".pointy").remove();
+                    if(this.model.get("status")=="D"){
+                        var publishButton = $(' <div class="pointy" style="display:inline-block !important;opacity:1;position:absolute;margin-left:10px"> <a class="icon play24 showtooltip" title="Publish Landing Page" ></a> </div>');
+                        dialog.$el.find("#dialog-title").append(publishButton);
+                        publishButton.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                        publishButton.find(".play24").click(_.bind(this.publishPage,this,dialog));
+                    }
                 },
                 linkPageDialog: function(){                    
-                    var dialog_title = "Link of Landing Page &quot;" + this.model.get('name') + "&quot;";
-                    var dialog = this.app.showDialog({title: dialog_title,
+                    var dialog_title = "Link of &quot;" + this.model.get('name') + "&quot;";
+                    var config = {title: dialog_title,
                         css: {"width": "600px", "margin-left": "-300px"},
                         bodyCss: {"min-height": "140px"},
                         headerIcon: 'link'
-                    });
+                    };
+                    if(this.model.get("status")=="D"){
+                        config.buttons ={saveBtn: {text: 'Publish', btnicon: 'check'}};                        
+                    }
+                    var dialog = this.app.showDialog(config);                    
                     var html = '<div style="margin-top:0px;" class="blockname-container">'
                         html += '<div class="label-text">Page Link:</div>'
                         html += '<div class="input-append sort-options blockname-container"><div class="inputcont">'  
-                        html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.model.get("publishURL"))+'" style="width:558px" readonly="readonly">'
+                        if(this.model.get("status")=="D"){
+                            html += '<input type="text" id="page_link" value="Page is not published yet." style="width:558px" readonly="readonly">'
+                        }
+                        else{
+                            html += '<input type="text" id="page_link" value="'+this.app.decodeHTML(this.model.get("publishURL"))+'" style="width:558px" readonly="readonly">'
+                        }
                         html += '</div></div>'
-                        html += '<div style="font-size: 12px;margin-top:10px">'
-                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";
-                        html += '<i>Press '+key+' + C to copy link.</i>'
+                        var message_display =(this.model.get("status")=="D")?"none":"block";
+                        html += '<div class="copy-message" style="font-size: 12px;margin-top:10px;display:'+message_display+'">'                        
+                        var key = navigator.platform.toUpperCase().indexOf("MAC")>-1 ? "Command" : "Ctrl";                        
+                        html += '<i >Press '+key+' + C to copy link.</i>'
+                        
                         html += '</div> </div>'
                         
                         html = $(html);
@@ -221,6 +251,7 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                              event.stopPropagation();
                              event.preventDefault();
                         })
+                        dialog.saveCallBack(_.bind(this.publishPage, this, dialog));
                         
                 },
                 deletePageDialoge: function () {                                      
@@ -273,6 +304,12 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                 },
                 categoryClick: function(obj){
                     this.trigger('categorySearch',$(obj.target).text());                    
+                },
+                publishBadgeClick:function(){
+                    this.$el.parents(".ws-content.active").find("[data-search='P']").click();
+                },
+                draftBadgeClick:function(){
+                    this.$el.parents(".ws-content.active").find("[data-search='D']").click();
                 }
 
             });
