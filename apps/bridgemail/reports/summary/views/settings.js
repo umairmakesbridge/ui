@@ -145,7 +145,7 @@ function (template,icheck) {
                                       _.each(res,function(idx){
                                             _.each(idx,function(key,value){
                                                _.each(key,function(k,v){
-                                                  list = k.encode + ',';
+                                                  list += k.encode + ',';
                                                })
                                             })
                                     })
@@ -183,18 +183,24 @@ function (template,icheck) {
                                 return false;
                             }
                             var span = "";
+                            var str ="";
                             if(result.count !="0"){
                                 var results = type=="List"?result.lists[0]:result.filters[0];
                                   _.each(results,function(key){
                                     _.each(key,function(value){
-                                        span += "<span>"+value.name+"</span>"
-                                    })                                       
+                                        
+                                        str += "<div class='recepient_type'><i class='icon "+type.toLowerCase()+"'></i>"; 
+                                        str +="<strong>"+type+" </strong>";
+                                        str += "<span>"+value.name+"</span></div>";
+                                        
+                                    })
                                     
                                 })
-                                    var str = "<i class='icon "+type.toLowerCase()+"'></i>"; 
-                                     str +="<strong>"+type+" </strong>";                                
-                                     str+=span;
-                                     that.$el.find(".recepient_type").html(str);
+                                    that.$el.find(".recepient_type").parent().html('');
+                                    that.$el.find("#recepient_type_wrap").html(str);
+                                    
+                                     
+                                     
                                      return str;
                             }else{
                                  var str = "<i class='icon "+type.toLowerCase()+"'></i>"; 

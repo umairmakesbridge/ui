@@ -9627,4 +9627,10 @@ sup.beta {
 	right: -40px;
 	background: url("../img/arrow-right.png") no-repeat scroll center center #eaf4f9;
 }
+#recepient_type_wrap .recepient_type{
+    margin-bottom: 10px;
+}
+#recepient_type_wrap .recepient_type:last-child{
+    margin-bottom: 0px;
+}
   /* ================================================End tan_a_changes.css================================================ */
