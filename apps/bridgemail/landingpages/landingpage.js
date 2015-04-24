@@ -296,6 +296,9 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                                    dialog.$("#page_link").val(this.app.decodeHTML(_json[1]));
                                    dialog.$(".copy-message").show();
                                    dialog.$(".btn-save").remove();
+                                   if(dialog.$("#email-template-iframe").length){
+                                       dialog.$("#email-template-iframe").attr("src",dialog.$("#email-template-iframe").attr("src"));
+                                   }
                                }
                                this.app.showMessge("Landing page is published.");
                                this.editable = false;                                
