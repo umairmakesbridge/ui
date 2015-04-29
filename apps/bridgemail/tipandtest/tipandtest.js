@@ -134,7 +134,7 @@ define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','
                     require([files], function(Alert) {
                         var mPage = new Alert({origin:that,refer: that, dialog: dialog, type: "edit", botId: botID, botType: botType, app: that.app, model: ''});
                         dialog.getBody().html(mPage.$el);
-                        dialog.parents('body').find('#new_autobot').removeAttr('class');
+                        that.$el.parents('body').find('#new_autobot').removeAttr('class');
                         //console.log('Ok start From here for bot : ' + that.model.get('actionType'));
                         var dialogArrayLength = that.app.dialogArray.length; // New Dialog
                         mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
