@@ -151,7 +151,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     this.$('.filter_seven').parent().remove();
                 }
                 else{
-                    this.offset = this.offset + 20;
+                    this.offset = this.offset + 50;
                 }
                 var _data = {offset:this.offset};
                 /*if(!this.sortBy){
