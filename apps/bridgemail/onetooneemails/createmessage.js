@@ -209,9 +209,10 @@ function (template,contactsView) {
              this.app.showLoading("Loading Contact Details...", vcontact);
             // this.parent.$el.find('.stats_listing').hide();
                 require(["common/vcontact"], _.bind(function(page) {
-                            var visitcontact = new page({parent: this, app: this.app, subNum: this.subNum,isOTOFlag:true});
+                            var visitcontact = new page({parent: this, app: this.app, subNum: this.subNum,isOTOFlag:true,isSendEmail:this.isSendEmail});
                             $(vcontact).html(visitcontact.$el);
                             this.isVisitcontactClick = true;
+                            
                                     }, this));
              },
              getEmailSubDetail : function(){

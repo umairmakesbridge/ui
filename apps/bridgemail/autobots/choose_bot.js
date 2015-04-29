@@ -41,6 +41,7 @@ define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
                     if(this.options.type !== false){
                           actionType =   this.options.type == "EB"?"E":this.options.type;
                           botType = this.options.type == "EB"?"B":"N";
+                           this.$el.parents('body').find('#new_autobot').removeAttr('class');
                     }else{    
                           actionType = $(ev.target).parents('li').data('bot');
                           botType = $(ev.target).parents('li').data('type');
