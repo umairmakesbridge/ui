@@ -246,7 +246,7 @@ define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','
                 createPage: function(txt,json){
                     if(json[0]=="success"){
                         this.app.mainContainer.openLandingPage({"id":json[1],"checksum":json[2],"parent":this,editable:true});   
-                        if(this.$el.parents('body').find('#wstabs [workspace_id="landingpages"]')){
+                        if(this.$el.parents('body').find('#wstabs [workspace_id="landingpages"]').length !== 0){
                             var lp_view = $("[workspace_id='landingpages']").data("viewObj");
                              lp_view.headBadge();
                             lp_view.getLandingPages();
