@@ -61,6 +61,8 @@
   , addBasicFilter:function(obj,e,params){
       if(this.$element.find(".filter-div ._row").length===this.options.maxFilter){
           this.options.app.showAlert("You can't add more than 8 filter rows.",$("body"),{fixed:true});
+          obj.stopPropagation();          
+          return false;
       }
       var filter = $(this.options.filterRow)
       var value_display='block',matchValue=''
