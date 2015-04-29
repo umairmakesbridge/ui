@@ -121,10 +121,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onet
                    // this.setEditor();
                     var target = $.getObj(obj,"a");
                     var bms_token =this.app.get('bms_token');
-                   // this.app.showLoading('Loading HTML...',this.$el);
-                    //this.states.editor_change = true;
-                   // var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+                             
-                   // jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
+                                  
                      this.template_id = target.attr("id").split("_")[1]; 
                      this.templateView.createOTODialog();
                     

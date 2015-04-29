@@ -25,6 +25,7 @@ function (template,highlighter,tags) {
                  this.app = this.options.app;
                  this.sub_id = this.options.subNum;
                  this.DialogView = this.options.dialog;
+                 this.isSendEmail = (this.options.isSendEmail) ? this.options.isSendEmail : '';
                  this.sub_name = '';
                  this.jSon = '';
                  this.render();
@@ -51,6 +52,10 @@ function (template,highlighter,tags) {
                            _this.$el.html(_this.template({_json: _json}));
                                         if(_this.options.isOTOFlag){
                                  _this.hideElements();
+                                 
+                             }
+                             if(_this.isSendEmail){
+                                 _this.$el.parents('.modal').find('#dialog-title .dialog-title').html(_this.getFirstAlphabet(_json));
                              }
                         }
                     })
@@ -70,15 +75,16 @@ function (template,highlighter,tags) {
             openContact:function(){
                 if(this.DialogView){
                     var dialogArrayLength = this.app.dialogArray.length; // New Dialog
-                    console.log(dialogArrayLength);
+                    //console.log(dialogArrayLength);
                 }
                 this.$el.parents('body').find('#contact-vcard').remove();
                 this.app.mainContainer.openSubscriber(this.sub_id,this.sub_name);
             },
             getFullName:function(){
                 var name = this.model.get('firstName') + " " + this.model.get('lastName');
-                if(!this.model.get('firstName') || !this.model.get('lastName'))
-                    return this.model.get('email');
+                if(!this.model.get('firstName') || !this.model.get('lastName')){
+                   return this.model.get('email');
+                }
                 else 
                     return name;
             },
@@ -105,6 +111,7 @@ function (template,highlighter,tags) {
                     this.$el.parents('.modal-body').find('.contact-name').text(this.app.decodeHTML(this.getFullName()));
                     this.$el.parents('.modal-body').find('#contact-name-prev').show();
                     this.parent.$el.parent().hide();
+                    
                 }
                 this.$('.use-preview-btn').hide();
                 //this.$('.checkedadded-preview').show();

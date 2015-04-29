@@ -4413,7 +4413,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .tipntest {}
 
 
-.tipntest h1 { font-weight:normal; font-family: 'proxima_nova_regular'; font-size:24px; text-align:center; color:#292929; margin:70px 0 0; }
+.tipntest h1 { font-weight:normal; font-family: 'proxima_nova_regular'; font-size:24px; text-align:center; color:#292929; margin:35px 0 0; }
 
 
 .tipntest h3 { font-weight:normal; font-family: 'proxima_nova_regular'; text-align:center; }
@@ -4510,7 +4510,8 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 
 
 .tipntest ol.progressbar li a { font-size:14px; color:#5d8495; padding:35px 20px; border-radius:2px; cursor:pointer;display:block;}
-.tipntest ol.progressbar li a:hover { background:#e9edf6;}
+.tipntest ol.progressbar li:hover { background:#e9edf6;}
+.tipntest ol.progressbar li:hover .schelpvid {opacity:1;}
 .tipntest ol.progressbar li a i.icon { float:none !important; margin:0 auto 10px!important; background:none;}
 .tipntest ol.progressbar li a span { display:block;}
 
@@ -4519,7 +4520,14 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     border: 2px solid #4cb334;
 	color:#4cb334;
 }
-
+.tip_test qoute {
+    color: #6494af;
+    float: right;
+    font-size: 14px;
+    line-height: 29px;
+    position: relative;
+     right: 24.7%;
+}
 
 
 

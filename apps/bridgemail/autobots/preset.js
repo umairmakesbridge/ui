@@ -1032,7 +1032,7 @@ define(['text!autobots/html/preset.html', 'jquery.icheck', 'bms-tags'],
                     var selected_val = ""
                     val = 30;
                     spanHTML += ''
-                    for (var i = 1; i <= 30; i++) {
+                    for (var i = 1; i <= 90; i++) {
                         selected_val = (i == val) ? "selected" : ""
                         spanHTML += '<option value="' + i + '" ' + selected_val + '>' + i + '</option>'
                     }
