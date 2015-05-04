@@ -1,4 +1,4 @@
-define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','bms-mergefields'],
+define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','bms-mergefields','jquery.searchcontrol'],
         function (template,AutobotsCollection) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
