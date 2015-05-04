@@ -57,7 +57,7 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'developement',
+                env: 'test',
                 complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
@@ -88,6 +88,10 @@ define([
             this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
                             ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
                             "reports":"camapignReport",subscriber:"openSubscriber"};
+                        
+            if(this.get("env")=="production"){
+                this.set("path",window.location.protocol+"//"+imagesCDN+this.get("path"));
+            }        
               
         },
         start: function (Router, MainContainer, callback) {
@@ -503,7 +507,7 @@ define([
             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
             str = str.replace(/\\/g, "");
             str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n");  
+            str = str.replace(/\r\n/g, "\n"); 
             return str;
         },
         getMMM: function (month) {
