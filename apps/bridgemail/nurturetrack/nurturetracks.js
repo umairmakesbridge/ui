@@ -245,7 +245,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             var trackViewTile = new trackRowTile({ model: collection.at(s),sub:this });                                                            
                             trackViewTile.on('tagclicktile',_.bind(this.searchByTagTile,this));
                             this.$trackTileArea.append(trackViewTile.$el);
-                            trackViewTile.tmPr.trimTags();
+                            trackViewTile.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
                             var _model = collection.at(s);
                             if(_model.get("status")=="P" || _model.get("status")=="Q"){                                
                                 this.callDispenseStats(_model.get("trackId.encode"),_model.get("trackId.checksum"),true);
