@@ -240,7 +240,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         
                         this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
                         this.$('.open-csv').click(_.bind(this.openCsv,this));    
-                        }else{
+                        }else if(collection.length==0){
                             this.$el.find('.thumbnails.cards .open-csv').remove();
                         }
                         for(var s=this.offset;s<collection.length;s++){

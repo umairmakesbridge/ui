@@ -15,12 +15,12 @@
                         <tr id="" class="erow">
                         
                         	
-                            <td width="10px">
-                                <div class="letter_block l_<%- this.getFirstAlphabet().toLowerCase() %>"><span><%- this.getFirstAlphabet() %></span></div>
+                            <td width="">
+                                <a class="show-detail"><div class="letter_block l_<%- this.getFirstAlphabet().toLowerCase() %>"><span class="showtooltip" title="Click to view profile"><%- this.getFirstAlphabet() %></span></div></a>
                              </td>
                                 
                             
-                              <td width=""><div>
+                              <td width="100%"><div>
                                   <div class="name-type">
                                   
                                     <div class="title show-detail" id="<%- model.get('subNum')%>">
@@ -28,6 +28,7 @@
                                         <% if(model.get('salesStatus')!==''){%>
                                         <a class="statusdd color3"><%- model.get('salesStatus').toLowerCase()%>  <b class="caret"></b></a>
                                         <%}%> 
+                                        <a class="suppressed-icon showtooltip" title="Contact already suppressed" style="display:none;"><img src="<%- this.options.app.get('path')%>img/suppressed.png" /></a>
                                 	</div>
                                     
                                     <div class="clearfix"></div>
@@ -54,9 +55,11 @@
                                   
                                   
                                  	 <div class="clearfix"></div>
-                                     
+                                                <% if(model.get('email')){ %>
                                      		<span class="inf" style=""><i class="icon email"></i><b><%- this.options.app.decodeHTML(model.get('email'))%></b></span>
-                                    	 	<span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/> 
+                                    	 	<% }if(model.get('telephone')){ %>
+                                                <span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/> 
+                                                <% } %>
                                                 <div class="clearfix"></div><span class="inf" style="display:none"><i class="icon company"></i><b>Netechy</b></span>
                                       		
                                             
@@ -70,10 +73,12 @@
                                     	<div class="filterbar" style="display:none">
                                         	<strong class="badge">9</strong>
                                         </div>
+                                        <% if(model.get('score') != "0"){ %>
                                         <div class="score">
                                         	<i class="icon score"></i>
                                             <%- model.get('score')%>
                                         </div>
+                                        <% } %>
                                     	<div class="crms">
                                             <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/nsicon2.png" alt=""></a>
                                              <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/inicon2.png" alt=""></a>
