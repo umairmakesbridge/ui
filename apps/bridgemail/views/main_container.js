@@ -631,7 +631,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', noTags: true, title: 'Bounced Emails', sub_title: 'Bounced Campaign Report', url: 'common/bouncereport', workspace_id: 'bouncedemail', 'addAction': false, tab_icon: 'bouncedemails'});
                 },
                 linkfilters: function () {
-                    this.addWorkSpace({type: '', noTags: true, title: 'Link Filters', sub_title: 'Manage Link Filters', url: 'common/linkFilter', workspace_id: 'linkfilter', 'addAction': false, tab_icon: 'linkfilters'});
+                    this.addWorkSpace({type: '', noTags: true, title: 'URL Tag Bot', sub_title: 'Manage Link Filters', url: 'common/linkFilter', workspace_id: 'linkfilter', 'addAction': false, tab_icon: 'linkfilters'});
                 },
                 one_one_listings : function(){
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 

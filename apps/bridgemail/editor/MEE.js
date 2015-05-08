@@ -930,7 +930,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             else {
                                                 img.removeAttr("isStyleSet");
                                             }
-                                            img.removeClass("imageHandlingClass resizable clickEvent ui-resizable");
+                                            img.removeClass("imageHandlingClass resizable clickEvent ui-resizable").addClass("img");
 
                                             if (img.parent().get(0).tagName == 'a' || img.parent().get(0).tagName == 'A') {
                                                 imageContainer.html(img.parent().outerHTML());
