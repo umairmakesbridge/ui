@@ -54,8 +54,13 @@ function (template,highlighter,tags) {
                                  _this.hideElements();
                                  
                              }
-                             if(_this.isSendEmail){
-                                 _this.$el.parents('.modal').find('#dialog-title .dialog-title').html(_this.getFirstAlphabet(_json));
+                             if(_this.isSendEmail && _this.options.isOTOFlag){  
+                            
+                                 var name = _json.firstName + " " + _json.lastName + " | "+_json.email;
+                                 if(!_json.firstName || !_json.lastName){
+                                   name = _json.email;
+                                 }
+                                 _this.$el.parents('.modal').find('#dialog-title .dialog-title').html(name);
                              }
                         }
                     })

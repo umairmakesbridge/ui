@@ -1290,26 +1290,7 @@ ul.tabs-btns li.active a{
 .filterbtn, .mngbtn{
     float:left;
 }
-.contactbox a.closebtn {
-    background: url("../img/closebtn-blue.png") no-repeat scroll center center;
-    display: block;
-    height: 18px;
-    opacity: 0;
-    position: absolute;
-    right: 100px;
-	padding:2px;
-    top: 10px;
-    transition: opacity 0.3s ease-out 0s;
-    width: 18px;
-    z-index: 200;
-	
-}
-.contactbox:hover a.closebtn {
-    opacity: 1;
-}
-.contactbox a.closebtn:hover {
-    opacity: 0.7;
-}
+
 .contactsdiv{
     min-height: 450px;
     overflow-y: auto;
@@ -1423,13 +1404,13 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.pausebtn {
     background: url("../img/pause48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.previewbtn {
+.thumbnail .img > div a.previewbtn ,.action-btns a.previewbtn {
     background: url("../img/preview48.png") no-repeat scroll center center #7B929F;
 }
 .thumbnail .img > div a.usebtn {
     background: url("../img/check48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.editbtn {
+.thumbnail .img > div a.editbtn , .action-btns a.editbtn{
     background: url("../img/edit48.png") no-repeat scroll center center  #7B929F;
 }
 .thumbnail .img > div a.copybtn {
@@ -1444,18 +1425,22 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.pausebtn {
     background: url("../img/pause48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.previewbtn  {
+.thumbnail .img > div a.previewbtn , .action-btns a.previewbtn {
     background: url("../img/preview48.png") no-repeat scroll center center #7B929F;
 }
 
-.thumbnail .img > div a.editbtn {
+.thumbnail .img > div a.editbtn , .action-btns a.editbtn{
     background: url("../img/edit48.png") no-repeat scroll center center #7B929F;
 }
 .thumbnail .img > div a.copybtn {
     background: url("../img/copy48.png") no-repeat scroll center center #7B929F;
 }
-.thumbnail .img > div a.deletebtn {
+.thumbnail .img > div a.deletebtn , .action-btns a.deletebtn{
+  
     background: url("../img/delete48.png") no-repeat scroll center center #7B929F;
+}
+.thumbnail .img > div a.sendmsg, .action-btns a.sendmsg {
+    background: url("../img/sendmsg48.png") no-repeat scroll center center #7b929f;
 }
 .thumbnail .img > div a.selectbtn.createcamp span{
     /*background: url("../img/campaign48.png") no-repeat scroll left center rgba(0, 0, 0, 0);   */
@@ -4560,6 +4545,166 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     background-color: #f2b2a8;
 }
 
+
+/*------------------------- Contacts - Cards / Tiles ------------------------*/
+
+.contactsdiv  .loadmore { margin:30px;}
+
+.thumbnails.cards {   }
+
+
+.thumbnails.cards .thumbnail.browse .drag {  height: 188px; border-radius: 2px;}
+.thumbnails.cards .thumbnail.browse:hover .drag.create {  background: url("../img/act-plus2.png") no-repeat scroll center 40% rgba(0, 0, 0, 0); }
+.thumbnails.cards .thumbnail.browse .drag.create span { top:60%; }
+.thumbnails.cards .thumbnail { height:220px; max-width:400px; width:400px; border-radius:3px;   }
+
+.thumbnails.cards .thumbnail div.letter_block {
+    height: 50px;
+    line-height: 50px;
+    width: 50px;
+	margin:0;
+}
+.thumbnails.cards .thumbnail div.letter_block span {
+    font-family: "proxima_nova_semibold";
+    font-size: 24px;
+    line-height: 50px;
+}
+.thumbnails.cards .thumbnail .bmsgrid .bDiv tr td:last-child div {
+    min-height: inherit;
+}
+
+.thumbnails.cards .thumbnail .activities_tbl { padding: 5px;}
+.thumbnails.cards .thumbnail .bmsgrid div.bDiv td { background: none;}
+.thumbnails.cards .thumbnail .bmsgrid div.bDiv tr:hover { box-shadow: none; }
+
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act { padding:0 !important; 
+ color: #4f87ab;
+    display: block;
+    float: left;
+    font-size: 13px;
+    line-height: 18px; 
+    width: 100%;
+}
+
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act em {
+    font-size: 12px;
+    font-style: normal;
+}
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .icon {
+    display: block;
+    float: left;
+    height: 18px;
+    margin-right: 5px !important;
+    width: 18px;
+}
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act b {
+    display: inline-block;
+    font-weight: normal;
+    position: relative;
+}
+.activities_tbl .bmsgrid .name-type span.inf b {
+    display: inline-block;
+    font-weight: normal;
+    position: relative;
+}
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .open  { background: url("../img/openicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .click  { background: url("../img/clickicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .pageview  { background: url("../img/pageviewicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .conversion  { background: url("../img/conversionicon.png") no-repeat scroll 0 center ;  }
+
+
+.thumbnails.cards .thumbnail .bmsgrid .tagscont { height: 25px; }
+.thumbnails.cards .thumbnail .bmsgrid .tagscont ul { float: none; height: auto; max-width: none; padding: 5px 0;}
+.thumbnails.cards .thumbnail .bmsgrid .tagscont ul li a { background: #e2f1f9; margin:0; color:#6494af;  }
+.thumbnails.cards .thumbnail .bmsgrid .tagscont ul li a:hover { background: none repeat scroll 0 0 #00aff0; color:#fff; }
+.thumbnails.cards .thumbnail .bmsgrid .name-type h3 > a { color: #02afef; font-size: 18px !important;   line-height: 22px; font-family: "proxima_nova_semibold";}
+
+
+
+
+.thumbnails.cards .thumbnail .tagscont .ellipsis {
+    background: none repeat scroll 0 0 #e2f1f9;
+    color: #6494af;
+    display: block;
+    font-family: "proxima_nova_semibold";
+    font-size: 16px;
+    margin: 2px;
+}
+
+.thumbnails.cards .thumbnail .tagscont .ellipsis:hover  {background: none repeat scroll 0 0 #00aff0; color:#fff;}
+
+.thumbnails.cards .thumbnail .c-detail { height:120px;}
+.thumbnails.cards .thumbnail .c-detail .mCSB_container {    margin-right: 0px;}
+.thumbnails.cards .thumbnail .btm-icons {
+    clear: both;
+    display: block;
+    padding: 5px 5px 0;
+	height: 25px;
+    width: 100%;
+}
+
+
+.thumbnails.cards .thumbnail .action-btns { 
+	position:absolute; 
+	left:0; 
+	width:100%; 
+	bottom:0px;
+	-webkit-animation-name: fadeOutDown;
+	animation-name: fadeOutDown;
+	}
+	
+.thumbnails.cards .thumbnail:hover .action-btns { 
+	bottom:0; 
+	-webkit-animation-name: fadeInUp;
+	animation-name: fadeInUp;
+	}
+
+.action-btns a {
+    background: none repeat scroll 0 0 #7b929f;
+    border-radius: 0;
+    color: #ffffff;
+    display: block;
+    float: left;
+    height: 55px;
+    text-align: center;
+    transition: background-position 0.3s linear 0s;
+    width: 25%;
+}
+.action-btns a span {
+    display: block;
+    font-size: 12px;
+    height: 16px;
+    letter-spacing: 0;
+    line-height: 16px;
+    margin: 35px auto 0;
+    opacity: 0;
+    text-align: center;
+    transition: opacity 0.3s ease-out 0s;
+    width: 100%;
+}
+.action-btns a:hover span {
+    opacity: 1;
+}
+.action-btns a:hover {
+    background-position: center 5px !important;
+}
+.thumbnails.cards .thumbnail{
+          box-shadow: 0 2px 3px rgba(102, 147, 170, 0.2);
+          overflow: hidden;
+}
+.thumbnails.cards .thumbnail:hover {
+    box-shadow: 0 5px 15px rgba(102, 147, 170, 0.5);
+}
+.thumbnails.cards .activities_tbl .bmsgrid .name-type span.inf{
+    padding:5px;
+    margin:0;
+}
+.thumbnails.cards .bmsgrid div.bDiv{
+    overflow: hidden;
+}
+.thumbnails.cards .score{
+    margin-left: 0;
+}
 /*
 -------------- ENDS HERE ----------
 */
@@ -7289,10 +7434,10 @@ position:relative;
 .s-clr7 { background-color: #2A9EEF; }
 .s-clr6 { background-color: #2699E9; }
 .s-clr5 { background-color: #1F94E5; }
-.s-clr4 { background-color: #1D8FDE; }
-.s-clr3 { background-color: #1E8BD7; }
-.s-clr2 { background-color: #1985D0; }
-.s-clr1 { background-color: #177FC7; }
+.s-clr4 { background-color: #1D8FDE !important; }
+.s-clr3 { background-color: #1E8BD7 !important; }
+.s-clr2 { background-color: #1985D0 !important; }
+.s-clr1 { background-color: #177FC7 !important; }
 .slide-btns .icon.refresh { background-image: url("../img/subscriber-refresh48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.calender { background-image: url("../img/calender48.png"); background-position:center center; background-repeat:no-repeat; }
 .slide-btns .icon.check { background-image: url("../img/check48.png"); background-position:center center; background-repeat:no-repeat; }

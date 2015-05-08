@@ -46,13 +46,16 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             */
             render: function () {
                this.$el.html(this.template({}));
-               this.app = this.options.app;           
+               this.app = this.options.app;        
                
                this.$contactList = this.$(".contactsdiv");
                this.$contactLoading = this.$(".loadmore");
+               this.isSalesforceUser = false;
                                
-               this.initControls();               
-               this.fetchContacts();               
+               this.initControls();      
+               this.checkSalesforce();
+               
+               //this.fetchContacts();               
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
@@ -116,6 +119,28 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
               $(window).resize(_.bind(this.liveLoading,this));
               this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});
             },
+            checkSalesforce:function(){
+                this.app.getData({
+                        "URL":"/pms/io/salesforce/getData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=status",
+                        "key":"salesfocre",
+                        callback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);    
+                            var sf = this.app.getAppData("salesfocre");
+                            if(sf[0] == "err" ||sf.isSalesforceUser=="N"){
+                              // this.loadSetupArea();  
+                              this.fetchContacts();
+                            }
+                            else{
+                                this.isSalesforceUser = true;
+                                this.fetchContacts();
+                            }
+                        },this),
+                        errorCallback:_.bind(function(){
+                            this.app.showLoading(false,this.$el);                        
+                           // this.loadSetupArea();  
+                        },this)
+                    });
+            },
             /**
              * Fetching contacts list from server.
             */
@@ -145,7 +170,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 if(!fcount){
                     remove_cache = true;
                     this.offset = 0;
-                    this.$contactList.children(".contactbox").remove();
+                    this.$contactList.find('.thumbnails.cards').children(".contact-li").remove();
                     this.app.showLoading("Loading Contacts...",this.$contactList);             
                     this.$(".notfound").remove();
                     this.$('.filter_seven').parent().remove();
@@ -211,18 +236,21 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         this.showTotalCount(response.totalCount);
                         
                         this.$contactLoading.hide();
-                        
+                        if(collection.length!=0){
+                        this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
+                        this.$('.open-csv').click(_.bind(this.openCsv,this));    
+                        }
                         for(var s=this.offset;s<collection.length;s++){
-                            var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this });                                
+                            var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this ,app:this.app});                                
                             subscriberView.on('tagclick',this.searchByTag);
                             subscriberView.on('updatecount',this.updateRefreshCount);
-                            this.$contactLoading.before(subscriberView.$el);
+                            this.$contactList.find('.thumbnails.cards').append(subscriberView.$el);
                         }                        
                         /*-----Remove loading------*/
                             this.app.removeSpinner(this.$el);
                     /*------------*/
                         if(collection.length<parseInt(response.totalCount)){
-                            this.$(".contactbox").last().attr("data-load","true");
+                            this.$(".thumbnails.cards li.contact-li").last().attr("data-load","true");
                         } 
                         if(collection.length==0){
                             var search_message  ="";
@@ -255,7 +283,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             liveLoading:function(){
                 var $w = $(window);
                 var th = 200;
-                var inview = this.$(".contactbox").last().filter(function() {
+                var inview = this.$(".thumbnails.cards li.contact-li").last().filter(function() {
                     var $e = $(this),
                         wt = $w.scrollTop(),
                         wb = wt + $w.height(),
@@ -433,6 +461,10 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                             return false;
                         }
                         event.preventDefault();
-                   }
+                   },
+            openCsv: function(){
+                this.app.mainContainer.csvUpload();
+            }
+                 
         });
 });

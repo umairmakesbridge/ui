@@ -1,4 +1,123 @@
-<input type="checkbox" value="" name="" id="no1" class="checkpanel contact-row-check" />
+<div class="thumbnail">
+                                          <div id="" class="activities_tbl">
+                  <div class="bmsgrid  ">
+                    <div class="hDiv">
+                      <div class="hDivBox">
+                        <table cellspacing="0" cellpadding="0">
+                        </table>
+                      </div>
+                    </div>
+                    <div class="bDiv" style="height: ;">
+                      <table cellspacing="0" cellpadding="0" border="0" id="camp_list_grid">
+                        <tbody>
+                        
+                        
+                        <tr id="" class="erow">
+                        
+                        	
+                            <td width="10px">
+                                <div class="letter_block l_<%- this.getFirstAlphabet().toLowerCase() %>"><span><%- this.getFirstAlphabet() %></span></div>
+                             </td>
+                                
+                            
+                              <td width=""><div>
+                                  <div class="name-type">
+                                  
+                                    <div class="title show-detail" id="<%- model.get('subNum')%>">
+                                	<h3><a title="Click to view profile"><%- contact_name %></a></h3>
+                                        <% if(model.get('salesStatus')!==''){%>
+                                        <a class="statusdd color3"><%- model.get('salesStatus').toLowerCase()%>  <b class="caret"></b></a>
+                                        <%}%> 
+                                	</div>
+                                    
+                                    <div class="clearfix"></div>
+                                     <span class="act" style=" visibility: hidden;"><i class="icon open"></i>Opened Email <em>- 3 days ago</em></span>
+                                      
+                                    
+                                    
+                                    
+                                  </div>
+                                </div></td>
+                              
+                            </tr>
+                        
+                        
+                        
+                        
+                            <tr>
+                            <td width="100%" colspan="2"><div>
+                                  <div class="name-type c-detail">
+                                  
+                                      <div class="t-scroll tagscont"> 
+                                      
+                                      </div>
+                                  
+                                  
+                                 	 <div class="clearfix"></div>
+                                     
+                                     		<span class="inf" style=""><i class="icon email"></i><b><%- this.options.app.decodeHTML(model.get('email'))%></b></span>
+                                    	 	<span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/> 
+                                                <div class="clearfix"></div><span class="inf" style="display:none"><i class="icon company"></i><b>Netechy</b></span>
+                                      		
+                                            
+                                     
+                                     <div class="btm-icons ">
+                                  
+                                    	<div class="hotness" style="display:none">
+                                        	<span class="on"><strong class="badge">4</strong></span>
+                                            
+                                    	</div> <!--  hotness  --> 
+                                    	<div class="filterbar" style="display:none">
+                                        	<strong class="badge">9</strong>
+                                        </div>
+                                        <div class="score">
+                                        	<i class="icon score"></i>
+                                            <%- model.get('score')%>
+                                        </div>
+                                    	<div class="crms">
+                                            <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/nsicon2.png" alt=""></a>
+                                             <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/inicon2.png" alt=""></a>
+                                             <% if(this.options.sub.isSalesforceUser){ %> 
+                                                <% if(model.get('sfUrl')){ %>
+                                                <a class="salesforce-view" style="display:none;" data-url="<%- this.options.app.decodeHTML(model.get('sfUrl')) %>"><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
+                                                <% }else{ %>
+                                                     <a class="add-to-salesforce" style="display:none;"><img src="<%- this.app.get('path')%>img/SF_plus.png"/></a>
+                                                     <% } %>
+                                              <% } %>
+                                        </div>
+                                     
+                           </div>
+                                    
+                                     
+                                    
+                                  </div>
+                                </div></td>
+                            
+                            </tr>
+                            
+                
+                        
+                        
+                       
+                       
+                        </tbody>
+                      </table>
+                      <div class="iDiv" style="display: none;"></div>
+                    </div>
+                  </div>
+                </div>
+                                          
+                                              <div class="action-btns animated" >
+                                                  <a class="previewbtn s-clr4 show-detail"><span>Preview</span></a>
+                                                  <a class="sendmsg s-clr3 oto-sendmail" id=""><span>Send Message</span></a>
+                                                  <a class="editbtn s-clr2 show-detail"><span>Edit</span></a>
+                                                  <a class="deletebtn s-clr1" id=""><span>Delete</span></a>
+                                              </div>
+                                          
+                                        </div>
+<div style="display:none"> 
+    
+    <input type="checkbox" value="" name="" id="no1" class="checkpanel contact-row-check" />
 <div class="leftbox">
     <div class="title show-detail" id="<%- model.get('subNum')%>">
         <h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
@@ -6,6 +125,9 @@
             <a class="statusdd color3 captilize"><%- model.get('salesStatus').toLowerCase()%> </a>
         <%}%>    
         <a  class="schedulebtn">Schedule</a>
+        <% if(model.get('sfUrl')){ %>
+        <a><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
+        <% } %>
     </div>
     <div class=" tagscont"> 
         <ul>
@@ -77,3 +199,4 @@
          
     </div>
 </div>
+</div><!-- Extra div to hide the content -->

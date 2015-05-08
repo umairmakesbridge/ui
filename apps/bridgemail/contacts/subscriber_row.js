@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber_row.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!contacts/html/subscriber_row.html','jquery.highlight','common/tags_row'],
+function (template,highlighter,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page
@@ -7,7 +7,8 @@ function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
         return Backbone.View.extend({
-            className: 'contactbox',
+            tagName: 'li',
+            className: 'contact-li',
             detailFields:{"firstName":{"label":"First Name"},"lastName":{"label":"Last Name"},"email":{"label":"Email"},"company":{"label":"Company"},"city":{"label":"City"},
                         "country":{"label":"Country"},"state":{"label":"State"},"zip":{"label":"Zip"},"address1":{"label":"Address 1"},"address2":{"label":"Address 2"},
                         "areaCode":{"label":"Area Code"},"telephone":{"label":"Telephone"},"jobStatus":{"label":"Job Status"},"industry":{"label":"Industry"},"salesRep":{"label":"Sales Rep"},
@@ -23,7 +24,10 @@ function (template,highlighter) {
                'click .more-detail':'showDetail',
                'click .closebtn': 'hideDetail',
                'click .tag':'tagSearch',
-               'click .show-detail':'openContact'
+               'click .oto-sendmail': 'sendEmail',
+               'click .show-detail':'openContact',
+               'click .add-to-salesforce':"synctoSF",
+               'click .salesforce-view':"viewSyncedSF"
             },
             /**
              * Initialize view - backbone
@@ -60,6 +64,7 @@ function (template,highlighter) {
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                this.showTagsTemplate();
                 this.$('input.contact-row-check').iCheck({
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
@@ -87,6 +92,19 @@ function (template,highlighter) {
                     this.$(".tag").highlight($.trim(this.sub.tagTxt));
                 }
             },
+            showTagsTemplate:function(){
+                    this.tmPr =  new tagView(
+                                   {parent:this,
+                                    app:this.app,
+                                    parents:this.sub,
+                                    rowElement: this.$el,
+                                    helpText : 'Contacts',
+                                    type:'contacts',
+                                    tags:this.model.get('tags')});
+                        
+                      this.$('.tagscont').append(this.tmPr.$el);
+                      
+                },
             showDetail:function(){
                 this.$(".allprofileinfo .proinfo span").remove();
                 this.$(".allprofileinfo,.closebtn").show();                
@@ -122,6 +140,20 @@ function (template,highlighter) {
                 }
                 return full_name;
             },
+            getFirstAlphabet : function(json){
+                 var fName = this.model.get("firstName");
+                 var lName = this.model.get("lastName");
+                 var email = this.model.get("email");
+                 var firstAlpha = '';
+                 if(fName){
+                          firstAlpha = this.app.decodeHTML(fName);
+                      }else if(lName){
+                          firstAlpha = this.app.decodeHTML(lName);
+                      }else{
+                          firstAlpha = this.app.decodeHTML(email);
+                      }
+                     return firstAlpha.charAt(0);
+            },
             tagSearch:function(obj){
                 this.trigger('tagclick',$(obj.target).text());
                 return false;
@@ -136,9 +168,71 @@ function (template,highlighter) {
                           sub_name = this.model.get("email");
                       }
                        
-                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name,this.model.get("supress"));
+                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name,this.model.get("supress"),this.sub.isSalesforceUser);
                       
-            }
+            },
+            sendEmail : function(){
+                       // console.log(this.model.get("subNum"));
+                         // Loading templates 
+                        var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'Templates'+'<strong id="oto_total_templates" class="cstatus pclr18 right" style="margin-left:5px;display:none;"> Total <b></b> </strong>',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                        headerEditable:false,
+                        headerIcon : 'template',
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        tagRegen:false,
+                        reattach : false
+                        });
+                        this.app.showLoading("Loading Templates...",dialog.getBody());
+                        var _this = this;
+                        require(["bmstemplates/templates"],function(templatesPage){                                                     
+                             _this.templateView = new templatesPage({page:_this,app:_this.app,scrollElement:dialog.getBody(),dialog:dialog,selectCallback:_.bind(_this.selectTemplate,_this),isOTO : true,subNum:_this.model.get("subNum"),directContactFlag:true});               
+                           var dialogArrayLength = _this.app.dialogArray.length; // New Dialog
+                           dialog.getBody().append( _this.templateView.$el);
+                            _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); 
+                           _this.app.showLoading(false,  _this.templateView.$el.parent());                     
+                             _this.templateView.init();
+                             _this.templateView.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                             _this.app.dialogArray[dialogArrayLength-1].reattach = true;// New Dialog
+                            _this.app.dialogArray[dialogArrayLength-1].currentView = _this.templateView; // New Dialog
+                        })
+                 },
+                 selectTemplate:function(obj){
+                   // this.setEditor();
+                    var target = $.getObj(obj,"a");
+                    var bms_token =this.app.get('bms_token');
+                   // this.app.showLoading('Loading HTML...',this.$el);
+                    //this.states.editor_change = true;
+                   // var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+                             
+                   // jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
+                     this.template_id = target.attr("id").split("_")[1]; 
+                     this.templateView.createOTODialog();
+                    
+                },
+                synctoSF : function(){
+                    var dialog_width = $(document.documentElement).width()-60;
+                        var dialog_height = $(document.documentElement).height()-182;
+                        var dialog = this.app.showDialog({title:'Add to Salesforce',
+                        css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
+                        headerEditable:false,
+                        headerIcon : 'template',
+                        bodyCss:{"min-height":dialog_height+"px"},
+                        tagRegen:false,
+                        reattach : false
+                        });
+                        var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum");
+                        var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        dialog.getBody().append(iframHTML);
+                        //this.app.showLoading("Loading Templates...",dialog.getBody());
+                        //dialog.getBody().append('<iframe src="/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK='+this.app.get('bms_token')+'&subNum='+this.model.get("subNum")+'&fromNewUI=true" width="100%" frameborder="0" style="height:100%;overflow:hidden"></iframe>');
+                },
+                viewSyncedSF : function(event){
+                    var url = $(event.target).parent().data('url');
+                    console.log(url);
+                    window.open(url,'newwindow', 'scrollbars=yes,resizable=yes');
+                }
+                
             
         });
 });

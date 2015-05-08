@@ -30,6 +30,9 @@ function (template,jqueryui,addbox) {
                     this.$el.html(this.template({}));
                     this.initControls();
                     this.setupFields();
+                    if(this.options.isSalesforceUser){
+                        this.showSalesforceUser();
+                    }
             },
             /**
              * Initializing all controls here which need to show in view.
@@ -193,6 +196,14 @@ function (template,jqueryui,addbox) {
                           subName = this.subscriber.sub_fields.email;
                       }
                 this.app.mainContainer.SubscriberName(this.subscriber.sub_id,subName);
+            },
+            showSalesforceUser : function(){
+                if(this.subscriber.sub_fields.conLeadId){
+                this.$('#sfid').val(this.subscriber.sub_fields.conLeadId).attr('readonly','readonly');
+                this.$('#sfowner').val(this.subscriber.sub_fields.salesRep).attr('readonly','readonly');
+                }else{
+                    this.$('.sf-field-accordion').hide();
+                }
             }
         });
 });

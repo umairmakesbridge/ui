@@ -38,7 +38,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                  */
                 render: function() {
                     this.app = this.options.app;
-                    this.$el.html(this.template({}));                    
+                    this.$el.html(this.template({}));      
+               
                     if (this.options.params && this.options.params.sub_id) {
                         this.sub_id = this.options.params.sub_id;
                         this.sub_name = this.options.params.sub_name;
@@ -319,7 +320,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     var dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["contacts/subscriber_fields"], function(sub_detail) {
-                        var page = new sub_detail({sub: _this});
+                        var page = new sub_detail({sub: _this,isSalesforceUser:_this.options.params.isSalesforceUser});
                         dialog.getBody().html(page.$el);
                         if (_this.sub_fields["conLeadId"]) {
                             dialog.saveCallBack2(_.bind(page.updateSubscriberDetailAtSalesForce, page, dialog));
