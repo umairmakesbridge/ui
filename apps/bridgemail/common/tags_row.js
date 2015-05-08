@@ -12,18 +12,29 @@ function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
         return Backbone.View.extend({
-            tagName:'p',
+            
             /**
              * Attach events on elements in view.
             */
             events: {
                  'click a':'tagsClick',
             },
+            tagName: function(){
+                var tagName = "p";
+                if(this.options.type==="contacts"){
+                    tagName = "ul";
+                }else{
+                    tagName = 'p';
+                }
+                
+                return tagName;
+            },
             /**
              * Initialize view - backbone
             */
             initialize: function () {
-                    this.template = _.template(template);				
+                    this.template = _.template(template);
+                    
                     this.parent = this.options.parent;
                     this.parents = this.options.parents;
                     this.app = this.options.app;
@@ -75,7 +86,7 @@ function (template,highlighter) {
              * Initializing all controls here which need to show in view.
             */
             initControls:function(){
-                if(this.options.type !== 'NT'){
+                if(this.options.type !== 'NT' && this.options.type !=="contacts"){
                if(this.parents.searchString.searchType ==="tag"){
                         var tagText = this.parents.searchString.searchText;
                         this.$("a").each(function(){
@@ -87,7 +98,8 @@ function (template,highlighter) {
             },
          
            tagsClick: function(obj){               
-                var tag = $.getObj(obj,"a");
+               if(this.options.type !== "contacts"){ 
+               var tag = $.getObj(obj,"a");
                 if(this.tagSearchCall){
                     this.tagSearchCall(tag.text());
                 }
@@ -97,15 +109,15 @@ function (template,highlighter) {
                     this.parents.$('#clearsearch').hide();
                     this.parents.loadTemplates('search','tag',{text:tag.text()});  
                 }
+            }
           },
-           trimTags : function(){
+           trimTags : function(obj){
                  var isElipsis = true;
                  var totalTagsWidth = 0;
-                
-                  $.each(this.rowElement.find(".t-scroll p a"),_.bind(function(k,val){
+                  $.each(this.rowElement.find(obj.innerElement),_.bind(function(k,val){
                         totalTagsWidth = $(val).outerWidth() + parseInt(totalTagsWidth)+8;
                         
-                        if(totalTagsWidth > 345){
+                        if(totalTagsWidth > obj.maxwidth){
                           if(isElipsis){
                                var eplisis = $('<i class="ellipsis">...</i><div class="clearfix"></div>');
                              $(val).before(eplisis);

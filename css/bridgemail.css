@@ -8338,28 +8338,6 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
     margin: 0 5px 0 0 !important;
 }
 .contactsdiv {}
-.contactbox { height:100px; background:#EFF7FB; margin:2px 0 0; overflow:hidden; position:relative;}
-.contactbox:first-child { margin:0;}
-.contactbox:nth-child(2n) {  background:#F4F9FC;}
-.contactbox.suppressed {opacity:0.6; }
-.contactbox.selected { background:#eef6dc;}
-
-.contactbox:hover {background:#dcf3fe; opacity:1; }
-
-
-.contactbox .checkpanelinput  {
-	background:#fff;
-	margin-right:15px;
-	border:2px solid #EFF7FB;}
-	
-.contactbox .checkpanelinput.checked {  background-color: #94CF1E; border:2px solid #94CF1E;}
-.contactbox .checkpanelinput { min-width:35px;  height:65px; padding-top:31px;z-index: 999;}
-.contactbox .checkpanelinput.disabled {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    border: 2px solid rgba(0, 0, 0, 0);
-}
-.contactbox .checkpanelinput.disabled .icheck_line-icon { background: url("../img/suppressed.png") no-repeat scroll center center; }
-
 
 
 .contactsdiv {
@@ -8371,35 +8349,6 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
 	border-radius:  2px;
 }
 
-
-
-
-.contactbox .leftbox { float:left; width:480px;}
-.contactbox .rightbox { float:right; width:380px;}
-
-
-.contactbox .leftbox .title {
-    height: 24px;
-    line-height: 24px;
-    padding: 10px 0;
-}
-
-.contactbox .leftbox .title h3,.contactbox .leftbox .title h3 a {
-    float: left;
-    font-size: 18px;
-	color:#02AFEF;
-	margin:0;
-    line-height: 24px;
-}
-
-.contactbox .leftbox .title h3 a:hover  { padding-right:30px; position:relative; }
-.contactbox .leftbox .title h3 a:hover:before  { background: url("../img/preview2.png") no-repeat scroll center center ; content:""; display:block; position:absolute; right:0; top:0; height:100%; width:30px; }
-.contactbox:hover .leftbox .title h3 a:hover {color:#0080ca; }
-.contactbox .leftbox .title a {
-    float: left;
-    margin-left: 10px;
-    margin-top: 5px;
-}
 .statusdd {
     background: none repeat scroll 0 0 #F9E9A3;
     border-radius: 20px;
@@ -8422,7 +8371,7 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
 }
 .statusdd:hover { opacity:1; color: #a77304; background: none repeat scroll 0 0 #F0D08B;}
 
-.contactbox .leftbox  .linkedin {background: url("../img/linkedin.png") no-repeat center center ; width:53px; height:20px; display:none;}
+.
 
 
 .chatbtn {
@@ -8456,13 +8405,6 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
 	-moz-border-radius: 20px;
 	border-radius:  20px; }
 	
-.contactbox:hover .schedulebtn { display:none;}
-
-.contactbox .leftbox .tagscont { margin:0; }
-.contactbox .leftbox .tagscont .tagicon { margin: 1px 1px 0 0;  background-position: -180px -885px;}
-.contactbox .leftbox .tagscont ul {  max-width: 100%; }
-.contactbox .leftbox .tagscont ul li a {  background: none repeat scroll 0 0 #FFFFFF;  color: #01AEEE;  padding: 0 5px;}
-.contactbox .leftbox .tagscont ul li a:hover {  background: none repeat scroll 0 0 #01AEEE;  color: #FFFFFF; }
 
 
 
@@ -8473,32 +8415,6 @@ ul#template_search_menu li.active a, ul#template_search_menu li a:hover  {   bac
 }
 
 
-.contactbox .hotness, .contactbox .filterbar span  { opacity:0.5; }
-.contactbox:hover .hotness, .contactbox:hover .filterbar span  { opacity:1; }
-.hotness { float:left;}
-.hotness span {background: url("../img/flame.png") no-repeat center top ; width:14px; height:20px; display:block; float:left; cursor:pointer;}
-.hotness span.on { background-position: center bottom;}
-
-
-
-.contactbox .rightbox .ellipsis {
-    background: none repeat scroll 0 0 #19BAF7;
-    border-radius: 2px;
-    color: #FFFFFF;
-    cursor: pointer;
-    float: right;
-    font-weight: bold;
-    height: 16px;
-    letter-spacing: 2px;
-    line-height: 9px;
-    margin: 22px 0 0 10px;
-    padding: 0 3px 0 5px;
-    position: relative;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius:  2px;}
-
-/* ---------------------- */
 
 
 
@@ -8700,7 +8616,7 @@ div.crms a img {
     font-weight: normal;
 }
 
-.contactbox:hover .actstatus { color: #348592;}
+.contact-li.suppressed {opacity:0.6; }
 
 
 

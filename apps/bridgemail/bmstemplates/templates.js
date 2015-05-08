@@ -395,7 +395,7 @@ function (template,highlight,templateCollection,templateRowView) {
                                                 _.each(collection.models, _.bind(function(model){
                                                         this.rowView = new templateRowView({model:model,sub:this,selectCallback:this.options.selectCallback,selectTextClass:this.selectTextClass,OnOFlag:this.OnOFlag});
                                                         this.$el.find('.thumbnails').append(this.rowView.$el);
-                                                       this.rowView.tmPr.trimTags();
+                                                       this.rowView.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
                                                     },this));
                                                     /*-----Remove loading------*/
                                                         this.app.removeSpinner(this.$el);

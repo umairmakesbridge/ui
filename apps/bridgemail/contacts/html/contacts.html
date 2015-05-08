@@ -1,5 +1,5 @@
 <div class="temp-filters clearfix">
-    <h2 id="contacts_count">
+    <h2 id="contacts_count" style="display:none;">
         <input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" />        
         <h2 id="total_templates"><strong class="badge total-count">0</strong> <span class="total-text">Contacts</span></h2>
         <h2 id="total_selected" style="display:none"><strong class="badge total-selected-count">0</strong> <span class="total-selected-text">Contacts</span></h2>
@@ -30,13 +30,16 @@
       </div>
      
     </div>         
-    <div class="refreshbtn" style="display: none;float:left!important"><img src="img/recurring2.gif" alt="" /></div> 
+    <div class="refreshbtn" style="display: none;float:left!important"><img src="<%- this.options.app.get('path')%>img/recurring2.gif" alt="" /></div> 
     <label class="right top-label">Sort By:</label>
   </div>
 
-  <div class="contactsdiv">
-                      
+  <div class="contactsdiv tileview">
+      <ul class="thumbnails cards">
+           
+      </ul>
+
     <div class="loadmore" style="display:none">
-         <img src="img/loading.gif" alt=""/>
+         <img src="<%- this.options.app.get('path')%>img/loading.gif" alt=""/>
     </div>                  
  </div> <!-- contactsdiv -->
