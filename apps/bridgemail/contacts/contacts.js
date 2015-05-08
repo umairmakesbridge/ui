@@ -236,9 +236,12 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         this.showTotalCount(response.totalCount);
                         
                         this.$contactLoading.hide();
-                        if(collection.length!=0){
+                        if(collection.length!=0 && this.$el.find('.thumbnails.cards .open-csv').length == 0){
+                        
                         this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
                         this.$('.open-csv').click(_.bind(this.openCsv,this));    
+                        }else{
+                            this.$el.find('.thumbnails.cards .open-csv').remove();
                         }
                         for(var s=this.offset;s<collection.length;s++){
                             var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this ,app:this.app});                                

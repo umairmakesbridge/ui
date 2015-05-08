@@ -24,7 +24,7 @@
                                   <div class="name-type">
                                   
                                     <div class="title show-detail" id="<%- model.get('subNum')%>">
-                                	<h3><a title="Click to view profile"><%- contact_name %></a></h3>
+                                	<h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
                                         <% if(model.get('salesStatus')!==''){%>
                                         <a class="statusdd color3"><%- model.get('salesStatus').toLowerCase()%>  <b class="caret"></b></a>
                                         <%}%> 
@@ -108,10 +108,10 @@
                 </div>
                                           
                                               <div class="action-btns animated" >
-                                                  <a class="previewbtn s-clr4 show-detail"><span>Preview</span></a>
-                                                  <a class="sendmsg s-clr3 oto-sendmail" id=""><span>Send Message</span></a>
-                                                  <a class="editbtn s-clr2 show-detail"><span>Edit</span></a>
-                                                  <a class="deletebtn s-clr1" id=""><span>Delete</span></a>
+                                                  <a class="previewbtn s-clr3 show-detail"><span>Preview</span></a>
+                                                  <a class="sendmsg s-clr2 oto-sendmail" id=""><span>Send Message</span></a>
+                                                  <a class="editbtn s-clr1 show-detail"><span>Edit</span></a>
+                                                  
                                               </div>
                                           
                                         </div>
