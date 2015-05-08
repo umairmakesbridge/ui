@@ -83,6 +83,7 @@ function (template,highlighter,tagView) {
                 if(this.model.get("supress")=="S"){
                     this.$el.addClass("suppressed");
                     this.$(".checkpanelinput").addClass("disabled");
+                    this.$('.suppressed-icon').show();
                 }
                 if(this.sub.searchTxt){
                     this.$(".show-detail").highlight($.trim(this.sub.searchTxt));
@@ -93,6 +94,7 @@ function (template,highlighter,tagView) {
                 }
             },
             showTagsTemplate:function(){
+                    if(this.model.get('tags')){
                     this.tmPr =  new tagView(
                                    {parent:this,
                                     app:this.app,
@@ -102,7 +104,10 @@ function (template,highlighter,tagView) {
                                     type:'contacts',
                                     tags:this.model.get('tags')});
                         
-                      this.$('.tagscont').append(this.tmPr.$el);
+                      this.$('.tagscont').append(this.tmPr.$el).show();
+                  }else{
+                      this.$('.tagscont').hide();
+                  }
                       
                 },
             showDetail:function(){
