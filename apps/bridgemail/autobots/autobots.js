@@ -159,7 +159,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                                 that.$el.find("#tblAutobots tbody").append(new Autobot({model: model, app: that.options.app, page: that}).el)
                                 var autoBotTiles = new AutobotTile({model: model, app: that.options.app, page: that});
                                 that.$el.find(".thumbnails").append(autoBotTiles.el)
-                                autoBotTiles.tmPr.trimTags();
+                                autoBotTiles.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
                                  if(model.get("status")=="P" || model.get("status")=="Q"){                                
                                         that.callDispenseStats(model.get("botId.encode"),model.get("botId.checksum"),true);
                                  }
