@@ -1,5 +1,5 @@
-define(['contacts/collections/subscriber_timeline','contacts/collections/subscriber_timeline_future','text!contacts/html/subscriber_timeline.html','contacts/timeline_row','moment'],
-function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
+define(['contacts/collections/subscriber_timeline','contacts/collections/subscriber_timeline_future','text!contacts/html/subscriber_timeline.html','contacts/timeline_row','moment','contacts/timeline_filter'],
+function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Timeline view 
@@ -11,7 +11,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
              * Attach events on elements in view.
             */
             events: {
-             
+              'click .show-all':'showAll',
+              'click .show-advance':'openFilterDialog'
             },
             /**
              * Initialize view - backbone
@@ -24,7 +25,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                 this.timeLineRequestFuture = new TimelineFuture(); 
                 this.monthYear = "";
                 this.render();                 
-                //this.model.on('change',this.renderRow,this);
+                //this.model.on('change',thi.renderRow,this);
             },
             /**
              * Render view on page.
@@ -33,8 +34,8 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                 this.$el.html(this.template({                 
                 }));                
                 this._request = null;
-                this.$timelineFuture = this.$(".timeline-container .future .filter-div");
-                this.$timelineContainer = this.$(".timeline-container .current .filter-div");
+                this.$timelineFuture = this.$(".timeline-container .future");
+                this.$timelineContainer = this.$(".timeline-container .current");
                 this.$curLoad = this.$(".loadmore");
                 this.initControls();    
             },            
@@ -65,12 +66,29 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                 var remove_cache = false;
                 if(!fcount){
                     //remove_cache = true;
-                    this.offset = 0;                              
+                    this.offset = 0;     
+                    this.timeLineRequest = new Timeline(); 
+                    this.$timelineContainer.children().not('.timestop.now').remove();
+                    this.$curLoad.show();
+                    remove_cache=true;   
                 }
                 else{
                     this.offset = this.offset + 30;                    
                 }
                 var _data = {offset:this.offset,subNum: this.sub.sub_id};                
+                
+                if(this.timelineFilter){
+                    _data['timelineFilter'] =this.timelineFilter;
+                    if(this.timelineFilter=="N" && this.campNum){
+                        _data['campNums'] =this.campNum;
+                    }
+                    else if(this.timelineFilter=="W" && this.workflowId){
+                        _data['workflowId'] =this.workflowId;
+                    }
+                }
+                 if(this.activityType){
+                    _data['activityType'] =this.activityType;
+                }
                
                 if(this._request && this.offset!==0){
                     this._request.abort();
@@ -79,7 +97,12 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                     success: _.bind(function (collection, response) {                                
                         // Display items                                                                      
                        if(response.totalCount=="0"){
-                          this.$timelineContainer.parent().hide();
+                          this.$timelineContainer.hide();
+                          this.$(".notfound").show();
+                       }
+                       else{
+                           this.$timelineContainer.show();
+                           this.$(".notfound").hide();
                        }
                        this.app.showLoading(false,this.$el); 
                        this.$curLoad.hide();
@@ -88,7 +111,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                             var model_date = this.getMonthYear(collection.at(s));
                             if(this.monthYear !==model_date){
                                 this.monthYear = model_date;
-                                this.$timelineContainer.append(this.timeStamp(this.monthYear));                                                                                               
+                                //this.$timelineContainer.append(this.timeStamp(this.monthYear));                                                                                               
                             }      
                             this.$timelineContainer.append(timelineView.$el);                                                       
                         }    
@@ -96,14 +119,14 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                                  this.app.removeSpinner(this.$el);
                                /*------------*/
                         if(collection.length<parseInt(response.totalCount)){                            
-                            this.$(".filter-row").last().attr("data-load","true");
+                            this.$(".act_row").last().attr("data-load","true");
                         }
                         else{
                            if(this.sub.sub_fields){ 
-                            this.$timelineContainer.append($('<div class="filter-row signedup"><div class="filter-cont"> <h4>Signed Up on '+this.getMonthYear(this.sub.sub_fields.creationDate,true)+'</h4> </div></div>'));                                                        
+                                this.$timelineContainer.append($('<div class="startflag"><div class="icon start"></div> <h5>Joined on '+this.getMonthYear(this.sub.sub_fields.creationDate,true)+'</h5></div>'));                                                        
                            }
                            else{
-                               this.$timelineContainer.append($('<div class="filter-row signedup"><div class="filter-cont"> <h4>Signed Up on </h4> </div></div>'));                                                        
+                               this.$timelineContainer.append($('<div class="startflag"><div class="icon start"></div> <h5>Signed Up</h5></div>'));                                                        
                            }
                         }
                         
@@ -120,13 +143,27 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                 // Fetch invite requests from server
                 var remove_cache = false;
                 if(!fcount){                    
-                    this.offsetFuture = 0;                              
+                    this.offsetFuture = 0;      
+                    this.$timelineContainer.children().not('.timestop').remove();
+                    this.timeLineRequestFuture = new TimelineFuture(); 
+                    remove_cache=true;                    
                 }
                 else{
                     this.offsetFuture = this.offsetFuture + 30;
                 }
                 var _data = {offset:this.offsetFuture,subNum: this.sub.sub_id};                
-               
+                if(this.timelineFilter){
+                    _data['timelineFilter'] =this.timelineFilter;
+                    if(this.timelineFilter=="N" && this.campNum){
+                        _data['campNums'] =this.campNum;
+                    }
+                    else if(this.timelineFilter=="W" && this.workflowId){
+                        _data['workflowId'] =this.workflowId;
+                    }
+                }
+                if(this.activityType){
+                    _data['activityType'] =this.activityType;
+                }
                 if(this._request && this.offsetFuture!==0){
                     this._request.abort();
                 }                
@@ -134,7 +171,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                     success: _.bind(function (collection, response) {                                
                         // Display items                                                                      
                         if(response.totalCount=="0"){
-                            this.$timelineFuture.parent().hide();
+                            this.$timelineFuture.hide();
                         }
                        this.app.showLoading(false,this.$el); 
                        for(var s=this.offsetFuture;s<collection.length;s++){
@@ -142,7 +179,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                             var model_date = this.getMonthYear(collection.at(s));
                             if(this.monthYear !==model_date){
                                 this.monthYear = model_date;
-                                this.$timelineFuture.prepend(this.timeStamp(this.monthYear));                                                                    
+                                //this.$timelineFuture.prepend(this.timeStamp(this.monthYear));                                                                    
                             }      
                             this.$timelineFuture.prepend(timelineView.$el);                                                                               
                         }
@@ -188,7 +225,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
             liveLoading:function(){
                 var $w = $(window);
                 var th = 200;
-                var inview = this.$(".current .filter-row").last().filter(function() {
+                var inview = this.$(".current .act_row").last().filter(function() {
                     var $e = $(this),
                         wt = $w.scrollTop(),
                         wb = wt + $w.height(),
@@ -212,7 +249,12 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
                 else{
                    _date = moment(this.app.decodeHTML(val),'M/D/YYYY H:m');
                 }
-                return _date.format("MMM YYYY");
+                if(isValue){
+                    return _date.format("DD MMM YYYY")+" at "+ _date.format("hh:mm A");
+                }
+                else{
+                    return _date.format("MMM YYYY");
+                }
             },
             timeStamp:function(monthYear,current){
                 var _now = current ? 'now':'';
@@ -221,7 +263,43 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment) {
             ,
             loadMoreFuture:function(){                
                 return $('<div class="timestop load-more-future"><span class="ellipsis" >Load More...</span></div>');
+            },
+            openFilterDialog:function(){
+                var dialog = new filterDialog({callBack:_.bind(this.searchAdvance,this)});
+                $("body").append(dialog.$el);
+            },
+            searchCampaign:function(campNum){
+                this.timelineFilter = "N";
+                this.campNum = campNum;
+                this.workflowId = null;
+                this.activityType = null;
+               //this.fetchTimeLineFuture();
+                this.fetchTimeLine();                
+            },
+            searchWorkflow:function(workFlowId){
+                this.timelineFilter = "W";
+                this.campNum = null;
+                this.activityType = null;
+                this.workflowId = workFlowId;
+                this.fetchTimeLineFuture();
+                this.fetchTimeLine();                
+            },searchAdvance:function(event,activityType){
+                this.timelineFilter = event;
+                this.activityType= activityType;
+                if(event!=="SU"){
+                    this.fetchTimeLineFuture();
+                }
+                this.fetchTimeLine();                
+            },
+            showAll:function(){
+                this.timelineFilter = null;
+                this.campNum = null;
+                this.activityType = null;
+                this.workflowId = null;                
+                this.fetchTimeLineFuture();
+                this.fetchTimeLine(); 
             }
+            
             
         });
 });

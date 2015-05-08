@@ -87,7 +87,7 @@ define([
             //Exposes Workspaces 
             this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
                             ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
-                            "reports":"camapignReport",subscriber:"openSubscriber"};
+                            "reports":"camapignReport",subscriber:"openSubscriber",camppreview:"previewCamp"};
                         
             if(this.get("env")=="production"){
                 this.set("path",window.location.protocol+"//"+imagesCDN+this.get("path"));
@@ -469,34 +469,44 @@ define([
             });
         },
         encodeHTML: function (str) {
-            str = str.replace(/:/g, "&#58;");
-            str = str.replace(/\'/g, "&#39;");
-            str = str.replace(/=/g, "&#61;");
-            str = str.replace(/\(/g, "&#40;");
-            str = str.replace(/\)/g, "&#41;");
-            str = str.replace(/</g, "&lt;");
-            str = str.replace(/>/g, "&gt;");
-            str = str.replace(/\"/g, "&quot;");
-            str = str.replace(/\‘/g,"&#8216;");
+            if(typeof(str)!=="undefined"){
+                str = str.replace(/:/g, "&#58;");
+                str = str.replace(/\'/g, "&#39;");
+                str = str.replace(/=/g, "&#61;");
+                str = str.replace(/\(/g, "&#40;");
+                str = str.replace(/\)/g, "&#41;");
+                str = str.replace(/</g, "&lt;");
+                str = str.replace(/>/g, "&gt;");
+                str = str.replace(/\"/g, "&quot;");
+                str = str.replace(/\‘/g,"&#8216;");
+            }
+            else{
+                str = "";
+            }
             return str;
         }
         ,
         decodeHTML: function (str, lineFeed) {
             //decoding HTML entites to show in textfield and text area 				
-            str = str.replace(/&#58;/g, ":");
-            str = str.replace(/&#39;/g, "\'");
-            str = str.replace(/&#61;/g, "=");
-            str = str.replace(/&#40;/g, "(");
-            str = str.replace(/&#41;/g, ")");
-            str = str.replace(/&lt;/g, "<");
-            str = str.replace(/&gt;/g, ">");
-            str = str.replace(/&gt;/g, ">");
-            str = str.replace(/&#9;/g, "\t");
-            str = str.replace(/&nbsp;/g, " ");
-            str = str.replace(/&quot;/g, "\"");
-            str = str.replace(/&#8216;/g, "‘");          
-            if (lineFeed) {
-                str = str.replace(/&line;/g, "\n");
+            if(typeof(str)!=="undefined"){
+                str = str.replace(/&#58;/g, ":");
+                str = str.replace(/&#39;/g, "\'");
+                str = str.replace(/&#61;/g, "=");
+                str = str.replace(/&#40;/g, "(");
+                str = str.replace(/&#41;/g, ")");
+                str = str.replace(/&lt;/g, "<");
+                str = str.replace(/&gt;/g, ">");
+                str = str.replace(/&gt;/g, ">");
+                str = str.replace(/&#9;/g, "\t");
+                str = str.replace(/&nbsp;/g, " ");
+                str = str.replace(/&quot;/g, "\"");
+                str = str.replace(/&#8216;/g, "‘");          
+                if (lineFeed) {
+                    str = str.replace(/&line;/g, "\n");
+                }
+            }
+            else{
+                str = "";
             }
             return str;
         },

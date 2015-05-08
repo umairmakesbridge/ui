@@ -964,6 +964,27 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
 
                     });
 
+                },
+                previewCamp:function(){
+                    var camp_id = $.getUrlVar(false,'campNum');
+                    if(camp_id){                            
+                        var isTextOnly = false;                                                          
+                        var dialog_width = $(document.documentElement).width();
+                        var dialog_height = $(document.documentElement).height()-120;
+                        var dialog = this.app.showDialog({title:'Campaign Preview' ,
+                                          css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"0px"},
+                                          headerEditable:false,
+                                          headerIcon : 'dlgpreview',
+                                          bodyCss:{"min-height":dialog_height+"px"}
+                        });	
+                        this.app.showLoading("Loading...",dialog.getBody());									
+                        var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+camp_id;  
+                        require(["common/templatePreview"],_.bind(function(templatePreview){
+                        var tmPr =  new templatePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'C',tempNum:camp_id,isText:isTextOnly}); // isText to Dynamic
+                         dialog.getBody().html(tmPr.$el);
+                         tmPr.init();
+                       },this));
+                   }
                 }
             });
 

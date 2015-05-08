@@ -151,6 +151,10 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("body").css("overflow-y","hidden");
                         },
                         hide:function(){
+                            if(this.app.get("newWin")){
+                                window.close();
+                                return;
+                            }
                             if(this.option.closeCD){
                                this.$el.modal("hide");                               
                                setTimeout(function(){                               

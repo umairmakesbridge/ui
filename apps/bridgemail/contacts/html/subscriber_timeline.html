@@ -4,34 +4,24 @@
         <h3>
             <span>Activity Timeline</span>
         </h3>
-        <ul class="feedbtns" style="display: none">
-          <li class="active"><a ><i class="icon actfeed"></i><b class="caret"></b></a></li>
-          <li><a ><i class="icon socfeed"></i><b class="caret"></b></a></li>
-        </ul>
-       <div class="input-append search search-timeline" style="display: none"> 
-           
-       </div>
-        <div class="since" style="visibility: hidden">
-           <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
-           <input type="text" value="4/23/99" style="width:150px;" id="daterange" />
-        </div>  <!-- since - date range  -->  
-
+        <div class="filters">
+            <a class="show-all">Show All</a> &nbsp;|&nbsp;
+            <a class="show-advance">Advance Filter</a>            
+        </div>               
     </div>    <!-- activitybar  -->       
 
 <div class="timeline-container">
     <!--  Timeline future  -->   
-    <div class="timeline future">        
-        <div class="filter-div">            
-        </div>
+    <div class="new_activities future">        
+
     </div> 
      <!--  Timeline current --> 
-    <div class="timeline current">
-        <div class="filter-div">
-
-        </div>
+    <div class="new_activities current">        
+        <br>
     </div>
-    <div class="loadmore" style="display:none">
-         <img src=""<%- this.app.get('path')%>img/loading.gif" alt=""/>
+    <div class="loadmore" style="display:block">
+         <img src="<%- this.app.get('path')%>img/loading.gif" alt=""/>
     </div>       
+    <p class="notfound" style="display:none">No Activity Found</p>
 </div>
 </div> <!-- activitiespanel  -->

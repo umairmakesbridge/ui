@@ -1,0 +1,86 @@
+<div class="filter_pop">
+    <a class="closebtn"></a>
+    <h3>Advanced Filter</h3>
+    <h4>Choose Filter</h4>
+    <select class="select-type" data-placeholder="Choose Event Type...">
+        <option value=""></option>
+        <option value="N">Campaign </option>
+        <option value="W">Workflow  </option>
+        <option value="T">Nurture Track  </option>
+        <option value="A">Auto Trigger   </option>
+        <option value="SM">Single Message  </option>
+        <option value="SU">Signup Form  </option>
+    </select>
+    <select class="select-message" data-placeholder="Choose Message Type..." style="display: none">
+        <option value="">None </option>
+        <option value="">Message 1 </option>
+        <option value="">Message 2 </option>
+    </select>
+    <br/><br/>
+    <h4 class="activity-heading">Choose Activity Type</h4>
+    <ul class="checklist all-events">
+        <li class=" btnunchecked">
+            <input type="checkbox" id="act-Sent" class="checkpanel" value="CS" name="" checked="checked" />
+            <label for="act-Sent"><span class="social-icon fb"></span><strong>Sent</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Open"  class="checkpanel" value="OP" name=""  checked="checked" />
+            <label for="act-Open"><span class="social-icon tw"></span><strong>Open</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Click"  class="checkpanel" value="CK" name=""  checked="checked" />
+            <label for="act-Click"><span class="social-icon in"></span><strong>Click</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Views"  class="checkpanel" value="WV" name=""  checked="checked" />
+            <label for="act-Views"><span class="social-icon pi"></span><strong>Page Views</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Converted"  class="checkpanel" value="CT" name=""  checked="checked" />
+            <label for="act-Converted"><span class="social-icon pi"></span><strong>Converted</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Bounced"  class="checkpanel" value="CB" name=""  checked="checked" />
+            <label for="act-Bounced"><span class="social-icon gp"></span><strong>Bounced</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Unsubscribed"  class="checkpanel" value="UN" name=""  checked="checked" />
+            <label for="act-Unsubscribed"><span class="social-icon gp"></span><strong>Unsubscribed</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Suppressed"  class="checkpanel" value="SP" name=""  checked="checked" />
+            <label for="act-Suppressed"><span class="social-icon gp"></span><strong>Suppressed</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Alert"  class="checkpanel" value="A" name=""  checked="checked" />
+            <label for="act-Alert"><span class="social-icon gp"></span><strong>Alert</strong></label>
+        </li>
+    </ul>
+    <ul class="checklist singleMessage-events" style="display: none">
+        <li class="">
+            <input type="checkbox" id="act-Sent" class="checkpanel" value="MT" name="" checked="checked" />
+            <label for="act-Sent"><span class="social-icon fb"></span><strong>Sent</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Open"  class="checkpanel" value="MO" name=""  checked="checked" />
+            <label for="act-Open"><span class="social-icon tw"></span><strong>Open</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Click"  class="checkpanel" value="MC" name=""  checked="checked" />
+            <label for="act-Click"><span class="social-icon in"></span><strong>Click</strong></label>
+        </li>
+        <li class="">
+            <input type="checkbox" id="act-Views"  class="checkpanel" value="MS" name=""  checked="checked" />
+            <label for="act-Views"><span class="social-icon pi"></span><strong>Supress</strong></label>
+        </li>
+       
+    </ul>
+    <div class="clearfix"></div>     
+    <br/> 
+    <div class="btns">
+        <a class="btn-green apply-filter"><span>Filter</span><i class="icon filter"></i></a>
+        <a class="btn-gray btn-cancel"><span>Cancel</span><i class="icon cross"></i></a>
+    </div>
+
+    <div class="clearfix"></div>
+</div>

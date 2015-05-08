@@ -937,7 +937,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             }
                                             else {
                                                 imageContainer.html(img.outerHTML());
-
+                                            }
+                                            var anchorTag = imageContainer.find("a")
+                                            if(anchorTag.length>0){
+                                                if(anchorTag.attr("onclick")=="return false;"){
+                                                    anchorTag.removeAttr("onclick");
+                                                }
                                             }
 
                                             imageContainer.addClass("MEE_ITEM").removeClass("drapableImageContainer");
