@@ -56,6 +56,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                 this.fetchTime();
                 $(window).scroll(_.bind(this.liveLoading,this));
                 $(window).resize(_.bind(this.liveLoading,this));
+                this.app.scrollingTop({scrollDiv:'window',appendto:this.sub.$el});
             }
             /**
              * Fetching timeline from server.
