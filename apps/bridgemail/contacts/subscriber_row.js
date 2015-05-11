@@ -36,6 +36,7 @@ function (template,highlighter,tagView) {
                     this.template = _.template(template);				
                     this.sub = this.options.sub
                     this.app = this.sub.app;
+                    this.tmPr = '';
                     this.render();
                     this.model.on('change',this.renderRow,this);
             },
@@ -94,7 +95,7 @@ function (template,highlighter,tagView) {
                 }
             },
             showTagsTemplate:function(){
-                    if(this.model.get('tags')){
+
                     this.tmPr =  new tagView(
                                    {parent:this,
                                     app:this.app,
@@ -105,10 +106,8 @@ function (template,highlighter,tagView) {
                                     tags:this.model.get('tags')});
                         
                       this.$('.tagscont').append(this.tmPr.$el).show();
-                  }else{
-                      this.$('.tagscont').hide();
-                  }
-                      
+                     this.$('.tagscont ul li a.showtooltip').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                
                 },
             showDetail:function(){
                 this.$(".allprofileinfo .proinfo span").remove();

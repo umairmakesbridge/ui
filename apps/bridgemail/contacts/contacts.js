@@ -244,10 +244,12 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                             this.$el.find('.thumbnails.cards .open-csv').remove();
                         }
                         for(var s=this.offset;s<collection.length;s++){
-                            var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this ,app:this.app});                                
+                            var subscriberView = new SubscriberRowView({ model: collection.at(s),sub:this ,app:this.app});    
                             subscriberView.on('tagclick',this.searchByTag);
                             subscriberView.on('updatecount',this.updateRefreshCount);
                             this.$contactList.find('.thumbnails.cards').append(subscriberView.$el);
+                            subscriberView.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll li'});
+
                         }                        
                         /*-----Remove loading------*/
                             this.app.removeSpinner(this.$el);
@@ -435,6 +437,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.$("#contact-search").val("Tag: "+tag);
                this.$("#clearsearch").show();
                this.tagTxt = tag;
+               $('.showtooltip').tooltip('hide');
                this.fetchContacts();
             },
             updateRefreshCount:function(){                
