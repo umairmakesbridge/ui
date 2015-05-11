@@ -105,7 +105,7 @@ function (template,highlighter,tagView) {
                                     type:'contacts',
                                     tags:this.model.get('tags')});
                         
-                      this.$('.tagscont').append(this.tmPr.$el).show();
+                      this.$('.tagscont').append(this.tmPr.$el);
                      this.$('.tagscont ul li a.showtooltip').tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 
                 },
