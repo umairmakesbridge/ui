@@ -47,6 +47,7 @@ function (template,highlighter) {
                     this.isTrim = false;
                     this.render();
                     //this.model.on('change',this.renderRow,this);
+                  
             },
               /**
              * Render view on page.
@@ -55,7 +56,9 @@ function (template,highlighter) {
                 this.$el.html(this.template({
                     model: this.tags
                 }));
-                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                if(this.options.type!=="contacts"){
+                    this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                }
                 var _$this = this;
                 $( window ).scroll(function() {
                     if(_$this.isTrim){
@@ -128,16 +131,24 @@ function (template,highlighter) {
                     },this));
              },
             expandTags: function(){
-              this.parent.$('.t-scroll' ).css('height', '155px');  
-              this.parent.$(".caption").animate({height:"250px"},250); 
-	      this.parent.$(".caption p i.ellipsis").hide(); 
-	      this.parent.$(".caption p div.clearfix").hide(); 
+                if(this.options.type==="contacts"){
+                    
+		    this.parent.$(".thumbnail .tagscont .ellipsis").hide(); 
+		    this.parent.$(".thumbnail .c-detail").mCustomScrollbar();
+                    this.parent.$('.thumbnail .bmsgrid .tagscont').css('height', 'auto'); 
+                    this.isTrim = true;
+                }else{ 
+                    this.parent.$('.t-scroll' ).css('height', '155px');  
+                    this.parent.$(".caption").animate({height:"250px"},250); 
+                    this.parent.$(".caption p i.ellipsis").hide(); 
+                    this.parent.$(".caption p div.clearfix").hide(); 
 
-              this.parent.$(".caption p").css({'height':'auto','display':'block'});
-	      this.parent.$(".btm-bar").css({"position":"absolute","bottom":"0"});
-	      this.parent.$(".img > div").animate({bottom:"105px"});
-              this.parent.$('.t-scroll' ).mCustomScrollbar(); 
-              this.isTrim = true;
+                    this.parent.$(".caption p").css({'height':'auto','display':'block'});
+                    this.parent.$(".btm-bar").css({"position":"absolute","bottom":"0"});
+                    this.parent.$(".img > div").animate({bottom:"105px"});
+                    this.parent.$('.t-scroll' ).mCustomScrollbar(); 
+                    this.isTrim = true;
+              }
           },
            collapseTags : function(e){
               if(this.isTrim){
@@ -147,17 +158,32 @@ function (template,highlighter) {
                   }
                   //console.log(e.nodeName);
                   if(e){
-                   if(e.nodeName === 'UL' || e == window){
-                        this.rowElement.find(".t-scroll").mCustomScrollbar("destroy");
-                        this.isTrim = false;
-                        this.rowElement.find('.t-scroll' ).removeAttr('style');
-                        this.rowElement.find(".caption").animate({height:"145px"},250);
-                        this.rowElement.find(".caption p i.ellipsis").show();
-                        this.parent.$(".caption p div.clearfix").show(); 
-                        this.rowElement.find(".caption p").removeAttr('style');
-                        this.rowElement.find(".btm-bar").removeAttr('style');
-                        this.rowElement.find(".img > div").removeAttr('style');
-                   }
+                   if(this.options.type==="contacts"){
+                        if(e == window){
+                          // console.log(window);
+                           this.parent.$('.thumbnail .bmsgrid .tagscont' ).css({height: "25px"});
+			   this.parent.$(".thumbnail .tagscont .ellipsis").show(); 
+			   this.parent.$('.thumbnail .c-detail').mCustomScrollbar("destroy");
+                       }else if($(e).hasClass('activities_tbl') || ($(e).hasClass('cards') && $(e).hasClass('thumbnails'))){
+                           this.parent.$('.thumbnail .bmsgrid .tagscont' ).animate({height: "25px"}, 250);
+			   this.parent.$(".thumbnail .tagscont .ellipsis").show(); 
+			   this.parent.$('.thumbnail .c-detail').mCustomScrollbar("destroy");
+                        }
+                       }else{
+                           if(e.nodeName === 'UL' || e == window){
+                                    this.rowElement.find(".t-scroll").mCustomScrollbar("destroy");
+                                    this.isTrim = false;
+                                    this.rowElement.find('.t-scroll').removeAttr('style');
+                                    this.rowElement.find(".caption").animate({height: "145px"}, 250);
+                                    this.rowElement.find(".caption p i.ellipsis").show();
+                                    this.parent.$(".caption p div.clearfix").show();
+                                    this.rowElement.find(".caption p").removeAttr('style');
+                                    this.rowElement.find(".btm-bar").removeAttr('style');
+                                    this.rowElement.find(".img > div").removeAttr('style');
+                         
+                                 }
+                       }
+                   
                }
               }
           }
