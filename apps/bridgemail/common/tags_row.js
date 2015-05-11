@@ -132,10 +132,10 @@ function (template,highlighter) {
              },
             expandTags: function(){
                 if(this.options.type==="contacts"){
-                    
+                    this.parent.$('.thumbnail .bmsgrid .tagscont').css('height', 'auto'); 
 		    this.parent.$(".thumbnail .tagscont .ellipsis").hide(); 
 		    this.parent.$(".thumbnail .c-detail").mCustomScrollbar();
-                    this.parent.$('.thumbnail .bmsgrid .tagscont').css('height', 'auto'); 
+                    
                     this.isTrim = true;
                 }else{ 
                     this.parent.$('.t-scroll' ).css('height', '155px');  
