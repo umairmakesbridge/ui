@@ -4607,11 +4607,17 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     font-weight: normal;
     position: relative;
 }
-.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .open  { background: url("../img/openicon.png") no-repeat scroll 0 center ;  }
-.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .click  { background: url("../img/clickicon.png") no-repeat scroll 0 center ;  }
-.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .pageview  { background: url("../img/pageviewicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .open,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .OP,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .MO,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .O  { background: url("../img/openicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .click,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .CK,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .MC,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .C  { background: url("../img/clickicon.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .pageview,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .WV  { background: url("../img/pageviewicon.png") no-repeat scroll 0 center ;  }
 .thumbnails.cards .thumbnail .bmsgrid .name-type span.act .conversion  { background: url("../img/conversionicon.png") no-repeat scroll 0 center ;  }
-
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .SC  { background: url("../img/act-score-g.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .CS,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .MT,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .S,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .MM  { background: url("../img/campaignsent-g.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .SP,.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .MS{ background: url("../img/suppress-g.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .SU{ background: url("../img/form-g.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .WA{ background: url("../img/alerts-g-18.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .TF{ background: url("../img/act-tellfriend-g.png") no-repeat scroll 0 center ;  }
+.thumbnails.cards .thumbnail .bmsgrid .name-type span.act .WM{ background: url("../img/sendto-g-18.png") no-repeat scroll 0 center ;  }
 
 .thumbnails.cards .thumbnail .bmsgrid .tagscont { height: 25px; }
 .thumbnails.cards .thumbnail .bmsgrid .tagscont ul { float: none; height: auto; max-width: none; padding: 5px 0;}

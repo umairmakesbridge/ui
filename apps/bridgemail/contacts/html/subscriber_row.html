@@ -32,8 +32,11 @@
                                 	</div>
                                     
                                     <div class="clearfix"></div>
-                                     <span class="act" style=" visibility: hidden;"><i class="icon open"></i>Opened Email <em>- 3 days ago</em></span>
-                                      
+                                    <% if(activity_type){ %>
+                                     <span class="act subs-activity-event" ><% if(activity_type){ %><i class="icon <%- model.get("lastActivityType") %>"></i><%- activity_type %> <% } %> <em> </em></span>
+                                     <% }else{ %>
+                                                <span class="act" style="visibility: hidden;"><i class="icon open"></i>Opened Email <em>- 3 days ago</em></span>
+                                                <% } %>
                                     
                                     
                                     
@@ -58,11 +61,11 @@
                                                 <% if(model.get('email')){ %>
                                      		<span class="inf" style=""><i class="icon email"></i><b><%- this.options.app.decodeHTML(model.get('email'))%></b></span>
                                     	 	<% }if(model.get('telephone')){ %>
-                                                <span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/> 
+                                                <span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/><div class="clearfix"></div>
                                                 <% } %>
-                                                <div class="clearfix"></div><span class="inf" style="display:none"><i class="icon company"></i><b>Netechy</b></span>
-                                      		
-                                            
+                                                <% if(model.get('company')){ %>
+                                                <span class="inf" ><i class="icon company"></i><b><%- this.options.app.decodeHTML(model.get('company'))%></b></span>
+                                      		<% }%>
                                      
                                      <div class="btm-icons ">
                                   
@@ -76,17 +79,17 @@
                                         <% if(model.get('score') != "0"){ %>
                                         <div class="score">
                                         	<i class="icon score"></i>
-                                            <%- model.get('score')%>
+                                          <% if(Number(model.get('score')) > 0){%> +<% }else{%> -<% } %><%- model.get('score')%>
                                         </div>
                                         <% } %>
-                                    	<div class="crms">
+                                    	<div class="crms" <% if(model.get('score') == "0"){ %> style="margin-left:0;" <% } %> >
                                             <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/nsicon2.png" alt=""></a>
                                              <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/inicon2.png" alt=""></a>
                                              <% if(this.options.sub.isSalesforceUser){ %> 
                                                 <% if(model.get('sfUrl')){ %>
-                                                <a class="salesforce-view" style="display:none;" data-url="<%- this.options.app.decodeHTML(model.get('sfUrl')) %>"><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
+                                                <a class="salesforce-view" style="display:none;"  data-url="<%- this.options.app.decodeHTML(model.get('sfUrl')) %>"><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
                                                 <% }else{ %>
-                                                     <a class="add-to-salesforce" style="display:none;"><img src="<%- this.app.get('path')%>img/SF_plus.png"/></a>
+                                                     <a class="add-to-salesforce" style="display:none;" ><img src="<%- this.app.get('path')%>img/SF_plus.png"/></a>
                                                      <% } %>
                                               <% } %>
                                         </div>

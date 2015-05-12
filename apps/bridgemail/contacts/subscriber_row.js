@@ -1,4 +1,4 @@
-define(['text!contacts/html/subscriber_row.html','jquery.highlight','common/tags_row'],
+define(['text!contacts/html/subscriber_row.html','jquery.highlight','common/tags_row', 'moment'],
 function (template,highlighter,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -52,7 +52,7 @@ function (template,highlighter,tagView) {
                     activity_type:this.mapping[this.model.get("lastActivityType")]?this.mapping[this.model.get("lastActivityType")].name:this.model.get("lastActivityType")
                 }));                
                 this.initControls();  
-               
+                this.lastOpenActivityDate();
             },
             /**
              * Render Row view on page.
@@ -93,6 +93,44 @@ function (template,highlighter,tagView) {
                 else if(this.sub.tagTxt){
                     this.$(".tag").highlight($.trim(this.sub.tagTxt));
                 }
+                
+                
+            },
+            lastOpenActivityDate:function(){
+                            var date_today = new Date();
+                            var date1 = moment(date_today.getFullYear() + '-' + (date_today.getMonth() + 1) + '-' + date_today.getDate() + " " + date_today.getHours() + ":" + date_today.getMinutes(), 'YYYY-M-D H:m');
+                            var date2 = moment(this.app.decodeHTML(this.model.get("lastActivityDate")), 'YYYY-M-D H:m');
+                            var diffMin = date1.diff(date2, 'minutes');
+                            var diffHour = date1.diff(date2, 'hours');
+                            var diffDays = date1.diff(date2, 'days');
+                            var diffMonths = date1.diff(date2, 'months');
+                            var diffYear = date1.diff(date2, 'years');
+                            if (diffMin < 60) {
+                                
+                               var mins = parseInt(diffMin) <= "1" ? "min" : "mins";
+                                this.$(".act em").html("- "+diffMin+" "+mins+" ago");
+                                //this.$(".act em").html("Mins")
+                            }
+                            else if (diffHour < 24) {
+                                var hrs = parseInt(diffHour) <= "1" ? "hr" : "hrs";
+                                this.$(".act em").html("- "+diffHour+" "+hrs+" ago");
+                                //this.$(".seen-time-text").html("Hrs")
+                            }
+                            else if (diffDays < 32) {
+                                var day = parseInt(diffDays) <= "1" ? "day" : "days";
+                                this.$(".act em").html("- "+diffDays+" "+day+" ago");
+                                //this.$(".seen-time-text").html("Days")
+                            }
+                            else if (diffMonths < 12) {
+                                var month = parseInt(diffMonths) <= "1" ? "month" : "months";
+                                this.$(".act em").html("- "+diffMonths+" "+month+" ago");
+                                //this.$(".seen-time-text").html("Months")
+                            }
+                            else if (diffMonths >= 12) {
+                                var year = parseInt(diffMonths) <= "1" ? "year" : "years";
+                                this.$(".act em").html("- "+diffYear+" "+year+" ago");
+                                //this.$(".seen-time-text").html("Years")
+                            }
             },
             showTagsTemplate:function(){
 

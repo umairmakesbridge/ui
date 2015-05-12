@@ -167,7 +167,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                                 _this.$(".seen-interval").html(diffMonths);
                                 _this.$(".seen-time-text").html("Months")
                             }
-                            else if (diffMonths <= 12) {
+                            else if (diffMonths >= 12) {
                                 _this.$(".seen-interval").html(diffYear);
                                 _this.$(".seen-time-text").html("Years")
                             }
