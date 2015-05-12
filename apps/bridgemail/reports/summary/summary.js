@@ -91,7 +91,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                     _data['botId'] = this.autobotId;
                     
                    // _data["triggerOrder"] = this.options.params.messageNo
-                    _data['type'] = "mailBotStats";
+                   _data['type'] = "mailBotStats";
                     //xxx.bridgemailsystem.com/pms/io/trigger/getAutobotData/?type=mailBotStats&botId=xxx0
                 }
                

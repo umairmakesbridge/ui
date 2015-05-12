@@ -38,7 +38,12 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                 events: {
                     "click .advance-filter":'openFilterDialog',
                     "click .this-event":'filterByEvent',
-                    "click .preview-event":'previewCampaign'
+                    "click .preview-event":'previewCampaign',
+                    "click .view-report":'viewReport',
+                    "click .this-event-type":"fetchEventType",
+                    "mouseover .filter":function(){this.$(".filter").addClass("active")},
+                    "mouseout .filter":function(){this.$(".filter").removeClass("active")},
+                    "click .this-event-campaign":'filterCampaign'
                     
                 },
                 /**
@@ -162,7 +167,15 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                         this.sub.searchCampaign(model.get("campNum.encode"));
                     } else if(model.get('campaignType') && model.get('campaignType')=="W"){
                         this.sub.searchWorkflow(model.get("workflowId.encode"));
+                    }else if(model.get('campaignType') && model.get('campaignType')=="B"){
+                        this.sub.searchAutobot(model.get("botId.encode"));
+                    }else if(model.get('campaignType') && model.get('campaignType')=="T"){
+                        this.sub.searchNurturetrack(model.get("trackId.encode"));
                     }
+                },
+                filterCampaign:function(){
+                     var model = this.model;
+                    this.sub.searchMessage(model.get("campaignType"),model.get("campNum.encode"));
                 },
                 getMeter:function(){
                     var cssClass = "";
@@ -208,6 +221,14 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                          tmPr.init();
                        },this));
                    }
+                },
+                viewReport: function(){
+                   var camp_id= this.model.get('campNum.encode');
+                   this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});
+                },
+                fetchEventType:function(){
+                    this.sub.timelineFilter=null;
+                    this.sub.searchAdvance("",this.model.get("activityType"));
                 }
             });
         });

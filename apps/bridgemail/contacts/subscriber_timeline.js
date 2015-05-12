@@ -24,6 +24,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                 this.timeLineRequest = new Timeline(); 
                 this.timeLineRequestFuture = new TimelineFuture(); 
                 this.monthYear = "";
+                this.filter = {filterType:"",filerEvents:""};
                 this.render();                 
                 //this.model.on('change',thi.renderRow,this);
             },
@@ -85,10 +86,17 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                     }
                     else if(this.timelineFilter=="W" && this.workflowId){
                         _data['workflowId'] =this.workflowId;
+                    }else if(this.timelineFilter=="B" && this.botId){
+                        _data['botId'] =this.botId;
+                    }else if(this.timelineFilter=="T" && this.trackId){
+                        _data['trackId'] =this.trackId;
                     }
                 }
                  if(this.activityType){
                     _data['activityType'] =this.activityType;
+                }
+                if(this.campNum){
+                    _data['campNums'] =this.campNum;
                 }
                
                 if(this._request && this.offset!==0){
@@ -266,39 +274,84 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                 return $('<div class="timestop load-more-future"><span class="ellipsis" >Load More...</span></div>');
             },
             openFilterDialog:function(){
-                var dialog = new filterDialog({callBack:_.bind(this.searchAdvance,this)});
+                var dialog = new filterDialog({callBack:_.bind(this.searchAdvance,this),filter:this.filter});
                 $("body").append(dialog.$el);
             },
             searchCampaign:function(campNum){
                 this.timelineFilter = "N";
                 this.campNum = campNum;
-                this.workflowId = null;
-                this.activityType = null;
-               //this.fetchTimeLineFuture();
+                this.trackId =this.workflowId=this.botId = null;                
+                this.activityType = null;               
                 this.fetchTimeLine();                
             },
             searchWorkflow:function(workFlowId){
                 this.timelineFilter = "W";
-                this.campNum = null;
+                this.trackId =this.botId=this.campNum = null;
                 this.activityType = null;
                 this.workflowId = workFlowId;
                 this.fetchTimeLineFuture();
                 this.fetchTimeLine();                
-            },searchAdvance:function(event,activityType){
-                this.timelineFilter = event;
+            },
+            searchAutobot:function(botId){
+                this.timelineFilter = "B";
+                this.botId = botId;
+                this.trackId =this.workflowId=this.campNum = null;                
+                this.activityType = null;               
+                this.fetchTimeLine();                 
+            },
+            searchNurturetrack:function(trackId){
+                this.timelineFilter = "T";
+                this.trackId = trackId;
+                this.workflowId =this.botId=this.campNum = null;
+                this.workflowId = null;
+                this.activityType = null;               
+                this.fetchTimeLine();                 
+            },
+            searchMessage:function(type,campNum){
+                this.timelineFilter =type;
+                this.campNum = campNum;
+                this.activityType = null;   
+                if(type=="W"){
+                    this.fetchTimeLineFuture();
+                }
+                this.fetchTimeLine();  
+            }
+            ,searchAdvance:function(event,activityType){
+                if(event){
+                    this.timelineFilter = event;
+                    this.filter.filterType = event;
+                }                                
+                this.trackId =this.workflowId =this.botId=this.campNum = null;
                 this.activityType= activityType;
-                if(event!=="SU"){
+                this.filter.filerEvents = activityType;
+                if(event=="SU"){
+                    this.timelineFilter = null;
+                    this.activityType= event;
+                }
+                if(event!=="N" && event!=="SU" && this.isFutureEvent(activityType)){                    
                     this.fetchTimeLineFuture();
                 }
                 this.fetchTimeLine();                
             },
             showAll:function(){
                 this.timelineFilter = null;
-                this.campNum = null;
-                this.activityType = null;
-                this.workflowId = null;                
+                this.trackId =this.workflowId =this.botId=this.campNum = null;
+                this.activityType = null;                
                 this.fetchTimeLineFuture();
                 this.fetchTimeLine(); 
+            },
+            isFutureEvent:function(activityType){
+                var isFutureEvent = false;
+                if(activityType!==""){
+                    var activityArray = activityType.split(",");
+                    for(var i=0;i<activityArray.length;i++){
+                        if(activityArray[i]=="CS" || activityArray[i]=="A"|| activityArray[i]=="SC"){
+                            isFutureEvent = true;
+                            break;
+                        }
+                    }
+                                   }                
+                return isFutureEvent;
             }
             
             

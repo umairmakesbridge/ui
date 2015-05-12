@@ -6,10 +6,13 @@ function (template,app) {
             events: {
                 'click .closebtn':'closeFilters',
                 'click .btn-cancel':'closeFilters',
-                'click .apply-filter':'applyFilters'
+                'click .apply-filter':'applyFilters',
+                'click .check-all':'checkAll',
+                'click .uncheck-all':'unCheckAll'
             },
             initialize: function () {
                 this.app = app;
+                this.filter = this.options.filter;
                 this.template = _.template(template);                
                 
                 this.render();
@@ -29,11 +32,20 @@ function (template,app) {
                       this.$(".btns").css("padding-top","120px");
                   }
                   else{
+                      if(target.val()=="W"){
+                         this.$(".act-wf").show();
+                      }
+                      else{
+                         this.$(".act-wf").hide();
+                      }
                       this.$(".checklist").hide();
                       this.$(".all-events,.activity-heading").show();
                       this.$(".btns").css("padding-top","10px");
                   }
               },this));  
+              if(this.filter.filterType!==""){
+                  this.$(".select-type").change();
+              }
              // this.$(".select-message").chosen({disable_search: "true",width:"220px"});  
               this.$('input.checkpanel').iCheck({
                     checkboxClass: 'checkpanelinput',
@@ -43,20 +55,29 @@ function (template,app) {
             },
             applyFilters:function(){
               if(this.options.callBack){
-                  var selector = ".all-events";
+                  var selector = ".all-events input:checked";
                   var type = this.$(".select-type").val();
                   if(type=="SM"){
-                      selector = ".singleMessage-events";
+                      selector = ".singleMessage-events input:checked";
                       type="";
                   }
                   else {
-                      selector = ".all-events";
+                      if(type=="W"){
+                        selector = ".all-events input:checked";
+                      }
+                      else{
+                          selector = ".all-events input.camp-event:checked";
+                      }
                   }
-                  var selectedTypes = this.$(selector+" input:checked").map(function() {
+                  var selectedTypes = this.$(selector).map(function() {
                     return this.value;
                   }).get().join();
                   if(type=="SU"){
                       selectedTypes = "";
+                  }
+                  if(selectedTypes=="" && type!=="SU"){
+                      this.app.showAlert("Please select Activity type",$("body"));
+                      return false;
                   }
                   this.options.callBack(type,selectedTypes);
               } 
@@ -64,6 +85,12 @@ function (template,app) {
             },
             closeFilters: function(){
                 this.$el.remove();
+            },
+            checkAll:function(){
+                this.$('input.checkpanel').iCheck('check');
+            },
+            unCheckAll:function(){
+                this.$('input.checkpanel').iCheck('uncheck');
             }
             
         });    

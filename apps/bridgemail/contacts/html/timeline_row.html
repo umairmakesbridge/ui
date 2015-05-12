@@ -1,4 +1,4 @@
-<div class="icon <%-cssClass %>"></div>
+<div class="icon <%-cssClass %> this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"></div>
 <% if(type=="SC") { %>
 <h5><a class="<% if(model.get('score') >= 0){ print('green') }else{ print('red')} %>"><%- this.getScore() %></a></h5>
 <div class="info-p">
@@ -13,14 +13,14 @@
 </div>
 <%  } else if(type=="A" || type=="WA"){  %>
 
-<h5><a >Workflow Msg</a> <span class="soptn">Step <%- model.get("triggerOrder") %></span><span class="soptn">Option <%- model.get("optionNumber") %></span></h5>
+<h5><a >Workflow Msg</a> <span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
 <div class="info-p">
     <p><%- this.app.decodeHTML(model.get("mailBody")) %></p>
 </div>
 
 <%  } else if(type=="WM") { %>
 
-<h5><a >Workflow Msg</a><span class="soptn">Step <%- model.get("triggerOrder") %></span><span class="soptn">Option <%- model.get("optionNumber") %></span></h5>
+<h5><a >Workflow Msg</a><span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
 <div class="info-p">
     <p><%- this.app.decodeHTML(model.get("mailBody")) %></p>
 </div>
@@ -48,13 +48,13 @@
     
     
     <% if(model.get("campaignType")==="W") { %>
-    <h5><a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("workflowName")) %></a><span class="soptn">Step <%- model.get("triggerOrder") %></span><span  class="soptn">Option <%- model.get("optionNumber") %></span></h5>
+    <h5><a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("workflowName")) %></a><span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
     <% } else if(model.get("campaignType")==="N" && model.get("campaignName")){ %>
         <h5>            
-            <a class='preview-event  showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("campaignName")) %> </a>
+            <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("campaignName")) %> </a>
              <% if(type=="OP"){ %>
-                <a class="icon preview2" ></a>
-                <a class="icon report" ></a>   
+                <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
+                <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
              <% } %>
         </h5>
     <% } %>
@@ -120,17 +120,23 @@
     <ul>
         <li>Filter by</li>        
         <% if(tTypeName=="Workflow"){%>
-        <li class="this-event"><a>This Workflow</a></li>
+        <li class="this-event"><a>This Workflow Only</a></li>
+        <li class="this-event-campaign"><a>This Campaign Only</a></li>
         <% } else if(tTypeName=="Campaign") { %>
-        <li class="this-event"><a>This campaign</a></li>
-        <% } else { %>
-        <li class="this-event"><a>This Event Type</a></li>
+        <li class="this-event"><a>This Campaign Only</a></li>
+        <% } else if(tTypeName=="Autobot") { %>
+        <li class="this-event"><a>This Autobot  Only</a></li>
+        <% } else if(tTypeName=="Nurture Track") { %>
+        <li class="this-event"><a>This Nurture Track Only</a></li>
+        <li class="this-event-campaign"><a>This Message Only </a></li>
         <% } %>
+        
+        <li class="this-event-type"><a>This Event Type</a></li>
         <li><a class="advance-filter">Advance</a></li>
     </ul>
 </div>
 <div class="btm-bar ">
-    <div class="datetime"><span><%-name %> </span> at <%-time %>, <%-date %></div>
+    <div class="datetime"><span class="this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"><%-name %> </span> at <%-time %>, <%-date %></div>
     <% if(tTypeName) { %>
         <div class="camp_type">
             <span>
