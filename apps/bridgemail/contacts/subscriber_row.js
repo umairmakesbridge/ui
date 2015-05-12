@@ -52,7 +52,7 @@ function (template,highlighter,tagView) {
                     activity_type:this.mapping[this.model.get("lastActivityType")]?this.mapping[this.model.get("lastActivityType")].name:this.model.get("lastActivityType")
                 }));                
                 this.initControls();  
-               
+                this.lastOpenActivityDate();
             },
             /**
              * Render Row view on page.
@@ -94,7 +94,7 @@ function (template,highlighter,tagView) {
                     this.$(".tag").highlight($.trim(this.sub.tagTxt));
                 }
                 
-                this.lastOpenActivityDate();
+                
             },
             lastOpenActivityDate:function(){
                             var date_today = new Date();
@@ -126,7 +126,7 @@ function (template,highlighter,tagView) {
                                 this.$(".act em").html("- "+diffMonths+" "+month+" ago");
                                 //this.$(".seen-time-text").html("Months")
                             }
-                            else if (diffMonths <= 12) {
+                            else if (diffMonths >= 12) {
                                 var year = parseInt(diffMonths) <= "1" ? "year" : "years";
                                 this.$(".act em").html("- "+diffYear+" "+year+" ago");
                                 //this.$(".seen-time-text").html("Years")
