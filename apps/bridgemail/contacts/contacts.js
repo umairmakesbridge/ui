@@ -263,15 +263,24 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                               search_message +=" containing '"+this.searchTxt+"'" ;
                             }
                             if(this.filterBy==="CK" && this.sortBy !=="CK_7"){
-                                 this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 17px;"><a class="filter_seven">Show last 7 days Clickers</a></p>');
+                                 this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 17px;"><a class="filter_seven">Show last 7 days Clickers</a> | <a class="show_all_contacts">Show All Contacts</a></p>');
                                  this.$('.filter_seven').click(_.bind(function(){
                                      this.$('.recent-activities').val('CK_7').trigger('chosen:updated');
                                      this.$('.recent-activities option:nth-child(5)').trigger('change');
                                  },this))
+                                 
                             }else{
                                          this.$('.filter_seven').parent().remove();
                                          this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p>');
                             }
+                            // Show all contact if zero clicker or visitors
+                            this.$('.show_all_contacts').click(_.bind(function(){
+                                     //this.$('.recent-activities').val('CK_7').trigger('chosen:updated');
+                                     this.filterBy="T";
+                                     this.sortBy = '';
+                                     this.$el.parents('.ws-content.active').find('.c-current-status li.clickable_badge:first-child').addClass('font-bold');
+                                    this.fetchContacts();
+                                 },this))
                         }                               
                         
                     }, this),

@@ -32,8 +32,11 @@
                                 	</div>
                                     
                                     <div class="clearfix"></div>
-                                     <span class="act" style=" visibility: hidden;"><i class="icon open"></i>Opened Email <em>- 3 days ago</em></span>
-                                      
+                                    <% if(activity_type){ %>
+                                     <span class="act subs-activity-event" ><% if(activity_type){ %><i class="icon <%- model.get("lastActivityType") %>"></i><%- activity_type %> <% } %> <em> </em></span>
+                                     <% }else{ %>
+                                                <span class="act" style="visibility: hidden;"><i class="icon open"></i>Opened Email <em>- 3 days ago</em></span>
+                                                <% } %>
                                     
                                     
                                     
@@ -58,11 +61,11 @@
                                                 <% if(model.get('email')){ %>
                                      		<span class="inf" style=""><i class="icon email"></i><b><%- this.options.app.decodeHTML(model.get('email'))%></b></span>
                                     	 	<% }if(model.get('telephone')){ %>
-                                                <span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/> 
+                                                <span class="inf phone"><i class="icon phone"></i><b><%- this.options.app.decodeHTML(model.get('telephone'))%></b></span> <br/><div class="clearfix"></div>
                                                 <% } %>
-                                                <div class="clearfix"></div><span class="inf" style="display:none"><i class="icon company"></i><b>Netechy</b></span>
-                                      		
-                                            
+                                                <% if(model.get('company')){ %>
+                                                <span class="inf" ><i class="icon company"></i><b><%- this.options.app.decodeHTML(model.get('company'))%></b></span>
+                                      		<% }%>
                                      
                                      <div class="btm-icons ">
                                   
