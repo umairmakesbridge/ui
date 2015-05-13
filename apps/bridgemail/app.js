@@ -57,8 +57,8 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'production',
-                complied: 1,
+                env: 'test',
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
@@ -511,6 +511,16 @@ define([
             }
             return str;
         },
+        encodingAttr:function(val){
+            if(typeof(val)!=="undefined"){
+                val = val.replace(/&/g, "&amp;")
+                val = val.replace(/\'/g, "&#39;");
+            }
+            else{
+                val = "";
+            }
+            return val;
+        },
         decodeJSON: function(str){
             /*str = str.replace(/\\t/g, "\t"); 
             str = str.replace(/\\n/g, "\n");
@@ -557,9 +567,9 @@ define([
             var tag_array = tags.split(",");
             var tag_html = "<ul>";
             var type = type ? type: "";
-            $.each(tag_array, function (key, val) {
-                tag_html += "<li title='Click to view "+type+" with \"<b>"+val+"</b>\" tag.' class='showtooltip'><a class='taglink'>" + val + "</a></li>";
-            });
+            $.each(tag_array, _.bind(function (key, val) {
+                tag_html += "<li title='Click to view "+type+" with \"<b>"+this.encodingAttr(val)+"</b>\" tag.' class='showtooltip'><a class='taglink'>" + val + "</a></li>";
+            },this));
             tag_html += "</ul>";
             return tag_html;
         },

@@ -62,7 +62,7 @@ function (template,app) {
                       type="";
                   }
                   else {
-                      if(type=="W"){
+                      if(type=="W" || type==""){
                         selector = ".all-events input:checked";
                       }
                       else{

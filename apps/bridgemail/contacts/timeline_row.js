@@ -43,7 +43,8 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     "click .this-event-type":"fetchEventType",
                     "mouseover .filter":function(){this.$(".filter").addClass("active")},
                     "mouseout .filter":function(){this.$(".filter").removeClass("active")},
-                    "click .this-event-campaign":'filterCampaign'
+                    "click .this-event-campaign":'filterCampaign',
+                    "click .all-timelineFilter":'fitlertimelineFilter'
                     
                 },
                 /**
@@ -229,6 +230,13 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                 fetchEventType:function(){
                     this.sub.timelineFilter=null;
                     this.sub.searchAdvance("",this.model.get("activityType"));
+                },
+                fitlertimelineFilter:function(){                    
+                    var m = this.model;
+                    var getTriggerType = m.get("campaignType");
+                    if(getTriggerType){
+                        this.sub.searchAdvance(getTriggerType,"");
+                    }
                 }
             });
         });

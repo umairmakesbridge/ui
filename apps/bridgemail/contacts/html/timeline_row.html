@@ -15,7 +15,7 @@
 
 <h5><a >Workflow Msg</a> <span class="soptn showtooltip" title="Step Label: <%- this.app.decodeHTML(model.get('stepLabel')) %>">Step <%- model.get("triggerOrder") %></span><span class="soptn showtooltip" title="Option Label: <%- this.app.decodeHTML(model.get('optionLabel')) %>">Option <%- model.get("optionNumber") %></span></h5>
 <div class="info-p">
-    <p><%- this.app.decodeHTML(model.get("mailBody")) %></p>
+    <p><%- this.app.decodeHTML(model.get("alertComments"),true) %></p>
 </div>
 
 <%  } else if(type=="WM") { %>
@@ -52,6 +52,14 @@
     <% } else if(model.get("campaignType")==="N" && model.get("campaignName")){ %>
         <h5>            
             <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("campaignName")) %> </a>
+             <% if(type=="OP"){ %>
+                <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
+                <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
+             <% } %>
+        </h5>
+    <% } else if(model.get("campaignType")==="T" && model.get("trackName")){ %>
+        <h5>            
+            <a class='preview-event showtooltip' title="Click to preview"><%- this.app.decodeHTML(model.get("trackName")) %> </a>
              <% if(type=="OP"){ %>
                 <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
                 <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
@@ -106,9 +114,9 @@
             <strong>Message Title</strong>
         </div>
     <% } %>
-    <% if(model.get('url')) { %>
+    <% if(model.get('pageURL')) { %>
         <div class="infotxt">
-            <a href="<%- this.app.decodeHTML(model.get('url'))  %>"><i class="icon link"></i><%- this.app.decodeHTML(model.get('url'))  %></a>
+            <a href="<%- this.app.decodeHTML(model.get('pageURL'))  %>"><i class="icon link"></i><%- this.app.decodeHTML(model.get('pageTitle'))  %></a>
             <strong>Message URL</strong>
         </div>
     <% } %>
@@ -139,7 +147,11 @@
     <div class="datetime"><span class="this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"><%-name %> </span> at <%-time %>, <%-date %></div>
     <% if(tTypeName) { %>
         <div class="camp_type">
+            <% if( model.get("campaignType")) { %>
+            <span class="showtooltip all-timelineFilter" title="View all <%- this.app.decodeHTML(tTypeName)%>s" style="cursor: pointer">
+            <% } else { %>
             <span>
+            <% } %>
                 <% if(tTypecss) { %>
                 <i class="icon <%- tTypecss %>"></i> 
                 <% } %>    

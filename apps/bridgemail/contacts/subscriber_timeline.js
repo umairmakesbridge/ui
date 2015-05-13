@@ -115,6 +115,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                        }
                        this.app.showLoading(false,this.$el); 
                        this.$curLoad.hide();
+                       this.$(".total-count").html( this.app.addCommas(response.totalCount))
                        for(var s=this.offset;s<collection.length;s++){
                             var timelineView = new TimeLineRowView({ model: collection.at(s),sub:this });                                                            
                             var model_date = this.getMonthYear(collection.at(s));

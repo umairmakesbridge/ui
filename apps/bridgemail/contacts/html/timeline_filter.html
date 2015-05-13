@@ -3,7 +3,7 @@
     <h3>Advanced Filter</h3>
     <h4>Choose Filter</h4>
     <select class="select-type" data-placeholder="Choose Event Type...">
-        <option value=""></option>
+        <option value="">All</option>
         <option value="N" <% if(this.filter.filterType=='N'){ print('selected="selected"') } %>>Campaign </option>
         <option value="W" <% if(this.filter.filterType=='W'){ print('selected="selected"') } %>>Workflow  </option>
         <option value="T" <% if(this.filter.filterType=='T'){ print('selected="selected"') } %>>Nurture Track  </option>
@@ -17,7 +17,7 @@
         <option value="">Message 2 </option>
     </select>
     <br/><br/>
-    <h4 class="activity-heading">Choose Activity Type &nbsp;<a class="check-all">Check All</a>&nbsp;|&nbsp;<a class="uncheck-all">Un-Check All</a></h4>
+    <h4 class="activity-heading">Choose Activity Type &nbsp;<a class="check-all">check all</a>&nbsp;|&nbsp;<a class="uncheck-all">un-check all</a></h4>
     <ul class="checklist all-events">
         <li class=" btnunchecked">
             <input type="checkbox" id="act-Sent" class="checkpanel camp-event" value="CS" name="" <% if(this.filter.filerEvents.indexOf('CS')>-1 || (this.filter.filerEvents=="" && this.filter.filterType=="")){ print('checked="checked"') } %> />

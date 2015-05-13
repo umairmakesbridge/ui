@@ -334,10 +334,10 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                             if (this.offsetLength == 0) {
                                 var search_message = "";
                                 if (this.searchTxt) {
-                                    search_message += " containing '" + this.searchTxt + "'";
+                                    search_message += " containing '" + this.app.encodeHTML(this.searchTxt) + "'";
                                 }
-                                this.$('#total_templates').html('<p class="notfound nf_overwrite">No Campaigns found' + search_message + '</p>');
-                                this.$el.find('#camps_grid tbody').before('<p class="notfound">No Campaigns found' + search_message + '</p>');
+                                this.$('#total_templates').html('<p class="notfound nf_overwrite">No Campaigns found' + this.app.encodeHTML(this.searchTxt) + '</p>');
+                                this.$el.find('#camps_grid tbody').before('<p class="notfound">No Campaigns found' + this.app.encodeHTML(this.searchTxt) + '</p>');
                             }
 
                         }, this),
@@ -482,7 +482,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!camp
                     var text_count = '<strong class="badge">' + this.app.addCommas(count) + '</strong><b>' + statusType + ' </b>';
 
                     if (this.searchTxt) {
-                        this.$("#total_templates").html(text_count + _text + " found containing text '<b>" + this.searchTxt + "</b>'");
+                        this.$("#total_templates").html(text_count + _text + " found containing text '<b>" + this.app.encodeHTML(this.searchTxt) + "</b>'");
                     }
                     else {
                         this.$("#total_templates").html(text_count + _text);

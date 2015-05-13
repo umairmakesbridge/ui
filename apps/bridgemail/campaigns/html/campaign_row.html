@@ -11,8 +11,7 @@
                     <% } %>
                     <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
                  <div class="tags tagscont" id="campaign_tag_camp">
-                     <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>
-                     
+                     <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
                  </div>
          </div>
     </div>
