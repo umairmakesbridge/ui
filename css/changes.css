@@ -1,5 +1,8 @@
 /*Jquery CSS Overlide*/
 
+.required {
+    color:#fb8080;
+}
 .set-time .timebox input{
     text-align: left;
     width:58px;

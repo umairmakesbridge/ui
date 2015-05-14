@@ -32,7 +32,7 @@ function (template,app) {
                       this.$(".btns").css("padding-top","120px");
                   }
                   else{
-                      if(target.val()=="W"){
+                      if(target.val()=="W" || target.val()=="" ){
                          this.$(".act-wf").show();
                       }
                       else{

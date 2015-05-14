@@ -248,6 +248,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     } else {                     
                          workspaceTitle = _this.sub_fields["email"];                        
                     }
+                    this.sub_name = workspaceTitle;
                     _this.$el.parents(".ws-content").find("#workspace-header").html(workspaceTitle);
                     var workspace_id = _this.$el.parents(".ws-content").attr("id");
                     _this.app.mainContainer.setTabDetails({workspace_id:workspace_id,heading:workspaceTitle,subheading:"Contact Profile"});
@@ -294,6 +295,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     if (this.sub_fields["salesStatus"]) {
                         this.$(".statusdd").show();
                         this.$(".statusdd span").html(this.sub_fields["salesStatus"]);
+                        this.sub_saleStatus = this.sub_fields["salesStatus"];
                     }
                     else {
                         this.$(".statusdd").hide();

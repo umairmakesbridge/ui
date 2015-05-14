@@ -9718,7 +9718,7 @@ ul.checklist 	.social-icon {
 
 .filter_pop {
     left: 50%;
-    margin:-200px 0 0 -250px;
+    margin:-250px 0 0 -250px;
     position: fixed;
     top: 50%;
     z-index: 99999;

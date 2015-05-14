@@ -44,7 +44,8 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     "mouseover .filter":function(){this.$(".filter").addClass("active")},
                     "mouseout .filter":function(){this.$(".filter").removeClass("active")},
                     "click .this-event-campaign":'filterCampaign',
-                    "click .all-timelineFilter":'fitlertimelineFilter'
+                    "click .all-timelineFilter":'fitlertimelineFilter',
+                    "click .page-views":"loadPageViewsDialog"
                     
                 },
                 /**
@@ -237,6 +238,40 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     if(getTriggerType){
                         this.sub.searchAdvance(getTriggerType,"");
                     }
+                },
+                loadPageViewsDialog: function (ev) {
+
+                    var dialog_width = 80;
+                    var encode = this.sub.sub.sub_id;                   
+                    var url = "";
+                    
+                    var url = this.model.get('articleURL')?this.model.get('articleURL'):this.model.get('pageURL');
+                    var title = this.model.get('articleTitle')?this.model.get('pageTitle'):this.model.get('pageURL');
+                    url = title + '|-.-|' + url;
+                    
+                    
+                    var dialog_height = $(document.documentElement).height() - 200;
+                    var dialog = this.app.showDialog(
+                        {
+                            title: 'Page Views',
+                            css: {"width": dialog_width + "%", "margin-left": "-" + (dialog_width / 2) + "%", "top": "20px"},
+                            headerEditable: false,
+                            headerIcon: 'preview3',
+                            bodyCss: {"min-height": dialog_height + "px"}
+                        });
+                    this.app.showLoading('Loading Page Views....', dialog.getBody());
+                    
+                    var name = this.sub.sub.sub_name;
+                    var salesStatus = this.sub.sub.sub_saleStatus;
+
+                    require(["reports/summary/views/pageviews", ], _.bind(function (Views) {
+                        var mPage = new Views({campNum: this.model.get('campNum.encode'), subNum: encode, encode: encode, app: this.app, email: name, salestatus: salesStatus, url: url});
+                        dialog.getBody().html(mPage.$el);
+                        this.app.showLoading(false, dialog.getBody());
+
+                    },this));
+
+
                 }
             });
         });

@@ -58,8 +58,10 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                         
                         
                         this.$(".subacc-sendername").val(this.app.decodeHTML(_json.senderName));
+                        this.$(".subacc-fromEmail").val(this.app.decodeHTML(_json.fromEmail));
                         this.$(".subacc-fromemail").html(this.app.decodeHTML(_json.fromEmail));                        
                         this.$(".subacc-replyto").val(this.app.decodeHTML(_json.replyToEmail));
+                        this.$(".subacc-webaddress").val(this.app.decodeHTML(_json.webAddress));
                         if(_json.apps){
                             _.each(_json.apps[0],function(val,key){
                                 if(val[0].appShortName=="BridgeMail System"){
@@ -92,7 +94,8 @@ define(['text!account/html/addeditsubaccount.html','account/collections/salesrep
                                     ,phone:this.$(".subacc-telephone").val(),address1:this.$(".subacc-address1").val()
                                     ,address2:this.$(".subacc-address2").val(),url:this.$(".subacc-url").val()
                                     ,senderName:this.$(".subacc-sendername").val(),webAddress:this.$(".subacc-webaddress").val()
-                                    ,replyTo:this.$(".subacc-replyto").val()
+                                    ,replyToEmail:this.$(".subacc-replyto").val()
+                                    ,fromEmail:this.$(".subacc-fromEmail").val()
                                     ,salesrep:this.$("._salesrep_grid input:checked").map(function() {return $(this).attr("data-salerep");}).get().join(",")
                                     ,pass1:this.$(".subacc-password").val(),pass2:this.$(".subacc-confirm-password").val(),
                                     appId:this.$(".app_subs input:checked").map(function() {return $(this).attr("data-appid");}).get().join(",")};

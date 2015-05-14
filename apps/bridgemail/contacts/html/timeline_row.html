@@ -35,7 +35,7 @@
     <div class="info-p">
     <p><%- this.app.decodeHTML(model.get("articleTitle")) %></p>
     </div>
-<%  } else if(type=="CS" || type=="OP" || type=="CK" || type=="CT" || ( type=="WV" && (model.get("campaignType")==="W" || model.get("campaignType")==="N") ) ) { %>
+<%  } else if(type=="CS" || type=="OP" || type=="CK" || type=="CT" || ( type=="WV" && typeof(model.get("campaignType"))!=="undefined"  ) ) { %>
     <% if(type=="CS") {%>
     <div class="meter  <%- this.getMeter() %>">
         <span class="open showtooltip" title="Opened"></span>
@@ -64,6 +64,7 @@
                 <a class="icon preview2 preview-event showtooltip" title="Click to preview"></a>
                 <a class="icon report showtooltip view-report" title="Click to view report" ></a>   
              <% } %>
+             <span class="soptn showtooltip" title="Message Label: <%- this.app.decodeHTML(model.get('messageLabel')) %>">Message <%- model.get("triggerOrder") %></span>
         </h5>
     <% } %>
     <% if(type=="CK" || type=="WV") { %>
@@ -78,7 +79,7 @@
         </div>
         <% if(model.get('pageViewsCount') && model.get('pageViewsCount')!=="0") { %>
         <div class="infotxt">
-            <a ><i class="icon viewcount"></i> <%- model.get("pageViewsCount") %></a>
+            <a class="page-views"><i class="icon viewcount"></i> <%- model.get("pageViewsCount") %></a>
             <strong>Page Views</strong>
         </div>
         <% } %>
@@ -147,8 +148,8 @@
     <div class="datetime"><span class="this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"><%-name %> </span> at <%-time %>, <%-date %></div>
     <% if(tTypeName) { %>
         <div class="camp_type">
-            <% if( model.get("campaignType")) { %>
-            <span class="showtooltip all-timelineFilter" title="View all <%- this.app.decodeHTML(tTypeName)%>s" style="cursor: pointer">
+            <% if( tTypeName!=="Single Message") { %>
+            <span class="showtooltip all-timelineFilter" title="Click to view all <%- this.app.decodeHTML(tTypeName)%>s activities" style="cursor: pointer">
             <% } else { %>
             <span>
             <% } %>
