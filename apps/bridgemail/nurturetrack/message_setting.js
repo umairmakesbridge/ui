@@ -113,7 +113,10 @@ function (template) {
               jQuery.getJSON(URL,  _.bind(function(tsv, state, xhr){
                   this.app.showLoading(false,this.$el);  
                   var camp_json = jQuery.parseJSON(xhr.responseText);
-                  this.camp_json = camp_json;
+                  this.camp_json = camp_json;                  
+                  if(this.messagebody_page){
+                      this.messagebody_page.campobjData = camp_json;
+                  }
                   this.step1_page.loadCampaign(this.camp_json);                  
                   
               },this));    

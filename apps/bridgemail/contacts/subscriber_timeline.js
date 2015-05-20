@@ -39,6 +39,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                 this.$timelineContainer = this.$(".timeline-container .current");
                 this.$curLoad = this.$(".loadmore");
                 this.initControls();    
+                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },            
             /**
              * Initializing all controls here which need to show in view.

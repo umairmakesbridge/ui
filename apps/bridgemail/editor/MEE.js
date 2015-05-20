@@ -3812,6 +3812,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 selector: "div.textcontent",
                                                 inline: true,
                                                 theme: "modern",
+                                                paste_as_text:true,    
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',

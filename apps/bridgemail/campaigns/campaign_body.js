@@ -128,7 +128,7 @@ function (template,editorView) {
               var _width = this.parent.$el.width()-48;
               this.$(".html-text,.editor-text").css({"height":_height+"px","width":_width+"px"});
               this.$("#htmlarea").css({"height":_height+"px","width":(_width-2)+"px"});
-              if(this.campobjData.editorType=="W"){
+              if(this.campobjData && this.campobjData.editorType=="W"){
                 this.openEditor();
               }
             },
@@ -223,7 +223,9 @@ function (template,editorView) {
                      .done(function(data) {
                      });
                  }
-                 this.campobjData.editorType = post_editor['editorType'];
+                 if( post_editor['editorType']){
+                     this.campobjData.editorType = post_editor['editorType'];
+                }
 
             },
             loadMEE:function(){
@@ -287,7 +289,7 @@ function (template,editorView) {
                 this.states.editor_change = true;
                 var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                 jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
-                this.$("#html_editor").click();
+                //this.$("#html_editor").click();
 
             },
             getcampaignscopy:function(){
@@ -316,7 +318,8 @@ function (template,editorView) {
                 this.app.showLoading(false,this.$el.parents(".modal"));
                 var html_json = jQuery.parseJSON(xhr.responseText);
                 var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
-                if(html_json.htmlText){                        
+                if(html_json.htmlText){                   
+                    this.parent.htmlText = html_json.htmlText;
                     if(html_json.isEasyEditorCompatible=="Y"){                        
                         post_editor['editorType'] = 'MEE';
                         this.$("#html_editor_mee").click();

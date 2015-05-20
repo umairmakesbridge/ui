@@ -2282,7 +2282,9 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     else if (selected_li == "plain_text") {
                         post_editor['editorType'] = 'P';
                     }
-                    this.states.step2.editorType = post_editor['editorType'];
+                    if(post_editor['editorType'] &&  post_editor['editorType']!=="P"){
+                        this.states.step2.editorType = post_editor['editorType'];
+                    }
                     if (post_editor["editorType"] && this.campobjData.editorType != post_editor["editorType"]) {
                         this.campobjData.editorType = post_editor["editorType"];
                         $.post(URL, post_editor)
@@ -2366,7 +2368,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var html_json = jQuery.parseJSON(xhr.responseText);
                     var htmlText = this.app.decodeJSON(html_json.htmlText);
                     if (htmlText) {
-
+                        this.states.step2.htmlText = htmlText;     
                         if (html_json.isEasyEditorCompatible == "Y") {
                             this.$("#html_editor_mee").click();
                             this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));

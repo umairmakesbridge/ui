@@ -79,7 +79,7 @@
         </div>
         <% if(model.get('pageViewsCount') && model.get('pageViewsCount')!=="0") { %>
         <div class="infotxt">
-            <a class="page-views"><i class="icon viewcount"></i> <%- model.get("pageViewsCount") %></a>
+            <a class="page-views showtooltip" title="Click for page views details"><i class="icon viewcount"></i> <%- model.get("pageViewsCount") %></a>
             <strong>Page Views</strong>
         </div>
         <% } %>
