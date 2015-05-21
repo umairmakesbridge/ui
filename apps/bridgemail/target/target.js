@@ -122,6 +122,7 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                                             camp_obj.app.showAlert(target_json[1], camp_obj.$el);
 
                                         }
+                                        
                                         $(obj.target).removeClass("saving");
                                     });
                         }
@@ -231,9 +232,13 @@ define(['text!target/html/target.html', 'bms-filters','bms-tags','jquery.bmsgrid
                                     if(campview.loadTargets){
                                         campview.loadTargets();
                                     }
+                                    else if(campview.options.bkflag){
+                                        campview.parent.dialog.showPrevious();
+                                    }
                                     else if(campview.parent && campview.parent.loadTargets){
                                         campview.parent.loadTargets();
                                     }
+                                    
                                 });
                     }
                     else {
