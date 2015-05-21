@@ -157,9 +157,10 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
             },
             makerow:function(val){
                 var row_html = "";
+                var max_width = this.$(".camp_listing").width()*.50;
                 var flag_class = this.getCampStatus(val[0].status);                 
                 row_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
-                row_html += '<td><div class="name-type"><div class="name-type"><h3><span class="campname showtooltip" style="float:left;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div></h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></div></td>';
+                row_html += '<td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div></h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';
                 var _checked =this.$(".filter-camp li:first-child").hasClass("active")?'class="unchecked check-box"':'class="checkedadded check-box"';
                 
                 //row_html += '<td><div class="time show" style="width:130px"><strong><span>'+ this.getDateFormat(val) +'</span></strong></div><div id="action_'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Add</span><i class="icon next"></i></a></div></td>';

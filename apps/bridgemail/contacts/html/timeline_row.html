@@ -1,5 +1,5 @@
 <div class="icon <%-cssClass %> this-event-type showtooltip" title="Click to view this event type only" style="cursor: pointer"></div>
-<% if(type=="SC") { %>
+<% if(type=="SC" && model.get('score') > 0 )  { %>
 <h5><a class="<% if(model.get('score') >= 0){ print('green') }else{ print('red')} %>"><%- this.getScore() %></a></h5>
 <div class="info-p">
     <div class="infotxt">
@@ -141,7 +141,7 @@
         <% } %>
         
         <li class="this-event-type"><a>This Event Type</a></li>
-        <li><a class="advance-filter">Advance</a></li>
+        <li><a class="advance-filter">Advanced</a></li>
     </ul>
 </div>
 <div class="btm-bar ">

@@ -667,11 +667,15 @@ div.csHaveData{
 .mainContentHtmlGrand > .sortable > li.csHaveData { border:1px dotted #a9c2d5 !important; border-top:10px solid  #a9c2d5 !important;  position:relative; /*min-height:80px;*/ z-index:99;  /*margin: 5px; cursor:move;*/
                                                     -webkit-border-radius: 2px 2px ;
                                                     -moz-border-radius:  2px 2px ;
-                                                    border-radius:  2px 2px; }
+                                                    border-radius:  2px 2px;                                                         
+                                                      margin-right:25px;   
+                                                   }
 .mainContentHtmlGrand > .sortable > li.csHaveData.hover{border:1px solid #03d3ff !important; border-top:10px solid  #03d3ff !important; z-index:990;
                                                         -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
                                                         -moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.8);
                                                         box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
+                                                       
+                                                        
 }
 div.csHaveData.hover{       
     z-index:990;   
