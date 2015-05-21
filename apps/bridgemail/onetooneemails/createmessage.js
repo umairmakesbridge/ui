@@ -229,7 +229,7 @@ function (template,contactsView) {
                         else{
                            _this.subEmailDetails = _json;
                            _this.app.showLoading(false, _this.dialog.getBody());
-                            if(_json.body.indexOf("__OUTERTD") != -1){
+                            if(_json.body.indexOf("__OUTERTD") != -1 && !_this.isPreviewEmail){
                                  _this.emailHTML = _json.body;
                                  _this.isloadMeeEditor = true;
                                  _this.loadEditor();

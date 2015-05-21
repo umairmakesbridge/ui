@@ -4777,7 +4777,9 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     white-space: nowrap;
     text-overflow:ellipsis;
 }
-
+.targets_grid_table tr td:first-child{
+        max-width: 285px;
+}
 .icon.addnetsuite{
     background: url("../img/NS_plus-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
