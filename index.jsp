@@ -67,7 +67,7 @@ String _path = "/pms/umair/";
     
     <script>
         var bms_token = '<%= Default.toDefault((String)session.getAttribute(PMSDefinitions.CSRF_TOKEN_NAME)) %>';
-        var _path = '<%= _path %>'
+        var _path = '<%= _path %>';
         var previewDomain = "<%=PMSResources.getInstance().getPreviewDomain()%>";
         var imagesCDN =  "<%=PMSResources.getInstance().getCDNForImages()%>";
         var staticCDN =  "<%=PMSResources.getInstance().getCDNForStaticContents()%>"; 

@@ -72,7 +72,7 @@ define([
                 images_CDN: imagesCDN,
                 static_CDN: staticCDN,
                 host: window.location.hostname,
-                path: _path,
+                path: _path,                
                 session: null,
                 app_data: {}
             }, window.sz_config || {} ));
@@ -88,7 +88,7 @@ define([
             this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
                             ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
                             "reports":"camapignReport",subscriber:"openSubscriber",camppreview:"previewCamp"};
-                        
+            this.set("s_path",this.get("path"));            
             if(this.get("env")=="production"){
                 this.set("path",window.location.protocol+"//"+imagesCDN+this.get("path"));
             }        
