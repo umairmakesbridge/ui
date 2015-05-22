@@ -341,6 +341,7 @@ define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurt
                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          dialog.getBody().html(targetsPage.$el);
                          targetsPage.$el.find('#targets_grid').addClass('targets_grid_table');
+                         targetsPage.$el.find('.col2 .template-container').addClass('targets_grid_table_right');
                          targetsPage.$el.find('.step2-lists').css({'top':'0'});
                          targetsPage.$el.find('.step2-lists span').css({'left':'70px'});
                          targetsPage.init();
