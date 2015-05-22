@@ -16,7 +16,7 @@
                         
                         	
                             <td width="">
-                                <a class="show-detail"><div class="letter_block l_<%- this.getFirstAlphabet().toLowerCase() %>"><span class="showtooltip" title="Click to view profile"><%- this.getFirstAlphabet() %></span></div></a>
+                                <a class="show-detail contact-firstAlphabet"><div class="letter_block "><span class="showtooltip" title="Click to view profile"></span></div></a>
                              </td>
                                 
                             
@@ -24,7 +24,7 @@
                                   <div class="name-type">
                                   
                                     <div class="title show-detail" id="<%- model.get('subNum')%>">
-                                	<h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
+                                        <h3><a class="showtooltip trim-text" title="Click to view <b>'<%- contact_name %>'</b> profile"><%- contact_name %></a></h3>
                                         <% if(model.get('salesStatus')!==''){%>
                                         <a class="statusdd color3"><%- model.get('salesStatus').toLowerCase()%>  <b class="caret"></b></a>
                                         <%}%> 

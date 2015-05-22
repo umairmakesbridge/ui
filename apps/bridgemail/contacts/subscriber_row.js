@@ -52,6 +52,7 @@ function (template,highlighter,tagView) {
                     activity_type:this.mapping[this.model.get("lastActivityType")]?this.mapping[this.model.get("lastActivityType")].name:this.model.get("lastActivityType")
                 }));                
                 this.initControls();  
+                this.getFirstAlphabet();
                 this.lastOpenActivityDate();
             },
             /**
@@ -194,7 +195,9 @@ function (template,highlighter,tagView) {
                       }else{
                           firstAlpha = this.app.decodeHTML(email);
                       }
-                     return firstAlpha.charAt(0);
+                     //return firstAlpha.charAt(0);
+                 this.$('.contact-firstAlphabet').find('.letter_block').addClass('l_'+firstAlpha.charAt(0).toLowerCase());
+                 this.$('.contact-firstAlphabet').find('span').html(firstAlpha.charAt(0));
             },
             tagSearch:function(obj){
                 this.trigger('tagclick',$(obj.target).text());
