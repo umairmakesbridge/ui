@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_report.html','moment','jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','jquery.chosen','daterangepicker'],
+define(['text!reports/html/campaign_report.html','moment','jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','jquery.chosen','daterangepicker','jquery.icheck'],
 function (template,moment,bmsgrid,highlight,searchcontrol) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -26,6 +26,7 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
             initialize:function(){              
                this.template = _.template(template);		               
                this.render();
+               this.outside = false;
             },
             /**
              * Initialize view .
@@ -43,6 +44,26 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
               this.getAllCampaigns(5);              
             },
             initControls:function(){
+                 this.$('input.checkpanel').iCheck({
+                      checkboxClass: 'checkpanelinput',
+                      insert: '<div class="icheck_line-icon"></div>'
+               });
+               
+                this.$('input.checkpanel').on('ifChecked', _.bind(function(event){
+                   this.$("#camps_grid_report tr td:nth-child(1) .check-box").removeClass("unchecked").addClass("checkedadded");
+                   if(!this.outside){
+                     this.createChart();
+                  }
+                  this.outside = false;
+                },this))
+                
+                this.$('input.checkpanel').on('ifUnchecked', _.bind(function(event){                   
+                   if(!this.outside){
+                     this.$("#camps_grid_report tr td:nth-child(1) .check-box").removeClass("checkedadded").addClass("unchecked");  
+                     this.createChart();
+                  }
+                   this.outside = false;
+                },this))
                 this.dateRangeControl = this.$('#daterange').daterangepicker();                
                 this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange,this));
                 this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi,this));
@@ -81,6 +102,11 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                     _target.addClass("active");
                     this.$(".spntext").html(_target.text());
                     this.getAllCampaigns(parseInt(_target.attr("last")));
+                    if(parseInt(_target.attr("last"))){
+                         this.$('input.checkpanel').iCheck('check');
+                    }else{
+                        this.$('input.checkpanel').iCheck('uncheck');
+                    }
                 }
                 
             },
@@ -130,12 +156,13 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                         colresize:false,                        
                         height:this.app.get('wp_height')-77,                        
                         usepager : false,
-                        colWidth : ['100%','140px']
+                        colWidth : ["40px",'100%','140px']
                     });
-                    this.$("#camps_grid_report tr td:nth-child(1)").attr("width","100%");                    
-                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","140px");    
-                    this.$("#camps_grid_report tr td:nth-child(2) .check-box").click(_.bind(this.addToChart,this));                    
-                    this.$("#camps_grid_report tr td:nth-child(1) .campname").click(_.bind(this.previewCampaign,this));
+                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","40px");                    
+                    this.$("#camps_grid_report tr td:nth-child(2)").attr("width","100%");                    
+                    this.$("#camps_grid_report tr td:nth-child(3)").attr("width","140px");    
+                    this.$("#camps_grid_report tr td:nth-child(1) .check-box").click(_.bind(this.addToChart,this));                    
+                    this.$("#camps_grid_report tr td:nth-child(2) .campname").click(_.bind(this.previewCampaign,this));
                     // this.$("#camps_grid_report tr td:nth-child(1) .report").click(_.bind(this.showChart,this));
                       var that = this;
                     this.$("#camps_grid_report tr td:nth-child(1) .report").click(function(){
@@ -160,13 +187,12 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                 var max_width = this.$(".camp_listing").width()*.50;
                 var flag_class = this.getCampStatus(val[0].status);                 
                 row_html += '<tr id="row_'+val[0]['campNum.encode']+'">';                        
-                row_html += '<td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div></h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';
                 var _checked =this.$(".filter-camp li:first-child").hasClass("active")?'class="unchecked check-box"':'class="checkedadded check-box"';
+                row_html += '<td style="padding:0px"><a '+_checked+' id="'+val[0]['campNum.encode']+'" style="margin:0px;position:relative"><i class="icon check"></i></a></td><td><div class="name-type"><h3><span class="campname showtooltip" style="float:left;overflow:hidden;min-width:40px;max-width:'+max_width+'px;" title="Click to Preview">'+val[0].name+'</span><span class="cstatus '+flag_class+'">'+this.app.getCampStatus(val[0].status)+'</span><div class="campaign_stats showtooltip" title="Click to View Chart"><a class="icon report"></a></div></h3><div class="tags tagscont">'+this.app.showTags(val[0].tags)+'</div></td>';                               
                 
-                //row_html += '<td><div class="time show" style="width:130px"><strong><span>'+ this.getDateFormat(val) +'</span></strong></div><div id="action_'+val[0]['campNum.encode']+'" class="action"><a class="btn-green"><span>Add</span><i class="icon next"></i></a></div></td>';
-                row_html += '<td><div class="time show"><strong><span>'+this.getDateFormat(val)+'</strong></div>';
-                row_html += '<div class="sent-pending"><span><em>Sent</em>'+this.app.addCommas(val[0].sentCount)+'</span><span><em>Pending</em>'+this.app.addCommas(val[0].pendingCount)+'</span></div>'
-                row_html += '<a '+_checked+' id="'+val[0]['campNum.encode']+'"><i class="icon check"></i></a></td>';
+                row_html += '<td><div class="time show" style="width:160px !important;"><strong><span>'+this.getDateFormat(val)+'</strong></div>';
+                row_html += '<div class="sent-pending" style="width:160px !important;"><span><em>Sent</em>'+this.app.addCommas(val[0].sentCount)+'</span><span><em>Pending</em>'+this.app.addCommas(val[0].pendingCount)+'</span></div>'
+                row_html += '</td>';
                     
                 
                 
@@ -234,6 +260,22 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                 else{
                      addBtn.removeClass("checkedadded").addClass("unchecked"); 
                 }
+                var totalRows = this.$("#camps_grid_report tr").length;
+                var totalChecked = this.$(".checkedadded").length;
+                
+                if(totalRows==totalChecked){
+                    if(this.$(".select-all:checked").length==0){
+                        this.outside = true;
+                    }
+                     this.$('input.checkpanel').iCheck('check');
+                }
+                else{
+                    if(this.$(".select-all:checked").length==1){
+                        this.outside = true;
+                    }
+                    this.$('input.checkpanel').iCheck('uncheck');
+                }
+                
                 this.createChart();
             },
             createChart:function(){
@@ -254,10 +296,10 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                                       ,openCount:0,pageViewsCount:0,pendingCount:0,pinterestCount:0,sentCount:0,supressCount:0,
                                       twitterCount:0,unSubscribeCount:0};
                    var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=stats";                  
-                       URL +="&campNums="+_campaigns;                      
-                       
-                   this.states_call = jQuery.getJSON(URL,  function(tsv, state, xhr){
-                       var camp_json = jQuery.parseJSON(xhr.responseText);
+                       //URL +="&campNums="+_campaigns;                      
+                   var post_data = {campNums:_campaigns}    
+                   this.states_call =  $.post(URL, post_data).done(function (data) {
+                       var camp_json = jQuery.parseJSON(data);
                        _.each(camp_json.campaigns[0], function(val) {
                            _this.chart_data["bounceCount"] = _this.chart_data["bounceCount"] + parseInt(val[0].bounceCount);
                            _this.chart_data["clickCount"] = _this.chart_data["clickCount"] + parseInt(val[0].clickCount);
@@ -342,6 +384,11 @@ function (template,moment,bmsgrid,highlight,searchcontrol) {
                         this.toDate = toDate.format("MM-DD-YYYY");
                     }   
                     this.getAllCampaigns(this.$(".filter-camp li.active").attr("last"));
+                    if(parseInt(this.$(".filter-camp li.active").attr("last"))){
+                         this.$('input.checkpanel').iCheck('check');
+                    }else{
+                        this.$('input.checkpanel').iCheck('uncheck');
+                    }
                }
             },
             setDateRangeLi:function(obj){
