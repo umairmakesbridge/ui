@@ -59,16 +59,15 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.ht
                             if(ev.target.tagName != "A"){
                                 obj = $(ev.target).parents('a');
                             }
-                                var elem = obj.attr('data-t'); 
-                                var src = this.$el.find('.activated-image').attr('src');
-                                if(typeof src !="undefined"){
-                                    src = src.replace('w.','.');
-                                    this.$el.find('.activated-image').attr('src',src).removeClass('activated-image');
-                                }
-                            
+                            var elem = obj.attr('data-t'); 
+                            var src = this.$el.find('.activated-image').attr('src');
+                            if(typeof src !="undefined"){
+                                src = src.replace('w.','.');
+                                this.$el.find('.activated-image').attr('src',src).removeClass('activated-image');
+                            }                            
                             this.$el.find('#'+elem).find('input[type=text]').focus();
                             var src =obj.find('img').attr('src');
-                            src = src.replace('.','w.');
+                            src = src.replace('-g','-gw');
                             obj.find('img').attr('src',src).addClass('activated-image');
                         },
 			render: function () {
