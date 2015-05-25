@@ -4775,7 +4775,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     text-overflow:ellipsis;
 }
 .targets_grid_table tr td:first-child{
-        max-width: 270px;
+        max-width: 260px;
 }
 .targets_grid_table_right .bmsgrid #recipients tr td:first-child{
         max-width: 270px;
