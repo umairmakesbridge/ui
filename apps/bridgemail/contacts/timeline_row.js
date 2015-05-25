@@ -207,6 +207,9 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                         else if(this.model.get('campaignName')){
                             title=this.model.get('campaignName');
                         }
+                        else if(this.model.get('trackName')){
+                            title=this.model.get('trackName');
+                        }
                         var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Preview of &quot;' + title + '&quot;' ,

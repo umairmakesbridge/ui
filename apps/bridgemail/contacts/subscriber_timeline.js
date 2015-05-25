@@ -123,8 +123,10 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                             if(this.monthYear !==model_date){
                                 this.monthYear = model_date;
                                 //this.$timelineContainer.append(this.timeStamp(this.monthYear));                                                                                               
-                            }      
-                            this.$timelineContainer.append(timelineView.$el);                                                       
+                            }
+                            if(this.validEvent(collection.at(s))){
+                                this.$timelineContainer.append(timelineView.$el);                                                       
+                            }
                         }    
                          /*-----Remove loading------*/
                                  this.app.removeSpinner(this.$el);
@@ -146,6 +148,15 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                             
                     }
                 });
+            },
+            validEvent: function(model){
+                var isValid = true;
+                
+                if(model.get("activityType")=="SC" && model.get("score")=="0"){
+                    isValid = false;
+                }
+                
+                return isValid;
             }
              /**
              * Fetching Future timeline from server.
@@ -192,7 +203,9 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                                 this.monthYear = model_date;
                                 //this.$timelineFuture.prepend(this.timeStamp(this.monthYear));                                                                    
                             }      
-                            this.$timelineFuture.prepend(timelineView.$el);                                                                               
+                            if(this.validEvent(collection.at(s))){
+                                this.$timelineFuture.prepend(timelineView.$el);                                                                               
+                            }
                         }
                         this.$timelineFuture.find(".load-more-future").remove();
                         if(collection.length<parseInt(response.totalCount)){
