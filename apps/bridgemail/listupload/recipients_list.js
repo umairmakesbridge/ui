@@ -197,7 +197,8 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
                                 tags:''});
                             this.objRecipients.add(newModel);
                              var last_model = this.objRecipients.last();
-                            this.$el.find('#list_grid tbody').prepend(new recipientView({model:last_model,app:app}).el);
+                            
+                            this.$el.find('#list_grid tbody').prepend(new recipientView({model:last_model,app:app,parent:this}).el);
                             this.$el.find("#list_grid tbody tr:first").slideDown("slow"); 
                 },
                 
