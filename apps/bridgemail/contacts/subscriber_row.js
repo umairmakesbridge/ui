@@ -92,7 +92,7 @@ function (template,highlighter,tagView) {
                     this.$(".tag").highlight($.trim(this.sub.searchTxt));
                 }
                 else if(this.sub.tagTxt){
-                    this.$(".tag").highlight($.trim(this.sub.tagTxt));
+                    this.$(".tag").highlight($.trim(this.app.decodeHTML(this.sub.tagTxt)));
                 }
                 
                 
@@ -200,7 +200,8 @@ function (template,highlighter,tagView) {
                  this.$('.contact-firstAlphabet').find('span').html(firstAlpha.charAt(0));
             },
             tagSearch:function(obj){
-                this.trigger('tagclick',$(obj.target).text());
+                var tag = this.app.encodeHTML($(obj.target).text())
+                this.trigger('tagclick',tag);
                 return false;
             },
             openContact : function(){
