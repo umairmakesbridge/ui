@@ -4074,6 +4074,7 @@ input[type="button"].small-button {
 
 #cssmenuLinkGUI li .homelink { background:url("../images/homelink.png") no-repeat center center;}
 #cssmenuLinkGUI li .emaillink { background:url("../images/emaillink.png") no-repeat center center;}
+#cssmenuLinkGUI li .phonelink { background:url("../images/phonelink.png") no-repeat center center;}
 #cssmenuLinkGUI li .frwrdfriend { background:url("../images/frwrdfriend.png") no-repeat center center;}
 #cssmenuLinkGUI li .unsubslink { background:url("../images/unsubslink.png") no-repeat center center;}
 #cssmenuLinkGUI li .vbrsrlink { background:url("../images/vbrsrlink.png") no-repeat center center;}
@@ -4403,7 +4404,7 @@ ul.aligncol li i.alignbottom { background: url("../images/alignbottom.png") no-r
 .mainContentHtmlGrand > .sortable > li.csDynamicData:hover  .main_blocker { background:#03d3ff }
 
 
-.mainContentHtmlGrand > .sortable > li.csDynamicData.hover {border:2px solid #03d3ff !important; z-index:990;
+.mainContentHtmlGrand > .sortable > li.csDynamicData.hover {border:2px solid #03d3ff !important; z-index:9990;
                                                             border-top:10px solid  #03d3ff; 
                                                             -webkit-box-shadow:0 0px 8px rgba(3, 211, 255, 0.8);
                                                             -moz-box-shadow: 0 0px 8px rgba(3, 211, 255, 0.8);

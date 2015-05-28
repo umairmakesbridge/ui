@@ -149,7 +149,7 @@ function (template) {
                      var dialog = this.app.showDialog({title:dialog_title,
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                               bodyCss:{"min-height":dialog_height+"px"},							   
-                              buttons: {saveBtn:{text:'Save Filter'} }                                                                           
+                              buttons: {saveBtn:{text:'Apply Filter'} }                                                                           
                     });                    
                     
                     this.app.showLoading("Loading Filters...",dialog.getBody());

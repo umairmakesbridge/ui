@@ -1341,6 +1341,7 @@ a.saving span {
 
 #cssmenuLinkGUI li .homelink { background:url("../images/homelink.png") no-repeat center center;}
 #cssmenuLinkGUI li .emaillink { background:url("../images/emaillink.png") no-repeat center center;}
+#cssmenuLinkGUI li .phonelink { background:url("../images/phonelink.png") no-repeat center center;}
 #cssmenuLinkGUI li .frwrdfriend { background:url("../images/frwrdfriend.png") no-repeat center center;}
 #cssmenuLinkGUI li .unsubslink { background:url("../images/unsubslink.png") no-repeat center center;}
 #cssmenuLinkGUI li .vbrsrlink { background:url("../images/vbrsrlink.png") no-repeat center center;}

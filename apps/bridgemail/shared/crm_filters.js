@@ -544,7 +544,7 @@
             
         })
         if(self.options.filterFor=="S"){                        
-            this.$element.find(".advance-option").val(data[adv_option])
+            this.$element.find(".advance-option").val(self.options.app.decodeHTML(data[adv_option]))
         }
       }
   },

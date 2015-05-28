@@ -5599,7 +5599,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         if(searchFormTxt!==""){
                                             myElement.find("#FBResultDiv").html(returnData.totalCount + " records Found");
                                             myElement.find("#FBResultDiv").show();      
-                                            myElement.find(".formDroppable").hide();
+                                            //myElement.find(".formDroppable").hide();
                                         }
                                         else{
                                             myElement.find("#FBResultDiv").hide();
