@@ -29,7 +29,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         }
 
                     },
-                    'click .tipntest-toggle': function (obj) {
+                    'click #tipntest-toggle-one': function (obj) {
                         var $a = $.getObj(obj, "a");
                         $('.tw-toggle').removeClass("active");
                              $("#tiles").hide();
@@ -38,6 +38,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                             $("[workspace_id='tip_test']").click();
                             if(!this.openTipnTest){
                                 this.tip_test();
+                            }
+
+                    }
+                    ,
+                    'click #tipntest-toggle-two': function (obj) {
+                        var $a = $.getObj(obj, "a");
+                        $('.tw-toggle').removeClass("active");
+                             $("#tiles").hide();
+                                $('#workspace').show();
+                                $('#workspace').animate({left: '0px'});
+                            $("[workspace_id='tip_test_2']").click();
+                            if(!this.openTipnTest2){
+                                this.tip_test_2();
                             }
 
                     }
@@ -130,6 +143,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.lastActiveWorkSpace = "";
                     this.isTipnTestFlag = false;
                     this.openTipnTest = false;
+                    this.openTipnTest2 = false;
                     this.render();
                 }
                 ,
@@ -640,6 +654,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 tip_test : function(){
                    this.addWorkSpace({type: '', noTags: true ,title: 'Increase Sales Meetings - Follow Up In Under 5 Minutes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
+                },
+                 tip_test_2 : function(){
+                   this.addWorkSpace({type: '', noTags: true ,title: 'New Proven Process', sub_title: '', url: 'tipandtest/tipandtest2', workspace_id: 'tip_test_two', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 

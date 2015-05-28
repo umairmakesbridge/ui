@@ -20,6 +20,7 @@ function (template,googles, contactsView) {
                this.$el.html(this.template({}));
                this.app = this.options.page.app;   
                this.legend = this.options.legend;
+               this.parent = this.options.page;
                this.chartArea = this.options.chartArea;
                this.image = this.options.url;
                this.active_ws = $(document).find(".ws-content.active");
@@ -58,7 +59,10 @@ function (template,googles, contactsView) {
               this.chart = new google.visualization.PieChart(this.el);
               var that = this;
                  google.visualization.events.addListener(this.chart, 'ready', function () {
-                  that.image.append('<img style="display:none" src="' + that.chart.getImageURI() + '" id="img_download"/>');
+                    if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ 
+                        that.parent.getImgData();
+                    }
+                    that.image.append('<img style="display:none" src="' + that.chart.getImageURI() + '" id="img_download"/>');
                   });
                 google.visualization.events.addListener(that.chart, 'select',function(){
                   var selectedItem = that.chart.getSelection()[0];

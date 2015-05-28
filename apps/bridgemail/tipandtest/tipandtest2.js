@@ -1,8 +1,8 @@
-define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','bms-mergefields','jquery.searchcontrol'],
+define(['text!tipandtest/html/tipandtest2.html','autobots/collections/autobots','bms-mergefields','jquery.searchcontrol'],
         function (template,AutobotsCollection) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
-            // Proven Process : One
+            // Proven Process : Second
             //
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             'use strict';
@@ -77,7 +77,7 @@ define(['text!tipandtest/html/tipandtest.html','autobots/collections/autobots','
                            
                     //console.log(data.models);
                             _.each(data.models,function(model) {
-                                //console.log(model.get('presetLabel') + "  & Type: " + model.get('presetType'));
+                                console.log(model.get('presetLabel') + "  & Type: " + model.get('presetType'));
                                 if(model.get('presetType')==="PRE.2"){
                                     that.$('.meeting-request').attr('id','row_'+model.get('botId.encode'));
                                     that.$('.meeting-request').attr('data-id',model.get('botId.encode'));

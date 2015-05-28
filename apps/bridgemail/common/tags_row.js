@@ -40,7 +40,8 @@ function (template,highlighter) {
                     this.app = this.options.app;
                     this.tags = this.options.tags;
                     this.rowElement = this.options.rowElement;
-                    this.tagsplit = this.tags.split(",");                    
+                    this.tagsplit = this.tags.split(",");   
+                    
                     this.tagTxt = '';
                     this.tagCount = 0;
                     this.tagSearchCall = this.options.tagSearchCall;
@@ -59,12 +60,14 @@ function (template,highlighter) {
                 if(this.options.type!=="contacts"){
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 }
+                
                 var _$this = this;
                 $( window ).scroll(function() {
                     if(_$this.isTrim){
                         _$this.collapseTags(window);
                     }
                  });
+                 
                  if(this.rowElement){
                      this.rowElement.mouseout(_.bind(this.collapseTags,this));
                      this.rowElement.mouseout(_.bind(this.collapseTags,this));

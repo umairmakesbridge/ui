@@ -267,12 +267,19 @@ define([
                     this.mainContainer.initializeIsotops();
                 }                
                 
-                if(this.get("tipId")){
+                if(this.get("tipId")==1){
                     this.mainContainer.tip_test();
-                    this.mainContainer.$(".tipntest-toggle").show();
+                    this.mainContainer.$("#tipntest-toggle-one").show();
+                    this.mainContainer.$("#tipntest-toggle-two").hide();
                     this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
                     this.mainContainer.openTipnTest=true;
                     this.mainContainer.isTipnTestFlag=true;
+                }else if(this.get("tipId")==2){
+                    this.mainContainer.tip_test_2();
+                    this.mainContainer.$("#tipntest-toggle-one").hide();
+                    this.mainContainer.$("#tipntest-toggle-two").show();
+                    this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
+                    this.mainContainer.openTipnTest2=true;
                 }
                 if(this.get("workId")){
                     if(this.workid[this.get("workId")] && this.mainContainer[this.workid[this.get("workId")]]){
@@ -763,8 +770,14 @@ define([
                     }
                 }
                 if(_user["tipntest"] && _user["tipntest"].toLowerCase()=="y"){
-                    this.mainContainer.$(".ws-tabs").css("top","140px");
-                    this.mainContainer.$(".tipntest-toggle").show();
+                    if(this.get("tipId")==2){
+                        this.mainContainer.$(".ws-tabs").css("top","140px");
+                        this.mainContainer.$("#tipntest-toggle-two").show();
+                    }else{
+                        this.mainContainer.$(".ws-tabs").css("top","140px");
+                        this.mainContainer.$("#tipntest-toggle-one").show();
+                    }
+                    
                 }
             }
             else {

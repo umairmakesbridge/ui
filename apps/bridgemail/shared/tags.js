@@ -230,7 +230,7 @@
       var _input = this.dialog.find("input.tag-input")
       var tag = _input.val() 
       if(this.options.url && this.validation(tag)){  
-          tag = this.options.app.encodeHTML(tag)
+          //tag = this.options.app.encodeHTML(tag)
           var self = this
           var temp_tags = (this.options.tags)?(this.options.tags+","+tag):tag
           
@@ -252,7 +252,7 @@
                     }
                     self.dialog.find("#add_tag_btn").removeClass("saving") 
                     if(tag_json && tag_json.success){
-                        self.options.tags = temp_tags;
+                        self.options.tags = self.options.app.encodeHTML(temp_tags);
                         self.showTags();                                                                
                     }
                     else if(tag_json[0]=="err"){
@@ -282,7 +282,7 @@
     tags_array.splice(this.tag_id,1)    
     var temp_tags = tags_array.join()
     
-    this.options.params['tag'] = tag
+    this.options.params['tag'] = this.options.app.decodeHTML(tag);
     this.options.params['type'] = 'deleteTag'
     
     var params = this.options.params

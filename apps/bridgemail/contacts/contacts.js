@@ -193,7 +193,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     }
                 }
                 else if(this.tagTxt){
-                    _data['searchTag'] = this.tagTxt;
+                    _data['searchTag'] = this.app.decodeHTML(this.tagTxt);
                     this.sortBy = 'lastActivityDate';
                     this.filterBy = "";
                 }
@@ -442,10 +442,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.$("#total_selected").hide();
             },
             searchByTag:function(tag){
+                
                this.searchTxt = '';
-               this.$("#contact-search").val("Tag: "+tag);
+               this.$("#contact-search").val("Tag: "+this.app.decodeHTML(tag));
                this.$("#clearsearch").show();
-               this.tagTxt = tag;
+               this.tagTxt = this.app.encodeHTML(tag);
                $('.showtooltip').tooltip('hide');
                this.fetchContacts();
             },

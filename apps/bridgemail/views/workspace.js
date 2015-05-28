@@ -30,6 +30,7 @@ function ($,Backbone, _,app,Wizard, template) {
                            
                         }
                         app.mainContainer.openTipnTest=false;
+                        app.mainContainer.openTipnTest2=false;
                         $("body").css("overflow","auto");                                                    
                         $("#activities,#search,.icons-bar").show();                        
                     },
