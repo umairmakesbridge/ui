@@ -38,6 +38,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                             "html": "<table class='MEE_IMAGEWITHTEXTCONTENT' width='100%'><tr><td width='50%'><div class='imageContainer imagePlaceHolderAlone drapableImageContainer'>Drag image here</div></td><td valign='top' width='50%'><div class='textcontent'>You can write text here...</div></td></tr></table></div>"
                         },
                         {
+                            "type": "signupForm",
+                            "html": "<div class='formPlaceHolderAlone MEEFORMCONTAINER'> </div>"
+                        },
+                        {
                             "type": "spacer5",
                             "html": "<div style='height:5px' class='spacer-ele'></div>"
                         },
@@ -471,11 +475,23 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             }
                                         }
                                         IsStyleActivated = false;
+                                         mee.checkForm();
                                         oInitDestroyEvents.InitAll(mainObj);
                                         makeCloneAndRegister();
                                     }
                                     else {
                                         setTimeout(_.bind(mee.setHTML,mee),200);
+                                    }
+                                }
+                                
+                                mee.checkForm = function(){
+                                    if(!options.landingPage)return false;
+                                    meeIframe = myElement.find("#mee-iframe").contents();
+                                    if(meeIframe.find(".MEEFORMCONTAINER").length){
+                                        myElement.find("[data-type='signupForm']").addClass("disabled").attr("draggable",false);   
+                                    }
+                                    else{
+                                        myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable",true);   
                                     }
                                 }
 
@@ -1816,6 +1832,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     if (meeIframeWindow.$(".myDroppable").length == 1) {
                                         meeIframeWindow.$(".myDroppable").remove();
                                     }
+                                    mee.checkForm();
                                 }
 
                                 function InitializeCopyButtonOnElement(element) {
@@ -2261,8 +2278,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     // htmlToPlace.find("img.imageHandlingClass").resizable({
 
                                     meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
-                                        resize: function( event, ui ) {
-                                           $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                        aspectRatio: true,
+                                        start:function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
+                                            $(this).append("<div class='resizeable-tooltip'></div>")
+                                        },
+                                        resize: function( event, ui ) {                                                    
+                                            $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                            $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                        },
+                                        stop: function(event,ui){
+                                            $(this).find(".resizeable-tooltip").remove();
                                         }
                                     });
                                     args.droppedElement.html(htmlToPlace);
@@ -3795,8 +3821,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
                                         if (meeIframeWindow.$(element.find(".resizableImage")).resizable) {
                                             meeIframeWindow.$(element.find(".resizableImage")).resizable({
-                                                resize: function( event, ui ) {
+                                                aspectRatio: true,
+                                                start:function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
+                                                    $(this).append("<div class='resizeable-tooltip'></div>")
+                                                },
+                                                resize: function( event, ui ) {                                                    
                                                     $(this).find("img").css({"width":$(this).css("width"),"height":$(this).css("height")});
+                                                    $(this).find(".resizeable-tooltip").html(parseInt($(this).css("width"))+" × "+parseInt($(this).css("height")));
+                                                },
+                                                stop: function(event,ui){
+                                                    $(this).find(".resizeable-tooltip").remove();
                                                 }
                                             });
                                             meeIframeWindow.$(element.find(".formresizable")).resizable({});
@@ -4989,7 +5024,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         makeCloneAndRegister();
                                         return false;
                                     });
-
+                                    mee.checkForm();
 
                                 }
 //**************************************************** END DROPPING, DRAGGING, IMAGE CONTAINERS WORK (CORE FUNCTIONALITY) **************************************************** //                         

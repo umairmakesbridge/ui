@@ -4753,7 +4753,8 @@ body > .draggableControl{
 }
 .mce-i-unlink {background-position: -330px -0px;}
 .mce-i-link {background-position: -300px -0px;}
-.droppedFormBlock i.icon{background:url("../images/drop-form1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
+.droppedFormBlock i.icon,.signupform{background:url("../images/drop-form1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
+.draggableControl.disabled {opacity: 0.4;}
 /* ================================================End editorstyle.css================================================ */
 
 

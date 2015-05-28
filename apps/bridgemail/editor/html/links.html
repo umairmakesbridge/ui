@@ -72,10 +72,23 @@
                 <i class="icon preview"></i>
             </a>
             <br>
-
+            <div>
+            <div class="col1 upward" style="width:200px">
+                 <label>Link Target</label>
+                 <select data-placeholder="Select Target for url" class="select-target">
+                     <option value="">None</option>
+                     <option value="_self">Open in same window</option>
+                     <option value="_blank">Open in new window</option>
+                     <option value="_parent">Open in parent frameset</option>
+                     <option value="_top">Open in full body of window</option>
+                 </select>    
+            </div>
+            <div class="col2" style="width:290px">
             <label>Link Name</label>
-            <input type="text" maxlength="200" class="textLinkGUI linkName">
-            <br>
+             <input type="text" maxlength="200" class="textLinkGUI linkName">
+            </div> 
+            </div>    
+            
             <div class="inputlabel" style="display:none">
                 <input type="checkbox" id="dont-track">
                 <label>

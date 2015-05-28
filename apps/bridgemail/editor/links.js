@@ -61,6 +61,7 @@ function (template) {
                     var _li = $(this).parents("li");
                     _li.find("input.radiopanel").iCheck("check");
                 });
+                this.$(".select-target").chosen({ width: "200px", disable_search: "false"});
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
             },
             /**
@@ -166,6 +167,7 @@ function (template) {
             showLinkDetails:function(anchorObj){                
                 var _a_href = anchorObj.attr("href").toLowerCase();
                 var actual_href = anchorObj.attr("href");
+                var actual_target = anchorObj.attr("target");
                 if(_a_href.startsWith("mailto:")){
                     var showSubject = $.getUrlVar(_a_href,'subject');
                     _a_href = _a_href.replace("?subject="+showSubject,"");
@@ -199,6 +201,13 @@ function (template) {
                         actual_href = actual_href.replace("?campaignkw="+showName,"");
                         actual_href = actual_href.replace("&campaignkw="+showName,"");
                     }
+                    if(!showName && anchorObj.attr("name")){
+                        showName = anchorObj.attr("name");
+                    }
+                    
+                    if(actual_target){
+                        this.$(".select-target").val(actual_target);
+                    }
                     this.$("input.linkHyperLinkURL").val(actual_href);
                     this.$(".visitlink").attr("href",actual_href);
                     this.$("input.linkName").val(showName);
@@ -224,18 +233,46 @@ function (template) {
                 }
                 return myLink;
             },
+            getTarget:function(){
+              return this.$(".select-target").val() ;
+            },
+            getLinkName:function(){
+              return this.$("input.linkName").val();  
+            },
             attachLinkToImg:function(){
                 var myImageLink = ""; 
                 myImageLink = this.getLink();     
+                var target = this.getTarget();
+                var linkName = this.getLinkName();
+                var targetAttr = "";
+                var linkNameAttr = "";
+                if(target){
+                     targetAttr = "target='"+target+"'";
+                }
+                if(linkName){
+                    linkNameAttr = "name='"+linkName+"'";
+                }
                 if(!myImageLink){return false}
                 //Add link to editor
                 if (myImageLink != "" && myImageLink != null) {
                     var imgObj = this.hiddenObj.is("img")?this.hiddenObj:this.hiddenObj.find("img");
                     if(imgObj.parent().is("a")){
                         imgObj.parent().attr("href", myImageLink);
+                        if(target){
+                            imgObj.parent().attr("target", target);
+                        }
+                        else{
+                            imgObj.parent().removeAttr("target");
+                        }
+                        if(linkName){
+                            imgObj.parent().attr("name", linkName);
+                        }
+                        else{
+                            imgObj.parent().removeAttr("name");
+                        }
                     }
                     else{
-                        imgObj.wrap("<a href='" + myImageLink + "' onclick='return false;' ></a>");
+                        imgObj.wrap("<a href='" + myImageLink + "' "+targetAttr+" "+linkNameAttr+" onclick='return false;' ></a>");
                     }
                 }
                 return myImageLink;
@@ -244,8 +281,19 @@ function (template) {
                  var postBackupLink = "";
                  var myTextLink = "";
                  postBackupLink = this.getLink(); 
+                 var target = this.getTarget();
+                 var targetAttr = "";
+                 if(target){
+                     targetAttr = "target='"+target+"'";
+                 }
+                 
+                var linkNameAttr = "";
+                var linkName = this.getLinkName();
+                if(linkName){
+                    linkNameAttr = "name='"+linkName+"'";
+                }
                  if(!postBackupLink){return false}
-                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' style='text-decoration:underline;'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
+                 myTextLink = "<a class='MEE_LINK' href='" + postBackupLink + "' "+targetAttr+" "+linkNameAttr+" style='text-decoration:underline;'>" + this.$("."+this.activeTab+"Div textarea.linkTextArea").val() + "</a>";
                  
                  /*if(selected_element_range != null) {
                     tiny_editor_selection.setRng(selected_element_range);
@@ -255,6 +303,18 @@ function (template) {
                 this.tiny_editor_selection = this.meeIframeWindow.tinyMCE.activeEditor.selection;
                 if (this.tiny_editor_selection.getNode().nodeName == "a" || this.tiny_editor_selection.getNode().nodeName == "A") {                    
                     this.tiny_editor_selection.getNode().setAttribute("href", postBackupLink);
+                    if(target){
+                        this.tiny_editor_selection.getNode().setAttribute("target", target);
+                    }
+                    else{
+                        this.tiny_editor_selection.getNode().removeAttribute("target")
+                    }
+                    if(linkName){
+                        this.tiny_editor_selection.getNode().setAttribute("name", linkName);
+                    }
+                    else{
+                        this.tiny_editor_selection.getNode().removeAttribute("name")
+                    }
                     if(this.$("."+this.activeTab+"Div textarea.linkTextArea").val()){
                         this.tiny_editor_selection.getNode().innerHTML = this.$("."+this.activeTab+"Div textarea.linkTextArea").val();
                     }
@@ -318,15 +378,15 @@ function (template) {
             getURL:function(noName){
                     var link = "";
                     var _hyperlinkInput = this.$("input.linkHyperLinkURL");
-                    var linkName = this.$("input.linkName").val();
+                    //var linkName = this.$("input.linkName").val();
                     //var lineNameStr = linkName?"?campaignkw=" + linkName:"";   
                     var lineNameStr ="";
-                    if(linkName){
+                    /*if(linkName){
                         lineNameStr = $.trim(_hyperlinkInput.val()).indexOf("?")>-1 ? "&campaignkw=" + linkName : "?campaignkw=" + linkName;
                     }
                     else{
                         lineNameStr = "";
-                    }
+                    }*/
                     
                     
                     if(noName){
@@ -418,6 +478,7 @@ function (template) {
             },
             selectAnchor:function(e){
                 this.$("input.linkHyperLinkURL").val($(e.target).text());
+                this.$(".visitlink").attr("href",$(e.target).text());
                 $(".existinglinksdd").remove();
             }
             ,

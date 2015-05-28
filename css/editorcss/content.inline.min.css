@@ -2124,4 +2124,27 @@ i.icon{
     top: 50%;
     cursor: pointer;
 }
-
+.resizeable-tooltip{
+    font-family: 'PT Sans', sans-serif;
+    position: absolute;
+    top:-10px;
+    left:50%;
+    margin-left:-30px;
+    min-width:30px;
+    width:60px;
+    max-width:100px;
+    background: none repeat scroll 0 0 #495b67;
+    color: #fff;
+    display:block;
+    border:1px solid #495b67;
+    font-size: 12px;
+    line-height: 20px;
+    opacity: 1;       
+    text-align: center;    
+    -webkit-border-radius: 3px;
+    -moz-border-radius:3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 1px 3px #ccc;
+    -moz-box-shadow: 0 1px 3px #ccc;
+    box-shadow: 0 1px 3px #ccc;
+}

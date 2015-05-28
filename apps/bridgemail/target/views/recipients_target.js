@@ -77,7 +77,7 @@ function (template) {
                         return ;
                     }
                      var that = this;
-                     var target_id = $(ev.target).data('id');
+                     var target_id = this.model.get('filterNumber.encode');
                      var bms_token =that.app.get('bms_token');
                      var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+bms_token;
                                     that.options.app.showLoading("Refreshing Target...",that.$el);
