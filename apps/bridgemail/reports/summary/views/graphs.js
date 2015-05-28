@@ -219,7 +219,7 @@ function (template,chart,contactsView,jsPDF) {
                         title: name,
                         subject: name,     
                         author: 'Makesbridge',
-                        keywords: 'pdf, javascript,geenerated',
+                        keywords: 'pdf, javascript,generated',
                         creator: 'Makesbridge'
                     });
                      var logo = that.getBase64FromImageUrl(that.$el.find('#imgLogo')[0].src,true);
@@ -303,7 +303,26 @@ function (template,chart,contactsView,jsPDF) {
                              doc.text(165, y, that.options.app.addCommas(m.get('clickCount')));
                              y = y + 7;
                          });
-                       doc.save(name);       
+                      
+                       if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
+                           var retunVal =  doc.output('datauri');
+                            that.$('.download').unbind("click");
+                               that.$('.download').attr('onclick','window.open(\''+retunVal+'\',\'_blank\')');
+                               that.$('.download').html('download');
+                              
+                        }else{
+                            doc.save(name + '.pdf');  
+                        }
+                      
+                      /*var element = document.getElementById('iframe-pdfgraph');
+                        
+                       document.getElementById("iframe-pdfgraph").addEventListener("click", function( event ) {
+                        // display the current click count inside the clicked div
+                        event.target.innerHTML = 'hi';
+                      }, false);
+                      var event = new CustomEvent("click", element);
+                      document.dispatchEvent(event)*/
+                      //open.window(retunVal,'_blank');
                     }});
                     
                      //that.$el.append("<div style='display:none' id='links'></div>");

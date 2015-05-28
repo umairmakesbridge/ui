@@ -65,10 +65,18 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
                  /*-----Remove loading------*/
                     this.options.app.removeSpinner(this.$el);
+                    console.log('loading completed');
+                   //console.log('is Safari '+) ;
                    /*------------*/
+                   if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
+                       this.graphView.getImgData();
+                       this.graphView.$el.find('.download').html('Loading...');
+                       this.graphView.getImgData();
+                   }
             },
             addGraphs:function(data){
-                this.$('.col-cstats').prepend(new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId,botId:this.autobotId}).el);  
+                this.graphView = new ViewGraphs({campaignType:this.objSummary.get('campaignType'),triggerOrder:this.options.params.messageNo,clicks:this.stats.get('clickCount'),model:data,tags:this.objSummary.get('tags'),status:this.objSummary.get('status'),app:this.options.app,campNum:this.campNum,trackId:this.trackId,botId:this.autobotId});
+                this.$('.col-cstats').prepend(this.graphView.el);  
                 
                 this.options.app.showLoading(false,this.$('.col-cstats'));
             },

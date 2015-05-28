@@ -24,11 +24,16 @@ define(['text!notifications/html/notification.html', 'moment','jquery.chosen','a
                 },
                 initialize: function() {
                     this.app = app;
+                    
                     this.template = _.template(template);
+                    
                     this.model.on('change', this.render, this);
                     this.render();
                 },
                 render: function() {
+                    if(this.model.get('DATA_NOT_FOUND')){
+                        this.$el.hide();
+                    }
                     this.$el.html(this.template(this.model.toJSON()));
                     var colorName = "blue";
                     switch (this.model.get('notifyType')) {
