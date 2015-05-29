@@ -60,7 +60,7 @@ function (template,googles, contactsView) {
               var that = this;
                  google.visualization.events.addListener(this.chart, 'ready', function () {
                     if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ 
-                        that.parent.getImgData();
+                          that.parent.chartload=true;
                     }
                     that.image.append('<img style="display:none" src="' + that.chart.getImageURI() + '" id="img_download"/>');
                   });

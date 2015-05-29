@@ -23,12 +23,16 @@ function (template,chart,contactsView,jsPDF) {
                  this.active_ws = "";
                  this.trackId = this.options.trackId || 0;
                  this.botId = this.options.botId || 0;
+                 this.completeImageLoad1 = false;
+                 this.completeImageLoad2 = false;
+                 this.chartload =false;
                  this.data = [];
                  this.render();
             },
             render: function () {
                 var that = this;
                 this.$el.html(this.template(this.model.toJSON()));
+                
                 this.loadChart();
                 
                 this.$el.find('.chart-pending-views').on('click',function(ev){
@@ -40,7 +44,21 @@ function (template,chart,contactsView,jsPDF) {
                    return false;
                 })
                 
+                 if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
+                    this.$('#imgLogo').load(function() { that.completeImageLoad1=true;});
+                    this.$('#imgCon').load(function() {that.completeImageLoad2=true;});
+                    this.checkLoadCompleted();
+                }
             },
+            checkLoadCompleted : function (){
+                    if(this.completeImageLoad1 && this.completeImageLoad2 && this.chartload ){
+                           this.getImgData();
+                    }
+                   else{
+                            setTimeout(_.bind(this.checkLoadCompleted,this),200)
+                    }
+            },
+            
             loadChart:function(){
 
                     this.chartPage = new chart({ws:this.$el.parents(".ws-content.active"),url:this.$el.find(".download"),app:this.options.app,campNum:this.campNum,page:this,legend:{"true":true},chartArea:{width:"90%",height:"90%"}});
@@ -303,13 +321,17 @@ function (template,chart,contactsView,jsPDF) {
                              doc.text(165, y, that.options.app.addCommas(m.get('clickCount')));
                              y = y + 7;
                          });
-                      
+                      var retunVal =  doc.output('datauri');
                        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
-                           var retunVal =  doc.output('datauri');
-                            that.$('.download').unbind("click");
-                               that.$('.download').attr('onclick','window.open(\''+retunVal+'\',\'_blank\')');
-                               that.$('.download').html('download');
-                              
+                           
+                            that.$('.download').hide();
+                            that.$('.download').html('download');
+                            that.$('.download-safari').show();
+                               that.$('.download-safari').click(function(event){
+                                     window.open(retunVal,'_blank');
+                                      
+                               });
+                                   
                         }else{
                             doc.save(name + '.pdf');  
                         }

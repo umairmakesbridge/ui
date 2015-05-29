@@ -65,13 +65,12 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
                  /*-----Remove loading------*/
                     this.options.app.removeSpinner(this.$el);
-                    console.log('loading completed');
-                   //console.log('is Safari '+) ;
+                   
                    /*------------*/
                    if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
-                       this.graphView.getImgData();
+                      
                        this.graphView.$el.find('.download').html('Loading...');
-                       this.graphView.getImgData();
+                      
                    }
             },
             addGraphs:function(data){

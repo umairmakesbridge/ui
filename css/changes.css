@@ -6723,7 +6723,7 @@ ul.ftipg li i.gp { background-position: -120px -30px;}
     color:#000;
 }
  
-.download {
+.download,.download-safari {
     background: url("../img/download.png") no-repeat scroll 94% center #FFFFFF;
     border-radius: 2px;
     color: #748592;
