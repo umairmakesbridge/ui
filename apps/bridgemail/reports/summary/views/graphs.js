@@ -29,8 +29,15 @@ function (template,chart,contactsView,jsPDF) {
             render: function () {
                 var that = this;
                 this.$el.html(this.template(this.model.toJSON()));
-                this.loadChart();
-                
+                if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ 
+                this.options.app.showLoading("Loading Graph...",this.$("#chart"));
+                this.$('#imgLogo').load(_.bind(function() {
+                               this.loadChart();
+                          },this));
+                 }else{
+                     this.loadChart();
+                 }
+
                 this.$el.find('.chart-pending-views').on('click',function(ev){
                    that.pendingViews(ev);
                    return false;
@@ -163,8 +170,10 @@ function (template,chart,contactsView,jsPDF) {
                 doc.save('datauri');  
                           
             },
+            
             getImgData:function() {
                  var that = this;
+                
                 require(['reports/summary/collections/links'],function(Links){
                     /*
                    * that.$el.find(".div_pdf").remove();
@@ -204,7 +213,8 @@ function (template,chart,contactsView,jsPDF) {
                     */
                    
                    //  that.$el.find(".div_pdf").remove();
-                     
+                               
+                               
                     var doc =  new jsPDF( );
                    var active_ws = that.$el.parents(".ws-content");
                   var name =  active_ws.find("#workspace-header")
@@ -303,26 +313,20 @@ function (template,chart,contactsView,jsPDF) {
                              doc.text(165, y, that.options.app.addCommas(m.get('clickCount')));
                              y = y + 7;
                          });
-                      
+                      var retunVal =  doc.output('datauri');
                        if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
-                           var retunVal =  doc.output('datauri');
-                            that.$('.download').unbind("click");
-                               that.$('.download').attr('onclick','window.open(\''+retunVal+'\',\'_blank\')');
-                               that.$('.download').html('download');
-                              
+                           
+                            that.$('.download').hide();
+                            that.$('.download').html('download');
+                            that.$('.download-safari').show();
+                               that.$('.download-safari').click(function(event){
+                                     window.open(retunVal,'_blank'); 
+                               });
+                                   
                         }else{
                             doc.save(name + '.pdf');  
                         }
-                      
-                      /*var element = document.getElementById('iframe-pdfgraph');
-                        
-                       document.getElementById("iframe-pdfgraph").addEventListener("click", function( event ) {
-                        // display the current click count inside the clicked div
-                        event.target.innerHTML = 'hi';
-                      }, false);
-                      var event = new CustomEvent("click", element);
-                      document.dispatchEvent(event)*/
-                      //open.window(retunVal,'_blank');
+                   
                     }});
                     
                      //that.$el.append("<div style='display:none' id='links'></div>");

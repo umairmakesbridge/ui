@@ -59,8 +59,17 @@ function (template,googles, contactsView) {
               this.chart = new google.visualization.PieChart(this.el);
               var that = this;
                  google.visualization.events.addListener(this.chart, 'ready', function () {
+                     /*that.parent.$('#imgLogo').load(function() {
+                                alert('image is loaded 1');
+                                that.parent.getImgData(1);
+                          });*/
                     if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ 
-                        that.parent.getImgData();
+                        setTimeout(
+                        function() 
+                        {
+                          that.parent.getImgData();
+                        }, 5000);
+           
                     }
                     that.image.append('<img style="display:none" src="' + that.chart.getImageURI() + '" id="img_download"/>');
                   });
