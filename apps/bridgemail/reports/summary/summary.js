@@ -65,6 +65,7 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 this.options.app.showLoading(false,this.$el.find('.links-container'));
                  /*-----Remove loading------*/
                     this.options.app.removeSpinner(this.$el);
+                   
                    /*------------*/
                    if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
                       

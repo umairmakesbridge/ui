@@ -23,21 +23,18 @@ function (template,chart,contactsView,jsPDF) {
                  this.active_ws = "";
                  this.trackId = this.options.trackId || 0;
                  this.botId = this.options.botId || 0;
+                 this.completeImageLoad1 = false;
+                 this.completeImageLoad2 = false;
+                 this.chartload =false;
                  this.data = [];
                  this.render();
             },
             render: function () {
                 var that = this;
                 this.$el.html(this.template(this.model.toJSON()));
-                if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ 
-                this.options.app.showLoading("Loading Graph...",this.$("#chart"));
-                this.$('#imgLogo').load(_.bind(function() {
-                               this.loadChart();
-                          },this));
-                 }else{
-                     this.loadChart();
-                 }
-
+                
+                this.loadChart();
+                
                 this.$el.find('.chart-pending-views').on('click',function(ev){
                    that.pendingViews(ev);
                    return false;
@@ -47,7 +44,21 @@ function (template,chart,contactsView,jsPDF) {
                    return false;
                 })
                 
+                 if(/^((?!chrome).)*safari/i.test(navigator.userAgent)){ // check if browser is safari
+                    this.$('#imgLogo').load(function() { that.completeImageLoad1=true;});
+                    this.$('#imgCon').load(function() {that.completeImageLoad2=true;});
+                    this.checkLoadCompleted();
+                }
             },
+            checkLoadCompleted : function (){
+                    if(this.completeImageLoad1 && this.completeImageLoad2 && this.chartload ){
+                           this.getImgData();
+                    }
+                   else{
+                            setTimeout(_.bind(this.checkLoadCompleted,this),200)
+                    }
+            },
+            
             loadChart:function(){
 
                     this.chartPage = new chart({ws:this.$el.parents(".ws-content.active"),url:this.$el.find(".download"),app:this.options.app,campNum:this.campNum,page:this,legend:{"true":true},chartArea:{width:"90%",height:"90%"}});
@@ -170,10 +181,8 @@ function (template,chart,contactsView,jsPDF) {
                 doc.save('datauri');  
                           
             },
-            
             getImgData:function() {
                  var that = this;
-                
                 require(['reports/summary/collections/links'],function(Links){
                     /*
                    * that.$el.find(".div_pdf").remove();
@@ -213,8 +222,7 @@ function (template,chart,contactsView,jsPDF) {
                     */
                    
                    //  that.$el.find(".div_pdf").remove();
-                               
-                               
+                     
                     var doc =  new jsPDF( );
                    var active_ws = that.$el.parents(".ws-content");
                   var name =  active_ws.find("#workspace-header")
@@ -320,13 +328,23 @@ function (template,chart,contactsView,jsPDF) {
                             that.$('.download').html('download');
                             that.$('.download-safari').show();
                                that.$('.download-safari').click(function(event){
-                                     window.open(retunVal,'_blank'); 
+                                     window.open(retunVal,'_blank');
+                                      
                                });
                                    
                         }else{
                             doc.save(name + '.pdf');  
                         }
-                   
+                      
+                      /*var element = document.getElementById('iframe-pdfgraph');
+                        
+                       document.getElementById("iframe-pdfgraph").addEventListener("click", function( event ) {
+                        // display the current click count inside the clicked div
+                        event.target.innerHTML = 'hi';
+                      }, false);
+                      var event = new CustomEvent("click", element);
+                      document.dispatchEvent(event)*/
+                      //open.window(retunVal,'_blank');
                     }});
                     
                      //that.$el.append("<div style='display:none' id='links'></div>");
