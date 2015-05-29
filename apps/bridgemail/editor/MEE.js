@@ -4108,6 +4108,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         if (!IsStyleActivated) {
                                                                                                                         
                                                             $(this).addClass("hover");
+                                                            $(this).parents(".csHaveData").addClass("hoverParent");
                                                             $(this).prepend(myobject);
                                                             $(this).parents(".csHaveData").removeClass("hover");
                                                             $(this).find(".editformpanel,.edit-form").show();
@@ -4118,7 +4119,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             //Assign COPY functionality here
                                                             InitializeCopyButtonOnElement($(this).find(".topHandlers"));                                                                                                                                                                                }
                                                     },
-                                                    function (e) {                                                      
+                                                    function (e) {     
+                                                        $(this).parents(".csHaveData").removeClass("hoverParent");
                                                         $(this).find(".topHandlers").remove();
                                                         $(this).find(".editformpanel").hide();
                                                         $(this).removeClass("hover");

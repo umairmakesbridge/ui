@@ -2149,3 +2149,6 @@ i.icon{
     -moz-box-shadow: 0 1px 3px #ccc;
     box-shadow: 0 1px 3px #ccc;
 }
+.hoverParent{
+    z-index: 1000 !important;
+}
