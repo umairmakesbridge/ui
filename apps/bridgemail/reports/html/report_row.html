@@ -1,0 +1,53 @@
+<div class="icon <%- rIcon %>"></div>
+
+<div class="filt_cont">
+    <div class="temp-filters clearfix" id="contacts_count">
+        <!--<input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />-->
+        <h2><strong class="badge total-camp-count">0</strong> <%- rType.toLowerCase() %> found</h2>
+        <div style=" " class="srt-div">          
+        <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
+        <input type="text" id="daterange" placeholder="Select date" />
+        <a style="" id="clearcal" class="close-icon"></a>
+      </div>    
+        <div class="input-append search listsearch"></div>      
+        </div>
+    </div>
+    <div class="template-container">
+        <div class="target-listing copy_camp" id="copy-camp-listing">
+       <div class="col1 ">
+
+        <div class="template-container" style="min-height: 400px">
+          <div class="camp_listing camp_reports">      
+          </div>
+        </div>
+        <!-- template-container  --> 
+      </div>
+
+
+      <div class="col2 col-cstats">
+        <div class="cstats"> 
+            <div class="mask start-message"><div class="init-message">Add <%- rType %> to see graph</div></div>  
+            
+          
+          <div class="chart campaign-chart">
+
+          </div>          
+
+            <div class="clearfix"></div>
+        </div>
+      </div>
+        </div>
+      </div>
+</div>    
+
+<div class="btm-bar ">
+    <div class="filter_type">
+        <span class=""><%- rType %></span>
+    </div>
+    <a class="icon delete showtooltip" title="Remove <%- rType %>"></a>                
+</div> 
+
+
+
+
+

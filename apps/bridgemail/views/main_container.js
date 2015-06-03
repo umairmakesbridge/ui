@@ -128,6 +128,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .bounced-email': 'bouncedEmail',
                     'click .linkfilters': 'linkfilters',
                     'click .custom-reports': 'customReprots',
+                    'click .report-flow':'reportFlow',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -635,7 +636,10 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Workflows', sub_title: 'Listing', url: 'workflow/workflows', workspace_id: 'workflows', 'addAction': true, tab_icon: 'workflowlisting'});
                 },
                 customReprots: function(){
-                    this.addWorkSpace({type: '', title: 'Custom Reports', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'customreports', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Custom Charts', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'reports', noTags: true});
+                },
+                reportFlow: function(){
+                    this.addWorkSpace({type: '', title: 'Custom Report', sub_title: 'Analytics', url: 'reports/reportflow', workspace_id: 'reportflow', 'addAction': false, tab_icon: 'customreports', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});

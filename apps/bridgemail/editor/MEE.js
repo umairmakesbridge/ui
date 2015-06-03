@@ -8,6 +8,7 @@
  * * Section7 - Editor Functions
  * * Section8 - Landing page Forms
  ****/
+
 define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery-ui', 'mee-helper', 'mincolors','bms-remote'],
         function ($, Backbone, _, template) {
             'use strict';
@@ -43,19 +44,19 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         },
                         {
                             "type": "spacer5",
-                            "html": "<div style='height:5px' class='spacer-ele'></div>"
+                            "html": '<div style=\'height:5px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="5">&nbsp;</td></tr></table></div>'
                         },
                         {
                             "type": "spacer10",
-                            "html": "<div style='height:10px' class='spacer-ele'></div>"
+                            "html": '<div style=\'height:10px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="10">&nbsp;</td></tr></table></div>'
                         },
                         {
                             "type": "spacer15",
-                            "html": "<div style='height:15px;' class='spacer-ele'></div>"
+                            "html": '<div style=\'height:15px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="15">&nbsp;</td></tr></table></div>'
                         },
                         {
                             "type": "spacer20",
-                            "html": "<div style='height:20px;' class='spacer-ele'> </div>"
+                            "html": '<div style=\'height:20px\' class=\'spacer-ele\'><table class="fullCenter" align="center" style="border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td style="font-size: 1px; line-height: 1px;" height="20">&nbsp;</td></tr></table></div>'
                         },
                         {
                             "type": "oneColumnContainer",
@@ -2278,7 +2279,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     // htmlToPlace.find("img.imageHandlingClass").resizable({
 
                                     meeIframeWindow.$(htmlToPlace.find(".resizableImage")).resizable({
-                                        aspectRatio: true,
+                                        aspectRatio: false,
                                         start:function(event,ui){
                                             $(this).find(".resizeable-tooltip").remove();
                                             $(this).append("<div class='resizeable-tooltip'></div>")
@@ -3821,7 +3822,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
                                         if (meeIframeWindow.$(element.find(".resizableImage")).resizable) {
                                             meeIframeWindow.$(element.find(".resizableImage")).resizable({
-                                                aspectRatio: true,
+                                                aspectRatio: false,
                                                 start:function(event,ui){
                                                     $(this).find(".resizeable-tooltip").remove();
                                                     $(this).append("<div class='resizeable-tooltip'></div>")
