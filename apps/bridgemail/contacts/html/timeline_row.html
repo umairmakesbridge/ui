@@ -36,7 +36,7 @@
     <p><%- this.app.decodeHTML(model.get("articleTitle")) %></p>
     </div>
 <%  } else if(type=="CS" || type=="OP" || type=="CK" || type=="CT" || ( type=="WV" && typeof(model.get("campaignType"))!=="undefined"  ) ) { %>
-    <% if(type=="CS") {%>
+    <% if(type=="CS" && !this.future) {%>
     <div class="meter  <%- this.getMeter() %>">
         <span class="open showtooltip" title="Opened"></span>
         <span class="click showtooltip" title="Clicked"></span>

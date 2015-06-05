@@ -29,7 +29,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                  */
                 initialize: function() {
                     this.sub_fields = null;
-                    this.current_ws = null;
+                    this.current_ws = null;                    
                     this.template = _.template(template);
                     this.render();
                 },
@@ -37,13 +37,15 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                  * Render view on page.
                  */
                 render: function() {
-                    this.app = this.options.app;
-                    this.$el.html(this.template({}));      
+                    this.app = this.options.app;                    
                
                     if (this.options.params && this.options.params.sub_id) {
                         this.sub_id = this.options.params.sub_id;
                         this.sub_name = this.options.params.sub_name;
+                        this.editable = this.options.params.editable;
+                        this.email = this.options.params.email;
                     }
+                    this.$el.html(this.template({}));      
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.initControls();
                     this.loadData();
@@ -55,19 +57,23 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                 init: function() {
                     this.current_ws = this.$el.parents(".ws-content");
                     this.tagDiv = this.current_ws.find("#campaign_tags");
+                    this.campHeader = this.current_ws.find('.camp_header');
                     this.tagDiv.show();
-                    
+                    if(this.editable==false){
+                        this.campHeader.addClass("not-editable");
+                    }
                     var editIconSub = $('<a class="icon edit"></a>');
                     var deleteIconSub = $('<a class="icon delete"></a>');
                     var action_icon = $('<div class="pointy"></div>")');
                     action_icon.append(editIconSub);
                     //action_icon.append(deleteIconSub);
-                    this.current_ws.find(".edited  h2").append(action_icon);
+                    if(this.editable){
+                        this.current_ws.find(".edited  h2").append(action_icon);
 
-                    editIconSub.click(_.bind(function() {
-                        this.editProfile();
-                    }, this));
-
+                        editIconSub.click(_.bind(function() {
+                            this.editProfile();
+                        }, this));
+                    }
                     this.loadActivityTimeLine();
 
                 },
@@ -90,7 +96,13 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     var bms_token = this.app.get('bms_token');
                     //Load subscriber details, fields and tags
                     this.app.showLoading("Loading Contact Details...", this.$el);
-                    var URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getSubscriber";
+                    var URL = "";
+                    if(this.editable){
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getSubscriber";
+                    }
+                    else{
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.email;
+                    }
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
                         _this.app.showLoading(false, _this.$el);
                         var _json = jQuery.parseJSON(xhr.responseText);
@@ -120,8 +132,8 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                             _this.$('.suppress-sub').html('<i class="icon supress-w disabled-btn"></i>');
                             _this.$('.suppress-sub').attr('data-original-title','Contact already suppressed');
                             _this.$('.suppress-sub').removeClass('suppress-sub');
-                            _this.$el.parents('body').find('.ws-content.active .camp_header').addClass('orange-head');
-                            _this.$el.parents('body').find('.ws-content.active .camp_header .supress-w').show();
+                            _this.campHeader.addClass('orange-head');
+                            _this.campHeader.find('.supress-w').show();
                         }
                         else{
                             _this.$('.suppress-sub').parent().show();
@@ -129,9 +141,20 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         
                         _this.showTags();
                         _this.showFields();
+                        _this.sub_id = _json.subNum;
+                        if(!this.editable){
+                            _this.getActiviites();
+                        }
                     })
-
-                    //Loading subscriber activities like last seen, visists and actions 
+                    
+                    if(this.editable){
+                        this.getActiviites();
+                    }
+                    
+                },
+                getActiviites: function(){
+                  //Loading subscriber activities like last seen, visists and actions 
+                    var _this = this;
                     this.app.showLoading("States..", this.$(".sub-stats"));
                     URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getActivityStats";
                     jQuery.getJSON(URL, function(tsv, state, xhr) {
@@ -190,7 +213,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         $.each(_json, function(key, value) {
                             _this.$("." + key).html(value);
                         })
-                    })
+                    })  
                 },
                 /**
                  * Show tags of view called when data is fetched.
@@ -200,7 +223,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     this.tagDiv.tags({app: this.app,
                         url: '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token'),
                         params: {type: 'tags', subNum: this.sub_id, tags: ''}
-                        , showAddButton: true,
+                        , showAddButton: this.editable,
                         tempOpt: true,
                         tags: tags,
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allSubscriberTags"
@@ -239,7 +262,9 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     _this.$(".topinfo").children().remove();
                     var changeFieldsBtn = $('<a class="settingbtn"></a>');
                     changeFieldsBtn.click(_.bind(this.editProfile, this));
-                    _this.$(".topinfo").append(changeFieldsBtn);
+                    if(this.editable){
+                        _this.$(".topinfo").append(changeFieldsBtn);
+                    }
                     /*Contact Name on Header*/
                     var workspaceTitle = _this.sub_fields["firstName"] + " " + _this.sub_fields["lastName"];
                     if (_this.sub_fields["firstName"] !== "" || _this.sub_fields["lastName"] !== "")
@@ -309,15 +334,18 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     var _this = this;
                     var dialog_width = 1000;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var btn_prp = {title: 'Edit Profile',
+                    var btn_prp = {title: this.editable?'Edit Profile':'View Profile',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'account',
-                        bodyCss: {"min-height": dialog_height + "px"},
-                        buttons: {saveBtn: {text: 'Update', btnicon: 'update'}}
+                        bodyCss: {"min-height": dialog_height + "px"}
+                        
                     }
-                    if (this.sub_fields["conLeadId"]) {
-                        btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
+                    if(this.editable){
+                        btn_prp['buttons']= {saveBtn: {text: 'Update', btnicon: 'update'}};
+                        if (this.sub_fields["conLeadId"]) {
+                            btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
+                        }
                     }
                     var dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", dialog.getBody());
@@ -338,12 +366,15 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     var _this = this;
                     var dialog_width = 1000;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var btn_prp = {title: 'Manage Lists',
+                    var btn_prp = {title: this.editable?'Manage Lists':"Lists",
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10%"},
                         headerEditable: false,
                         headerIcon: 'mlist2',
-                        bodyCss: {"min-height": "448px"},
-                        buttons: {saveBtn: {text: 'Save', btnicon: 'save'}}
+                        bodyCss: {"min-height": "448px"}
+                        
+                    }
+                    if(this.editable){
+                        btn_prp["buttons"] = {saveBtn: {text: 'Save', btnicon: 'save'}}
                     }
 
                     var dialog = this.app.showDialog(btn_prp);

@@ -733,6 +733,9 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.$("#html_code").click();
                         this.$("textarea#handcodedhtml").val(this.app.decodeHTML(this.states.step2.htmlText, true));
                     }
+                    else if(this.campobjData.editorType == ""){
+                        this.$("#use_template").click();
+                    }
 
                     var _height = $(window).height() - 431;
                     var _width = this.$el.width() - 24;

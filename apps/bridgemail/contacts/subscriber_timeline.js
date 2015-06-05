@@ -197,7 +197,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                         }
                        this.app.showLoading(false,this.$el); 
                        for(var s=this.offsetFuture;s<collection.length;s++){
-                            var timelineView = new TimeLineRowView({ model: collection.at(s),sub:this });                                                            
+                            var timelineView = new TimeLineRowView({ model: collection.at(s),sub:this,future:true });                                                            
                             var model_date = this.getMonthYear(collection.at(s));
                             if(this.monthYear !==model_date){
                                 this.monthYear = model_date;

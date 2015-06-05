@@ -19,7 +19,8 @@ function (template,jqueryui,addbox) {
             */
             initialize: function () {
                     this.template = _.template(template);				
-                    this.subscriber = this.options.sub
+                    this.subscriber = this.options.sub;
+                    this.editable = this.sub.editable;
                     this.app = this.subscriber.app;
                     this.render();
             },
@@ -40,7 +41,12 @@ function (template,jqueryui,addbox) {
             initControls:function(){
                 this.$( ".basic-field-accordion" ).accordion({ active: 0, collapsible: false,heightStyle: "content"});
                 this.$( ".custom-field-accordion" ).accordion({ active: 0, collapsible: true,heightStyle: "content"});
-                this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
+                if(this.editable){
+                    this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
+                }
+                else{
+                    this.$("input").prop("readonly",true);
+                }
             },
             /**
              * Create fields and Append dialog view

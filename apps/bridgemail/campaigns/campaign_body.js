@@ -117,6 +117,9 @@ function (template,editorView) {
                     this.$("#html_code").click();
                     this.$("#handcodedhtml").val(this.app.decodeHTML(this.parent.htmlText,true));
                 }
+                else if(this.campobjData.editorType==""){
+                    this.$("#use_template").click();
+                }
                 
                 
             },

@@ -151,7 +151,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                           $("body").css("overflow-y","hidden");
                         },
                         hide:function(){
-                            if(this.app.get("newWin")){
+                            if(this.app.get("newWin") && this.app.get("workId")=="camppreview"){
                                 window.close();
                                 return;
                             }

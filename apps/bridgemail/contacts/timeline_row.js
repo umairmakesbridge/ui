@@ -53,7 +53,8 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                  */
                 initialize: function () {
                     this.template = _.template(template);
-                    this.sub = this.options.sub
+                    this.sub = this.options.sub;
+                    this.future = this.options.future;
                     this.app = this.sub.app;
                     this.render();
                     //this.model.on('change',this.renderRow,this);

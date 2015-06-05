@@ -96,11 +96,9 @@ function (template) {
               previewIconMessage.click(_.bind(this.previewCampaign,this));  
             },
            loadMessageHTML:function(){
-               if(this.messagebody_page){
-                   if(this.htmlText || this.plainText){
+               if(this.messagebody_page){                   
                     this.$("#accordion_messagebody").accordion( "option", "active", 0 );
-                    this.messagebody_page.populateBody();
-                   }
+                    this.messagebody_page.populateBody();                   
                }
                else{
                   setTimeout(_.bind(this.loadMessageHTML,this),200); 
