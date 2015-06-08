@@ -172,8 +172,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     else if (this.status == "P")
                         return ["Pending", "pclr6"];
                 },
-                showTags: function() {
-                    
+                showTags: function() {                    
                     var tags = "";
                     if (typeof this.model != "undefined")
                         tags = this.model.get('tags');
@@ -271,15 +270,16 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                             that.tags = that.tags + checksum + ",";
                         }
                     });
-                    var isRecur = this.$el.find("#ddlIsRecur").val();
-                    var recurType = this.$el.find("#ddlRecurType").val();
+                    var isRecur = this.model.get('isRecur');//this.$el.find("#ddlIsRecur").val();
+                    var recurType = this.model.get('recurPeriod');//this.$el.find("#ddlRecurType").val();
                     //console.log(this.$el.find("#ddlendless").val());
-                    if (this.$el.find("#ddlendless").val() == "1") {
+                   /* if (this.$el.find("#ddlendless").val() == "1") {
                         var recurTimes = this.$el.find("#txtRecurTimes").val();
                     } else {
                         var recurTimes = 0;
-                    }
-                    var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    }*/
+                    var recurTimes = this.model.get('recurTimes');
+                    var recurPeriod = this.model.get('recurTimes');//this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, actionTags: this.tags};
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');

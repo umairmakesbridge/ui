@@ -253,14 +253,15 @@ define(['text!autobots/html/score.html', 'target/views/recipients_target', 'bms-
                          btnPlay.removeClass('saving-blue');
                         return;
                     }
-                     var isRecur = this.$el.find("#ddlIsRecur").val();
-                    var recurType = this.$el.find("#ddlRecurType").val();
-                   if(this.$el.find("#ddlendless").val() == "1"){
+                    var isRecur = this.model.get('isRecur');//this.$el.find("#ddlIsRecur").val();
+                    var recurType = this.model.get('recurType');//this.$el.find("#ddlRecurType").val();
+                   /*if(this.$el.find("#ddlendless").val() == "1"){
                        var recurTimes = this.$el.find("#txtRecurTimes").val();
                     }else{
                         var recurTimes = 0;
-                    }
-                     var recurPeriod = this.$el.find("#txtRecurPeriod").val();
+                    }*/
+                    var recurTimes = this.model.get('recurTimes');
+                    var recurPeriod = this.model.get('recurPeriod');//this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var scoreChange = this.$el.find("#scorechange").val();
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll, scoreChange: scoreChange};

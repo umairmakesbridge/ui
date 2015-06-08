@@ -107,19 +107,24 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 isRecurring: function() {
                     if (this.model.get('isRecur') == "Y") {
                         var label = "";
+                        var add_s = this.model.get('recurPeriod')=="1"?"":"s";
                         switch (this.model.get('recurType')) {
+                            case"H":
+                                label = "Repeat after every " + this.model.get('recurPeriod') + " hour"+add_s;
+                                break;
                             case"M":
-                                label = "Repeat after every " + this.model.get('recurPeriod') + " months";
+                                label = "Repeat after every " + this.model.get('recurPeriod') + " month"+add_s;
                                 break;
                             case"Y":
-                                label = "Repeat after every " + this.model.get('recurPeriod') + " years";
+                                label = "Repeat after every " + this.model.get('recurPeriod') + " year"+add_s;
                                 break;
                             case"D":
-                                label = "Repeat after every " + this.model.get('recurPeriod') + " days";
+                                label = "Repeat after every " + this.model.get('recurPeriod') + " day"+add_s;
                                 break;
                         }
+                        add_s = this.model.get('recurTimes') =="1"?"":"s";
                         if (this.model.get('recurTimes') != "0") {
-                            label = label + " , not more than " + this.model.get('recurTimes') + " time"
+                            label = label + " , not more than " + this.model.get('recurTimes') + " time"+add_s
                         }
                         return "<a class='icon-b reoccure showtooltip' data-original-title='" + label + "'></a>";
                     } else {

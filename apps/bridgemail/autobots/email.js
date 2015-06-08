@@ -79,21 +79,30 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     if (this.options.type == "edit") {
                         this.getTargets();
                         this.loadCampaign();
-                        this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));
-                        this.$el.find("#ddlRecurType").val(this.model.get('recurType'));
-                        this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod'));
+                        this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));                        
+                        this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod')!=="0"?this.model.get('recurPeriod'):"2");
                         if (this.model.get('recurTimes') != "0") {
                             this.$el.find("#ddlendless").val("1");
                             this.$el.find(".show-recur-period").css('display', 'inline-block');
                         }
                         if (this.model.get('isRecur') != "N") {
-                            this.$el.find("#show_other").show();
-                            this.$el.find("#spnhelptext").hide();
-                        } else {
+                            if(this.model.get('recurType')=="N" && this.model.get('recurPeriod') =="0" && this.model.get('recurTimes')=="0"){
+                                this.$el.find("#show_other").hide();
+                                this.$el.find("#spnhelptext").hide();
+                                this.$el.find("#spninstant").show();
+                                this.$el.find("#ddlIsRecur").val("I");
+                            }
+                            else{
+                                this.$el.find("#show_other").show();
+                                this.$el.find("#spnhelptext").hide();
+                                this.$el.find("#spninstant").hide();
+                            }
+                        } else{
                             this.$el.find("#spnhelptext").show();
                             this.$el.find("#show_other").hide();
-                        }
-                        this.$el.find("#ddlRecurType").val(this.model.get('recurType'));
+                            this.$el.find("#spninstant").hide();
+                        }                        
+                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="" || this.model.get('recurType')=="N")?'D':this.model.get('recurType'));
                         this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
                         this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
                     }
@@ -131,9 +140,15 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     if (selected == "N") {
                         this.$el.find("#show_other").hide();
                         this.$el.find("#spnhelptext").show();
-                    } else {
+                        this.$el.find("#spninstant").hide();
+                    } else if(selected=="Y"){
                         this.$el.find("#show_other").show();
                         this.$el.find("#spnhelptext").hide();
+                        this.$el.find("#spninstant").hide();
+                    }else{
+                        this.$el.find("#show_other").hide();
+                        this.$el.find("#spnhelptext").hide();
+                        this.$el.find("#spninstant").show();
                     }
                 },
                 showRecurInput: function(ev) {
@@ -316,6 +331,12 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                     }
                     var recurPeriod = this.$el.find("#txtRecurPeriod").val();
                     var isSweepAll = this.$el.find("#chkIsSweepAll").is(':checked') ? "Y" : "N";
+                    if(isRecur=="I"){
+                        isRecur = "Y";
+                        recurType = "N";
+                        recurTimes = 0;
+                        recurPeriod = 0;
+                    }
                     var post_data = {tags: this.mainTags, botId: this.options.botId, type: "update", isRecur: isRecur, recurType: recurType, recurPeriod: recurPeriod, recurTimes: recurTimes, isSweepAll: isSweepAll};
                     var URL = "/pms/io/trigger/saveAutobotData/?BMS_REQ_TK=" + this.options.app.get('bms_token');
                     var result = false;

@@ -52,6 +52,7 @@
     </div>
 </td>
 <td width="90px"><div>
+        <% if(this.model.get('actionType')!=="SC" && this.model.get('actionType')!=="TG") {%>
         <div class="subscribers"> <strong><span><em>Pending</em>
                      <%if(this.model.get('pendingCount') == "0"){%>
                      <%=this.options.app.addCommas(this.model.get('pendingCount'))%> 
@@ -61,7 +62,9 @@
                   <%}%>
                    
                 </span></strong> </div>
+        <% } %>
     </div>
+    
 </td>
 <td width="132px">
     <div>

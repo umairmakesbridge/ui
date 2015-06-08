@@ -927,9 +927,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             img.css("width", resizableImg.inlineStyle("width"));
                                             img.css("height", resizableImg.inlineStyle("height"));
                                             img.attr("border", 0);
-                                            if (resizableImg.attr("style")) {
-                                                img.attr("isStyleSet", "true");
-                                                img.attr("style", resizableImg.attr("style") + "border:0;margin:0px;padding:0px;");
+                                            var imgStyle = resizableImg.attr("style");
+                                            if (imgStyle) {
+                                                img.attr("isStyleSet", "true");                                                                                                
+                                                if(imgStyle.substring(imgStyle.length-1)==";"){
+                                                    img.attr("style",imgStyle + "border:0;margin:0px;padding:0px;");
+                                                }
+                                                else{
+                                                    img.attr("style",imgStyle + ";border:0;margin:0px;padding:0px;");
+                                                }
                                             }
                                             else {
                                                 img.removeAttr("isStyleSet");

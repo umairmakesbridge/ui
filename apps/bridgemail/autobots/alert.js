@@ -69,20 +69,31 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
 
                     if (this.options.type == "edit") {
                         this.getTargets();
-                        this.$("#ddlIsRecur").val(this.model.get('isRecur'));
-                        this.$("#ddlRecurType").val(this.model.get('recurType'));
-                        this.$("#txtRecurPeriod").val(this.model.get('recurPeriod'));
+                                                                                                
+                        this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));                        
+                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="" || this.model.get('recurType')=="N")?'D':this.model.get('recurType'));
+                        this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod')!=="0"?this.model.get('recurPeriod'):"2");
                         if (this.model.get('recurTimes') != "0") {
                             this.$("#ddlendless").val("1");
                             this.$(".show-recur-period").css('display', 'inline-block');
                         }
                         if (this.model.get('isRecur') != "N") {
-                            this.$("#show_other").show();
-                            this.$("#spnhelptext").hide();
-                        } else {
-                            this.$("#spnhelptext").show();
-                            this.$("#show_other").hide();
-                        }
+                            if(this.model.get('recurType')=="N" && this.model.get('recurPeriod') =="0" && this.model.get('recurTimes')=="0"){
+                                this.$el.find("#show_other").hide();
+                                this.$el.find("#spnhelptext").hide();
+                                this.$el.find("#spninstant").show();
+                                this.$el.find("#ddlIsRecur").val("I");
+                            }
+                            else{
+                                this.$el.find("#show_other").show();
+                                this.$el.find("#spnhelptext").hide();
+                                this.$el.find("#spninstant").hide();
+                            }
+                        } else{
+                            this.$el.find("#spnhelptext").show();
+                            this.$el.find("#show_other").hide();
+                            this.$el.find("#spninstant").hide();
+                        }    
                         this.$("#txtRecurTimes").val(this.model.get('recurTimes'));
                         this.$("#alertemails").val(this.options.app.decodeHTML(this.alertEmails,true));
                         this.$("#alertmessage").val(this.options.app.decodeHTML(this.alertMessage,true));
@@ -130,11 +141,17 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                 changeSetting: function(ev) {
                     var selected = $(ev.target).val();
                     if (selected == "N") {
-                        this.$("#show_other").hide();
-                        this.$("#spnhelptext").show();
-                    } else {
-                        this.$("#show_other").show();
-                        this.$("#spnhelptext").hide();
+                        this.$el.find("#show_other").hide();
+                        this.$el.find("#spnhelptext").show();
+                        this.$el.find("#spninstant").hide();
+                    } else if(selected=="Y"){
+                        this.$el.find("#show_other").show();
+                        this.$el.find("#spnhelptext").hide();
+                        this.$el.find("#spninstant").hide();
+                    }else{
+                        this.$el.find("#show_other").hide();
+                        this.$el.find("#spnhelptext").hide();
+                        this.$el.find("#spninstant").show();
                     }
                 },
                 showRecurInput: function(ev) {
@@ -290,12 +307,18 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     } else {
                         var recurTimes = 0;
                     }
+                    
                     var recurPeriod = this.$("#txtRecurPeriod").val();
                     var isSweepAll = this.$("#chkIsSweepAll").is(':checked') ? "Y" : "N";
                     var alertemails = this.$("#alertemails").val();
                     var alertmessages = this.$("#alertmessage").val();
                     var alertSalesRep = this.$(".alert-salesrep")[0].checked? "Y":"N";
-
+                    if(isRecur=="I"){
+                        isRecur = "Y";
+                        recurType = "N";
+                        recurTimes = 0;
+                        recurPeriod = 0;
+                    }
                     var emails = alertemails.split(',');
                     var that = this;
                     var error = false;
