@@ -94,7 +94,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     },
                     'click .new-campaign': 'createCampaignDialog',
                     'click .new-template': 'createTemplate',
-                    'click .naturetrack-li': 'createNurtureTrack',
+                    'click .naturetrack-li': 'addNurtureTrack',
                     'click .new-graphics': 'createGraphics',
                     'click .view-contacts': 'viewContacts',
                     'click .campaign-listing': 'campaignListing',
@@ -660,7 +660,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', noTags: true ,title: 'Increase Sales Meetings - Follow Up In Under 5 Minutes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                  tip_test_2 : function(){
-                   this.addWorkSpace({type: '', noTags: true ,title: 'New Proven Process', sub_title: '', url: 'tipandtest/tipandtest2', workspace_id: 'tip_test_two', 'addAction': false, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '', noTags: true ,title: 'Are you getting the most from your contact research teams?', sub_title: '', url: 'tipandtest/tipandtest2', workspace_id: 'tip_test_two', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 forms_listings : function(){
                    this.addWorkSpace({type: '', title: 'Signup Forms', sub_title: 'Listing', url: 'forms/formlistings', workspace_id: 'signup-forms', 'addAction': true, tab_icon: 'signupforms'}); 
@@ -841,8 +841,23 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         _this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog
                     });
                 },
-                createNurtureTrack: function () {
-                    var dialog = this.app.showDialog({title: 'New Nurture Track',
+                addNurtureTrack: function () {
+                    this.app.showAddDialog(
+                    {
+                      app: this.app,
+                      heading : 'Create a new Nurture Track',
+                      buttnText: 'Create',
+                      plHolderText : 'Enter nuture track name here',
+                      bgClass :'nurtures-tilt',
+                      emptyError : 'Nurture Track name can\'t be empty',
+                      createURL : '/pms/io/trigger/saveNurtureData/',
+                      fieldKey : "name",
+                      postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
+                      saveCallBack :  _.bind(this.createNurtureTrack,this) // Calling same view for refresh headBadge
+                    });
+                    
+                    
+                  /*  var dialog = this.app.showDialog({title: 'New Nurture Track',
                         css: {"width": "650px", "margin-left": "-325px"},
                         bodyCss: {"min-height": "100px"},
                         headerIcon: 'new_headicon',
@@ -854,8 +869,17 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         dialog.getBody().html(mPage.$el);
                         mPage.$("input").focus();
                         dialog.saveCallBack(_.bind(mPage.createNurtureTrack, mPage));
-                    }, this));
+                    }, this));*/
                 },
+                createNurtureTrack : function(fieldText, _json){
+                                if(this.addCountHeader){
+                                    this.addCountHeader();
+                                    this.fetchTracks();
+                                 }
+                                 var isCreateNT = true;
+                                 this.openNurtureTrack({"id":_json[1],"checksum":_json[2],isCreateNT:isCreateNT,"parent":this,editable:true});
+                             
+                    },
                 createCampaign: function (fieldText, _json) {
                     var camp_id = _json[1];
                     var camp_wsid = _json[2];

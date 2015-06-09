@@ -30,19 +30,20 @@
       this.listFilter = null
       var self = this;
       if(this.options.filterFor==="C"){
-        this.$element.find(".filter-div").append(this.options.toprow)
-        this.$element.find(".filter-div").find(".all-any").t_button()
+       // this.$element.find(".filter-div").append(this.options.toprow)
+       // this.$element.find(".filter-div").find(".all-any").t_button()
         addFilterRow()
       } 
       function addFilterRow(){
-        var  basicFilter = $('<li><a class="btn-green"><span>Basic Filter</span> <i class="filter"></i> </a></li>')
-        var  emailFilter = $('<li><a class="btn-green"><span>Email Activity</span> <i class="email"></i></a></li>')
-        self.listFilter = $('<li><a  class="btn-green"><span>Lists</span> <i class="list"></i> </a></li>')
-        var  formFilter = $('<li><a  class="btn-green"><span>Form Submissions</span> <i class="form"></i></a></li>')
-        var  websiteFilter = $('<li><a  class="btn-green"><span>Website Actions</span> <i class="web"></i></a></li>')
-        var  leadScoreFilter = $('<li><a  class="btn-green"><span>Lead Score</span> <i class="score"></i></a></li>')
+        var  basicFilter = $('<li><a><span class="icon basic"></span> <strong class="filter">Basic Filter</strong> </a></li>')
+        var  emailFilter = $('<li><a><span class="icon emailact"></span> <strong class="filter">Email Activity</strong></a></li>')
+        self.listFilter = $('<li><a><span class="icon list"></span> <strong class="list">Lists</strong></a></li>')
+        var  formFilter = $('<li><a><span   class="icon form"></span> <strong class="form" style="background: rgba(0, 0, 0, 0) none repeat scroll 0 0;">Form Submissions</strong></a></li>')
+        var  websiteFilter = $('<li><a><span class="icon webaction"></span> <strong class="web">Website Actions</strong></a></li>')
+        var  leadScoreFilter = $('<li><a><span class="icon score"></span> <strong class="score" style="color:#fff;">Lead Score</strong></a></li>')
         var add_filter_row = $(self.options.bottomrow_c);
-        
+         
+       
         //adding different filter to add row
         add_filter_row.find("ul").append(basicFilter)
         add_filter_row.find("ul").append(emailFilter)
@@ -51,7 +52,12 @@
         add_filter_row.find("ul").append(websiteFilter)
         add_filter_row.find("ul").append(leadScoreFilter)
         self.$element.find(".filter-div").append(add_filter_row)
-        
+         // Adding any/all options
+          if(self.options.filterFor==="C"){
+            self.$element.find(".filter-div .new_activities").prepend(self.options.toprow)
+            self.$element.find(".filter-div").find("#all-any").chosen({width:'80px', "disable_search": true})
+            //self.$element.find(".filter-div").find(".all-any").t_button()
+         }
         //Attaching events to filter buttons
         basicFilter.on("click",$.proxy(self.addBasicFilter,self))
         emailFilter.on("click",$.proxy(self.addEmailFilter,self))
@@ -66,7 +72,7 @@
     }
   , addBasicFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
-      filter.addClass("filter")
+      filter.addClass("filter darkblue")
       var nofield_change = false;
       var selected_field = "",selected_rule="",selected_formats="", matchValue="",gapValue = "0",list_html='<div class="btn-group sub-date-container" style="display:none"><a class="icon add-list"></a></div>',
           format_display="none",value_display="block",gap_display="none"
@@ -105,8 +111,9 @@
           filter_html +='<div class="btn-group formats-container" style="display:'+format_display+'"><div class="inputcont"><select class="selectbox formats" disabled="disabled"><option>Loading...</option>'                    
           filter_html +='</select></div></div>'
           filter_html += '<div class="btn-group value-container" style="display:'+value_display+'"><div class="inputcont"><input type="text" value="'+matchValue+'" name="" class="matchValue" style="width:240px;" /></div></div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');    
-      filter.find(".filter-cont").append(filter_html)
+          filter.append('<div class="icon basic"></div>');
+          filter.find(".filter-cont").append(filter_html);
+      //filter.find(".filter-cont").append('<span class="timelinelabel">Basic Filter</span>');  
       //Chosen with fields
       filter.find(".fields").chosen({width:'200px'}).change(function(){
           if($(this).val()=="{{SUBSCRIPTION_DATE}}"){
@@ -184,7 +191,7 @@
       
       filter.find(".sub-date-container").on("click",$.proxy(this.showDialog,this))
       
-      this.addActionBar(filter)
+      this.addActionBar(filter,'Basic Filter')
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
       //Loading Rules, basic fields and formats
@@ -297,15 +304,16 @@
     }
   , addEmailFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
-      filter.addClass("email")
-      var selected_camp = "",selected_article = ""
+      filter.addClass("email blue")
+      var selected_camp = "",selected_article = "";
+      var mapValue = ''; // 
       var self = this
       var filter_html = '<div class="row"><label>Filter by</label>'
           filter_html += ' <div class="btn-group "><select data-placeholder="Select Filter by" class="filter-by"><option value="OP">Email Opened</option><option value="CK">Email Clicked</option><option value="NC">Non Clickers</option></select></div>'
           filter_html += '</div>'
           filter_html += '<div class="row">'
             filter_html += '<label>Campaign</label>'            
-            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option></select></div>'  
+            filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'  
             filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
@@ -315,14 +323,14 @@
                   })*/
                   
             filter_html +='</select></div>'
-            filter_html += '<a  class="icon view showtooltip" title="Preview Campaign" ></a></div>'
+            filter_html += '<a  class="icon view showtooltip preview-campaign" title="Preview Campaign" ></a></div>'
             filter_html += '<div class="row nolabel campaign-url-container" style="display:none"><div class="btn-group "><select data-placeholder="Select URL" class="campaign-url"></select></div>'              
           filter_html += '<a  class="icon view showtooltip" title="Preview Link"></a></div>'
           filter_html += '<div class="match row"> Happened in last '
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan emailFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Email Activity</span>');        
+      filter.append('<div class="icon open"></div>');        
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-by").chosen({disable_search: "true",width:"152px"}).change(function(){
           if($(this).val()=="CK" &&  filter.find(".campaign-list").val()!=="-1"){
@@ -342,7 +350,8 @@
           $(this).parent().find(".chosen-container").append('<div class="loading-wheel combo"></div>')
           
           filter.find(".campaign-list").html("<option value='-1'>Loading...</option>").prop("disabled",true).trigger("chosen:updated")
-          var map ={N:"listNormalCampaigns",A:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",T:"listNurtureTracksCampaigns"}
+          var map ={N:"listNormalCampaigns",A:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",T:"listNurtureTracksCampaigns",B:"listAutobotCampaigns"}
+          mapValue = $(this).val();
           var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type="+map[$(this).val()];                                                                                
             jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){
@@ -359,7 +368,12 @@
                             var _checksum = val[0].md5 || val[0]["campNum.checksum"]
                             selected_camp = (params && params["campaignNumber.checksum"]==_checksum)?"selected":""
                             var _value = val[0]["campNum.encode"] || val[0]["campNum"]
-                            select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
+                            if(val[0]["isTextOnly"]){
+                            select_html += '<option value="'+_value+'" '+selected_camp+' data-istext="'+val[0]["isTextOnly"]+'">'+val[0].name+'</option>'
+                            }
+                            else{
+                                select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
+                            }
                         })
                      }
                      
@@ -370,9 +384,25 @@
                      
                 }
             }).fail(function() { console.log( "error campaigns listing" ); });
-          
+            
+           
       })
-      
+       // Preview campaign 
+          filter.find(".preview-campaign").click(function(){
+              var obj = {};
+              obj["currview"] = self;
+              if($( ".campaign-list option:selected" ).val() != -1){
+                  obj['camp_id'] = $( ".campaign-list option:selected" ).val();
+                  obj['camp_name'] = $( ".campaign-list option:selected" ).text();
+                  if(mapValue==="N"){
+                      obj['isTextOnly'] = $( ".campaign-list option:selected" ).data('istext'); 
+                  }else{
+                      obj['isTextOnly'] = "N";
+                  }
+                  self.options.app.previewCCampaign(obj);
+              } 
+              
+          });
       //Campaign List Select box 
       filter.find(".campaign-list").chosen({width:"450px"}).change(function(){
           if($(this).val()!=="-1" &&  filter.find(".filter-by").val()=="CK"){
@@ -411,7 +441,7 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      this.addActionBar(filter)
+      this.addActionBar(filter,'Email Activity');
       this.$element.find(".addfilter").before(filter)                
       this.showTooltips(filter)
       if(params){
@@ -477,7 +507,8 @@
                     });
             filter_html += '</tbody></table>'
           filter_html += '</div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Lists</span>');            
+          
+      filter.append('<div class="icon list"></div>');            
       filter.find(".filter-cont").append(filter_html)
       filter.find(".member-box").chosen({disable_search: "true",width:"200px"}).change(function(){
           $(this).val($(this).val())
@@ -500,7 +531,7 @@
          });
          
       
-      this.addActionBar(filter)      
+      this.addActionBar(filter,'Lists')      
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
       filter.find("#__list_grid").bmsgrid({
@@ -560,7 +591,7 @@
   , addFormFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
       var select_form = ""
-      filter.addClass("form");
+      filter.addClass("form yellow").css('background','#fff');
       var self = this
       var filter_html = '<div class="row"><label>Submitted Form</label>'
           filter_html += ' <div class="btn-group forms-box-container"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div>'
@@ -569,7 +600,7 @@
           filter_html += '<div class="match row"> Happened in last '
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'                  
           filter_html += '</div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Form Submission</span>');                
+      filter.append('<div class="icon form2"></div>');                
       filter.find(".filter-cont").append(filter_html)
       filter.find(".forms-box").chosen({width:"300px"})      
       filter.find(".timespan").chosen({disable_search: "true",width:"80px"}).change(function(){
@@ -577,7 +608,7 @@
           $(this).trigger("chosen:updated")
       })
       
-      this.addActionBar(filter)
+      this.addActionBar(filter,'Form Submission')
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
       if(this.webforms.length===0){
@@ -629,7 +660,7 @@
       filter_html += '<div class="match row days-container" style="display:none;clear:both"> in last '
             filter_html += '<div class="btn-group "><select class="timespan scoreRange">'+this.getTimeSpan(30)+'</select></div> days'                  
       filter_html += '</div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Lead Score</span>');            
+      filter.append('<div class="icon score"></div>');            
       filter.find(".filter-cont").append(filter_html)
       filter.find(".condtion-box").chosen({disable_search: "true",width:"200px"}).change(function(){
           if($(this).val()=="incmore"){
@@ -643,7 +674,7 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      this.addActionBar(filter)
+      this.addActionBar(filter,'Lead Score')
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
       if(params){
@@ -657,7 +688,7 @@
     }
    , addWebsiteFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
-      filter.addClass("web")
+      filter.addClass("web blue")
       var selected_link="",selected_ptype="",selected_linkfilter=""
       // Loading Page url, page types and link filters data
       var URL = ""
@@ -687,7 +718,7 @@
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> days'  
                 filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan webFreq">'+this.getTimeSpan(1)+'</select></div> or more times'  
           filter_html += '</div>'
-      filter.find(".filter-cont").append('<span class="timelinelabel">Website Action</span>')    
+      filter.append('<div class="icon pageview"></div>')    
       filter.find(".filter-cont").append(filter_html)
       filter.find(".filter-box").chosen({disable_search: "true",width:"152px"}).change(function(){
           if($(this).val()=="PU"){
@@ -828,7 +859,7 @@
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
       })
-      this.addActionBar(filter)
+      this.addActionBar(filter,'Website Action')
       this.$element.find(".addfilter").before(filter)
       this.showTooltips(filter)
 
@@ -846,9 +877,11 @@
       
       
     }
-  , addActionBar:function(filterRow){
-      var action =  $('<div class="right-btns"></div>')            
-      var del_btn = $('<a title="Delete Filter" class="btn-red showtooltip"><i class="icon delete "></i></a>')      
+  , addActionBar:function(filterRow,filterType){
+					
+      var action =  $('<div class="btm-bar "><div class="filter_type"><span class="">'+filterType+'</span></div></div>')            
+      var del_btn = $('<a title="Delete Filter" class="icon delete showtooltip"></a>');
+      var edit_btn = $('<a class="icon edit" title="Edit Filter"></a>')
       action.append(del_btn)            
       del_btn.click(function(){
          $(this).parents(".filter-row").remove()
@@ -980,7 +1013,7 @@
       var _target = this.$element
       var self = this
       _target.find(".filter-div ._row").remove()
-      _target.find(".all-any button[rule='"+data.applyRuleCount+"']").click()
+      _target.find("#all-any ").val(data.applyRuleCount).trigger("chosen:updated")
       $.each(data.triggers[0],function(i,v){
           var filter =  v[0] 
           if(filter.type=="P"){
@@ -1007,7 +1040,7 @@
   initFilters:function(){
       var _target = this.$element
       _target.find(".filter-div ._row").remove()
-      _target.find(".all-any button[rule='A']").click()
+      //_target.find("#all-any button[rule='A']").click()
   },
   validate:function(total_rows){
       var isError = false
@@ -1071,7 +1104,7 @@
       var self = this;
       var total_rows = _target.find(".filter-div ._row");
       filters_post["count"] = total_rows.length
-      filters_post["applyRuleCount"]= _target.find(".all-any .btn.active").attr("rule")
+      filters_post["applyRuleCount"]= _target.find("#all-any option:selected").val();
       
       if(this.validate(total_rows)){return false}
       
@@ -1272,9 +1305,9 @@
   $.fn.filters.defaults = {
     
     template: '<div class="timeline"><div class="filter-div"></div></div>'
-  , toprow : '<div class="match filter_start">If <div class="btn-group all-any" data-toggle="buttons-radio"><button class="btn active" rule="A">All</button><button class="btn" rule="1">Any</button></div> of the Filter match below</div>'
-  , bottomrow_c : '<div class="filter-row filter-menu addfilter"><ul></ul></div>'
-  , filterRow : '<div class="filter-row _row"><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
+  , toprow : '<div class="act_row  nobg"> <div class="icon allany"></div> <div class="filt_cont"><em class="text">If </em><select style="width: 80px; margin: 0px 5px;" id="all-any" class=" nosearch selectbox rules"><option value="A">All</option><option value="1">Any</option></select><em class="text"> of the Filter match below</em></div></div>'
+  , bottomrow_c : '<div class="timeline_panel"><div class="new_activities"><div class="addfilter"><div class="addbar"><a class="icon plus"></a><ul></ul></div></div></div></div>'
+  , filterRow : '<div class="filter-row _row act_row "><div class="head-icon"><span class="icon filter"></span></div><div class="filter-cont"></div></div>'
   , filterFor : 'C'
   , title: ''
   , app:null
