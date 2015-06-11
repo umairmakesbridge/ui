@@ -102,7 +102,7 @@ define(['text!autobots/html/email.html', 'target/views/recipients_target', 'bms-
                             this.$el.find("#show_other").hide();
                             this.$el.find("#spninstant").hide();
                         }                        
-                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="" || this.model.get('recurType')=="N")?'D':this.model.get('recurType'));
+                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="")?'D':this.model.get('recurType'));
                         this.$el.find("#txtRecurTimes").val(this.model.get('recurTimes'));
                         this.model.get('isSweepAll') == "Y" ? this.$el.find("#chkIsSweepAll").iCheck('check') : this.$el.find("#chkIsSweepAll").iCheck('uncheck');
                     }

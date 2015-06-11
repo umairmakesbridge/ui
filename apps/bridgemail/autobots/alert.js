@@ -71,7 +71,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                         this.getTargets();
                                                                                                 
                         this.$el.find("#ddlIsRecur").val(this.model.get('isRecur'));                        
-                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="" || this.model.get('recurType')=="N")?'D':this.model.get('recurType'));
+                        this.$el.find("#ddlRecurType").val((this.model.get('recurType')=="")?'D':this.model.get('recurType'));
                         this.$el.find("#txtRecurPeriod").val(this.model.get('recurPeriod')!=="0"?this.model.get('recurPeriod'):"2");
                         if (this.model.get('recurTimes') != "0") {
                             this.$("#ddlendless").val("1");

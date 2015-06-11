@@ -23,7 +23,10 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     'click .taglink': 'tagClick',
                     'click .category-click': 'categoryClick',
                     'click .published':'publishBadgeClick',
-                    'click .draf-badge' : 'draftBadgeClick'
+                    'click .draf-badge' : 'draftBadgeClick',
+                    "click .row-move":"addRowToCol2",
+                    "click .row-remove":"removeRowToCol2",
+                    "click .check-box":'checkUncheck'
                 },
                 /**
                  * Initialize view - backbone
@@ -33,6 +36,10 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     this.sub = this.options.sub
                     this.app = this.sub.app;
                     this.tagTxt = '';
+                    this.showUseButton = this.options.showUse;
+                    this.showRemoveButton = this.options.showRemove;
+                    this.showCheckbox = this.options.showCheckbox;
+                    this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
                 },
@@ -44,7 +51,9 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     this.$el.html(this.template({
                         model: this.model
                     }));
-
+                    if(this.showUseButton){
+                        this.$el.attr("data-checksum",this.model.get("pageId.checksum"))
+                    }
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.initControls();
 
@@ -313,6 +322,34 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                 },
                 draftBadgeClick:function(){
                     this.$el.parents(".ws-content.active").find("[data-search='D']").click();
+                },
+                addRowToCol2:function(){                    
+                    if(this.showUseButton){
+                        this.$el.fadeOut("fast",_.bind(function(){                            
+                            this.sub.addToCol2(this.model);    
+                            this.$el.hide();                            
+                        },this));
+                    }
+                },
+                removeRowToCol2:function(){
+                    if(this.showRemoveButton){
+                        this.$el.fadeOut("fast",_.bind(function(){                        
+                            this.sub.adToCol1(this.model);    
+                            this.$el.remove();
+                        },this));
+                    }
+                },
+                checkUncheck:function(obj){
+                    var addBtn = $.getObj(obj,"a");     
+                    if(addBtn.hasClass("unchecked")){
+                        addBtn.removeClass("unchecked").addClass("checkedadded");               
+                    }
+                    else{
+                         addBtn.removeClass("checkedadded").addClass("unchecked"); 
+                    }                    
+                    if(this.sub.createPageChart){
+                        this.sub.createPageChart();
+                    }
                 }
 
             });

@@ -1,3 +1,71 @@
+<% if(this.showUseButton  || this.showRemoveButton){ %>
+<td width="75%">
+    <div>
+        <div class="name-type">              
+            <h3>                
+                <a style="max-width:355px;overflow-x:hidden;text-overflow: ellipsis"> <%= this.model.get('name')%> </a>                
+                <a class="cstatus pclr3 category-click" > <%= this.model.get('category')%> </a> 
+                <% if(model.get('status')=='P'){ %> 
+                <span class="cstatus published">Published</span> <% }  else {%>
+                <a class="cstatus cflag pclr1 draf-badge">Draft</a>
+                <% } %>
+            </h3>  
+                <div class="tags tagscont">
+                    <%= this.app.showTags(this.model.get('tags'),'Pages') %>
+                </div>
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>                
+        <div class="slide-btns one s-clr2">
+            <span class="icon setting"></span>
+            <div>                 
+               <% if(this.showUseButton) {%>
+                    <a class="icon check clr3 row-move" ><span>Use</span></a>
+                <% } else if(this.showRemoveButton) {%>
+                    <a class="icon remove clr3 row-remove" ><span>Remove</span></a>
+                <% } %>  
+            </div>   
+        </div>
+    </div>
+</td>
+
+<% } else if(this.showCheckbox){ %>
+<td style="padding:0px;width:40px">
+    <a class="checkedadded check-box" id="<%-this.model.get('pageId.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    
+</td>
+<td width="100%">
+    <div>
+        <div class="name-type">              
+            <h3>                
+                <a style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis"> <%= this.model.get('name')%> </a>                
+                <a class="cstatus pclr3 category-click" > <%= this.model.get('category')%> </a> 
+                <% if(model.get('status')=='P'){ %> 
+                <span class="cstatus published">Published</span> <% }  else {%>
+                <a class="cstatus cflag pclr1 draf-badge">Draft</a>
+                <% } %>
+            </h3>  
+                <div class="tags tagscont">
+                    <%= this.app.showTags(this.model.get('tags'),'Pages') %>
+                </div>
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+        </div>        
+         
+    </div>
+</td>
+
+<% }else { %>
+
 <td width="100%">
     <div>
         <div class="name-type">              
@@ -31,11 +99,12 @@
         </div>          
     </div>
 </td>
+
 <td width="132px">
     <div>
         <div style="width:105px" class="time">
             <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
-        </div>
+        </div>        
         <div class="slide-btns <% if(model.get('status')==='D'){ print('six s-clr7') } else { print('five s-clr6') } %>">
             <span class="icon setting"></span>
             <div>                 
@@ -58,5 +127,6 @@
 
     </div>
 </td>
+<% } %>
 
 

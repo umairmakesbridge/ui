@@ -441,7 +441,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     mee.setHTML();                                    
                                 };
                                 
-                                mee.encodeSpecialHTML = function(str){
+                                mee.encodeSpecialHTML = function(str){                                    
                                     str = str.replace(/mee-style=/g, "style=");
                                     str = str.replace(/\‘/g,"&#8216;");
                                     str = str.replace(/\’/g,"&#8217;");
@@ -450,8 +450,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     str = str.replace(/\„/g,"&#8222;");
                                     str = str.replace(/\€/g,"&#8364;");
                                     str = str.replace(/\™/g,"&#8482;");
-                                    str = str.replace(/\–/g,"&#8208;");
-                                    str = str.replace(/\​/,"");
+                                    str = str.replace(/\–/g,"&#8208;");                                    
+                                    str = str.replace(/\​/g,"");
                                     return str;
                                 }
                                 
@@ -1045,6 +1045,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     oHtml.removeClass("mainTable");
                                     oHtml.find("*").removeAttr("data-mce-style");
                                     oHtml.find("p").css("margin","0px");
+                                    oHtml.find("ul,ol").css({"margin-top":"0px","margin-bottom":"0px"});
+                                    oHtml.find("li").css({"margin":"0px"});
                                     
 
                                     // oHtml.find("*").not(".DYNAMIC_VARIATION").removeAttr("class");

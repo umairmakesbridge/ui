@@ -3,22 +3,33 @@
 <div class="filt_cont">
     <div class="temp-filters clearfix" id="contacts_count">
         <!--<input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />-->
-        <h2><strong class="badge total-camp-count">0</strong> <%- rType.toLowerCase() %> found</h2>
+        <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>
         <div style=" " class="srt-div">          
-        <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
-        <input type="text" id="daterange" placeholder="Select date" />
-        <a style="" id="clearcal" class="close-icon"></a>
-      </div>    
+        <!--<div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
+            <input type="text" id="daterange" placeholder="Select date" />
+            <a style="" id="clearcal" class="close-icon"></a>
+        </div>-->    
         <div class="input-append search listsearch"></div>      
         </div>
     </div>
     <div class="template-container">
         <div class="target-listing copy_camp" id="copy-camp-listing">
-       <div class="col1 ">
+       <div class="col1 " >
 
-        <div class="template-container" style="min-height: 400px">
+        <div class="template-container" style="height:420px;background: #fff;margin:0px;overflow-y: auto">
           <div class="camp_listing camp_reports">      
+              <div class="init-message add-msg-report"><a>Click here to add <%- rType %></a></div>
+              <div class="bmsgrid" style="display:none">
+                <div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div>
+                <div style="height: " class="bDiv">
+                    <table cellpadding="0" cellspacing="0" width="100%" id="_grid">
+                        <tbody></tbody>
+                    </table>
+                    <div style="display: none;" class="iDiv"></div>
+                </div>
+            </div>  
           </div>
+          
         </div>
         <!-- template-container  --> 
       </div>
@@ -32,7 +43,18 @@
           <div class="chart campaign-chart">
 
           </div>          
-
+          <% if(this.reportType=="landingpages"){ %>  
+          <div class="stats-panel">                
+                <div>
+                    <ul class="socpc">                        
+                        <li class="clr2" style="width:50%"><span>Submission <strong class="submitCount">0</strong></span></li>                       
+                        <li class="clr4" style="width:50%"><span>Page Views <strong class="viewCount">0</strong></span></li>                        
+                    </ul>
+                    
+                    <div class="clearfix"></div>
+                </div>
+            </div>  
+            <% } %>
             <div class="clearfix"></div>
         </div>
       </div>
@@ -43,8 +65,9 @@
 <div class="btm-bar ">
     <div class="filter_type">
         <span class=""><%- rType %></span>
-    </div>
+    </div> 
     <a class="icon delete showtooltip" title="Remove <%- rType %>"></a>                
+    <a class="icon edit showtooltip" title="Change Selection"></a>
 </div> 
 
 

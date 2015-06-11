@@ -121,6 +121,14 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                             case"D":
                                 label = "Repeat after every " + this.model.get('recurPeriod') + " day"+add_s;
                                 break;
+                            case"N":
+                                if(this.model.get('recurPeriod')=="0" && this.model.get("recurTimes")=="0"){
+                                    label = "Instantly";
+                                }
+                                else{
+                                    label = "Repeat after every " + this.model.get('recurPeriod') + " minute"+add_s;
+                                }
+                                break;
                         }
                         add_s = this.model.get('recurTimes') =="1"?"":"s";
                         if (this.model.get('recurTimes') != "0") {

@@ -19,9 +19,10 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 },
                 init: function () {
                     this.app.removeSpinner(this.$el);
+                    this.addReport('landingpages');
                 },
                 addReport:function(event){
-                    var rType = $.getObj(event, "li").attr("data-type");
+                    var rType = typeof(event)=="object"?$.getObj(event, "li").attr("data-type"):event;
                     var row_view = new reportRow({app:this.app,reportType:rType});
                     row_view.$el.insertBefore(this.$(".addbar"));
                 }
