@@ -9198,7 +9198,7 @@ ul.boxbtnslist li:hover { background:#e6f1f8; }
 }
 
 
-.new_activities {  padding:10px 10px 20px 60px; overflow:hidden; position:relative;}
+.new_activities {  padding:10px 10px 20px 60px; /*overflow:hidden;*/ position:relative;}
 
 .new_activities:before {
     background: none repeat scroll 0 0 #B7D6E3;
@@ -9244,7 +9244,7 @@ box-shadow: 0 2px 2px 0 #C0DEEA;
 
 .new_activities .act_row  .info-p { min-height: 50px; margin:10px 0 0;}
 
-.new_activities .act_row  i.icon { float:left; width:20px; height:20px;  }
+.new_activities .act_row  i.icon { float:left; width:35px; height:35px;  }
 
 
 .new_activities .act_row > .icon { 
@@ -14418,7 +14418,8 @@ a.bayshore-toggle i {
 .timeline_panel {
     background: none repeat scroll 0 0 #e9f5fa;
     border-radius: 2px;
-    overflow: hidden;
+    /*overflow: hidden;*/
+    min-height:480px;
 }
 
 
@@ -14505,8 +14506,8 @@ a.bayshore-toggle i {
     display: block;
     font-size: 13px !important;
 	padding: 5px 12px;
-    height: 25px;
-	  line-height: 25px;
+    height: 29px;
+	  line-height: 29px;
 	  margin: 0 2px;
 	width:200px;
 	float:left;}

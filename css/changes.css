@@ -2352,7 +2352,7 @@ i.contact-name-prev {
 	    height: 63px !important;
 	}
 	#filter_list_grid tr td:last-child {
-	   padding: 1px 0 4px;
+	   padding: 1px 5px 4px;
 	}
 	.step2-lists{
 	     position: absolute;
@@ -4989,7 +4989,31 @@ a.tipntest-toggle:hover i { opacity:0.7;}
   .new-win .workspace{
       margin:5px !important;
   }
+  #__form_grid div.bDiv tr .action a {
+    margin-right: 10px;
+}
+  #__form_grid tr.selected td:last-child div::after {
+    right: 0;
+    top: -22px;
+     height: 63px;
+}
+#__form_grid tr td:last-child {
   
+    padding-right: 4px;
+}
+.filter-cont .errortext{
+    right: 2px; 
+}
+.webforms-container .inputcont{
+    float:none;
+}
+.inputcont.error .template-container {
+    border: 2px solid #fb8080;
+}
+.webforms-container .errortext {
+    right: 0;
+   bottom: 100%;
+}
   /* ================================================Start tan_a_changes.css================================================ */
   h2.header-list {
     padding: 5px 1px 3px 10px;
