@@ -32,7 +32,7 @@ function (template,app) {
                       this.$(".btns").css("padding-top","120px");
                   }
                   else{
-                      if(target.val()=="W" || target.val()=="" ){
+                      if(target.val()=="W" || target.val()=="" || target.val()=="B"){
                          this.$(".act-wf").show();
                       }
                       else{
@@ -62,7 +62,7 @@ function (template,app) {
                       type="";
                   }
                   else {
-                      if(type=="W" || type==""){
+                      if(type=="W" || type=="" || type=="B"){
                         selector = ".all-events input:checked";
                       }
                       else{

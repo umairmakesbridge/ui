@@ -11,7 +11,7 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                 mapping: {
                     "SU": {"name": "Signed Up", "action": "Form", "cssClass": "form"}
                     , "SC": {"name": "Score Changed", "action": "Score", "cssClass": "score"}
-                    , "A": {"name": "Workflow Alert", "action": "Workflow", "cssClass": "alert"}
+                    , "A": {"name": "Alert", "action": "Autobot", "cssClass": "alert"}
                     , "W": {"name": "Workflow Wait", "action": "Workflow", "cssClass": "wait"}
                     , "CS": {"name": "Sent", "action": "Campaign", "cssClass": "sent"}
                     , "OP": {"name": "Opened", "action": "Campaign", "cssClass": "open"}
@@ -26,7 +26,7 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     , "MC": {"name": "Clicked", "action": "Email", "cssClass": "click"}
                     , "MO": {"name": "Opened", "action": "Email", "cssClass": "open"}
                     , "MS": {"name": "Surpressed", "action": "Email", "cssClass": "suppress"}
-                    , "WA": {"name": "Workflow Alert", "action": "Workflow", "cssClass": "alert"}
+                    , "WA": {"name": "Alert", "action": "Workflow", "cssClass": "alert"}
                     , "WM": {"name": "Workflow Trigger Mail", "action": "Workflow", "cssClass": "wtmail"}
                     , "MM": {"name": "Trigger Mail Sent", "action": "Workflow", "cssClass": "wtmail"}
                     , "N": {"name": "Workflow Do Nothing", "action": "Workflow", "cssClass": "alert"}
@@ -127,22 +127,30 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                         if (getTriggerType == "N") {
                             triggerType = {name: "Campaign", cssClass: "camp"};
                         }
-                        else if (getTriggerType == "W") {
+                        else if (getTriggerType == "W" || typeof(m.get("workflowId.encode"))!=="undefined") {
                             triggerType = {name: "Workflow", cssClass: "wf"};
                         }
                         else if (getTriggerType == "A") {
                             triggerType = {name: "Autotrigger", cssClass: ""};
                         }
-                        else if (getTriggerType == "T") {
+                        else if (getTriggerType == "T" || typeof(m.get("trackId.encode"))!=="undefined") {
                             triggerType = {name: "Nurture Track", cssClass: ""};
                         }
-                        else if (getTriggerType == "B") {
+                        else if (getTriggerType == "B" || typeof(m.get("botId.encode"))!=="undefined" ) {
                             triggerType = {name: "Autobot", cssClass: ""};
                         }
                     } else if (typeof (m.get("singleMessageId.encode")) !== "undefined") {
                         triggerType = {name: "Single Message", cssClass: ""};
                     } else if (m.get("activityType") == "MM" || m.get("activityType") == "A") {
-                        triggerType = {name: "Workflow", cssClass: "wf"};
+                        if(typeof(m.get("botId.encode"))!=="undefined"){
+                            triggerType = {name: "Autobot", cssClass: ""};
+                        }
+                        else{
+                            triggerType = {name: "Workflow", cssClass: "wf"};
+                        }
+                    }
+                    else if(typeof(m.get("botId.encode"))!=="undefined"){
+                        triggerType = {name: "Autobot", cssClass: ""};
                     }
                     
 
@@ -170,7 +178,7 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                         this.sub.searchCampaign(model.get("campNum.encode"));
                     } else if(model.get('campaignType') && model.get('campaignType')=="W"){
                         this.sub.searchWorkflow(model.get("workflowId.encode"));
-                    }else if(model.get('campaignType') && model.get('campaignType')=="B"){
+                    }else if( (model.get('campaignType') && model.get('campaignType')=="B") || typeof(model.get("botId.encode"))!=="undefined"){
                         this.sub.searchAutobot(model.get("botId.encode"));
                     }else if(model.get('campaignType') && model.get('campaignType')=="T"){
                         this.sub.searchNurturetrack(model.get("trackId.encode"));
@@ -211,6 +219,9 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                         else if(this.model.get('trackName')){
                             title=this.model.get('trackName');
                         }
+                        else if(this.model.get('botLabel')){
+                            title=this.model.get('botLabel');
+                        }
                         var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Preview of &quot;' + title + '&quot;' ,
@@ -239,6 +250,9 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                 fitlertimelineFilter:function(){                    
                     var m = this.model;
                     var getTriggerType = m.get("campaignType");
+                    if(typeof(m.get("botId.encode"))!=="undefined"){
+                        getTriggerType = "B"
+                    }
                     if(getTriggerType){
                         this.sub.searchAdvance(getTriggerType,"");
                     }

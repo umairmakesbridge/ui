@@ -2239,7 +2239,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Hand Code HTML</b>. Are you sure you want to continue?", target_li);
                         return true;
                     }
-                    else if (selected_li.length && ((this.states.step2.editorType == "W" && _tinyMCE.get('bmseditor_' + this.wp_id).getBody().childNodes.length !== 1) || (this.states.step2.editorType == "H" && this.$("textarea#handcodedhtml").val() != "")) && target_li.attr("id") == "html_editor_mee") {
+                    else if (selected_li.length && ((this.states.step2.editorType == "W" && $(_tinyMCE.get('bmseditor_' + this.wp_id).getBody()).text() !== "") || (this.states.step2.editorType == "H" && this.$("textarea#handcodedhtml").val() != "")) && target_li.attr("id") == "html_editor_mee") {
                         this.showChangeEditorDialog("Your current built Template will be lost, as it is not compatible with <b>Easy Editor</b>. Are you sure you want to continue?", target_li);
                         return true;
                     }
@@ -3967,7 +3967,6 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.RecTargetPage.init();
                         // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
                         this.setRecipients();
-
                         //this.RecListsPage.createRecipients(listArray);
                     }, this));
                     /*var that = this;

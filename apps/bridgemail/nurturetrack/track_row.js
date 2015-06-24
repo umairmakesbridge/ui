@@ -19,7 +19,10 @@ function (template,highlighter) {
               'click .pause-track':'pauseNurtureTrack',
               'click .campaign_stats':'reportNT',
               'click .message-view':'viewNurtureTrack',
-              'click .tag':'tagSearch'
+              'click .tag':'tagSearch',
+              'click .row-move': 'addRowToCol2',
+              'click .row-remove': 'removeRowToCol2',
+              'click .check-box': 'checkUncheck'
             },
             /**
              * Initialize view - backbone
@@ -27,6 +30,10 @@ function (template,highlighter) {
             initialize: function () {
                     this.parent = this.options.sub;      
                     this.app = this.parent.app;
+                    this.showUseButton = this.options.showUse;
+                    this.showRemoveButton = this.options.showRemove;
+                    this.showCheckbox = this.options.showCheckbox;
+                    this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.template = _.template(template);				                                                      
                     this.render();                    
             },
@@ -38,6 +45,9 @@ function (template,highlighter) {
                 this.$el.html(this.template({
                     model: this.model
                 }));                
+                if(this.showUseButton){
+                    this.$el.attr("data-checksum",this.model.get("trackId.checksum"))
+                }
                 this.initControls();  
                
             },
@@ -152,6 +162,34 @@ function (template,highlighter) {
                      $("body").append(view_page.$el);        
                      view_page.init();
                  },this));
+            },
+            addRowToCol2: function () {
+                if (this.showUseButton) {
+                    this.$el.fadeOut("fast", _.bind(function () {
+                        this.parent.addToCol2(this.model);
+                        this.$el.hide();
+                    }, this));
+                }
+            },
+            removeRowToCol2: function () {
+                if (this.showRemoveButton) {
+                    this.$el.fadeOut("fast", _.bind(function () {
+                        this.parent.adToCol1(this.model);
+                        this.$el.remove();
+                    }, this));
+                }
+            },
+            checkUncheck: function (obj) {
+                var addBtn = $.getObj(obj, "a");
+                if (addBtn.hasClass("unchecked")) {
+                    addBtn.removeClass("unchecked").addClass("checkedadded");
+                }
+                else {
+                    addBtn.removeClass("checkedadded").addClass("unchecked");
+                }
+                if (this.parent.createTrackChart) {
+                    this.parent.createTrackChart();
+                }
             }
         });
 });

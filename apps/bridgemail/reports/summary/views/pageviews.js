@@ -83,10 +83,13 @@ function (template,PageView,ViewsCollection) {
               
            },
             capitalizeLetter:function(){
-                
-             return this.options.salestatus.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-                   return letter.toUpperCase();
-              });
+              var saleStatus = "";
+                if(this.options.salestatus){
+                saleStatus = this.options.salestatus.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                     return letter.toUpperCase();
+                });  
+             }
+             return saleStatus;
            },
             liveLoading:function(){
                 var $w = $(window);

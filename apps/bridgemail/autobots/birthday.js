@@ -159,7 +159,6 @@ define(['text!autobots/html/birthday.html', 'target/views/recipients_target', 'b
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
                     var dialog = this.options.app.showDialog(dialog_object);
-
                     this.options.app.showLoading("Loading Targets...", dialog.getBody());
                     require(["target/selecttarget"], _.bind(function(page) {
                         var targetsPage = new page({page: this, dialog: dialog, editable: true});

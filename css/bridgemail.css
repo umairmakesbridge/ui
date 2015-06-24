@@ -818,6 +818,8 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}
 .icon.targetw {background: url("../img/targetw.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .icon.lppage {background: url("../img/landingpgs30.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.icon.campaigndlg {background: url("../img/campaignicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.icon.nurturedlg {background: url("../img/nurture2.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .icon.nsicon {
     background: url("../img/netsuiteicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);
 }
@@ -14445,6 +14447,7 @@ a.bayshore-toggle i {
 .timeline_panel .new_activities .act_row .filter_type span { background-color:#fff; color:#8bbacf;}
 .timeline_panel .new_activities .act_row.darkblue .filter_type span { background-color:#fff; color:#0096ce;}
 .timeline_panel .new_activities .act_row.blue .filter_type span { background-color:#fff; color:#00aff0;}
+.timeline_panel .new_activities .act_row.red .filter_type span { background-color:#fff; color:red;}
 .timeline_panel .new_activities .act_row.yellow .filter_type span { background-color:#fff; color:#f4a534;}
 .timeline_panel .new_activities .act_row.green .filter_type span { background-color:#fff; color:#3ad703;}
 
@@ -14461,6 +14464,7 @@ a.bayshore-toggle i {
 }
 .timeline_panel .new_activities .act_row .filter_type span:before { background-color:#8bbacf ; color:#8bbacf;}
 .timeline_panel .new_activities .act_row.darkblue .filter_type span:before { background-color:#0096ce ; color:#0096ce;}
+.timeline_panel .new_activities .act_row.red .filter_type span:before { background-color:red ; color:red;}
 .timeline_panel .new_activities .act_row.blue .filter_type span:before { background-color:#00aff0; color:#00aff0;}
 .timeline_panel .new_activities .act_row.yellow .filter_type span:before { background-color:#f4a534; color:#f4a534;}
 .timeline_panel .new_activities .act_row.green .filter_type span:before { background-color:#3ad703; color:#3ad703;}
@@ -14608,10 +14612,14 @@ a.bayshore-toggle i {
 .timeline_panel .addbar ul li .icon.basic {background: url("../img/act-basic-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.score {background: url("../img/act-score-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.emailact {background: url("../img/act-emailact-w.png") no-repeat scroll center center;}
+.timeline_panel .addbar ul li .icon.campaign {background: url("../img/campaignicon.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.form {background: url("../img/act-form-w.png") no-repeat scroll center center;}
+.timeline_panel .addbar ul li .icon.form30 {background: url("../img/act-webform_30.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.webaction {background: url("../img/act-webaction-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.list {background: url("../img/act-list-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.tags {background: url("../img/act-tags-w.png") no-repeat scroll center center;}
+.timeline_panel .addbar ul li .icon.tags30 {background: url("../img/act-tag-w.png") no-repeat scroll center center;}
+.timeline_panel .addbar ul li .icon.target {background: url("../img/act-target-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.nurturetrack {background: url("../img/act-nurture-w.png") no-repeat scroll center center;}
 .timeline_panel .addbar ul li .icon.autobot {background: url("../img/act-autobot-w.png") no-repeat scroll center center;}
 
@@ -14746,11 +14754,13 @@ a.bayshore-toggle i {
 
 .new_activities .act_row.gray > .icon { border:2px solid #b7d6e3; } 
 .new_activities .act_row.darkblue > .icon { border:2px solid #0096ce; } 
+.new_activities .act_row.red > .icon { border:2px solid #red; } 
 
 .new_activities .act_row .allany {background: url("../img/act-allany.png") no-repeat scroll center center #fff; }
 .new_activities .act_row .basic {background: url("../img/act-basic.png") no-repeat scroll center center #fff; }
 .new_activities .act_row > .form2 { background: url("../img/act-form2.png") no-repeat scroll center center #fff; }
-.new_activities .act_row > .track { background: url("../img/act-track.png") no-repeat scroll center center #fff; }
-.new_activities .act_row > .autobot { background: url("../img/act-autobot.png") no-repeat scroll center center #fff; }
+.new_activities .act_row > .track { background: url("../img/nurturetrackicon-b.png") no-repeat scroll center center #fff; }
+.new_activities .act_row > .autobot { background: url("../img/autobots.png") no-repeat scroll center center #fff; }
+.new_activities .act_row > .target { background: url("../img/target-red.png") no-repeat scroll center center #fff; }
 .new_activities .act_row > .list { background: url("../img/act-list.png") no-repeat scroll center center #fff; }
 .new_activities .act_row > .tags { background: url("../img/act-tags.png") no-repeat scroll center center #fff; }

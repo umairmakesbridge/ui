@@ -47,7 +47,13 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!acco
                             return false;
                         }
                         this.$(".user-id").html(_json.userId);
-                        this.$(".account-type").html(_json["account-type"]=="O"?"Operator":"Master");
+                        this.$(".account-type").html(_json["accountType"]=="O"?"Operator":"Master");
+                        if(_json["accountType"]=="O"){
+                            this.$("[data-key='managesubaccounts'],[data-key='updatesalesreps']").hide();
+                        }
+                        else{
+                            this.$("[data-key='managesubaccounts'],[data-key='updatesalesreps']").show();
+                        }
                         this.$(".subscription").html(_json["packageType"]);
                         this.$(".account-expiry").html(_json["accountExpiry"]);
                         

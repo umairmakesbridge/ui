@@ -1,3 +1,56 @@
+<% if(this.showUseButton  || this.showRemoveButton){ %>
+<td width="75%">
+    <div>
+        <div class="name-type">
+            <h3>
+                <a class="form-name edit-form showtooltip " title="Click to edit"> <%= this.model.get('name') %> </a>
+            </h3>  
+
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em>Last Edited</em><%= this.getDate() %></span></strong>
+        </div>         
+        <div class="slide-btns one s-clr2">
+            <span class="icon setting"></span>
+            <div>                 
+               <% if(this.showUseButton) {%>
+                    <a class="icon check clr3 row-move" ><span>Use</span></a>
+                <% } else if(this.showRemoveButton) {%>
+                    <a class="icon remove clr3 row-remove" ><span>Remove</span></a>
+                <% } %>  
+            </div>   
+        </div>        
+    </div>
+</td>
+
+<% } else if(this.showCheckbox){ %>
+<td style="padding:0px;width:40px">
+    <a class="checkedadded check-box" id="<%-this.model.get('formId.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    
+</td>
+<td width="">
+    <div>
+        <div class="name-type">
+            <h3>
+                <a class="form-name edit-form showtooltip " title="Click to edit"> <%= this.model.get('name') %> </a>
+            </h3>  
+
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em>Last Edited</em><%= this.getDate() %></span></strong>
+        </div>         
+    </div>
+</td>
+
+<% } else {%>
+
 <td width="">
     <div>
         <div class="name-type">
@@ -27,5 +80,7 @@
 
     </div>
 </td>
+
+<% } %>
 
 

@@ -3335,7 +3335,7 @@ border-color: #0096FF #0096FF transparent transparent;
 /* ================================================Start ui.daterangepicker.css================================================ */
 .ui-daterangepickercontain {
 	position: absolute;
-	z-index: 999;
+	z-index: 9999;
 }
 .ui-daterangepickercontain .ui-daterangepicker {
 	float: left;

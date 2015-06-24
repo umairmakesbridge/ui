@@ -18,7 +18,10 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                     "click .link-form": "linkFormDialog",
                     "click .snippet-form": "snippetFormDialog",
                     "click .copy-form": "copyForm",
-                    "click .delete-form": 'deleteFormDialog'
+                    "click .delete-form": 'deleteFormDialog',
+                    'click .row-move': 'addRowToCol2',
+                    'click .row-remove': 'removeRowToCol2',
+                    'click .check-box': 'checkUncheck'
                 },
                 /**
                  * Initialize view - backbone
@@ -27,6 +30,10 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                     this.template = _.template(template);
                     this.parent = this.options.sub;
                     this.app = this.parent.app;
+                    this.showUseButton = this.options.showUse;
+                    this.showRemoveButton = this.options.showRemove;
+                    this.showCheckbox = this.options.showCheckbox;
+                    this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.render();
                     //this.model.on('change',this.renderRow,this);
                 },
@@ -39,6 +46,9 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                         model: this.model
                     }));
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    if(this.showUseButton){
+                        this.$el.attr("data-checksum",this.model.get("formId.checksum"))
+                    }
                     this.initControls();
 
                 },
@@ -189,6 +199,34 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                                 }
 
                             }, this));
+                },
+                addRowToCol2: function () {
+                    if (this.showUseButton) {
+                        this.$el.fadeOut("fast", _.bind(function () {
+                            this.parent.addToCol2(this.model);
+                            this.$el.hide();
+                        }, this));
+                    }
+                },
+                removeRowToCol2: function () {
+                    if (this.showRemoveButton) {
+                        this.$el.fadeOut("fast", _.bind(function () {
+                            this.parent.adToCol1(this.model);
+                            this.$el.remove();
+                        }, this));
+                    }
+                },
+                checkUncheck: function (obj) {
+                    var addBtn = $.getObj(obj, "a");
+                    if (addBtn.hasClass("unchecked")) {
+                        addBtn.removeClass("unchecked").addClass("checkedadded");
+                    }
+                    else {
+                        addBtn.removeClass("checkedadded").addClass("unchecked");
+                    }
+                    if (this.parent.createSignupFormChart) {
+                        this.parent.createSignupFormChart();
+                    }
                 }
             });
         });

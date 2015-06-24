@@ -312,6 +312,7 @@ function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) 
                 this.botId = botId;
                 this.trackId =this.workflowId=this.campNum = null;                
                 this.activityType = null;               
+                this.fetchTimeLineFuture();
                 this.fetchTimeLine();                 
             },
             searchNurturetrack:function(trackId){

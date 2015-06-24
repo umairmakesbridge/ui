@@ -1,9 +1,84 @@
+<% if(this.showUseButton  || this.showRemoveButton){ %>
+<td width="75%"><div>
+        <div class="name-type">
+            <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>">                    
+                    <%if(this.model.get('isPreset') == "Y"){%>
+                                <%=this.model.get('presetLabel')%>
+                 <%}else{%>
+                <%=this.model.get('label')%>
+                 <%}%>    
+                                
+                </a><%=this.getStatus()%> 
+                
+            </h3>
+            <div class="tags tagscont">
+                <ul>
+                    <% _.each(this.getTags(),function(t){ %>  
+                    <li><a  class="tag showtooltip" data-original-title="Click to view similar bots"><%- t %></a>  </li>
+                    <% })%>
+                </ul>
+            </div>
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em></em><%= this.getPlayedOn() %></span></strong>
+        </div>
+        <div class="slide-btns one s-clr2">
+            <span class="icon setting"></span>
+            <div>                 
+               <% if(this.showUseButton) {%>
+                    <a class="icon check clr3 row-move" ><span>Use</span></a>
+                <% } else if(this.showRemoveButton) {%>
+                    <a class="icon remove clr3 row-remove" ><span>Remove</span></a>
+                <% } %>  
+            </div>   
+        </div>        
+    </div>
+</td>
+<% } else if(this.showCheckbox){ %>
+<td style="padding:0px;width:40px">
+    <a class="checkedadded check-box" id="<%-this.model.get('botId.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    
+</td>
+<td width="100%"><div>
+        <div class="name-type">
+            <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis" data-id="<%=this.model.get('botId.encode')%>">                    
+                    <%if(this.model.get('isPreset') == "Y"){%>
+                                <%=this.model.get('presetLabel')%>
+                 <%}else{%>
+                <%=this.model.get('label')%>
+                 <%}%>    
+                                
+                </a><%=this.getStatus()%> 
+                
+            </h3>
+            <div class="tags tagscont">
+                <ul>
+                    <% _.each(this.getTags(),function(t){ %>  
+                    <li><a  class="tagp"><%- t %></a>  </li>
+                    <% })%>
+                </ul>
+            </div>
+        </div>
+    </div>
+</td>
+<td width="132px">
+    <div>
+        <div style="width:105px" class="time">
+            <strong><span><em></em><%= this.getPlayedOn() %></span></strong>
+        </div>
+               
+    </div>
+</td>
+
+<% } else {%>
 <td width="90px">
     <div class="img" style="max-width:none!important;">
         <%=this.getAutobotImage()%>
     </div>
 </td>
-
 <td width="100%"><div>
         <div class="name-type">
             <h3> <a class="edit-autobot showtooltip" data-original-title="Click to view"  data-id="<%=this.model.get('botId.encode')%>">
@@ -143,3 +218,4 @@
         </div>
     </div>
 </td>
+<% } %>

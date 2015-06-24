@@ -20,7 +20,7 @@ function (template,jqueryui,addbox) {
             initialize: function () {
                     this.template = _.template(template);				
                     this.subscriber = this.options.sub;
-                    this.editable = this.sub.editable;
+                    this.editable = this.subscriber.editable;
                     this.app = this.subscriber.app;
                     this.render();
             },

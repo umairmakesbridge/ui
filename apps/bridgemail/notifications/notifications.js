@@ -100,9 +100,11 @@ define(['text!notifications/html/notifications.html','app', 'notifications/notif
                                      $(that.el).find('h4').find('span').html(that.notificationText+' messages');
                                 }
                                 $(that.el).find('h4').find('.badge').html(objNotifications.unreadCount);
+                                $('.messagesbtn sup').show().html(objNotifications.unreadCount);
                             }else{
                                 $(that.el).find('h4').find('span').html(that.notificationText+' messages');
                                 $(that.el).find('h4').find('.badge').html(objNotifications.total);
+                                $('.messagesbtn sup').hide();
                             }
                             
                             if(data.length == 0){
