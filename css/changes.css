@@ -2349,11 +2349,13 @@ i.contact-name-prev {
 	    display : none !important;
 	}
 	#filter_list_grid tr.selected td:last-child div:after {
-	    height: 63px !important;
+	    height: 68px !important;
+            top: -25px;
 	}
-	#filter_list_grid tr td:last-child {
-	   padding: 1px 5px 4px;
-	}
+	
+        #filter_list_grid tr.selected td:last-child{
+            padding: 0 5px;
+        }
 	.step2-lists{
 	     position: absolute;
 	    top: 28px;
@@ -4997,9 +4999,9 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     top: -22px;
      height: 63px;
 }
-#__form_grid tr td:last-child {
-  
+#__form_grid tr.selected td:last-child {
     padding-right: 4px;
+    
 }
 .filter-cont .errortext{
     right: 2px; 
@@ -8618,6 +8620,12 @@ ul#autobots_search_menu li.active a, ul#autobots_search_menu li a:hover  {   bac
     height: 16px;
     margin: 0 4px 0 -7px !important;
     width: 16px;
+}
+
+#tagslistone ul li i.icon , #tagslisttwo ul li i.icon{
+    float: right;
+    height: 28px;
+    width: 28px;
 }
 /*------
 .s-clr8 {	background-color: #2FA4F6 !important; }
