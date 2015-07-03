@@ -24,11 +24,20 @@ function (template) {
                    
             },
             initialize: function () {
-                this.app = this.options.app;
-                this.parent = this.options.page;
+                if(this.options.app){
+                    this.app = this.options.app;
+                    this.parent = this.options.page;
+                }
+                else{                    
+                    this.parent = this.options.sub;
+                    this.app = this.parent.app;
+                }
                 this.template = _.template(template);
                 this.showUseButton = this.options.showUse;
                 this.showRemoveButton = this.options.showRemove;
+                this.fromReport = this.options.fromReport;
+                this.showCheckbox = this.options.showCheckbox;
+                this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                 this.hidePopulation = this.options.hidePopulation;
                 this.dialogArray = this.options.dialogArray ;
                 this.model.on('change',this.render,this);
@@ -37,7 +46,9 @@ function (template) {
             render: function () {
                 this.$el.html(this.template(this.model.toJSON())); 
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                
+                if(this.showUseButton){
+                    this.$el.attr("data-checksum",this.model.get("filterNumber.checksum"))
+                }
                 if(this.parent.searchText){
                     this.$(".edit-target").highlight($.trim(this.parent.searchText));
                     this.$(".tag").highlight($.trim(this.parent.searchText));
@@ -51,20 +62,20 @@ function (template) {
                 var target_id = $(ev.target).data('id');
                 var bms_token =that.app.get('bms_token');
                  var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+bms_token;
-                   that.options.app.showAlertDetail({heading:'Confirm Deletion',
+                   that.app.showAlertDetail({heading:'Confirm Deletion',
                         detail:"Are you sure you want to delete this target?",                                                
                             callback: _.bind(function(){													
-                                that.options.app.showLoading("Deleting Target...",that.$el);
+                                that.app.showLoading("Deleting Target...",that.$el);
                                 $.post(URL, {type:'delete',filterNumber:target_id})
                                     .done(function(data) {                  
-                                          that.options.app.showLoading(false,that.$el);   
+                                          that.app.showLoading(false,that.$el);   
                                            var _json = jQuery.parseJSON(data);
                                            if(_json[0]!=='err'){
                                                $(ev.target).parents('tr').fadeOut('slow');
                                               
                                              }
                                            else{
-                                                that.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                                                that.app.showAlert(_json[1],$("body"),{fixed:true}); 
                                            }
                                    });
                             },that)},
@@ -73,21 +84,21 @@ function (template) {
                 },
                 refreshTarget:function(ev){
                     if(this.model.get('filtersCount') == "0" || this.model.get('filtersCount') == ""){
-                        this.options.app.showAlert("This Target is empty and can't be refreshed. Please add filters in it.",$("body"),{fixed:true}); 
+                        this.app.showAlert("This Target is empty and can't be refreshed. Please add filters in it.",$("body"),{fixed:true}); 
                         return ;
                     }
                      var that = this;
                      var target_id = this.model.get('filterNumber.encode');
                      var bms_token =that.app.get('bms_token');
                      var URL = "/pms/io/filters/saveTargetInfo/?BMS_REQ_TK="+bms_token;
-                                    that.options.app.showLoading("Refreshing Target...",that.$el);
+                                    that.app.showLoading("Refreshing Target...",that.$el);
                                     $.post(URL, {type:'runPopulation',filterNumber:target_id})
                                         .done(function(data) {                  
-                                              that.options.app.showLoading(false,that.$el);   
+                                              that.app.showLoading(false,that.$el);   
                                                var _json = jQuery.parseJSON(data);
                                                if(_json[0]!=='err'){
                                                    if (_json[1].indexOf("Error") >= 0){
-                                                     that.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                                                     that.app.showAlert(_json[1],$("body"),{fixed:true}); 
                                                     }else{
                                                         that.model.set('status',"S");
                                                         that.render();
@@ -95,7 +106,7 @@ function (template) {
                                                     
                                                 }
                                                else{
-                                                    that.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                                                    that.app.showAlert(_json[1],$("body"),{fixed:true}); 
                                                }
                                    });
                 
@@ -226,9 +237,9 @@ function (template) {
                         if(that.app.checkError(data)){
                             return false;
                         }
-                        var percentDiv ="<div class='pstats left-side' style='display:block'><ul><li class='openers'><strong>"+that.options.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
-                         percentDiv =percentDiv + "<li class='clickers'><strong>"+that.options.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
-                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.options.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
+                        var percentDiv ="<div class='pstats left-side' style='display:block'><ul><li class='openers'><strong>"+that.app.addCommas(data.openers)+"<sup>%</sup></strong><span>Openers</span></li>";
+                         percentDiv =percentDiv + "<li class='clickers'><strong>"+that.app.addCommas(data.clickers)+"<sup>%</sup></strong><span>Clickers</span></li>";
+                         percentDiv =percentDiv + "<li class='visitors'><strong>"+that.app.addCommas(data.pageviewers)+"<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
                          that.showLoadingWheel(false,target);
                      target.parents('.percent_stats').append(percentDiv);
                                            	
@@ -242,7 +253,7 @@ function (template) {
                 var listNum = $(ev.target).data('id');
                 var dialog_width = $(document.documentElement).width()-60;
                 var dialog_height = $(document.documentElement).height()-182;
-                 var dialog = that.options.app.showDialog({
+                 var dialog = that.app.showDialog({
                                   title:dialog_title,
                                   css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
                                   headerEditable:false,
@@ -339,10 +350,22 @@ function (template) {
                         this.render();
                     }
                     else {
-                        this.options.app.showAlert(_json[1],$("body"),{fixed:true}); 
+                        this.app.showAlert(_json[1],$("body"),{fixed:true}); 
                     }
 
                 }, this));
+            },
+            checkUncheck: function (obj) {
+                var addBtn = $.getObj(obj, "a");
+                if (addBtn.hasClass("unchecked")) {
+                    addBtn.removeClass("unchecked").addClass("checkedadded");
+                }
+                else {
+                    addBtn.removeClass("checkedadded").addClass("unchecked");
+                }
+                if (this.parent.createTargetChart) {
+                    this.parent.createTargetChart();
+                }
             }
                 
         });    

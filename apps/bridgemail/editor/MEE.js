@@ -923,8 +923,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var myImage = imageContainer.find(".myImage");
                                         if (img.length) {
                                             img.attr("width", parseInt(resizableImg.inlineStyle("width")));
+                                            if(parseInt(resizableImg.inlineStyle("width"))<100){
+                                                img.addClass("static").removeClass("img");
+                                            }
                                             img.attr("height", parseInt(resizableImg.inlineStyle("height")));
-                                            img.css("width", resizableImg.inlineStyle("width"));
+                                            img.css("width", resizableImg.inlineStyle("width"));                                            
                                             img.css("height", resizableImg.inlineStyle("height"));
                                             img.attr("border", 0);
                                             var imgStyle = resizableImg.attr("style");
@@ -940,7 +943,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             else {
                                                 img.removeAttr("isStyleSet");
                                             }
-                                            img.removeClass("imageHandlingClass resizable clickEvent ui-resizable").addClass("img");
+                                            img.removeClass("imageHandlingClass resizable clickEvent ui-resizable").not(".static").addClass("img");
 
                                             if (img.parent().get(0).tagName == 'a' || img.parent().get(0).tagName == 'A') {
                                                 imageContainer.html(img.parent().outerHTML());

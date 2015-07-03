@@ -84,8 +84,8 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         }, this));                        
                     } else if(this.reportType=="webforms"){
                         this.app.showLoading('Loading...',this.$el);
-                        require(["forms/formlistings_row"], _.bind(function (botRow) {
-                            this.formRow = botRow;
+                        require(["forms/formlistings_row"], _.bind(function (formRow) {
+                            this.formRow = formRow;
                             this.app.showLoading(false,this.$el);
                             if(this.objects.length){
                                 this.loadSignupforms();
@@ -98,6 +98,16 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                             this.app.showLoading(false,this.$el);
                             if(this.objects.length){
                                 this.loadNurtureTracks();
+                            }
+                        }, this));                        
+                    }
+                    else if(this.reportType=="targets"){
+                        this.app.showLoading('Loading...',this.$el);
+                        require(["target/views/recipients_target"], _.bind(function (targetRow) {
+                            this.targetRow = targetRow;
+                            this.app.showLoading(false,this.$el);
+                            if(this.objects.length){
+                                this.loadTargets();
                             }
                         }, this));                        
                     }
@@ -114,7 +124,9 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     } else if(this.reportType=="webforms"){
                         this.openSignupFormsDialog();
                     } else if(this.reportType=="nurturetracks"){
-                        this.openNurtureTracksDialog();
+                         this.openNurtureTracksDialog();
+                    } else if(this.reportType=="targets"){
+                        this.openTargetsDialog();
                     }
                     
                 },
@@ -593,6 +605,66 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                             //this.createCampaignChart();                                                        
                         },this));
                     }
+                },
+                 //////********************* Targets  *****************************************//////
+                loadTargets:function(){
+                   this.app.showLoading("Loading selection...",this.$el);
+                   var targetsNums = this.objects.map(function( index ) {
+                                    return index.id
+                                 } ).join()
+                      var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=list_csv";                                                                   
+                      var post_data = {filterNumber_csv:targetsNums}    
+                      this.states_call =  $.post(URL, post_data).done(_.bind(function (data) {
+                          this.app.showLoading(false,this.$el);
+                          var _json = jQuery.parseJSON(data);                          
+                          _.each(_json.filters[0], function(val) {
+                              this.modelArray.push(new Backbone.Model(val[0]));
+                          },this);
+                          this.createTargets();                            
+                      },this)) 
+                },
+                openTargetsDialog:function(){
+                     var _width = $(document.documentElement).width() - 60;
+                    var _height = $(document.documentElement).height() - 182;
+                    var dialog_object ={title:'Select Targets',
+                        css:{"width":_width+"px","margin-left":-(_width/2)+"px","top": "10px"},
+                        bodyCss:{"min-height":_height+"px"},
+                        saveCall : '',
+                        headerIcon : 'targetw'                        
+                    }                     
+                     dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;                      
+                     var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Targets...",dialog.getBody());                                  
+                    require(["target/select_target"],_.bind(function(page){                                     
+                         var _page = new page({page:this,dialog:dialog,editable:this.editable,dialogHeight:_height-103});
+                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                         dialog.getBody().html(_page.$el);                         
+                         _page.init();
+                         _page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                         this.app.dialogArray[dialogArrayLength-1].saveCall=_.bind(_page.saveCall,_page); // New Dialog
+                         dialog.saveCallBack(_.bind(_page.saveCall,_page));                         
+                    },this));
+                },                
+                createTargets:function(){                    
+                    if(this.modelArray.length){
+                        this.$(".add-msg-report").hide();
+                        this.$(".bmsgrid").show();                        
+                        var _grid = this.$("#_grid tbody");
+                        var _maxWidth = this.$(".col1 .template-container").width()*.5;
+                        _grid.children().remove();
+                        _.each(this.modelArray, function(val, index) {
+                            var targetRow = new this.targetRow({model: val, sub: this,showCheckbox:true,maxWidth:_maxWidth});                            
+                            _grid.append(targetRow.$el);                            
+                        },this);
+                        //this.app.showLoading("Creating Chart...",this.$(".cstats")); 
+                        require(["reports/campaign_line_chart"],_.bind(function(chart){                            
+                            this.chartPage = new chart({page:this,legend:{position:'none'},chartArea:{width:"100%",height:"80%",left:'10%',top:'10%'}});
+                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage.$el.css({"width":"100%","height":"280px"});                                
+                            //this.createCampaignChart();                                                        
+                        },this));
+                    }
+                    this.sub.saveSettings();
                 }
             });
         });
