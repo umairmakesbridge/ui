@@ -166,6 +166,7 @@
       this.result_highlighted = null;
       this.result_single_selected = null;
       this.is_remote =   this.options.is_remote || false;
+      this.is_remote_type = (this.options.is_remote_type) ? this.options.is_remote_type : "";
       this.allow_single_deselect = (this.options.allow_single_deselect != null) && (this.form_field.options[0] != null) && this.form_field.options[0].text === "" ? this.options.allow_single_deselect : false;
       this.disable_search_threshold = this.options.disable_search_threshold || 0;
       this.disable_search = this.options.disable_search || false;
@@ -776,14 +777,39 @@
           offset = 0;
           this.remote_page = 20;
       }
+      
       if(this.options.remote_url){
         var URL = this.options.remote_url + "&offset="+offset;  
+        var remote_type = this.is_remote_type;
         jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){                        
                   var _json = jQuery.parseJSON(xhr.responseText);                                                 
-                  var select_html = ''
+                  var select_html = '';
+                  var arrayList;
+                  if(remote_type==="campaings"){
+                      arrayList = _json.campaigns[0]; 
+                  }else{
+                      arrayList = _json.links[0];
+                  }
+                 
                   _this.search_results_div.find(".loading-li").remove();
-                  $.each(_json.links[0], function(index, val) {            
+                  $.each(arrayList, function(index, val) {  
+                      // Campaign listing
+                    if(remote_type==="campaings"){
+                        var _checksum = val[0]["campNum.checksum"]
+                            var selected_camp = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==_checksum)?"selected":""
+                            if(selected_camp){
+                                    $(_this.form_field).removeAttr("data-selected");
+                                }
+                            var _value = val[0]["campNum.encode"] || val[0]["campNum"]
+                            if(val[0]["isTextOnly"]){
+                            select_html += '<option value="'+_value+'" '+selected_camp+' data-istext="'+val[0]["isTextOnly"]+'">'+val[0].name+'</option>'
+                            }
+                            else{
+                                select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
+                            }
+                    }else{
+                         // links listings
                        selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
                        if(selected_link){
                            $(_this.form_field).removeAttr("data-selected");
@@ -792,6 +818,9 @@
                        var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""
                        select_html += '<option value="'+url+'" '+selected_link+'>'+ (title ? title : url)+'</option>'                      
                        _this.options.page_urls.push({"id":url,"title":title})
+                    }
+                      
+                     
                    })
                    $(_this.form_field).append(select_html);
                    s_top = _this.search_results_div.scrollTop();

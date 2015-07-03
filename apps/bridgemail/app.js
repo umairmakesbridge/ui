@@ -925,7 +925,34 @@ define([
                 currentTab.wscroll = et;
                 tabarray.push(currentTab);
             }
-        }
+        },
+        /*-------------------------------
+         * Common Preview method
+         * -------------------------------*/
+       previewCCampaign: function(obj){
+                            
+                            var dialog_width = $(document.documentElement).width()-60;
+				var dialog_height = $(document.documentElement).height()-182;
+				var dialog = this.showDialog({title:'Campaign Preview of &quot;' + obj.camp_name + '&quot;' ,
+						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+						  headerEditable:false,
+						  headerIcon : 'dlgpreview',
+						  bodyCss:{"min-height":dialog_height+"px"}
+				});	
+				this.showLoading("Loading Campaign HTML...",dialog.getBody());									
+                                var preview_url = "https://"+this.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+obj.camp_id;  
+                                require(["common/templatePreview"],_.bind(function(templatePreview){
+                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this,frameHeight:dialog_height,prevFlag:'C',tempNum:obj.camp_id,isText:obj.isTextOnly}); // isText to Dynamic
+                                 dialog.getBody().append(tmPr.$el);
+                                 this.showLoading(false, tmPr.$el.parent());
+                                 var dialogArrayLength = this.dialogArray.length;
+                                 tmPr.$el.addClass('dialogWrap-'+dialogArrayLength);
+                                 tmPr.init();
+                                 
+                               },this));
+                               
+                               
+       }
     });
 
     return new App();
