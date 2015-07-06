@@ -39,6 +39,7 @@ define(['text!campaigns/html/campaign_row.html', 'jquery.highlight'],
                     this.showUseButton = this.options.showUse;
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
+                    this.showSummaryChart = this.options.showSummaryChart;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.tagTxt = '';
                     this.render();
@@ -54,7 +55,7 @@ define(['text!campaigns/html/campaign_row.html', 'jquery.highlight'],
                     }));
 
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    if(this.showUseButton){
+                    if(this.showUseButton || this.showSummaryChart){
                         this.$el.attr("data-checksum",this.model.get("campNum.checksum"))
                     }
                     this.initControls();

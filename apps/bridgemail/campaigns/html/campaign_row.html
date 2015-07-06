@@ -28,6 +28,51 @@
         </div>        
     </div>
 </td>
+<% } else if(this.showSummaryChart){ %>
+<td style="padding:0px;width:40px">
+    <a class="checkedadded check-box" id="<%-this.model.get('campNum.encode')%>" style="margin:0px;position:relative;height: 255px"><i class="icon check"></i></a>    
+</td>
+<td width="100%">
+    <table cellpading="0" cellspacing="0" width="100%">
+        <tr>
+            <td>
+                 <div>
+                    <div class="name-type">              
+                           <h3>                    
+                            <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:355px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>                    
+                            <a class="cstatus cflag showtooltip <%= this.getFlagClass().flag_class %>" title="Click to view <%= this.getCampStatus().status.toLowerCase() %> campaigns"><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+                            <div class="tags tagscont" id="campaign_tag_camp">
+                                <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
+                            </div>
+                    </div>
+               </div>
+            </td>
+            <td>
+                <% if(this.model.get('status')!== 'D'){ %>
+                <div>
+                    <div class="subscribers">
+                        <strong><span><em>Sent</em><%= this.app.addCommas(this.model.get('sentCount')) %></span></strong>
+                    </div>
+                    <% }%>     
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div style="width:105px" class="time">
+                        <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
+                    </div>
+                </div>    
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div style="height: 150px" id="chart-<%-this.model.get('campNum.checksum')%>">
+                    
+                </div>
+            </td>
+        </tr>
+    </table>
+</td>
 <% } else if(this.showCheckbox){ %>
 <td style="padding:0px;width:40px">
     <a class="checkedadded check-box" id="<%-this.model.get('campNum.encode')%>" style="margin:0px;position:relative"><i class="icon check"></i></a>    

@@ -28,6 +28,7 @@ function (template) {
                this.app = this.options.page.app;   
                this.legend = this.options.legend;
                this.chartArea = this.options.chartArea;
+               this.isStacked = this.options.isStacked?true:false;
             }
             /**
              * Custom init function called after view is completely render in wrokspace.
@@ -43,10 +44,12 @@ function (template) {
                 legend:this.legend,                         
                 chartArea:this.chartArea,    
                 fontSize:12,                
-                bar: { groupWidth: '75%' },
+                colors:['#454F88','#2F93E5','#62ABE6','#0C73C2'],
+                bar: { groupWidth: '50%' },
                 fontName:"'PT Sans',sans-serif",
                 backgroundColor: 'transparent',
-                'backgroundColor.stroke':'#ccc'          
+               'backgroundColor.stroke':'#ccc',
+               isStacked : this.isStacked 
               };
               var formatter = new google.visualization.NumberFormat(
                         {pattern:'#,###'}

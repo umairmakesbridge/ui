@@ -7,7 +7,10 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                 events: {                    
                    'click .delete':'removeReport',                   
                    'click .add-msg-report':'openSelectionDialog',
-                   'click .edit':'openSelectionDialog'
+                   'click .edit':'openSelectionDialog',
+                   "keyup #daterange":'showDatePicker',
+                   "click #clearcal":'hideDatePicker',
+                  "click .calendericon":'showDatePickerFromClick'
                 },
                 initialize: function () {
                     this.mapping = {campaigns:{label:'Campaigns',colorClass:'darkblue',iconClass:'open'},
@@ -21,7 +24,9 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     this.sub = this.options.sub;            
                     this.app = this.sub.app;   
                     this.objects = this.options.objects? this.options.objects:[];
-                    this.modelArray = [];                                        
+                    this.modelArray = [];           
+                    this.fromDate =null;
+                    this.toDate =null;
                     this.reportType = this.options.reportType;
                     this.template = _.template(template);                                        
                     this.render();
@@ -46,9 +51,55 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         iconsource: 'campaigns'
                  });	                 
                  this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});                 
+                 this.dateRangeControl = this.$('#daterange').daterangepicker();                
+                 this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange,this));
+                 this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi,this));
                  this.loadRows();
                  
+                },/*---------- Calender functions---------------*/
+                showDatePicker:function(){
+                    this.$('#clearcal').show();
+                    return false;
                 },
+                hideDatePicker:function(){
+                    this.$('#clearcal').hide();
+                    this.fromDate = "";
+                    this.toDate = "";
+                    this.$('#daterange').val('');
+                    this.showHideChartArea(false);
+                    this.loadCampaigns();
+                },
+                showDatePickerFromClick:function(){
+                    this.$('#daterange').click();
+                    return false;
+                },
+                setDateRange:function() {
+                   var val = this.$("#daterange").val(); 
+                   if($.trim(val)){      
+                        this.$('#clearcal').show();
+                        var _dateRange = val.split("-");
+                        var toDate ="",fromDate="";                  
+                        if(_dateRange[0]){
+                            fromDate = moment($.trim(_dateRange[0]),'M/D/YYYY');
+                        }   
+                        if($.trim(_dateRange[1])){
+                            toDate = moment($.trim(_dateRange[1]),'M/D/YYYY');
+                        }                    
+                        if(fromDate){
+                            this.fromDate = fromDate.format("MM-DD-YYYY");
+                        }
+                        if(toDate){
+                            this.toDate = toDate.format("MM-DD-YYYY");
+                        }   
+                        this.loadCampaignsSummary();
+                   }
+                },
+                setDateRangeLi:function(obj){
+                    var target = $.getObj(obj,"li");
+                    if(!target.hasClass("ui-daterangepicker-dateRange")){
+                        this.setDateRange();
+                    }
+                },/*---------- End Calender functions---------------*/
                 removeReport:function(){
                     this.$el.remove();
                     this.sub.removeMode(this.orderNo);
@@ -240,7 +291,8 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                                     return index.id
                                  } ).join()
                       var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=list_csv";                                                                   
-                      var post_data = {campNum_csv:campNums}    
+                      var post_data = {campNum_csv:campNums};
+                      this.modelArray = [];
                       this.states_call =  $.post(URL, post_data).done(_.bind(function (data) {
                           this.app.showLoading(false,this.$el);
                           var _json = jQuery.parseJSON(data);                          
@@ -353,6 +405,67 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     }                    
                     this.sub.saveSettings();
                     
+                },
+                loadCampaignsSummary:function(){
+                    if(this.modelArray.length){
+                        this.$(".add-msg-report").hide();
+                        this.$(".bmsgrid").show();
+                        this.showHideChartArea(true);
+                        var _grid = this.$("#_grid tbody");                        
+                        _grid.children().remove();
+                        _.each(this.modelArray, function(val, index) {
+                            var campRow = new this.campRow({model: val, sub: this,showSummaryChart:true});                            
+                            this.app.showLoading("Loading Summary Chart...",this.$("#chart-"+val.get("campNum.checksum")));
+                            _grid.append(campRow.$el);                            
+                            
+                            require(["reports/campaign_line_chart"],_.bind(function(chart){                            
+                            this.chartPage = new chart({page:this,legend:{},isStacked:true});
+                                    //this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
+                            this.$("#chart-"+val.get("campNum.checksum")).html(this.chartPage.$el);
+                            this.chartPage.$el.css({"width":"100%","height":"150px"});                                
+                             var _data = [
+                                ['Genre', 'Sent', 'Open', 'View', 'Click',
+                                  { role: 'annotation' } ],
+                                ['24 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],  
+                                ['26 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],
+                                ['28 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],
+                                ['30 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), '']
+                              ];
+                            this.chartPage.createChart(_data);
+                            },this));
+                        },this);
+                        
+                        /*require(["reports/campaign_line_chart"],_.bind(function(chart){                            
+                            var _campaigns = $.map(this.$(".checkedadded"),function(el){
+                                return el.id;
+                            }).join(",");
+                            var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=summaryByDateRange";                                                                   
+                            var post_data = {campNum_csv:_campaigns,fromDate:this.fromDate,toDate:this.toDate}    
+                            this.states_call =  $.post(URL, post_data).done(_.bind(function (data) { 
+                                
+                                var camp_json = jQuery.parseJSON(data);
+                                _.each(camp_json.summaries[0], function(val) {                                
+                                    
+                                    
+                                },this);
+                                                               
+                            
+                            },this));
+                                                                                    
+                        },this));*/
+                    }
+                },
+                showHideChartArea:function(flag){
+                    if(flag){
+                        this.$(".cols").removeClass("col1");
+                        this.$(".col2").hide();
+                        this.$(".template-container").css({"overflow-y":'hidden',height:'auto'});
+                    }
+                    else{
+                        this.$(".cols").addClass("col1");
+                        this.$(".col2").show();
+                        this.$(".template-container").css({"overflow-y":'auto',height:'420px'});
+                    }
                 }
                 ,
                 //////********************* Autobots *****************************************//////
