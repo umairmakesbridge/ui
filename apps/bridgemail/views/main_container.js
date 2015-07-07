@@ -450,6 +450,22 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
 
                     });
                 }
+                ,
+                openReport: function (opt) {
+                    var report_id = opt.id ? opt.id : 0;
+                    var report_checksum = opt.checksum ? opt.checksum : 0;
+                    this.addWorkSpace({type: '',
+                        title: "Loading...",
+                        sub_title: 'Analytics',
+                        tab_icon: 'reports',
+                        workspace_id: 'report_' + report_checksum,
+                        url: 'reports/reportflow',
+                       'addAction': false,
+                        noTags: true,
+                        params: {report_id: report_id, parent: opt.parent, editable: opt.editable}
+
+                    });
+                }
 
                 //Handling Dashboard Scripts for animation stuff.      
                 ,
@@ -649,7 +665,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Custom Charts', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'reports', noTags: true});
                 },
                 reportFlow: function(){
-                    this.addWorkSpace({type: '', title: 'Custom Report', sub_title: 'Analytics', url: 'reports/reportflow', workspace_id: 'reportflow', 'addAction': false, tab_icon: 'customreports', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'customreports', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
