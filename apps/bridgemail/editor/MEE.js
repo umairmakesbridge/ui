@@ -704,8 +704,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 function reConstructCode(html) {
                                     var oHtml = $(html);
-
-                                    oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css("display", "none");
+                                    oHtml.find(".MEE_DROPPABLE").addClass("myDroppable ui-draggable ui-droppable").removeClass("MEE_DROPPABLE").css({"visibility": "hidden"});
                                     oHtml.find(".MEE_ELEMENT").addClass("csHaveData ui-draggable ui-droppable").removeClass("MEE_ELEMENT");
                                     oHtml.find(".MEE_CONTAINER").addClass("container").removeClass("MEE_CONTAINER");
 
@@ -897,7 +896,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     var oHtml = $(html);
                                     oHtml.find("[data-mce-type='bookmark']").remove();
-                                    oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("display");
+                                    oHtml.find(".myDroppable").removeClass("myDroppable ui-draggable ui-droppable").addClass("MEE_DROPPABLE").removeInlineStyle("visibility");
                                     oHtml.find(".csHaveData").removeClass("csHaveData ui-draggable ui-droppable").addClass("MEE_ELEMENT");
                                     oHtml.find(".mainContentHtmlGrand").removeClass("mainContentHtmlGrand").addClass("MEE_DOCUMENT_CONTENTS");
                                     oHtml.find(".mainContentHtml").removeClass("mainContentHtml sortable").addClass("MEE_CONTENTS");
@@ -4670,7 +4669,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             dc.Label = "Default";
                                                             dc.DynamicContentID = "c123";
                                                             dc.IsDefault = true;
-                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='display: none;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='display: none;'></li>";
+                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr>default<td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
                                                             dv.ListOfDynamicContents.push(dc);
 
 
@@ -4678,7 +4677,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             dc.Label = "dc 123";
                                                             dc.DynamicContentID = "c123";
                                                             dc.IsDefault = false;
-                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='display: none;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='display: none;'></li>";
+                                                            dc.InternalContents = "<li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li><li class='ui-draggable ui-droppable csHaveData'><table class='container'><tbody><tr><td><ul class='sortable'></ul></td></tr></tbody></table></li><li class='myDroppable ui-draggable ui-droppable' style='visibility: hidden;'></li>";
                                                             dv.ListOfDynamicContents.push(dc);
 
                                                             args.DynamicVariation = dv;
@@ -4843,8 +4842,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         //Last element FULL height                                           
                                         SetLastElementHeight($(this));
                                     });
-                                    $(e.target).next(".myDroppable").hide();
-                                    $(e.target).prev(".myDroppable").hide();
+                                    $(e.target).next(".myDroppable").invisible();
+                                    $(e.target).prev(".myDroppable").invisible();
                                 }
                                 mee.stopDragging = function () {
                                     myElement.find(".divBuildingBlockLoading").hide();
@@ -4886,7 +4885,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 }
 
                                 var RemoveDroppables = function (container, undo) {
-                                    container.find(".myDroppable:not(.csHaveData)").hide();
+                                    container.find(".myDroppable:not(.csHaveData)").invisible();
 
                                     //Remove height from destination's parent and source's parent (.sortable UL)
                                     //Releted to last element dropped full height:
@@ -4900,7 +4899,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 }
 
                                 var ShowDroppables = function (container) {
-                                    container.find(".myDroppable:not(.csHaveData)").show();
+                                    container.find(".myDroppable:not(.csHaveData)").visible();
                                 }
 
                                 var RemovePopups = function () {
