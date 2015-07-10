@@ -7,15 +7,16 @@ function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
         return Backbone.View.extend({
-            className: 'campaign-box',
+            className: 'proven-box',
             tagName:'tr',
             
             /**
              * Attach events on elements in view.
             */
             events: {
-               'click .opentiptest':'opentipandtest',
-              
+               //'click .opentiptest':'opentipandtest',
+               'click .proven-td' : 'opentipandtest',
+                'click .taglink':'tagClick'
             },
             /**
              * Initialize view - backbone
@@ -36,8 +37,10 @@ function (template,highlighter) {
             */
             render: function () {                    
                 
-               this.$el.html(this.template());
-               this.$el.attr('id',this.options.idrow.tipid);
+               this.$el.html(this.template({
+                    model: this.model
+                }));
+              // this.$el.attr('id',this.options.idrow.tipid);
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.initControls();  
                
@@ -52,8 +55,13 @@ function (template,highlighter) {
               
             },
             opentipandtest : function(event){
-              //  console.log($(event.currentTarget));
-            }
+                    this.app.mainContainer.addWorkSpace({type: '', noTags: true ,title: this.model.get('title'), sub_title: '', url: this.model.get('url'), workspace_id: this.model.get('tipid'), 'addAction': false, tab_icon: 'tipntest'}); 
+            },
+            tagClick:function(obj){
+                            //this.sub.taglinkVal = true;
+                            this.tagTxt = $(obj.currentTarget).text();
+                            this.app.initSearch(obj,this.parent.$el.find("#list-search"));
+                        }
         });
 });/* 
  * To change this license header, choose License Headers in Project Properties.

@@ -1490,9 +1490,9 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             var fromOptions = '';
                             var selected_fromEmail = '';
                             fromEmailsArray.sort();
-                            if (camp_obj.app.salesMergeAllowed) {
-                                fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
-                            }
+                            //if (camp_obj.app.salesMergeAllowed) {
+                              //  fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                           // }
                             for (var i = 0; i < fromEmailsArray.length; i++)
                             {
                                 if (fromEmailsArray[i] == defaults_json.fromEmail) {
@@ -1505,7 +1505,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
                             //console.log(fromOptions);
-                            if (camp_obj.app.salesMergeAllowed) {
+                            //if (camp_obj.app.salesMergeAllowed) {
                                 camp_obj.$("#campaign_from_email").chosen().change(function (obj) {
                                     if (obj.target.value === '{{BMS_SALESREP.EMAIL}}') {
                                         camp_obj.$('#campaign_from_email_default').show();
@@ -1513,7 +1513,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                                         camp_obj.$('#campaign_from_email_default').hide();
                                     }
                                 });
-                            }
+                            //}
                             camp_obj.$el.find('#fromemail_default').append(fromOptions);
                             camp_obj.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
                             camp_obj.$("#campaign_from_email").chosen({no_results_text: 'Oops, nothing found!', disable_search: (fromEmailsArray.length <= 5) ? true : false});

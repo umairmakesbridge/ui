@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, singlelistingRowView) {
+define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipandtest/html/tipandtestlisting.html',  'tipandtest/tipandtest_row','tipandtest/collections/tipandtestlisting'],
+        function (bmsgrid, jqhighlight, jsearchcontrol, template, tipandtestRowView , tipandtestCollection) {
             'use strict';
             return Backbone.View.extend({
                 id: 'tip_test_listings',
@@ -29,6 +29,12 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                 initialize: function () {
                     this.template = _.template(template);
                     //this.singlelistingCollection = new singlelistingCollection();
+                    this.tiptestCollection = new tipandtestCollection();
+                    /*var tiptestArray = [
+                               {tipid:'tipntest-toggle-three',name:'Proven Process 3',title:'Are you getting the most from your contact research teams?',sub_title: '', url: 'tipandtest/tipandtest3'},
+                               {tipid:'tipntest-toggle-two',name:'Proven Process 2',title:'Are you getting the most from your contact research teams?',sub_title: '', url: 'tipandtest/tipandtest2'},
+                               {title: '', sub_title: '', }
+                            ]*/
                     this.render();
                 },
                 render: function ()
@@ -55,16 +61,19 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     this.template_id='';
                     this.templateView  = '';
                     this.searchBadgeTxt = '';
+                    
                     camp_obj.getalltipandtest();
+                    camp_obj.app.showLoading("Loading Proven Process...", camp_obj.$("#target-camps"));
                     camp_obj.$el.find('div#campslistsearch').searchcontrol({
                         id: 'list-search',
                         width: '300px',
                         height: '22px',
-                        searchFunc: _.bind(this.searchEmails, this),
-                        clearFunc: _.bind(this.clearSearchEmails, this),
-                        placeholder: 'Search emails by subject',
+                        gridcontainer: camp_obj.$el.find(".target-listing"),
+                        // searchFunc: _.bind(this.searchEmails, this),
+                       // clearFunc: _.bind(this.clearSearchEmails, this),
+                        placeholder: 'Search Proven Prcess',
                         showicon: 'yes',
-                        iconsource: 'campaigns',
+                        iconsource: 'wtab-tipntest',
                         countcontainer: 'no_of_camps'
                     });
 
@@ -98,7 +107,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
 
                   
                             // Display items
-                            this.$("#camp_list_grid tbody").find('.loading-campagins').remove();
+                            
                             
                            
                             //console.log('offsetLength = '+ this.offsetLength + ' & total Fetch = ' + this.total_fetch);
@@ -106,10 +115,25 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                             this.app.showLoading(false, this.$("#target-camps"));
                             //this.showTotalCount(response.totalCount);
                            
+                           
+                            //console.log(this.tiptestCollection);
+                            var _data ;
                             //this.$campaginLoading.hide();
-                           var tiptestArray = [{tipid:'tipntest-toggle-two',name:'Proven Process 2'},{tipid:'tipntest-toggle-one',name:'Proven Process 1'}];
-                            _.each(tiptestArray, _.bind(function (val) {
-                                this.$el.find('#camp_list_grid tbody').append(new singlelistingRowView({idrow: val, sub: this}).el);
+                            this.tiptestCollection = this.tiptestCollection.fetch({data: _data,
+                                    success: _.bind(function (data1, collection) {
+                                       this.$("#total_templates strong.badge").html(collection.totalCount);
+                                        _.each(data1.models, _.bind(function (model) {
+                                            this.$el.find('#camp_list_grid tbody').append(new tipandtestRowView({model: model, sub: this}).el);
+                                        }, this));
+                                         this.app.showLoading(false, this.$("#target-camps"));
+                                    },this)
+                    
+                    
+                            });
+                          _.each(this.tiptestCollection.models, _.bind(function (model) {
+                              //  console.log(model);
+                               // var mPage = new tipandtestRowView({model: model, sub: this}).el;
+                               // this.$el.find('#camp_list_grid tbody').append(mPage);
                                     
                             }, this));
                             
@@ -137,7 +161,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                     }
                 },
                 searchEmails: function (o, txt) {
-
+                    
                     this.type = '';
                     this.searchTxt = txt;
                     this.total_fetch = 0;

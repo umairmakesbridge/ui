@@ -745,7 +745,7 @@
         filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> <em class="text">days</em>'                  
         filter_html += '</div>'
         filter_html += '</div>'          
-        filter_html += '<div class="row" style=""><div class="btn-group forms-box-container"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div></div>'
+        filter_html += '<div class="row" style="display:none;"><div class="btn-group forms-box-container"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div></div>'
       filter.append('<div class="icon form2"></div>');                
        filter.find(".filter-cont").append(filter_html);
     
