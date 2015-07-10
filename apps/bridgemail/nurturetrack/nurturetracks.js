@@ -330,7 +330,7 @@ function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,tr
                             var trackViewTile = new trackRowMakesbrdigeTile({ model: collection.at(s),sub:this });                                                            
                             trackViewTile.on('tagbmsclicktile',_.bind(this.searchByTagTileBms,this));
                             this.$trackTileBmsArea.append(trackViewTile.$el);
-                            trackViewTile.tmPr.trimTags();
+                            trackViewTile.tmPr.trimTags({maxwidth:345,innerElement:'.t-scroll p a'});
                             
                             
                         }                        

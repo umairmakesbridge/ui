@@ -94,7 +94,6 @@
   , addBasicFilter:function(obj,e,params){
       var filter = $(this.options.filterRow)
       filter.addClass("filter darkblue")
-      var nofield_change = false;
       var list_div = '';
       var selected_field = "",selected_rule="",selected_formats="", matchValue="",gapValue = "0",list_html='<div class="btn-group sub-date-container" style="display:none"><a class="icon add-list"></a></div>',
           list_div = "<div class='subname-filters-dialog-class' id='subname-filters-dialog'><div id='show-loading' style='width:300px;height:300px;margin:0 auto;position:relative;display:none;'></div></div>",
@@ -260,7 +259,9 @@
       if(params){
           
           if( params.fieldName=="{{SUBSCRIPTION_DATE}}" || params.fieldName=="{{BIRTH_DATE}}"){
-            filter.find(".formats-container").hide().trigger("chosen:updated");
+            if(params.rule!=="dr"){
+                       filter.find(".formats-container").hide().trigger("chosen:updated");
+             }
             this.showDialog(false,filter);
         }
       }
@@ -610,7 +611,7 @@
           
           
           
- filter.find(".member-box").chosen({disable_search: "true",width:"200px"}).change(function(){
+          filter.find(".member-box").chosen({disable_search: "true",width:"200px"}).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
           if($(this).val()==="N"){
@@ -637,7 +638,7 @@
                 clearFunc: $.proxy(this.clearSearchList, this,filter),
                 
          });
-      
+     
       filter.find('#__list_grid').parent().on('scroll', function () {
                     self.scrolling(filter,'listfilter');
                 });
@@ -651,7 +652,9 @@
       this.showTooltips(filter)
       this.listsObj['filter'] = filter;
       this.listsObj['params'] = params;
-      
+      if(params){
+       filter.attr('checksumlists',params["listNumbers.checksums"]);   
+      }
       this.loadLists(false,filter,params);
     },
     loadLists:function(fcount,filter,params,searchtext){
@@ -659,7 +662,7 @@
          var filter = filter;
          var searchtext = (searchtext)?searchtext:"";
         var params = params;
-        if (!fcount) {
+        if (!fcount || this.offsetLengthLists===0) {
                         this.offsetLengthLists = 0;
                         this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
                         filter.find('#__list_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
@@ -688,6 +691,7 @@
                     self.offsetLengthLists = data.nextOffset;
                     self.options.app.showLoading(false, filter.find('#__list_grid'));
                     if(data.totalCount !== "0"){
+                        
                      self.generateListFilter(data,filter,params);
                     }else{
                         console.log('no record found');
@@ -713,10 +717,11 @@
           filter.find('#__list_grid').html('');
       }
       
+      
       filter.find('#total_subscriber_lists strong').html(list_array.totalCount);
       
       $.each(list_array.lists[0], function(index, val) {     
-                        filter_html += '<tr id="row_'+val[0]["listNumber.encode"]+'">';      
+                        filter_html += '<tr id="row_'+val[0]["listNumber.encode"]+'" checksum="'+val[0]["listNumber.checksum"]+'">';      
                         filter_html +='<td width="100px"><div><input class="check-list" type="checkbox" value="'+val[0]["listNumber.encode"]+'" list_checksum="'+val[0]["listNumber.checksum"]+'" /></div></td>'
                         filter_html += '<td width="100%"><div><div class="name-type"><h3 class="lists-name">'+val[0].name+'</h3><div class="tags tagscont">'+self.options.app.showTags(val[0].tags)+'</div></div></div></td>';                        
                         filter_html += '<td width="100px"><div><div class="subscribers" style="min-width:80px"><span  class=""></span>'+self.options.app.addCommas(val[0].subscriberCount)+'</div><div id="'+val[0]["listNumber.encode"]+'" class="action"><a class="btn-green"><span>Use</span><i class="icon next"></i></a></div></div></td>';                        
@@ -732,6 +737,12 @@
                             $(this).find(".lists-name").highlight($.trim(self.listsObj.searchText))
                             $(this).find(".taglink").highlight($.trim(self.listsObj.searchText));
                            });
+                           var list_arr = filter.attr('checksumlists').split(',');
+                            $.each(list_arr,function(k,v){
+                                //filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
+                                filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").addClass("selected")  
+                                filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").find('.check-list').iCheck('check');
+                              });
                 }
       
       if(self.offsetLengthLists !== "-1"){
@@ -761,18 +772,27 @@
            if(filter.find('#__list_grid .check-list').iCheck){
             $(event.target).parents("tr").find(".check-list").iCheck('check');
         }
+        
+        
       });
+      
+     
       filter.find('.list-refresh').click(function(){
             self.lists = null;
             self.addListFilter();
             //self.loadLists();
       });
+      if(params && params['isMemberOfList']==="false"){
+                                filter.find('#lists_all_any_selectbox_chosen').hide();
+                                filter.find('.lists-all-any').show();
+                            }
       if(params && !this.listsObj.searchText){ 
            var isMemberOfList = params.isMemberOfList=="false"?"N":"Y"
            filter.find(".member-box").val(isMemberOfList).trigger("chosen:updated")
            var matchAll = params.matchAll=="false"?"N":"Y"
-           filter.find(".match-box").val(matchAll).trigger("chosen:updated")
-           var list_arr = params["listNumbers.checksums"].split(",")
+           filter.find(".match-box").val(matchAll).trigger("chosen:updated");
+          
+           var list_arr = filter.attr('checksumlists').split(',');
            
            $.each(list_arr,function(k,v){
                //filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
@@ -780,11 +800,28 @@
                filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").find('.check-list').iCheck('check');
            });
            
+            filter.find(".filtercheck").on('ifUnchecked', function(event){
+                if(params){
+                    //var list_arr = params["listNumbers.checksums"].split(",")
+                    var uncheckVal = $(event.target).parents("tr").attr('checksum');
+                    $.each(list_arr,function(key,val){
+                        if(uncheckVal === list_arr[key]){
+                            list_arr.splice(key, 1)
+                        }
+                    });
+                    
+                    filter.attr('checksumlists',list_arr.join());
+                }
+                
+              });
+           
            $.each($('#__list_grid .selected'),function(k,v){
               $(this).find('.check-list').iCheck('check');
            })
            
            if(list_arr[0] && filter.find('#__list_grid input[list_checksum='+list_arr[0]+']').length == 0){
+               this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
+                    filter.find('#__list_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
                self.loadLists(self.offsetLengthLists,filter,params)
            }else{
                
@@ -794,8 +831,10 @@
                     filter.find("#__list_grid").addClass('scrollapplied');
                     filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").find('.check-list').iCheck('check');
                 });
+               
                 if(!self.scrolltoListView)
                 {
+                    
                     filter.find("#__list_grid input[list_checksum="+list_arr[0]+"]").parents("tr").scrollintoview();
                     if(self.$element.find('.listsgrid').length ===  self.$element.find('.listsgrid.scrollapplied').length){
                         self.scrolltoListView = true; 
@@ -825,7 +864,7 @@
         filter_html += '<div class="btn-group "><select data-placeholder="2" class="timespan formTimeSpan">'+this.getTimeSpan(30,90)+'</select></div> <em class="text">days</em>'                  
         filter_html += '</div>'
         filter_html += '</div>'          
-        filter_html += '<div class="row" style=""><div class="btn-group forms-box-container"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div></div>'
+        filter_html += '<div class="row" style=""><div class="btn-group forms-box-container" style="display:none;"><div class="inputcont"><select data-placeholder="Select Webform" disabled="disabled" class="forms-box"><option value="-1">Loading Web Forms...</option></select></div></div></div>'
       filter.append('<div class="icon form2"></div>');                
        filter.find(".filter-cont").append(filter_html);
     
@@ -925,7 +964,10 @@
                    if(!self.isScrollattachform){
                        filter.find(".forms-box").html('');
                        self.select_html_formList = '<option value=""></option>'  
-                   }                 
+                   }   
+                   if(self.webformsObj.searchText){
+                        filter.find('#__form_grid tbody').html('');
+                    }
                    if(_json.totalCount!=="0"){
                       filter.find('.loading-campagins').remove();
                       self.options.app.showLoading(false, filter.find('#__form_grid'));
@@ -993,11 +1035,18 @@
              filter.find('.forms-box').val($(this).attr("id")).trigger("chosen:updated");
              filter.find("#__form_grid tr").removeClass("selected");
              $(this).parents("tr").addClass("selected");
+             filter.attr('selected_checksum',$(this).parents("tr").attr('webform_checksum'));
             // dialog.hide();
          })
+         if(filter.attr('selected_checksum')){
+             filter.find("#__form_grid tr[webform_checksum='"+filter.attr('selected_checksum')+"']").addClass("selected")
+         }
+        
         if(params && !self.webformsObj.searchText){
             if(params && params['formNumber.checksum'] && filter.find("#__form_grid tr.selected").length == 0 ){
                                //console.log('calling for ajax');
+                               self.options.app.showLoading("Loading forms...", filter.find('#__form_grid'));
+                               filter.find('#__form_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
                                self.LoadFormList(self.offsetLengthformList,filter,params) 
                              }else if(params && filter.find("#__form_grid tr.selected").length > 0 && !filter.hasClass('scrolltoview')){
                                
@@ -1006,6 +1055,7 @@
                                             self.scrolltoFormListView = true; 
                                 
                              }
+                             
                              
         }
         
@@ -1480,7 +1530,9 @@
                      console.log(selected_list);
                        triggerNo = $(val).data('sublist');
                     if(selected_list && dialog.find('.filter_list_grid-'+triggerNo+' tr[list_checksum='+selected_list+']').length == 0){
-                             self.loadSubsList(self.offsetLengthSubList,false,dialog); 
+                                var showloading = $('#show-loading');
+                                self.options.app.showLoading("Loading Lists...",filter.find('#filter_list_grid'));
+                                self.loadSubsList(self.offsetLengthSubList,false,dialog); 
                              
                              }else{
                                  var tr = dialog.find(".filter_list_grid-"+triggerNo+" tr[list_checksum='"+selected_list+"']")
