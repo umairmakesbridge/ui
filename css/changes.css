@@ -4395,7 +4395,8 @@ a.tipntest-toggle i {
 }
 a.tipntest-toggle:hover i { opacity:0.7;}
 
-
+.sc-links a.tipntest-toggle:hover i{opacity : 1;background: url("../img/tipntesticon-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.sc-links > a.tipntest-toggle:hover {background: none repeat scroll 0 0 #294957 !important; }
 
 .wtab-tipntest {
     background: url("../img/ws-icons.png") no-repeat scroll -60px -240px rgba(0, 0, 0, 0);
@@ -4518,7 +4519,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     position: relative;
      right: 24.7%;
 }
-.tipntest-video a span {
+.tipntest-video a span, .tipntest-video-three a span {
     float: right; color: rgb(99, 138, 160);
     position: relative; 
     right: 40px; 
@@ -4527,6 +4528,10 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 }
 .tipntest-video-two a span {
     right: 30px;
+}
+
+.tipntest-video-three a span {
+    /*right: 75px;*/
 }
 
 

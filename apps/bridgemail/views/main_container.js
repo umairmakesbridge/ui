@@ -129,6 +129,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     'click .linkfilters': 'linkfilters',
                     'click .custom-reports': 'customReprots',
                     'click .report-flow':'reportFlow',
+                    'click .tipntestlistings':'tipandtestlistings',
                     'click #ql_refresh': function () {
                         this.loadHeaderCount(true);
                     }
@@ -312,6 +313,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         $(".ws-content ." + options.workspace_id + "_list").find(".r-choose-" + options.params.type).click();
                     }
                 },
+               
                 activeWorkSpace: function (obj, options) {
                     if (!obj.hasClass("active")) {
                         obj.removeClass("hover");
@@ -665,6 +667,9 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 },
                 one_one_listings : function(){
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
+                },
+                 tipandtestlistings : function(){
+                   this.addWorkSpace({type: '', noTags: true ,title: 'Proven Processes', sub_title: '', url: 'tipandtest/tipandtestlisting', workspace_id: 'tip_test_listings', 'addAction': false, tab_icon: 'tipntest'}); 
                 },
                 tip_test : function(){
                    this.addWorkSpace({type: '', noTags: true ,title: 'Increase Sales Meetings - Follow Up In Under 5 Minutes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 
