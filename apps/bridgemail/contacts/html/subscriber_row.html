@@ -87,9 +87,9 @@
                                              <a href="" class="" style="display:none;"><img src="<%- this.options.app.get('path')%>img/inicon2.png" alt=""></a>
                                              <% if(this.options.sub.isSalesforceUser){ %> 
                                                 <% if(model.get('sfUrl')){ %>
-                                                <a class="salesforce-view" style="display:none;"  data-url="<%- this.options.app.decodeHTML(model.get('sfUrl')) %>"><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
+                                                <a class="salesforce-view" style=""  data-url="<%- this.options.app.decodeHTML(model.get('sfUrl')) %>"><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
                                                 <% }else{ %>
-                                                     <a class="add-to-salesforce" style="display:none;" ><img src="<%- this.app.get('path')%>img/SF_plus.png"/></a>
+                                                     <a class="add-to-salesforce" style="" ><img src="<%- this.app.get('path')%>img/SF_plus.png"/></a>
                                                      <% } %>
                                               <% } %>
                                         </div>

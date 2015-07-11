@@ -395,7 +395,7 @@
        filter_html += '<div class="row">'
             filter_html += '<label style="width: 120px;">Campaign</label>'            
             filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'  
-            filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list">'  
+            filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list" disabled="disabled">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
                   filter_html +='<option value=""></option>'
@@ -471,7 +471,7 @@
                         })
                      }
                     
-                     filter.find(".campaign-list").html(select_html).prop("disabled",false).trigger("chosen:updated")
+                     filter.find(".campaign-list").html(select_html);
                      if( filter.find(".campaign-list").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".campaign-list").find("option:last-child").attr("data-load","true");
                              }
@@ -483,6 +483,8 @@
                            filter.find(".campaign-list").trigger("chosen:select")
                         }
                        filter.find(".campaign-list").change()
+                     }else{
+                         filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
                      }
                      
                 }
