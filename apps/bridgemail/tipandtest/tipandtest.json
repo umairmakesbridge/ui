@@ -1,0 +1,51 @@
+{
+    "totalCount": "3",
+    "nextOffset": "-1",
+    "batchCount": "3",
+    "processes": [
+        {
+            "process1": [
+                {
+                    "tipid": "tipntest-toggle-one",
+                    "keywords": "",
+                    "tags": "sales,lead management",
+                    "status": "D",
+                    "updationDate": "01-19-15",
+                    "originalURL": "",
+                    "processId.checksum": "cd00692c3bfe59267d5ecfac5310286c",
+                    "title": "Increase Sales Meetings - Follow Up In Under 5 Minutes",
+                    "name": "Increase sales meetings by 25%",
+                    "url": "tipandtest/tipandtest"
+                }
+            ],
+            "process2": [
+                {
+                    "tipid": "tipntest-toggle-two",
+                    "keywords": "",
+                    "tags": "marketing automation, lead follow up, Google Drive",
+                    "status": "D",
+                    "updationDate": "01-19-15",
+                    "originalURL": "",
+                    "processId.checksum": "cd00692c3bfe59267d5ecfac5310286c",
+                    "title": "Are you getting the most from your contact research teams?",
+                    "name": "Add marketing automation to Google Drive",
+                    "url": "tipandtest/tipandtest2"
+                }
+            ],
+            "process3": [
+                {
+                    "tipid": "tipntest-toggle-three",
+                    "keywords": "",
+                    "tags": "restaurant",
+                    "status": "D",
+                    "updationDate": "01-19-15",
+                    "originalURL": "",
+                    "processId.checksum": "cd00692c3bfe59267d5ecfac5310286c",
+                    "title": "Are you getting the most from your contact research teams?",
+                    "name": "Restaurants send mobile coupons and increase loyalty",
+                    "url": "tipandtest/tipandtest3"
+                }
+            ]
+        }
+    ]
+}

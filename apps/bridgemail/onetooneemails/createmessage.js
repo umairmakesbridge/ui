@@ -116,9 +116,9 @@ function (template,contactsView) {
                             var fromEmailsArray = fromEmails.split(',');
                             var fromOptions = '';
                             var selected_fromEmail = '';
-                            if(this.app.salesMergeAllowed){
-                                fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
-                            }
+                            //if(this.app.salesMergeAllowed){
+                             //   fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                           // }
                             for(var i=0;i<fromEmailsArray.length;i++)
                             {
                                 if(fromEmailsArray[i] == defaults_json.fromEmail){
@@ -129,7 +129,7 @@ function (template,contactsView) {
                                      fromOptions += '<option value="'+ fromEmailsArray[i] +'">'+fromEmailsArray[i] + '</option>';
                             }
                             this.$el.find('#campaign_from_email').append(fromOptions);
-                            if(this.app.salesMergeAllowed){
+                            //if(this.app.salesMergeAllowed){
                                 this.$("#campaign_from_email").chosen().change(_.bind(function(obj){
                                     if(obj.target.value === '{{BMS_SALESREP.EMAIL}}'){
                                         this.$('#campaign_from_email_default').show();
@@ -137,7 +137,7 @@ function (template,contactsView) {
                                        this.$('#campaign_from_email_default').hide();
                                     }
                                 },this));
-                            }
+                            //}
                             this.$el.find('#fromemail_default').append(fromOptions);
                             this.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
                             this.$("#campaign_from_email").trigger("chosen:updated");
