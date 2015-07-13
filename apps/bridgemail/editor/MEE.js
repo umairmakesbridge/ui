@@ -943,6 +943,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 img.removeAttr("isStyleSet");
                                             }
                                             img.removeClass("imageHandlingClass resizable clickEvent ui-resizable").not(".static").addClass("img");
+                                            img.css("display","block");
 
                                             if (img.parent().get(0).tagName == 'a' || img.parent().get(0).tagName == 'A') {
                                                 imageContainer.html(img.parent().outerHTML());

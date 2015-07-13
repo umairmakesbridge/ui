@@ -10,6 +10,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 initialize: function () {
                     this.app = this.options.app;     
                     this.template = _.template(template);                                        
+                    this.editable = true;
                     this.models = [];                    
                     if (this.options.params) {
                         if(this.options.params.report_id){
@@ -29,6 +30,31 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 init: function () {
                     this.current_ws = this.$el.parents(".ws-content"); 
                     this.ws_header = this.current_ws.find(".camp_header .edited"); 
+                    
+                    
+                   this.app.scrollingTop({scrollDiv:'window',appendto:this.$el});                        
+                                                         
+                   var deleteIcon = $('<a class="icon delete showtooltip" title="Delete Report" style="margin-top:0px"></a>');                                                         
+                   this.ws_header.find(".pointy").remove();                   
+                   this.ws_header.find("h2").append(deleteIcon);
+                   deleteIcon.click(_.bind(this.deleteReportDialog,this));
+                                      
+                    if(this.current_ws.find("#workspace-header").hasClass("header-edible-campaign")===false){
+                        this.current_ws.find(".camp_header #workspace-header").addClass("showtooltip").attr("title","Click to rename").click(_.bind(this.showHideTitle,this));                   
+                        this.current_ws.find("#workspace-header").addClass('header-edible-campaign');                                                         
+                        this.current_ws.find(".camp_header .cancelbtn").click(_.bind(function(obj){                        
+                              this.showHideTitle();                        
+                         },this));
+                         this.current_ws.find(".camp_header .savebtn").click(_.bind(this.renameReport,this));
+                         this.current_ws.find(".camp_header  #header_wp_field").keyup(_.bind(function(e){
+                             if(e.keyCode==13){
+                                this.current_ws.find(".camp_header .savebtn").click();
+                             }
+                         },this));
+                    }
+                    
+                    this.current_ws.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                    
+                    
                     this.getSettings();
                 },
                 addReport:function(event,obj){
@@ -115,6 +141,80 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 },
                 removeMode:function(no){
                     this.models.splice(no-1,1);
+                },
+                showHideTitle:function(show,isNew){
+                    if(this.editable==false){
+                        return false;
+                    }
+                    var current_ws = this.current_ws.find(".camp_header");
+                    if(show){
+                        current_ws.find("h2").hide();
+                        current_ws.find(".workspace-field").show().css("margin-top","6px");                    
+                        current_ws.find(".tagscont").hide();                   
+                        current_ws.find("#header_wp_field").val(this.app.decodeHTML(this.current_ws.find("span#workspace-header").html())).focus();                    
+                    }
+                    else{
+                        current_ws.find("h2").show();
+                        current_ws.find(".workspace-field").hide();    
+                        current_ws.find(".tagscont").show();
+                    }
+                },
+                renameReport:function(obj){                    
+                    var nt_name_input =  $(obj.target).parents(".edited").find("input");                                           
+                    var workspace_head = this.current_ws.find(".camp_header");
+                    var URL = "/pms/io/user/customReports/?BMS_REQ_TK="+this.app.get('bms_token');
+                    $(obj.target).addClass("saving");
+                    $.post(URL, { type: "rename",reportName:nt_name_input.val(),reportId:this.reportId })
+                      .done(_.bind(function(data) {                              
+                          var _json = jQuery.parseJSON(data);                              
+                          if(_json[0]!=="err"){                                  
+                             workspace_head.find("span#workspace-header").html(this.app.encodeHTML(nt_name_input.val()));                                                                                                 
+                             this.showHideTitle();
+                             this.app.showMessge("Report renamed Successfully!");                                  
+                          }
+                          else{                                  
+                              this.app.showAlert(_json[1],this.$el);
+                          }							  
+                          $(obj.target).removeClass("saving");                              
+                     },this));
+                },
+                deleteReportDialog: function () {                                      
+                    var report_id = this.reportId;
+                    if (report_id) {
+                        this.app.showAlertDetail({heading: 'Confirm Deletion',
+                            detail: "Are you sure you want to delete this report?",
+                            callback: _.bind(function () {                                
+                                this.deleteReport();
+                            }, this)},
+                        $('body'));                      
+                    }
+                },
+                deleteReport: function ()
+                {
+                    var report_obj = this.parentWS;                   
+                    var URL = '/pms/io/user/customReports/?BMS_REQ_TK=' + report_obj.app.get('bms_token');
+                    report_obj.app.showLoading("Deleting Report...", report_obj.$el.parents(".ws-content.active"), {fixed: 'fixed'});
+                    $.post(URL, {type: 'delete', reportId: this.reportId})
+                        .done(_.bind(function (data) {
+                            this.app.showLoading(false, report_obj.$el.parents(".ws-content.active"));
+                            var _json = jQuery.parseJSON(data);
+                            if(this.app.checkError(_json)){
+                             return false;
+                             }
+                            if (_json[0] !== "err") {
+                                this.app.showMessge("Report has been deleted successfully!");                                    
+                                this.$el.fadeOut(_.bind(function(){
+                                   this.$el.remove();
+                                },this));                                        
+                                var total_count = report_obj.$("#total_reports .badge");
+                                total_count.html(parseInt(total_count.text())-1);
+                                this.current_ws.find(".camp_header .close-wp").click();
+                            }
+                            else {
+                                report_obj.app.showAlert(_json[1], report_obj.$el.parents(".ws-content.active"));
+                            }
+
+                        }, this));
                 }
 
             });

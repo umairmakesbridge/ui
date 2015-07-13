@@ -409,7 +409,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                             }); 
                     tags=tags+"</ul> ";
                 
-                var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+this.objSummary.get('updationDate')+"</strong> </div>";    
+                var date = moment(this.options.app.decodeHTML(this.objSummary.get('scheduledDate')), 'YYYY-M-D H:m');
+                var dateFormat = date.format("DD MMM, YYYY hh:mm A");
+                var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+dateFormat+"</strong> </div>";    
                 //this.$el.parents(".ws-content").find(".camp_header").find('.c-name').append(sentAt);
                 this.active_ws.find(".camp_header").find("#campaign_tags").addClass("tagscont").css("width","auto").append("<span class='tagicon gray'></span>").append(tags).append(sentAt);
                     

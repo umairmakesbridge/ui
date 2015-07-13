@@ -414,45 +414,38 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         var _grid = this.$("#_grid tbody");                        
                         _grid.children().remove();
                         _.each(this.modelArray, function(val, index) {
-                            var campRow = new this.campRow({model: val, sub: this,showSummaryChart:true});                            
+                            var campRow = new this.campRow({model: val, sub: this,showSummaryChart:true});                                                        
+                            _grid.append(campRow.$el);                                                        
                             this.app.showLoading("Loading Summary Chart...",this.$("#chart-"+val.get("campNum.checksum")));
-                            _grid.append(campRow.$el);                            
-                            
-                            require(["reports/campaign_line_chart"],_.bind(function(chart){                            
-                            this.chartPage = new chart({page:this,legend:{},isStacked:true});
-                                    //this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(val[0].clickCount);
-                            this.$("#chart-"+val.get("campNum.checksum")).html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width":"100%","height":"150px"});                                
-                             var _data = [
-                                ['Genre', 'Sent', 'Open', 'View', 'Click',
-                                  { role: 'annotation' } ],
-                                ['24 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],  
-                                ['26 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],
-                                ['28 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), ''],
-                                ['30 June 2015', parseInt(Math.random() * 10), parseInt(Math.random() * 24), parseInt(Math.random() * 20), parseInt(Math.random() * 32), '']
-                              ];
-                            this.chartPage.createChart(_data);
+                            var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=summaryDailyBreakUp";
+                            var post_data = {campNum:val.get("campNum.encode"),toDate:this.toDate,fromDate:this.fromDate}    
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if(summary_json[0]=="err"){
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if(summary_json.count!=="0"){
+                                    require(["reports/campaign_line_chart"],_.bind(function(chart){                            
+                                        this.chartPage = new chart({page:this,legend:{},isStacked:true});                                    
+                                        this.$("#chart-"+val.get("campNum.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width":"100%","height":"150px"});                                                                                            
+                                        var _data = [
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click',{ role: 'annotation' } ]
+                                          ];
+                                         _.each(summary_json.summaries[0], function(sVal) { 
+                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM YYYY"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), '']) 
+                                         });
+                                         this.chartPage.createChart(_data);                                                        
+                                    },this));
+                                }
+                                else{
+                                    this.$("#chart-"+val.get("campNum.checksum")).html('<div class="loading"><p style="background:none">No data found for campaign <i>"'+val.get("name")+'"</i> </p></div>');
+                                }
                             },this));
+                            
                         },this);
-                        
-                        /*require(["reports/campaign_line_chart"],_.bind(function(chart){                            
-                            var _campaigns = $.map(this.$(".checkedadded"),function(el){
-                                return el.id;
-                            }).join(",");
-                            var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=summaryByDateRange";                                                                   
-                            var post_data = {campNum_csv:_campaigns,fromDate:this.fromDate,toDate:this.toDate}    
-                            this.states_call =  $.post(URL, post_data).done(_.bind(function (data) { 
-                                
-                                var camp_json = jQuery.parseJSON(data);
-                                _.each(camp_json.summaries[0], function(val) {                                
-                                    
-                                    
-                                },this);
-                                                               
-                            
-                            },this));
-                                                                                    
-                        },this));*/
+                                                
                     }
                 },
                 showHideChartArea:function(flag){
