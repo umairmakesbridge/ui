@@ -800,6 +800,8 @@
                             var selected_camp = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==_checksum)?"selected":""
                             if(selected_camp){
                                     $(_this.form_field).removeAttr("data-selected");
+                                    _this.search_results_div.parents('body').find('#campaign-lists-filterplug').prop("disabled",false).trigger("chosen:updated");
+
                                 }
                             var _value = val[0]["campNum.encode"] || val[0]["campNum"]
                             if(val[0]["isTextOnly"]){
@@ -808,6 +810,7 @@
                             else{
                                 select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
                             }
+                            
                     }else{
                          // links listings
                        selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
@@ -822,7 +825,9 @@
                       
                      
                    })
+                   
                    $(_this.form_field).append(select_html);
+                    
                    s_top = _this.search_results_div.scrollTop();
                    _this.results_update_field();
                    _this.search_results_div.scrollTop(s_top);

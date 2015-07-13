@@ -395,7 +395,7 @@
        filter_html += '<div class="row">'
             filter_html += '<label style="width: 120px;">Campaign</label>'            
             filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'  
-            filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" class="campaign-list" disabled="disabled">'  
+            filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" id="campaign-lists-filterplug" class="campaign-list" disabled="disabled">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
                   filter_html +='<option value=""></option>'
@@ -480,7 +480,7 @@
                      if(params && params["campaignNumber.checksum"]){
                          if(filter.find(".campaign-source").val()==="N"){
                            filter.find(".campaign-list").attr("data-selected",self.options.app.decodeHTML(params['campaignNumber.checksum']));
-                           filter.find(".campaign-list").trigger("chosen:select")
+                           filter.find(".campaign-list").trigger("chosen:select");
                         }
                        filter.find(".campaign-list").change()
                      }else{
@@ -1529,11 +1529,11 @@
         $.each(self.$element.find('.sub-date-container'),function(key,val){
                    
                    if(!$(val).hasClass('selected-row') ){
-                     console.log(selected_list);
+                    //console.log(selected_list);
                        triggerNo = $(val).data('sublist');
                     if(selected_list && dialog.find('.filter_list_grid-'+triggerNo+' tr[list_checksum='+selected_list+']').length == 0){
                                 var showloading = $('#show-loading');
-                                self.options.app.showLoading("Loading Lists...",filter.find('#filter_list_grid'));
+                                self.options.app.showLoading("Loading Lists...",dialog.find('#filter_list_grid'));
                                 self.loadSubsList(self.offsetLengthSubList,false,dialog); 
                              
                              }else{
