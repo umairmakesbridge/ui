@@ -1369,6 +1369,9 @@ ul.tabs-btns li.active a{
      background-position: -90px -90px;
 
 }
+.wtab-reportslisting{
+    background-position:-60px 0px;
+}
 .file-border{
     box-shadow : inset 0px 0px 20px rgba(0, 0, 0, 0.1);
     border : 1px dashed #bb2b2b !important;

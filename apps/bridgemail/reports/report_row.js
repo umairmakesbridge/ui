@@ -67,7 +67,7 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     this.toDate = "";
                     this.$('#daterange').val('');
                     this.showHideChartArea(false);
-                    this.loadCampaigns();
+                    this.loadReports();
                 },
                 showDatePickerFromClick:function(){
                     this.$('#daterange').click();
@@ -90,8 +90,8 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         }
                         if(toDate){
                             this.toDate = toDate.format("MM-DD-YYYY");
-                        }   
-                        this.loadCampaignsSummary();
+                        }                           
+                        this.loadSummaryReports();
                    }
                 },
                 setDateRangeLi:function(obj){
@@ -178,6 +178,38 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                          this.openNurtureTracksDialog();
                     } else if(this.reportType=="targets"){
                         this.openTargetsDialog();
+                    }
+                    
+                },
+                loadReports : function(){
+                    if(this.reportType=="landingpages"){
+                        //this.openLandingPagesDialog();
+                    } else if(this.reportType=="campaigns"){
+                        this.loadCampaigns();
+                    } else if(this.reportType=="autobots"){
+                        this.loadAutobots();
+                    } else if(this.reportType=="webforms"){
+                        //this.openSignupFormsDialog();
+                    } else if(this.reportType=="nurturetracks"){
+                         //this.openNurtureTracksDialog();
+                    } else if(this.reportType=="targets"){
+                        //this.openTargetsDialog();
+                    }
+                    
+                },
+                loadSummaryReports : function(){
+                    if(this.reportType=="landingpages"){
+                        //this.openLandingPagesDialog();
+                    } else if(this.reportType=="campaigns"){
+                        this.loadCampaignsSummary();
+                    } else if(this.reportType=="autobots"){
+                        this.loadAutobotsSummary();
+                    } else if(this.reportType=="webforms"){
+                        //this.openSignupFormsDialog();
+                    } else if(this.reportType=="nurturetracks"){
+                         //this.openNurtureTracksDialog();
+                    } else if(this.reportType=="targets"){
+                        //this.openTargetsDialog();
                     }
                     
                 },
@@ -413,12 +445,13 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         this.showHideChartArea(true);
                         var _grid = this.$("#_grid tbody");                        
                         _grid.children().remove();
-                        _.each(this.modelArray, function(val, index) {
-                            var campRow = new this.campRow({model: val, sub: this,showSummaryChart:true});                                                        
+                        _.each(this.modelArray, function(val, index) {                                                        
+                            var campRow = new this.campRow({model: val, sub: this,showSummaryChart:true});                                                                                    
                             _grid.append(campRow.$el);                                                        
                             this.app.showLoading("Loading Summary Chart...",this.$("#chart-"+val.get("campNum.checksum")));
                             var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=summaryDailyBreakUp";
-                            var post_data = {campNum:val.get("campNum.encode"),toDate:this.toDate,fromDate:this.fromDate}    
+                            var campNum = val.get("campNum.encode");
+                            var post_data = {campNum:campNum,toDate:this.toDate,fromDate:this.fromDate}    
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if(summary_json[0]=="err"){
@@ -466,7 +499,8 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                      this.app.showLoading("Loading selection...",this.$el);
                     var botNums = this.objects.map(function( index ) {
                                     return index.id
-                                 } ).join()
+                                 } ).join();           
+                      this.modelArray = [];           
                       var URL = "/pms/io/trigger/getAutobotData/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=get_csv";                                                                   
                       var post_data = {botId_csv:botNums}    
                       this.states_call =  $.post(URL, post_data).done(_.bind(function (data) {
@@ -581,6 +615,49 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     }                    
                     this.sub.saveSettings();
                     
+                },
+                loadAutobotsSummary:function(){
+                    if(this.modelArray.length){
+                        this.$(".add-msg-report").hide();
+                        this.$(".bmsgrid").show();
+                        this.showHideChartArea(true);
+                        var _grid = this.$("#_grid tbody");                        
+                        _grid.children().remove();
+                        _.each(this.modelArray, function(val, index) {                            
+                             var autobotRow = new this.botRow({model: val,page: this, sub: this,showSummaryChart:true});                                                                                    
+                            _grid.append(autobotRow.$el);                                                        
+                            this.app.showLoading("Loading Summary Chart...",this.$("#chart-"+val.get("botId.checksum")));
+                            var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK="+this.app.get("bms_token")+"&type=summaryDailyBreakUp";
+                            var campNum = val.get("actionData")[0]["campNum.encode"];
+                            var post_data = {campNum:campNum,toDate:this.toDate,fromDate:this.fromDate}    
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if(summary_json[0]=="err"){
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if(summary_json.count!=="0"){
+                                    require(["reports/campaign_line_chart"],_.bind(function(chart){                            
+                                        this.chartPage = new chart({page:this,legend:{},isStacked:true});                                    
+                                        this.$("#chart-"+val.get("botId.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width":"100%","height":"150px"});                                                                                            
+                                        var _data = [
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click',{ role: 'annotation' } ]
+                                          ];
+                                         _.each(summary_json.summaries[0], function(sVal) { 
+                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM YYYY"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), '']) 
+                                         });
+                                         this.chartPage.createChart(_data);                                                        
+                                    },this));
+                                }
+                                else{
+                                    this.$("#chart-"+val.get("botId.checksum")).html('<div class="loading"><p style="background:none">No data found for autobot <i>"'+val.get("label")+'"</i> </p></div>');
+                                }
+                            },this));
+                            
+                        },this);
+                                                
+                    }
                 },
                 //////********************* Signup Forms  *****************************************//////
                 loadSignupforms:function(){ 

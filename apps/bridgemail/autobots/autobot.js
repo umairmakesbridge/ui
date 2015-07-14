@@ -22,7 +22,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     "click .copy": "cloneAutobot",
                     "click .report":"reportShow",
                     'click .row-move': 'addRowToCol2',
-                    'click .row-remove': 'removeRowToCol2',
+                    'click .row-remove': 'removeRowToCol2',                   
                     'click .check-box': 'checkUncheck'
                 },
                 initialize: function() {
@@ -38,7 +38,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
-                    
+                    this.showSummaryChart = this.options.showSummaryChart;
                     this.model.on('change', this.render, this);
                     this.render();
                     $(this.el).attr('id', 'row_' + this.model.get('botId.encode'));

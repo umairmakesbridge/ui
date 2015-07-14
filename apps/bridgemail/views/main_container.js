@@ -667,7 +667,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.addWorkSpace({type: '', title: 'Custom Charts', sub_title: 'Analytics', url: 'reports/customreports', workspace_id: 'customereports', 'addAction': true, tab_icon: 'reports', noTags: true});
                 },
                 reportFlow: function(){
-                    this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'customreports', noTags: true});
+                    this.addWorkSpace({type: '', title: 'Reports', sub_title: 'Analytics', url: 'reports/reports', workspace_id: 'reports', 'addAction': true, tab_icon: 'reportslisting', noTags: true});
                 },
                 exportsubscribers: function () {
                     this.addWorkSpace({type: '', noTags: true, title: 'Export Subscribers', sub_title: 'Export Contacts', url: 'contacts/exportsubscribers', workspace_id: 'export_subscriber', 'addAction': false, tab_icon: 'exportsubscribers'});
