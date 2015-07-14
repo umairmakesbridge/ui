@@ -55,7 +55,7 @@ function (template,highlighter) {
               
             },
             opentipandtest : function(event){
-                    this.app.mainContainer.addWorkSpace({type: '', noTags: true ,title: this.model.get('title'), sub_title: '', url: this.model.get('url'), workspace_id: this.model.get('tipid'), 'addAction': false, tab_icon: 'tipntest'}); 
+                    this.app.mainContainer.addWorkSpace({type: '', noTags: true ,title: this.model.get('title'), sub_title: 'Proven Process', url: this.model.get('url'), workspace_id: this.model.get('tipid'), 'addAction': false, tab_icon: 'tipntest'}); 
             },
             tagClick:function(obj){
                             //this.sub.taglinkVal = true;
