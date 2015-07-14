@@ -5,7 +5,12 @@ define([
 	return Backbone.Collection.extend({
 		model: Campaign,
 		url: function () {
-                    return app.get('path')+'apps/bridgemail/tipandtest/tipandtest.json';
+                    if(app.get('complied')==0){ 
+                        return app.get('path')+'apps/bridgemail/tipandtest/tipandtest.json';
+                    }else{
+                        return app.get('path')+'/tipandtest/tipandtest.json';
+                    } 
+                    
 		},
                 parse: function(response,sent) {
                     var result = []

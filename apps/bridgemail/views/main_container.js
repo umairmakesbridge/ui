@@ -685,7 +685,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                    this.addWorkSpace({type: '', title: '1:1 Emails', sub_title: 'Listing', url: 'onetooneemails/singlelistings', workspace_id: 'singleemail', 'addAction': true, tab_icon: 'onetoonelisting'}); 
                 },
                  tipandtestlistings : function(){
-                   this.addWorkSpace({type: '', noTags: true ,title: 'Proven Processes', sub_title: '', url: 'tipandtest/tipandtestlisting', workspace_id: 'tip_test_listings', 'addAction': false, tab_icon: 'tipntest'}); 
+                   this.addWorkSpace({type: '', noTags: true ,title: 'Proven Processes', sub_title: '', url: 'tipandtest/tipandtestlisting', workspace_id: 'tip_test_listings', 'addAction': false, tab_icon: 'tipntestlisting'}); 
                 },
                 tip_test : function(){
                    this.addWorkSpace({type: '', noTags: true ,title: 'Increase Sales Meetings - Follow Up In Under 5 Minutes', sub_title: '', url: 'tipandtest/tipandtest', workspace_id: 'tip_test', 'addAction': false, tab_icon: 'tipntest'}); 

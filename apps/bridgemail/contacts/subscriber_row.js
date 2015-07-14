@@ -256,27 +256,43 @@ function (template,highlighter,tagView) {
                      this.templateView.createOTODialog();
                     
                 },
-                synctoSF : function(){
+                synctoSF : function(event){
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Add to Salesforce',
                         css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                         headerEditable:false,
-                        headerIcon : 'template',
+                        headerIcon : 'salesforcelog',
                         bodyCss:{"min-height":dialog_height+"px"},
                         tagRegen:false,
                         reattach : false
                         });
-                        var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum");
-                        var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum")+"&fromNewUI=true";
+                        var iframHTML = "<iframe src=\""+url+"\" id='addtosalesforceframe' width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().append(iframHTML);
+                        dialog.getBody().find('.workflowiframe').load(function(){
+                             //$(this).show();
+                            var iframe = $(this);
+                            //console.log('load the iframe')
+                            dialog.$el.find('.modal-footer .btn-save span').html('Add to Salesforce');
+                            dialog.$el.find('.modal-footer .btn-save').removeClass('btn-save').addClass('btn-add').show();
+                            iframe.contents().find('.hideitiframe').hide();
+                            console.log(url);
+                            dialog.$el.find('.modal-footer .btn-add').click(function(event){
+                               document.getElementById('addtosalesforceframe').contentWindow.addtosf();
+                               $(this).hide().delay( 2000 );
+                                //dialog.hide();
+                            })
+                        });
+                        event.stopPropagation();
                         //this.app.showLoading("Loading Templates...",dialog.getBody());
                         //dialog.getBody().append('<iframe src="/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK='+this.app.get('bms_token')+'&subNum='+this.model.get("subNum")+'&fromNewUI=true" width="100%" frameborder="0" style="height:100%;overflow:hidden"></iframe>');
                 },
                 viewSyncedSF : function(event){
                     var url = $(event.target).parent().data('url');
-                    console.log(url);
+                    //console.log(url);
                     window.open(url,'newwindow', 'scrollbars=yes,resizable=yes');
+                     event.stopPropagation();
                 }
                 
             

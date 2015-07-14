@@ -387,6 +387,7 @@
       var filter = $(this.options.filterRow)
       filter.addClass("email blue")
       var selected_camp = "",selected_article = "";
+      var isSelected_camp = false;
       var mapValue = ''; // 
       var self = this
       var filter_html = '<div class="row"><label style="width: 120px;">Filter by</label>'
@@ -460,7 +461,10 @@
                         var camp_list = _json.lists || _json.campaigns
                         $.each(camp_list[0], function(index, val) {    
                             var _checksum = val[0].md5 || val[0]["campNum.checksum"]
-                            selected_camp = (params && params["campaignNumber.checksum"]==_checksum)?"selected":""
+                            selected_camp = (params && params["campaignNumber.checksum"]==_checksum)?"selected":"";
+                            if(selected_camp){
+                                isSelected_camp = true;
+                            }
                             var _value = val[0]["campNum.encode"] || val[0]["campNum"]
                             if(val[0]["isTextOnly"]){
                             select_html += '<option value="'+_value+'" '+selected_camp+' data-istext="'+val[0]["isTextOnly"]+'">'+val[0].name+'</option>'
@@ -471,21 +475,28 @@
                         })
                      }
                     
+                     
+                     
                      filter.find(".campaign-list").html(select_html);
+                     //console.log('check its hitting' + );
+                     if(isSelected_camp){
+                         
+                         filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
+                     }
                      if( filter.find(".campaign-list").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".campaign-list").find("option:last-child").attr("data-load","true");
                              }
                       // 
                      
                      if(params && params["campaignNumber.checksum"]){
-                         if(filter.find(".campaign-source").val()==="N"){
+                         if(filter.find(".campaign-source").val()==="N" && !isSelected_camp){
                            filter.find(".campaign-list").attr("data-selected",self.options.app.decodeHTML(params['campaignNumber.checksum']));
                            filter.find(".campaign-list").trigger("chosen:select");
                         }
                        filter.find(".campaign-list").change()
                      }else{
                          filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
-                     }
+                         }
                      
                 }
             }).fail(function() { console.log( "error campaigns listing" ); });
