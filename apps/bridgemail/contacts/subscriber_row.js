@@ -267,6 +267,7 @@ function (template,highlighter,tagView) {
                         tagRegen:false,
                         reattach : false
                         });
+                        var _this = this;
                         var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum")+"&fromNewUI=true";
                         var iframHTML = "<iframe src=\""+url+"\" id='addtosalesforceframe' width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().append(iframHTML);
@@ -274,14 +275,34 @@ function (template,highlighter,tagView) {
                              //$(this).show();
                             var iframe = $(this);
                             //console.log('load the iframe')
+                            if(iframe.contents().find('.info').hasClass('successfull-lead')){
+                               // console.log('Successfully lead added need to hide ');
+                               _this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
+                                dialog.hide();   
+                            }
+                            if(iframe.contents().find('.error').hasClass('error-lead')){
+                               // console.log('lead error  ');
+                                dialog.$el.find('.modal-footer .btn-add').hide().delay( 1000);
+                                dialog.$el.find('.modal-footer .btn-close').before('<a style="" class="btn-yellow left btn-backsales"><i class="icon back left"></i><span>Back</span></a>')
+                               //_this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
+                                //dialog.hide();  
+                                dialog.$el.find('.modal-footer .btn-backsales').click(function(){
+                                    dialog.$el.find('#addtosalesforceframe').attr('src',url);
+                                })
+                                
+                            }else{
+                                dialog.$el.find('.modal-footer .btn-add').show();
+                                dialog.$el.find('.modal-footer .btn-backsales').remove();
+                            }
+                            
                             dialog.$el.find('.modal-footer .btn-save span').html('Add to Salesforce');
                             dialog.$el.find('.modal-footer .btn-save').removeClass('btn-save').addClass('btn-add').show();
                             iframe.contents().find('.hideitiframe').hide();
-                            console.log(url);
+                            //console.log(url);
                             dialog.$el.find('.modal-footer .btn-add').click(function(event){
                                document.getElementById('addtosalesforceframe').contentWindow.addtosf();
-                               $(this).hide().delay( 2000 );
-                                //dialog.hide();
+                               
+                                //
                             })
                         });
                         event.stopPropagation();
