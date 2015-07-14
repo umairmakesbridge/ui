@@ -73,7 +73,7 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!tipa
                        // clearFunc: _.bind(this.clearSearchEmails, this),
                         placeholder: 'Search Proven Prcess',
                         showicon: 'yes',
-                        iconsource: 'wtab-tipntest',
+                        iconsource: 'wtab-tipntestlisting',
                         countcontainer: 'no_of_camps'
                     });
 

@@ -4393,13 +4393,23 @@ a.tipntest-toggle i {
     transition: opacity 0.3s ease-out 0s;
     width: 30px;
 }
+a.tipntestlistings i {
+    background: rgba(0, 0, 0, 0) url("../img/pp_listing_icon_w.png") no-repeat scroll center center;
+    height: 30px;
+    opacity: 1;
+    transition: opacity 0.3s ease-out 0s;
+    width: 30px;
+}
 a.tipntest-toggle:hover i { opacity:0.7;}
 
-.sc-links a.tipntest-toggle:hover i{opacity : 1;background: url("../img/tipntesticon-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.sc-links a.tipntest-toggle:hover i{opacity : 1;background: url("../img/pp_listing_icon_w-g.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .sc-links > a.tipntest-toggle:hover {background: none repeat scroll 0 0 #294957 !important; }
 
 .wtab-tipntest {
     background: url("../img/ws-icons.png") no-repeat scroll -60px -240px rgba(0, 0, 0, 0);
+}
+.wtab-tipntestlisting {
+   background: rgba(0, 0, 0, 0) url("../img/ws-icons.png") no-repeat scroll -58px -88px;
 }
 .tipntest {}
 
@@ -4700,6 +4710,18 @@ a.tipntest-toggle:hover i { opacity:0.7;}
     transition: opacity 0.3s ease-out 0s;
     width: 100%;
 }
+.add-to-salesforce img {
+    height: 18px;
+    width: 18px;
+}
+.salesforce-view img {
+    height: 18px;
+    width: 18px;
+}
+.icon.salesforcelog {
+    background: rgba(0, 0, 0, 0) url("../img/sf-logo-30.png") no-repeat scroll center center;
+}
+
 .action-btns a:hover span {
     opacity: 1;
 }
