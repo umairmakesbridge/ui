@@ -17,7 +17,8 @@ function (template) {
             */
             initialize:function(){
               // _.bindAll(this, 'searchByTag','updateRefreshCount');  
-               this.template = _.template(template);		               
+               this.template = _.template(template);		
+               this.vAxisLogScale = false;
                this.render();
             },
             /**
@@ -28,6 +29,7 @@ function (template) {
                this.app = this.options.page.app;   
                this.legend = this.options.legend;
                this.chartArea = this.options.chartArea;
+               this.vAxisLogScale = this.options.vAxisLogScale;
                this.isStacked = this.options.isStacked?true:false;
             }
             /**
@@ -44,11 +46,12 @@ function (template) {
                 legend:this.legend,                         
                 chartArea:this.chartArea,    
                 fontSize:12,                
-                colors:['#454F88','#2F93E5','#62ABE6','#0C73C2'],
-                bar: { groupWidth: '50%' },
+                colors:['#454F88','#2F93E5','#62ABE6','#0C73C2','#3b5998','#bb0000'],
+                bar: { groupWidth: '45%' },
                 fontName:"'PT Sans',sans-serif",
                 backgroundColor: 'transparent',
                'backgroundColor.stroke':'#ccc',
+               vAxis:{logScale:this.vAxisLogScale},
                isStacked : this.isStacked 
               };
               var formatter = new google.visualization.NumberFormat(

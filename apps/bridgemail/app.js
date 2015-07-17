@@ -312,13 +312,19 @@ define([
             }
             else {
                 this.mainContainer.$(".one-one-listing,.signup-forms").show();
-            }
-           // console.log(this.get("user"));
-                 if (this.testUsers.indexOf(this.get("user").userId) > -1) {
-                    this.mainContainer.$(".tipntestlistings,.report-flow").show();
-                }else{
-                    this.mainContainer.$('.tipntestlistings,.report-flow').hide();
-                }
+            }           
+           if (this.testUsers.indexOf(this.get("user").userId) > -1) {
+               this.mainContainer.$(".tipntestlistings").show();
+           }else{
+               this.mainContainer.$('.tipntestlistings').hide();
+           }
+           var addedUser = ['jjautobot','juicyjuice','juicyjuicebb'];
+           if(this.testUsers.indexOf(this.get("user").userId) > -1 || addedUser.indexOf(this.get("user").userId) > -1){
+              this.mainContainer.$(".report-flow").show(); 
+           }
+           else{
+               this.mainContainer.$(".report-flow").show(); 
+           }
         },
         fromCRM: function () {
             if (this.get("isFromCRM") && this.get("isFromCRM").toLowerCase() == "y") {

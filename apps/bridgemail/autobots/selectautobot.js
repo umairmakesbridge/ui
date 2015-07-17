@@ -75,7 +75,7 @@ function (template, AutobotCollection, botRowView,moment) {
                     }
                     if (this.request)
                         this.request.abort();
-                     var _data = {type: 'search',status:'R','actionType':'E'};
+                     var _data = {type: 'search',status:'R,P','actionType':'E'};
                     _data['offset'] = this.offset;                    
                     if (this.toDate && this.fromDate) {
                         _data['fromDate'] = this.fromDate;
@@ -88,7 +88,7 @@ function (template, AutobotCollection, botRowView,moment) {
                     _data['bucket'] = 20;
                                         
                     this.$('#bots_grid tbody .load-tr').remove();
-                    this.$('#bots_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No autobots founds!</div><div class='loading-bots' style='margin-top:50px'></div></td></tr>");
+                    this.$('#bots_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No autobots found!</div><div class='loading-bots' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("Please wait, loading autobots...", this.$el.find('#bots_grid tbody').find('.loading-bots'));
                     this.$('#bots_grid tbody').find('.loading-bots .loading p ').css('padding','30px 0 0');
                     this.autobotCollection = new AutobotCollection();
@@ -222,7 +222,7 @@ function (template, AutobotCollection, botRowView,moment) {
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
-                    this.$("#total_targets span").html("Campaign(s) found for  <b>\"" + text + "\" </b>");
+                    this.$("#total_targets span").html("autobot(s) found for  <b>\"" + text + "\" </b>");
                 },
                 liveLoading: function(where) {
                     var $w = $(window);

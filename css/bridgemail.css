@@ -13682,6 +13682,7 @@ margin: 10px 0 0;
 .auto_gallery {   background: url("../img/botsgallery.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .n_birthdaybot {   background: url("../img/bdaybot-add.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .customreports{background: url("../images/customcharts.png") no-repeat scroll center center; }
+.cust-reports{background: url("../images/reports_m.png") no-repeat scroll center center; }
 
 .messageerror{
     background-color: #FCAEAE;

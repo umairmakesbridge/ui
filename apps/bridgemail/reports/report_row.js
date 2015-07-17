@@ -460,14 +460,14 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                                 }
                                 if(summary_json.count!=="0"){
                                     require(["reports/campaign_line_chart"],_.bind(function(chart){                            
-                                        this.chartPage = new chart({page:this,legend:{},isStacked:true});                                    
+                                        this.chartPage = new chart({page:this,legend:{},isStacked:true,vAxisLogScale:true});                                    
                                         this.$("#chart-"+val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width":"100%","height":"150px"});                                                                                            
+                                        this.chartPage.$el.css({"width":"100%","height":"250px"});                                                                                            
                                         var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click',{ role: 'annotation' } ]
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click','Socail','Bounce',{ role: 'annotation' } ]
                                           ];
                                          _.each(summary_json.summaries[0], function(sVal) { 
-                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM YYYY"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), '']) 
+                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']) 
                                          });
                                          this.chartPage.createChart(_data);                                                        
                                     },this));
@@ -638,14 +638,14 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                                 }
                                 if(summary_json.count!=="0"){
                                     require(["reports/campaign_line_chart"],_.bind(function(chart){                            
-                                        this.chartPage = new chart({page:this,legend:{},isStacked:true});                                    
+                                        this.chartPage = new chart({page:this,legend:{},isStacked:true,vAxisLogScale:true});                                    
                                         this.$("#chart-"+val.get("botId.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width":"100%","height":"150px"});                                                                                            
+                                        this.chartPage.$el.css({"width":"100%","height":"250px"});                                                                                            
                                         var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click',{ role: 'annotation' } ]
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click','Social','Bounce',{ role: 'annotation' } ]
                                           ];
                                          _.each(summary_json.summaries[0], function(sVal) { 
-                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM YYYY"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), '']) 
+                                            _data.push([ moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']) 
                                          });
                                          this.chartPage.createChart(_data);                                                        
                                     },this));
