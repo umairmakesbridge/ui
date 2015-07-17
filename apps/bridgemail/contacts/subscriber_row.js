@@ -282,7 +282,7 @@ function (template,highlighter,tagView) {
                                iframe.contents().find('.publisherPageWrapper').hide();
                                 _this.sub.$el.find('.refresh_btn').click();
                                 _this.app.showLoading("Saving Salesforce...",dialog.getBody());
-                                dialog.hide().delay();   
+                                dialog.hide();   
                             }
                             if(iframe.contents().find('.error').hasClass('error-lead')){
                                // console.log('lead error  ');
