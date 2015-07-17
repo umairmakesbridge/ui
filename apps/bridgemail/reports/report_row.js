@@ -191,7 +191,7 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                     } else if(this.reportType=="webforms"){
                         //this.openSignupFormsDialog();
                     } else if(this.reportType=="nurturetracks"){
-                         //this.openNurtureTracksDialog();
+                         this.loadNurtureTracks();
                     } else if(this.reportType=="targets"){
                         //this.openTargetsDialog();
                     }
@@ -206,8 +206,8 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         this.loadAutobotsSummary();
                     } else if(this.reportType=="webforms"){
                         //this.openSignupFormsDialog();
-                    } else if(this.reportType=="nurturetracks"){
-                         //this.openNurtureTracksDialog();
+                    } else if(this.reportType=="nurturetrack"){
+                         this.loadNurtureTrackSummary();
                     } else if(this.reportType=="targets"){
                         //this.openTargetsDialog();
                     }
@@ -756,10 +756,10 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                         saveCall : '',
                         headerIcon : 'nurturedlg'                        
                     }                     
-                     dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;                      
+                     //dialog_object["buttons"]= {saveBtn:{text:'Done'} }  ;                      
                      var dialog = this.app.showDialog(dialog_object);
                     this.app.showLoading("Loading Nurture Tracks...",dialog.getBody());                                  
-                    require(["nurturetrack/selecttrack"],_.bind(function(page){                                     
+                    require(["nurturetrack/select_single_track"],_.bind(function(page){                                     
                          var _page = new page({page:this,dialog:dialog,editable:this.editable,dialogHeight:_height-103});
                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          dialog.getBody().html(_page.$el);                         
@@ -788,6 +788,10 @@ define(['text!reports/html/report_row.html','jquery.searchcontrol','daterangepic
                             //this.createCampaignChart();                                                        
                         },this));
                     }
+                },
+                loadNurtureTrackSummary:function(){
+                    
+                    
                 },
                  //////********************* Targets  *****************************************//////
                 loadTargets:function(){

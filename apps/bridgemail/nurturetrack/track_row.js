@@ -34,6 +34,8 @@ function (template,highlighter) {
                     this.showRemoveButton = this.options.showRemove;
                     this.showCheckbox = this.options.showCheckbox;
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
+                    this.showSummaryChart = this.options.showSummaryChart;
+                    this.singleSelection = this.options.singleSelection;
                     this.template = _.template(template);				                                                      
                     this.render();                    
             },
@@ -164,11 +166,14 @@ function (template,highlighter) {
                  },this));
             },
             addRowToCol2: function () {
-                if (this.showUseButton) {
+                if (this.showUseButton && !this.singleSelection) {
                     this.$el.fadeOut("fast", _.bind(function () {
                         this.parent.addToCol2(this.model);
                         this.$el.hide();
                     }, this));
+                }
+                else if(this.showUseButton && this.singleSelection){
+                    this.parent.addTo(this.model);
                 }
             },
             removeRowToCol2: function () {

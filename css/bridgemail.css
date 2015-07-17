@@ -9248,6 +9248,7 @@ box-shadow: 0 2px 2px 0 #C0DEEA;
 .new_activities .act_row  .info-p { min-height: 50px; margin:10px 0 0;}
 
 .new_activities .act_row  i.icon { float:left; width:35px; height:35px;  }
+.timeline-container .new_activities .act_row  i.icon { float:left; width:20px; height:20px;  }
 
 
 .new_activities .act_row > .icon { 
