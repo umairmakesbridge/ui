@@ -268,6 +268,7 @@ function (template,highlighter,tagView) {
                         reattach : false
                         });
                         var _this = this;
+                        this.app.showLoading("Loading Salesforce...",dialog.getBody());
                         var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum")+"&fromNewUI=true";
                         var iframHTML = "<iframe src=\""+url+"\" id='addtosalesforceframe' width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().append(iframHTML);
@@ -278,7 +279,10 @@ function (template,highlighter,tagView) {
                             if(iframe.contents().find('.info').hasClass('successfull-lead')){
                                // console.log('Successfully lead added need to hide ');
                                _this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
-                                dialog.hide();   
+                               iframe.contents().find('.publisherPageWrapper').hide();
+                                _this.sub.$el.find('.refresh_btn').click();
+                                _this.app.showLoading("Saving Salesforce...",dialog.getBody());
+                                dialog.hide().delay();   
                             }
                             if(iframe.contents().find('.error').hasClass('error-lead')){
                                // console.log('lead error  ');
@@ -294,7 +298,7 @@ function (template,highlighter,tagView) {
                                 dialog.$el.find('.modal-footer .btn-add').show();
                                 dialog.$el.find('.modal-footer .btn-backsales').remove();
                             }
-                            
+                            _this.app.showLoading(false,  dialog.getBody()); 
                             dialog.$el.find('.modal-footer .btn-save span').html('Add to Salesforce');
                             dialog.$el.find('.modal-footer .btn-save').removeClass('btn-save').addClass('btn-add').show();
                             iframe.contents().find('.hideitiframe').hide();
