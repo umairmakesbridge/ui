@@ -9908,4 +9908,7 @@ sup.beta {
     bottom: 38px;
     box-shadow: 4px 0px 3px rgba(0, 0, 0, 0.15);
 }
+.app_subs .checkpanelinput {
+    position: relative;
+}
   /* ================================================End tan_a_changes.css================================================ */

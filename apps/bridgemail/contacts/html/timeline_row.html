@@ -6,7 +6,7 @@
       <div class="infotxt">
         <span><%-this.app.decodeHTML(model.get("botLabel"))%></span>
         <strong>Autobot Name</strong>
-    </div>
+      </div>    
     <% } if(typeof(model.get('pageType'))!=="undefined"){ %>
     <div class="infotxt">
         <span><%-this.app.decodeHTML(model.get("pageType"))%></span>
@@ -17,6 +17,23 @@
         <a href="<%- this.app.decodeHTML(model.get('pageURL')) %>" target='_blank'><i class="icon link"></i> <%- this.app.decodeHTML(model.get("pageURL")) %></a>
         <strong>Page URL</strong>
     </div>
+    <% } %>    
+    <% if(model.get('recur.isRecur')=="Y"){ %>
+        <div class="infotxt">
+            <% if(model.get("recur.recurCount")=="1") { %>
+                <span><%-model.get("recur.recurCount")%> time</span>
+            <% } else { %>
+                <span><%-model.get("recur.recurCount")%> times</span>
+            <% } %>
+            <strong>Action Performed</strong>
+        </div>
+        
+        <% if(model.get('status')=="P") { %>
+            <div class="infotxt">
+                <span><%-this.getLastExecutionDate() %> </span>
+                <strong>Last Recur Date</strong>
+            </div>
+        <% } %>
     <% } %>
 </div>
 <%  } else if(type=="A" || type=="WA"){  %>

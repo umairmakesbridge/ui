@@ -112,6 +112,11 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     return {date: _date.format("DD MMM YYYY"), time: _date.format("hh:mm A")};
 
                 },
+                getLastExecutionDate: function () {
+                    var _date = moment(this.app.decodeHTML(this.model.get("recur.lastExecDate")), 'M/D/YYYY h:m a');
+                    return  _date.format("DD MMM YYYY") + " " + _date.format("hh:mm A");
+
+                },
                 filterData: function () {
                     var model = this.model;
                     var title = "";//model.get("name")?this.model.get("name"):this.mapping[this.model.get("activityType")].name;                                    

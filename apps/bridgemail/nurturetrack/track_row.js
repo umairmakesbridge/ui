@@ -36,6 +36,7 @@ function (template,highlighter) {
                     this.maxWidth = this.options.maxWidth?this.options.maxWidth:'auto';
                     this.showSummaryChart = this.options.showSummaryChart;
                     this.singleSelection = this.options.singleSelection;
+                    this.showMessage = this.options.showMessage;                    
                     this.template = _.template(template);				                                                      
                     this.render();                    
             },
@@ -48,7 +49,10 @@ function (template,highlighter) {
                     model: this.model
                 }));                
                 if(this.showUseButton){
-                    this.$el.attr("data-checksum",this.model.get("trackId.checksum"))
+                    this.$el.attr("data-checksum",this.model.get("trackId.checksum"));
+                }
+                else if(this.showMessage){
+                    this.$el.attr("data-checksum",this.model.get("campNum.checksum"));
                 }
                 this.initControls();  
                
@@ -195,6 +199,47 @@ function (template,highlighter) {
                 if (this.parent.createTrackChart) {
                     this.parent.createTrackChart();
                 }
-            }
+            },getTimeShow: function () {
+                    var datetime = '';
+                    var dtHead = '';
+                    var dateFormat = '';
+                    if (this.model.get('status') == 'P' || this.model.get('status') == 'S')
+                    {
+                        dtHead = 'Schedule Date';
+                        datetime = this.model.get('scheduledDate');
+                    }
+                    else if (this.model.get('status') == 'C')
+                    {
+                        dtHead = 'Sent Date';
+                        datetime = this.model.get('scheduledDate');
+                    }
+                    else if (this.model.get('status') == 'D')
+                    {
+                        dtHead = 'Last Edited';
+                        if (this.model.get('updationDate'))
+                            datetime = this.model.get('updationDate');
+                        else
+                            datetime = this.model.get('creationDate');
+                    }
+                    else {
+                        dtHead = 'Last Edited';
+                        if (this.model.get('updationDate'))
+                            datetime = this.model.get('updationDate');
+                        else
+                            datetime = this.model.get('creationDate');
+                    }
+                    if (datetime)
+                    {
+                        var date = moment(this.app.decodeHTML(datetime), 'YYYY-M-D H:m');
+                        dateFormat = date.format("DD MMM, YYYY");
+                        if (this.model.get('status') == 'S' || this.model.get('status') == 'P') {
+                            dateFormat = date.format("DD MMM, YYYY<br/>hh:mm A");
+                        }
+                    }
+                    else {
+                        dateFormat = '';
+                    }
+                    return {dtHead: dtHead, dateTime: dateFormat}
+                }
         });
 });

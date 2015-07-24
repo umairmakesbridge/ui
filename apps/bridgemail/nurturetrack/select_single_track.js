@@ -15,7 +15,7 @@ function (template, TracksCollection, trackRowView,moment) {
                         this.dialog = this.options.dialog;
                         this.scrollElement = null;
                         this.total_fetch = 0;
-                        this.gridHeight = this.options.dialogHeight?this.options.dialogHeight:345;
+                        this.gridHeight = this.options.dialogHeight?(this.options.dialogHeight+35):345;
                         this.editable=this.options.editable;                        
                         this.tracksModelArray = [];                        
                         this.total = 0;
@@ -38,22 +38,22 @@ function (template, TracksCollection, trackRowView,moment) {
                             colresize:false,
                             height:this.gridHeight,							
                             usepager : false,
-                            colWidth : ['100%','100']
+                            colWidth : ['100%','90','100']
                     });                    
                   
                     this.col1 = this.$("#tracks_grid tbody")
                     this.scrollElement = this.$(".leftcol .bDiv");
-                    this.loadCampaigns();
-                    this.scrollElement.scroll(_.bind(this.liveLoading,this));
-                    this.scrollElement.resize(_.bind(this.liveLoading,this));
+                    this.loadNutureTracks();
+                    //this.scrollElement.scroll(_.bind(this.liveLoading,this));
+                    //this.scrollElement.resize(_.bind(this.liveLoading,this));
                     this.$(".col1 #form-search").on("keyup",_.bind(this.search,this));
                     this.$(".col1 #clearsearch").on("click",_.bind(this.clearSearch,this));
                     this.$('.refresh_btn').click(_.bind(function(){                        
-                        this.loadCampaigns();
+                        this.loadNutureTracks();
                     },this));
                     this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 },
-                loadCampaigns:function(fcount){                  
+                loadNutureTracks:function(fcount){                  
                     if (!fcount){
                         this.offset = 0;
                         this.total_fetch = 0;
@@ -74,7 +74,7 @@ function (template, TracksCollection, trackRowView,moment) {
                     }                    
                     _data['bucket'] = 20;                                        
                     this.$('#tracks_grid tbody .load-tr').remove();
-                    this.$('#tracks_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No signup forms founds!</div><div class='loading-tracks' style='margin-top:50px'></div></td></tr>");
+                    this.$('#tracks_grid tbody').append("<tr class='erow load-tr' id='loading-tr'><td colspan=7><div class='no-contacts' style='display:none;margin-top:10px;padding-left:43%;'>No Nuture Tracks founds!</div><div class='loading-tracks' style='margin-top:50px'></div></td></tr>");
                     this.app.showLoading("Please wait, loading nurture tracks...", this.$el.find('#tracks_grid tbody').find('.loading-tracks'));
                     this.$('#tracks_grid tbody').find('.loading-tracks .loading p ').css('padding','30px 0 0');
                     this.tracksCollection = new TracksCollection();
@@ -123,9 +123,9 @@ function (template, TracksCollection, trackRowView,moment) {
                     this.hideRecipients();
                 },
                 hideRecipients:function(){
-                     for(var i=0;i<this.tracksModelArray.length;i++){                        
+                    /*for(var i=0;i<this.tracksModelArray.length;i++){                        
                         this.col1.find("tr[data-checksum='"+this.tracksModelArray[i].get("trackId.checksum")+"']").hide();
-                    }
+                    }*/
                 },
                 targetInRecipients:function(checksum){
                     var isExits = false;
@@ -158,13 +158,13 @@ function (template, TracksCollection, trackRowView,moment) {
                     if (code == 13 || code == 8) {
                         that.$el.find('.col1 #clearsearch').show();
                         this.searchTxt = text;
-                        that.loadCampaigns();
+                        that.loadNutureTracks();
                     } else if (code == 8 || code == 46) {
 
                         if (!text) {
                             that.$el.find('.col1 #clearsearch').hide();
                             this.searchTxt = text;
-                            that.loadCampaigns();
+                            that.loadNutureTracks();
                         }
                     } else {
                         that.$el.find('.col1 #clearsearch').show();
@@ -173,7 +173,7 @@ function (template, TracksCollection, trackRowView,moment) {
                             if (text.length < 2)
                                 return;
                             that.searchTxt = text;
-                            that.loadCampaigns();
+                            that.loadNutureTracks();
                         }, 500); // 2000ms delay, tweak for faster/slower
                     }
                 }, clearSearch: function(ev) {
@@ -184,7 +184,7 @@ function (template, TracksCollection, trackRowView,moment) {
                     this.searchTags = '';
                     this.total_fetch = 0;
                     this.$("#total_targets span").html("Campaign(s) found");    
-                    this.loadCampaigns();
+                    this.loadNutureTracks();
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
@@ -204,7 +204,7 @@ function (template, TracksCollection, trackRowView,moment) {
                     });
                     if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
                         inview.removeAttr("data-load");
-                        this.loadCampaigns(this.offsetLength);
+                        this.loadNutureTracks(this.offsetLength);
                     }
                 },
                 addTo:function(model){                    
@@ -212,35 +212,28 @@ function (template, TracksCollection, trackRowView,moment) {
                     this.saveCall();
                 },
                 saveCall:function(){
-                    var col2 = this.$(this.col2).find(".bDiv tbody");
-                    if(col2.find("tr").length>0){
-                       var pagesArray =  {}
-                        var t =1;
-                        _.each(this.tracksModelArray,function(val,key){
-                           pagesArray["page"+t] = [{"checksum":val.get("trackId.checksum"),"encode":val.get("trackId.checksum")}] ;
-                           t++;
-                        },this);   
-                        this.parent.modelArray = this.tracksModelArray;
-                        this.parent.pagesArray = pagesArray;
-                        this.dialog.hide();
-                        this.parent.createNurtureTrack();
-                    }
-                    else{
-                        this.app.showAlert("Please select at least on signup form.",this.$el);
-                    }
+                    var col2 = this.$(this.col2).find(".bDiv tbody");                    
+                    var tracksArray =  {};
+                    var objectArray = [];
+                     var t =1;
+                     _.each(this.tracksModelArray,function(val,key){
+                        tracksArray["page"+t] = [{"checksum":val.get("trackId.checksum"),"encode":val.get("trackId.checksum")}] ;
+                        t++;
+                        objectArray.push({"id":val.get("trackId.encode"),"checked":true})
+                     },this);   
+                     this.parent.modelArray = this.tracksModelArray;
+                     this.parent.pagesArray = tracksArray;
+                     this.parent.objects = objectArray;
+                     this.dialog.hide();
+                     this.parent.createNurtureTrack();
+                    
                 },
               showSelectedCampaigns : function(lists){                                      
                   if(this.showSelectedRecords==false){
-                    var selectedPages = this.parent.modelArray;
-                    if(selectedPages.length){
-                      for(var s=0;s<selectedPages.length;s++){                                
-                           this.addToCol2(selectedPages[s]);                         
-                      }                        
-                    }
+                    var selectedPages = this.parent.modelArray;                    
                     this.showSelectedRecords=true;
                  }
-                  this.hideRecipients();
-                   
+                  this.hideRecipients();                   
               },
               searchByTagTile:function(tag){
                this.$("#targetrecpssearch #track-recps-search").val(tag);
@@ -277,7 +270,7 @@ function (template, TracksCollection, trackRowView,moment) {
                 this.fromDate = "";
                 this.toDate = "";
                 this.$('#daterange').val('');   
-                this.loadCampaigns();
+                this.loadNutureTracks();
             },
             showDatePickerFromClick:function(){
                 this.$('#daterange').click();
@@ -301,7 +294,7 @@ function (template, TracksCollection, trackRowView,moment) {
                     if(toDate){
                         this.toDate = toDate.format("MM-DD-YYYY");
                     }   
-                    this.loadCampaigns();
+                    this.loadNutureTracks();
                     
                }
             },

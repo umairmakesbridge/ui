@@ -244,14 +244,17 @@ function (template, CampaignsCollection, campRowView,moment) {
                 saveCall:function(){
                     var col2 = this.$(this.col2).find(".bDiv tbody");
                     if(col2.find("tr").length>0){
-                       var pagesArray =  {}
+                       var pagesArray =  {};
+                       var objectArray =[];
                         var t =1;
                         _.each(this.campaignsModelArray,function(val,key){
                            pagesArray["page"+t] = [{"checksum":val.get("campNum.checksum"),"encode":val.get("campNum.checksum")}] ;
+                           objectArray.push({"id":val.get("campNum.encode"),"checked":true})
                            t++;
                         },this);   
                         this.parent.modelArray = this.campaignsModelArray;
                         this.parent.pagesArray = pagesArray;
+                        this.parent.objects = objectArray;
                         this.dialog.hide();
                         this.parent.createCampaigns();
                     }

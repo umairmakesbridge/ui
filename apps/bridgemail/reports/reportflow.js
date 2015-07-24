@@ -57,9 +57,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                     
                     this.getSettings();
                 },
-                addReport:function(event,obj){
+                addReport:function(event,obj,loadReport){
                     var rType = typeof(event)=="object"?$.getObj(event, "li").attr("data-type"):event;
-                    var row_view = new reportRow({reportType:rType,sub:this,objects:obj});
+                    var row_view = new reportRow({reportType:rType,sub:this,objects:obj,loadReport:loadReport});
                     this.models.push(row_view);
                     row_view.orderNo = this.models.length;
                     row_view.$el.insertBefore(this.$(".addbar"));
@@ -129,9 +129,16 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                id = r_val.get("pageId.encode"); 
                             }else if(type=="autobots"){
                                id = r_val.get("botId.encode"); 
-                            }  
+                            }else if(type=="nurturetracks"){
+                               id = r_val.get("trackId.encode"); 
+                            }                             
                             selected_obj['id'] = id;
-                            selected_obj['checked'] =val.$("[id='"+id+"'] .check").length?true:false;
+                            if(type=="nurturetracks"){
+                                selected_obj['checked'] =true;
+                            }
+                            else{
+                                selected_obj['checked'] =val.$("[id='"+id+"'] .check").length?true:false;
+                            }
                             report_obj[type].push(selected_obj);          
                         },this);                                             
                         report_json.push(report_obj);
