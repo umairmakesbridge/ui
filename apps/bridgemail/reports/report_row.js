@@ -793,7 +793,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.$(".add-msg-report").hide();
                         this.$(".bmsgrid").show();
                         if (this.modelArray.length == 1) {
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' messages</b>');
+                            var msgCountText = this.modelArray[0].get("msgCount")=="1" ? "message":"messages";
+                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' '+msgCountText+'</b>');
                         }
                         else {
                             this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');

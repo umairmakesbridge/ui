@@ -6,7 +6,9 @@ function (template, TracksCollection, trackRowView,moment) {
                 events: {                   
                       "keyup #daterange":'showDatePicker',
                       "click #clearcal":'hideDatePicker',
-                      "click .calendericon":'showDatePickerFromClick'
+                      "click .calendericon":'showDatePickerFromClick',
+                      "keyup .search-control":'searchNurtureTrack',
+                      "click .search .close-icon":'clearSearch'
                  },
                 initialize: function () {
                         this.template = _.template(template);				
@@ -40,6 +42,7 @@ function (template, TracksCollection, trackRowView,moment) {
                             usepager : false,
                             colWidth : ['100%','90','100']
                     });                    
+                                         
                   
                     this.col1 = this.$("#tracks_grid tbody")
                     this.scrollElement = this.$(".leftcol .bDiv");
@@ -176,36 +179,10 @@ function (template, TracksCollection, trackRowView,moment) {
                             that.loadNutureTracks();
                         }, 500); // 2000ms delay, tweak for faster/slower
                     }
-                }, clearSearch: function(ev) {
-                    $(ev.target).hide();
-                    this.$(".col1 .search-control").val('');
-                    this.total = 0;
-                    this.searchTxt = '';
-                    this.searchTags = '';
-                    this.total_fetch = 0;
-                    this.$("#total_targets span").html("Campaign(s) found");    
-                    this.loadNutureTracks();
                 },
                 showSearchFilters: function(text, total) {
                     this.$("#total_targets .badge").html(total);
                     this.$("#total_targets span").html("Campaign(s) found for  <b>\"" + text + "\" </b>");
-                },
-                liveLoading: function(where) {
-                    var $w = $(window);
-                    var th = 200;
-
-                    var inview = this.$el.find('table#tracks_grid tbody tr:last').filter(function() {
-                        var $e = $(this),
-                                wt = $w.scrollTop(),
-                                wb = wt + $w.height(),
-                                et = $e.offset().top,
-                                eb = et + $e.height();
-                        return eb >= wt - th && et <= wb + th;
-                    });
-                    if (inview.length && inview.attr("data-load") && this.$el.height() > 0) {
-                        inview.removeAttr("data-load");
-                        this.loadNutureTracks(this.offsetLength);
-                    }
                 },
                 addTo:function(model){                    
                     this.tracksModelArray.push(model);     
@@ -303,6 +280,28 @@ function (template, TracksCollection, trackRowView,moment) {
                 if(!target.hasClass("ui-daterangepicker-dateRange")){
                     this.setDateRange();
                 }
+            },
+            searchNurtureTrack:function(){
+                var grid = this.$("#tracks_grid");
+                var query = ".edit-track";
+                var searchterm = $.trim(this.$(".search-control").val());
+                if(searchterm.length>2){
+                    grid.find("tr").hide();
+                    grid.find("tr").filter(function() {
+                        if($(this).find(query).text().toLowerCase().indexOf(searchterm) > -1)
+                        {							                                                         
+                            $(this).find(query).removeHighlight().highlight(searchterm);	
+                            return $(this);
+                        }
+                    }).show();	
+                    this.$(".close-icon").show();
+                }
+            },
+            clearSearch:function(){
+                this.$(".close-icon").hide();
+                var grid = this.$("#tracks_grid");
+                grid.find("tr").show();this.$(".search-control").val('');
+                grid.find(".edit-track").removeHighlight();
             }
         });
 });
