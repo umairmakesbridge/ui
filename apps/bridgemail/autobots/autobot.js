@@ -28,6 +28,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 initialize: function() {
                     this.template = _.template(template);
                     this.parent = this.options.page;
+                    this.app = this.parent.app;
                     this.icon = "";
                      if (this.model.get('isPreset') == "Y") {
                         this.label = this.model.get('presetLabel');
@@ -454,23 +455,19 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     var that = this;
                     var dialog_width = $(document.documentElement).width() - 60;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var dialog = that.options.app.showDialog({title: 'Campaign Preview of &quot;' + camp_name + '&quot;',
+                    var app = that.options.app ? that.options.app : this.app;
+                    var dialog = app.showDialog({title: 'Preview of &quot;' + camp_name + '&quot;',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'dlgpreview',
-                        bodyCss: {"min-height": dialog_height + "px"},
-                        //buttons: {saveBtn:{text:'Email Preview',btnicon:'copycamp'} }
-                    });
-                    //var preview_url = "https://"+that.options.app.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+that.campNum+"&html=Y&original=N";    
-                    var preview_url = "https://" + that.options.app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + that.model.get('actionData')[0]['campNum.encode'];
+                        bodyCss: {"min-height": dialog_height + "px"},                       
+                    });                        
+                    var preview_url = "https://" + app.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + that.model.get('actionData')[0]['campNum.encode'];
                     require(["common/templatePreview"], _.bind(function(templatePreview) {
                         var tmPr = new templatePreview({frameSrc: preview_url, app: that.options.app, frameHeight: dialog_height, prevFlag: 'C', tempNum: that.model.get('actionData')[0]['campNum.encode']});
                         dialog.getBody().html(tmPr.$el);
                         tmPr.init();
-                    }, this));
-//                        var preview_iframe = $("<iframe class=\"email-iframe\" style=\"height:"+dialog_height+"px\" frameborder=\"0\" src=\""+preview_url+"\"></iframe>");                            
-//                        dialog.getBody().html(preview_iframe);               
-//                        dialog.saveCallBack(_.bind(that.sendTextPreview,that,that.campNum));                        
+                    }, this));                     
                     e.stopPropagation();
                 },
                 addRowToCol2: function () {
