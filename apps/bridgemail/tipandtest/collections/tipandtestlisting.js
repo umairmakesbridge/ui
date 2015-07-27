@@ -8,7 +8,7 @@ define([
                     if(app.get('complied')==0){ 
                         return app.get('path')+'apps/bridgemail/tipandtest/tipandtest.json';
                     }else{
-                        return app.get('path')+'/tipandtest/tipandtest.json';
+                        return app.get('s_path')+'tipandtest/tipandtest.json';
                     } 
                     
 		},
