@@ -256,7 +256,7 @@ function (template,highlighter,tagView) {
                      this.templateView.createOTODialog();
                     
                 },
-                synctoSF : function(event){
+                synctoSF : function(){
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Add to Salesforce',
@@ -268,11 +268,10 @@ function (template,highlighter,tagView) {
                         reattach : false
                         });
                         var _this = this;
-                        this.app.showLoading("Loading Salesforce...",dialog.getBody());
-                        var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum")+"&fromNewUI=true";
-                        var iframHTML = "<iframe src=\""+url+"\" id='addtosalesforceframe' width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum");
+                        var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().append(iframHTML);
-                        dialog.getBody().find('.workflowiframe').load(function(){
+                         dialog.getBody().find('.workflowiframe').load(function(){
                              //$(this).show();
                             var iframe = $(this);
                             //console.log('load the iframe')
@@ -315,9 +314,8 @@ function (template,highlighter,tagView) {
                 },
                 viewSyncedSF : function(event){
                     var url = $(event.target).parent().data('url');
-                    //console.log(url);
+                    console.log(url);
                     window.open(url,'newwindow', 'scrollbars=yes,resizable=yes');
-                     event.stopPropagation();
                 }
                 
             
