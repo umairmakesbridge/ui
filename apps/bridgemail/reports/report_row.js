@@ -754,7 +754,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                 loadNurtureTracks: function () {
                     this.app.showLoading("Loading selection...", this.$el);
                     this.modelArray = [];
-
+                    this.app.showLoading("Loading Nurture Track...", this.$el);
                     var URL = "/pms/io/trigger/getNurtureData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&trackId=" + this.objects[0].id + "&type=get";
                     jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
                         var _json = jQuery.parseJSON(xhr.responseText);
@@ -845,6 +845,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
                             _grid.append(msgRow.$el);
                         }, this);
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_line_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
@@ -859,7 +860,6 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         this.$(".start-message").hide();
                         this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
-
                         var _campaigns = $.map(this.$(".checkedadded"), function (el) {
                             return el.id;
                         }).join(",");

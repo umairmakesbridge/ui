@@ -79,15 +79,11 @@
 </td>
 <td width="100%">
     <div>
-         <div class="name-type">
-              
-                <h3>
-                    <% if(this.getCampStatus().status == "Scheduled"){ %>
-                         <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>
-                    <% }else{ %>
-                    <a class="campname show-detail showtooltip <%= this.getFlagClass().editClass %>" title="<%= this.getCampStatus().tooltip %>"> <%= this.model.get('name')%> </a>
-                    <% } %>
-                    <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
+         <div class="name-type">              
+                <h3>                    
+                    <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>
+                    <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %>
+                </h3>  
                  <div class="tags tagscont" id="campaign_tag_camp">
                      <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
                  </div>

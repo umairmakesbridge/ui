@@ -72,11 +72,11 @@
          <div class="name-type">              
                 <h3>                    
                     <% if(this.model.get("subject")){  %>
-                    <a class="campname show-detail showtooltip"> <%= this.model.get('subject') %> </a>                    
+                    <a class="campname show-detail showtooltip" title="Click to preview"> <%= this.model.get('subject') %> </a>                    
                     <% } else { %>
-                    <a class="campname show-detail showtooltip"> &lt;subject line&gt;</a>
+                    <a class="campname show-detail showtooltip" title="Click to preview"> &lt;subject line&gt;</a>
                     <% } %>
-                    <a class="cstatus pclr18 showtooltip %>" title="Message">Message <b><%= this.model.get('order') %></b>
+                    <a class="cstatus pclr18">Message <b><%= this.model.get('order') %></b>
                 </h3>                   
          </div>
     </div>

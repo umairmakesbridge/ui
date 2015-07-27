@@ -87,21 +87,7 @@ function (template) {
                       fieldKey : "campName",
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token'),templateNumber:templateId},
                       saveCallBack :  _.bind(this.app.mainContainer.createCampaign,this.app.mainContainer) // Calling same view for refresh headBadge
-                    });
-                    
-                    /*var camp_obj = this;
-                    var dialog_title = "New Campaign";
-                    var dialog = this.app.showDialog({title:dialog_title,
-                        css:{"width":"650px","margin-left":"-325px"},
-                        bodyCss:{"min-height":"100px"},							   
-                        buttons: {saveBtn:{text:'Create Campaign'} }                                                                           
-                    });
-                    this.app.showLoading("Loading...",dialog.getBody());
-                    require(["campaigns/newcampaign"],function(newcampPage){                                     
-                            var mPage = new newcampPage({camp:camp_obj,app:camp_obj.app,newcampdialog:dialog,templateID:templateId});
-                            dialog.getBody().html(mPage.$el);
-                            dialog.saveCallBack(_.bind(mPage.createCampaign,mPage,templateId));
-                    });*/
+                    });                  
             }            
             
         });
