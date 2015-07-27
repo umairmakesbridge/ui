@@ -313,11 +313,7 @@ define([
             else {
                 this.mainContainer.$(".one-one-listing,.signup-forms").show();
             }           
-           if (this.testUsers.indexOf(this.get("user").userId) > -1) {
-               this.mainContainer.$(".tipntestlistings").show();
-           }else{
-               this.mainContainer.$('.tipntestlistings').hide();
-           }
+          
            var addedUser = ['jjautobot','juicyjuice','juicyjuicebb'];
            if(this.testUsers.indexOf(this.get("user").userId) > -1 || addedUser.indexOf(this.get("user").userId) > -1){
               this.mainContainer.$(".report-flow").show(); 
