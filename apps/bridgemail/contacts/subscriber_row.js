@@ -256,7 +256,7 @@ function (template,highlighter,tagView) {
                      this.templateView.createOTODialog();
                     
                 },
-                synctoSF : function(){
+                synctoSF : function(event){
                     var dialog_width = $(document.documentElement).width()-60;
                         var dialog_height = $(document.documentElement).height()-182;
                         var dialog = this.app.showDialog({title:'Add to Salesforce',
@@ -268,8 +268,9 @@ function (template,highlighter,tagView) {
                         reattach : false
                         });
                         var _this = this;
+                        this.app.showLoading("Loading Salesforce...",dialog.getBody());
                         var url = "/pms/dashboard/AddToSalesForce.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.model.get("subNum");
-                        var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                        var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" id='addtosalesforceframe' class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().append(iframHTML);
                          dialog.getBody().find('.workflowiframe').load(function(){
                              //$(this).show();
@@ -277,10 +278,11 @@ function (template,highlighter,tagView) {
                             //console.log('load the iframe')
                             if(iframe.contents().find('.info').hasClass('successfull-lead')){
                                // console.log('Successfully lead added need to hide ');
+                                _this.app.showLoading("Saving Salesforce...",dialog.getBody());
                                _this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
                                iframe.contents().find('.publisherPageWrapper').hide();
                                 _this.sub.$el.find('.refresh_btn').click();
-                                _this.app.showLoading("Saving Salesforce...",dialog.getBody());
+                               
                                 dialog.hide();   
                             }
                             if(iframe.contents().find('.error').hasClass('error-lead')){
@@ -304,8 +306,6 @@ function (template,highlighter,tagView) {
                             //console.log(url);
                             dialog.$el.find('.modal-footer .btn-add').click(function(event){
                                document.getElementById('addtosalesforceframe').contentWindow.addtosf();
-                               
-                                //
                             })
                         });
                         event.stopPropagation();
@@ -314,8 +314,9 @@ function (template,highlighter,tagView) {
                 },
                 viewSyncedSF : function(event){
                     var url = $(event.target).parent().data('url');
-                    console.log(url);
+                    //console.log(url);
                     window.open(url,'newwindow', 'scrollbars=yes,resizable=yes');
+                    event.stopPropagation();
                 }
                 
             
