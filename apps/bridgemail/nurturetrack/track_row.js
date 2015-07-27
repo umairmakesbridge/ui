@@ -248,7 +248,7 @@ function (template,highlighter) {
                 //var appMsgs = this.app.messages[0];				
                 var dialog_width = $(document.documentElement).width() - 60;
                 var dialog_height = $(document.documentElement).height() - 182;
-                var dialog = this.app.showDialog({title: 'Message Preview of &quot;' + this.model.get('label') + '&quot;',
+                var dialog = this.app.showDialog({title: 'Message Preview of &quot;' + this.model.get('subject') + '&quot;',
                     css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                     headerEditable: false,
                     headerIcon: 'dlgpreview',
