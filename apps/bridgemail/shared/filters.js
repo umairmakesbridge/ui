@@ -1391,6 +1391,7 @@
         
         //dialog.getBody().html(d)
         dialog.html(d)
+         dialog.attr('checksumlist',self.subListObj.params['listNumber.checksum']);
         d.find("#"+searchDiv).searchcontrol({
                 id:'list-search',
                 width:'250px',
@@ -1452,10 +1453,6 @@
         }
       
       var checksumlist;
-      if(self.subListObj.params){
-         checksumlist = self.subListObj.params['listNumber.checksum'];
-         
-      }
        jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){
                       var lists = jQuery.parseJSON(xhr.responseText); 
@@ -1535,26 +1532,23 @@
        dialog.find('.stats-scroll').click(function(){
             self.scrollingTop(dialog);
        });
-       var triggerNo;
-     
-        $.each(self.$element.find('.sub-date-container'),function(key,val){
-                   
-                   if(!$(val).hasClass('selected-row') ){
-                    //console.log(selected_list);
-                       triggerNo = $(val).data('sublist');
-                    if(selected_list && dialog.find('.filter_list_grid-'+triggerNo+' tr[list_checksum='+selected_list+']').length == 0){
+          
+                var selected_list = dialog.attr('checksumlist');
+                    if(selected_list && dialog.find('#filter-lists tr[list_checksum='+selected_list+']').length == 0){
                                 var showloading = $('#show-loading');
                                 self.options.app.showLoading("Loading Lists...",dialog.find('#filter_list_grid'));
+                                //console.log('calling for next offset');
                                 self.loadSubsList(self.offsetLengthSubList,false,dialog); 
-                             
+                                
                              }else{
-                                 var tr = dialog.find(".filter_list_grid-"+triggerNo+" tr[list_checksum='"+selected_list+"']")
-                                 $(val).addClass('selected-row');
+                                 var tr = dialog.find("#filter-lists tr[list_checksum='"+selected_list+"']")
+                                 dialog.find('#filter_list_grid').addClass('selected-row');
                                  if(tr.length){
                                         tr.addClass("selected");
                                         if(!self.scrolltoSubLisView ){
-                                            dialog.find(".filter_list_grid-"+triggerNo+" tr.selected").scrollintoview();
-                                            if(self.$element.find('.sub-date-container').length === self.$element.find('.sub-date-container.selected-row').length){
+                                            console.log('scrolling');
+                                            dialog.find("#filter-lists tr.selected").scrollintoview();
+                                            if(self.$element.find('.filter_list_grid').length ===  dialog.find('#filter_list_grid.selected-row').length){
                                                 self.scrolltoSubLisView = true; 
                                             }
                                             
@@ -1562,8 +1556,8 @@
                                         
                                     }
                              }
-                   } 
-           });
+                  
+          
   },
    liveLoadingList: function (filter,listType,params) {
                     //console.log(filter);
