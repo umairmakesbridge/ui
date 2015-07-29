@@ -9912,3 +9912,12 @@ sup.beta {
     position: relative;
 }
   /* ================================================End tan_a_changes.css================================================ */
+  /* ================================================Start of Filter Style Fixes ================================================ */
+  #campaign_lists_filterplug_chosen .chosen-drop .chosen-search .btn-group,#web_filterplug_chosen .chosen-drop .chosen-search .btn-group{
+      position: absolute;
+      top:3px;
+  }
+  #basic_filterplug_chosen .chosen-drop .chosen-search .btn-group{
+      position: absolute;
+      top:0px;
+  }

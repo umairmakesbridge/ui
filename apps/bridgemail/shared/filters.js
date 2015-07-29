@@ -127,7 +127,7 @@
          }
       }
              
-      var filter_html = '<div class="btn-group field-container"><div class="inputcont"><select data-placeholder="Choose a Field" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
+      var filter_html = '<div class="btn-group field-container"><div class="inputcont"><select data-placeholder="Choose a Field" id="basic-filterplug" class="selectbox fields" disabled="disabled"><option>Loading Fields...</option>'                        
           filter_html +='</select></div></div>'
           filter_html +=list_html
           filter_html +='<div class="btn-group rules-container"><div class="inputcont"><select id="basic-filter-options"  class="selectbox rules" disabled="disabled"><option value="">Loading...</option>'                      
@@ -882,7 +882,7 @@
        filter.find(".filter-cont").append(filter_html);
     
       
-      filter_html_tb = '<div class="webforms-container"><div class="inputcont"><div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_form_subscriber"><strong class="badge">0</strong><span>lists found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div id="formlistsearch" style="margin:0;" class="input-append search"></div></h2></div><div class="target-listing" id="filter-forms" style="margin-top:9px"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div>'
+      filter_html_tb = '<div class="webforms-container"><div class="inputcont"><div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_form_subscriber"><strong class="badge">0</strong><span>forms found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div id="formlistsearch" style="margin:0;" class="input-append search"></div></h2></div><div class="target-listing" id="filter-forms" style="margin-top:9px"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div>'
       filter_html_tb += '<div class="bDiv" style="height: 320px;"> <table cellpadding="0" cellspacing="0" width="100%" id="__form_grid"><tbody>'
        
       filter_html_tb += '</tbody></table></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></div>'
@@ -1143,7 +1143,7 @@
           filter_html += '</select></div>'
           filter_html += '<div class="pagelink-box-container" style="display:none">'
             filter_html += '<label style="display:none">Filter URL</label>'
-            filter_html += '<div class="btn-group "><select data-placeholder="Select Page Link" class="pagelink-box" disabled="disabled"><option value="">Loading Page URL... </option></select></div>'                        
+            filter_html += '<div class="btn-group "><select id="web-filterplug" data-placeholder="Select Page Link" class="pagelink-box" disabled="disabled"><option value="">Loading Page URL... </option></select></div>'                        
           filter_html += '</div>'
           filter_html += '<div class="pagetype-box-container" style="display:none">'
             filter_html += '<label style="display:none">Page Type</label>'
@@ -1641,13 +1641,13 @@
                         taglist ='<ul>';  
                         var i =0;
                         $.each(tags.tagList[0], function(index, val) {
-                            var inactive = (val[0].subCount === "0") ? "inactive" : "";
-                              taglist += '<li id="row_'+index+'" class="action '+inactive+'" item_index="'+i+'" checksum="'+val[0].tag+'"><a class="tag"><span>'+val[0].tag+'</span><strong class="badge">'+val[0].subCount+'</strong></a>';               
-                              if(inactive === ""){
+                           // var inactive = (val[0].subCount === "0") ? "inactive" : "";
+                              taglist += '<li id="row_'+index+'" class="action" item_index="'+i+'" checksum="'+val[0].tag+'"><a class="tag"><span>'+val[0].tag+'</span><strong class="badge">'+val[0].subCount+'</strong></a>';               
+                              //if(inactive === ""){
                                 taglist += '<a class="btn-green move-row"><span>Use</span><i class="icon next"></i></a></li>';  
-                              }else{
+                              //}else{
                                   taglist +='</li>';
-                              }
+                             // }
                             i++;  
                             });
                          taglist +='</ul>'; 
