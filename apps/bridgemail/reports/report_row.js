@@ -91,6 +91,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         }
                         if (toDate) {
                             this.toDate = toDate.format("MM-DD-YYYY");
+                        } else{
+                            this.toDate = fromDate.format("MM-DD-YYYY");
                         }
                         this.loadSummaryReports();
                     }
@@ -472,7 +474,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Socail', 'Bounce', {role: 'annotation'}]
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
@@ -481,7 +483,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     }, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading"><p style="background:none">No data found for campaign <i>"' + val.get("name") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for campaign <i>"' + val.get("name") + '"</i> </p></div>');
                                 }
                             }, this));
 
@@ -660,7 +662,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     }, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading"><p style="background:none">No data found for autobot <i>"' + val.get("label") + '"</i> </p></div>');
+                                    this.$("#chart-" + val.get("botId.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for autobot <i>"' + val.get("label") + '"</i> </p></div>');
                                 }
                             }, this));
 
@@ -937,7 +939,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Socail', 'Bounce', {role: 'annotation'}]
+                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
@@ -946,7 +948,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     }, this));
                                 }
                                 else {
-                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading"><p style="background:none">No data found for <i>Message ' + order_no + '</i></p></div>');
+                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for <i>Message ' + order_no + '</i></p></div>');
                                 }
                                 order_no = order_no + 1;
                             }, this));

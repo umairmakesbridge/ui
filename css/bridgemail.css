@@ -9282,6 +9282,7 @@ box-shadow: 0 2px 2px 0 #C0DEEA;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	}
+.new_activities .act_row .meter.hide {display:none}        
 .new_activities .act_row .meter.open { background-position:0 0;}
 .new_activities .act_row .meter.click { background-position:-140px 0px !important;}
 .new_activities .act_row .meter.visit { background-position:-280px 0 !important;}

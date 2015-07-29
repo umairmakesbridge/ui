@@ -194,7 +194,7 @@ define(['text!contacts/html/timeline_row.html', 'moment'],
                     this.sub.searchMessage(model.get("campaignType"),model.get("campNum.encode"));
                 },
                 getMeter:function(){
-                    var cssClass = "";
+                    var cssClass = "hide";
                     
                     if(this.model.get("isConversion")==="Y"){
                         cssClass="conversion";

@@ -1469,6 +1469,7 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
 }
+
 /*Abdullah Changes*/
 .thumbnail .img > div a.selectbtn.createcamp {
     background: url("../img/campaign48.png") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -3704,9 +3705,10 @@ ul#template_search_menu li {
 .nf_overwrite{
      margin-top: 7px !important;
 }
-.notfound {
+.notfound, .notfound p {
     color: #6292ad;
 }
+.nodata p {color: #6292ad;font-size:17px;font-weight:normal;text-align:center;font-style:italic;}
 
 ul.autobot-headbadge  li a{
      cursor: default;
@@ -5227,8 +5229,9 @@ h2.header-list > span { margin-left:0; /*font-weight:bold;*/ font-size:15px; col
 }
 .notfound
 {
-	text-align:center; margin-top:50px; font-style:italic;
+    text-align:center; margin-top:50px; font-style:italic;
 }
+
 .settings .cont { position:relative; }
 .addrow label { width:25%; }
 div.tooltip.right { right:auto; width:auto; top:inherit; margin-left: 5px;
