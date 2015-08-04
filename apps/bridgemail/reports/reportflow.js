@@ -131,7 +131,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                id = r_val.get("botId.encode"); 
                             }else if(type=="nurturetracks"){
                                id = r_val.get("trackId.encode"); 
-                            }                             
+                            }else if(type=="tags"){
+                               id = r_val.get("tag"); 
+                            }                              
                             selected_obj['id'] = id;
                             if(type=="nurturetracks"){
                                 selected_obj['checked'] =true;

@@ -33,7 +33,6 @@ define(['text!tags/html/tags.html', 'bms-mapping', 'jquery.searchcontrol','bms-t
                     } else {
                         return tags.substring(0, tags.length - 1);
                     }
-
                 },
                 loadTags: function() {
                     var app = this.app;

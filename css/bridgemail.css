@@ -817,6 +817,7 @@ i.icon{ float:right; margin:0 !important; width:35px; height:35px;}
 .icon.calender {   background: url("../img/calender.png") no-repeat scroll center center ;}
 .icon.report {   background: url("../img/report.png") no-repeat scroll center center ;}
 .icon.targetw {background: url("../img/targetw.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
+.icon.tagw {background: url("../img/tag-w.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .icon.lppage {background: url("../img/landingpgs30.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .icon.campaigndlg {background: url("../img/campaignicon.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
 .icon.nurturedlg {background: url("../img/nurture2.png") no-repeat scroll center center rgba(0, 0, 0, 0);}
@@ -3821,6 +3822,9 @@ a.tw-toggle.wsicon i {
     line-height: 18px;
     margin: 0;
     padding: 0;
+}
+#tagslist ul li > a{
+    padding: 0 !important;
 }
 .tagscont .tag.add {
 	color:#80C000;
@@ -8690,7 +8694,7 @@ div.crms a img {
 .tagslist { margin:0; width:auto; max-width:100% ; height:auto;}
 .tagslist ul { padding:0; height:auto;  max-width:100% !important; top:0;}
 .tagslist  ul li { margin:5px;}
-.tagslist  ul li > a { font-size: 13px;line-height: 28px; background:#ffffff ;  min-width: 100px;}
+.tagslist  ul li > a { font-size: 13px !important;line-height: 28px; background:#ffffff ;  min-width: 100px;}
 .tagslist  ul li > a span {  line-height: 28px; color:#6494AF;}
 .tagslist  ul li > a span:hover { color:#fff;} 
 .tagslist  ul li > a i {
@@ -9915,7 +9919,7 @@ position: relative;
 .cstats ul {
 }
 
-.cstats ul li { 
+.tag-chart ul li,.cstats ul li { 
 color: #FFFFFF;
     float: left;
     font-size: 18px;
@@ -9924,34 +9928,37 @@ color: #FFFFFF;
     padding: 0;
     position: relative;
 }
-.cstats ul li span {
+.tag-chart ul li span,.cstats ul li span {
     display: block;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: normal;
     letter-spacing: 0.5px;
     line-height: 20px;
     padding: 5px  15px;
 }
-.cstats ul li strong {
+.tag-chart ul li strong, .cstats ul li strong {
     color: #FFFFFF;
     font-size: 18px;
     font-weight: bold;
 	display:block;
 }
-.cstats ul li:first-chhild { margin:0; }
+.tag-chart ul li:first-child, .cstats ul li:first-chhild { margin:0; }
 
-.cstats ul li:after { 
+.tag-chart ul li:after,.cstats ul li:after { 
 	content:"";
 	position:absolute; display:block; left:0; top:0; height:100%; width:4px;
 	-webkit-border-radius: 1px ;
 	-moz-border-radius: 1px;
 	border-radius: 1px;}
 
-.cstats ul li.clr1:after { background-color:#b6cbdb !important; }
+.tag-chart ul li.clr1:after,.cstats ul li.clr1:after { background-color:#b6cbdb !important; }
 .cstats ul li.clr2:after { background-color:#454f88 !important; }
 .cstats ul li.clr3:after { background-color:#0c73c2 !important; }
 .cstats ul li.clr4:after { background-color:#2f93e5 !important; }
 .cstats ul li.clr5:after { background-color:#62abe6 !important; }
+
+.tag-chart ul li.clr6:after { background-color:#97d61d !important; }
+.tag-chart ul li.clr7:after { background-color:#f71a1a !important; }
 
 
 

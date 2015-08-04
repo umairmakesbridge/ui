@@ -451,7 +451,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     str = str.replace(/\€/g,"&#8364;");
                                     str = str.replace(/\™/g,"&#8482;");
                                     str = str.replace(/\–/g,"&#8208;");    
-                                    str = str.replace(/\—/g,"&#8212;");    
+                                    str = str.replace(/\—/g,"&#8212;");
+                                    str = str.replace(/\–/g,"&#8211;");
+                                    str = str.replace(/\™/g,"&#8482;");
                                     str = str.replace(/\​/g,"");
                                     return str;
                                 }

@@ -102,7 +102,7 @@
                     options.searchFunc(obj,searchterm);
                 }
                 else{
-                    if(search_val!==searchterm){
+                    if(search_val!==searchterm && options.clearFunc){
                         options.clearFunc();
                     }
                     closeicon.hide();

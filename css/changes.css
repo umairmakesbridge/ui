@@ -1898,6 +1898,35 @@ ol.campaign_progress li.s4:before {content:""; background-image: url("../img/ico
 .ui-spinner .ui-button-text-only .ui-button-text{
     padding:0px;
 }
+.tag-chart .tag-area{
+    position:relative;background:#fff;height:250px;
+}
+.tag-chart{
+    margin-top:5px;
+    position: relative;
+    height: 370px;
+}
+
+.tag-chart .tag-header{    
+    background: url("../img/tags-g.png") no-repeat scroll 10px center #EAF4F9;
+    border: 2px solid #fff;
+    border-bottom: 0px;
+    border-radius: 2px 2px 0 0;
+    color: #6494AF;
+    cursor: pointer;
+    display: block;    
+    font-size: 16px;
+    font-weight: bold;
+    height: 45px;
+    line-height: 45px;
+    margin-top: 0px;
+    min-height: 0;
+    padding: 2px 15px 2px 40px;    
+    position: relative;
+}
+.tags-charts div.tag-chart:first-child{
+    margin-top:0px;
+}
 
 /*----------
     Abdullah Changes 

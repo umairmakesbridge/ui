@@ -400,7 +400,7 @@ define(['text!autobots/html/tag.html', 'target/views/recipients_target', 'bms-ta
                     var dialog_object = {title: 'Select Tags',
                         css: {"width": "1200px", "margin-left": "-600px"},
                         bodyCss: {"min-height": "423px"},
-                        headerIcon: 'targetw'
+                        headerIcon: 'tagw'
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
                     var dialog1 = this.options.app.showDialog(dialog_object);

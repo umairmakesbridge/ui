@@ -66,10 +66,11 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     this.rescheduled = false;
                     this.hidecalender = false;
                     this.scrollApply = false;
+                    this.copyFromCampaign = false;
                     this.campobjData = null;
                     this.campDefaults = {};
                     this.allowedUser = ['admin', 'jayadams', 'demo'];
-                    this.campFromName = '';
+                    this.campFromName = '';                    
                     this.states = {
                         "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false},
                         "step2": {"templates": false, htmlText: '', plainText: '', change: false, editorType: ''},
@@ -2246,10 +2247,11 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     return false;
                 },
                 step2SlectSource: function (target_li, byPass) {
-                    if (!byPass && (this.states.step2.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)) {
+                    if (!byPass && !this.copyFromCampaign && (this.states.step2.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)) {
                         return;
                     }
-
+                    
+                    this.copyFromCampaign = false;
                     this.$(".step2 #choose_soruce li").removeClass("selected");
                     this.$(".step2 .soruces").hide();
                     this.$(".step2 #area_" + target_li.attr("id")).fadeIn("fast");
@@ -2366,21 +2368,21 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                     this.$(".textdiv").hide();
                 },
-                setEditorHTML: function (tsv, state, xhr) {
-                    this.app.showLoading(false, this.$el);
+                setEditorHTML: function (tsv, state, xhr) {            
+                    this.app.showLoading(false,this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
-                    var htmlText = this.app.decodeJSON(html_json.htmlText);
+                    var htmlText = this.app.decodeJSON(html_json.htmlText);                    
                     if (htmlText) {
                         this.states.step2.htmlText = htmlText;     
-                        if (html_json.isEasyEditorCompatible == "Y") {
+                        if (html_json.editorType == "MEE") {
                             this.$("#html_editor_mee").click();
-                            this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));
-                            this.states.editor_change = true;
+                            this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));                            
                         }
                         else {
                             this.$("#html_editor").click();
                             _tinyMCE.get('bmseditor_' + this.wp_id).setContent(this.app.decodeHTML(htmlText, true));
                         }
+                        this.states.editor_change = true;
                     }
 
                 },

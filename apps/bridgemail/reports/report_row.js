@@ -174,6 +174,11 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             }
                         }, this));
                     }
+                    else if(this.reportType=="tags"){
+                        if (this.objects.length) {
+                            this.loadTags();
+                        }
+                    }
 
 
                 },
@@ -190,6 +195,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.openNurtureTracksDialog();
                     } else if (this.reportType == "targets") {
                         this.openTargetsDialog();
+                    } else if(this.reportType=="tags"){
+                        this.openTagsDialog();
                     }
 
                 },
@@ -204,8 +211,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         //this.openSignupFormsDialog();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTracks();
-                    } else if (this.reportType == "targets") {
-                        //this.openTargetsDialog();
+                    } else if (this.reportType == "tags") {
+                        this.loadTags();
                     }
 
                 },
@@ -220,8 +227,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         //this.openSignupFormsDialog();
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTrackSummary();
-                    } else if (this.reportType == "targets") {
-                        //this.openTargetsDialog();
+                    } else if (this.reportType == "tags") {
+                        this.loadTagsSummary();
                     }
 
                 },
@@ -280,7 +287,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(pageRow.$el);
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -378,7 +385,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(campRow.$el);
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -469,16 +476,20 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     return false;
                                 }
                                 if (summary_json.count !== "0") {
-                                    require(["reports/campaign_line_chart"], _.bind(function (chart) {
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: true});
-                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                        var vAxisLogScale =true;
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
-                                        ];
+                                        ];                                        
                                         _.each(summary_json.summaries[0], function (sVal) {
+                                            if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
+                                                 vAxisLogScale = false;
+                                             }
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
                                         });
+                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                     }, this));
                                 }
@@ -557,7 +568,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(botRow.$el);
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -648,16 +659,20 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     return false;
                                 }
                                 if (summary_json.count !== "0") {
-                                    require(["reports/campaign_line_chart"], _.bind(function (chart) {
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: true});
-                                        this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
+                                        var vAxisLogScale =  true;
                                         _.each(summary_json.summaries[0], function (sVal) {
+                                             if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
+                                                 vAxisLogScale = false;
+                                             }
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
                                         });
+                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                        this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                     }, this));
                                 }
@@ -708,7 +723,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(formRow.$el);
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -849,7 +864,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(msgRow.$el);
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -934,16 +949,20 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                     return false;
                                 }
                                 if (summary_json.count !== "0") {
-                                    require(["reports/campaign_line_chart"], _.bind(function (chart) {
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: true});
-                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
+                                        var vAxisLogScale = true;
                                         _.each(summary_json.summaries[0], function (sVal) {
+                                             if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
+                                                 vAxisLogScale = false;
+                                             }
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
                                         });
+                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                     }, this));
                                 }
@@ -1009,7 +1028,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             _grid.append(targetRow.$el);
                         }, this);
                         //this.app.showLoading("Creating Chart...",this.$(".cstats")); 
-                        require(["reports/campaign_line_chart"], _.bind(function (chart) {
+                        require(["reports/"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
@@ -1017,6 +1036,166 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         }, this));
                     }
                     this.saveSettings();
+                }
+                //////********************* Tags  *****************************************//////
+                ,
+                loadTags: function(){
+                    if(this.modelArray.length){
+                        this.$("#copy-camp-listing").show();                  
+                       this.$(".tags-charts").remove();
+                    }else{
+                        this.app.showLoading("Loading selection...", this.$el);
+                        var tags_array = this.objects.map(function (index) {
+                            return index.id
+                        });
+                        this.modelArray = [];                   
+                        var post_data = {};
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";                        
+                        this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
+                            this.app.showLoading(false, this.$el);
+                            var _json = jQuery.parseJSON(data);
+                            _.each(_json.tagList[0], function (val) {
+                                if(tags_array.indexOf(val[0].tag)>-1){
+                                    this.modelArray.push(new Backbone.Model(val[0]));
+                                }
+                            }, this);
+                            this.createTags();
+                        }, this))
+                    }
+                },
+                openTagsDialog: function () {
+                    var _width = 1200;
+                    var _height = 425;
+                    var dialog_object = {title: 'Select Tags',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        headerIcon: 'tagw'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Tags...", dialog.getBody());
+                    require(["tags/select_tags"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, dialogHeight: _height - 103});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));
+                },
+                createTags: function () {
+                    if (this.modelArray.length) {
+                        this.$(".add-msg-report").hide();
+                        this.$(".tagslist").show().parent().parent().css("background","#eaf4f9");                        
+                        this.$(".tags-charts").remove();
+                        var _grid = this.$(".tagslist ul");
+                        
+                        _grid.children().remove();
+                        _.each(this.modelArray, function (val, key) {
+                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + val.get("tag") + '"><a class="tag"><span>' + val.get("tag") + '</span><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
+                            _grid.append(tagLi);
+                        }, this);
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                            this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}, randomColor:true});
+                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
+                            this.createTagsChart();
+                        }, this));
+                    }
+                },
+                createTagsChart: function () {
+                    if (this.modelArray.length) {
+                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                        this.$(".start-message").hide();
+                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        var total_selected = this.modelArray.length;
+                        if (total_selected > 1) {
+                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                        }
+                        else {
+                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                        }                        
+                        this.chart_data = {subCount: 0};
+                            var _data = [
+                                ['Action', 'Count']                                
+                            ];
+                            var liWidth = 100/this.modelArray.length;
+                            this.$("ul.socpc li").remove();
+                            _.each(this.modelArray, function (val) {                                
+                                _data.push([val.get("tag"),parseInt(val.get("subCount"))]);                                
+                                this.$("ul.socpc").append($('<li class="clr3" style="width:'+liWidth+'%"><span>'+val.get("tag")+' <strong class="tagCount">'+val.get("subCount")+'</strong></span></li>'))
+                            }, this);                            
+                            this.chartPage.createChart(_data);
+                            this.app.showLoading(false, this.$(".cstats"));                                                       
+                    }
+                    else {
+                        this.$(".start-message").show();
+                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
+                    }
+                    this.saveSettings();
+                },
+                loadTagsSummary: function () {
+                    if (this.modelArray.length) {
+                        this.$(".add-msg-report").hide();                                                
+                        this.$("#copy-camp-listing").hide();                        
+                        var chartsDiv = $("<div class='tags-charts'> </div>");
+                        if(this.$(".tags-charts").length){
+                           this.$(".tags-charts").remove();
+                        }
+                        this.$(".parent-container").append(chartsDiv);                        
+                        _.each(this.modelArray, function (val, index) {
+                                                        
+                            var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
+                            var tag = val.get("tag");
+                            var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
+                              
+                            var tagClass =tag.replace(/ /g, "_").replace(/</g, "_").replace(/>/g, "_").replace(/\//g, "_").replace(/\\/g, "_"); 
+                            chartsDiv.append("<div class='tag-chart'><div class='tag-header'>"+tag+"</div><div class='tag-area "+tagClass+"'></div><div class=\"stats-panel\"><div><ul class=\"socpc\"></ul><div class=\"clearfix\"></div></div></div></div>");
+                            this.app.showLoading("Loading Summary Chart...", this.$("."+tagClass));
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if (summary_json[0] == "err") {
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if (summary_json.count !== "0") {                                                                                                                                                
+                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
+                                        var _data = [
+                                            ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
+                                        ];
+                                        var vAxisLogScale = true;
+                                        this.chart_data = {addCount: 0,removeCount:0};
+                                        _.each(summary_json.stats[0], function (sVal) {
+                                             if(parseInt(sVal[0].addCount)==1 || parseInt(sVal[0].removeCount)==1){                                                 
+                                                 vAxisLogScale = false;
+                                             }
+                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
+                                            this.chart_data['addCount']  = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                            this.chart_data['removeCount']  = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                        },this);
+                                        this.chartPage = new chart({page: this, title:tag, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#f71a1a','#97d61d']});
+                                        this.$("."+tagClass).html(this.chartPage.$el);
+                                        var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">'+this.app.addCommas(this.chart_data['addCount'])+'</strong></span></li>';
+                                            liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">'+this.app.addCommas(this.chart_data['removeCount'])+'</strong></span></li>';
+                                            liHTML += '<li class="clr1" style="width:33.33%"><span>Net Growth <strong class="growth">'+this.app.addCommas(this.chart_data['addCount']-this.chart_data['removeCount'])+'</strong></span></li>';    
+                                        this.$(".tag-area."+tagClass).next().find(".socpc").html(liHTML);
+                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                        this.chartPage.createChart(_data);
+                                    }, this));
+                                }
+                                else {
+                                    this.$("."+tagClass).html('<div class="loading nodata"><p style="background:none">No data found for <i>Tag "' + tag + '"</i></p></div>');
+                                }
+                                
+                            }, this));
+
+                        }, this);
+
+                    }
                 }
             });
         });

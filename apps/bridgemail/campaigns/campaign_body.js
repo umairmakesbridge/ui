@@ -33,7 +33,8 @@ function (template,editorView) {
                     this.states.editor_change = false;
                     this.campobjData = this.parent.camp_json;
                     this.copyCampaigns = false;
-                    this.meeEditor = false;
+                    this.copyFromCampaign = true;
+                    this.meeEditor = false;                    
                     this.editable=this.options.editable;
                     this.scrollElement = this.options.scrollElement;                    
                     this.wp_id = "NT_MESSAGE";
@@ -185,9 +186,10 @@ function (template,editorView) {
                   return false;
             },
             step2SlectSource:function(target_li,byPass){ 
-                if(!byPass && (this.parent.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)){                        
+                if(!byPass && !this.copyFromCampaign && (this.parent.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)){                        
                     return;
                 }
+                this.copyFromCampaign = false;
                 this.$("#choose_soruce li").removeClass("selected");
                 this.$(".soruces").hide();  
                 this.$("#area_"+target_li.attr("id")).fadeIn("fast");
@@ -317,13 +319,13 @@ function (template,editorView) {
                   setTimeout(_.bind(this.setEditor,this),200);
               }
             },
-            setEditorHTML:function(tsv, state, xhr){
-                this.app.showLoading(false,this.$el.parents(".modal"));
+            setEditorHTML:function(tsv, state, xhr){                
+                this.app.showLoading(false,this.$el.parents(".modal"));                                
                 var html_json = jQuery.parseJSON(xhr.responseText);
                 var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
                 if(html_json.htmlText){                   
                     this.parent.htmlText = html_json.htmlText;
-                    if(html_json.isEasyEditorCompatible=="Y"){                        
+                    if(html_json.editorType=="MEE"){                        
                         post_editor['editorType'] = 'MEE';
                         this.$("#html_editor_mee").click();
                         this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));
@@ -339,8 +341,7 @@ function (template,editorView) {
                     this.campobjData.editorType = post_editor["editorType"];
                     $.post(URL,post_editor)
                      .done(function(data) {
-                     });
-                    
+                     });                    
                 }
                 /*if(html_json.htmlText){
                     _tinyMCE.get('bmseditor_'+this.wp_id).setContent(this.app.decodeHTML(html_json.htmlText,true));
