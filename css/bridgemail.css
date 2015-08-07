@@ -9919,7 +9919,7 @@ position: relative;
 .cstats ul {
 }
 
-.tag-chart ul li,.cstats ul li { 
+.summary-chart ul li,.cstats ul li { 
 color: #FFFFFF;
     float: left;
     font-size: 18px;
@@ -9928,7 +9928,7 @@ color: #FFFFFF;
     padding: 0;
     position: relative;
 }
-.tag-chart ul li span,.cstats ul li span {
+.summary-chart ul li span,.cstats ul li span {
     display: block;
     font-size: 12px;
     font-weight: normal;
@@ -9936,34 +9936,39 @@ color: #FFFFFF;
     line-height: 20px;
     padding: 5px  15px;
 }
-.tag-chart ul li strong, .cstats ul li strong {
+.summary-chart ul li strong, .cstats ul li strong {
     color: #FFFFFF;
     font-size: 18px;
     font-weight: bold;
 	display:block;
 }
-.tag-chart ul li:first-child, .cstats ul li:first-chhild { margin:0; }
+.summary-chart ul li:first-child, .cstats ul li:first-chhild { margin:0; }
 
-.tag-chart ul li:after,.cstats ul li:after { 
+.summary-chart ul li:after,.cstats ul li:after { 
 	content:"";
 	position:absolute; display:block; left:0; top:0; height:100%; width:4px;
 	-webkit-border-radius: 1px ;
 	-moz-border-radius: 1px;
 	border-radius: 1px;}
 
-.tag-chart ul li.clr1:after,.cstats ul li.clr1:after { background-color:#b6cbdb !important; }
+.cstats ul li.clr1:after { background-color:#b6cbdb !important; }
 .cstats ul li.clr2:after { background-color:#454f88 !important; }
 .cstats ul li.clr3:after { background-color:#0c73c2 !important; }
 .cstats ul li.clr4:after { background-color:#2f93e5 !important; }
 .cstats ul li.clr5:after { background-color:#62abe6 !important; }
+.summary-chart ul li.clr6:after { background-color:#97d61d !important; }
+.summary-chart ul li.clr7:after { background-color:#f71a1a !important; }
 
-.tag-chart ul li.clr6:after { background-color:#97d61d !important; }
-.tag-chart ul li.clr7:after { background-color:#f71a1a !important; }
-
-
+.summary-chart ul li.clr-sent:after {background-color:#dfdfdf !important;}
+.summary-chart ul li.clr-open:after {background-color:#f6e408 !important;}
+.summary-chart ul li.clr-view:after {background-color:#559cd6 !important;}
+.summary-chart ul li.clr-click:after {background-color:#27316a !important;}
+.summary-chart ul li.clr-social:after {background-color:#03d9a4 !important;}
+.summary-chart ul li.clr-bounce:after { background-color:#f71a1a !important; }
 
 
 .cstats .chart { margin-top:10px; float:right;}
+
 
 
 /* ------------ */

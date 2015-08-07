@@ -412,6 +412,9 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                 var date = moment(this.options.app.decodeHTML(this.objSummary.get('scheduledDate')), 'YYYY-M-D H:m');
                 var dateFormat = date.format("DD MMM, YYYY hh:mm A");
                 var sentAt = "<div class='sentat'> <em>Sent at</em> <strong>"+dateFormat+"</strong> </div>";    
+                if(this.objSummary.get('scheduledDate')==""){
+                    sentAt="";
+                }
                 //this.$el.parents(".ws-content").find(".camp_header").find('.c-name').append(sentAt);
                 this.active_ws.find(".camp_header").find("#campaign_tags").addClass("tagscont").css("width","auto").append("<span class='tagicon gray'></span>").append(tags).append(sentAt);
                     

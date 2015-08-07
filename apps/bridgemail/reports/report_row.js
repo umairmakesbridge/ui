@@ -10,7 +10,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                     'click .edit': 'openSelectionDialog',
                     "keyup #daterange": 'showDatePicker',
                     "click #clearcal": 'hideDatePicker',
-                    "click .calendericon": 'showDatePickerFromClick'
+                    "click .calendericon": 'showDatePickerFromClick',
+                    "click .percent":'showPercentDiv'
                 },
                 initialize: function () {
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'darkblue', iconClass: 'open'},
@@ -201,6 +202,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
 
                 },
                 loadReports: function () {
+                    this.$(".target-listing").removeClass("summary-chart");
                     if (this.reportType == "landingpages") {
                         //this.openLandingPagesDialog();
                     } else if (this.reportType == "campaigns") {
@@ -217,6 +219,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
 
                 },
                 loadSummaryReports: function () {
+                    this.$(".target-listing").addClass("summary-chart");
                     if (this.reportType == "landingpages") {
                         //this.openLandingPagesDialog();
                     } else if (this.reportType == "campaigns") {
@@ -229,7 +232,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
                         this.loadTagsSummary();
-                    }
+                    }                    
 
                 },
                 //////********************* Landing pages *****************************************//////
@@ -480,17 +483,29 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                         var vAxisLogScale =true;
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
-                                        ];                                        
+                                        ];    
+                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                                           , openCount: 0, sentCount: 0, socialCount: 0};
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
                                                  vAxisLogScale = false;
-                                             }
+                                             }                                             
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
-                                        });
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                        },this);
+                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
+                                         _.each(this.chart_data, function (v, key) {
+                                             this.$("#stats-" + val.get("campNum.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        }, this);
+                                        
                                     }, this));
                                 }
                                 else {
@@ -663,17 +678,28 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
+                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                                           , openCount: 0, sentCount: 0, socialCount: 0};
                                         var vAxisLogScale =  true;
                                         _.each(summary_json.summaries[0], function (sVal) {
                                              if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
                                                  vAxisLogScale = false;
                                              }
                                             _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
-                                        });
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                        },this);
+                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
+                                        _.each(this.chart_data, function (v, key) {                                            
+                                             this.$("#stats-" + val.get("botId.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        }, this);
                                     }, this));
                                 }
                                 else {
@@ -858,6 +884,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         }, this);
                         var order_no = 1;
                         _.each(this.campArray, function (val, index) {
+                            val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
                             val.set("order", order_no);
                             order_no = order_no + 1;
                             var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
@@ -953,17 +980,28 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                                         var _data = [
                                             ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
                                         ];
+                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                                           , openCount: 0, sentCount: 0, socialCount: 0};
                                         var vAxisLogScale = true;
                                         _.each(summary_json.summaries[0], function (sVal) {
                                              if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
                                                  vAxisLogScale = false;
                                              }
-                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
-                                        });
-                                        this.chartPage = new chart({page: this, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale});
+                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
+                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                        },this);
+                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
+                                        _.each(this.chart_data, function (v, key) {                                            
+                                            this.$("#stats-" + val.get("campNum.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        }, this);
                                     }, this));
                                 }
                                 else {
@@ -1041,7 +1079,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                 ,
                 loadTags: function(){
                     if(this.modelArray.length){
-                        this.$("#copy-camp-listing").show();                  
+                        this.$("#copy-camp-listing").show();                                          
                        this.$(".tags-charts").remove();
                     }else{
                         this.app.showLoading("Loading selection...", this.$el);
@@ -1094,9 +1132,10 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, key) {
-                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + val.get("tag") + '"><a class="tag"><span>' + val.get("tag") + '</span><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
+                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + this.app.encodeHTML(val.get("tag")) + '"><a class="tag"><span>' + this.app.encodeHTML(val.get("tag")) + '</span><i  class="icon percent showtooltip" data-name ="'+this.app.encodeHTML(val.get("tag"))+'" title="Click to see responsiveness of this tag" ></i><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
                             _grid.append(tagLi);
                         }, this);
+                        _grid.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}, randomColor:true});
@@ -1104,6 +1143,48 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createTagsChart();
                         }, this));
+                    }
+                },
+                showPercentDiv: function (ev) {
+                    var target = $(ev.target);
+                    var tag = target.data('name');
+                    
+                    if ($('.percent_stats').length > 0)
+                        this.$('.percent_stats .pstats').remove();
+                    var that = this;
+                    var offset = target.offset();
+                    
+                    if(!$('body > .percent_stats').length){
+                        $("body").append('<div class="percent_stats" style="position:absolute"></div>');
+                    }
+                    $('.percent_stats').css({left: offset.left-4, top: offset.top + 10,"z-index":999});
+                    
+                    that.showLoadingWheel(true, $('.percent_stats'));
+                    var bms_token = that.app.get('bms_token');
+                    var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK=" + bms_token + "&tag=" + tag + "&type=stats";
+
+                    jQuery.getJSON(URL, function (tsv, state, xhr) {
+                        var data = jQuery.parseJSON(xhr.responseText);
+                        if (that.app.checkError(data)) {
+                            return false;
+                        }
+                        var percentDiv = " <div class='pstats' style='display:block'><ul><li class='openers'><strong>" + that.app.addCommas(data.openers) + "<sup>%</sup></strong><span>Openers</span></li>";
+                        percentDiv = percentDiv + "<li class='clickers'><strong>" + that.app.addCommas(data.clickers) + "<sup>%</sup></strong><span>Clickers</span></li>";
+                        percentDiv = percentDiv + "<li class='visitors'><strong>" + that.app.addCommas(data.pageviewers) + "<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
+                        that.showLoadingWheel(false, target);
+                                                
+                        
+                        $('.percent_stats').append(percentDiv);                        
+                        $('.percent_stats .pstats').addClass('left-side');
+                        
+                    });                    
+                },
+                showLoadingWheel: function (isShow, target) {
+                    if (isShow)
+                        target.append("<div class='pstats' style='display:block; background:#01AEEE;'><div class='loading-wheel right' style='margin-left:-10px;margin-top: -5px;position: inherit!important;'></div></div></div>")
+                    else {
+                        var ele = target.find(".loading-wheel");
+                        ele.remove();
                     }
                 },
                 createTagsChart: function () {
@@ -1126,7 +1207,7 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                             this.$("ul.socpc li").remove();
                             _.each(this.modelArray, function (val) {                                
                                 _data.push([val.get("tag"),parseInt(val.get("subCount"))]);                                
-                                this.$("ul.socpc").append($('<li class="clr3" style="width:'+liWidth+'%"><span>'+val.get("tag")+' <strong class="tagCount">'+val.get("subCount")+'</strong></span></li>'))
+                                this.$("ul.socpc").append($('<li class="clr3" style="width:'+liWidth+'%"><span>'+this.app.encodeHTML(val.get("tag"))+' <strong class="tagCount">'+val.get("subCount")+'</strong></span></li>'))
                             }, this);                            
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));                                                       
@@ -1142,10 +1223,10 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                     if (this.modelArray.length) {
                         this.$(".add-msg-report").hide();                                                
                         this.$("#copy-camp-listing").hide();                        
-                        var chartsDiv = $("<div class='tags-charts'> </div>");
+                        var chartsDiv = $("<div class='tags-charts summary-chart'> </div>");
                         if(this.$(".tags-charts").length){
                            this.$(".tags-charts").remove();
-                        }
+                        }                        
                         this.$(".parent-container").append(chartsDiv);                        
                         _.each(this.modelArray, function (val, index) {
                                                         

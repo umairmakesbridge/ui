@@ -325,7 +325,7 @@ function (template,editorView) {
                 var post_editor = {editorType:'',type:"editorType",campNum:this.parent.camp_id};
                 if(html_json.htmlText){                   
                     this.parent.htmlText = html_json.htmlText;
-                    if(html_json.editorType=="MEE"){                        
+                    if(html_json.editorType=="MEE" || html_json.isEasyEditorCompatible=="Y" ){                        
                         post_editor['editorType'] = 'MEE';
                         this.$("#html_editor_mee").click();
                         this.setMEE($('<div/>').html(html_json.htmlText).text().replace(/&line;/g,""));

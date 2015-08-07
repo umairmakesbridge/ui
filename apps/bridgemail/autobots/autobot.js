@@ -27,7 +27,7 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 },
                 initialize: function() {
                     this.template = _.template(template);
-                    this.parent = this.options.page;
+                    this.parent = this.options.page;                    
                     this.app = this.parent.app;
                     this.icon = "";
                      if (this.model.get('isPreset') == "Y") {
@@ -110,7 +110,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                 },
                 reportShow:function(){
                        var camp_id=this.model.get('actionData')[0]['campNum.encode'];
-                                        this.options.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                       var app = this.options.app ? this.options.app : this.app;
+                       app.mainContainer.addWorkSpace({params: {camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
                   },
                 dateSetting: function(sentDate) {
                     var _date = moment(sentDate, 'MM-DD-YY');

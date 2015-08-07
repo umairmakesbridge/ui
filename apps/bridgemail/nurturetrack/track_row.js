@@ -23,7 +23,8 @@ function (template,highlighter) {
               'click .tag':'tagSearch',
               'click .row-move': 'addRowToCol2',
               'click .row-remove': 'removeRowToCol2',
-              'click .check-box': 'checkUncheck'
+              'click .check-box': 'checkUncheck',
+              'click .message-stats':'reportShow'
             },
             /**
              * Initialize view - backbone
@@ -261,6 +262,10 @@ function (template,highlighter) {
                     dialog.getBody().html(tmPr.$el);
                     tmPr.init();
                 }, this));
-             }   
+             },
+                reportShow:function(){                                
+                    var camp_id=this.model.get('campNum.encode');
+                    this.app.mainContainer.addWorkSpace({params: {camp_id: camp_id,messageNo:this.model.get("order"),trackName:this.model.get("subject"),trackId:this.model.get("trackId.encode")},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('campNum.checksum'),tab_icon:'campaign-summary-icon'});                
+                }   
         });
 });

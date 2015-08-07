@@ -2374,7 +2374,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var htmlText = this.app.decodeJSON(html_json.htmlText);                    
                     if (htmlText) {
                         this.states.step2.htmlText = htmlText;     
-                        if (html_json.editorType == "MEE") {
+                        if (html_json.editorType == "MEE" || html_json.isEasyEditorCompatible == "Y") {
                             this.$("#html_editor_mee").click();
                             this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));                            
                         }

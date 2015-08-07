@@ -29,42 +29,39 @@
     </div>
 </td>
 <% } else if(this.showSummaryChart){ %>
-<td width="100%">
-    <table cellpading="0" cellspacing="0" width="100%">
-        <tr>
+<td width="100%" style="padding:0px;background-color: #fff;">
+    <table cellpading="0" cellspacing="0" width="100%" class="chart-tile">
+        <tr class="header">
             <td>
                  <div>
                     <div class="name-type">              
                            <h3>                    
                             <a class="scheduleOpn-camp show-detail showtooltip <%= this.getFlagClass().editClass %>" style="max-width:355px;overflow-x:hidden;text-overflow: ellipsis" title="Click to view"> <%= this.model.get('name')%> </a>                    
-                            <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>  
-                            <div class="tags tagscont" id="campaign_tag_camp">
-                                <%= this.app.showTags(this.model.get('tags'),'Campaigns') %>                                         
-                            </div>
+                            <a class="cstatus cflag <%= this.getFlagClass().flag_class %>" ><%= this.getCampStatus().status %></a><%= this.getFlagClass().chartIcon %></h3>                              
                     </div>
                </div>
-            </td>
-            <td>
-                <% if(this.model.get('status')!== 'D'){ %>
-                <div>
-                    <div class="subscribers">
-                        <strong><span><em>Sent</em><%= this.app.addCommas(this.model.get('sentCount')) %></span></strong>
-                    </div>
-                    <% }%>     
+            </td>                        
+        </tr>
+        <tr>
+            <td class="s-chart">
+                <div style="height: 250px" id="chart-<%-this.model.get('campNum.checksum')%>">
+                    
                 </div>
-            </td>
-            <td>
-                <div>
-                    <div style="width:105px" class="time">
-                        <strong><span><em><%= this.getTimeShow().dtHead %></em><%= this.getTimeShow().dateTime %></span></strong>
-                    </div>
-                </div>    
             </td>
         </tr>
         <tr>
-            <td colspan="3">
-                <div style="height: 250px" id="chart-<%-this.model.get('campNum.checksum')%>">
-                    
+            <td style="padding:0px" id="stats-<%-this.model.get('campNum.checksum')%>">
+                <div class="stats-panel">
+                    <div>
+                        <ul class="socpc">
+                            <li style="width:16.66%" class="clr-sent"><span>Sent <strong class="sentCount">-</strong></span></li>
+                            <li style="width:16.66%" class="clr-open"><span>Open <strong class="openCount">-</strong></span></li>   
+                            <li style="width:16.66%" class="clr-view"><span>View <strong class="pageViewsCount">-</strong></span></li>
+                            <li style="width:16.66%" class="clr-click"><span>Click <strong class="clickCount">-</strong></span></li>                            
+                            <li style="width:16.66%" class="clr-social"><span>Social <strong class="socialCount">-</strong></span></li>
+                            <li style="width:16.66%" class="clr-bounce"><span>Bounce <strong class="bounceCount">-</strong></span></li>
+                        </ul>
+                    </div>
                 </div>
             </td>
         </tr>

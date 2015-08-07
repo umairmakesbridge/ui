@@ -1928,6 +1928,34 @@ ol.campaign_progress li.s4:before {content:""; background-image: url("../img/ico
     margin-top:0px;
 }
 
+.chart-tile {
+    background-color:#fff;
+    margin-bottom: 5px !important;
+    border-spacing:0px !important;    
+}
+.chart-tile td{
+    background-color:#fff !important;
+}
+.chart-tile tr.header td{
+    background-color:#eaf4f9 !important;
+    color:#6494af !important;
+    height:45px !important;
+}
+.chart-tile .name-type h3 a:first-child{
+    color:#6494af !important;
+}
+
+.chart-tile .s-chart{background:rgba(248, 251, 253, 0.7) !important;}
+
+.summary-chart {
+    padding:0px !important;
+}
+
+.summary-chart .bmsgrid div.bDiv table{
+    border-spacing:0px !important;
+}
+
+
 /*----------
     Abdullah Changes 
  -----------*/	
@@ -5418,7 +5446,7 @@ div.tooltip.right .tooltip-inner { border-radius:6px; }
 #campaigns_list .temp-filters > h2 {   
     margin: 0;
 }
-.campaign_stats .report {
+.message-stats .report,.campaign_stats .report {
     height: 20px;
     margin: 0;
     width: 20px;
@@ -7392,9 +7420,9 @@ position:relative;
 
 .tagslist ul .percent {
     background: url("../img/percent.png") no-repeat scroll center center #FFFFFF !important;
-    height: 28px;
+    height: 28px !important;
 	 float: left;
-    width: 30px;
+    width: 30px !important;
 }
 .tagslist ul .percent:hover {background: url("../img/percent2.png") no-repeat scroll center center #FFFFFF !important;}
 
