@@ -1058,7 +1058,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         }
                     }
                     obj.stopPropagation();
-                },
+                },                
                 saveStep1: function () {
                     var camp_obj = this;
                     var app = camp_obj.app;
@@ -1080,6 +1080,15 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             control: el.find('.subject-container'),
                             message: camp_obj.app.messages[0].CAMP_subject_empty_error
                         });
+                        isValid = false;
+                    }
+                    else if(app.checkIllegalCharacters(el.find('#campaign_subject').val(),_.bind(function(lettersArray){
+                             var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
+                             el.find('#campaign_subject').val(el.find('#campaign_subject').val().replace(re, _.bind(app.replaceCharacaters,app)));   
+                             this.saveStep1();
+                            },this),
+                            {fieldName:"Subject field"} )
+                            ){
                         isValid = false;
                     }
                     else if (el.find('#campaign_subject').val().length > 100)
@@ -1298,7 +1307,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var camp_obj = this;
                     var proceed = -1;
                     var html = "", plain = "";
-                    var post_data = {type: "saveStep2", campNum: this.camp_id}
+                    var post_data = {type: "saveStep2", campNum: this.camp_id,htmlCode:'',plainText:''}
                     var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                     if (selected_li == "html_editor") {
                         html = (this.$(".textdiv").css("display") == "block") ? this.$("#htmlarea").val() : _tinyMCE.get('bmseditor_' + this.wp_id).getContent();
@@ -1306,7 +1315,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'N';
-                        //this.$("#campaign_isTextOnly").prop("checked",false).iCheck('uncheck');
+                                               
+                        
                     } else if (selected_li == "html_code") {
                         html = this.$("textarea#handcodedhtml").val();
                         post_data['htmlCode'] = html;
@@ -1326,8 +1336,25 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
                     }
+                    var combineText = post_data['htmlCode'] +  post_data['plainText'];
+                    var notSupportedChars = this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
+                             var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
+                             if (selected_li == "html_editor") {
+                                _tinyMCE.get('bmseditor_' + this.wp_id).setContent(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));   
+                                this.$("#bmstexteditor").val(plain.replace(re, _.bind(this.app.replaceCharacaters,this.app)));   
+                             } else if (selected_li == "html_code") {
+                                 this.$("textarea#handcodedhtml").val(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                             } else if (selected_li == "plain_text") {
+                                 this.$("textarea#plain-text").val(plain.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                             }else if (selected_li == "html_editor_mee") {
+                                 this.$("#mee_editor").setMEEHTML(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                             }
+                                                             
+                             this.saveStep2();
+                            },this),
+                            {fieldName:"Campaign body"} )
 
-                    if (this.states.editor_change === true || typeof (gotoNext) !== "undefined") {
+                    if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined" ) && !notSupportedChars) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
                         }

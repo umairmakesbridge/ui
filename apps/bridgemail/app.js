@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2','views/common/add_action','moment'
-], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog,moment) {
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action', 'moment'
+], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({
         messages: [{'CAMP_subject_empty_error': 'Subject cannot be empty',
@@ -58,26 +58,32 @@ define([
             //Load config or use defaults
             this.set(_.extend({
                 env: 'test',
-                complied: 1,
+                complied: 0,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
                 isFromCRM: $.getUrlVar(false, 'crm'),
-                tipId : $.getUrlVar(false,'tipId'),
-                workId : $.getUrlVar(false,'workId'),
-                newWin : $.getUrlVar(false,'newWin'),
-                subNum : $.getUrlVar(false,'subNum'),
-                preview_domain: previewDomain,                
+                tipId: $.getUrlVar(false, 'tipId'),
+                workId: $.getUrlVar(false, 'workId'),
+                newWin: $.getUrlVar(false, 'newWin'),
+                subNum: $.getUrlVar(false, 'subNum'),
+                preview_domain: previewDomain,
                 content_domain: contentDomain,
                 user_Key: userKey,
                 images_CDN: imagesCDN,
                 static_CDN: staticCDN,
                 host: window.location.hostname,
-                path: _path,                
+                path: _path,
                 session: null,
                 app_data: {}
-            }, window.sz_config || {} ));
-            this.testUsers = ['admin', 'jayadams', 'demo','MKS-Training2','mansoor@makesbridge.com'];
-            this.dcItemsUsers = ['admin', 'jayadams', 'demo','fisglobal'];
+            }, window.sz_config || {}));
+            this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com'];
+            this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];
+            
+            this.specialLetters = {"Á":"A","á":"a","Č":"C","č":"c","Ď":"D","ď":"d","É":"E","é":"e","Ě":"E","ě":"e","Í":"I","í":"i","Ň":"N","ň":"n","Ó":"O","ó":"o","Ř":"R","ř":"r","Š":"S","š":"s","Ť":"T","ť":"t","Ů":"U","ů":"u","Ý":"Y","ý":"y","Ž":"Z","ž":"z",
+                                   "Ą":"A","ą":"a","Ć":"C","ć":"c","Ę":"E","ę":"e","Ł":"L","ł":"l","Ń":"N","ń":"n","Ś":"S","ś":"s","Ź":"Z","ź":"z","Ż":"Z","ż":"z",
+                                   "ç":"c","Ú":"U","ú":"u",
+                                   "Ç":"C","Ğ":"G","Ö":"O","Ş":"S","Ü":"U","ğ":"g","ö":"o","ş":"s","ü":"u","İ":"I","ı":"i"                                   
+                                  };
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {
@@ -85,14 +91,14 @@ define([
             }
             //this.CRMGetStatus();
             //Exposes Workspaces 
-            this.workid = {"contacts":"viewContacts","campaigns":"campaignListing","workflows":"workflowListing","forms":"forms_listings","landingpages":"landingPageslist"
-                            ,"templates":"templateGallery","lists":"viewLists","tags":"viewTags","targets":"viewTargets","nurturetracks":"nurtureTracks","autobots":"autoBots",
-                            "reports":"camapignReport",subscriber:"openSubscriber",camppreview:"previewCamp"};
-            this.set("s_path",this.get("path"));            
-            if(this.get("env")=="production"){
-                this.set("path",window.location.protocol+"//"+imagesCDN+this.get("path"));
-            }        
-              
+            this.workid = {"contacts": "viewContacts", "campaigns": "campaignListing", "workflows": "workflowListing", "forms": "forms_listings", "landingpages": "landingPageslist"
+                , "templates": "templateGallery", "lists": "viewLists", "tags": "viewTags", "targets": "viewTargets", "nurturetracks": "nurtureTracks", "autobots": "autoBots",
+                "reports": "camapignReport", subscriber: "openSubscriber", camppreview: "previewCamp"};
+            this.set("s_path", this.get("path"));
+            if (this.get("env") == "production") {
+                this.set("path", window.location.protocol + "//" + imagesCDN + this.get("path"));
+            }
+
         },
         start: function (Router, MainContainer, callback) {
             //Create the router
@@ -118,20 +124,20 @@ define([
                 //attaching main container in body                                
                 $('body').append(this.mainContainer.$el);
                 $('body').append(this.mainContainer.footer.$el);
-                if(this.get("newWin")){
+                if (this.get("newWin")) {
                     $("body").addClass("new-win");
                 }
                 this.mainContainer.dashBoardScripts();
                 this.getUser();
                 this.initScript();
-                try{
+                try {
                     $("html").removeClass("loading-html");
-                   
+
                 }
-                catch(e){
-                    
+                catch (e) {
+
                 }
-                
+
                 (callback || $.noop)();
             }, this));
         },
@@ -163,7 +169,7 @@ define([
                 if (!container.is(ev.target) // if the target of the click isn't the message dialogue...
                         && container.has(ev.target).length === 0) { // ... nor a descendant of the  message dialogue
                     if (!$(ev.target).hasClass('quick-add') && !$(ev.target).hasClass('plusicon') && !$(ev.target).hasClass('btn-ok') && !$(ev.target).hasClass('close') && !$(ev.target).hasClass('btn-cancel') && !$(ev.target).parents('div').hasClass('btns')) {
-                        container.animate({top:"-600px"});
+                        container.animate({top: "-600px"});
                     }
                 }
                 var container = $(".ocp_stats");
@@ -172,7 +178,7 @@ define([
                     if (!$(ev.target).hasClass('metericon'))
                         container.hide('fast');
                 }
-            
+
 
                 $(".tagbox-addbox").remove();
                 $("#camp_tags").removeClass("active");
@@ -197,15 +203,15 @@ define([
                 });
                 $("#template_search_menu").hide();
             });
-            $("body").keyup(_.bind(function(e){
+            $("body").keyup(_.bind(function (e) {
 
-            if(e.keyCode == 27){
-                     if(this.dialogArray.length > 0){
+                if (e.keyCode == 27) {
+                    if (this.dialogArray.length > 0) {
                         this.dialogView.hide();
                     }
                     $('body').find('.moda-v2').parent().remove();
-                }  
-            },this));
+                }
+            }, this));
             $("body").mousedown(function () {
                 $(".MEE_EDITOR .alertButtons").hide();
             })
@@ -239,7 +245,7 @@ define([
             //Cache Clear time set
             this.clearCache();
             this.mainContainer.$el.css("min-height", $(document.documentElement).height() - 35);
-            
+
         },
         getUser: function () {
             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.get("bms_token") + "&type=get";
@@ -250,50 +256,50 @@ define([
                 }
                 this.set("user", _json);
                 var allowedUser = ['bayshoresolutions'];
-                if (allowedUser.indexOf(this.get("user").userId) > -1 || this.testUsers.indexOf(this.get("user").userId)>-1) {
-                    if(this.get("user").userId === 'bayshoresolutions'){
-                        this.mainContainer.$(".local-adds").addClass('bayshore-toggle');   
+                if (allowedUser.indexOf(this.get("user").userId) > -1 || this.testUsers.indexOf(this.get("user").userId) > -1) {
+                    if (this.get("user").userId === 'bayshoresolutions') {
+                        this.mainContainer.$(".local-adds").addClass('bayshore-toggle');
                     }
                     this.mainContainer.$(".local-adds").show();
-                    require(["common/localTile"],_.bind(function(localTile){
-                        var tmPr =  new localTile({app:this,userId:this.get("user").userId}); // isText to Dynamic
-                         this.mainContainer.$("#tiles").append(tmPr.$el);
-                         this.mainContainer.initializeIsotops();
+                    require(["common/localTile"], _.bind(function (localTile) {
+                        var tmPr = new localTile({app: this, userId: this.get("user").userId}); // isText to Dynamic
+                        this.mainContainer.$("#tiles").append(tmPr.$el);
+                        this.mainContainer.initializeIsotops();
                         // tmPr.init();
-                       },this));
+                    }, this));
                 }
                 else {
                     this.mainContainer.$(".local-adds").hide();
                     this.mainContainer.initializeIsotops();
-                }                
-                
-                if(this.get("tipId")==1){
+                }
+
+                if (this.get("tipId") == 1) {
                     this.mainContainer.tip_test();
                     this.mainContainer.$("#tipntest-toggle-one").show();
                     this.mainContainer.$("#tipntest-toggle-two").hide();
-                    this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
-                    this.mainContainer.openTipnTest=true;
-                    this.mainContainer.isTipnTestFlag=true;
-                }else if(this.get("tipId")==2){
+                    this.mainContainer.$(".workspace .ws-tabs").css('top', '140px');
+                    this.mainContainer.openTipnTest = true;
+                    this.mainContainer.isTipnTestFlag = true;
+                } else if (this.get("tipId") == 2) {
                     this.mainContainer.tip_test_2();
                     this.mainContainer.$("#tipntest-toggle-one").hide();
                     this.mainContainer.$("#tipntest-toggle-two").show();
-                    this.mainContainer.$(".workspace .ws-tabs").css('top','140px');
-                    this.mainContainer.openTipnTest2=true;
+                    this.mainContainer.$(".workspace .ws-tabs").css('top', '140px');
+                    this.mainContainer.openTipnTest2 = true;
                 }
-                if(this.get("workId")){
-                    if(this.workid[this.get("workId")] && this.mainContainer[this.workid[this.get("workId")]]){
+                if (this.get("workId")) {
+                    if (this.workid[this.get("workId")] && this.mainContainer[this.workid[this.get("workId")]]) {
                         this.mainContainer[this.workid[this.get("workId")]]();
                     }
                 }
-                if(_json.fromEmailMergeAllowed == "Y"){
+                if (_json.fromEmailMergeAllowed == "Y") {
                     this.salesMergeAllowed = true;
                 }
-                if(this.mainContainer){
+                if (this.mainContainer) {
                     this.showFeatures();
-                 }else{
-                    setTimeout(_.bind(this.showFeatures,this),200);
-                 }
+                } else {
+                    setTimeout(_.bind(this.showFeatures, this), 200);
+                }
 
             }, this));
             this.checkFromCRM();
@@ -306,21 +312,21 @@ define([
             }
         },
         showFeatures: function () {
-            var allowedUser = ['admin', 'jayadams', 'demo','hawaiilife','MKS-Training2','mansoor@makesbridge.com'];
+            var allowedUser = ['admin', 'jayadams', 'demo', 'hawaiilife', 'MKS-Training2', 'mansoor@makesbridge.com'];
             if (allowedUser.indexOf(this.get("user").userId) > -1) {
                 this.mainContainer.$(".one-one-listing,.signup-forms").show();
             }
             else {
                 this.mainContainer.$(".one-one-listing,.signup-forms").show();
-            }           
-          
-           var addedUser = ['jjautobot','juicyjuice','juicyjuicebb'];
-           if(this.testUsers.indexOf(this.get("user").userId) > -1 || addedUser.indexOf(this.get("user").userId) > -1){
-              this.mainContainer.$(".report-flow").show(); 
-           }
-           else{
-               this.mainContainer.$(".report-flow").show(); 
-           }
+            }
+
+            var addedUser = ['jjautobot', 'juicyjuice', 'juicyjuicebb'];
+            if (this.testUsers.indexOf(this.get("user").userId) > -1 || addedUser.indexOf(this.get("user").userId) > -1) {
+                this.mainContainer.$(".report-flow").show();
+            }
+            else {
+                this.mainContainer.$(".report-flow").show();
+            }
         },
         fromCRM: function () {
             if (this.get("isFromCRM") && this.get("isFromCRM").toLowerCase() == "y") {
@@ -434,10 +440,10 @@ define([
         },
         showAlertPopup: function (message, container) {
             if (message) {
-                var dialogWidth = message.dialogWidth? "width:"+message.dialogWidth: "";
-                var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete" style="'+dialogWidth+'"><h3>' + message.heading + '</h3>';
-                var btn_class= message.btnClass?message.btnClass:"btn-red"; 
-                var btn = '<div class="btns"><a class="'+btn_class+' btn-ok"><span>Yes, ' + message.text + '</span><i class="icon ' + message.icon + '"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
+                var dialogWidth = message.dialogWidth ? "width:" + message.dialogWidth : "";
+                var dialogHTML = '<div class="overlay"></div><div class="messagebox messagebox_ delete" style="' + dialogWidth + '"><h3>' + message.heading + '</h3>';
+                var btn_class = message.btnClass ? message.btnClass : "btn-red";
+                var btn = '<div class="btns"><a class="' + btn_class + ' btn-ok"><span>Yes, ' + message.text + '</span><i class="icon ' + message.icon + '"></i></a><a class="btn-gray btn-cancel"><span>No, Cancel</span><i class="icon cross"></i></a></div><div class="clearfix"></div>';
                 dialogHTML += '<p>' + message.detail + '</p>' + btn + '</div>';
                 var dialog = $(dialogHTML);
                 $(container).append(dialog);
@@ -484,7 +490,7 @@ define([
             });
         },
         encodeHTML: function (str) {
-            if(typeof(str)!=="undefined"){
+            if (typeof (str) !== "undefined") {
                 str = str.replace(/:/g, "&#58;");
                 str = str.replace(/\'/g, "&#39;");
                 str = str.replace(/=/g, "&#61;");
@@ -493,9 +499,9 @@ define([
                 str = str.replace(/</g, "&lt;");
                 str = str.replace(/>/g, "&gt;");
                 str = str.replace(/\"/g, "&quot;");
-                str = str.replace(/\‘/g,"&#8216;");
+                str = str.replace(/\‘/g, "&#8216;");
             }
-            else{
+            else {
                 str = "";
             }
             return str;
@@ -503,47 +509,47 @@ define([
         ,
         decodeHTML: function (str, lineFeed) {
             //decoding HTML entites to show in textfield and text area 				
-            if(typeof(str)!=="undefined"){
+            if (typeof (str) !== "undefined") {
                 str = str.replace(/&amp;/g, "&");
                 str = str.replace(/&#58;/g, ":");
-                str = str.replace(/&#39;/g, "\'");                
+                str = str.replace(/&#39;/g, "\'");
                 str = str.replace(/&#40;/g, "(");
                 str = str.replace(/&#41;/g, ")");
                 str = str.replace(/&lt;/g, "<");
                 str = str.replace(/&gt;/g, ">");
-                str = str.replace(/&gt;/g, ">");                
+                str = str.replace(/&gt;/g, ">");
                 str = str.replace(/&#9;/g, "\t");
                 str = str.replace(/&nbsp;/g, " ");
                 str = str.replace(/&quot;/g, "\"");
-                str = str.replace(/&#8216;/g, "‘");      
+                str = str.replace(/&#8216;/g, "‘");
                 str = str.replace(/&#61;/g, "=");
                 if (lineFeed) {
                     str = str.replace(/&line;/g, "\n");
                 }
             }
-            else{
+            else {
                 str = "";
             }
             return str;
         },
-        encodingAttr:function(val){
-            if(typeof(val)!=="undefined"){
+        encodingAttr: function (val) {
+            if (typeof (val) !== "undefined") {
                 val = val.replace(/&/g, "&amp;")
                 val = val.replace(/\'/g, "&#39;");
             }
-            else{
+            else {
                 val = "";
             }
             return val;
         },
-        decodeJSON: function(str){
+        decodeJSON: function (str) {
             /*str = str.replace(/\\t/g, "\t"); 
-            str = str.replace(/\\n/g, "\n");
-            str = str.replace(/\\r/g, "\r");
-            str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
-            str = str.replace(/\\/g, "");
-            str = str.replace(/&amp;/g, "&");
-            str = str.replace(/\r\n/g, "\n"); */
+             str = str.replace(/\\n/g, "\n");
+             str = str.replace(/\\r/g, "\r");
+             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
+             str = str.replace(/\\/g, "");
+             str = str.replace(/&amp;/g, "&");
+             str = str.replace(/\r\n/g, "\n"); */
             return str;
         },
         getMMM: function (month) {
@@ -578,13 +584,13 @@ define([
             }
             return status;
         },
-        showTags: function (tags,type) {
+        showTags: function (tags, type) {
             var tag_array = tags.split(",");
             var tag_html = "<ul>";
-            var type = type ? type: "";
+            var type = type ? type : "";
             $.each(tag_array, _.bind(function (key, val) {
-                tag_html += "<li title='Click to view "+type+" with \"<b>"+this.encodingAttr(val)+"</b>\" tag.' class='showtooltip'><a class='taglink'>" + val + "</a></li>";
-            },this));
+                tag_html += "<li title='Click to view " + type + " with \"<b>" + this.encodingAttr(val) + "</b>\" tag.' class='showtooltip'><a class='taglink'>" + val + "</a></li>";
+            }, this));
             tag_html += "</ul>";
             return tag_html;
         },
@@ -677,19 +683,19 @@ define([
         showStaticDialog: function (options) {
             options['app'] = this;
             var dialog = new bmsStaticDialog(options);
-            $(".modal,.modal-backdrop").css("visibility","hidden");
+            $(".modal,.modal-backdrop").css("visibility", "hidden");
             $("body").append(dialog.$el);
             dialog.show();
-            return dialog;           
+            return dialog;
         },
-        showAddDialog: function (options) {                        
+        showAddDialog: function (options) {
             if (this.get("user") && this.get("user").hasSalesOnlyAccess == "N") {
-                this.addDialogView = new addDialog(options);            
-                $("body").append(this.addDialogView.$el);            
+                this.addDialogView = new addDialog(options);
+                $("body").append(this.addDialogView.$el);
                 this.addDialogView.init();
-                return this.addDialogView;           
+                return this.addDialogView;
             }
-        },       
+        },
         enableValidation: function (options)
         {
             if (options.controlcss)
@@ -753,39 +759,39 @@ define([
         setInfo: function () {
             if (this.get("user")) {
                 var _user = this.get("user");
-                var fullName = _user.firstName + " " + _user.lastName;                
-                this.mainContainer.$(".profiledd").attr("title","Click for account management").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20)); 
-                
-                if(_user.thumbURL){
-                    this.mainContainer.$(".profile img").attr("src",this.decodeHTML(_user.thumbURL));
+                var fullName = _user.firstName + " " + _user.lastName;
+                this.mainContainer.$(".profiledd").attr("title", "Click for account management").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                this.mainContainer.$(".user-name").html(this.stringTruncate(fullName, 20));
+
+                if (_user.thumbURL) {
+                    this.mainContainer.$(".profile img").attr("src", this.decodeHTML(_user.thumbURL));
                 }
                 if (!_user.firstName && !_user.lastName) {
                     this.mainContainer.$(".user-name").html(_user.firstName);
                 }
-                if(_user.packageType && _user.packageType.toLowerCase()==="trial"){
+                if (_user.packageType && _user.packageType.toLowerCase() === "trial") {
                     var expiry_date = moment(_user.accountExpiry, 'YYYY-MM-DD  HH:mm');
-                    if(expiry_date.format("YYYY")!=="Invalid date"){
+                    if (expiry_date.format("YYYY") !== "Invalid date") {
                         var current_date = moment(new Date());
-                        var expiryDaysLeft = expiry_date.diff(current_date,'days');
-                        if(expiryDaysLeft<=30){
-                            if(this.mainContainer.header.$(".announcementbtn").css("display")=="none"){                            
+                        var expiryDaysLeft = expiry_date.diff(current_date, 'days');
+                        if (expiryDaysLeft <= 30) {
+                            if (this.mainContainer.header.$(".announcementbtn").css("display") == "none") {
                                 this.mainContainer.header.$(".announcementbtn").show();
                                 this.mainContainer.header.$('.announcement_dialogue').show();
                             }
-                            this.mainContainer.header.$('.announcement_dialogue').append("<div class='expire-message'><p>Your Trial Account expires in <b>"+expiryDaysLeft+" Days</b>. Please contact support to upgrade your account.</p></div>")                        
+                            this.mainContainer.header.$('.announcement_dialogue').append("<div class='expire-message'><p>Your Trial Account expires in <b>" + expiryDaysLeft + " Days</b>. Please contact support to upgrade your account.</p></div>")
                         }
                     }
                 }
-                if(_user["tipntest"] && _user["tipntest"].toLowerCase()=="y"){
-                    if(this.get("tipId")==2){
-                        this.mainContainer.$(".ws-tabs").css("top","140px");
+                if (_user["tipntest"] && _user["tipntest"].toLowerCase() == "y") {
+                    if (this.get("tipId") == 2) {
+                        this.mainContainer.$(".ws-tabs").css("top", "140px");
                         this.mainContainer.$("#tipntest-toggle-two").show();
-                    }else{
-                        this.mainContainer.$(".ws-tabs").css("top","140px");
+                    } else {
+                        this.mainContainer.$(".ws-tabs").css("top", "140px");
                         this.mainContainer.$("#tipntest-toggle-one").show();
                     }
-                    
+
                 }
             }
             else {
@@ -884,83 +890,119 @@ define([
             }
             event.preventDefault();
         },
-        getIEVersion: function(){
+        getIEVersion: function () {
             var msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
             if (isNaN(msie)) {
-              msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+                msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
             }
             return msie;
         },
         /*-----------------------------
          *          Tabs Switching and Scrolling  
          * -------------------------------*/
-        pushWKSTabs : function(tabobj){
+        pushWKSTabs: function (tabobj) {
             var tabarray = this.tabsArray;
             var isTabExist = false;
             var result = '';
-                    for(var i=0;i < tabarray.length; i++){
-                    if(tabarray[i].wks_id === tabobj.wks_id){
-                        isTabExist = true;
-                        result = this.switchToActiveWKS(i,tabobj.wks_id); // Call to remove value from array
-                       if(result){tabarray.push(result);} // push array value back again
-                    }
+            for (var i = 0; i < tabarray.length; i++) {
+                if (tabarray[i].wks_id === tabobj.wks_id) {
+                    isTabExist = true;
+                    result = this.switchToActiveWKS(i, tabobj.wks_id); // Call to remove value from array
+                    if (result) {
+                        tabarray.push(result);
+                    } // push array value back again
                 }
-            
-            if(!isTabExist){
+            }
+
+            if (!isTabExist) {
                 tabarray.push(tabobj);
             }
             //console.log(tabarray);
             /*-----Scrolling of Workspace-----*/
             var currentTab = tabarray.pop();
-            $( window ).scrollTop( currentTab.wscroll );
+            $(window).scrollTop(currentTab.wscroll);
             tabarray.push(currentTab);
         },
-        switchToActiveWKS : function(index,tabobj_id){
-             var tabarray = this.tabsArray;
-             var spliced = tabarray.splice(index, 1);
-             return spliced[0];
+        switchToActiveWKS: function (index, tabobj_id) {
+            var tabarray = this.tabsArray;
+            var spliced = tabarray.splice(index, 1);
+            return spliced[0];
         },
-        popWKSTabs: function(){
+        popWKSTabs: function () {
             var tabarray = this.tabsArray;
             var currentTab = tabarray.pop();
-           $('#wp_li_'+currentTab.wks_id).click();
-           $( window ).scrollTop( currentTab.wscroll );
+            $('#wp_li_' + currentTab.wks_id).click();
+            $(window).scrollTop(currentTab.wscroll);
         },
-        scrollWKStab:function(et){
+        scrollWKStab: function (et) {
             var tabarray = this.tabsArray;
             var currentTab = tabarray.pop();
-            if(currentTab){
+            if (currentTab) {
                 currentTab.wscroll = et;
                 tabarray.push(currentTab);
             }
         },
+        checkIllegalCharacters: function(val,callBack,options){
+          var illegalLetters = /[Á-Žá-žĄ-Żą-żçáÇĞÖÜçğöşüÁ-Žá-ź]+/g;
+          var notValid = false;          
+          if(illegalLetters.test(val)){
+              var lettersArray = val.match(illegalLetters);                      
+              var message = options.fieldName+' contains following characters which are not supported currently.<br/><font style="font-size:18px;line-height:28px;font-weight:bold">'+lettersArray.join(",")+"</font>";
+                  message += "<br/>If you want to proceed, above characters will be changed to <br/>";
+                  var changedCharacters = [];
+                  _.each( lettersArray ,function(ke){
+                      changedCharacters.push(this.specialLetters[ke]);                      
+                  },this);
+                  message += '<font style="font-size:18px;line-height:28px;font-style: italic;">'+changedCharacters.join(",")+'</font>';
+                  message += "<br/>Press <b>Continue</b> to proceed or press <b>Cancel</b> to change above characters manullay";
+              this.showAlertPopup({heading:'Characters not supported',
+                        detail:message,  
+                        text: "Continue",
+                        btnClass:"btn-yellow",
+                        dialogWidth: "450px",
+                        icon: "next",
+                        callback: _.bind(function(){                            
+                            callBack(lettersArray);
+                        },this)
+                    },
+                    $('body'));  
+                    
+                notValid = true;
+          }
+          
+          return notValid;
+          
+        },
+        replaceCharacaters:function(letter){             
+           return this.specialLetters[letter]; 
+        },
         /*-------------------------------
          * Common Preview method
          * -------------------------------*/
-       previewCCampaign: function(obj){
-                            
-                            var dialog_width = $(document.documentElement).width()-60;
-				var dialog_height = $(document.documentElement).height()-182;
-				var dialog = this.showDialog({title:'Campaign Preview of &quot;' + obj.camp_name + '&quot;' ,
-						  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-						  headerEditable:false,
-						  headerIcon : 'dlgpreview',
-						  bodyCss:{"min-height":dialog_height+"px"}
-				});	
-				this.showLoading("Loading Campaign HTML...",dialog.getBody());									
-                                var preview_url = "https://"+this.get("preview_domain")+"/pms/events/viewcamp.jsp?cnum="+obj.camp_id;  
-                                require(["common/templatePreview"],_.bind(function(templatePreview){
-                                var tmPr =  new templatePreview({frameSrc:preview_url,app:this,frameHeight:dialog_height,prevFlag:'C',tempNum:obj.camp_id,isText:obj.isTextOnly}); // isText to Dynamic
-                                 dialog.getBody().append(tmPr.$el);
-                                 this.showLoading(false, tmPr.$el.parent());
-                                 var dialogArrayLength = this.dialogArray.length;
-                                 tmPr.$el.addClass('dialogWrap-'+dialogArrayLength);
-                                 tmPr.init();
-                                 
-                               },this));
-                               
-                               
-       }
+        previewCCampaign: function (obj) {
+
+            var dialog_width = $(document.documentElement).width() - 60;
+            var dialog_height = $(document.documentElement).height() - 182;
+            var dialog = this.showDialog({title: 'Campaign Preview of &quot;' + obj.camp_name + '&quot;',
+                css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                headerEditable: false,
+                headerIcon: 'dlgpreview',
+                bodyCss: {"min-height": dialog_height + "px"}
+            });
+            this.showLoading("Loading Campaign HTML...", dialog.getBody());
+            var preview_url = "https://" + this.get("preview_domain") + "/pms/events/viewcamp.jsp?cnum=" + obj.camp_id;
+            require(["common/templatePreview"], _.bind(function (templatePreview) {
+                var tmPr = new templatePreview({frameSrc: preview_url, app: this, frameHeight: dialog_height, prevFlag: 'C', tempNum: obj.camp_id, isText: obj.isTextOnly}); // isText to Dynamic
+                dialog.getBody().append(tmPr.$el);
+                this.showLoading(false, tmPr.$el.parent());
+                var dialogArrayLength = this.dialogArray.length;
+                tmPr.$el.addClass('dialogWrap-' + dialogArrayLength);
+                tmPr.init();
+
+            }, this));
+
+
+        }
     });
 
     return new App();
