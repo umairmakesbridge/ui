@@ -750,12 +750,16 @@
                             $(this).find(".lists-name").highlight($.trim(self.listsObj.searchText))
                             $(this).find(".taglink").highlight($.trim(self.listsObj.searchText));
                            });
-                           var list_arr = filter.attr('checksumlists').split(',');
-                            $.each(list_arr,function(k,v){
+                           var list_arr = filter.attr('checksumlists');
+                           if(list_arr){
+                               list_arr = list_arr.split(',');
+                                $.each(list_arr,function(k,v){
                                 //filter.find("#__list_grid input[list_checksum='"+v+"']").prop("checked",true).parents("tr").addClass("selected")               
                                 filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").addClass("selected")  
                                 filter.find("#__list_grid input[list_checksum='"+v+"']").parents("tr").find('.check-list').iCheck('check');
                               });
+                           }
+                           
                 }
       
       if(self.offsetLengthLists !== "-1"){
