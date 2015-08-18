@@ -1,5 +1,5 @@
-define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangepicker', 'jquery.icheck'],
-        function (template) {
+define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', 'daterangepicker', 'jquery.icheck'],
+        function (template,moment) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
@@ -20,7 +20,9 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         autobots: {label: 'Autobots', colorClass: 'grey', iconClass: 'autobot'},
                         tags: {label: 'Tags', colorClass: 'green', iconClass: 'tags'},
                         webforms: {label: 'Signup Forms', colorClass: '', iconClass: 'form'},
-                        targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'}
+                        targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
+                        webstats: {label: 'Web Stats', colorClass: 'yellow', iconClass: 'webstats'}
+                        
                     };
                     this.sub = this.options.sub;
                     this.app = this.sub.app;
@@ -198,6 +200,8 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.openTargetsDialog();
                     } else if(this.reportType=="tags"){
                         this.openTagsDialog();
+                    } else if(this.reportType =="webstats"){
+                        this.openWebStatsDialog();
                     }
 
                 },
@@ -232,7 +236,9 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
                         this.loadTagsSummary();
-                    }                    
+                    }  else if (this.reportType == "webstats") {
+                        this.createWebstats();
+                    }                  
 
                 },
                 //////********************* Landing pages *****************************************//////
@@ -1277,6 +1283,128 @@ define(['text!reports/html/report_row.html', 'jquery.searchcontrol', 'daterangep
                         }, this);
 
                     }
+                }
+                ,
+                openWebStatsDialog: function () {
+                    var _width = 400;
+                    var _height = 415;
+                    var dialog_object = {title: 'Select Source',
+                        css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
+                        bodyCss: {"min-height": _height + "px"},
+                        saveCall: '',
+                        headerIcon: 'setting2'
+                    }
+                    dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
+                    var dialog = this.app.showDialog(dialog_object);
+                    this.app.showLoading("Loading Tags...", dialog.getBody());
+                    require(["reports/select_stats"], _.bind(function (page) {
+                        var _page = new page({page: this, dialog: dialog, dialogHeight: _height - 103});
+                        var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                        dialog.getBody().html(_page.$el);
+                        _page.init();
+                        _page.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
+                        this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(_page.saveCall, _page); // New Dialog
+                        dialog.saveCallBack(_.bind(_page.saveCall, _page));
+                    }, this));
+                },
+                createWebstats:function(){
+                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists"}}
+                    if (this.modelArray.length) {
+                        var bms_token = this.app.get('bms_token');
+                        var _type = this.modelArray[0];
+                        var queryString = (this.fromDate && this.toDate)?"&daterange=y&fromDate="+moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY")+"&toDate="+ moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY"):"&span=7"
+                        var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=" + _type + queryString;
+                        this.app.showLoading("Loading Data...", this.$el);
+                        jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                            this.webStatData = jQuery.parseJSON(xhr.responseText);
+                            if (this.app.checkError(this.webStatData)) {
+                                return false;
+                            }
+                            this.app.showLoading(false, this.$el);
+                            if (this.webStatData.length !== 0) {   
+                                this.app.showLoading("Loading Chart...", this.$el); 
+                                this.$(".add-msg-report").hide(); 
+                                this.$(".webstats-chart").remove();
+                                require(["reports/webstats"], _.bind(function (chart) {    
+                                 this.chartPage = new chart({page: this});   
+                                 this.app.showLoading(false, this.$el); 
+                                 var _data = [];
+                                 if(_type=="uv"){
+                                    _.each(this.webStatData,function(val,index){
+                                        var _date = moment(val[0], 'YYYY-M-D');
+                                        _data.push([_date.format("DD MMM"),parseInt(val[1])])
+                                    },this)
+                                 }
+                                 var options = {
+                                        chart: {
+                                            type: 'column'
+                                        },
+                                        title: {
+                                            text: webstats[_type].title
+                                        },
+                                        subtitle: {
+                                            text: this.getDateText(this.fromDate,this.toDate)
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            labels: {
+                                                rotation: -45,
+                                                style: {
+                                                    fontSize: '12px',
+                                                    fontFamily: 'Verdana, sans-serif'
+                                                }
+                                            }
+                                        },
+                                        yAxis: {
+                                            min: 0,
+                                            title: {
+                                                text: webstats[_type].yAxisText
+                                            }
+                                        },
+                                        legend: {
+                                            enabled: false
+                                        },
+                                        tooltip: {
+                                            formatter: function () {
+                                                return '<b>'+this.y+'</b> Unique Visitors <br/>' +
+                                                        'on ' + this.key;
+                                            }
+                                        },
+                                        series: [{
+                                            name: 'Count',
+                                            data: _data,
+                                            color:'#93be4c',
+                                            dataLabels: {
+                                                enabled: true,
+                                                rotation: -90,
+                                                color: '#FFFFFF',
+                                                align: 'right',
+                                                format: '{point.y:.0f}', // one decimal
+                                                y: 10, // 10 pixels down from the top
+                                                style: {
+                                                    fontSize: '12px',
+                                                    fontFamily: 'Verdana, sans-serif'
+                                                }
+                                            }
+                                        }]
+                                    }
+                                    var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
+                                    this.$(".camp_reports").append(chartDiv);
+                                    this.chartPage.createChart(options,chartDiv)
+                                    
+                                }, this));
+                            }
+                        },this));        
+                   }    
+                },
+                getDateText:function(fromDate,toDate){
+                    var textDate="Last 7 Days";
+                    if(fromDate && toDate){
+                        var fromDateObject = moment(fromDate, 'M/D/YYYY');
+                        var toDateObject = moment(toDate, 'M/D/YYYY');
+                    }
+                    
+                    
                 }
             });
         });

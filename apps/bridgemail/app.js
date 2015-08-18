@@ -82,7 +82,8 @@ define([
             this.specialLetters = {"Á":"A","á":"a","Č":"C","č":"c","Ď":"D","ď":"d","É":"E","é":"e","Ě":"E","ě":"e","Í":"I","í":"i","Ň":"N","ň":"n","Ó":"O","ó":"o","Ř":"R","ř":"r","Š":"S","š":"s","Ť":"T","ť":"t","Ů":"U","ů":"u","Ý":"Y","ý":"y","Ž":"Z","ž":"z",
                                    "Ą":"A","ą":"a","Ć":"C","ć":"c","Ę":"E","ę":"e","Ł":"L","ł":"l","Ń":"N","ń":"n","Ś":"S","ś":"s","Ź":"Z","ź":"z","Ż":"Z","ż":"z",
                                    "ç":"c","Ú":"U","ú":"u",
-                                   "Ç":"C","Ğ":"G","Ö":"O","Ş":"S","Ü":"U","ğ":"g","ö":"o","ş":"s","ü":"u","İ":"I","ı":"i"                                   
+                                   "Ç":"C","Ğ":"G","Ö":"O","Ş":"S","Ü":"U","ğ":"g","ö":"o","ş":"s","ü":"u","İ":"I","ı":"i",
+                                   "Áá":"Aa","Čč":"Cc","Ďď":"Dd","Éé":"Ee","Ěě":"Ee","Íí":"Ii","Ňň":"Nn","Óó":"Oo","Řř":"Rr","Šš":"Ss","Ťť":"Tt","Úú":"Uu","Ůů":"Uu","Ýý":"Yy","Žž":"Zz"
                                   };
 
             //Convenience for accessing the app object in the console
@@ -947,19 +948,19 @@ define([
           var notValid = false;          
           if(illegalLetters.test(val)){
               var lettersArray = val.match(illegalLetters);                      
-              var message = options.fieldName+' contains following characters which are not supported currently.<br/><font style="font-size:18px;line-height:28px;font-weight:bold">'+lettersArray.join(",")+"</font>";
-                  message += "<br/>If you want to proceed, above characters will be changed to <br/>";
+              var message = options.fieldName+' contains the following characters which are not currently supported.<br/><font style="font-size:18px;line-height:28px;font-weight:bold;display:block;overflow:hidden;white-space:wrap;width:460px;">'+lettersArray.join(", ")+"</font>";
+                  message += "<br/>If you want to proceed, the above characters will be changed to <br/>";
                   var changedCharacters = [];
                   _.each( lettersArray ,function(ke){
                       changedCharacters.push(this.specialLetters[ke]);                      
                   },this);
-                  message += '<font style="font-size:18px;line-height:28px;font-style: italic;">'+changedCharacters.join(",")+'</font>';
-                  message += "<br/>Press <b>Continue</b> to proceed or press <b>Cancel</b> to change above characters manullay";
+                  message += '<font style="font-size:18px;line-height:28px;font-style: italic;display:block;overflow:hidden;white-space:wrap;width:460px;">'+changedCharacters.join(", ")+'</font>';
+                  message += "<br/>Click <b>Continue</b> to proceed or press <b>Cancel</b> to change above characters manually.";
               this.showAlertPopup({heading:'Characters not supported',
                         detail:message,  
                         text: "Continue",
                         btnClass:"btn-yellow",
-                        dialogWidth: "450px",
+                        dialogWidth: "475px",
                         icon: "next",
                         callback: _.bind(function(){                            
                             callBack(lettersArray);

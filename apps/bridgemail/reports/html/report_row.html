@@ -1,8 +1,11 @@
-<div class="icon <%- rIcon %>"></div>
 <div class="filt_cont">
     <div class="temp-filters clearfix" id="contacts_count">
         <!--<input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />-->
-        <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>
+        <% if(this.reportType!=="webstats"){ %>  
+            <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>
+        <% } else {%>
+            <h2 class="total-count"><%- rType %> </h2>
+        <% } %>    
         <div style=" " class="srt-div">          
             <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
                 <input type="text" id="daterange" placeholder="Select date range" style="width:230px"/>
@@ -13,7 +16,7 @@
     </div>
     <div class="template-container parent-container">
         <div class="target-listing copy_camp" id="copy-camp-listing">
-            <div class="col1 cols" >
+            <div <% if(this.reportType!=="webstats"){%>class="col1 cols"<% } %> >
 
                 <div class="template-container" style="height:420px;background: #fff;margin:0px;overflow-y: auto">
                     <div class="camp_listing camp_reports">      
@@ -40,7 +43,7 @@
                 <!-- template-container  --> 
             </div>
 
-
+            <% if(this.reportType!=="webstats"){ %>  
             <div class="col2 col-cstats">
                 <div class="cstats"> 
                     <div class="mask start-message"><div class="init-message">Add <%- rType %> to see graph</div></div>  
@@ -92,6 +95,7 @@
                     <div class="clearfix"></div>
                 </div>
             </div>
+            <% } %>
         </div>
     </div>
 </div>    

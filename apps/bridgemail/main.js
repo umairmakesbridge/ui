@@ -3,7 +3,7 @@
     require.config({  
        deps: ['main'], 
        waitSeconds:400,       
-       urlArgs: "bust=1.465_42" ,       
+       urlArgs: "bust=1.465_44" ,       
        paths:{
            jquery:'shared/libs/jquery',
            underscore:'shared/libs/underscore',
@@ -41,7 +41,9 @@
            'mee-helper': 'shared/editor_common',
            'mincolors':'shared/libs/jquery.minicolors',
            'tinymce':'shared/libs/tinymce/tinymce.min',
-           'scrollbox':'shared/jquery.scrollbox'
+           'scrollbox':'shared/jquery.scrollbox',
+           'highcharts':'shared/libs/charts/highcharts',
+           'export-chart':'shared/libs/charts/modules/exporting'
        },
         shim: {
                 backbone: {

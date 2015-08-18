@@ -1954,6 +1954,16 @@ ol.campaign_progress li.s4:before {content:""; background-image: url("../img/ico
 .summary-chart .bmsgrid div.bDiv table{
     border-spacing:0px !important;
 }
+.hidetimeline.new_activities{
+    padding:10px 10px 20px;
+}
+.hidetimeline.new_activities::before{
+    background: none;
+}
+
+.hidetimeline .addbar .icon.plus::before{
+    background: none;
+}
 
 
 /*----------
