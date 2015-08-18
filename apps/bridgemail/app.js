@@ -79,11 +79,11 @@ define([
             this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com'];
             this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];
             
-            this.specialLetters = {"Á":"A","á":"a","Č":"C","č":"c","Ď":"D","ď":"d","É":"E","é":"e","Ě":"E","ě":"e","Í":"I","í":"i","Ň":"N","ň":"n","Ó":"O","ó":"o","Ř":"R","ř":"r","Š":"S","š":"s","Ť":"T","ť":"t","Ů":"U","ů":"u","Ý":"Y","ý":"y","Ž":"Z","ž":"z",
-                                   "Ą":"A","ą":"a","Ć":"C","ć":"c","Ę":"E","ę":"e","Ł":"L","ł":"l","Ń":"N","ń":"n","Ś":"S","ś":"s","Ź":"Z","ź":"z","Ż":"Z","ż":"z",
-                                   "ç":"c","Ú":"U","ú":"u",
-                                   "Ç":"C","Ğ":"G","Ö":"O","Ş":"S","Ü":"U","ğ":"g","ö":"o","ş":"s","ü":"u","İ":"I","ı":"i",
-                                   "Áá":"Aa","Čč":"Cc","Ďď":"Dd","Éé":"Ee","Ěě":"Ee","Íí":"Ii","Ňň":"Nn","Óó":"Oo","Řř":"Rr","Šš":"Ss","Ťť":"Tt","Úú":"Uu","Ůů":"Uu","Ýý":"Yy","Žž":"Zz"
+            this.specialLetters = {"Á":"&Aacute;","á":"&aacute;","Č":"&Ccaron;","č":"&ccaron;","Ď":"&Dcaron;","ď":"&dcaron;","É":"&Eacute;","é":"&eacute;","Ě":"&Ecaron;","ě":"&ecaron;","Í":"&Iacute;","í":"&iacute;","Ň":"&Ncaron;","ň":"&ncaron;","Ó":"&Oacute;","ó":"&oacute;","Ř":"&Rcaron;","ř":"&rcaron;","Š":"&Scaron;","š":"&scaron;","Ť":"&Tcaron;","ť":"&tcaron;","Ů":"&Uring;","ů":"&uring;","Ý":"&Yacute;","ý":"&yacute;","Ž":"&Zcaron;","ž":"&zcaron;",
+                                   "Ą":"&Aogon;","ą":"&aogon;","Ć":"&Cacute;","ć":"&cacute;","Ę":"&Eogon;","ę":"&eogon;","Ł":"&Lstrok;","ł":"&lstrok;","Ń":"&Nacute;","ń":"&nacute;","Ś":"&Sacute;","ś":"&sacute;","Ź":"&Zacute;","ź":"&zacute;","Ż":"&Zdot;","ż":"&zdot;",
+                                   "ç":"&Ccedil;","Ú":"&Uacute;","ú":"&uacute;",
+                                   "Ç":"&Ccedil;","Ğ":"&Gbreve","Ö":"&Ouml;","Ş":"&Scedil;","Ü":"&Uuml;","ğ":"&Gbreve;","ö":"&Ouml;","ş":"&Scedil;","ü":"&Uuml;","İ":"&Idot;","ı":"&inodot;",
+                                   "Áá":"&Aacute;&aacute;","Čč":"&Ccaron;&ccaron;","Ďď":"&Dcaron;&dcaron;","Éé":"&Eacute;&eacute;","Ěě":"&Ecaron;&ecaron;","Íí":"&Iacute;&iacute;","Ňň":"&Ncaron;&ncaron;","Óó":"&Oacute;&oacute;","Řř":"&Rcaron;&rcaron;","Šš":"&Scaron;&scaron;","Ťť":"&Tcaron;&tcaron;","Úú":"&Uacute;&uacute;","Ůů":"&Uring;&uring;","Ýý":"&Yacute;&yacute;","Žž":"&Zcaron;&zcaron;"
                                   };
 
             //Convenience for accessing the app object in the console
@@ -551,7 +551,84 @@ define([
              str = str.replace(/\\/g, "");
              str = str.replace(/&amp;/g, "&");
              str = str.replace(/\r\n/g, "\n"); */
-            return str;
+            str = str.replace(/&Aacute;/g, "Á");
+            str = str.replace(/&aacute;/g, "á");
+            str = str.replace(/&Ccaron;/g, "Č");
+            str = str.replace(/&ccaron;/g, "č");
+            str = str.replace(/&Dcaron;/g, "Ď");
+            str = str.replace(/&dcaron;/g, "ď");
+            str = str.replace(/&Eacute;/g, "É");
+            str = str.replace(/&eacute;/g, "é");
+            str = str.replace(/&Ecaron;/g, "Ě");
+            str = str.replace(/&ecaron;/g, "ě");
+            str = str.replace(/&Iacute;/g, "Í");
+            
+            str = str.replace(/&iacute;/g, "í");
+            str = str.replace(/&Ncaron;/g, "Ň");
+            str = str.replace(/&ncaron;/g, "ň");
+            str = str.replace(/&Oacute;/g, "Ó");
+            str = str.replace(/&oacute;/g, "ó");
+            str = str.replace(/&Rcaron;/g, "Ř");
+            str = str.replace(/&rcaron;/g, "ř");
+            str = str.replace(/&Scaron;/g, "Š");
+            str = str.replace(/&scaron;/g, "š");
+            str = str.replace(/&Tcaron;/g, "Ť");
+            str = str.replace(/&tcaron;/g, "ť");
+            str = str.replace(/&Uring;/g, "Ů");
+            str = str.replace(/&uring;/g, "ů");
+            str = str.replace(/&Yacute;/g, "Ý");
+            str = str.replace(/&yacute;/g, "ý");
+            
+             str = str.replace(/&Zcaron;/g, "Ž");
+             str = str.replace(/&zcaron;/g, "ž");
+             
+             str = str.replace(/&Aogon;/g, "Ą");
+             str = str.replace(/&aogon;/g, "ą");
+             str = str.replace(/&Cacute;/g, "Ć");
+             str = str.replace(/&cacute;/g, "ć");
+             str = str.replace(/&Eogon;/g, "Ę");
+             str = str.replace(/&eogon;/g, "ę");
+             str = str.replace(/&Lstrok;/g, "Ł");
+             str = str.replace(/&lstrok;/g, "ł");
+             str = str.replace(/&Nacute;/g, "Ń");
+             str = str.replace(/&nacute;/g, "ń");
+             str = str.replace(/&Sacute;/g, "Ś");
+             str = str.replace(/&sacute;/g, "ś");
+             str = str.replace(/&Zacute;/g, "Ź");
+             str = str.replace(/&zacute;/g, "ź");
+             str = str.replace(/&Zdot;/g, "Ż");
+             str = str.replace(/&zdot;/g, "ż");
+             
+             str = str.replace(/&ccedil;/g, "ç");
+             str = str.replace(/&Uacute;/g, "Ú");
+             str = str.replace(/&uacute;/g, "ú");
+             str = str.replace(/&Ccedil;/g, "Ç");
+             str = str.replace(/&Gbreve;/g, "Ğ");
+             str = str.replace(/&Ouml;/g, "Ö");
+             str = str.replace(/&Scedil;/g, "Ş");
+             str = str.replace(/&Uuml;/g, "Ü");
+             str = str.replace(/&gbreve;/g, "ğ");
+             str = str.replace(/&ouml;/g, "ö");
+             str = str.replace(/&scedil;/g, "ş");
+             str = str.replace(/&uuml;/g, "ü");
+             str = str.replace(/&Idot;/g, "İ");
+             str = str.replace(/&inodot;/g, "ı");
+             str = str.replace(/&Aacute;&aacute;/g, "Áá");
+             str = str.replace(/&Ccaron;&ccaron;/g, "Čč");
+             str = str.replace(/&Dcaron;&dcaron;/g, "Ďď");
+             str = str.replace(/&Eacute;&eacute;/g, "Éé");
+             str = str.replace(/&Ecaron;&ecaron;/g, "Ěě");
+             str = str.replace(/&Iacute;&iacute;/g, "Íí");
+             str = str.replace(/&Ncaron;&ncaron;/g, "Ňň");
+             str = str.replace(/&Oacute;&oacute;/g, "Óó");
+             str = str.replace(/&Rcaron;&rcaron;/g, "Řř");
+             str = str.replace(/&Scaron;&scaron;/g, "Šš");
+             str = str.replace(/&Tcaron;&tcaron;/g, "Ťť");
+             str = str.replace(/&Uacute;&uacute;/g, "Úú");
+             str = str.replace(/&Uring;&uring;/g, "Ůů");
+             str = str.replace(/&Yacute;&yacute;/g, "Ýý");
+             str = str.replace(/&Zcaron;&zcaron;/g, "Žž");
+             return str;
         },
         getMMM: function (month) {
             var monthNames = [

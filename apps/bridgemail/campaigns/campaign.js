@@ -354,7 +354,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
                         camp_obj.app.mainContainer.setTabDetails({workspace_id: workspace_id, heading: camp_json.name, subheading: "Campaign Wizard"});
 
-                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
+                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_obj.app.decodeJSON(camp_json.subject)));
                         var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                         if (camp_json.fromEmail != '')
                         {
