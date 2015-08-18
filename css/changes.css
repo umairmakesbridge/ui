@@ -4946,6 +4946,9 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 	opacity:0.5;
 	cursor: not-allowed;
 }
+.add-cursor {
+    cursor:pointer;
+}
 #campaign_from_email_chosen .chosen-search input[type="text"]{
     width:95%;
 }
@@ -9982,3 +9985,45 @@ sup.beta {
     position: relative;
 }
   /* ================================================End tan_a_changes.css================================================ */
+  /* ================================================Start of Filter Style Fixes ================================================ */
+  #campaign_lists_filterplug_chosen .chosen-drop .chosen-search .btn-group,#web_filterplug_chosen .chosen-drop .chosen-search .btn-group{
+      position: absolute;
+      top:3px;
+  }
+  #basic_filterplug_chosen .chosen-drop .chosen-search .btn-group{
+      position: absolute;
+      top:0px;
+  }
+  .single-sub{
+      background:rgba(0, 0, 0, 0) url("../img/Single_Contact.png") no-repeat scroll 11px 15px;
+      width:150px;
+      height:170px;
+      color: #598398;
+  }
+  .single-sub > a span , .opencsv > a span ,.multisub-email  > a span{
+    position: relative;
+    top: 160px;
+}
+.single-sub:hover{
+    background : #1f94e5 url("../img/Single_Contact-w.png") no-repeat scroll 11px 15px !important;
+    cursor:pointer;
+}
+.opencsv{
+       background:rgba(0, 0, 0, 0) url("../img/Contact_via_CSV.png") no-repeat scroll 15px 15px;
+      width:150px;
+      height:170px;
+      
+}
+.opencsv:hover{
+    background : #1f94e5 url("../img/Contact_via_CSV-w.png") no-repeat scroll 15px 15px !important;
+    cursor:pointer;
+}
+.multisub-email{
+    background:rgba(0, 0, 0, 0) url("../img/Contact_via_Email.png") no-repeat scroll  20px 15px;
+      width:150px;
+      height:170px;
+}
+.multisub-email:hover{
+   background : #1f94e5 url("../img/Contact_via_Email-w.png") no-repeat scroll 20px 15px !important; 
+   cursor:pointer;
+}

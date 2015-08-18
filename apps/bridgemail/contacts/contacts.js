@@ -24,6 +24,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         }
                     }
             },
+             basicFields: {"firstName": {"label": "First Name"}, "lastName": {"label": "Last Name"}, "company": {"label": "Company"}, "areaCode": {"label": "Area Code"}, "telephone": {"label": "Telephone"},
+                    "email": {"label": "Email"}, "city": {"label": "City"},
+                    "country": {"label": "Country"}, "state": {"label": "State"}, "zip": {"label": "Zip"}, "address1": {"label": "Address 1"}, "address2": {"label": "Address 2"},
+                    "jobStatus": {"label": "Job Status"}, "industry": {"label": "Industry"}, "salesRep": {"label": "Sales Rep"},
+                    "source": {"label": "Source"}, "salesStatus": {"label": "Sales Status"}, "occupation": {"label": "Occupation"}, "birthDate": {"label": "Birthday"}},
             /**
              * Initialize view - backbone .
             */
@@ -239,7 +244,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         if(collection.length!=0 && this.$el.find('.thumbnails.cards .open-csv').length == 0){
                         
                         this.$('.thumbnails.cards').append('<li class="open-csv"><div style="height:;" class="thumbnail browse"><div style="" class="drag create"><span>Create New Contact </span></div></div></li>');
-                        this.$('.open-csv').click(_.bind(this.openCsv,this));    
+                        this.$('.open-csv').click(_.bind(this.addSubscriber,this));    
                         }else if(collection.length==0){
                             this.$el.find('.thumbnails.cards .open-csv').remove();
                         }
@@ -478,8 +483,19 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         }
                         event.preventDefault();
                    },
-            openCsv: function(){
-                this.app.mainContainer.csvUpload();
+            addSubscriber: function(){
+                 var _this = this;
+                   $("body #new_autobot").remove();
+                   $("body .autobots-modal-in").remove();
+                   $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
+                   $("body").append("<div id='new_autobot' style='width: 710px;  top: 120px;left:50%' class='modal in'><div class='modal-body' style='min-height: 300px;'></div></div>");
+                   $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
+                   this.app.showLoading("Loading....",$("body #new_autobot .modal-body"));
+                
+                    require(["contacts/multipleadd"], function(sub_detail) {
+                           var page = new sub_detail({app:_this.app,sub:_this}); 
+                           $("body #new_autobot").html(page.el);
+                    });
             }
                  
         });
