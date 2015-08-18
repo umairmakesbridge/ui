@@ -1469,6 +1469,13 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
 }
+.tableHeadRow{
+    background: #ccc;
+    color:#777;
+}
+.oddRowCss{
+    background: #f7f7f7;
+}
 
 /*Abdullah Changes*/
 .thumbnail .img > div a.selectbtn.createcamp {

@@ -1089,7 +1089,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             },this),
                             {fieldName:"Subject field"} )
                             ){
-                        isValid = false;
+                        //isValid = false;
                     }
                     else if (el.find('#campaign_subject').val().length > 100)
                     {

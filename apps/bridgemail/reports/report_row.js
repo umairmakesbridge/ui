@@ -181,6 +181,10 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         if (this.objects.length) {
                             this.loadTags();
                         }
+                    }else if(this.reportType=="webstats"){
+                        if (this.objects.length) {
+                            this.loadWebStats();
+                        }
                     }
 
 
@@ -219,7 +223,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.loadNurtureTracks();
                     } else if (this.reportType == "tags") {
                         this.loadTags();
-                    }
+                    }else if (this.reportType == "webstats") {                        
+                        this.loadWebStats();
+                    }    
 
                 },
                 loadSummaryReports: function () {
@@ -524,6 +530,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                 },
                 showHideChartArea: function (flag) {
+                    if (this.reportType == "webstats"){
+                        return false;
+                    }
                     if (flag) {
                         this.$(".cols").removeClass("col1");
                         this.$(".col2").hide();
@@ -1307,11 +1316,18 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         dialog.saveCallBack(_.bind(_page.saveCall, _page));
                     }, this));
                 },
-                createWebstats:function(){
-                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists"}}
+                loadWebStats:function(){
+                  this.modelArray.push(this.objects[0].id);
+                  this.createWebstats();
+                },
+                createWebstats:function(fromLoadData){
+                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists",barColor:"#93be4c"},
+                                    "pv":{title:"Page Views",subtitle:"",yAxisText:"Page Views",barColor:"#2f93e5"},
+                                    "rv":{title:"Return Visitors",subtitle:"",yAxisText:"Return Visitor Count",barColor:"#dfaa2c"}
+                                    }
                     if (this.modelArray.length) {
                         var bms_token = this.app.get('bms_token');
-                        var _type = this.modelArray[0];
+                        var _type = this.modelArray[0];                        
                         var queryString = (this.fromDate && this.toDate)?"&daterange=y&fromDate="+moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY")+"&toDate="+ moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY"):"&span=7"
                         var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=" + _type + queryString;
                         this.app.showLoading("Loading Data...", this.$el);
@@ -1321,6 +1337,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 return false;
                             }
                             this.app.showLoading(false, this.$el);
+                            this.$(".parent-container .template-container").css("background","#f4f9fc")
+                            var dateLabelObject = this.getDateText(this.fromDate,this.toDate);
                             if (this.webStatData.length !== 0) {   
                                 this.app.showLoading("Loading Chart...", this.$el); 
                                 this.$(".add-msg-report").hide(); 
@@ -1329,82 +1347,125 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                  this.chartPage = new chart({page: this});   
                                  this.app.showLoading(false, this.$el); 
                                  var _data = [];
-                                 if(_type=="uv"){
-                                    _.each(this.webStatData,function(val,index){
-                                        var _date = moment(val[0], 'YYYY-M-D');
-                                        _data.push([_date.format("DD MMM"),parseInt(val[1])])
-                                    },this)
-                                 }
-                                 var options = {
-                                        chart: {
-                                            type: 'column'
-                                        },
-                                        title: {
-                                            text: webstats[_type].title
-                                        },
-                                        subtitle: {
-                                            text: this.getDateText(this.fromDate,this.toDate)
-                                        },
-                                        xAxis: {
-                                            type: 'category',
-                                            labels: {
-                                                rotation: -45,
-                                                style: {
-                                                    fontSize: '12px',
-                                                    fontFamily: 'Verdana, sans-serif'
-                                                }
-                                            }
-                                        },
-                                        yAxis: {
-                                            min: 0,
+                                    if (_type == "uv" || _type == "pv" || _type == "rv") {
+                                        _.each(this.webStatData, function (val, index) {
+                                            var _date = moment(val[0], 'YYYY-M-D');
+                                            _data.push([_date.format("DD MMM"), parseInt(val[1])])
+                                        }, this)
+
+                                        var options = {
+                                            chart: {
+                                                type: 'column',
+                                                backgroundColor: "#f4f9fc"
+                                            },
                                             title: {
-                                                text: webstats[_type].yAxisText
-                                            }
-                                        },
-                                        legend: {
-                                            enabled: false
-                                        },
-                                        tooltip: {
-                                            formatter: function () {
-                                                return '<b>'+this.y+'</b> Unique Visitors <br/>' +
-                                                        'on ' + this.key;
-                                            }
-                                        },
-                                        series: [{
-                                            name: 'Count',
-                                            data: _data,
-                                            color:'#93be4c',
-                                            dataLabels: {
-                                                enabled: true,
-                                                rotation: -90,
-                                                color: '#FFFFFF',
-                                                align: 'right',
-                                                format: '{point.y:.0f}', // one decimal
-                                                y: 10, // 10 pixels down from the top
+                                                text: webstats[_type].title,
                                                 style: {
-                                                    fontSize: '12px',
-                                                    fontFamily: 'Verdana, sans-serif'
+                                                    "color": "#02afef",
+                                                    "fontSize": "20px"
                                                 }
-                                            }
-                                        }]
+                                            },
+                                            subtitle: {
+                                                text: dateLabelObject.label,
+                                                style: {
+                                                    "color": "#999"
+                                                }
+                                            },
+                                            xAxis: {
+                                                type: 'category',
+                                                labels: {
+                                                    rotation: -45,
+                                                    style: {
+                                                        fontSize: '12px',
+                                                        fontFamily: 'Verdana, sans-serif'
+                                                    }
+                                                }
+                                            },
+                                            yAxis: {
+                                                min: 0,
+                                                title: {
+                                                    text: webstats[_type].yAxisText,
+                                                    style: {
+                                                        "color": "#4d759e"
+                                                    }
+                                                }
+                                            },
+                                            legend: {
+                                                enabled: false
+                                            },
+                                            tooltip: {
+                                                backgroundColor: webstats[_type].barColor,
+                                                style: {color: "#fff"},
+                                                formatter: function () {
+                                                    return '<b>' + this.y + '</b> ' + webstats[_type].title + ' <br/>' +
+                                                            'on ' + this.key;
+                                                }
+                                            },
+                                            series: [{
+                                                    name: 'Count',
+                                                    data: _data,
+                                                    color: webstats[_type].barColor,
+                                                    dataLabels: {
+                                                        enabled: (dateLabelObject.days > 40) ? false : true,
+                                                        rotation: -90,
+                                                        color: '#FFFFFF',
+                                                        align: 'right',
+                                                        format: '{point.y:.0f}', // one decimal
+                                                        y: 10, // 10 pixels down from the top
+                                                        style: {
+                                                            fontSize: '12px',
+                                                            fontFamily: 'Verdana, sans-serif'
+                                                        }
+                                                    }
+                                                }]
+                                        }
+                                        var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
+                                        this.$(".camp_reports").append(chartDiv);
+                                        this.chartPage.createChart(options, chartDiv)
                                     }
-                                    var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                                    this.$(".camp_reports").append(chartDiv);
-                                    this.chartPage.createChart(options,chartDiv)
-                                    
+                                    else {
+                                        var _data = [];                                        
+                                        _.each(this.webStatData, function (val, index) {
+                                            
+                                        }, this)
+                                    }
                                 }, this));
                             }
                         },this));        
+                        if(!fromLoadData){
+                            this.saveSettings();
+                        }
                    }    
                 },
                 getDateText:function(fromDate,toDate){
                     var textDate="Last 7 Days";
+                    var _days = 0;
                     if(fromDate && toDate){
                         var fromDateObject = moment(fromDate, 'M/D/YYYY');
-                        var toDateObject = moment(toDate, 'M/D/YYYY');
+                        var currentDateObject = moment(new Date());
+                        var toDateObject  = moment(toDate, 'M/D/YYYY');                                             
+                        if(currentDateObject.format("DD MMM YYYY")==toDateObject.format("DD MMM YYYY")){
+                            _days = currentDateObject.diff(fromDateObject,'days');   
+                            if(_days==0){
+                                textDate = "Today"
+                            } else if(_days==1){
+                                textDate = "Yesterday"
+                            } else if(_days==7){
+                                textDate = "Last 7 Days"
+                            } else if(_days==10){
+                                textDate = "Last 10 Days"
+                            } else if(_days==30){
+                                textDate = "Last 30 Days"
+                            }
+                            else {
+                                textDate = fromDateObject.format("DD MMM YYYY") + " to " +  currentDateObject.format("DD MMM YYYY");
+                            }
+                        }else{
+                            _days = toDateObject.diff(fromDateObject,'days');   
+                            textDate = fromDateObject.format("DD MMM YYYY") + " to " +  toDateObject.format("DD MMM YYYY");
+                        }
                     }
-                    
-                    
+                    return {label:textDate,days:_days};                    
                 }
             });
         });
