@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html','highcharts','goog!visualization,1,packages:[corechart]'],
+define(['text!reports/html/campaign_pie_chart.html','highcharts','goog!visualization,1,packages:[table]'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -37,9 +37,11 @@ function (template) {
             createTable: function (_data,ele){                
                 var data = google.visualization.arrayToDataTable(_data);
                 var table = new google.visualization.Table(ele);
-                table.draw(data, {showRowNumber: true, width: '100%', height: '100%',
+                table.draw(data, {showRowNumber: false, width: '100%', height: '100%',page:"enable",                                        
                                     cssClassNames:{headerRow:'tableHeadRow',
-                                                   oddTableRow: 'oddRowCss' 
+                                                   oddTableRow: 'oddRowCss',
+                                                   tableRow: 'tableRow',
+                                                   hoverTableRow: 'hovercss'
                                         }
                                     }
                         );

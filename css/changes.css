@@ -1469,12 +1469,71 @@ ul.tabs-btns li.active a{
 .thumbnail .img > div a.editbtn:hover {
     background-color: #98D028;
 }
-.tableHeadRow{
-    background: #ccc;
-    color:#777;
+.tableHeadRow th{
+    background: #dcf3fe;
+    background-image: none !important;
+    color:#02afef;
+    height:42px;
+    font-size:12px;
+    font-family: 'PT Sans', sans-serif;
 }
+
+.tableHeadRow th:first-child{
+    border-radius: 5px 0 0;
+}
+.tableHeadRow th:last-child{
+    border-radius: 0 5px 0 0;
+}
+
 .oddRowCss{
-    background: #f7f7f7;
+    background: #f4f9fc;
+    font-size:11px;
+    font-family: 'PT Sans', sans-serif;
+    height:40px;
+    text-align: center;
+    color:#598398;
+}
+.tableRow {
+    font-size:11px;
+    font-family: 'PT Sans', sans-serif;
+    text-align: center;
+    height:40px;
+    color:#598398;
+}
+
+.oddRowCss td:first-child,.tableRow td:first-child{
+    border-width: 0 0 1px 1px !important; 
+}
+.oddRowCss td:last-child,.tableRow td:last-child{
+    border-width: 0 1px 1px 0 !important; 
+}
+
+.google-visualization-table-table th, .google-visualization-table-table td{
+    border-width: 0 0 1px !important;
+    border-color:#dcf3fe !important;
+}
+
+.google-visualization-table-div-page{
+    background: #dcf3fe !important;
+    background-image: none !important;
+    border-color:#dcf3fe !important;
+    height:30px;
+}
+
+.tableHeadRow th:nth-child(1),.oddRowCss td:nth-child(1),.tableRow td:nth-child(1){
+    text-align: left;
+    padding-left:10px;
+}
+
+.hovercss {
+    background:#f9fcfe;
+}
+
+.google-visualization-table{
+    border:0px !important;
+}
+.google-visualization-table-td-number{
+    text-align: center !important;
 }
 
 /*Abdullah Changes*/

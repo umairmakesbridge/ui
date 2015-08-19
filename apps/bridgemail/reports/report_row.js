@@ -1321,9 +1321,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                   this.createWebstats();
                 },
                 createWebstats:function(fromLoadData){
-                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists",barColor:"#93be4c"},
-                                    "pv":{title:"Page Views",subtitle:"",yAxisText:"Page Views",barColor:"#2f93e5"},
-                                    "rv":{title:"Return Visitors",subtitle:"",yAxisText:"Return Visitor Count",barColor:"#dfaa2c"}
+                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists",xAxisText:"",barColor:"#93be4c"},
+                                    "pv":{title:"Page Views",subtitle:"",yAxisText:"Page Views",xAxisText:"",barColor:"#2f93e5"},
+                                    "rv":{title:"Return Visitors",subtitle:"",yAxisText:"Return Visitor Count",xAxisText:"",barColor:"#dfaa2c"},
+                                    "seo":{title:"Top Keywords",subtitle:"",yAxisText:"Keywords count",xAxisText:"Top Keywords",xAxisLabelDisabled:true,multipColrs:true},
+                                    "lcdetail":{title:"Top Companies",subtitle:"",yAxisText:"Views Count",xAxisText:"Top Companies Visited",xAxisLabelDisabled:true,multipColrs:true},
+                                    "ref":{title:"Top Referral Links",subtitle:"",yAxisText:"Count",xAxisText:"Top Referral Links",xAxisLabelDisabled:true,multipColrs:true},
+                                    "pp":{title:"Popular Pages",subtitle:"",yAxisText:"Pages View Count",xAxisText:"Top Pages",xAxisLabelDisabled:true,multipColrs:true}
                                     }
                     if (this.modelArray.length) {
                         var bms_token = this.app.get('bms_token');
@@ -1337,26 +1341,46 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 return false;
                             }
                             this.app.showLoading(false, this.$el);
-                            this.$(".parent-container .template-container").css("background","#f4f9fc")
+                            this.$(".parent-container .template-container").css("background","#f4f9fc");
                             var dateLabelObject = this.getDateText(this.fromDate,this.toDate);
                             if (this.webStatData.length !== 0) {   
                                 this.app.showLoading("Loading Chart...", this.$el); 
                                 this.$(".add-msg-report").hide(); 
-                                this.$(".webstats-chart").remove();
+                                this.$(".webstats-chart,.webstats-table").remove();
                                 require(["reports/webstats"], _.bind(function (chart) {    
                                  this.chartPage = new chart({page: this});   
                                  this.app.showLoading(false, this.$el); 
                                  var _data = [];
-                                    if (_type == "uv" || _type == "pv" || _type == "rv") {
+                                 var chart_Type = "column";
+                                    if (_type == "uv" || _type == "pv" || _type == "rv" ) {
                                         _.each(this.webStatData, function (val, index) {
                                             var _date = moment(val[0], 'YYYY-M-D');
                                             _data.push([_date.format("DD MMM"), parseInt(val[1])])
                                         }, this)
-
+                                    } 
+                                    else{
+                                        chart_Type = "bar"
+                                         _.each(this.webStatData, function (val, index) {                                            
+                                             if(index < 10){
+                                                 if(_type == "seo"){
+                                                    _data.push([val[0], parseInt(val[1])])
+                                                } else if(_type == "lcdetail"){
+                                                    _data.push([val[0], parseInt(val[1])])
+                                                } else if(_type == "ref"){
+                                                    _data.push([val[0], parseInt(val[1])])                                                   
+                                                } else if(_type == "pp"){
+                                                    _data.push([val[0], parseInt(val[1])])
+                                                }   
+                                            }                                            
+                                        }, this)
+                                    }
                                         var options = {
                                             chart: {
-                                                type: 'column',
+                                                type: chart_Type,
                                                 backgroundColor: "#f4f9fc"
+                                            },
+                                            plotOptions:{
+                                              series:{colorByPoint:webstats[_type].multipColrs}  
                                             },
                                             title: {
                                                 text: webstats[_type].title,
@@ -1373,7 +1397,16 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             },
                                             xAxis: {
                                                 type: 'category',
+                                                tickLength:0,
+                                                title: {
+                                                    text: webstats[_type].xAxisText,                                                    
+                                                    margin:30,
+                                                    style: {
+                                                        "color": "#4d759e"
+                                                    }
+                                                },
                                                 labels: {
+                                                    enabled: !webstats[_type].xAxisLabelDisabled,
                                                     rotation: -45,
                                                     style: {
                                                         fontSize: '12px',
@@ -1382,6 +1415,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                 }
                                             },
                                             yAxis: {
+                                                lineWidth:1,
                                                 min: 0,
                                                 title: {
                                                     text: webstats[_type].yAxisText,
@@ -1394,11 +1428,23 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                 enabled: false
                                             },
                                             tooltip: {
-                                                backgroundColor: webstats[_type].barColor,
+                                                backgroundColor: webstats[_type].barColor?webstats[_type].barColor:"#2f93e5",
                                                 style: {color: "#fff"},
                                                 formatter: function () {
-                                                    return '<b>' + this.y + '</b> ' + webstats[_type].title + ' <br/>' +
-                                                            'on ' + this.key;
+                                                     if (_type == "uv" || _type == "pv" || _type == "rv" ) {
+                                                            return '<b>' + this.y + '</b> ' + webstats[_type].title + ' <br/>' +
+                                                                'on ' + this.key;
+                                                    }
+                                                    else if(_type == "seo"){
+                                                         return '<b>Keyword </b><br/>' + _data[this.x][0] 
+                                                    }
+                                                     else if(_type == "lcdetail"){
+                                                         return '<b>Company </b><br/>' + _data[this.x][0] 
+                                                    }else if(_type == "ref"){
+                                                         return '<b>URL </b><br/>' + _data[this.x][0] 
+                                                    }else if(_type == "pp"){
+                                                         return '<b>Page Name </b><br/>' + _data[this.x][0] 
+                                                    }
                                                 }
                                             },
                                             series: [{
@@ -1406,7 +1452,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                     data: _data,
                                                     color: webstats[_type].barColor,
                                                     dataLabels: {
-                                                        enabled: (dateLabelObject.days > 40) ? false : true,
+                                                        enabled: (dateLabelObject.days > 40 ||  webstats[_type].xAxisLabelDisabled) ? false : true,
                                                         rotation: -90,
                                                         color: '#FFFFFF',
                                                         align: 'right',
@@ -1422,12 +1468,38 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
                                         this.$(".camp_reports").append(chartDiv);
                                         this.chartPage.createChart(options, chartDiv)
-                                    }
-                                    else {
-                                        var _data = [];                                        
-                                        _.each(this.webStatData, function (val, index) {
+                                    
+                                    if(_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp"){                                    
+                                        this.$(".parent-container .template-container").css({"background":"#fff","height":"900px"});
+                                        var _dataTable = [];
+                                        if(_type == "seo"){
+                                            _dataTable.push(['Keyword Text','Count','Source']);                                        
+                                            _.each(this.webStatData, function (val, index) {
+                                                _dataTable.push([val[0],parseInt(val[1]),val[2]]);
+                                            }, this)
                                             
-                                        }, this)
+                                        } else if(_type == "lcdetail"){
+                                            _dataTable.push(['Company','Page Views','Date','Traffic Source','Country','Telephone']);                                        
+                                            _.each(this.webStatData, function (val, index) {
+                                                _dataTable.push([val[0],parseInt(val[1]),val[2],val[3],val[7],val[8]]);
+                                            }, this)
+                                        }else if(_type == "ref"){
+                                            _dataTable.push(['Referral Link','Count']);                                        
+                                            _.each(this.webStatData, function (val, index) {
+                                                _dataTable.push([val[0],parseInt(val[1])]);
+                                            }, this)
+                                            
+                                        }else if(_type == "pp"){
+                                            _dataTable.push(['Page Name','Page Views', 'Unique Views','Page URL']);                                        
+                                            _.each(this.webStatData, function (val, index) {
+                                                _dataTable.push([val[0],parseInt(val[1]),parseInt(val[2]),val[3]]);
+                                            }, this)
+                                            
+                                        }
+                                        
+                                        var tabletDiv = $("<div style='height:420;width:100%;margin-top:20px;' class='webstats-table'></div>");
+                                        this.$(".camp_reports").append(tabletDiv);
+                                        this.chartPage.createTable(_dataTable,tabletDiv[0]);
                                     }
                                 }, this));
                             }

@@ -1008,7 +1008,13 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                         if (camp_name_input.attr("process-id")) {
                             $(obj.target).addClass("saving");
-                            $.post(URL, {type: "newName", campName: camp_name_input.val(), campNum: this.camp_id})
+                            var campName = camp_name_input.val();
+                            this.app.checkIllegalCharacters(campName, _.bind(function (lettersArray) {
+                                var re = new RegExp("[" + lettersArray.join("") + "]+", "g");
+                                campName = campName.replace(re, _.bind(this.app.replaceCharacaters, this.app));
+                            }, this));
+                            
+                            $.post(URL, {type: "newName", campName: campName, campNum: this.camp_id})
                                     .done(function (data) {
                                         var camp_json = jQuery.parseJSON(data);
                                         if (camp_json[0] !== "err") {
@@ -1081,16 +1087,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             message: camp_obj.app.messages[0].CAMP_subject_empty_error
                         });
                         isValid = false;
-                    }
-                    else if(app.checkIllegalCharacters(el.find('#campaign_subject').val(),_.bind(function(lettersArray){
-                             var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
-                             el.find('#campaign_subject').val(el.find('#campaign_subject').val().replace(re, _.bind(app.replaceCharacaters,app)));   
-                             this.saveStep1();
-                            },this),
-                            {fieldName:"Subject field"} )
-                            ){
-                        //isValid = false;
-                    }
+                    }                   
                     else if (el.find('#campaign_subject').val().length > 100)
                     {
                         app.showError({
@@ -1241,13 +1238,20 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val()) ? this.$("#campaign_default_reply_to").val() : "";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
+                        var subject_field = this.$("#campaign_subject").val();
+                        this.app.checkIllegalCharacters(subject_field, _.bind(function (lettersArray) {
+                            var re = new RegExp("[" + lettersArray.join("") + "]+", "g");
+                            subject_field = this.$("#campaign_subject").val().replace(re, _.bind(app.replaceCharacaters, app));
+                        }, this));
+                               
+                               
                         var fromEmail = this.$('#campaign_from_email').val();//this.$('#campaign_from_email_input').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val() : "";
                         if (proceed !== 0 && (this.states.step1.change || this.camp_id == 0)) {
                             this.app.showLoading("Saving Step 1...", this.$el.parents(".ws-content"));
                             var URL = "/pms/io/campaign/saveCampaignData/?BMS_REQ_TK=" + this.app.get('bms_token');
                             $.post(URL, {type: "saveStep1", campNum: this.camp_id,
-                                subject: this.$("#campaign_subject").val(),
+                                subject: subject_field,
                                 senderName: this.$("#campaign_from_name").val(),
                                 fromEmail: fromEmail,
                                 defaultFromEmail: fromEmailMF,
@@ -1337,24 +1341,23 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         post_data['htmlCode'] = "";
                     }
                     var combineText = post_data['htmlCode'] +  post_data['plainText'];
-                    var notSupportedChars = this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
+                    this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
                              var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
                              if (selected_li == "html_editor") {
-                                _tinyMCE.get('bmseditor_' + this.wp_id).setContent(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));   
-                                this.$("#bmstexteditor").val(plain.replace(re, _.bind(this.app.replaceCharacaters,this.app)));   
+                                post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
+                                post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
                              } else if (selected_li == "html_code") {
-                                 this.$("textarea#handcodedhtml").val(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                                 post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              } else if (selected_li == "plain_text") {
-                                 this.$("textarea#plain-text").val(plain.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                                 post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              }else if (selected_li == "html_editor_mee") {
-                                 this.$("#mee_editor").setMEEHTML(html.replace(re, _.bind(this.app.replaceCharacaters,this.app)));
+                                 post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              }
                                                              
-                             this.saveStep2();
-                            },this),
-                            {fieldName:"Campaign body"} )
+                             
+                            },this))
 
-                    if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined" ) && !notSupportedChars) {
+                    if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined" )) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
                         }

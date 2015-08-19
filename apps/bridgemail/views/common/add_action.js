@@ -34,15 +34,15 @@ function ($,Backbone, _, template) {
                 create: function(e){
                     if($(".create-button").hasClass("saving")) return false;
                     var field_text = $.trim(this.$(".field-text").val());
-                    var notSupportedChars = this.app.checkIllegalCharacters(field_text,_.bind(
+                     this.app.checkIllegalCharacters(field_text,_.bind(
                                 function(lettersArray){
                                     var re = new RegExp("["+lettersArray.join("")+"]+","g");                              
-                                    this.$(".field-text").val(field_text.replace(re, _.bind(this.app.replaceCharacaters,this.app)));                                                                                          
-                                    this.create();
-                               },this),
-                               {fieldName:"Name field"} 
+                                    field_text = field_text.replace(re, _.bind(this.app.replaceCharacaters,this.app));                                                                                          
+                                    
+                               },this)
+                               
                             )
-                    if(field_text && !notSupportedChars){
+                    if(field_text){
                         this.app.hideError({control:this.$('.lp_name')});                        
                         if(this.options.createURL){   
                             if(this.options.postData){this.options.postData[this.options.fieldKey] = field_text;}
