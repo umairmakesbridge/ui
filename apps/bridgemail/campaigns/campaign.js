@@ -4265,6 +4265,12 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var URL = "/pms/list/UpdateSubscriberProfileLayout.jsp?campaignNumber="+this.camp_id+"&origin=EditCampaignOptions.jsp&x=cccjsp&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
                     var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"fieldsLayoutIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
+                    this.app.showLoading("Loading Subscriber Profile...",dialog.getBody());
+                    dialog.getBody().find('.fieldsLayoutIframe').load(_.bind(function () {
+                                this.app.showLoading(false,dialog.getBody());
+                                // this.$("#workflowlistsearch #clearsearch").click();
+
+                         },this))
                     dialog.saveCallBack(function(){
                         dialog.$(".fieldsLayoutIframe")[0].contentWindow.document.updateSubscriberProfileLayout.submit();
                     });
@@ -4282,6 +4288,12 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var URL = "/pms/list/DesignateLists.jsp?campaignNumber="+this.camp_id+"&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
                     var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"optlistiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
+                    this.app.showLoading("Loading Opt-In List...",dialog.getBody());
+                    dialog.getBody().find('.optlistiframe').load(_.bind(function () {
+                                this.app.showLoading(false,dialog.getBody());
+                                // this.$("#workflowlistsearch #clearsearch").click();
+
+                         },this))
                     dialog.saveCallBack(function(){
                         dialog.$(".optlistiframe")[0].contentWindow.document.designateLists.submit();
                     });

@@ -70,7 +70,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.current_ws = this.$el.parents(".ws-content");
                this.current_ws.find("#campaign_tags").hide();
                this.ws_header = this.current_ws.find(".camp_header .edited"); 
-               this.ws_header.find(".add-action").remove();
+               //this.ws_header.find(".add-action").remove();
                this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                this.addCountHeader();
                this.fetchCount();
@@ -88,6 +88,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                  this.ws_header.append($countHeader);
                  this.tempCount = this.ws_header.find('.tempCount').parent();
                  this.tempCount.click(_.bind(this.filterContacts, this));
+                 
+                 this.current_ws.find("#addnew_action").attr("data-original-title", "Create New Contact").click(_.bind(this.addSubscriber, this));
             },
             /**
              * Initializing all controls here which need to show in view.
