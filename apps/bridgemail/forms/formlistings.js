@@ -254,21 +254,29 @@ define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!form
                         this.fetchForms();
                     }
                 },
-                openFormDialog: function(formId){
+                openFormDialog: function(formId,formName){
                     var dialog_width = $(document.documentElement).width()-60;
                     var dialog_height = $(document.documentElement).height()-162;
+                    var _this = this;
+                    
                     var dialog = this.app.showDialog({title:'Form Builder',
                               css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"20px"},
                               headerEditable:false,
                               headerIcon : 'dlgformwizard',                              
                               bodyCss:{"min-height":dialog_height+"px"}
                     });
+                    if(formName){
+                        this.app.showLoading("Loading "+formName+" ...",dialog.getBody());
+                    }
+                    else{
+                        this.app.showLoading("Loading ...",dialog.getBody());
+                    }
                     var formurl = formId ? "&formId="+formId : "";
                     dialog_height = parseFloat(dialog_height)-6 ;
                     var transport = new easyXDM.Socket({           
                         remote:  window.location.protocol+'//'+this.app.get("content_domain")+"/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + this.app.get("bms_token")+"&ukey="+this.app.get("user_Key")+formurl,
                         onReady: function(){
-
+                            _this.app.showLoading(false,dialog.getBody());
                         },
                         onMessage: _.bind(function(message, origin){
                             var response = jQuery.parseJSON(message);

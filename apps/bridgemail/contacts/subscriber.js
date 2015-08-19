@@ -475,6 +475,12 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         var coursecorrect_url = "/pms/trigger/CourseCorrect_new.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+ this.sub_id+"&fromNewUI=true&popup=Y";
                         var iframHTML = "<iframe src=\""+coursecorrect_url+"\"  width=\"100%\" class=\"workflowiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                         dialog.getBody().html(iframHTML);
+                        this.app.showLoading("Loading Course Correct...",dialog.getBody());
+                         dialog.getBody().find('.workflowiframe').load(_.bind(function () {
+                                this.app.showLoading(false,dialog.getBody());
+                                // this.$("#workflowlistsearch #clearsearch").click();
+
+                         },this))
                                                 
                 }
 

@@ -55,6 +55,12 @@ define(['text!reports/html/customreports.html'],
                     });                    
                     var iframHTML = "<iframe src=\""+url+"\"  width=\"100%\" class=\"customChartIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                     dialog.getBody().html(iframHTML);
+                    this.app.showLoading("Loading Custom Chart...",dialog.getBody());
+                         dialog.getBody().find('.customChartIframe').load(_.bind(function () {
+                                this.app.showLoading(false,dialog.getBody());
+                                // this.$("#workflowlistsearch #clearsearch").click();
+
+                         },this))
                     dialog.saveCallBack(function(){
                         //dialog.$(".customChartIframe")[0].contentWindow.saveUpdateData();
                     });

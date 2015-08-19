@@ -70,7 +70,7 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                     } 
                 },
                 editForm: function () {
-                    this.parent.openFormDialog(this.model.get("formId.encode"))
+                    this.parent.openFormDialog(this.model.get("formId.encode"),this.model.get('name'))
                 },
                 previewForm: function () {
                     var dialog_width = $(document.documentElement).width() - 60;
