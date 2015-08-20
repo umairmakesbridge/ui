@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/choose_bot.html','autobots/autobot_name'],
-        function(template,AutobotName) {
+define(['text!autobots/html/choose_bot.html'],
+        function(template) {
             'use strict';
             return Backbone.View.extend({
                 events: {

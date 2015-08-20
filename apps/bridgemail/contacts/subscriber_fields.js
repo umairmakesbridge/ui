@@ -351,7 +351,7 @@ function (template,jqueryui,addbox) {
                                _this.app.showMessge("Subscriber has been added successfully as a lead at Salesforce.");
                                iframe.contents().find('.publisherPageWrapper').hide();
                                 _this.refreshContactList();
-                               
+                                dialog.$el.find('.modal-footer .dialog-backbtn').hide();
                                 //dialog.hide();   
                                 dialog.hide();   
                             }
@@ -369,7 +369,7 @@ function (template,jqueryui,addbox) {
                                 
                             }else{
                                 dialog.$el.find('.modal-footer .btn-add').show();
-                                dialog.$el.find('.modal-footer .dialog-backbtn').show();
+                               // dialog.$el.find('.modal-footer .dialog-backbtn').show();
                                 dialog.$el.find('.modal-footer .btn-backsales').remove();
                             }
                             _this.app.showLoading(false,  dialog.getBody()); 
