@@ -442,18 +442,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 };
                                 
                                 mee.encodeSpecialHTML = function(str){                                    
-                                    str = str.replace(/mee-style=/g, "style=");
-                                    str = str.replace(/\‘/g,"&#8216;");
-                                    str = str.replace(/\’/g,"&#8217;");
-                                    str = str.replace(/\“/g,"&#8220;");
-                                    str = str.replace(/\”/g,"&#8221;");
-                                    str = str.replace(/\„/g,"&#8222;");
-                                    str = str.replace(/\€/g,"&#8364;");
-                                    str = str.replace(/\™/g,"&#8482;");
-                                    str = str.replace(/\–/g,"&#8208;");    
-                                    str = str.replace(/\—/g,"&#8212;");
-                                    str = str.replace(/\–/g,"&#8211;");
-                                    str = str.replace(/\™/g,"&#8482;");
+                                    str = str.replace(/mee-style=/g, "style=");                                                                      
                                     str = str.replace(/\​/g,"");
                                     return str;
                                 }
