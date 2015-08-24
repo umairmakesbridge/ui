@@ -72,7 +72,7 @@
          <div class="name-type">              
                 <h3>                    
                     <% if(this.model.get("subject")){  %>
-                    <a class="campname show-detail showtooltip" title="Click to preview"> <%= this.model.get('subject') %> </a>                    
+                    <a class="campname show-detail showtooltip" style="max-width:<%-this.maxWidth%>px;overflow-x:hidden;text-overflow: ellipsis" title="Click to preview"> <%= this.model.get('subject') %> </a>                    
                     <% } else { %>
                     <a class="campname show-detail showtooltip" title="Click to preview"> &lt;subject line&gt;</a>
                     <% } %>

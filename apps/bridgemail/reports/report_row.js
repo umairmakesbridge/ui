@@ -401,7 +401,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
+                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createCampaignChart();
@@ -446,12 +446,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [
-                                ['Action', 'Count', {role: 'style'}],
-                                ['Opens', this.chart_data["openCount"], '#454f88'],
-                                ['Clicks', this.chart_data["clickCount"], '#0c73c2'],
-                                ['Page Views', this.chart_data["pageViewsCount"], '#2f93e5'],
-                                ['Conversions', this.chart_data["conversionCount"], '#62abe6']
+                            var _data = [                                
+                                ['Opens', this.chart_data["openCount"]],
+                                ['Clicks', this.chart_data["clickCount"]],
+                                ['Page Views', this.chart_data["pageViewsCount"]],
+                                ['Conversions', this.chart_data["conversionCount"]]
                             ];
 
                             this.chartPage.createChart(_data);
@@ -492,17 +491,20 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 }
                                 if (summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                                        var vAxisLogScale =true;
-                                        var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
-                                        ];    
-                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];
+                                        
+                                        var categories = [];                                        
+                                        this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                                            , openCount: 0, sentCount: 0, socialCount: 0};
                                         _.each(summary_json.summaries[0], function (sVal) {
-                                            if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
-                                                 vAxisLogScale = false;
-                                             }                                             
-                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
+                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                            sentData.push(parseInt(sVal[0].sentCount));
+                                            openData.push(parseInt(sVal[0].openCount));
+                                            viewData.push(parseInt(sVal[0].pageViewsCount));
+                                            clickCount.push(parseInt(sVal[0].clickCount));
+                                            socialData.push(parseInt(sVal[0].socialCount));
+                                            bounceData.push(parseInt(sVal[0].bounceCount));
+                                                                                        
                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
@@ -510,8 +512,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                         },this);
-                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
-                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
+                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
+                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
+                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);  
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                          _.each(this.chart_data, function (v, key) {
@@ -599,7 +602,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
+                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createAutobotChart();
@@ -644,12 +647,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [
-                                ['Action', 'Count', {role: 'style'}],
-                                ['Opens', this.chart_data["openCount"], '#454f88'],
-                                ['Clicks', this.chart_data["clickCount"], '#0c73c2'],
-                                ['Page Views', this.chart_data["pageViewsCount"], '#2f93e5'],
-                                ['Conversions', this.chart_data["conversionCount"], '#62abe6']
+                            var _data = [                                
+                                ['Opens', this.chart_data["openCount"]],
+                                ['Clicks', this.chart_data["clickCount"]],
+                                ['Page Views', this.chart_data["pageViewsCount"]],
+                                ['Conversions', this.chart_data["conversionCount"]]
                             ];
 
                             this.chartPage.createChart(_data);
@@ -690,17 +692,20 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 }
                                 if (summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
-                                        var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
-                                        ];
-                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];                                        
+                                        var categories = [];   
+                                        this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                                            , openCount: 0, sentCount: 0, socialCount: 0};
-                                        var vAxisLogScale =  true;
+                                        
                                         _.each(summary_json.summaries[0], function (sVal) {
-                                             if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
-                                                 vAxisLogScale = false;
-                                             }
-                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
+                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                            sentData.push(parseInt(sVal[0].sentCount));
+                                            openData.push(parseInt(sVal[0].openCount));
+                                            viewData.push(parseInt(sVal[0].pageViewsCount));
+                                            clickCount.push(parseInt(sVal[0].clickCount));
+                                            socialData.push(parseInt(sVal[0].socialCount));
+                                            bounceData.push(parseInt(sVal[0].bounceCount)); 
+                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
                                              this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
@@ -708,7 +713,10 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                         },this);
-                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
+                                        
+                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
+                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
+                                                                                
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
@@ -907,7 +915,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
+                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createNurtureTrackChart();
@@ -946,12 +954,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [
-                                ['Action', 'Count', {role: 'style'}],
-                                ['Opens', this.chart_data["openCount"], '#454f88'],
-                                ['Clicks', this.chart_data["clickCount"], '#0c73c2'],
-                                ['Page Views', this.chart_data["pageViewsCount"], '#2f93e5'],
-                                ['Conversions', this.chart_data["conversionCount"], '#62abe6']
+                            var _data = [                                
+                                ['Opens', this.chart_data["openCount"]],
+                                ['Clicks', this.chart_data["clickCount"]],
+                                ['Page Views', this.chart_data["pageViewsCount"]],
+                                ['Conversions', this.chart_data["conversionCount"]]
                             ];
 
                             this.chartPage.createChart(_data);
@@ -992,17 +999,21 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 }
                                 if (summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
-                                        var _data = [
-                                            ['Genre', 'Sent', 'Open', 'View', 'Click', 'Social', 'Bounce', {role: 'annotation'}]
-                                        ];
+                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];                                        
+                                        var categories = [];   
+                                        
                                          this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                                            , openCount: 0, sentCount: 0, socialCount: 0};
-                                        var vAxisLogScale = true;
+                                       
                                         _.each(summary_json.summaries[0], function (sVal) {
-                                             if(parseInt(sVal[0].sentCount)==1 || parseInt(sVal[0].openCount)==1 || parseInt(sVal[0].pageViewsCount)==1 || parseInt(sVal[0].clickCount)==1){                                                 
-                                                 vAxisLogScale = false;
-                                             }
-                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
+                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                            sentData.push(parseInt(sVal[0].sentCount));
+                                            openData.push(parseInt(sVal[0].openCount));
+                                            viewData.push(parseInt(sVal[0].pageViewsCount));
+                                            clickCount.push(parseInt(sVal[0].clickCount));
+                                            socialData.push(parseInt(sVal[0].socialCount));
+                                            bounceData.push(parseInt(sVal[0].bounceCount)); 
+                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
                                              this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
@@ -1010,7 +1021,10 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
                                         },this);
-                                        this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
+                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
+                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
+                                        
+                                        //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
@@ -1153,7 +1167,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         _grid.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}, randomColor:true});
+                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createTagsChart();
@@ -1216,7 +1230,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }                        
                         this.chart_data = {subCount: 0};
                             var _data = [
-                                ['Action', 'Count']                                
+                                                         
                             ];
                             var liWidth = 100/this.modelArray.length;
                             this.$("ul.socpc li").remove();
@@ -1263,17 +1277,21 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         var _data = [
                                             ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
                                         ];
-                                        var vAxisLogScale = true;
+                                        
+                                        var increaseCount= [] , decreaseCount= [];  
+                                        var categories = [];  
+                                        
                                         this.chart_data = {addCount: 0,removeCount:0};
                                         _.each(summary_json.stats[0], function (sVal) {
-                                             if(parseInt(sVal[0].addCount)==1 || parseInt(sVal[0].removeCount)==1){                                                 
-                                                 vAxisLogScale = false;
-                                             }
-                                            _data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
+                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                            increaseCount.push(parseInt(sVal[0].addCount));
+                                            decreaseCount.push(parseInt(sVal[0].removeCount));
+                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
                                             this.chart_data['addCount']  = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
                                             this.chart_data['removeCount']  = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
                                         },this);
-                                        this.chartPage = new chart({page: this, title:tag, legend: {}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#f71a1a','#97d61d']});
+                                        var _data = [{"name":"Decrease","data":decreaseCount},{"name":"Increase","data":increaseCount}];
+                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#97d61d','#f71a1a']});
                                         this.$("."+tagClass).html(this.chartPage.$el);
                                         var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">'+this.app.addCommas(this.chart_data['addCount'])+'</strong></span></li>';
                                             liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">'+this.app.addCommas(this.chart_data['removeCount'])+'</strong></span></li>';
@@ -1381,7 +1399,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             },
                                             plotOptions:{
                                               series:{colorByPoint:webstats[_type].multipColrs}  
-                                            },
+                                            },                                            
                                             title: {
                                                 text: webstats[_type].title,
                                                 style: {
