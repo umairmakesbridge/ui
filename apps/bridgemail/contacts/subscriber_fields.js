@@ -53,7 +53,7 @@ function (template,jqueryui,addbox) {
                 this.$( ".custom-field-accordion" ).accordion({ active: 0, collapsible: true,heightStyle: "content"});
                 if(this.editable){
                     this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
-                }else if(this.options.isUpdateSubs){
+                }else if(this.options.isUpdateSubs || this.options.isAddFlag){
                     this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
                 }
                 else{
