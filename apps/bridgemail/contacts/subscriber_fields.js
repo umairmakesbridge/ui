@@ -28,6 +28,9 @@ function (template,jqueryui,addbox) {
                     this.editable = this.subscriber.editable;
                     this.app = this.subscriber.app;
                     this.emailsFlag= this.options.emailsFlag;
+                    if(this.options.rowtemplate){
+                        this.modelTemplate = this.options.rowtemplate;
+                    }
                     this.elDialogView = '';
                     this.render();
             },
@@ -67,7 +70,10 @@ function (template,jqueryui,addbox) {
                 var basicFields;
                 if(this.options.isAddFlag){
                     basicFields = this.basicFields
-                }else{
+                }else if(this.options.isUpdateSubs){
+                    basicFields = this.basicFields
+                }
+                else{
                     basicFields = this.subscriber.basicFields
                 }
                 $.each(basicFields,function(key,val){
@@ -82,8 +88,11 @@ function (template,jqueryui,addbox) {
                         field_html += '<div class="inputcont ">';
                         if(_this.options.isAddFlag){
                            field_html += '<input type="text" tabindex="'+tabindex+'" name="'+key+'" class="header-info textfield newsub-'+key+'"  />'; 
-                        }else{
-                            console.log(key);
+                        }else if(_this.options.isUpdateSubs){
+                            field_html += '<input type="text" tabindex="'+tabindex+'" name="'+key+'" value="'+_this.options.sub_fields[key]+'" class="header-info textfield"  />';  
+                        }
+                        else{
+                            
                            field_html += '<input type="text" tabindex="'+tabindex+'" name="'+key+'" value="'+_this.subscriber.sub_fields[key]+'" class="header-info textfield"  />';  
                         }
                         field_html += '</div></div></div>';
@@ -102,8 +111,14 @@ function (template,jqueryui,addbox) {
                 col1 = $("<div class='span6 cust_col1'></div>");
                 col2 = $("<div class='span6 cust_col2'></div>");
                 if(!this.options.isAddFlag){
-                    if(this.subscriber.sub_fields.cusFldList){
-                      $.each(this.subscriber.sub_fields.cusFldList[0],function(_key,val){
+                    var customFields = null;
+                    if(this.options.isUpdateSubs){
+                        customFields = this.options.sub_fields.cusFldList;
+                    }else{
+                        customFields = this.subscriber.sub_fields.cusFldList;
+                    }
+                    if(customFields){
+                      $.each(customFields[0],function(_key,val){
                           $.each(val[0],function(key,val){                        
                               var field_html = '<div class="row">';
                               field_html += '<label>'+key+'</label>';
@@ -249,13 +264,15 @@ function (template,jqueryui,addbox) {
                 var _this = this;
                 _this.app.showLoading("Saving Subscriber Fields...",dialog.$el);
                 var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&subNum="+this.subscriber.sub_id+"&type=editProfile";
+                var formSerialize = this.$("#sub_fields_form").serializeArray();
                 $.post(URL, this.$("#sub_fields_form").serialize())
                 .done(function(data) {                                 
                        var _json = jQuery.parseJSON(data);                         
                        _this.app.showLoading(false,dialog.$el);
                        _this.app.showMessge("Subscriber Updated Successfully!"); 
                        _this.updateValues();
-                       _this.refreshContactList();
+                       _this.updateModel(formSerialize);
+                       //_this.refreshContactList();
                        if(!_this.options.isAddFlag){
                             _this.subscriber.showFields();
                              _this.updateSubscriberLetter();
@@ -265,6 +282,16 @@ function (template,jqueryui,addbox) {
                       
                });
             },
+            updateModel: function (data) {
+                    //console.log(data);
+                    var dataObj = {};
+                    // Form array to Json
+                    for(var i=0;i<data.length;i++){
+                       dataObj[data[i].name] = data[i].value;
+                    }
+                     //console.log(dataObj.firstName);
+                    this.modelTemplate.model.set(dataObj);
+                },
             updateSubscriberDetailAtSalesForce:function(dialog)
 			{
                 var _this = this;

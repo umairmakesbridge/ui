@@ -367,7 +367,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     });
 
                 },
-                openSubscriber: function (sub_id,sub_name,isSupress,isSalesforceUser) {
+                openSubscriber: function (sub_id,sub_name,isSupress,isSalesforceUser,rowtemplate) {
                     var sub_id = sub_id ? sub_id : 0;
                     var isSalesforceUser = isSalesforceUser ? isSalesforceUser : false;
                     var email = "";
@@ -412,7 +412,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         sub_title: 'Contact Profile',
                         url: 'contacts/subscriber',
                         headerObj:{headerclass:headclass,headericon:headicon},
-                        params: {sub_id: sub_id,sub_name:sub_name,isSalesforceUser:isSalesforceUser,editable:isEditable,email:email},
+                        params: {sub_id: sub_id,sub_name:sub_name,isSalesforceUser:isSalesforceUser,editable:isEditable,email:email,rowtemplate:rowtemplate},
                         actions: []
                     });
                 },
