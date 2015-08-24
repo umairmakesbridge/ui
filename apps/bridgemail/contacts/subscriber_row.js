@@ -16,7 +16,8 @@ function (template,highlighter,tagView) {
              mapping:{"SU":{"name":"Signup Form"},"CS":{"name":"Campaign Sent"},"OP":{"name":"Campaign Open"},"CK":{"name":"Email Click"},"MT":{"name":"Single Message Sent"}
                     ,"MO":{"name":"Single Message Open"},"MC":{"name":"Single Message URL Click"},"MS":{"name":"Single Message Surpress"},"WM":{"name":"WF C2Y Trigger Mail"}
                     ,"MM":{"name":"MY C2Y Trigger Mail"},"UN":{"name":"Unsubscribe"},"SP":{"name":"Suppress"},"SC":{"name":"Score Change"},"TF":{"name":"Tell a friend"}
-                    ,"WV":{"name":"Web Visit"},"WA":{"name":"Workflow Alert"},"S":{"name":"Sent"},"O":{"name":"Opened"},"C":{"name":"Clicked"}},        
+                    ,"WV":{"name":"Web Visit"},"WA":{"name":"Workflow Alert"},"S":{"name":"Sent"},"O":{"name":"Opened"},"C":{"name":"Clicked"}},     
+            
             /**
              * Attach events on elements in view.
             */
@@ -25,7 +26,8 @@ function (template,highlighter,tagView) {
                'click .closebtn': 'hideDetail',
                'click .tag':'tagSearch',
                'click .oto-sendmail': 'sendEmail',
-               'click .show-detail':'openContact',
+               'click .show-detail':'editProfile',
+               'click .show-contact-detail':'openContact',
                'click .add-to-salesforce':"synctoSF",
                'click .salesforce-view':"viewSyncedSF"
             },
@@ -59,7 +61,8 @@ function (template,highlighter,tagView) {
              * Render Row view on page.
             */
             renderRow:function(){
-              
+              console.log('Change Occured');
+              this.render();
             },
             /**
              * Initializing all controls here which need to show in view.
@@ -204,6 +207,70 @@ function (template,highlighter,tagView) {
                 this.trigger('tagclick',tag);
                 return false;
             },
+            /**
+                 * Open edit profile dialog view.
+                 */
+                editProfile: function() {
+                    var _this = this;
+                    var dialog_width = 1000;
+                    var editable = true;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var btn_prp = {title: this.editable?'Edit Profile':'View Profile',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        headerIcon: 'account',
+                        bodyCss: {"min-height": dialog_height + "px"}
+                        
+                    }
+                    if(editable){
+                        btn_prp['buttons']= {saveBtn: {text: 'Update', btnicon: 'update'}};
+                        if (this.sub.isSalesforceUser) {
+                            btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
+                        }
+                    }
+                    var dialog = this.app.showDialog(btn_prp);
+                    this.app.showLoading("Loading...", dialog.getBody());
+                    this.loadData(dialog);  
+                },
+               /**
+                 * Loading data from server to populate page info.
+                 */
+                loadData: function(dialog) {
+                    var _this = this;
+                    var bms_token = this.app.get('bms_token');
+                    this.sub_id = this.model.get("subNum");
+                    //Load subscriber details, fields and tags
+                    this.app.showLoading("Loading Contact Details...", this.$el);
+                    var URL = "";
+                     var editable = true;
+                    if(editable){
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&subNum=" + this.sub_id + "&type=getSubscriber";
+                    }
+                    else{
+                        URL = "/pms/io/subscriber/getData/?BMS_REQ_TK=" + bms_token + "&sfid=" + this.sub_id + "&type=getSubscriberBySfInfo&email="+this.model.get("email");
+                    }
+                    jQuery.getJSON(URL, function(tsv, state, xhr) {
+                        _this.app.showLoading(false, _this.$el);
+                        var _json = jQuery.parseJSON(xhr.responseText);
+                        if (_this.app.checkError(_json)) {
+                            return false;
+                        }
+                        _this.sub_fields = _json;
+                       // _this.showFields(dialog);
+                         _this.sub_id = _json.subNum;
+                         
+                           require(["contacts/subscriber_fields"], function(sub_detail) {
+                                var page = new sub_detail({sub: _this,isSalesforceUser:_this.sub.isSalesforceUser,rowtemplate:_this,isUpdateSubs:true,sub_fields:_this.sub_fields});
+                            dialog.getBody().html(page.$el);
+                            if (_this.sub.isSalesforceUser) {
+                                dialog.saveCallBack2(_.bind(page.updateSubscriberDetailAtSalesForce, page, dialog));
+                            }
+                            dialog.saveCallBack(_.bind(page.updateSubscriberDetail, page, dialog));
+                        });
+                    });
+                    
+                }, 
+                 
             openContact : function(){
                       var sub_name = '';
                       if(this.model.get("firstName")){
@@ -214,7 +281,7 @@ function (template,highlighter,tagView) {
                           sub_name = this.model.get("email");
                       }
                        
-                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name,this.model.get("supress"),this.sub.isSalesforceUser);
+                      this.app.mainContainer.openSubscriber(this.model.get("subNum"),sub_name,this.model.get("supress"),this.sub.isSalesforceUser,this);
                       
             },
             sendEmail : function(){

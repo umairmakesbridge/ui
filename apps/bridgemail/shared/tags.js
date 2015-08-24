@@ -258,6 +258,9 @@
                     else if(tag_json[0]=="err"){
                         self.options.app.showAlert(tag_json[1],$("body"));
                     }
+                    if(self.options.callBack){
+                       self.options.callBack(self.options.app.encodeHTML(temp_tags));
+                    }
                     self.dialog.find(".tag-input").prop("disabled",false).val('');
                     self.dialog.find(".addtag").prop("disabled",false).removeClass("saving");
 

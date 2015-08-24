@@ -45,8 +45,13 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         this.editable = this.options.params.editable;
                         this.email = this.options.params.email;
                     }
+                    
                     this.$el.html(this.template({}));      
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                   
+                    if (this.options.params.rowtemplate) {
+                        this.modelTemplate = this.options.params.rowtemplate;
+                    }
                     this.initControls();
                     this.loadData();
                 }
@@ -141,7 +146,18 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                         
                         _this.showTags();
                         _this.showFields();
-                        _this.sub_id = _json.subNum;
+                       
+                        
+                        if(_json.firstName){
+                             _this.sub_name = _json.firstName;
+                        }else if(_json.firstName){
+                            _this.sub_name = _json.lastName;
+                        }else{
+                            _this.sub_name = _json.email;
+                        }
+                        
+                        _this.firstLetterContact();
+                         _this.sub_id = _json.subNum;
                         if(!this.editable){
                             _this.getActiviites();
                         }
@@ -220,15 +236,21 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                  */
                 showTags: function() {
                     var tags = this.sub_fields.tags;
+                    var _this = this;
                     this.tagDiv.tags({app: this.app,
                         url: '/pms/io/subscriber/setData/?BMS_REQ_TK=' + this.app.get('bms_token'),
                         params: {type: 'tags', subNum: this.sub_id, tags: ''}
                         , showAddButton: this.editable,
                         tempOpt: true,
                         tags: tags,
+                        callBack: _.bind(_this.newTags, _this),
                         typeAheadURL: "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get('bms_token') + "&type=allSubscriberTags"
+                   
                     });
 
+                },
+                newTags: function (data) {
+                    this.modelTemplate.model.set("tags", data);
                 },
                 /**
                  * Show and hide large view of fields on view.
@@ -350,7 +372,7 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                     var dialog = this.app.showDialog(btn_prp);
                     this.app.showLoading("Loading...", dialog.getBody());
                     require(["contacts/subscriber_fields"], function(sub_detail) {
-                        var page = new sub_detail({sub: _this,isSalesforceUser:_this.options.params.isSalesforceUser});
+                        var page = new sub_detail({sub: _this,isSalesforceUser:_this.options.params.isSalesforceUser,rowtemplate:_this.modelTemplate});
                         dialog.getBody().html(page.$el);
                         if (_this.sub_fields["conLeadId"]) {
                             dialog.saveCallBack2(_.bind(page.updateSubscriberDetailAtSalesForce, page, dialog));
@@ -482,6 +504,10 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
 
                          },this))
                                                 
+                },
+                firstLetterContact : function(){
+                    //console.log('id : '+ this.sub_id + ' name : '+ this.sub_name);
+                    this.app.mainContainer.SubscriberName(this.sub_id,this.sub_name);
                 }
 
             });
