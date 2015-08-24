@@ -53,6 +53,8 @@ function (template,jqueryui,addbox) {
                 this.$( ".custom-field-accordion" ).accordion({ active: 0, collapsible: true,heightStyle: "content"});
                 if(this.editable){
                     this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
+                }else if(this.options.isUpdateSubs){
+                    this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
                 }
                 else{
                     this.$("input").prop("readonly",true);
@@ -273,7 +275,7 @@ function (template,jqueryui,addbox) {
                        _this.updateValues();
                        _this.updateModel(formSerialize);
                        //_this.refreshContactList();
-                       if(!_this.options.isAddFlag){
+                       if(!_this.options.isAddFlag && !_this.options.isUpdateSubs){
                             _this.subscriber.showFields();
                              _this.updateSubscriberLetter();
                               dialog.hide();
