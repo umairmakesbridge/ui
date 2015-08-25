@@ -1291,7 +1291,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data['removeCount']  = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
                                         },this);
                                         var _data = [{"name":"Decrease","data":decreaseCount},{"name":"Increase","data":increaseCount}];
-                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#97d61d','#f71a1a']});
+                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#97d61d']});
                                         this.$("."+tagClass).html(this.chartPage.$el);
                                         var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">'+this.app.addCommas(this.chart_data['addCount'])+'</strong></span></li>';
                                             liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">'+this.app.addCommas(this.chart_data['removeCount'])+'</strong></span></li>';

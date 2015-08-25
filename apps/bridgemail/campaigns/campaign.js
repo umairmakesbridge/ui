@@ -354,7 +354,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         var workspace_id = camp_obj.$el.parents(".ws-content").attr("id");
                         camp_obj.app.mainContainer.setTabDetails({workspace_id: workspace_id, heading: camp_json.name, subheading: "Campaign Wizard"});
 
-                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_obj.app.decodeJSON(camp_json.subject)));
+                        camp_obj.$("#campaign_subject").val(camp_obj.app.decodeHTML(camp_json.subject));
                         var merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                         if (camp_json.fromEmail != '')
                         {
@@ -1238,13 +1238,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val()) ? this.$("#campaign_default_reply_to").val() : "";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
-                        var subject_field = this.$("#campaign_subject").val();
-                        this.app.checkIllegalCharacters(subject_field, _.bind(function (lettersArray) {
-                            var re = new RegExp("[" + lettersArray.join("") + "]+", "g");
-                            subject_field = this.$("#campaign_subject").val().replace(re, _.bind(app.replaceCharacaters, app));
-                        }, this));
-                               
-                               
+                        var subject_field = this.$("#campaign_subject").val();                        
+                                                              
                         var fromEmail = this.$('#campaign_from_email').val();//this.$('#campaign_from_email_input').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val() : "";
                         if (proceed !== 0 && (this.states.step1.change || this.camp_id == 0)) {
@@ -1349,7 +1344,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                              } else if (selected_li == "html_code") {
                                  post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              } else if (selected_li == "plain_text") {
-                                 post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
+                                 //post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              }else if (selected_li == "html_editor_mee") {
                                  post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              }
