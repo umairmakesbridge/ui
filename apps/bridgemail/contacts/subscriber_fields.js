@@ -53,7 +53,7 @@ function (template,jqueryui,addbox) {
                 this.$( ".custom-field-accordion" ).accordion({ active: 0, collapsible: true,heightStyle: "content"});
                 if(this.editable){
                     this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
-                }else if(this.options.isUpdateSubs){
+                }else if(this.options.isUpdateSubs || this.options.isAddFlag){
                     this.$(".add-field").addbox({app:this.app,addCallBack:_.bind(this.addCustomField,this)});
                 }
                 else{
@@ -243,6 +243,7 @@ function (template,jqueryui,addbox) {
                               _this.elDialogView = dialog;
                               dialog.$el.find('.btn-save').unbind('click');
                               dialog.$el.find('.btn-save').html('<span>Update</span><i class="icon update"></i>');
+                              dialog.$el.find('.dialog-title').html('Edit Profile');
                               _this.subscriber.sub_id = _json[1];
                               _this.$el.find('.add-to-salesforce').removeClass('disabled-btn').addClass('add-cursor');
                               dialog.$el.find('.btn-save').removeClass('btn-save').addClass('btn-update').click(function(){
@@ -273,7 +274,9 @@ function (template,jqueryui,addbox) {
                        _this.app.showLoading(false,dialog.$el);
                        _this.app.showMessge("Subscriber Updated Successfully!"); 
                        _this.updateValues();
-                       _this.updateModel(formSerialize);
+                       if(!_this.options.isAddFlag){
+                           _this.updateModel(formSerialize);
+                       }
                        //_this.refreshContactList();
                        if(!_this.options.isAddFlag && !_this.options.isUpdateSubs){
                             _this.subscriber.showFields();

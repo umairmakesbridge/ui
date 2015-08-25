@@ -61,7 +61,7 @@ function (template,highlighter,tagView) {
              * Render Row view on page.
             */
             renderRow:function(){
-              console.log('Change Occured');
+              //console.log('Change Occured');
               this.render();
             },
             /**
@@ -215,7 +215,7 @@ function (template,highlighter,tagView) {
                     var dialog_width = 1000;
                     var editable = true;
                     var dialog_height = $(document.documentElement).height() - 182;
-                    var btn_prp = {title: this.editable?'Edit Profile':'View Profile',
+                    var btn_prp = {title: editable?'Edit Profile':'View Profile',
                         css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
                         headerEditable: false,
                         headerIcon: 'account',
