@@ -544,13 +544,7 @@ define([
             return val;
         },
         decodeJSON: function (str) {
-            /*str = str.replace(/\\t/g, "\t"); 
-             str = str.replace(/\\n/g, "\n");
-             str = str.replace(/\\r/g, "\r");
-             str = str.replace(/\\u0000|\\u0002|\\u0003|\\u0004|\\u0005|\\u0006|\\u0007|\\u0008|\\u0009|\\u000A|\\u000B|\\u000C|\\u000E|\\u000F|\\u0010|\\u0011|\\u0012|\\u0013|\\u0014|\\u0015|\\u0016|\\u0017|\\u0018|\\u0019|\\u001A|\\u001B|\\u001C|\\u001D|\\u001E|\\u001F/g, "");
-             str = str.replace(/\\/g, "");
-             str = str.replace(/&amp;/g, "&");
-             str = str.replace(/\r\n/g, "\n"); */
+            /*
             str = str.replace(/&#193;/g, "Á");
             str = str.replace(/&#225;/g, "á");
             str = str.replace(/&#268;/g, "Č");
@@ -622,7 +616,7 @@ define([
              str = str.replace(/&#252;/g, "ü");
              str = str.replace(/&#304;/g, "İ");
              str = str.replace(/&#305;/g, "ı");
-          
+            */
              return str;
         },
         getMMM: function (month) {

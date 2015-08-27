@@ -1335,7 +1335,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
                     }
-                    var combineText = post_data['htmlCode'] +  post_data['plainText'];
+                   /* var combineText = post_data['htmlCode'] +  post_data['plainText'];
                     this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
                              var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
                              if (selected_li == "html_editor") {
@@ -1347,11 +1347,10 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                                  //post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
                              }else if (selected_li == "html_editor_mee") {
                                  post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
-                             }
-                                                             
+                             }                                                             
                              
                             },this))
-
+                    */        
                     if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined" )) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));

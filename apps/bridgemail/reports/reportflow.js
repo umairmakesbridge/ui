@@ -19,12 +19,13 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                         if(this.options.params.parent){
                             this.parentWS = this.options.params.parent;
                         }
-                    }
+                    }                    
                     this.render();
                 },
                 render: function ()
                 {                     
                   this.$el.html(this.template({}));                    
+                  this.checkBridgeStats();
                   this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                 },
                 init: function () {
@@ -226,6 +227,25 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             }
 
                         }, this));
+                },
+                checkBridgeStats:function(){
+                     if(this.app.get("bridgestatz") && this.app.get("bridgestatz").id){
+                         this.$("li[data-type='webstats']").show();
+                     }
+                     else{
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=bridgestatz";
+                        jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                            var _json = jQuery.parseJSON(xhr.responseText);                            
+                            if (this.app.checkError(_json)) {
+                                return false;
+                            }
+                            if(_json.id){
+                                this.app.set("bridgestatz", _json);
+                                this.$("li[data-type='webstats']").show();
+                            }                            
+                            
+                        }, this));
+                     }
                 }
 
             });

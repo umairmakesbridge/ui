@@ -1339,7 +1339,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                   this.createWebstats();
                 },
                 createWebstats:function(fromLoadData){
-                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Vists",xAxisText:"",barColor:"#93be4c"},
+                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Visits",xAxisText:"",barColor:"#93be4c"},
                                     "pv":{title:"Page Views",subtitle:"",yAxisText:"Page Views",xAxisText:"",barColor:"#2f93e5"},
                                     "rv":{title:"Return Visitors",subtitle:"",yAxisText:"Return Visitor Count",xAxisText:"",barColor:"#dfaa2c"},
                                     "seo":{title:"Top Keywords",subtitle:"",yAxisText:"Keywords count",xAxisText:"Top Keywords",xAxisLabelDisabled:true,multipColrs:true},
@@ -1521,6 +1521,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                     }
                                 }, this));
                             }
+                            else {                                    
+                                    this.app.showAlert("No data found for '"+webstats[_type].title+"'",$("body"));
+                                }
                         },this));        
                         if(!fromLoadData){
                             this.saveSettings();
