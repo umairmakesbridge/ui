@@ -16,7 +16,7 @@
                         
                         	
                             <td width="">
-                                <a class="show-detail contact-firstAlphabet"><div class="letter_block "><span class="showtooltip" title="Click to view profile"></span></div></a>
+                                <a class="show-contact-detail contact-firstAlphabet"><div class="letter_block "><span class="showtooltip" title="Click to view profile"></span></div></a>
                              </td>
                                 
                             
@@ -124,88 +124,3 @@
                                               </div>
                                           
                                         </div>
-<div style="display:none"> 
-    
-    <input type="checkbox" value="" name="" id="no1" class="checkpanel contact-row-check" />
-<div class="leftbox">
-    <div class="title show-detail" id="<%- model.get('subNum')%>">
-        <h3><a class="showtooltip" title="Click to view profile"><%- contact_name %></a></h3>
-        <% if(model.get('salesStatus')!==''){%>
-            <a class="statusdd color3 captilize"><%- model.get('salesStatus').toLowerCase()%> </a>
-        <%}%>    
-        <a  class="schedulebtn">Schedule</a>
-        <% if(model.get('sfUrl')){ %>
-        <a><img src="<%- this.app.get('path')%>img/sf-icon-Copy.png"/></a>
-        <% } %>
-    </div>
-    <div class=" tagscont"> 
-        <ul>
-          <% _.each(model.get('tags').split(","),function(t){ %>  
-            <li><a  class="tag"><%- this.app.decodeHTML(t) %></a> </li>
-          <% },this)%>          
-        </ul>
-      </div><!--   tagscont  --> 
-       <div class="leftboxbtm" style="display:none">
-            <div class="hotness">
-                <span class=""></span>
-                <span class=""></span>
-                <span class=""></span>
-                <span class=""></span>
-            </div> <!--  hotness  --> 
-            <div class="filterbar">
-                <span class="c1 activestate">1</span>
-                <span class="c2">2</span>
-                <span class="c3">3</span>
-                <span class="c4">4</span>
-                <span class="c5">5</span>
-                <span class="c6">6</span>
-                <span class="c7 ">7</span>
-                <span class="c8">8</span>
-                <span class="c9">9</span>
-                <span class="c10">10</span>
-            </div>
-            <div class="score">
-                    <i class="icon score"></i>
-                <%- model.get('score')%>
-            </div>
-            <a  class="chatbtn"><sup class="badge">0</sup></a>
-            <div class="crms">
-                <a  class=""><img src="<%- this.app.get('path')%>img/nsicon2.png" alt=""/></a>
-                 <a  class=""><img src="<%- this.app.get('path')%>img/inicon2.png" alt=""/></a>
-            </div>
-        </div>
-    </div> <!--  leftbox  --> 
-
-<div class="avatarcol">
-    <div class="img"><img src="<%- this.app.get('path')%>img/avatar.png" alt=""/></div>
-    <ul style="display:none"><li><a class="icon hide showtooltip" title="Hide Contact"></a></li><li><a class="icon sendmail showtooltip" title="Send Email"></a></li></ul>
-</div>
-<div class="rightbox">
-            <div class="actstatus">
-            <% if(time){ %><div class="time"><i class="icon time"></i><%- time %></div><% } %>
-            <% if(activity_type){ %><div class="activity"><i class="icon web"></i><%- activity_type %></div><% } %>
-        </div>
-        <div class="proinfo">
-            <span class="ellipsis more-detail showtooltip" title="View fields">...</span>            
-            <span class="fields">
-                Telephone
-            <strong></strong>
-            </span>
-            <span class="fields">
-                Company
-            <strong><%- this.app.decodeHTML(model.get('company'))%></strong>
-            </span>
-            <span class="fields">
-                Title
-            <strong><%- this.app.decodeHTML(model.get('title'))%></strong>            
-            </span>
-            
-            </div>                        
-</div> <!--  rightbox  --> 
-<a class="closebtn" style="display:none"></a>       
-<div class="allprofileinfo" style="display:none">
-    <div class="proinfo">
-         
-    </div>
-</div>
-</div><!-- Extra div to hide the content -->

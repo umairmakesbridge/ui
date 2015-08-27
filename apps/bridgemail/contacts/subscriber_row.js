@@ -54,8 +54,6 @@ function (template,highlighter,tagView) {
                     activity_type:this.mapping[this.model.get("lastActivityType")]?this.mapping[this.model.get("lastActivityType")].name:this.model.get("lastActivityType")
                 }));                
                 this.initControls();  
-                this.getFirstAlphabet();
-                this.lastOpenActivityDate();
             },
             /**
              * Render Row view on page.
@@ -69,7 +67,6 @@ function (template,highlighter,tagView) {
             */
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                this.showTagsTemplate();
                 this.$('input.contact-row-check').iCheck({
                         checkboxClass: 'checkpanelinput',
                         insert: '<div class="icheck_line-icon"></div>'
@@ -97,7 +94,9 @@ function (template,highlighter,tagView) {
                 else if(this.sub.tagTxt){
                     this.$(".tag").highlight($.trim(this.app.decodeHTML(this.sub.tagTxt)));
                 }
-                
+                this.showTagsTemplate();
+                this.getFirstAlphabet();
+                this.lastOpenActivityDate();
                 
             },
             lastOpenActivityDate:function(){

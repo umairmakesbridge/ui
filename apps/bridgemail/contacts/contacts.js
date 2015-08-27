@@ -1,5 +1,5 @@
-define(['jquery.searchcontrol','contacts/collections/subscribers','text!contacts/html/contacts.html','jquery.chosen','jquery.icheck','contacts/subscriber_row'],
-function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberRowView) {
+define(['jquery.searchcontrol','contacts/collections/subscribers','text!contacts/html/contacts.html','jquery.chosen','jquery.icheck','contacts/subscriber_row','contacts/multipleadd'],
+function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberRowView,addContactView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Contacts dashboard view, depends on search control, chosen control, icheck control
@@ -36,7 +36,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                _.bindAll(this, 'searchByTag','updateRefreshCount');  
                this.template = _.template(template);		
                //
-               this.subscriberRequest = new subscriberCollection();                              
+               this.subscriberRequest = new subscriberCollection();
+               this.addContactView = null;
                this.offset = 0;               
                this.searchTxt = '';
                this.tagTxt = '';
@@ -493,11 +494,9 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                    $("body").append("<div id='new_autobot' style='width: 710px;  top: 120px;left:50%' class='modal in'><div class='modal-body' style='min-height: 300px;'></div></div>");
                    $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
                    this.app.showLoading("Loading....",$("body #new_autobot .modal-body"));
-                
-                    require(["contacts/multipleadd"], function(sub_detail) {
-                           var page = new sub_detail({app:_this.app,sub:_this}); 
-                           $("body #new_autobot").html(page.el);
-                    });
+                   this.addContactView = new addContactView({ sub:this ,app:this.app}); 
+                  // var addContactView = new addContactView({ sub:this ,app:this.app});  
+                   $("body #new_autobot").html(this.addContactView.el);
             }
                  
         });
