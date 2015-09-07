@@ -1008,12 +1008,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                         if (camp_name_input.attr("process-id")) {
                             $(obj.target).addClass("saving");
-                            var campName = camp_name_input.val();
-                            this.app.checkIllegalCharacters(campName, _.bind(function (lettersArray) {
-                                var re = new RegExp("[" + lettersArray.join("") + "]+", "g");
-                                campName = campName.replace(re, _.bind(this.app.replaceCharacaters, this.app));
-                            }, this));
-                            
+                            var campName = camp_name_input.val();                                                        
                             $.post(URL, {type: "newName", campName: campName, campNum: this.camp_id})
                                     .done(function (data) {
                                         var camp_json = jQuery.parseJSON(data);
@@ -1335,7 +1330,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     if (typeof (htmlText) !== "undefined") {
                         post_data['htmlCode'] = "";
                     }
-                   /* var combineText = post_data['htmlCode'] +  post_data['plainText'];
+                    /*var combineText = post_data['htmlCode'] +  post_data['plainText'];
                     this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
                              var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
                              if (selected_li == "html_editor") {

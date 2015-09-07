@@ -29,6 +29,7 @@ function (template) {
                this.app = this.options.page.app;         
                this.xAxis = this.options.xAxis;
                this.yAxis = this.options.yAxis;
+               this.title = this.options.title ?this.options.title:'';
                this.isStacked = this.options.isStacked;
                this.colors = this.options.colors?this.options.colors:['#454F88','#2F93E5','#62ABE6','#0C73C2','#3b5998','#bb0000'];               
             }
@@ -47,7 +48,7 @@ function (template) {
                       series:{colorByPoint:true}  
                     },
                     title: {
-                        text: '',
+                        text: this.title,
                         style: {
                             "color": "#02afef",
                             "fontSize": "20px"

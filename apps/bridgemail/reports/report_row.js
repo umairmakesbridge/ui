@@ -1,5 +1,5 @@
 define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', 'daterangepicker', 'jquery.icheck'],
-        function (template,moment) {
+        function (template, moment) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',
@@ -11,7 +11,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     "keyup #daterange": 'showDatePicker',
                     "click #clearcal": 'hideDatePicker',
                     "click .calendericon": 'showDatePickerFromClick',
-                    "click .percent":'showPercentDiv'
+                    "click .percent": 'showPercentDiv',
+                    "click .icons-bar-chart .icons":'changeChart'
                 },
                 initialize: function () {
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'darkblue', iconClass: 'open'},
@@ -22,15 +23,26 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         webforms: {label: 'Signup Forms', colorClass: '', iconClass: 'form'},
                         targets: {label: 'Targets', colorClass: 'red', iconClass: 'target'},
                         webstats: {label: 'Web Stats', colorClass: 'yellow', iconClass: 'webstats'}
-                        
+
                     };
+                    this.webstats = {
+                        "uv": {title: "Unique Visitors", subtitle: "", yAxisText: "Unique Visits", xAxisText: "", barColor: "#93be4c"},
+                        "pv": {title: "Page Views", subtitle: "", yAxisText: "Page Views", xAxisText: "", barColor: "#2f93e5"},
+                        "rv": {title: "Return Visitors", subtitle: "", yAxisText: "Return Visitor Count", xAxisText: "", barColor: "#dfaa2c"},
+                        "seo": {title: "Top Keywords", subtitle: "", yAxisText: "Keywords count", xAxisText: "Top Keywords", xAxisLabelDisabled: true, multipColrs: true},
+                        "lcdetail": {title: "Top Companies", subtitle: "", yAxisText: "Views Count", xAxisText: "Top Companies Visited", xAxisLabelDisabled: true, multipColrs: true},
+                        "ref": {title: "Top Referral Links", subtitle: "", yAxisText: "Count", xAxisText: "Top Referral Links", xAxisLabelDisabled: true, multipColrs: true},
+                        "pp": {title: "Popular Pages", subtitle: "", yAxisText: "Pages View Count", xAxisText: "Top Pages", xAxisLabelDisabled: true, multipColrs: true}
+                    }
                     this.sub = this.options.sub;
                     this.app = this.sub.app;
                     this.objects = this.options.objects ? this.options.objects : [];
                     this.modelArray = [];
+                    this.dataArray = [];
                     this.fromDate = null;
                     this.toDate = null;
                     this.loadReport = this.options.loadReport;
+                    this.fromClick=false;
                     this.reportType = this.options.reportType;
                     this.template = _.template(template);
                     this.render();
@@ -58,6 +70,27 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     this.dateRangeControl = this.$('#daterange').daterangepicker();
                     this.dateRangeControl.panel.find(".btnDone").click(_.bind(this.setDateRange, this));
                     this.dateRangeControl.panel.find("ul.ui-widget-content li").click(_.bind(this.setDateRangeLi, this));
+                    this.$('input.checkinput').iCheck({
+                        checkboxClass: 'checkinput'
+                    });
+                    this.$('input.checkinput').on('ifChecked', _.bind(function(event){
+                        if(this.fromClick){
+                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                                return val.value;
+                           }).join();
+                           this.modelArray[0].id = selectedStates;
+                           this.drawMultiCharts();
+                      }
+                    },this));
+                     this.$('input.checkinput').on('ifUnchecked', _.bind(function(event){
+                        if(this.fromClick){ 
+                            var selectedStates = $.map( this.$("input.checkinput:checked"), function( val, i ) {
+                                return val.value;
+                           }).join();
+                           this.modelArray[0].id = selectedStates;
+                           this.drawMultiCharts();
+                       }
+                    },this))
                     this.loadRows();
 
                 }, /*---------- Calender functions---------------*/
@@ -94,7 +127,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }
                         if (toDate) {
                             this.toDate = toDate.format("MM-DD-YYYY");
-                        } else{
+                        } else {
                             this.toDate = fromDate.format("MM-DD-YYYY");
                         }
                         this.loadSummaryReports();
@@ -106,13 +139,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.setDateRange();
                     }
                 }, /*---------- End Calender functions---------------*/
-                saveSettings:function(){
+                saveSettings: function () {
                     if (this.loadReport) {
                         this.loadReport = false;
                     }
                     else {
                         this.sub.saveSettings();
-                    }  
+                    }
                 },
                 removeReport: function () {
                     this.$el.remove();
@@ -177,11 +210,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             }
                         }, this));
                     }
-                    else if(this.reportType=="tags"){
+                    else if (this.reportType == "tags") {
                         if (this.objects.length) {
                             this.loadTags();
                         }
-                    }else if(this.reportType=="webstats"){
+                    } else if (this.reportType == "webstats") {
                         if (this.objects.length) {
                             this.loadWebStats();
                         }
@@ -202,9 +235,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.openNurtureTracksDialog();
                     } else if (this.reportType == "targets") {
                         this.openTargetsDialog();
-                    } else if(this.reportType=="tags"){
+                    } else if (this.reportType == "tags") {
                         this.openTagsDialog();
-                    } else if(this.reportType =="webstats"){
+                    } else if (this.reportType == "webstats") {
                         this.openWebStatsDialog();
                     }
 
@@ -223,9 +256,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.loadNurtureTracks();
                     } else if (this.reportType == "tags") {
                         this.loadTags();
-                    }else if (this.reportType == "webstats") {                        
+                    } else if (this.reportType == "webstats") {
                         this.loadWebStats();
-                    }    
+                    }
 
                 },
                 loadSummaryReports: function () {
@@ -242,9 +275,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
                         this.loadTagsSummary();
-                    }  else if (this.reportType == "webstats") {
+                    } else if (this.reportType == "webstats") {
                         this.createWebstats();
-                    }                  
+                    }
 
                 },
                 //////********************* Landing pages *****************************************//////
@@ -401,7 +434,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createCampaignChart();
@@ -446,7 +479,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [                                
+                            var _data = [
                                 ['Opens', this.chart_data["openCount"]],
                                 ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
@@ -491,11 +524,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 }
                                 if (summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];
-                                        
-                                        var categories = [];                                        
+                                        var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
+
+                                        var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                                           , openCount: 0, sentCount: 0, socialCount: 0};
+                                            , openCount: 0, sentCount: 0, socialCount: 0};
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                             sentData.push(parseInt(sVal[0].sentCount));
@@ -504,23 +537,23 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             clickCount.push(parseInt(sVal[0].clickCount));
                                             socialData.push(parseInt(sVal[0].socialCount));
                                             bounceData.push(parseInt(sVal[0].bounceCount));
-                                                                                        
+
                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
                                             this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        },this);
-                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
-                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
-                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);  
+                                        }, this);
+                                        var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
+                                        this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
-                                         _.each(this.chart_data, function (v, key) {
-                                             this.$("#stats-" + val.get("campNum.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
                                         }, this);
-                                        
+
                                     }, this));
                                 }
                                 else {
@@ -533,7 +566,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                 },
                 showHideChartArea: function (flag) {
-                    if (this.reportType == "webstats"){
+                    if (this.reportType == "webstats") {
                         return false;
                     }
                     if (flag) {
@@ -602,7 +635,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createAutobotChart();
@@ -647,7 +680,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [                                
+                            var _data = [
                                 ['Opens', this.chart_data["openCount"]],
                                 ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
@@ -691,12 +724,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                     return false;
                                 }
                                 if (summary_json.count !== "0") {
-                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
-                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];                                        
-                                        var categories = [];   
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                        var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
+                                        var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                                           , openCount: 0, sentCount: 0, socialCount: 0};
-                                        
+                                            , openCount: 0, sentCount: 0, socialCount: 0};
+
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                             sentData.push(parseInt(sVal[0].sentCount));
@@ -704,24 +737,24 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             viewData.push(parseInt(sVal[0].pageViewsCount));
                                             clickCount.push(parseInt(sVal[0].clickCount));
                                             socialData.push(parseInt(sVal[0].socialCount));
-                                            bounceData.push(parseInt(sVal[0].bounceCount)); 
+                                            bounceData.push(parseInt(sVal[0].bounceCount));
                                             //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
-                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
                                             this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        },this);
-                                        
-                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
-                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
-                                                                                
+                                        }, this);
+
+                                        var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
+                                        this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+
                                         this.$("#chart-" + val.get("botId.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
-                                        _.each(this.chart_data, function (v, key) {                                            
-                                             this.$("#stats-" + val.get("botId.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
                                         }, this);
                                     }, this));
                                 }
@@ -859,8 +892,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.$(".add-msg-report").hide();
                         this.$(".bmsgrid").show();
                         if (this.modelArray.length == 1) {
-                            var msgCountText = this.modelArray[0].get("msgCount")=="1" ? "message":"messages";
-                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' '+msgCountText+'</b>');
+                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
                         }
                         else {
                             this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
@@ -915,7 +948,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createNurtureTrackChart();
@@ -954,7 +987,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chart_data["twitterCount"] = this.chart_data["twitterCount"] + parseInt(val[0].twitterCount);
                                 this.chart_data["unSubscribeCount"] = this.chart_data["unSubscribeCount"] + parseInt(val[0].unSubscribeCount);
                             }, this);
-                            var _data = [                                
+                            var _data = [
                                 ['Opens', this.chart_data["openCount"]],
                                 ['Clicks', this.chart_data["clickCount"]],
                                 ['Page Views', this.chart_data["pageViewsCount"]],
@@ -998,13 +1031,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                     return false;
                                 }
                                 if (summary_json.count !== "0") {
-                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
-                                        var sentData= [] , openData= [] , viewData= [] , clickCount= [] , socialData= [] , bounceData= [];                                        
-                                        var categories = [];   
-                                        
-                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                                           , openCount: 0, sentCount: 0, socialCount: 0};
-                                       
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                        var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
+                                        var categories = [];
+
+                                        this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                            , openCount: 0, sentCount: 0, socialCount: 0};
+
                                         _.each(summary_json.summaries[0], function (sVal) {
                                             categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                             sentData.push(parseInt(sVal[0].sentCount));
@@ -1012,24 +1045,24 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             viewData.push(parseInt(sVal[0].pageViewsCount));
                                             clickCount.push(parseInt(sVal[0].clickCount));
                                             socialData.push(parseInt(sVal[0].socialCount));
-                                            bounceData.push(parseInt(sVal[0].bounceCount)); 
+                                            bounceData.push(parseInt(sVal[0].bounceCount));
                                             //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
-                                             this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
                                             this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
                                             this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
                                             this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
                                             this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
                                             this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        },this);
-                                        var _data = [{"name":"Bounce","data":bounceData},{"name":"Social","data":socialData},{"name":"Click","data":clickCount},{"name":"View","data":viewData},{"name":"Open","data":openData},{"name":"Sent","data":sentData}];    
-                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#03d9a4','#27316a','#559cd6','#f6e408','#dfdfdf']});
-                                        
+                                        }, this);
+                                        var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
+                                        this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+
                                         //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
-                                        _.each(this.chart_data, function (v, key) {                                            
-                                            this.$("#stats-" + val.get("campNum.checksum")+" .stats-panel ." + key).html(this.app.addCommas(v));
+                                        _.each(this.chart_data, function (v, key) {
+                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
                                         }, this);
                                     }, this));
                                 }
@@ -1106,23 +1139,23 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 }
                 //////********************* Tags  *****************************************//////
                 ,
-                loadTags: function(){
-                    if(this.modelArray.length){
-                        this.$("#copy-camp-listing").show();                                          
-                       this.$(".tags-charts").remove();
-                    }else{
+                loadTags: function () {
+                    if (this.modelArray.length) {
+                        this.$("#copy-camp-listing").show();
+                        this.$(".tags-charts").remove();
+                    } else {
                         this.app.showLoading("Loading selection...", this.$el);
                         var tags_array = this.objects.map(function (index) {
                             return index.id
                         });
-                        this.modelArray = [];                   
+                        this.modelArray = [];
                         var post_data = {};
-                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";                        
+                        var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagCountList";
                         this.states_call = $.post(URL, post_data).done(_.bind(function (data) {
                             this.app.showLoading(false, this.$el);
                             var _json = jQuery.parseJSON(data);
                             _.each(_json.tagList[0], function (val) {
-                                if(tags_array.indexOf(val[0].tag)>-1){
+                                if (tags_array.indexOf(val[0].tag) > -1) {
                                     this.modelArray.push(new Backbone.Model(val[0]));
                                 }
                             }, this);
@@ -1155,19 +1188,19 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 createTags: function () {
                     if (this.modelArray.length) {
                         this.$(".add-msg-report").hide();
-                        this.$(".tagslist").show().parent().parent().css("background","#eaf4f9");                        
+                        this.$(".tagslist").show().parent().parent().css("background", "#eaf4f9");
                         this.$(".tags-charts").remove();
                         var _grid = this.$(".tagslist ul");
-                        
+
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, key) {
-                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + this.app.encodeHTML(val.get("tag")) + '"><a class="tag"><span>' + this.app.encodeHTML(val.get("tag")) + '</span><i  class="icon percent showtooltip" data-name ="'+this.app.encodeHTML(val.get("tag"))+'" title="Click to see responsiveness of this tag" ></i><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
+                            var tagLi = $('<li class="action" id="row_' + key + '" checksum="' + this.app.encodeHTML(val.get("tag")) + '"><a class="tag"><span>' + this.app.encodeHTML(val.get("tag")) + '</span><i  class="icon percent showtooltip" data-name ="' + this.app.encodeHTML(val.get("tag")) + '" title="Click to see responsiveness of this tag" ></i><strong class="badge">' + val.get("subCount") + '</strong></a> </li>');
                             _grid.append(tagLi);
                         }, this);
-                        _grid.find(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                        _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this,xAxis:{label:'category'},yAxis:{label:'Count'}});
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createTagsChart();
@@ -1177,17 +1210,17 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 showPercentDiv: function (ev) {
                     var target = $(ev.target);
                     var tag = target.data('name');
-                    
+
                     if ($('.percent_stats').length > 0)
                         this.$('.percent_stats .pstats').remove();
                     var that = this;
                     var offset = target.offset();
-                    
-                    if(!$('body > .percent_stats').length){
+
+                    if (!$('body > .percent_stats').length) {
                         $("body").append('<div class="percent_stats" style="position:absolute"></div>');
                     }
-                    $('.percent_stats').css({left: offset.left-4, top: offset.top + 10,"z-index":999});
-                    
+                    $('.percent_stats').css({left: offset.left - 4, top: offset.top + 10, "z-index": 999});
+
                     that.showLoadingWheel(true, $('.percent_stats'));
                     var bms_token = that.app.get('bms_token');
                     var URL = "/pms/io/user/getTagPopulation/?BMS_REQ_TK=" + bms_token + "&tag=" + tag + "&type=stats";
@@ -1201,12 +1234,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         percentDiv = percentDiv + "<li class='clickers'><strong>" + that.app.addCommas(data.clickers) + "<sup>%</sup></strong><span>Clickers</span></li>";
                         percentDiv = percentDiv + "<li class='visitors'><strong>" + that.app.addCommas(data.pageviewers) + "<sup>%</sup></strong><span>Visitors</span></li></ul></div>";
                         that.showLoadingWheel(false, target);
-                                                
-                        
-                        $('.percent_stats').append(percentDiv);                        
+
+
+                        $('.percent_stats').append(percentDiv);
                         $('.percent_stats .pstats').addClass('left-side');
-                        
-                    });                    
+
+                    });
                 },
                 showLoadingWheel: function (isShow, target) {
                     if (isShow)
@@ -1227,19 +1260,18 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }
                         else {
                             this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
-                        }                        
+                        }
                         this.chart_data = {subCount: 0};
-                            var _data = [
-                                                         
-                            ];
-                            var liWidth = 100/this.modelArray.length;
-                            this.$("ul.socpc li").remove();
-                            _.each(this.modelArray, function (val) {                                
-                                _data.push([val.get("tag"),parseInt(val.get("subCount"))]);                                
-                                this.$("ul.socpc").append($('<li class="clr3" style="width:'+liWidth+'%"><span>'+this.app.encodeHTML(val.get("tag"))+' <strong class="tagCount">'+val.get("subCount")+'</strong></span></li>'))
-                            }, this);                            
-                            this.chartPage.createChart(_data);
-                            this.app.showLoading(false, this.$(".cstats"));                                                       
+                        var _data = [
+                        ];
+                        var liWidth = 100 / this.modelArray.length;
+                        this.$("ul.socpc li").remove();
+                        _.each(this.modelArray, function (val) {
+                            _data.push([val.get("tag"), parseInt(val.get("subCount"))]);
+                            this.$("ul.socpc").append($('<li class="clr3" style="width:' + liWidth + '%"><span>' + this.app.encodeHTML(val.get("tag")) + ' <strong class="tagCount">' + val.get("subCount") + '</strong></span></li>'))
+                        }, this);
+                        this.chartPage.createChart(_data);
+                        this.app.showLoading(false, this.$(".cstats"));
                     }
                     else {
                         this.$(".start-message").show();
@@ -1250,61 +1282,61 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 },
                 loadTagsSummary: function () {
                     if (this.modelArray.length) {
-                        this.$(".add-msg-report").hide();                                                
-                        this.$("#copy-camp-listing").hide();                        
+                        this.$(".add-msg-report").hide();
+                        this.$("#copy-camp-listing").hide();
                         var chartsDiv = $("<div class='tags-charts summary-chart'> </div>");
-                        if(this.$(".tags-charts").length){
-                           this.$(".tags-charts").remove();
-                        }                        
-                        this.$(".parent-container").append(chartsDiv);                        
+                        if (this.$(".tags-charts").length) {
+                            this.$(".tags-charts").remove();
+                        }
+                        this.$(".parent-container").append(chartsDiv);
                         _.each(this.modelArray, function (val, index) {
-                                                        
+
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";
                             var tag = val.get("tag");
                             var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
-                              
-                            var tagClass =tag.replace(/ /g, "_").replace(/</g, "_").replace(/>/g, "_").replace(/\//g, "_").replace(/\\/g, "_"); 
-                            chartsDiv.append("<div class='tag-chart'><div class='tag-header'>"+tag+"</div><div class='tag-area "+tagClass+"'></div><div class=\"stats-panel\"><div><ul class=\"socpc\"></ul><div class=\"clearfix\"></div></div></div></div>");
-                            this.app.showLoading("Loading Summary Chart...", this.$("."+tagClass));
+
+                            var tagClass = tag.replace(/ /g, "_").replace(/</g, "_").replace(/>/g, "_").replace(/\//g, "_").replace(/\\/g, "_");
+                            chartsDiv.append("<div class='tag-chart'><div class='tag-header'>" + tag + "</div><div class='tag-area " + tagClass + "'></div><div class=\"stats-panel\"><div><ul class=\"socpc\"></ul><div class=\"clearfix\"></div></div></div></div>");
+                            this.app.showLoading("Loading Summary Chart...", this.$("." + tagClass));
                             $.post(URL, post_data).done(_.bind(function (sJson) {
                                 var summary_json = jQuery.parseJSON(sJson);
                                 if (summary_json[0] == "err") {
                                     this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
                                     return false;
                                 }
-                                if (summary_json.count !== "0") {                                                                                                                                                
-                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {                                        
+                                if (summary_json.count !== "0") {
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                                         var _data = [
                                             ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
                                         ];
-                                        
-                                        var increaseCount= [] , decreaseCount= [];  
-                                        var categories = [];  
-                                        
-                                        this.chart_data = {addCount: 0,removeCount:0};
+
+                                        var increaseCount = [], decreaseCount = [];
+                                        var categories = [];
+
+                                        this.chart_data = {addCount: 0, removeCount: 0};
                                         _.each(summary_json.stats[0], function (sVal) {
                                             categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
                                             increaseCount.push(parseInt(sVal[0].addCount));
                                             decreaseCount.push(parseInt(sVal[0].removeCount));
                                             //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
-                                            this.chart_data['addCount']  = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
-                                            this.chart_data['removeCount']  = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
-                                        },this);
-                                        var _data = [{"name":"Decrease","data":decreaseCount},{"name":"Increase","data":increaseCount}];
-                                        this.chartPage = new chart({page: this, isStacked: true,xAxis:{label:'category',categories:categories},yAxis:{label:'Count'},colors:['#f71a1a','#97d61d']});
-                                        this.$("."+tagClass).html(this.chartPage.$el);
-                                        var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">'+this.app.addCommas(this.chart_data['addCount'])+'</strong></span></li>';
-                                            liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">'+this.app.addCommas(this.chart_data['removeCount'])+'</strong></span></li>';
-                                            liHTML += '<li class="clr1" style="width:33.33%"><span>Net Growth <strong class="growth">'+this.app.addCommas(this.chart_data['addCount']-this.chart_data['removeCount'])+'</strong></span></li>';    
-                                        this.$(".tag-area."+tagClass).next().find(".socpc").html(liHTML);
+                                            this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                            this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                        }, this);
+                                        var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
+                                        this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
+                                        this.$("." + tagClass).html(this.chartPage.$el);
+                                        var liHTML = '<li class="clr6" style="width:33.33%"><span>Increase <strong class="Increase">' + this.app.addCommas(this.chart_data['addCount']) + '</strong></span></li>';
+                                        liHTML += '<li class="clr7" style="width:33.33%"><span>Decrease <strong class="Decrease">' + this.app.addCommas(this.chart_data['removeCount']) + '</strong></span></li>';
+                                        liHTML += '<li class="clr1" style="width:33.33%"><span>Net Growth <strong class="growth">' + this.app.addCommas(this.chart_data['addCount'] - this.chart_data['removeCount']) + '</strong></span></li>';
+                                        this.$(".tag-area." + tagClass).next().find(".socpc").html(liHTML);
                                         this.chartPage.$el.css({"width": "100%", "height": "250px"});
                                         this.chartPage.createChart(_data);
                                     }, this));
                                 }
                                 else {
-                                    this.$("."+tagClass).html('<div class="loading nodata"><p style="background:none">No data found for <i>Tag "' + tag + '"</i></p></div>');
+                                    this.$("." + tagClass).html('<div class="loading nodata"><p style="background:none">No data found for <i>Tag "' + tag + '"</i></p></div>');
                                 }
-                                
+
                             }, this));
 
                         }, this);
@@ -1313,8 +1345,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 }
                 ,
                 openWebStatsDialog: function () {
-                    var _width = 400;
-                    var _height = 415;
+                    var _width = 480;
+                    var _height = 290;
                     var dialog_object = {title: 'Select Source',
                         css: {"width": _width + "px", "margin-left": -(_width / 2) + "px", "top": "10%"},
                         bodyCss: {"min-height": _height + "px"},
@@ -1323,7 +1355,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                     dialog_object["buttons"] = {saveBtn: {text: 'Done'}};
                     var dialog = this.app.showDialog(dialog_object);
-                    this.app.showLoading("Loading Tags...", dialog.getBody());
+                    this.app.showLoading("Loading...", dialog.getBody());
                     require(["reports/select_stats"], _.bind(function (page) {
                         var _page = new page({page: this, dialog: dialog, dialogHeight: _height - 103});
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
@@ -1334,231 +1366,447 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         dialog.saveCallBack(_.bind(_page.saveCall, _page));
                     }, this));
                 },
-                loadWebStats:function(){
-                  this.modelArray.push(this.objects[0].id);
-                  this.createWebstats();
+                loadWebStats: function () {
+                    if(this.objects[0].subtype){
+                        this.modelArray.push({id:this.objects[0].id,subtype:this.objects[0].subtype,campMapping:this.objects[0].campMapping});
+                    }
+                    else{
+                        this.modelArray.push(this.objects[0].id);
+                    }
+                    this.createWebstats();
                 },
-                createWebstats:function(fromLoadData){
-                    var webstats = {"uv":{title:"Unique Visitors",subtitle:"",yAxisText:"Unique Visits",xAxisText:"",barColor:"#93be4c"},
-                                    "pv":{title:"Page Views",subtitle:"",yAxisText:"Page Views",xAxisText:"",barColor:"#2f93e5"},
-                                    "rv":{title:"Return Visitors",subtitle:"",yAxisText:"Return Visitor Count",xAxisText:"",barColor:"#dfaa2c"},
-                                    "seo":{title:"Top Keywords",subtitle:"",yAxisText:"Keywords count",xAxisText:"Top Keywords",xAxisLabelDisabled:true,multipColrs:true},
-                                    "lcdetail":{title:"Top Companies",subtitle:"",yAxisText:"Views Count",xAxisText:"Top Companies Visited",xAxisLabelDisabled:true,multipColrs:true},
-                                    "ref":{title:"Top Referral Links",subtitle:"",yAxisText:"Count",xAxisText:"Top Referral Links",xAxisLabelDisabled:true,multipColrs:true},
-                                    "pp":{title:"Popular Pages",subtitle:"",yAxisText:"Pages View Count",xAxisText:"Top Pages",xAxisLabelDisabled:true,multipColrs:true}
-                                    }
-                    if (this.modelArray.length) {
-                        var bms_token = this.app.get('bms_token');
-                        var _type = this.modelArray[0];                        
-                        var queryString = (this.fromDate && this.toDate)?"&daterange=y&fromDate="+moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY")+"&toDate="+ moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY"):"&span=7"
-                        var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=" + _type + queryString;
-                        this.app.showLoading("Loading Data...", this.$el);
-                        jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
-                            this.webStatData = jQuery.parseJSON(xhr.responseText);
-                            if (this.app.checkError(this.webStatData)) {
-                                return false;
+                createWebstats: function (fromLoadData) {
+                    if (this.modelArray.length) {                        
+                        var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
+                        if(this.modelArray[0].id){
+                            var _subtype = this.modelArray[0].subtype;
+                            if (_subtype == "top-charts") {
+                                this.$(".total-count").html("Top Charts");
+                                this.drawMixChart();
                             }
-                            this.app.showLoading(false, this.$el);
-                            this.$(".parent-container .template-container").css("background","#f4f9fc");
-                            var dateLabelObject = this.getDateText(this.fromDate,this.toDate);
-                            if (this.webStatData.length !== 0) {   
-                                this.app.showLoading("Loading Chart...", this.$el); 
-                                this.$(".add-msg-report").hide(); 
-                                this.$(".webstats-chart,.webstats-table").remove();
-                                require(["reports/webstats"], _.bind(function (chart) {    
-                                 this.chartPage = new chart({page: this});   
-                                 this.app.showLoading(false, this.$el); 
-                                 var _data = [];
-                                 var chart_Type = "column";
-                                    if (_type == "uv" || _type == "pv" || _type == "rv" ) {
-                                        _.each(this.webStatData, function (val, index) {
-                                            var _date = moment(val[0], 'YYYY-M-D');
-                                            _data.push([_date.format("DD MMM"), parseInt(val[1])])
-                                        }, this)
-                                    } 
-                                    else{
-                                        chart_Type = "bar"
-                                         _.each(this.webStatData, function (val, index) {                                            
-                                             if(index < 10){
-                                                 if(_type == "seo"){
-                                                    _data.push([val[0], parseInt(val[1])])
-                                                } else if(_type == "lcdetail"){
-                                                    _data.push([val[0], parseInt(val[1])])
-                                                } else if(_type == "ref"){
-                                                    _data.push([val[0], parseInt(val[1])])                                                   
-                                                } else if(_type == "pp"){
-                                                    _data.push([val[0], parseInt(val[1])])
-                                                }   
-                                            }                                            
-                                        }, this)
-                                    }
-                                        var options = {
-                                            chart: {
-                                                type: chart_Type,
-                                                backgroundColor: "#f4f9fc"
-                                            },
-                                            plotOptions:{
-                                              series:{colorByPoint:webstats[_type].multipColrs}  
-                                            },                                            
-                                            title: {
-                                                text: webstats[_type].title,
-                                                style: {
-                                                    "color": "#02afef",
-                                                    "fontSize": "20px"
-                                                }
-                                            },
-                                            subtitle: {
-                                                text: dateLabelObject.label,
-                                                style: {
-                                                    "color": "#999"
-                                                }
-                                            },
-                                            xAxis: {
-                                                type: 'category',
-                                                tickLength:0,
-                                                title: {
-                                                    text: webstats[_type].xAxisText,                                                    
-                                                    margin:30,
-                                                    style: {
-                                                        "color": "#4d759e"
-                                                    }
-                                                },
-                                                labels: {
-                                                    enabled: !webstats[_type].xAxisLabelDisabled,
-                                                    rotation: -45,
-                                                    style: {
-                                                        fontSize: '12px',
-                                                        fontFamily: 'Verdana, sans-serif'
-                                                    }
-                                                }
-                                            },
-                                            yAxis: {
-                                                lineWidth:1,
-                                                min: 0,
-                                                title: {
-                                                    text: webstats[_type].yAxisText,
-                                                    style: {
-                                                        "color": "#4d759e"
-                                                    }
-                                                }
-                                            },
-                                            legend: {
-                                                enabled: false
-                                            },
-                                            tooltip: {
-                                                backgroundColor: webstats[_type].barColor?webstats[_type].barColor:"#2f93e5",
-                                                style: {color: "#fff"},
-                                                formatter: function () {
-                                                     if (_type == "uv" || _type == "pv" || _type == "rv" ) {
-                                                            return '<b>' + this.y + '</b> ' + webstats[_type].title + ' <br/>' +
-                                                                'on ' + this.key;
-                                                    }
-                                                    else if(_type == "seo"){
-                                                         return '<b>Keyword </b><br/>' + _data[this.x][0] 
-                                                    }
-                                                     else if(_type == "lcdetail"){
-                                                         return '<b>Company </b><br/>' + _data[this.x][0] 
-                                                    }else if(_type == "ref"){
-                                                         return '<b>URL </b><br/>' + _data[this.x][0] 
-                                                    }else if(_type == "pp"){
-                                                         return '<b>Page Name </b><br/>' + _data[this.x][0] 
-                                                    }
-                                                }
-                                            },
-                                            series: [{
-                                                    name: 'Count',
-                                                    data: _data,
-                                                    color: webstats[_type].barColor,
-                                                    dataLabels: {
-                                                        enabled: (dateLabelObject.days > 40 ||  webstats[_type].xAxisLabelDisabled) ? false : true,
-                                                        rotation: -90,
-                                                        color: '#FFFFFF',
-                                                        align: 'right',
-                                                        format: '{point.y:.0f}', // one decimal
-                                                        y: 10, // 10 pixels down from the top
-                                                        style: {
-                                                            fontSize: '12px',
-                                                            fontFamily: 'Verdana, sans-serif'
-                                                        }
-                                                    }
-                                                }]
-                                        }
-                                        var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
-                                        this.$(".camp_reports").append(chartDiv);
-                                        this.chartPage.createChart(options, chartDiv)
-                                    
-                                    if(_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp"){                                    
-                                        this.$(".parent-container .template-container").css({"background":"#fff","height":"900px"});
-                                        var _dataTable = [];
-                                        if(_type == "seo"){
-                                            _dataTable.push(['Keyword Text','Count','Source']);                                        
-                                            _.each(this.webStatData, function (val, index) {
-                                                _dataTable.push([val[0],parseInt(val[1]),val[2]]);
-                                            }, this)
-                                            
-                                        } else if(_type == "lcdetail"){
-                                            _dataTable.push(['Company','Page Views','Date','Traffic Source','Country','Telephone']);                                        
-                                            _.each(this.webStatData, function (val, index) {
-                                                _dataTable.push([val[0],parseInt(val[1]),val[2],val[3],val[7],val[8]]);
-                                            }, this)
-                                        }else if(_type == "ref"){
-                                            _dataTable.push(['Referral Link','Count']);                                        
-                                            _.each(this.webStatData, function (val, index) {
-                                                _dataTable.push([val[0],parseInt(val[1])]);
-                                            }, this)
-                                            
-                                        }else if(_type == "pp"){
-                                            _dataTable.push(['Page Name','Page Views', 'Unique Views','Page URL']);                                        
-                                            _.each(this.webStatData, function (val, index) {
-                                                _dataTable.push([val[0],parseInt(val[1]),parseInt(val[2]),val[3]]);
-                                            }, this)
-                                            
-                                        }
-                                        
-                                        var tabletDiv = $("<div style='height:420;width:100%;margin-top:20px;' class='webstats-table'></div>");
-                                        this.$(".camp_reports").append(tabletDiv);
-                                        this.chartPage.createTable(_dataTable,tabletDiv[0]);
-                                    }
-                                }, this));
+                            else if (_subtype == "general-stats") {
+                                this.drawMultiCharts();
                             }
-                            else {                                    
-                                    this.app.showAlert("No data found for '"+webstats[_type].title+"'",$("body"));
-                                }
-                        },this));        
-                        if(!fromLoadData){
+                            else if (_subtype == "online-campaigns") {
+                                this.$(".total-count").html("Online Campaigns");
+                                this.drawOnlineCampaigns();
+                            }
+                        }
+                        else{
+                            if (_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp") {
+                                this.drawMixChart();
+                            }
+                            else {
+                                this.drawMultiCharts();
+                            }
+                        }
+
+                        if (!fromLoadData) {
                             this.saveSettings();
                         }
-                   }    
+                    }
                 },
-                getDateText:function(fromDate,toDate){
-                    var textDate="Last 7 Days";
+                drawMultiCharts: function () {
+                    this.dataArray = [];                    
+                    this.callsData = this.modelArray[0].id?this.modelArray[0].id.split(","):this.modelArray[0].split(",");
+                    this.$(".parent-container .template-container").css({"background": "#f4f9fc", "height": "420px"} );
+                    this.$(".add-msg-report,.total-count").hide();
+                    this.$(".stats-selection,.icons-bar-chart").show();
+                    
+                    this.$(".webstats-chart,.webstats-table").remove();
+                    for (var c = 0; c < this.callsData.length; c++) {
+                        this.$("[value='"+this.callsData[c]+"']").iCheck('check');
+                        this.callGeneralStats(this.callsData[c]);
+                    }
+                    
+                    if(!this.fromClick){
+                        this.fromClick = true;
+                    }
+
+                },
+                callGeneralStats: function (_type) {
+                    var bms_token = this.app.get('bms_token');
+                    var queryString = (this.fromDate && this.toDate) ? "&daterange=y&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY") : "&span=7"
+                    var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=" + _type + queryString;
+                    this.app.showLoading("Loading Data...", this.$el);
+                    jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                        var webStatData = jQuery.parseJSON(xhr.responseText);
+                        if (this.app.checkError(webStatData)) {
+                            return false;
+                        }
+                        this.app.showLoading(false, this.$el);  
+                        var data = [];
+                        $.each(webStatData,function(key,line){
+                                var dateValues = line[0].split('-');                                                                                                
+                                data.push([Date.UTC(parseInt(dateValues[0]), parseInt(dateValues[1])-1, parseInt(dateValues[2])), parseInt(line[1], 10)]);	
+                        })
+                        this.dataArray.push([_type,data]);
+                        if(this.callsData.length==this.dataArray.length){
+                            this.drawGeneralStats();
+                        }
+                        
+                    }, this));
+                },
+                changeChart:function(obj){
+                    var iconDiv = $.getObj(obj, "div");
+                    if(!iconDiv.hasClass("active")){
+                        this.$(".icons-bar-chart .icons").removeClass("active");
+                        iconDiv.addClass("active");
+                        var chartType = 'column';
+                        if(iconDiv.hasClass("barchart")){
+                            chartType = 'column';
+                        }
+                        else if(iconDiv.hasClass("linechart")){
+                            chartType = 'spline'
+                        }
+                        this.drawGeneralStats(chartType);
+                    }
+                },
+                drawGeneralStats:function(chartType){
+                   var dateLabelObject = this.getDateText(this.fromDate, this.toDate);
+                   this.$(".webstats-chart,.webstats-table").remove();
+                   var chart_type = chartType ? chartType:'column';
+                   this.app.showLoading("Loading Chart...", this.$el);
+                   var that = this;
+                   require(["reports/webstats"], _.bind(function (chart) {
+                       this.chartPage = new chart({page: this});
+                       this.app.showLoading(false, this.$el);                       
+                       var options ={
+                                    chart: {                                                  
+                                        backgroundColor: "#f4f9fc"
+                                    },                                            
+                                    title: {
+                                        text: '',
+                                        style: {
+                                            "color": "#02afef",
+                                            "fontSize": "20px"
+                                        }
+                                    },
+                                    subtitle: {                                                
+                                        text: dateLabelObject.label,
+                                        style: {
+                                            "color": "#999"
+                                        }
+                                    },
+                                    xAxis: {
+                                        type: 'datetime',
+                                        tickInterval:  dateLabelObject.days<=10?24 * 3600 * 1000 : 7 * 24 * 3600 * 1000,
+                                        tickLength:0,
+                                        dateTimeLabelFormats: {
+                                            week :'%e %b',
+                                            day :'%e %b'
+                                        },
+                                        title: {
+                                            text: '',  
+                                            margin:30,
+                                            style: {
+                                                "color": "#4d759e"
+                                            }
+                                        },
+                                        labels: {                                                                                                       
+                                            style: {
+                                                fontSize: '12px',
+                                                fontFamily: 'Verdana, sans-serif'
+                                            }
+                                        }
+                                    },
+                                    yAxis: [],
+                                    legend: {
+
+                                    },
+                                    tooltip: {
+                                        backgroundColor:"#2f93e5",
+                                        style: {color: "#fff"},
+                                        formatter: function () {
+                                            var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
+                                            tooltip_rect.attr("fill",this.series.color);
+                                            return '<b>' + that.app.addCommas(this.y) + '</b> ' + this.series.name + ' <br/>' +
+                                                        'on ' + moment(this.key).format("DD MMM YYYY");
+                                        }
+                                    },
+                                    series: []
+                                };
+                        _.each(this.dataArray,function(val,key){
+                                options.series.push({
+                                    name: this.webstats[val[0]].title,
+                                    data: val[1],
+                                    id: val[0],
+                                    lineWidth: 4, 
+                                    color:  this.webstats[val[0]].barColor, 
+                                    type: chart_type, 
+                                    yAxis: 0 
+                                });
+                                options.yAxis.push({                                                                                  
+                                    lineWidth:key==0?1:0,
+                                    min: 0,
+                                    title: {                                                    
+                                        style: {
+                                            "color": this.webstats[val[0]].barColor
+                                        },
+                                        text:this.webstats[val[0]].title
+                                    }                                             
+                                });
+                        },this)        
+                       var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
+                       this.$(".camp_reports").append(chartDiv);
+                       this.chartPage.createChart(options, chartDiv);
+
+                   },this)) 
+                },
+                drawMixChart: function () {                   
+                    var _type = this.modelArray[0].id?this.modelArray[0].id:this.modelArray[0];
+                    var bms_token = this.app.get('bms_token');
+                    var queryString = (this.fromDate && this.toDate) ? "&daterange=y&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY") : "&span=7"
+                    var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=" + _type + queryString;
+                    this.app.showLoading("Loading Data...", this.$el);
+                    jQuery.getJSON(URL, _.bind(function (tsv, state, xhr) {
+                        this.webStatData = jQuery.parseJSON(xhr.responseText);
+                        if (this.app.checkError(this.webStatData)) {
+                            return false;
+                        }
+                        this.app.showLoading(false, this.$el);
+                        this.$(".parent-container .template-container").css("background", "#f4f9fc");
+                        var dateLabelObject = this.getDateText(this.fromDate, this.toDate);
+                        if (this.webStatData.length !== 0) {
+                            this.app.showLoading("Loading Chart...", this.$el);
+                            this.$(".add-msg-report").hide();
+                            this.$(".webstats-chart,.webstats-table").remove();
+                            require(["reports/webstats"], _.bind(function (chart) {
+                                this.chartPage = new chart({page: this});
+                                this.app.showLoading(false, this.$el);
+                                var _data = [];
+                                var chart_Type = "bar";
+                                _.each(this.webStatData, function (val, index) {
+                                    if (index < 10) {
+                                        if (_type == "seo") {
+                                            _data.push([val[0], parseInt(val[1])])
+                                        } else if (_type == "lcdetail") {
+                                            _data.push([val[0], parseInt(val[1])])
+                                        } else if (_type == "ref") {
+                                            _data.push([val[0], parseInt(val[1])])
+                                        } else if (_type == "pp") {
+                                            _data.push([val[0], parseInt(val[1])])
+                                        }
+                                    }
+                                }, this)
+
+                                var options = {
+                                    chart: {
+                                        type: chart_Type,
+                                        backgroundColor: "#f4f9fc"
+                                    },
+                                    plotOptions: {
+                                        series: {colorByPoint: this.webstats[_type].multipColrs}
+                                    },
+                                    title: {
+                                        text: this.webstats[_type].title,
+                                        style: {
+                                            "color": "#02afef",
+                                            "fontSize": "20px"
+                                        }
+                                    },
+                                    subtitle: {
+                                        text: dateLabelObject.label,
+                                        style: {
+                                            "color": "#999"
+                                        }
+                                    },
+                                    xAxis: {
+                                        type: 'category',
+                                        tickLength: 0,
+                                        title: {
+                                            text: this.webstats[_type].xAxisText,
+                                            margin: 30,
+                                            style: {
+                                                "color": "#4d759e"
+                                            }
+                                        },
+                                        labels: {
+                                            enabled: !this.webstats[_type].xAxisLabelDisabled,
+                                            rotation: -45,
+                                            style: {
+                                                fontSize: '12px',
+                                                fontFamily: 'Verdana, sans-serif'
+                                            }
+                                        }
+                                    },
+                                    yAxis: {
+                                        lineWidth: 1,
+                                        min: 0,
+                                        title: {
+                                            text: this.webstats[_type].yAxisText,
+                                            style: {
+                                                "color": "#4d759e"
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        enabled: false
+                                    },
+                                    tooltip: {
+                                        backgroundColor: this.webstats[_type].barColor ? this.webstats[_type].barColor : "#2f93e5",
+                                        style: {color: "#fff"},
+                                        formatter: function () {
+                                            if (_type == "uv" || _type == "pv" || _type == "rv") {
+                                                return '<b>' + this.y + '</b> ' + this.webstats[_type].title + ' <br/>' +
+                                                        'on ' + this.key;
+                                            }
+                                            else if (_type == "seo") {
+                                                return '<b>Keyword </b><br/>' + _data[this.x][0]
+                                            }
+                                            else if (_type == "lcdetail") {
+                                                return '<b>Company </b><br/>' + _data[this.x][0]
+                                            } else if (_type == "ref") {
+                                                return '<b>URL </b><br/>' + _data[this.x][0]
+                                            } else if (_type == "pp") {
+                                                return '<b>Page Name </b><br/>' + _data[this.x][0]
+                                            }
+                                        }
+                                    },
+                                    series: [{
+                                            name: 'Count',
+                                            data: _data,
+                                            color: this.webstats[_type].barColor,
+                                            dataLabels: {
+                                                enabled: (dateLabelObject.days > 40 || this.webstats[_type].xAxisLabelDisabled) ? false : true,
+                                                rotation: -90,
+                                                color: '#FFFFFF',
+                                                format: '{point.y:.0f}', // one decimal
+                                                y: 20, // 10 pixels down from the top
+                                                style: {
+                                                    fontSize: '12px',
+                                                    fontFamily: 'Verdana, sans-serif'
+                                                }
+                                            }
+                                        }]
+                                }
+                                var chartDiv = $("<div style='height:420;width:100%' class='webstats-chart'></div>");
+                                this.$(".camp_reports").append(chartDiv);
+                                this.chartPage.createChart(options, chartDiv)
+
+                                if (_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp") {
+                                    this.$(".parent-container .template-container").css({"background": "#fff", "height": "900px"});
+                                    var _dataTable = [];
+                                    if (_type == "seo") {
+                                        _dataTable.push(['Keyword Text', 'Count', 'Source']);
+                                        _.each(this.webStatData, function (val, index) {
+                                            _dataTable.push([val[0], parseInt(val[1]), val[2]]);
+                                        }, this)
+
+                                    } else if (_type == "lcdetail") {
+                                        _dataTable.push(['Company', 'Page Views', 'Date', 'Traffic Source', 'Country', 'Telephone']);
+                                        _.each(this.webStatData, function (val, index) {
+                                            _dataTable.push([val[0], parseInt(val[1]), val[2], val[3], val[7], val[8]]);
+                                        }, this)
+                                    } else if (_type == "ref") {
+                                        _dataTable.push(['Referral Link', 'Count']);
+                                        _.each(this.webStatData, function (val, index) {
+                                            _dataTable.push([val[0], parseInt(val[1])]);
+                                        }, this)
+
+                                    } else if (_type == "pp") {
+                                        _dataTable.push(['Page Name', 'Page Views', 'Unique Views', 'Page URL']);
+                                        _.each(this.webStatData, function (val, index) {
+                                            _dataTable.push([val[0], parseInt(val[1]), parseInt(val[2]), val[3]]);
+                                        }, this)
+
+                                    }
+
+                                    var tabletDiv = $("<div style='height:420;width:100%;margin-top:20px;' class='webstats-table'></div>");
+                                    this.$(".camp_reports").append(tabletDiv);
+                                    this.chartPage.createTable(_dataTable, tabletDiv[0]);
+                                }
+                            }, this));
+                        }
+                        else {
+                            this.app.showAlert("No data found for '" + this.webstats[_type].title + "'", $("body"));
+                        }
+                    }, this));
+                },
+                getDateText: function (fromDate, toDate) {
+                    var textDate = "Last 7 Days";
                     var _days = 0;
-                    if(fromDate && toDate){
+                    if (fromDate && toDate) {
                         var fromDateObject = moment(fromDate, 'M/D/YYYY');
                         var currentDateObject = moment(new Date());
-                        var toDateObject  = moment(toDate, 'M/D/YYYY');                                             
-                        if(currentDateObject.format("DD MMM YYYY")==toDateObject.format("DD MMM YYYY")){
-                            _days = currentDateObject.diff(fromDateObject,'days');   
-                            if(_days==0){
+                        var toDateObject = moment(toDate, 'M/D/YYYY');
+                        if (currentDateObject.format("DD MMM YYYY") == toDateObject.format("DD MMM YYYY")) {
+                            _days = currentDateObject.diff(fromDateObject, 'days');
+                            if (_days == 0) {
                                 textDate = "Today"
-                            } else if(_days==1){
+                            } else if (_days == 1) {
                                 textDate = "Yesterday"
-                            } else if(_days==7){
+                            } else if (_days == 7) {
                                 textDate = "Last 7 Days"
-                            } else if(_days==10){
+                            } else if (_days == 10) {
                                 textDate = "Last 10 Days"
-                            } else if(_days==30){
+                            } else if (_days == 30) {
                                 textDate = "Last 30 Days"
                             }
                             else {
-                                textDate = fromDateObject.format("DD MMM YYYY") + " to " +  currentDateObject.format("DD MMM YYYY");
+                                textDate = fromDateObject.format("DD MMM YYYY") + " to " + currentDateObject.format("DD MMM YYYY");
                             }
-                        }else{
-                            _days = toDateObject.diff(fromDateObject,'days');   
-                            textDate = fromDateObject.format("DD MMM YYYY") + " to " +  toDateObject.format("DD MMM YYYY");
+                        } else {
+                            _days = toDateObject.diff(fromDateObject, 'days');
+                            textDate = fromDateObject.format("DD MMM YYYY") + " to " + toDateObject.format("DD MMM YYYY");
                         }
                     }
-                    return {label:textDate,days:_days};                    
+                    return {label: textDate, days: _days};
+                },
+                drawOnlineCampaigns:function(){
+                    var campArray = this.modelArray[0].id.split(",");                    
+                    this.$(".add-msg-report").hide();      
+                    this.$(".online-campaign-area").remove();
+                    this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
+                    _.each(campArray, function (val, index) {
+                            var campId = val;        
+                            var chartTitle = this.modelArray[0].campMapping?this.modelArray[0].campMapping[campId]:"" 
+                            this.$(".camp_reports").append($("<div class='online-campaign-area' id='"+campId+"'></div>"))
+                            this.app.showLoading("Loading Data...", this.$("#" + campId));
+                            var bms_token = this.app.get('bms_token');
+                            var queryString = (this.fromDate && this.toDate) ? "&daterange=y&fromDate=" + moment(this.fromDate, 'M/D/YYYY').format("MM/DD/YYYY") + "&toDate=" + moment(this.toDate, 'M/D/YYYY').format("MM/DD/YYYY") : "&span=7"
+                            var URL = "/pms/io/user/getWebStats/?BMS_REQ_TK=" + bms_token + "&type=one_adcam&code=" + campId + queryString;                            
+                            var post_data = {};
+                            $.post(URL, post_data).done(_.bind(function (sJson) {
+                                var summary_json = jQuery.parseJSON(sJson);
+                                if (summary_json[0] == "err") {
+                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                    return false;
+                                }
+                                if (summary_json.count !== "0") {
+                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                        var  viewData = [], clickCount = [], conversionData = [], bounceData = [];
+
+                                        var categories = [];
+                                        this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                            , openCount: 0, sentCount: 0, socialCount: 0};
+                                        _.each(summary_json, function (sVal) {
+                                            categories.push(moment(sVal[0], 'YYYY-M-D').format("DD MMM"));                                            
+                                            clickCount.push(parseInt(sVal[3]));
+                                            viewData.push(parseInt(sVal[4]));                                                                                        
+                                            bounceData.push(parseInt(sVal[5]));
+                                            conversionData.push(parseInt(sVal[6]));
+
+                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[5]);
+                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[3]);
+                                            this.chart_data["conversionCount"] = this.chart_data["conversionCount"] + parseInt(sVal[6]);                                                                                        
+                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[5]);
+                                        }, this);
+                                        var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Conversion", "data": conversionData}, {"name": "View", "data": viewData}, {"name": "Click", "data": clickCount}];
+                                        this.chartPage = new chart({page: this, isStacked: true,title:chartTitle, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6']});
+                                        this.$("#" + campId).html(this.chartPage.$el);
+                                        this.chartPage.$el.css({"width": "100%", "height": "420px"});
+                                        this.chartPage.createChart(_data);
+                                        
+
+                                    }, this));
+                                }
+                                else {
+                                    this.$("#" + campId).html('<div class="loading nodata"><p style="background:none">No data found for this campaign </p></div>');
+                                }
+                            }, this));
+
+                        }, this);
                 }
             });
         });

@@ -135,7 +135,9 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             }else if(type=="tags"){
                                id = r_val.get("tag"); 
                             }else if(type=="webstats"){
-                               id = r_val; 
+                               id = r_val.id; 
+                               selected_obj['subtype'] =r_val.subtype;
+                               selected_obj['campMapping'] =r_val.campMapping;
                             }                              
                             selected_obj['id'] = id;
                             if(type=="nurturetracks"){

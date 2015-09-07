@@ -82,7 +82,7 @@ String _path = "/pms/umair/";
     <!--[if lt IE 9]>
           <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->   
-    <script type="text/javascript" src="https://test.bridgemailsystem.com/tinymce_3/tiny_mce_old.js"></script>
+    <script type="text/javascript" src="https://<%=PMSResources.getInstance().getBaseDomain()%>/tinymce_3/tiny_mce_old.js"></script>
 </head>
 <body>
 

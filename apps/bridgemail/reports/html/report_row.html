@@ -2,9 +2,14 @@
     <div class="temp-filters clearfix" id="contacts_count">
         <!--<input type="checkbox" value="" name="" id="no1" class="checkpanel select-all" checked="checked" />-->
         <% if(this.reportType!=="webstats"){ %>  
-            <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>
+            <h2 class="total-count"><strong class="badge">0</strong> <%- rType.toLowerCase() %> selected</h2>            
         <% } else {%>
             <h2 class="total-count"><%- rType %> </h2>
+            <div class="stats-selection" style="display: none">
+                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="uv"><label>Unique Visitors</label></div>
+                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="pv"><label>Page Views</label></div>
+                <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="rv"><label>Return Visitors</label></div>
+            </div> 
         <% } %>    
         <div style=" " class="srt-div">          
             <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
@@ -19,7 +24,11 @@
             <div <% if(this.reportType!=="webstats"){%>class="col1 cols"<% } %> >
 
                 <div class="template-container" style="height:420px;background: #fff;margin:0px;overflow-y: auto">
-                    <div class="camp_listing camp_reports">      
+                    <div class="camp_listing camp_reports">     
+                        <div class="icons-bar-chart" style="display:none">
+                            <div class="barchart icons active showtooltip" title="Click to see bar chart"></div>
+                            <div class="linechart icons showtooltip"  title="Click to see line chart"></div>
+                        </div>
                         <div class="init-message add-msg-report"><a>Click here to add <%- rType %></a></div>
                         <div class="bmsgrid" style="display:none">
                             <div class="hDiv"><div class="hDivBox campaings-hDiv"><table cellspacing="0" cellpadding="0"></table></div></div>

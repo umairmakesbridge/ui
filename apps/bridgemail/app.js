@@ -57,7 +57,7 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'test',
+                env: 'production',
                 complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
@@ -543,9 +543,8 @@ define([
             }
             return val;
         },
-        decodeJSON: function (str) {
-            /*
-            str = str.replace(/&#193;/g, "Á");
+        decodeJSON: function (str) {            
+            /*str = str.replace(/&#193;/g, "Á");
             str = str.replace(/&#225;/g, "á");
             str = str.replace(/&#268;/g, "Č");
             str = str.replace(/&#269;/g, "č");
@@ -616,7 +615,7 @@ define([
              str = str.replace(/&#252;/g, "ü");
              str = str.replace(/&#304;/g, "İ");
              str = str.replace(/&#305;/g, "ı");
-            */
+             */
              return str;
         },
         getMMM: function (month) {

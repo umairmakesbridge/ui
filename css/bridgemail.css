@@ -7941,7 +7941,7 @@ div.returnpath {
 	margin: 0;
 	float:left;
 	padding: 0;
-	background: url(../img/checkcons.png) no-repeat;
+	//background: url(../img/checkicons.png) no-repeat;
 	border: none;
 	cursor: pointer;
 	min-width:45px;
@@ -14785,3 +14785,182 @@ a.bayshore-toggle i {
 .new_activities .act_row > .target { background: url("../img/target-red.png") no-repeat scroll center center #fff; }
 .new_activities .act_row > .list { background: url("../img/act-list.png") no-repeat scroll center center #fff; }
 .new_activities .act_row > .tags { background: url("../img/act-tags.png") no-repeat scroll center center #fff; }
+
+/***** Reports *********/
+.report-selection{
+    background:#f5f6f8;
+}
+
+.left_columnLinkReports {
+    height: auto;
+    padding: 10px 0px 10px 10px;
+    width: 70px;
+    float:left;
+    background:#f5f6f8;
+}
+
+.right_columnLinkReport {
+    float: right;
+    height: auto;
+    background:#fff;
+    padding: 10px;
+    margin: 10px 10px 0px 0px;
+    width: 370px;
+    min-height: 335px;
+}
+.left_columnLinkReports li {
+    font-size: 14px;
+    list-style: none outside none;
+    margin: 0px;
+    padding: 10px ;
+    height:50px;
+    background:#f5f6f8;    
+    cursor: pointer;
+}
+.left_columnLinkReports li:hover { background:#fff;}
+.left_columnLinkReports li.selected {background: none repeat scroll 0 0 #fff;}
+.left_columnLinkReports li i {
+    float: left;
+    height: 50px;
+    width: 50px;
+}
+
+.left_columnLinkReports li .gstats { background:url("../img/gstats.png") no-repeat center center;}
+.left_columnLinkReports li .topchart { background:url("../img/topcharts.png") no-repeat center center;}
+.left_columnLinkReports li .onlinecampaign { background:url("../img/onlinecampaigns.png") no-repeat center center;}
+.left_columnLinkReports li .websiteclick { background:url("../img/websiteclicks.png") no-repeat center center;}
+
+.right_columnLinkReport h4 {
+    color:#02afef;
+    font-size:15px;
+}
+
+.right_columnLinkReport ul.report-ul{
+    margin: 5px 0px 0px 20px;
+}
+.right_columnLinkReport ul.report-ul li{
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+.right_columnLinkReport ul.report-ul li div.description, .right_columnLinkReport .description{
+   color: #9b9b9b;
+   line-height: 1.15em;
+   margin-top: 8px;
+}
+.right_columnLinkReport ul.report-ul li span{
+    color:#6494af;
+    font-size:14px;
+    padding-left:5px;
+    display: inline-block;
+}
+.online-campaigns-ul,.website-clicks-ul{
+    height: 232px; overflow: auto;position: relative;
+}
+.online-campaign-area {
+    width:100%;
+    height:420px;   
+    position:relative;
+}
+.icons-bar-chart{
+    position:absolute;
+    width:60px;
+    height:30px;
+    z-index:100;
+    right:20px;
+    top:12px;
+}
+.icons-bar-chart .icons{
+    width:24px;
+    height:24px;        
+    background-image: url("../img/charticons.png");    
+    background-repeat: no-repeat;
+    display:inline-block;        
+    cursor:pointer;
+}
+.icons-bar-chart .icons:first-child{
+    margin-right:5px;
+}
+.icons-bar-chart .icons.barchart{
+    background-position: 0px 0px;
+}
+.icons-bar-chart .icons.linechart{
+    background-position: 0px -26px;    
+}
+
+.icons-bar-chart .icons.barchart:hover,.icons-bar-chart .icons.barchart.active{
+    background-position: -28px 0px;
+}
+.icons-bar-chart .icons.linechart:hover,.icons-bar-chart .icons.linechart.active{
+    background-position: -28px -26px;
+}
+
+.stats-selection{
+    float: left;
+    line-height: 22px;
+}
+.stats-selection .inputlabel{
+    display: inline-block;
+    margin-top: 10px;
+    padding:0px;
+}
+.stats-selection label{    
+    width:110px !important;
+    padding:0px 0px 0px 8px !important;
+}
+.icheckbox_square-green,
+.iradio_square-green {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(../img/green.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+.icheckbox_square-green {
+    background-position: 0 0;
+}
+    .icheckbox_square-green.hover {
+        background-position: -24px 0;
+    }
+    .icheckbox_square-green.checked {
+        background-position: -48px 0;
+    }
+    .icheckbox_square-green.disabled {
+        background-position: -72px 0;
+        cursor: default;
+    }
+    .icheckbox_square-green.checked.disabled {
+        background-position: -96px 0;
+    }
+
+.iradio_square-green {
+    background-position: -120px 0;
+}
+    .iradio_square-green.hover {
+        background-position: -144px 0;
+    }
+    .iradio_square-green.checked {
+        background-position: -168px 0;
+    }
+    .iradio_square-green.disabled {
+        background-position: -192px 0;
+        cursor: default;
+    }
+    .iradio_square-green.checked.disabled {
+        background-position: -216px 0;
+    }
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (min-resolution: 1.25dppx) {
+    .icheckbox_square-green,
+    .iradio_square-green {
+        background-image: url(green@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px;
+    }
+}

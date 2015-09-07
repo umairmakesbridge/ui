@@ -1,44 +1,307 @@
-<div class="ui-accordion">
-    <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel "  checked="checked" value="uv" name="option_stats">
-      <span class="left">Unique Visitors </span>             
-    </h3>
+<div class="left_columnLinkReports">
+    <div id="cssreports">
+        <ul>
+            <li class="selected" id="general-stats">
+                <a>
+                    <i class="icon gstats"></i>
+                </a>
+            </li>
+            <li id="top-charts">
+                <a>
+                    <i class="icon topchart"></i>
+                </a>
+            </li>
+            <li id="online-campaigns">
+                <a>
+                    <i class="icon onlinecampaign"></i>
+                </a>
+            </li>
+            <li id="website-clicks">
+                <a>
+                    <i class="icon websiteclick"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>
-<div class="ui-accordion">
-    <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="pv" name="option_stats">
-      <span class="left">Page Views </span>             
-    </h3>
+<div class="right_columnLinkReport frLinkGUI" id="rightPanelArea">
+    <div class="general-stats tcontent" style="display:block">
+        <h4>General Stats</h4>
+        <div class="category description">Build a report based on the data you've collected about your contacts. You can select multiple reports to see in chart.</div>
+        <ul class="report-ul">
+            <li>
+                <input type="checkbox" class="general-stats-panel"  checked="checked" value="uv" name="option_stats">
+                <span>
+                   Unique Visitors
+                </span>
+                <div class="description">Discover how much unique visitors came across.</div>
+            </li>
+            <li>
+                <input type="checkbox" class="general-stats-panel "  value="pv" name="option_stats">
+                <span>
+                   Page Views
+                </span>
+                <div class="description">Visualize how your contacts view pages over time.</div>
+            </li>
+            <li>
+                <input type="checkbox" class="general-stats-panel "   value="rv" name="option_stats">
+                <span>
+                   Return Visitors
+                </span>
+                <div class="description">Understand how much visitors returned to your pages.</div>
+            </li>
+        </ul>
+    </div>
+    <div class="top-charts tcontent" style="display:none">
+        <h4>Top Charts</h4>
+        <div class="category description">Build a report based on the data you've collected about keywords, companies, referrals and popular pages</div>
+        <ul class="report-ul">
+            <li>
+                <input type="radio" class="topstate-panel"  checked="checked" value="seo" name="top_stats">
+                <span>
+                   Top Keywords
+                </span>
+                <div class="description">See top key words used for search.</div>
+            </li>
+            <li>
+                <input type="radio" class="topstate-panel"  value="lcdetail" name="top_stats">
+                <span>
+                   Top Company Visited
+                </span>
+                <div class="description">Visualize a report based on the data you've collected about companies.</div>
+            </li>
+            <li>
+                <input type="radio" class="topstate-panel"   value="ref" name="top_stats">
+                <span>
+                   Top Referral Links
+                </span>
+                <div class="description">See how much referral links were clicked.</div>
+            </li>
+            <li>
+                <input type="radio" class="topstate-panel"   value="pp" name="top_stats">
+                <span>
+                   Top Pages
+                </span>
+                <div class="description">Checkout the top pages which were viewed .</div>
+            </li>
+        </ul>
+    </div>
+    <div class="online-campaigns tcontent" style="display:none">        
+        <h4>
+            Online Campaigns                
+        </h4>        
+        <div class="category description">Build a report based on online campaigns, You can select multiple campaigns.</div>
+        
+        <div class="srt-div">    
+            <select class="select-span">
+                <option value="30">Active Last 30 Days</option>
+                <option value="20">Active Last 20 Days</option>
+                <option value="10">Active Last 10 Days</option>
+                <option value="7">Active Last 7 Days</option>
+                <option value="1">Active Last 1 Day</option>
+            </select>
+        </div>
+        <div class="clearfix"></div>
+        <div>
+        <ul class="report-ul online-campaigns-ul">
+           
+        </ul>
+        </div>    
+    </div>
+    <div class="website-clicks tcontent" style="display:none">
+        <h4>Website Clicks</h4>
+        <div class="category description">Build a report based on website clicks.</div>
+        
+        <div class="srt-div" style="margin-top:14px">    
+            <select class="select-span-website">
+                <option value="30">Active Last 30 Days</option>
+                <option value="20">Active Last 20 Days</option>
+                <option value="10">Active Last 10 Days</option>
+                <option value="7">Active Last 7 Days</option>
+                <option value="1">Active Last 1 Day</option>
+            </select>
+        </div>
+        <div class="clearfix"></div>
+        <div>
+        <ul class="report-ul website-clicks-ul">
+           
+        </ul>
+        </div>
+    </div>
 </div>
-<div class="ui-accordion">
+<div class="clearfix"></div>
+
+<!--<div class="ui-accordion general-stats">
     <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="rv" name="option_stats">
-      <span class="left">Return Visitors </span>             
+      <input type="radio" class="radiopanel "  checked="checked" value="gs" name="option_stats">
+      <span class="left">General Stats </span>             
     </h3>
+    <div class="accordion-body" id="panel_0" style="min-height: 135px!important; padding:5px 5px 0px 5px">
+        <div class="bmsgrid webstats-row camp_listing">
+            <div class="hDiv">
+               <div class="hDivBox">
+                  <table cellspacing="0" cellpadding="0"></table>
+               </div>
+            </div>
+            <div class="bDiv" style="height: 140px;overflow:hidden;">
+               <table cellspacing="0" cellpadding="0" border="0" id="camps_grid_report">
+                  <tbody>
+                     <tr>
+                        <td width="40px" style="padding:0px">
+                           <div><a style="margin:0px;position:relative" class="check-box unchecked"><i class="icon check"></i></a></div>
+                        </td>
+                        <td width="100%">
+                           <div>
+                              <div class="name-type">                                 
+                                  <h4>Unique Visitors</h4>                                                                 
+                              </div>
+                           </div>
+                        </td>                        
+                     </tr>
+                     <tr>
+                        <td width="40px" style="padding:0px">
+                           <div><a style="margin:0px;position:relative" class="check-box unchecked"><i class="icon check"></i></a></div>
+                        </td>
+                        <td width="100%">
+                           <div>
+                              <div class="name-type">                                 
+                                  <h4>Page Views</h4>                                   
+                              </div>
+                           </div>
+                        </td>                        
+                     </tr>
+                      <tr>
+                        <td width="40px" style="padding:0px">
+                           <div><a style="margin:0px;position:relative" class="ccheck-box unchecked"><i class="icon check"></i></a></div>
+                        </td>
+                        <td width="100%">
+                           <div>
+                              <div class="name-type">                                
+                                 <h4>Return Visitors</h4>                                                                     
+                              </div>
+                           </div>
+                        </td>                        
+                     </tr>
+                     
+                  </tbody>
+               </table>
+               <div class="iDiv" style="display: none;"></div>
+            </div>
+         </div>
+
+    </div>    
 </div>
-<div class="ui-accordion">
+
+<div class="bmsgrid webstats-row camp_listing">
+    <div class="hDiv">
+       <div class="hDivBox">
+          <table cellspacing="0" cellpadding="0"></table>
+       </div>
+    </div>
+    <div class="bDiv" style="height: 190px;overflow:hidden;">
+       <table cellspacing="0" cellpadding="0" border="0" id="camps_grid_report">
+          <tbody>
+             <tr>
+                <td width="40px" style="padding:0px">
+                   <div><input type="radio" class="radiopanel " value="seo" name="option_stats"></div>
+                </td>
+                <td width="100%">
+                   <div>
+                      <div class="name-type">                                 
+                          <h4>Top Keywords</h4>                                                                 
+                      </div>
+                   </div>
+                </td>                        
+             </tr>
+             <tr>
+                <td width="40px" style="padding:0px">
+                   <div><input type="radio" class="radiopanel " value="lcdetail" name="option_stats"></div>
+                </td>
+                <td width="100%">
+                   <div>
+                      <div class="name-type">                                 
+                          <h4>Top Company Visited</h4>                                   
+                      </div>
+                   </div>
+                </td>                        
+             </tr>
+              <tr>
+                <td width="40px" style="padding:0px">
+                   <div><input type="radio" class="radiopanel " value="ref" name="option_stats"></div>
+                </td>
+                <td width="100%">
+                   <div>
+                      <div class="name-type">                                
+                         <h4>Top Referral Links</h4>                                                                     
+                      </div>
+                   </div>
+                </td>                        
+             </tr>
+             <tr>
+                <td width="40px" style="padding:0px">
+                   <div><input type="radio" class="radiopanel " value="pp" name="option_stats"></div>
+                </td>
+                <td width="100%">
+                   <div>
+                      <div class="name-type">                                
+                         <h4>Popular Page</h4>                                                                     
+                      </div>
+                   </div>
+                </td>                        
+             </tr>
+
+          </tbody>
+       </table>
+       <div class="iDiv" style="display: none;"></div>
+    </div>
+ </div>
+
+<div class="ui-accordion online-campaigns" style="margin-top:5px">
     <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="seo" name="option_stats">
-      <span class="left">Top Keywords </span>             
+      <input type="radio" class="radiopanel "  value="oc" name="option_stats">
+      <span class="left">Online Campaigns </span>             
     </h3>
+    <div class="accordion-body" id="panel_0" style="min-height: 135px!important; padding:5px 5px 0px 5px">
+        <div class="bmsgrid webstats-row camp_listing">
+            <div class="hDiv">
+               <div class="hDivBox">
+                  <table cellspacing="0" cellpadding="0"></table>
+               </div>
+            </div>
+            <div class="bDiv" style="height: 140px;overflow:hidden;">
+               <table cellspacing="0" cellpadding="0" border="0" id="camps_grid_report">
+                  <tbody>                                          
+                  </tbody>
+               </table>
+               <div class="iDiv" style="display: none;"></div>
+            </div>
+         </div>
+
+    </div>    
 </div>
-<div class="ui-accordion">
+
+<div class="ui-accordion website-clicks"  style="margin-top:5px">
     <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="lcdetail" name="option_stats">
-      <span class="left">Top Company Visited </span>             
+      <input type="radio" class="radiopanel "  value="wbcl" name="option_stats">
+      <span class="left">Website Clicks </span>             
     </h3>
-</div>
-<div class="ui-accordion">
-    <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="ref" name="option_stats">
-      <span class="left">Top Referral Links </span>             
-    </h3>
-</div>
-<div class="ui-accordion">
-    <h3 class="ui-accordion-header" role="tab">
-      <input type="radio" class="radiopanel " value="pp" name="option_stats">
-      <span class="left">Popular Page </span>             
-    </h3>
-</div>
+    <div class="accordion-body" id="panel_0" style="min-height: 135px!important; padding:5px 5px 0px 5px">
+        <div class="bmsgrid webstats-row camp_listing">
+            <div class="hDiv">
+               <div class="hDivBox">
+                  <table cellspacing="0" cellpadding="0"></table>
+               </div>
+            </div>
+            <div class="bDiv" style="height: 140px;overflow:hidden;">
+               <table cellspacing="0" cellpadding="0" border="0" id="camps_grid_report">
+                  <tbody>                                          
+                  </tbody>
+               </table>
+               <div class="iDiv" style="display: none;"></div>
+            </div>
+         </div>
+
+    </div>    
+</div>-->
 
 
