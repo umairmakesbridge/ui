@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multipleadd.html','fileuploader','bms-dragfile','bms-tags','scrollbox','jquery.bmsgrid','bms-addbox'],
-	function ($, Backbone, _, app, template,fileuploader,dragfile,bmstags,scrollbox) {
+define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multipleadd.html','fileuploader','bms-dragfile','bms-tags','scrollbox','contacts/subscriber_fields','jquery.bmsgrid','bms-addbox'],
+	function ($, Backbone, _, app, template,fileuploader,dragfile,bmstags,scrollbox,sub_detail) {
 		'use strict';
 		return Backbone.View.extend({
                     
@@ -67,12 +67,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multiplea
                                 }
                                 this.dialog = this.app.showDialog(btn_prp);
                                 this.app.showLoading("Loading...", this.dialog.getBody());
-                                if(this.subsType === 'multiEmails'){
-                                    this.dialogStyles['height'] = dialog_height;
-                                    this.dialogStyles['width'] = dialog_width;
-                                    this.dialogStyles['top'] = '10px'; 
-                                    
-                                }
+                                
                                 this.dialog.getBody().append('<div class="temp-filters clearfix" style="margin:0px;"><h2 class="header-list"><strong class="left" style="font-size:15px"> Choose existing list</strong><div class="iconpointy" style="top:3px;"><a class="btn-green add-list" title="Create List"><i class="icon plus left"></i></a></div></h2><div style=" " class="srt-div"><div id="" class="input-append search myimports-search"></div><a class="refresh_btn showtooltip" data-original-title="Refresh listing"><i>Refresh</i></a></div></div>  <div class="template-container fields bms-lists" style="margin:0 0 10px 0;"></div>')
                                  this.dialog.getBody().find(".myimports-search").searchcontrol({
                                         id:'newimports-search',
@@ -85,7 +80,13 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multiplea
                                  });
                                 this.dialog.getBody().find(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)}); 
                                this.dialog.getBody().find(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
-                                 
+                                 if(this.subsType === 'multiEmails'){
+                                    this.dialogStyles['height'] = dialog_height;
+                                    this.dialogStyles['width'] = dialog_width;
+                                    this.dialogStyles['top'] = '10px'; 
+                                    this.dialog.getBody().css('overflow','hidden');
+                                   this.subDetail = new sub_detail({ sub: this.parent,page:this,isSalesforceUser:false,isAddFlag:true,emailsFlag:true});    
+                                }
                                 this.getLists();
                                 this.dialog.getBody().find('.refresh_btn').click(_.bind(function(){
                                         this.isListSelected = false;
@@ -168,7 +169,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multiplea
                             showLists : function(){
                                 this.dialog.getBody().find('.temp-filters,.template-container').show();
                                 this.dialog.getBody().find('.subscriber_field_form').remove();
-                                this.dialog.getBody().find('#sub_fields_viaEmails_form').remove();
+                                this.dialog.getBody().find('#sub_fields_viaEmails_form').hide();
                                if( this.subsType === 'multiEmails'){
                                    this.dialog.$el.removeAttr('style');
                                    var margin = 
@@ -297,52 +298,40 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multiplea
                         ======================================================*/
                         multiEmails : function(){
                              this.closeDialog();
-                            var _this = this;
-                           
-//                            this.editable = true;
-//                    
-//                                
-//                                var btn_prp = {title: this.editable?'Add Contact By Emails':'View Profile',
-//                                    css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "70px"},
-//                                    headerEditable: false,
-//                                    headerIcon: 'account',
-//                                    bodyCss: {"min-height": dialog_height + "px"}
-//
-//                                }
-//                                if(this.editable){
-//                                    btn_prp['buttons']= {saveBtn: {text: 'Save', btnicon: 'save'}};
-//                                   // if (this.sub_fields["conLeadId"]) {
-//                                   //     btn_prp['newButtons'] = [{'btn_name': 'Update at Salesforce'}];
-//                                   // }
-//                                }
-//                                var dialog = this.app.showDialog(btn_prp);
-                    
+                            var _this = this;   
                                  if(!this.isListSelected){
                                     this.app.showAlert('No List Selected',$("body"),{fixed:true});
                                     return false;
                                 }else{
                                     this.dialogStyles['modalstyle'] = this.dialog.$el.attr('style');
                                     this.dialogStyles['modalbody'] = this.dialog.$el.find('.modal-body').attr('style');
-                                    var dialog_width = 642;
+                                    var dialog_width = 1000;
                                     var dialog_height = $(document.documentElement).height() - 582;
-                                    this.dialog.$el.css({"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "70px"})
+                                    this.dialog.$el.css({"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"})
                                     this.dialog.$el.find('.modal-body').css('min-height',dialog_height);
                                     this.dialog.getBody().find('.temp-filters,.template-container').hide();
                                     this.dialog.$el.find('.modal-footer .nextbtn').hide();
                                     this.dialog.$el.find('.modal-footer .btn-save,.modal-footer .btn-backlists,.modal-footer .btn-update').show();
                                     this.app.showLoading("Loading...", this.dialog.getBody());
                                     var dialog =this.dialog;
-                                    require(["contacts/subscriber_fields"], function(sub_detail) {
-                                        var page = new sub_detail({sub: _this.parent,page:_this,isSalesforceUser:false,isAddFlag:true,emailsFlag:true});
-                                        dialog.getBody().append(page.$el);
+                                   
+                                        var page = this.subDetail;
+                                        if(dialog.getBody().find('.model_form').length === 0){
+                                            dialog.getBody().append(page.$el);
+                                        }else{
+                                            page.$el.show();
+                                            this.dialog.getBody().find('#sub_fields_viaEmails_form').show();
+                                        }
+                                        
                                         dialog.$el.find('.contactsEmails').focus();
+                                        dialog.$el.find('.contactsEmails').css('width','935px');
                                         /*if (_this.sub_fields["conLeadId"]) {
                                             dialog.saveCallBack2(_.bind(page.updateSubscriberDetailAtSalesForce, page, dialog));
                                         }*/
                                         _this.app.showLoading(false, page.$el.parent());
                                         dialog.saveCallBack(_.bind(page.createSubscriberViaEmail, page, dialog));
 
-                                    });
+                                   
                                 }
                                 
                         }

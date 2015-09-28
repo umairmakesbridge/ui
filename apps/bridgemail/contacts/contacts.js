@@ -411,6 +411,8 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 if(this.ws_header.find(".tcount").html()=="0"){
                     this.ws_header.find(".tcount").html(this.app.addCommas(count));     
                     this.ws_header.find(".tcount").parent().addClass(this.app.getClickableClass(count));
+                }else{
+                    this.ws_header.find(".tcount").html(this.app.addCommas(count));  
                 }
                 var _text = count=="1"?"Contact":"Contacts";
                 var _clickers = count=="1"?"Clicker":"Clickers";

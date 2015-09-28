@@ -222,7 +222,12 @@ function (template,jqueryui,addbox) {
                             //  _this.updateValues();
                              // _this.subscriber.showFields();
                              //  _this.updateSubscriberLetter();
-                             _this.app.showMessge("New Subscribers Created Successfully!");
+                             if(parseInt(_json.addedCount) > 0){
+                                  _this.app.showMessge("New Subscribers Created Successfully!");
+                             }else{
+                                 _this.app.showMessge("Subscribers Updated Successfully!");
+                             }
+                            
                               _this.refreshContactList();
                               dialog.hide();
                               //dialog.$el.find('.btn-save').unbind('click');
