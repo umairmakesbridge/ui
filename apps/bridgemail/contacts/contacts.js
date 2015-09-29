@@ -409,8 +409,12 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                 this.$("#total_templates").show();
                 this.$(".total-count").html(this.app.addCommas(count));                        
                 if(this.ws_header.find(".tcount").html()=="0"){
-                    this.ws_header.find(".tcount").html(this.app.addCommas(count));     
-                    this.ws_header.find(".tcount").parent().addClass(this.app.getClickableClass(count));
+                    if(count==="0"){
+                        this.fetchCount();
+                    }else{
+                        this.ws_header.find(".tcount").html(this.app.addCommas(count));     
+                        this.ws_header.find(".tcount").parent().addClass(this.app.getClickableClass(count));
+                    }
                 }
                 var _text = count=="1"?"Contact":"Contacts";
                 var _clickers = count=="1"?"Clicker":"Clickers";

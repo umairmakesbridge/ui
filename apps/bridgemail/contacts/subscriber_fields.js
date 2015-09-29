@@ -268,6 +268,7 @@ function (template,jqueryui,addbox) {
                              // _this.subscriber.showFields();
                              //  _this.updateSubscriberLetter();
                              _this.app.showMessge("New Subscriber Created Successfully!"); 
+                             _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
                               var contactVal = dialog.$el.find('#import-list-grid .selected .lists_subscribers span').text();
                               contactVal = parseInt(contactVal.substring(8,10)) + 1;
