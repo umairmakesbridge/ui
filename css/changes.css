@@ -1304,7 +1304,7 @@ ul.tabs-btns li.active a{
 }
 
 /*****workspace tabs icons ***/
-.tabs-menu li span{
+.tabs-menu li span,.expand-menu ul li span{
     background-image: url("../img/ws-icons.png");
     background-color: transparent;
 }
@@ -5010,7 +5010,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 }
 .disabled-btn {
 	opacity:0.5;
-	cursor: not-allowed;
+	cursor: not-allowed !important;
 }
 .add-cursor {
     cursor:pointer;
@@ -5183,6 +5183,69 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .webforms-container .errortext {
     right: 0;
    bottom: 100%;
+}
+/*=======================
+****************
+    Tab Grouping 
+**************
+=====================*/
+
+#content-groupTabs ul li div.heading{
+    height: 20px;
+    line-height: 30px;
+    background-color:transparent;
+}
+
+#content-groupTabs ul {
+    min-height: 185px;
+    /*padding: 0 !important;*/
+}
+.expand-menu ul li:last-child {
+    border-bottom: 1px solid #e9f5fa;
+}
+.expand-menu ul li:last-child:hover {
+    border-bottom: 1px solid #00b1eb;
+}
+#content-groupTabs ul li .detail .heading {
+    color: #02afef;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    height: 20px;
+    line-height: 20px;
+    overflow: hidden;
+    position: relative;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 235px;
+}
+#content-groupTabs ul li i.closehover {
+    background: rgba(0, 0, 0, 0) url("../img/closebtn-blue.png") no-repeat scroll center center;
+    border-radius: 2px;
+    cursor: pointer;
+    display: block;
+    height: 22px;
+    opacity: 1;
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    transition: opacity 0.3s ease-out 0s;
+    width: 22px;
+}
+.scrolld-top.disabled-top{
+    background: #eee url("../img/iconup.png") no-repeat scroll center center  !important;
+    opacity:0.3;
+  cursor: not-allowed !important;
+  border-bottom: 1px solid #ddd;
+}
+.scrolld-btm.disabled-btm{
+    background: #eee url("../img/icondown.png") no-repeat scroll center center !important;
+    opacity:0.3;
+	cursor: not-allowed !important;
+        border-top: 1px solid #ddd;
+}
+.bmsgrid .lists_subscribers{
+    text-align:right;
 }
   /* ================================================Start tan_a_changes.css================================================ */
   h2.header-list {
@@ -9041,8 +9104,65 @@ ul#autobots_search_menu li a {
     top: 230px !important;
     transform: rotate(180deg);
 }
-.icon.extra { background: url("../img/extra.png") no-repeat scroll center center rgba(0, 0, 0, 0); }
+.icon.extra { background: url("../img/extra.png") no-repeat scroll center center rgba(0, 0, 0, 0); position: relative;}
+.workspace ul.tabs-menu li a .icon.extra sup {
+    background: #00aff0 none repeat scroll 0 0;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 14px;
+    padding: 1px 8px 3px;
+    position: absolute;
+    right: -9px;
+    text-align: center;
+    top: -3px;
+}
+.workspace ul.tabs-menu li.active a .icon.extra, .workspace ul.tabs-menu li a .icon.extra:hover  {
+    background: url("../img/extra-blue.png") no-repeat scroll center center ;
+	-webkit-border-radius: 2px;
+	-moz-border-radius:  2px;
+	border-radius:  2px;
+}
 
+.scrolld-top {
+    background: #f6fbfd url("../img/iconup.png") no-repeat scroll center center !important;
+    border-bottom: 1px solid #e9f5fa;
+    border-radius: 2px;
+    display: block !important;
+    height: 32px;
+    left: 5.3%;
+    opacity: 1 !important;
+    position: fixed;
+    top: 0;
+    
+    z-index: 999;
+}
+
+.scrolld-btm {
+    background: #f6fbfd url("../img/icondown.png") no-repeat scroll center center !important;
+    border-radius: 2px;
+    border-top: 1px solid #e9f5fa;
+    bottom: 0;
+    display: block !important;
+    height: 32px;
+    left: 5.3%;
+    opacity: 1 !important;
+    position: fixed;
+    
+    z-index: 999;
+}
+.expand-menu ul li {
+    background: #ffffff none repeat scroll 0 0;
+    border-top: 1px solid #e9f5fa;
+    display: block;
+    height: 49px;
+    padding: 6px;
+    position: relative;
+}
+.expand-menu ul li.active {
+    border-left: 3px solid #00b1eb;
+}
 .preseticon  {
     background: url("../img/preset.png") no-repeat scroll 0 0 / contain #ffffff;
     border-radius: 50%;

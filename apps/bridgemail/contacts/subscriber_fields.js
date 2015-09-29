@@ -32,6 +32,7 @@ function (template,jqueryui,addbox) {
                         this.modelTemplate = this.options.rowtemplate;
                     }
                     this.elDialogView = '';
+                    
                     this.render();
             },
             /**
@@ -144,6 +145,25 @@ function (template,jqueryui,addbox) {
                 
                 this.$(".custom-field-container").append(col1);
                 this.$(".custom-field-container").append(col2);
+                if(this.options.isAddFlag){
+                    this.$el.find('.textfield').change(_.bind(function(event){
+                    var currentInput = $(event.currentTarget);
+                    this.options.page.subsriberObj[currentInput.attr('name')] = currentInput.val();
+                    },this))
+                    if(this.options.page.subsriberObj){
+                        $.each(this.options.page.subsriberObj,_.bind(function(key,val){
+                            if(this.options.page.subsType === 'singlesub'){
+                                this.$('.newsub-'+key).val(val);
+                            }else{
+                                this.$('.contactsEmails').val(val);
+                            }
+                                
+                        },this));
+                    }
+                    
+                   
+                }
+           
             },
             /**
             * Update fields value in cache.
@@ -190,7 +210,9 @@ function (template,jqueryui,addbox) {
                       var _this = this;
                         _this.app.showLoading("Create Multiple Subscribers...",dialog.$el);
                         var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=addByEmailOnly";
-                        $.post(URL,  this.$("#sub_fields_viaEmails_form").serialize())
+                        var serializedData = this.$("#sub_fields_viaEmails_form").serialize();
+                        serializedData = serializedData+"&listNum="+dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                        $.post(URL,  serializedData)
                         .done(function(data) {  
                         
                        var _json = jQuery.parseJSON(data);                         
@@ -200,7 +222,12 @@ function (template,jqueryui,addbox) {
                             //  _this.updateValues();
                              // _this.subscriber.showFields();
                              //  _this.updateSubscriberLetter();
-                             _this.app.showMessge("New Subscribers Created Successfully!"); 
+                             if(parseInt(_json.addedCount) > 0){
+                                  _this.app.showMessge("New Subscribers Created Successfully!");
+                             }else{
+                                 _this.app.showMessge("Subscribers Updated Successfully!");
+                             }
+                            _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
                               dialog.hide();
                               //dialog.$el.find('.btn-save').unbind('click');
@@ -228,7 +255,9 @@ function (template,jqueryui,addbox) {
                  var _this = this;
                 _this.app.showLoading("Create Subscriber Fields...",dialog.$el);
                 var URL = "/pms/io/subscriber/setData/?BMS_REQ_TK="+this.app.get('bms_token')+"&type=addSubscriber";
-                $.post(URL, this.$("#sub_fields_form").serialize())
+                var serializedData = this.$("#sub_fields_form").serialize();
+                serializedData = serializedData+"&listNum="+dialog.$el.find('#import-list-grid .selected').attr('id').split('_')[1];
+                $.post(URL, serializedData)
                 .done(function(data) {  
                         
                        var _json = jQuery.parseJSON(data);                         
@@ -239,7 +268,11 @@ function (template,jqueryui,addbox) {
                              // _this.subscriber.showFields();
                              //  _this.updateSubscriberLetter();
                              _this.app.showMessge("New Subscriber Created Successfully!"); 
+                             _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
+                              var contactVal = dialog.$el.find('#import-list-grid .selected .lists_subscribers span').text();
+                              contactVal = parseInt(contactVal.substring(8,10)) + 1;
+                              dialog.$el.find('#import-list-grid .selected .lists_subscribers span').html('<em>Contacts</em>'+contactVal);
                               _this.elDialogView = dialog;
                               dialog.$el.find('.btn-save').unbind('click');
                               dialog.$el.find('.btn-save').html('<span>Update</span><i class="icon update"></i>');

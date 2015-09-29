@@ -5162,11 +5162,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                               bodyCss:{"min-height":dialog_height+"px"}
                                     });
                                     var formurl = formId ? "&formId="+formId : "";
+                                  
+                                            options._app.showLoading("Loading form...",dialog.getBody());
+                                        
                                     dialog_height = parseFloat(dialog_height)-6 ;
                                     var transport = new easyXDM.Socket({           
                                         remote:  window.location.protocol+'//'+options._app.get("content_domain")+"/pms/landingpages/rformBuilderNewUI.jsp?BMS_REQ_TK=" + options._app.get("bms_token")+"&ukey="+options._app.get("user_Key")+formurl,
                                         onReady: function(){
-
+                                                options._app.showLoading(false,dialog.getBody());
                                         },
                                         onMessage: _.bind(function(message, origin){
                                             var response = jQuery.parseJSON(message);
