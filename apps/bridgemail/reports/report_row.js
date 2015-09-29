@@ -921,7 +921,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     var _grid = this.$("#_grid tbody");
                     _grid.children().remove();
                     var _maxWidth = this.$(".col1 .template-container").width() * .5;
+                    var checkSumArray = [];                    
                     var campNums = $.map(messages, function (el) {
+                        checkSumArray.push(el[0]["campNum.checksum"]);
                         return el[0]["campNum.encode"];
                     }).join(",");
                     this.app.showLoading("Loading Messages...", this.$(".parent-container"));
@@ -939,13 +941,17 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.campArray.push(new Backbone.Model(val[0]));
                         }, this);
                         var order_no = 1;
-                        _.each(this.campArray, function (val, index) {
-                            val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
-                            val.set("order", order_no);
-                            order_no = order_no + 1;
-                            var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
-                            _grid.append(msgRow.$el);
-                        }, this);
+                        for(var i=0;i<checkSumArray.length;i++){
+                            _.each(this.campArray, function (val, index) {
+                                if(checkSumArray[i]==val.get("campNum.checksum")){
+                                    val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
+                                    val.set("order", order_no);
+                                    order_no = order_no + 1;
+                                    var msgRow = new this.trackRow({model: val, sub: this, showMessage: true, maxWidth: _maxWidth});
+                                    _grid.append(msgRow.$el);
+                                }                                
+                            }, this);
+                        }
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
@@ -1304,7 +1310,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                     this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
                                     return false;
                                 }
-                                if (summary_json.count !== "0") {
+                                if (summary_json.count && summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                                         var _data = [
                                             ['Genre', 'Decrease', 'Increase', {role: 'annotation'}]
@@ -1589,7 +1595,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         }
                                     }
                                 }, this)
-
+                                var that = this;
                                 var options = {
                                     chart: {
                                         type: chart_Type,
@@ -1643,10 +1649,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                     legend: {
                                         enabled: false
                                     },
-                                    tooltip: {
-                                        backgroundColor: this.webstats[_type].barColor ? this.webstats[_type].barColor : "#2f93e5",
+                                    tooltip: {                                        
                                         style: {color: "#fff"},
                                         formatter: function () {
+                                            var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
+                                            tooltip_rect.attr("fill",this.point.color);
                                             if (_type == "uv" || _type == "pv" || _type == "rv") {
                                                 return '<b>' + this.y + '</b> ' + this.webstats[_type].title + ' <br/>' +
                                                         'on ' + this.key;

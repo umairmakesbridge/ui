@@ -5129,7 +5129,7 @@ a.tipntest-toggle:hover i { opacity:0.7;}
 .modal .modal-header .c-name h2 span{
     max-width:80%;
     overflow: hidden;
-    text-overflow: ellipsis;              
+    text-overflow: ellipsis;            
   }
   .modal .modal-header .c-name h2 span.nowrap
   {
