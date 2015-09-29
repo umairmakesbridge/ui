@@ -227,6 +227,7 @@ define(['jquery', 'backbone', 'underscore', 'app', 'text!contacts/html/multiplea
                                                 this.app.removeCache("lists");
                                                 this.getLists();
                                                 this.newList = _json[2];
+                                                this.isListSelected = true;
                                             }
                                             else{
                                                 this.app.showAlert(_json[1],$("body"),{fixed:true}); 
