@@ -227,7 +227,7 @@ function (template,jqueryui,addbox) {
                              }else{
                                  _this.app.showMessge("Subscribers Updated Successfully!");
                              }
-                            
+                            _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
                               dialog.hide();
                               //dialog.$el.find('.btn-save').unbind('click');
