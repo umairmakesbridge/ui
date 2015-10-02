@@ -687,6 +687,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK="+options._app.get('bms_token')+"&fromNewUI=true";
                                         var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
                                         dialog.getBody().html(iframHTML);
+                                         options._app.showLoading("Loading Dynamic Content...",dialog.getBody());
+                                        $('iframe.dcItemsIframe').ready(function() {
+                                           
+                                           setTimeout(function(){ options._app.showLoading(false,dialog.getBody()); }, 3000);
+                                          });
                                     });
 
                                 }
