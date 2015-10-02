@@ -170,7 +170,8 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                     
                     if(this.model.get('actionType') == "E" || this.model.get('botType') == "B"){
                            var camp_id=this.model.get('actionData')[0]['campNum.encode'];
-                                        this.options.app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
+                                        var _app = this.options.app ? this.options.app: this.app;
+                                        _app.mainContainer.addWorkSpace({params: {clickType:clickType,camp_id: camp_id,autobotId:this.model.get('botId.encode'),icon:this.icon,label:this.label},type:'',title:'Loading...',url:'reports/summary/summary',workspace_id: 'summary_'+this.model.get('actionData')[0]['campNum.checksum'],tab_icon:'campaign-summary-icon'});
                                     }
                     //return;
                     else{

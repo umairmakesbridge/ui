@@ -9970,21 +9970,46 @@ color: #FFFFFF;
 .summary-chart ul li.clr6:after { background-color:#97d61d !important; }
 .summary-chart ul li.clr7:after { background-color:#f71a1a !important; }
 
-.summary-chart ul li.clr-sent:after {background-color:#dfdfdf !important;}
-.summary-chart ul li.clr-open:after {background-color:#f6e408 !important;}
-.summary-chart ul li.clr-view:after {background-color:#559cd6 !important;}
-.summary-chart ul li.clr-click:after {background-color:#27316a !important;}
-.summary-chart ul li.clr-social:after {background-color:#03d9a4 !important;}
-.summary-chart ul li.clr-bounce:after { background-color:#f71a1a !important; }
+ul li.clr-sent:after {background-color:#dfdfdf !important;}
+ul li.clr-open:after {background-color:#f6e408 !important;}
+ul li.clr-view:after {background-color:#559cd6 !important;}
+ul li.clr-click:after {background-color:#27316a !important;}
+ul li.clr-social:after {background-color:#03d9a4 !important;}
+ul li.clr-bounce:after { background-color:#f71a1a !important; }
 
 
 .cstats .chart { margin-top:10px; float:right;}
 
+.c-reports .stats-panel > div{
+    height: 50px;
+}
+
+.c-reports .stats-panel ul.socpc li{
+    padding:0px;
+}
+
+.summary-chart .template-container {
+    max-height: none !important;
+}
 
 
 /* ------------ */
 
 .col-cstats {background:#dcf3fe;} 
+
+.col-cstats.c-reports{
+    background-color: transparent;
+    border:1px solid #e9f5fa;
+}
+
+.table-area{
+    border:1px solid #e9f5fa;  
+    margin-top: 5px;
+}
+
+.table-area .template-container{
+    max-height:420px;min-height:290px; background: #fff;overflow-y: auto;
+}
 
 .col-cstats .cstats .chart {
     float: none;

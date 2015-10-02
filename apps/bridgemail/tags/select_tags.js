@@ -11,6 +11,7 @@ define(['text!tags/html/select_tags.html', 'bms-mapping', 'jquery.searchcontrol'
                 },
                 render: function () {
                     this.parent = this.options.page;
+                    this.tags = this.options.page.objects;
                     this.app = this.parent.app;            
                     this.dialog = this.options.dialog;
                     this.$el.html(this.template({}));
@@ -50,28 +51,12 @@ define(['text!tags/html/select_tags.html', 'bms-mapping', 'jquery.searchcontrol'
                                     template: '',
                                     movingElement: 'li'
                                 });
-                                if(curview.options.tags){
-                                    var tags = curview.options.tags;
-                                    for (var i = 0; i < tags.length; i++) {
-                                        if (curview.$el.find(".col1 li[checksum='" + tags[i] + "'] .move-row").length > 0) {
-                                            curview.$el.find(".col1 li[checksum='" + tags[i] + "'] .move-row").click();
-                                        } else if (tags[i] != "") {
-
-                                            var tags_html = '<li class="action new-added"  checksum="' + tags[i] + '"><a class="tag"><span>' + tags[i] + '</span><strong class="badge">0</strong></a> <a style="display: inline;" class="move-row btn-red class-remove"><i class="icon back left"></i><span>Remove</span></a></li>';
-                                            that.$el.find(".col2 .rightcol ul").append(tags_html);
-                                            that.$el.find(".col2 .rightcol ul li .class-remove").on('click', function () {
-                                                $(this).parents('li.action').remove();
-                                                var maintags = '';
-
-
-                                                that.$el.find(".col2 .rightcol li").each(function (i) {
-                                                    maintags += $(this).find("a:nth-child(1) span").text() + ',';
-                                                });
-
-                                            });
-
-                                        }
-                                    }
+                                if(curview.tags){                                    
+                                    $.each(curview.tags, function (key, val) {
+                                        if (curview.$el.find(".col1 li[checksum='" + val.id + "'] .move-row").length > 0) {
+                                            curview.$el.find(".col1 li[checksum='" + val.id + "'] .move-row").click();
+                                        } 
+                                     });
                                 }
                             }
                         }

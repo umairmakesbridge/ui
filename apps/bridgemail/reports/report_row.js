@@ -313,7 +313,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                         dialog.getBody().html(_page.$el);
                         _page.$el.find('#targets_grid').addClass('targets_grid_table');
-                        _page.$el.find('.col2 .template-container').addClass('targets_grid_table_right');
+                        _page.$el.find('.col-2 .template-container').addClass('targets_grid_table_right');
                         _page.$el.find('.step2-lists').css({'top': '0'});
                         _page.$el.find('.step2-lists span').css({'left': '70px'});
                         _page.init();
@@ -337,7 +337,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createPageChart();
                             this.app.showLoading(false, this.$(".cstats"));
@@ -347,7 +347,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 createPageChart: function () {
                     if (this.$(".checkedadded").length) {
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var total_pages_selected = this.$(".checkedadded").length;
                         if (total_pages_selected > 1) {
                             this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> landing pages selected');
@@ -370,12 +370,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         ];
                         this.chartPage.createChart(_data);
                         _.each(this.chart_data, function (val, key) {
-                            this.$(".col2 ." + key).html(this.app.addCommas(val));
+                            this.$(".col-2 ." + key).html(this.app.addCommas(val));
                         }, this);
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> landing pages selected');
                     }
 
@@ -434,8 +434,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createCampaignChart();
                         }, this));
@@ -445,7 +445,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if (this.$(".checkedadded").length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var total_pages_selected = this.$(".checkedadded").length;
                         if (total_pages_selected > 1) {
                             this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
@@ -489,14 +489,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
-                                this.$(".col2 ." + key).html(this.app.addCommas(val));
+                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
                             }, this);
 
                         }, this));
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
                     }
                     this.saveSettings();
@@ -571,12 +571,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                     if (flag) {
                         this.$(".cols").removeClass("col1");
-                        this.$(".col2").hide();
+                        this.$(".col-2").hide();
                         this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
                     }
                     else {
                         this.$(".cols").addClass("col1");
-                        this.$(".col2").show();
+                        this.$(".col-2").show();
                         this.$(".template-container").css({"overflow-y": 'auto', height: '420px'});
                         this.$(".parent-container").removeAttr("style");
                     }
@@ -635,8 +635,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createAutobotChart();
                         }, this));
@@ -646,7 +646,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if (this.$(".checkedadded").length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var total_pages_selected = this.$(".checkedadded").length;
                         if (total_pages_selected > 1) {
                             this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
@@ -690,14 +690,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
-                                this.$(".col2 ." + key).html(this.app.addCommas(val));
+                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
                             }, this);
 
                         }, this));
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
                     }
                     this.saveSettings();
@@ -807,7 +807,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createSignupFormChart();
                             this.app.showLoading(false, this.$(".cstats"));
@@ -817,7 +817,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 createSignupFormChart: function () {
                     if (this.$(".checkedadded").length) {
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var total_pages_selected = this.$(".checkedadded").length;
                         if (total_pages_selected > 1) {
                             this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> signup forms selected');
@@ -838,12 +838,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         ];
                         this.chartPage.createChart(_data);
                         _.each(this.chart_data, function (val, key) {
-                            this.$(".col2 ." + key).html(this.app.addCommas(val));
+                            this.$(".col-2 ." + key).html(this.app.addCommas(val));
                         }, this);
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> signup forms selected');
                     }
                     this.saveSettings();
@@ -954,8 +954,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createNurtureTrackChart();
                         }, this));
@@ -966,7 +966,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if (this.$(".checkedadded").length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var _campaigns = $.map(this.$(".checkedadded"), function (el) {
                             return el.id;
                         }).join(",");
@@ -1003,14 +1003,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
-                                this.$(".col2 ." + key).html(this.app.addCommas(val));
+                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
                             }, this);
 
                         }, this));
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> message selected');
                     }
                     this.saveSettings();
@@ -1136,7 +1136,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         //this.app.showLoading("Creating Chart...",this.$(".cstats")); 
                         require(["reports/"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, legend: {position: 'none'}, chartArea: {width: "100%", height: "80%", left: '10%', top: '10%'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             //this.createCampaignChart();                                                        
                         }, this));
@@ -1207,7 +1207,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
-                            this.$(".col2 .campaign-chart").html(this.chartPage.$el);
+                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createTagsChart();
                         }, this));
@@ -1259,7 +1259,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if (this.modelArray.length) {
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         this.$(".start-message").hide();
-                        this.$(".col2 .campaign-chart").show(this.$(".checkedadded").length);
+                        this.$(".col-2 .campaign-chart").show(this.$(".checkedadded").length);
                         var total_selected = this.modelArray.length;
                         if (total_selected > 1) {
                             this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
@@ -1281,7 +1281,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                     else {
                         this.$(".start-message").show();
-                        this.$(".col2 .campaign-chart").hide();
+                        this.$(".col-2 .campaign-chart").hide();
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> campaigns selected');
                     }
                     this.saveSettings();
@@ -1692,7 +1692,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 this.chartPage.createChart(options, chartDiv)
 
                                 if (_type == "seo" || _type == "lcdetail" || _type == "ref" || _type == "pp") {
-                                    this.$(".parent-container .template-container").css({"background": "#fff", "height": "900px"});
+                                    this.$(".parent-container .template-container").css({"background": "#fff", "height": "auto"});
+                                    this.$(".table-area .template-container").css({"max-height": "none"});
                                     var _dataTable = [];
                                     if (_type == "seo") {
                                         _dataTable.push(['Keyword Text', 'Count', 'Source']);

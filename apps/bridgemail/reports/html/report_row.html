@@ -20,10 +20,64 @@
         </div>
     </div>
     <div class="template-container parent-container">
-        <div class="target-listing copy_camp" id="copy-camp-listing">
-            <div <% if(this.reportType!=="webstats"){%>class="col1 cols"<% } %> >
+        <div class="target-listing copy_camp" id="copy-camp-listing">            
 
-                <div class="template-container" style="height:420px;background: #fff;margin:0px;overflow-y: auto">
+            <% if(this.reportType!=="webstats"){ %>  
+            <div class="col-2 col-cstats c-reports">
+                <div class="cstats" style="height:320px"> 
+                    <div class="mask start-message"><div class="init-message">Add <%- rType %> to see graph</div></div>  
+
+
+                    <div class="chart campaign-chart" style="margin-top:0px">
+
+                    </div>          
+                    <% if(this.reportType=="landingpages"){ %>  
+                    <div class="stats-panel">                
+                        <div>
+                            <ul class="socpc">                        
+                                <li class="clr4" style="width:50%"><span>Page Views <strong class="viewCount">0</strong></span></li>                        
+                                <li class="clr2" style="width:50%"><span>Submission <strong class="submitCount">0</strong></span></li>                                               
+                            </ul>
+
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>  
+                    <% } else if(this.reportType=="campaigns" || this.reportType=="autobots" || this.reportType=="nurturetracks") { %>
+                    <div class="stats-panel">                    
+                        <div>
+                            <ul class="socpc">
+                                <li class="clr-sent"><span>Sent <strong class="sentCount">0</strong></span></li>
+                                <li class="clr-open"><span>Open <strong class="openCount">0</strong></span></li>
+                                <li class="clr-click"><span>Click <strong class="clickCount">0</strong></span></li>
+                                <li class="clr-view"><span>Page Views <strong class="pageViewsCount">0</strong></span></li>
+                                <li class="clr-social"><span>Conversion <strong class="conversionCount">0</strong></span></li>
+                            </ul>
+                            <ul class="s-u-b" >                
+                                <li ><span>Unsubscribed <strong class="unSubscribeCount">0</strong></span></li>
+                                <li ><span>Supressed <strong class="supressCount">0</strong></span></li>
+                                <li ><span>Bounced <strong class="bounceCount">0</strong></span></li>
+                            </ul>
+                            <ul class="ftipg">
+                                <li ><i class="social-icon-color fb"></i><span class="facebookCount textCount">0</span></li>
+                                <li ><i class="social-icon-color tw"></i><span class="twitterCount textCount">0</span></li>
+                                <li ><i class="social-icon-color in"></i><span class="linkedInCount textCount">0</span></li>
+                                <li ><i class="social-icon-color pi"></i><span class="googlePlusCount textCount">0</span></li>
+                                <li ><i class="social-icon-color gp"></i><span class="pinterestCount textCount">0</span></li>
+                            </ul>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <% } if(this.reportType==="tags") { %>
+                    <div class="stats-panel"><div><ul class="socpc"></ul><div class="clearfix"></div></div></div>  
+
+                    <% } %>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <% } %>
+            
+            <div class="table-area">
+                <div class="template-container" style="margin:0px;background:none">
                     <div class="camp_listing camp_reports">     
                         <div class="icons-bar-chart" style="display:none">
                             <div class="barchart icons active showtooltip" title="Click to see bar chart"></div>
@@ -51,60 +105,7 @@
                 </div>
                 <!-- template-container  --> 
             </div>
-
-            <% if(this.reportType!=="webstats"){ %>  
-            <div class="col2 col-cstats">
-                <div class="cstats"> 
-                    <div class="mask start-message"><div class="init-message">Add <%- rType %> to see graph</div></div>  
-
-
-                    <div class="chart campaign-chart">
-
-                    </div>          
-                    <% if(this.reportType=="landingpages"){ %>  
-                    <div class="stats-panel">                
-                        <div>
-                            <ul class="socpc">                        
-                                <li class="clr4" style="width:50%"><span>Page Views <strong class="viewCount">0</strong></span></li>                        
-                                <li class="clr2" style="width:50%"><span>Submission <strong class="submitCount">0</strong></span></li>                                               
-                            </ul>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>  
-                    <% } else if(this.reportType=="campaigns" || this.reportType=="autobots" || this.reportType=="nurturetracks") { %>
-                    <div class="stats-panel">                    
-                        <div>
-                            <ul class="socpc">
-                                <li class="clr1"><span>Sent <strong class="sentCount">0</strong></span></li>
-                                <li class="clr2"><span>Open <strong class="openCount">0</strong></span></li>
-                                <li class="clr3"><span>Click <strong class="clickCount">0</strong></span></li>
-                                <li class="clr4"><span>Page Views <strong class="pageViewsCount">0</strong></span></li>
-                                <li class="clr5"><span>Conversion <strong class="conversionCount">0</strong></span></li>
-                            </ul>
-                            <ul class="s-u-b" >                
-                                <li ><span>Unsubscribed <strong class="unSubscribeCount">0</strong></span></li>
-                                <li ><span>Supressed <strong class="supressCount">0</strong></span></li>
-                                <li ><span>Bounced <strong class="bounceCount">0</strong></span></li>
-                            </ul>
-                            <ul class="ftipg">
-                                <li ><i class="social-icon-color fb"></i><span class="facebookCount textCount">0</span></li>
-                                <li ><i class="social-icon-color tw"></i><span class="twitterCount textCount">0</span></li>
-                                <li ><i class="social-icon-color in"></i><span class="linkedInCount textCount">0</span></li>
-                                <li ><i class="social-icon-color pi"></i><span class="googlePlusCount textCount">0</span></li>
-                                <li ><i class="social-icon-color gp"></i><span class="pinterestCount textCount">0</span></li>
-                            </ul>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-                    <% } if(this.reportType==="tags") { %>
-                    <div class="stats-panel"><div><ul class="socpc"></ul><div class="clearfix"></div></div></div>  
-
-                    <% } %>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <% } %>
+            
         </div>
     </div>
 </div>    

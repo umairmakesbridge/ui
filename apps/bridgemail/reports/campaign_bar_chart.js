@@ -79,7 +79,9 @@ function (template) {
                     },
                     colors: this.colors,
                     yAxis: {
-                        lineWidth:1,
+                        lineWidth:0,
+                        minorGridLineWidth:0,
+                        gridLineColor:'transparent',
                         min: 0,
                         title: {
                             text: '',
