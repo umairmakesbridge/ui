@@ -93,7 +93,7 @@ define(['text!recipientscontacts/html/rcontacts.html', 'recipientscontacts/rcont
                             that.offsetLength = contacts.length;
                             that.total_fetch = that.total_fetch + contacts.length;
                             _.each(contacts.models, function(model) {
-                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
+                                that.$el.find('#table_pageviews tbody').append(new rContact({model: model, app: that.options.app,isSubscriber:that.options.isSubscriber, listNum: that.options.listNum, type: that.options.type, sentAt: that.options.sentAt}).el);
                             });
                             if (that.searchText != '') {
                                 that.showSearchFilters(that.searchText, that.options.app.addCommas(that.objRContacts.total), that.searchText);

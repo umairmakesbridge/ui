@@ -37,8 +37,12 @@
             <strong><span><em>Page Views</em>
                     <% if(this.model.get('subscriptionData')[0].pageViewsCount !="0") { %>
                         <%if(this.options.type != "autobots"){ %>
+                            <% if(!this.options.isSubscriber){ %>
                             <a class="show-page-view showtooltip" data-original-title="Click to view page views" data-id="<%=this.model.get('subNum.encode')%>"><b data-id="<%=this.model.get('subNum.encode')%>"><%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%></b></a>
-                        <%}%>
+                            <% } else{%>
+                            <%=this.options.app.addCommas(this.model.get('subscriptionData')[0].pageViewsCount)%>
+                            <% } %>
+                           <%}%>
                     <% } else { %>
                     <%=this.model.get('subscriptionData')[0].pageViewsCount%> 
                     <% } %>

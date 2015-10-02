@@ -30,6 +30,9 @@ function (template) {
             },
             openContact:function(){
                 //this.$el.parents('.modal').find('.close').click();
+                if(this.options.isSubscriber){
+                    this.$el.parents('.modal').find('.close').click();
+                }
                 this.app.removeDialogs();
                 this.options.app.mainContainer.openSubscriber(this.model.get('subNum.encode'));
             },
