@@ -119,7 +119,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                      height:'22px',
                      searchFunc:_.bind(this.searchContacts,this),
                      clearFunc:_.bind(this.clearSearchContacts,this),
-                     placeholder: 'Search Contacts & Tags',                     
+                     placeholder: 'Search Contacts',                     
                      showicon: 'yes',
                      iconsource: 'subscribers'
               });

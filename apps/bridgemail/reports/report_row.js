@@ -43,8 +43,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     this.toDate = null;
                     this.loadReport = this.options.loadReport;
                     this.fromClick=false;
+                    this.row_obj = this.options.row_obj;
                     this.reportType = this.options.reportType;
-                    this.template = _.template(template);
+                    this.template = _.template(template);                    
+                    
+                    
                     this.render();
                 },
                 render: function ()
@@ -90,7 +93,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                            this.modelArray[0].id = selectedStates;
                            this.drawMultiCharts();
                        }
-                    },this))
+                    },this));
+                    if(this.row_obj && this.row_obj.toDate && this.row_obj.fromDate){
+                        this.fromDate = this.row_obj.fromDate;
+                        this.toDate = this.row_obj.toDate;
+                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                        var toDate = moment($.trim(this.toDate), 'MM-DD-YYYY');
+                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                    }
                     this.loadRows();
 
                 }, /*---------- Calender functions---------------*/
@@ -278,6 +288,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     } else if (this.reportType == "webstats") {
                         this.createWebstats();
                     }
+                    
+                    this.saveSettings();
 
                 },
                 //////********************* Landing pages *****************************************//////
@@ -396,7 +408,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         _.each(_json.campaigns[0], function (val) {
                             this.modelArray.push(new Backbone.Model(val[0]));
                         }, this);
-                        this.createCampaigns();
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createCampaigns();
+                        }
                     }, this))
                 },
                 openCampaignsDialog: function () {
@@ -509,6 +526,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.showHideChartArea(true);
                         var _grid = this.$("#_grid tbody");
                         _grid.children().remove();
+                        var total_pages_selected = this.modelArray.length;
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaigns selected');
+                        }
+                        else {
+                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
+                        }
                         _.each(this.modelArray, function (val, index) {
                             var campRow = new this.campRow({model: val, sub: this, showSummaryChart: true});
                             _grid.append(campRow.$el);
@@ -563,7 +587,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
 
                         }, this);
 
-                    }
+                    }                    
                 },
                 showHideChartArea: function (flag) {
                     if (this.reportType == "webstats") {
@@ -597,7 +621,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         _.each(_json.autobots[0], function (val) {
                             this.modelArray.push(new Backbone.Model(val[0]));
                         }, this);
-                        this.createAutobots();
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createAutobots();
+                        }
+                        
                     }, this))
                 },
                 openAutobotsDialog: function () {
@@ -708,6 +738,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.$(".add-msg-report").hide();
                         this.$(".bmsgrid").show();
                         this.showHideChartArea(true);
+                        var total_pages_selected = this.modelArray.length;
+                        if (total_pages_selected > 1) {
+                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                        }
+                        else {
+                            this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> autobots selected');
+                        }
                         var _grid = this.$("#_grid tbody");
                         _grid.children().remove();
                         _.each(this.modelArray, function (val, index) {
@@ -861,8 +898,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         if (this.app.checkError(_json)) {
                             return false;
                         }
-                        this.modelArray.push(new Backbone.Model(_json));
-                        this.createNurtureTrack();
+                        this.modelArray.push(new Backbone.Model(_json));                        
+                        if(this.toDate && this.fromDate){
+                            this.setDateRange();
+                        }
+                        else{
+                            this.createNurtureTrack();
+                        }
                     }, this))
                 },
                 openNurtureTracksDialog: function () {
@@ -1020,6 +1062,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.$(".add-msg-report").hide();
                         this.$(".bmsgrid").show();
                         this.showHideChartArea(true);
+                        if (this.modelArray.length == 1) {
+                            var msgCountText = this.modelArray[0].get("msgCount") == "1" ? "message" : "messages";
+                            this.$(".total-count").html('<strong class="badge">' + this.modelArray[0].get("name") + '</strong> nurture track selected having <b>' + this.modelArray[0].get("msgCount") + ' ' + msgCountText + '</b>');
+                        }
+                        else {
+                            this.$(".total-count").html('<strong class="badge">0</strong> nurture tracks selected');
+                        }
                         var _grid = this.$("#_grid tbody");
                         _grid.children().remove();
                         var order_no = 1;
@@ -1146,10 +1195,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 //////********************* Tags  *****************************************//////
                 ,
                 loadTags: function () {
-                    if (this.modelArray.length) {
+                    if (this.modelArray.length && this.$(".tagslist ul").children().length) {
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
-                    } else {
+                    } else {                        
+                        this.$("#copy-camp-listing").show();
+                        this.$(".tags-charts").remove();
+                        this.$(".table-area .template-container").css("height","");
                         this.app.showLoading("Loading selection...", this.$el);
                         var tags_array = this.objects.map(function (index) {
                             return index.id
@@ -1164,8 +1216,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 if (tags_array.indexOf(val[0].tag) > -1) {
                                     this.modelArray.push(new Backbone.Model(val[0]));
                                 }
-                            }, this);
-                            this.createTags();
+                            }, this);                         
+                            if(this.toDate && this.fromDate){
+                                this.setDateRange();
+                            }
+                            else{
+                                this.createTags();
+                            }
+                            
                         }, this))
                     }
                 },
@@ -1295,6 +1353,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.$(".tags-charts").remove();
                         }
                         this.$(".parent-container").append(chartsDiv);
+                        var total_selected = this.modelArray.length;
+                        if (total_selected > 1) {
+                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tags selected');
+                        }
+                        else {
+                            this.$(".total-count").html('<strong class="badge">' + total_selected + '</strong> tag selected');
+                        }
                         _.each(this.modelArray, function (val, index) {
 
                             var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=subscriberTagStatDayByDay";

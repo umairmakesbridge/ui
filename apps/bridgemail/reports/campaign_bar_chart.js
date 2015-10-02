@@ -1,4 +1,4 @@
-define(['text!reports/html/campaign_pie_chart.html','highcharts'],
+define(['text!reports/html/campaign_pie_chart.html','highcharts','export-chart'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -76,7 +76,7 @@ function (template) {
                                 fontFamily: "'PT Sans', sans-serif"
                             }
                         }
-                    },
+                    },                    
                     colors: this.colors,
                     yAxis: {
                         lineWidth:0,

@@ -60,7 +60,8 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                 },
                 addReport:function(event,obj,loadReport){
                     var rType = typeof(event)=="object"?$.getObj(event, "li").attr("data-type"):event;
-                    var row_view = new reportRow({reportType:rType,sub:this,objects:obj,loadReport:loadReport});
+                    var objects = (obj) ? obj[obj.type]:null;
+                    var row_view = new reportRow({reportType:rType,sub:this,row_obj:obj,objects:objects,loadReport:loadReport});
                     this.models.push(row_view);
                     row_view.orderNo = this.models.length;
                     row_view.$el.insertBefore(this.$(".addbar"));
@@ -101,7 +102,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                                 var page_json = jQuery.parseJSON(this.app.decodeHTML(_json.p_json));
                                 if(page_json.length){
                                     for(var i=0;i<page_json.length;i++){
-                                        this.addReport(page_json[i].type,page_json[i][page_json[i].type],true);
+                                        this.addReport(page_json[i].type,page_json[i],true);
                                     }
                                 }
                             }else{
@@ -146,8 +147,15 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                             else{
                                 selected_obj['checked'] =val.$("[id='"+id+"'] .check").length?true:false;
                             }
+                            
                             report_obj[type].push(selected_obj);          
-                        },this);                                             
+                        },this);       
+                        if(val.toDate){
+                            report_obj['toDate'] = val.toDate;
+                        }
+                        if(val.fromDate){
+                            report_obj['fromDate'] = val.fromDate;
+                        }
                         report_json.push(report_obj);
                     },this);
                                         
