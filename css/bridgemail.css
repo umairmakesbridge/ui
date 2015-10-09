@@ -12069,7 +12069,7 @@ background-position:200px top;
 
 
 
-.landing_top .status_tgl {
+.landing_top .status_tgl ,.contacts-switch .status_tgl{
     background: none repeat scroll 0 0 #91bed6;
     border-radius: 20px;
     float: right;
@@ -12080,22 +12080,53 @@ background-position:200px top;
     opacity: 1;
 	padding: 2px;
 }
-.landing_top .status_tgl a { float:left; color:#fff; display:block; padding: 4px 20px; border-radius: 20px; }
+.landing_top .status_tgl a,.contacts-switch .status_tgl a { float:left; color:#fff; display:block; padding: 4px 20px; border-radius: 20px; }
 
 .landing_top .status_tgl a.draft.active  { background: url("../img/draft18.png") no-repeat scroll 12px center #fff; 
 color: #91bed6;
     padding-left: 35px;
 	border-radius: 20px;
 	}
-
+        
+.contacts-switch .status_tgl a.draft.active  {
+     background: #fff;
+color: #2A99F8;
+    padding-left: 35px;
+	border-radius: 20px;
+        position:relative;
+	}
+        .contacts-switch .status_tgl a.draft.active .toggletag-icon{
+            background: url("../images/18x18_icon_map.png") no-repeat scroll -20px -53px;
+            display: block;
+            height: 18px;
+            left: 10px;
+            position: absolute;
+            top: 2px;
+            width: 18px;
+        }
 .landing_top .status_tgl a.published.active {
     background: url("../img/check18.png") no-repeat scroll 12px center #fff;
     border-radius: 20px;
     color: #41ce20;
     padding-left: 35px;
 }
+.contacts-switch .status_tgl a.published.active {
+    background: #fff ;
+    border-radius: 20px;
+    color: #41ce20;
+    padding-left: 35px;
+    position:relative;
+}
 
-
+ .contacts-switch .status_tgl a.published.active .togglecontact-icon{
+            background: url("../images/18x18_icon_map.png") no-repeat scroll -36px -33px;
+            display: block;
+            height: 18px;
+            left: 10px;
+            position: absolute;
+            top: 0px;
+            width: 18px;
+        }
 
 
 .lp_editor {background:#d6ebf6; padding:5px;  margin: 15px 0 0; border-radius: 2px;}

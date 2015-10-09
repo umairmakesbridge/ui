@@ -22,8 +22,30 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         if(this.searchTxt){
                             this.search()
                         }
-                    }
+                    },
+                "click .toggletags":function(event){
+                        this.$('.status_tgl a').removeClass('active');
+                        $(event.target).addClass('active');
+                        if(this.$('#contact-search').val().length > 0){
+                            this.$('#contact-search').val('');
+                            this.fetchContacts();
+                        }
+                        this.$('#contact-search').attr('placeholder','Search By Tags')
+                        this.isSearchTag = true;
+                    },
+            "click .togglecontact": function(event){
+                        this.$('.status_tgl a').removeClass('active');
+                        $(event.target).addClass('active');
+                        this.$('#contact-search').val('');
+                        this.$('#contact-search').attr('placeholder','Search By Contacts')
+                        if(this.$('#contact-search').val().length > 0){
+                            this.$('#contact-search').val('');
+                            this.fetchContacts();
+                        }
+                        this.isSearchTag = false;
+                    },
             },
+            
              basicFields: {"firstName": {"label": "First Name"}, "lastName": {"label": "Last Name"}, "company": {"label": "Company"}, "areaCode": {"label": "Area Code"}, "telephone": {"label": "Telephone"},
                     "email": {"label": "Email"}, "city": {"label": "City"},
                     "country": {"label": "Country"}, "state": {"label": "State"}, "zip": {"label": "Zip"}, "address1": {"label": "Address 1"}, "address2": {"label": "Address 2"},
@@ -45,6 +67,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.filterBy = 'CK';
                this.contacts_request = null;
                this.sortBy = '';
+                this.isSearchTag = false;
                this.render();
             },
             /**
@@ -115,11 +138,11 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                this.$(".recent-activities").change(_.bind(this.sortContacts,this));
                this.$(".contact-search").searchcontrol({
                      id:'contact-search',
-                     width:'180px',
+                     width:'280px',
                      height:'22px',
                      searchFunc:_.bind(this.searchContacts,this),
                      clearFunc:_.bind(this.clearSearchContacts,this),
-                     placeholder: 'Search Contacts',                     
+                     placeholder: 'Search By Contacts',                     
                      showicon: 'yes',
                      iconsource: 'subscribers'
               });
@@ -331,15 +354,44 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             searchContacts:function(o,txt){
                 this.tagTxt = '';
                 this.filterBy = '';
-                this.searchTxt = txt;  
+                if(this.isSearchTag){
+                   this.tagTxt = txt;
+                  // var tagName = this.tagTxt.split(": ").length
+                   //if( tagName.length > 1){
+                     //  this.tagTxt = tagName[1];
+                   //}
+                   
+                }else{
+                   this.searchTxt = txt;  
+                }
                 this.sortBy = 'lastActivityDate';
                 this.$('.recent-activities').val('lastActivityDate').trigger('chosen:updated');
                     this.search(o);                
             },
             search:function(o){
-                if(this.searchTxt.indexOf("Tag: ")>-1){
-                    var tagName = this.searchTxt.split(": ");
-                    this.searchByTag(tagName[1]);
+                if(this.searchTxt.indexOf("Tag: ")>-1 || this.isSearchTag == true){                    
+                    this.timeout = setTimeout(_.bind(function() {
+                                    clearTimeout(this.timeout);
+                                    //this.$('#contact-search').val('Tag: '+this.tagTxt);
+                                    //var tagName = this.tagTxt.split(": ");
+                                    //if(tagName.length > 1 && tagName[1] != ""){
+                                     //   this.searchByTag(tagName[1]);
+                                    //}else if(tagName.length == 1 && tagName[0] != ""){
+                                     //   this.searchByTag(tagName[0]);
+                                    //}else{
+                                    if(this.tagTxt === ""){
+                                        this.$('#contact-search').val('');
+                                        this.$('#clearsearch').click();
+                                    }else{
+                                        this.searchByTag(this.tagTxt);
+                                    }
+                                        
+                                    //}
+                                    
+                                }, this), 500);
+                    this.$('#contact-search').keydown(_.bind(function() {
+                                clearTimeout(this.timeout);
+                            }, this));
                  }
                  else{
                      var keyCode = this.keyvalid(o);
@@ -456,7 +508,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
             searchByTag:function(tag){
                 
                this.searchTxt = '';
-               this.$("#contact-search").val("Tag: "+this.app.decodeHTML(tag));
+               this.$("#contact-search").val(this.app.decodeHTML(tag));
                this.$("#clearsearch").show();
                this.tagTxt = this.app.encodeHTML(tag);
                $('.showtooltip').tooltip('hide');

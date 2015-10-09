@@ -87,13 +87,7 @@ function (template,highlighter,tagView) {
                     this.$(".checkpanelinput").addClass("disabled");
                     this.$('.suppressed-icon').show();
                 }
-                if(this.sub.searchTxt){
-                    this.$(".show-detail").highlight($.trim(this.sub.searchTxt));
-                    this.$(".tag").highlight($.trim(this.sub.searchTxt));
-                }
-                else if(this.sub.tagTxt){
-                    this.$(".tag").highlight($.trim(this.app.decodeHTML(this.sub.tagTxt)));
-                }
+                
                 this.showTagsTemplate();
                 this.getFirstAlphabet();
                 this.lastOpenActivityDate();
@@ -134,6 +128,15 @@ function (template,highlighter,tagView) {
                                 this.$(".act em").html("- "+diffYear+" "+year+" ago");
                                 //this.$(".seen-time-text").html("Years")
                             }
+                            
+                            
+                        if(this.sub.searchTxt){
+                            this.$(".show-contact-detail a").highlight($.trim(this.sub.searchTxt));
+                            this.$(".tag").highlight($.trim(this.sub.searchTxt));
+                        }
+                        else if(this.sub.tagTxt){
+                            this.$(".tag").highlight($.trim(this.app.decodeHTML(this.sub.tagTxt)));
+                        }
             },
             showTagsTemplate:function(){
 
