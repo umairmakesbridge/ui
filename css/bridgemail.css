@@ -14905,6 +14905,28 @@ a.bayshore-toggle i {
     right:40px;
     top:16px;
 }
+
+.chart-types{ 
+    right:50px;
+    top:26px;
+}
+
+.summary-chart ul li strong{
+    float: left;
+    font-size: 25px;
+    line-height: 20px;
+    margin: 8px 0 0;
+}
+
+.summary-chart ul li em{
+    float: right;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: bold;
+    margin: 10px 0 0;
+    opacity: 0.8;
+}
+
 .icons-bar-chart .icons{
     width:24px;
     height:24px;        

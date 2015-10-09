@@ -11,6 +11,9 @@
                 <div class="inputlabel" style="position:relative"><input type="checkbox" class="checkinput" value="rv"><label>Return Visitors</label></div>
             </div> 
         <% } %>    
+       <% if(this.reportType=="tags"){ %>  
+           <a class="tagsexpand showtooltip" style="display:none;position: absolute;top:7px;right:340px;" title="Click to expand tags details" data-expand="0"> Expand Tags </a>
+       <% } %>    
         <div style=" " class="srt-div">          
             <div class="since"> <span class="calendericon"><i class="icon calender left"></i><b class="caret right"></b></span>
                 <input type="text" id="daterange" placeholder="Select date range" style="width:230px"/>
@@ -26,7 +29,10 @@
             <div class="col-2 col-cstats c-reports">
                 <div class="cstats" style="height:320px"> 
                     <div class="mask start-message"><div class="init-message add-msg-report"><a>Click here to add <%- rType %></a></div></div>  
-
+                    <div class="icons-bar-chart chart-types" style="display:none">
+                        <div class="barchart icons active showtooltip" title="Click to see bar chart"></div>
+                        <div class="linechart icons showtooltip"  title="Click to see line chart"></div>
+                    </div>
 
                     <div class="chart campaign-chart" style="margin-top:0px">
 

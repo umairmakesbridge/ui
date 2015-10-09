@@ -12,7 +12,8 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     "click #clearcal": 'hideDatePicker',
                     "click .calendericon": 'showDatePickerFromClick',
                     "click .percent": 'showPercentDiv',
-                    "click .icons-bar-chart .icons":'changeChart'
+                    "click .icons-bar-chart .icons":'changeChart',
+                    "click .tagsexpand":"expandCollapseTags"
                 },
                 initialize: function () {
                     this.mapping = {campaigns: {label: 'Campaigns', colorClass: 'darkblue', iconClass: 'open'},
@@ -45,7 +46,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     this.fromClick=false;
                     this.row_obj = this.options.row_obj;
                     this.reportType = this.options.reportType;
-                    this.template = _.template(template);                    
+                    this.template = _.template(template);          
+                                        
+                    Highcharts.setOptions({
+                        lang: {
+                            thousandsSep: ',',
+                            contextButtonTitle:'Choose an output format'
+                        }
+                    });
                     
                     
                     this.render();
@@ -284,7 +292,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     } else if (this.reportType == "nurturetracks") {
                         this.loadNurtureTrackSummary();
                     } else if (this.reportType == "tags") {
-                        this.loadTagsSummary();
+                        this.drawTagsInOne();
                     } else if (this.reportType == "webstats") {
                         this.createWebstats();
                     }
@@ -576,6 +584,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
 
                                     }, this));
@@ -720,7 +729,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                this.$(".col-2 ." + key).html(this.app.addCommas(val));                                
                             }, this);
 
                         }, this));
@@ -792,6 +801,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            this.$("#stats-" + val.get("botId.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     }, this));
                                 }
@@ -1118,6 +1128,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         this.chartPage.createChart(_data);
                                         _.each(this.chart_data, function (v, key) {
                                             this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
                                         }, this);
                                     }, this));
                                 }
@@ -1198,6 +1209,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if (this.modelArray.length && this.$(".tagslist ul").children().length) {
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
+                        this.createTags();
                     } else {                        
                         this.$("#copy-camp-listing").show();
                         this.$(".tags-charts").remove();
@@ -1216,13 +1228,14 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 if (tags_array.indexOf(val[0].tag) > -1) {
                                     this.modelArray.push(new Backbone.Model(val[0]));
                                 }
-                            }, this);                         
-                            if(this.toDate && this.fromDate){
+                            }, this);             
+                            this.createTags();
+                            /*if(this.toDate && this.fromDate){
                                 this.setDateRange();
                             }
                             else{
                                 this.createTags();
-                            }
+                            }*/
                             
                         }, this))
                     }
@@ -1262,13 +1275,22 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             _grid.append(tagLi);
                         }, this);
                         _grid.find(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                                                
                         this.app.showLoading("Creating Chart...", this.$(".cstats"));
                         require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                             this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
                             this.createTagsChart();
+                            if (this.toDate && this.fromDate) {
+                                this.setDateRange();                                
+                            }
+                            else{
+                                this.$(".chart-types,.tagsexpand").hide();
+                                this.$(".tagsexpand").attr("data-expand","0").html("Expand Tags");
+                            }
                         }, this));
+                        
                     }
                 },
                 showPercentDiv: function (ev) {
@@ -1344,6 +1366,19 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     }
                     this.saveSettings();
                 },
+                expandCollapseTags:function(obj){
+                    var linkObj = $.getObj(obj, "a");
+                    if(linkObj.attr("data-expand")=="0"){
+                        this.loadTagsSummary();
+                        linkObj.attr("data-expand","1");
+                        linkObj.html("Collapse Tags").attr("data-original-title","Click to collapse tags details");
+                    }
+                    else{
+                        this.drawTagsInOne();
+                        linkObj.attr("data-expand","0");
+                        linkObj.html("Expand Tags").attr("data-original-title","Click to expand tags details");
+                    }
+                },
                 loadTagsSummary: function () {
                     if (this.modelArray.length) {
                         this.$(".add-msg-report").hide();
@@ -1413,7 +1448,155 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }, this);
 
                     }
+                },
+                drawTagsInOne: function(){
+                     this.dataArray = [];                    
+                     this.callsData  = this.modelArray.map(function (val) {
+                            return val.get("tag");
+                     });
+                     for (var c = 0; c < this.callsData.length; c++) {                        
+                        this.callTagStats(this.callsData[c]);
+                     }                     
+                },
+                callTagStats: function(tag){
+                    var bms_token = this.app.get('bms_token');
+                    var URL = "/pms/io/user/getData/?BMS_REQ_TK=" + bms_token + "&type=subscriberTagStatDayByDay";
+                    var post_data = {tag: tag, toDate: this.toDate, fromDate: this.fromDate}
+                    this.app.showLoading("Loading Data...", this.$el);
+                     $.post(URL, post_data).done(_.bind(function (sJson) {                         
+                        var tagsData = jQuery.parseJSON(sJson);
+                        if (this.app.checkError(tagsData)) {
+                            return false;
+                        }                        
+                        var data = [];
+                        if(tagsData && tagsData.stats){
+                            $.each(tagsData.stats[0],function(key,val){
+                                    var dateValues = val[0].reportDate.split('-');                                                                                                
+                                    data.push([Date.UTC(parseInt(dateValues[0]), parseInt(dateValues[1])-1, parseInt(dateValues[2])), parseInt(val[0].addCount, 10)]);	
+                            })
+                        }
+                        this.dataArray.push([tag,data]);
+                        if(this.callsData.length==this.dataArray.length){
+                            this.app.showLoading(false, this.$el);  
+                            this.combineTagsChart();
+                        }
+                        
+                    }, this));
+                },
+                combineTagsChart: function(chartType){
+                   var dateLabelObject = this.getDateText(this.fromDate, this.toDate);
+                   this.$(".add-msg-report").hide();
+                   this.$(".tagslist").show().parent().parent().css("background", "#eaf4f9");
+                   this.$("#copy-camp-listing").show();
+                   this.showHideChartArea(false);                   
+                   this.$(".tags-charts").remove();
+                   this.$(".target-listing").removeClass("summary-chart");
+                   this.$(".table-area .template-container").css("height","");
+                   this.$(".chart-types,.tagsexpand").show();
+                   
+                   var chart_type = chartType ? chartType:'column';
+                   this.app.showLoading("Loading Chart...", this.$el);
+                   var that = this;
+                   require(["reports/webstats"], _.bind(function (chart) {
+                       this.chartPage = new chart({page: this});
+                       this.app.showLoading(false, this.$el);                       
+                       var options ={
+                                    chart: {                                                  
+                                        backgroundColor: "#f4f9fc"
+                                    },                                            
+                                    title: {
+                                        text: '',
+                                        style: {
+                                            "color": "#02afef",
+                                            "fontSize": "20px"
+                                        }
+                                    },
+                                    subtitle: {                                                
+                                        text: dateLabelObject.label,
+                                        style: {
+                                            "color": "#999"
+                                        }
+                                    },
+                                    xAxis: {
+                                        type: 'datetime',
+                                        tickInterval:  dateLabelObject.days<=10?24 * 3600 * 1000 : 7 * 24 * 3600 * 1000,
+                                        tickLength:0,
+                                        dateTimeLabelFormats: {
+                                            week :'%e %b',
+                                            day :'%e %b'
+                                        },
+                                        title: {
+                                            text: '',  
+                                            margin:30,
+                                            style: {
+                                                "color": "#4d759e"
+                                            }
+                                        },
+                                        labels: {                                                                                                       
+                                            style: {
+                                                fontSize: '12px',
+                                                fontFamily: 'Verdana, sans-serif'
+                                            }
+                                        }
+                                    },
+                                    yAxis: [],
+                                    legend: {
+                                        align:'center',
+                                        verticalAlign: 'top',
+                                        y:20
+                                    },
+                                    tooltip: {
+                                        backgroundColor:"#2f93e5",
+                                        style: {color: "#fff"},
+                                        formatter: function () {
+                                            var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
+                                            tooltip_rect.attr("fill",this.series.color);
+                                            return '<b>' + that.app.addCommas(this.y) + ' added</b> for <i>"' + this.series.name + '"</i> <br/>' +
+                                                        'on ' + moment(this.key).format("DD MMM YYYY");
+                                        }
+                                    },
+                                    series: []
+                                };
+                        _.each(this.dataArray,function(val,key){
+                                var color = this.newRandomColor();
+                                options.series.push({
+                                    name: val[0],
+                                    data: val[1],
+                                    id: val[0],
+                                    lineWidth: 4, 
+                                    color:  color, 
+                                    type: chart_type, 
+                                    yAxis: 0 
+                                });
+                                options.yAxis.push({                                                                                  
+                                    lineWidth:key==0?1:0,
+                                    min: 0,
+                                    title: {                                                    
+                                        enabled: false,
+                                        style: {
+                                            "color": color
+                                        },
+                                        text:val[0]
+                                    }                                             
+                                });
+                        },this)        
+                       this.$(".campaign-chart > div").children().remove();
+                       var chartDiv = this.$(".campaign-chart > div");                                              
+                       this.chartPage.createChart(options, chartDiv);
+
+                   },this)) 
+                    
+                },
+                newRandomColor:function(){
+                    var color = [];
+                    color.push((Math.random() * 255).toFixed());
+                    color.push((Math.random() * 255).toFixed());
+                    color.push((Math.random() * 255).toFixed());
+                    color.push(1);
+                    var text = 'rgba(' + color.join(',') + ')';                    
+                    return text;
                 }
+                //////************************** Web Stats  *****************************************//////
                 ,
                 openWebStatsDialog: function () {
                     var _width = 480;
@@ -1530,7 +1713,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         else if(iconDiv.hasClass("linechart")){
                             chartType = 'spline'
                         }
-                        this.drawGeneralStats(chartType);
+                        if(this.reportType=="webstats"){
+                            this.drawGeneralStats(chartType);
+                        }
+                        else if(this.reportType=="tags"){
+                            this.combineTagsChart(chartType);
+                        }
                     }
                 },
                 drawGeneralStats:function(chartType){

@@ -124,8 +124,8 @@ function (template) {
                             var tooltip_rect = that.$('.highcharts-tooltip path:nth-child(4)');
                             tooltip_rect.attr("fill",this.series.color);
                             return '<b>' + this.x + '</b><br/>' +
-                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' +
-                                'Total: ' + that.app.addCommas(this.point.stackTotal);
+                                this.series.name + ': ' + that.app.addCommas(this.y) + '<br/>' 
+                                //'Total: ' + that.app.addCommas(this.point.stackTotal);
                         }
                     };
                     options.plotOptions = {column:{
@@ -159,7 +159,8 @@ function (template) {
                 
                 Highcharts.setOptions({
                     lang: {
-                        thousandsSep: ','
+                        thousandsSep: ',',
+                        contextButtonTitle:'Choose an output format'
                     }
                 });
                 
