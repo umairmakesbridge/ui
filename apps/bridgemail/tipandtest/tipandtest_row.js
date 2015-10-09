@@ -14,7 +14,7 @@ function (template,highlighter) {
              * Attach events on elements in view.
             */
             events: {
-               //'click .opentiptest':'opentipandtest',
+               'click .opentiptest':'opentipandtest',
                'click .proven-td' : 'opentipandtest',
                 'click .taglink':'tagClick'
             },
