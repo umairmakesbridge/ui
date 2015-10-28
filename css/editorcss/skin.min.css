@@ -1705,6 +1705,13 @@ div.mce-tinymce-inline {
 .paddingControl div.ved-edges-right div {background: url("../images/padrgt.png") no-repeat scroll center center;}
 
 
+.mce-tinymce-inline{
+    visibility: hidden !important;
+}
+.mce-tinymce.mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel.fixed-panel {
+    left: 0 !important;
+     visibility: visible !important;
+}
 
 
 

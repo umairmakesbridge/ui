@@ -285,6 +285,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                         /*-----Remove loading------*/
                             this.app.removeSpinner(this.$el);
                     /*------------*/
+                       
                         if(collection.length<parseInt(response.totalCount)){
                             this.$(".thumbnails.cards li.contact-li").last().attr("data-load","true");
                         } 
@@ -292,6 +293,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                             var search_message  ="";
                             if(this.searchTxt){
                               search_message +=" containing '"+this.searchTxt+"'" ;
+                              
                             }
                             if(this.filterBy==="CK" && this.sortBy !=="CK_7"){
                                  this.$contactLoading.before('<p class="notfound">No Contacts found'+search_message+'</p><br/><p style="text-align:center;font-size: 17px;"><a class="filter_seven">Show last 7 days Clickers</a> | <a class="show_all_contacts">Show All Contacts</a></p>');
@@ -475,7 +477,15 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     this.$(".total-text").html(_text+" found containing tag '<b>"+this.tagTxt+"</b>'");
                 }
                 else if(this.searchTxt){
-                    this.$(".total-text").html(_text+" found containing text or tag '<b>"+this.searchTxt+"</b>'");
+                     /*===========Define Max widht for contact search=============*/
+                                    var totalWidth = this.$el.parents('body').find('.ws-content.active').width();
+                                    var rightW = parseInt(this.$('.srt-div').outerWidth()) + parseInt(this.$('.top-label').outerWidth())
+                                    var leftW = ((totalWidth - rightW) - 5)/2
+                                    this.$(".total-text").css('display','inline-flex');
+                                    this.$(".total-text").html(_text+" found containing text '<b class='trim-text-search' style='max-width:"+leftW+"px'>"+this.searchTxt+"</b>'");
+                     /* ==========================*/
+                    
+                        
                 }else if(this.sortBy == 'score'){
                     this.$(".total-text").html(_text+" sorted out by '<b>"+this.sortBy+"</b>'");
                 }

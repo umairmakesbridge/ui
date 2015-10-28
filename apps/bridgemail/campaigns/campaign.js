@@ -32,7 +32,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     'click .preview-camp': 'previewCampaignstep4',
                     'click .prev-iframe-campaign': 'htmlTextClick',
                     'click .save-step2': 'saveForStep2',
-                    'click .dynamic-cotnent-items':'dcItemsDialog',
+                    'click .dynamic-cotnent-items': 'dcItemsDialog',
                     'click .editorbtnshow': function () {
                         this.$(".textdiv").hide();
                         this.$(".editor_box").show();
@@ -70,7 +70,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     this.campobjData = null;
                     this.campDefaults = {};
                     this.allowedUser = ['admin', 'jayadams', 'demo'];
-                    this.campFromName = '';                    
+                    this.campFromName = '';
                     this.states = {
                         "step1": {change: false, sf_checkbox: false, ns_checkbox: false, sfCampaignID: '', nsCampaignID: '', hasResultToSalesCampaign: false, hasResultToNetsuiteCampaign: false, pageconversation_checkbox: false, hasConversionFilter: false},
                         "step2": {"templates": false, htmlText: '', plainText: '', change: false, editorType: ''},
@@ -734,7 +734,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.$("#html_code").click();
                         this.$("textarea#handcodedhtml").val(this.app.decodeHTML(this.states.step2.htmlText, true));
                     }
-                    else if(this.campobjData.editorType == ""){
+                    else if (this.campobjData.editorType == "") {
                         this.$("#use_template").click();
                     }
 
@@ -764,6 +764,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                                     this.$nav.css("width", this.$(".editorpanel").width());
                                     this.$tools.addClass('editor-lefttoolbar-fixed');
                                     this.$editorarea.addClass('editor-panel-fixed');
+                                    this.scrollfixPanel();
                                 } else if (scrollTop <= this.navTop && this.isFixed) {
                                     this.isFixed = 0
                                     this.$nav.removeClass('editor-toptoolbar-fixed');
@@ -788,6 +789,18 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     }, this);
                     this.processScroll();
                     this.$win.on('scroll', this.processScroll);
+                },
+                scrollfixPanel: function () {
+                    $(window).scroll(_.bind(function () {
+                        var scrollTop = this.$win.scrollTop();
+                        var scrollPosition = scrollTop - 395;
+                        console.log(scrollPosition);
+                        if (scrollPosition < 0) {
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
+                        } else {
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollPosition + 'px');
+                        }
+                    }, this));
                 },
                 initStep3: function () {
                     if (this.states.step3.recipientType)
@@ -1008,7 +1021,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                         if (camp_name_input.attr("process-id")) {
                             $(obj.target).addClass("saving");
-                            var campName = camp_name_input.val();                                                        
+                            var campName = camp_name_input.val();
                             $.post(URL, {type: "newName", campName: campName, campNum: this.camp_id})
                                     .done(function (data) {
                                         var camp_json = jQuery.parseJSON(data);
@@ -1059,7 +1072,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         }
                     }
                     obj.stopPropagation();
-                },                
+                },
                 saveStep1: function () {
                     var camp_obj = this;
                     var app = camp_obj.app;
@@ -1082,7 +1095,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             message: camp_obj.app.messages[0].CAMP_subject_empty_error
                         });
                         isValid = false;
-                    }                   
+                    }
                     else if (el.find('#campaign_subject').val().length > 100)
                     {
                         app.showError({
@@ -1233,8 +1246,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
                         defaultReplyToEmail = merge_field_patt.test(this.$('#campaign_reply_to').val()) ? this.$("#campaign_default_reply_to").val() : "";
                         merge_field_patt = new RegExp("{{[A-Z0-9_-]+(?:(\\.|\\s)*[A-Z0-9_-])*}}", "ig");
-                        var subject_field = this.$("#campaign_subject").val();                        
-                                                              
+                        var subject_field = this.$("#campaign_subject").val();
+
                         var fromEmail = this.$('#campaign_from_email').val();//this.$('#campaign_from_email_input').val();
                         var fromEmailMF = merge_field_patt.test(fromEmail) ? this.$('#fromemail_default_input').val() : "";
                         if (proceed !== 0 && (this.states.step1.change || this.camp_id == 0)) {
@@ -1301,7 +1314,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var camp_obj = this;
                     var proceed = -1;
                     var html = "", plain = "";
-                    var post_data = {type: "saveStep2", campNum: this.camp_id,htmlCode:'',plainText:''}
+                    var post_data = {type: "saveStep2", campNum: this.camp_id, htmlCode: '', plainText: ''}
                     var selected_li = this.$(".step2 #choose_soruce li.selected").attr("id");
                     if (selected_li == "html_editor") {
                         html = (this.$(".textdiv").css("display") == "block") ? this.$("#htmlarea").val() : _tinyMCE.get('bmseditor_' + this.wp_id).getContent();
@@ -1309,8 +1322,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         post_data['htmlCode'] = html;
                         post_data['plainText'] = plain;
                         post_data['isCampaignText'] = 'N';
-                                               
-                        
+
+
                     } else if (selected_li == "html_code") {
                         html = this.$("textarea#handcodedhtml").val();
                         post_data['htmlCode'] = html;
@@ -1331,22 +1344,22 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         post_data['htmlCode'] = "";
                     }
                     /*var combineText = post_data['htmlCode'] +  post_data['plainText'];
-                    this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
-                             var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
-                             if (selected_li == "html_editor") {
-                                post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
-                                post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
-                             } else if (selected_li == "html_code") {
-                                 post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
-                             } else if (selected_li == "plain_text") {
-                                 //post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
-                             }else if (selected_li == "html_editor_mee") {
-                                 post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
-                             }                                                             
-                             
-                            },this))
-                    */        
-                    if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined" )) {
+                     this.app.checkIllegalCharacters(combineText,_.bind(function(lettersArray){
+                     var re = new RegExp("["+lettersArray.join("")+"]+","g"); 
+                     if (selected_li == "html_editor") {
+                     post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
+                     post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));   
+                     } else if (selected_li == "html_code") {
+                     post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
+                     } else if (selected_li == "plain_text") {
+                     //post_data['plainText'] = plain.replace(re, _.bind(this.app.replaceCharacaters,this.app));
+                     }else if (selected_li == "html_editor_mee") {
+                     post_data['htmlCode'] = html.replace(re, _.bind(this.app.replaceCharacaters,this.app));
+                     }                                                             
+                     
+                     },this))
+                     */
+                    if ((this.states.editor_change === true || typeof (gotoNext) !== "undefined")) {
                         if (typeof (gotoNext) === "undefined") {
                             this.app.showLoading("Saving Step 2...", this.$el.parents(".ws-content"));
                         }
@@ -1514,8 +1527,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             var selected_fromEmail = '';
                             fromEmailsArray.sort();
                             //if (camp_obj.app.salesMergeAllowed) {
-                              //  fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
-                           // }
+                            //  fromOptions += '<option value="{{BMS_SALESREP.EMAIL}}">{{BMS_SALESREP.EMAIL}}</option>';
+                            // }
                             for (var i = 0; i < fromEmailsArray.length; i++)
                             {
                                 if (fromEmailsArray[i] == defaults_json.fromEmail) {
@@ -1529,13 +1542,13 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             camp_obj.$el.find('#campaign_from_email').append(fromOptions);
                             //console.log(fromOptions);
                             //if (camp_obj.app.salesMergeAllowed) {
-                                camp_obj.$("#campaign_from_email").chosen().change(function (obj) {
-                                    if (obj.target.value === '{{BMS_SALESREP.EMAIL}}') {
-                                        camp_obj.$('#campaign_from_email_default').show();
-                                    } else {
-                                        camp_obj.$('#campaign_from_email_default').hide();
-                                    }
-                                });
+                            camp_obj.$("#campaign_from_email").chosen().change(function (obj) {
+                                if (obj.target.value === '{{BMS_SALESREP.EMAIL}}') {
+                                    camp_obj.$('#campaign_from_email_default').show();
+                                } else {
+                                    camp_obj.$('#campaign_from_email_default').hide();
+                                }
+                            });
                             //}
                             camp_obj.$el.find('#fromemail_default').append(fromOptions);
                             camp_obj.$el.find('#fromemail_default option:contains({{BMS_SALESREP.EMAIL}})').remove();
@@ -2269,7 +2282,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     if (!byPass && !this.copyFromCampaign && (this.states.step2.htmlText || this.states.editor_change) && this.showChangeEditorWarning(target_li)) {
                         return;
                     }
-                    
+
                     this.copyFromCampaign = false;
                     this.$(".step2 #choose_soruce li").removeClass("selected");
                     this.$(".step2 .soruces").hide();
@@ -2306,7 +2319,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     else if (selected_li == "plain_text") {
                         post_editor['editorType'] = 'P';
                     }
-                    if(post_editor['editorType'] &&  post_editor['editorType']!=="P"){
+                    if (post_editor['editorType'] && post_editor['editorType'] !== "P") {
                         this.states.step2.editorType = post_editor['editorType'];
                     }
                     if (post_editor["editorType"] && this.campobjData.editorType != post_editor["editorType"]) {
@@ -2326,11 +2339,19 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
+                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window), html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
                         this.$("#mee_editor").setChange(this.states);
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false, this.$("#area_html_editor_mee"));
+                        this.$el.parents('#workspace').click(function (e) {
+                            if ($(e.target).parents('#mee_editor').length > 0) {
+                                console.log('hit inside');
+                            } else {
+                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
+                            }
+
+                        })
                     }, this));
                 },
                 setTextVersion: function (text) {
@@ -2387,15 +2408,15 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
 
                     this.$(".textdiv").hide();
                 },
-                setEditorHTML: function (tsv, state, xhr) {            
-                    this.app.showLoading(false,this.$el);
+                setEditorHTML: function (tsv, state, xhr) {
+                    this.app.showLoading(false, this.$el);
                     var html_json = jQuery.parseJSON(xhr.responseText);
-                    var htmlText = this.app.decodeJSON(html_json.htmlText);                    
+                    var htmlText = this.app.decodeJSON(html_json.htmlText);
                     if (htmlText) {
-                        this.states.step2.htmlText = htmlText;     
+                        this.states.step2.htmlText = htmlText;
                         if (html_json.editorType == "MEE" || html_json.isEasyEditorCompatible == "Y") {
                             this.$("#html_editor_mee").click();
-                            this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));                            
+                            this.setMEE($('<div/>').html(htmlText).text().replace(/&line;/g, ""));
                         }
                         else {
                             this.$("#html_editor").click();
@@ -4243,63 +4264,63 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     return data;
                 },
                 editFieldsLayout: function () {
-                    var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
-                    var dialog = this.app.showDialog({title:'Subscriber Profile Update',
-                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                              headerEditable:false,                              
-                              bodyCss:{"min-height":dialog_height+"px"},
-                              buttons: {saveBtn: {text: 'Save'}}
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = this.app.showDialog({title: 'Subscriber Profile Update',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        buttons: {saveBtn: {text: 'Save'}}
                     });
-                    var URL = "/pms/list/UpdateSubscriberProfileLayout.jsp?campaignNumber="+this.camp_id+"&origin=EditCampaignOptions.jsp&x=cccjsp&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
-                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"fieldsLayoutIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    var URL = "/pms/list/UpdateSubscriberProfileLayout.jsp?campaignNumber=" + this.camp_id + "&origin=EditCampaignOptions.jsp&x=cccjsp&BMS_REQ_TK=" + this.app.get('bms_token') + "&fromNewUI=true&checksum=" + this.checksum;
+                    var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"fieldsLayoutIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
                     dialog.getBody().html(iframHTML);
-                    this.app.showLoading("Loading Subscriber Profile...",dialog.getBody());
+                    this.app.showLoading("Loading Subscriber Profile...", dialog.getBody());
                     dialog.getBody().find('.fieldsLayoutIframe').load(_.bind(function () {
-                                this.app.showLoading(false,dialog.getBody());
-                                // this.$("#workflowlistsearch #clearsearch").click();
+                        this.app.showLoading(false, dialog.getBody());
+                        // this.$("#workflowlistsearch #clearsearch").click();
 
-                         },this))
-                    dialog.saveCallBack(function(){
+                    }, this))
+                    dialog.saveCallBack(function () {
                         dialog.$(".fieldsLayoutIframe")[0].contentWindow.document.updateSubscriberProfileLayout.submit();
                     });
 
                 },
-                optListSelection: function () {                   
-                    var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
-                    var dialog = this.app.showDialog({title:'Opt-In List Selection',
-                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                              headerEditable:false,                              
-                              bodyCss:{"min-height":dialog_height+"px"},
-                              buttons: {saveBtn: {text: 'Save'}}
+                optListSelection: function () {
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = this.app.showDialog({title: 'Opt-In List Selection',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"},
+                        buttons: {saveBtn: {text: 'Save'}}
                     });
-                    var URL = "/pms/list/DesignateLists.jsp?campaignNumber="+this.camp_id+"&BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true&checksum="+this.checksum;
-                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"optlistiframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    var URL = "/pms/list/DesignateLists.jsp?campaignNumber=" + this.camp_id + "&BMS_REQ_TK=" + this.app.get('bms_token') + "&fromNewUI=true&checksum=" + this.checksum;
+                    var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"optlistiframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
                     dialog.getBody().html(iframHTML);
-                    this.app.showLoading("Loading Opt-In List...",dialog.getBody());
+                    this.app.showLoading("Loading Opt-In List...", dialog.getBody());
                     dialog.getBody().find('.optlistiframe').load(_.bind(function () {
-                                this.app.showLoading(false,dialog.getBody());
-                                // this.$("#workflowlistsearch #clearsearch").click();
+                        this.app.showLoading(false, dialog.getBody());
+                        // this.$("#workflowlistsearch #clearsearch").click();
 
-                         },this))
-                    dialog.saveCallBack(function(){
+                    }, this))
+                    dialog.saveCallBack(function () {
                         dialog.$(".optlistiframe")[0].contentWindow.document.designateLists.submit();
                     });
                 }
                 ,
-                dcItemsDialog:function(){
-                    var dialog_width = $(document.documentElement).width()-60;
-                    var dialog_height = $(document.documentElement).height()-182;
-                    var dialog = this.app.showDialog({title:'Dynamic Content Items',
-                              css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
-                              headerEditable:false,                              
-                              bodyCss:{"min-height":dialog_height+"px"}
+                dcItemsDialog: function () {
+                    var dialog_width = $(document.documentElement).width() - 60;
+                    var dialog_height = $(document.documentElement).height() - 182;
+                    var dialog = this.app.showDialog({title: 'Dynamic Content Items',
+                        css: {"width": dialog_width + "px", "margin-left": "-" + (dialog_width / 2) + "px", "top": "10px"},
+                        headerEditable: false,
+                        bodyCss: {"min-height": dialog_height + "px"}
                     });
-                    var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK="+this.app.get('bms_token')+"&fromNewUI=true";
-                    var iframHTML = "<iframe src=\""+URL+"\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:"+(dialog_height-7)+"px\"></iframe>"
+                    var URL = "/pms/publisher/dyFrame.jsp?BMS_REQ_TK=" + this.app.get('bms_token') + "&fromNewUI=true";
+                    var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
                     dialog.getBody().html(iframHTML);
-                    
+
                 }
 
             });

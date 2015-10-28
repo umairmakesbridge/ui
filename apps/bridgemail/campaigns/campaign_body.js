@@ -80,7 +80,8 @@ function (template,editorView) {
                         this.$nav.addClass('editor-toptoolbar-fixed');
                         this.$nav.css("width",this.$(".editorpanel").width());
                         this.$tools.addClass('editor-lefttoolbar-fixed');                        
-                        this.$editorarea.addClass('editor-panel-fixed');                                                
+                        this.$editorarea.addClass('editor-panel-fixed');
+                        this.scrollfixPanel();
                       } else if (scrollTop <= this.navTop && this.isFixed) {
                         this.isFixed = 0
                         this.$nav.removeClass('editor-toptoolbar-fixed');
@@ -94,7 +95,26 @@ function (template,editorView) {
                 this.processScroll();
                 this.$win.on('scroll', this.processScroll);                                
             },
-            
+            scrollfixPanel: function(){
+                    this.$win.scroll(_.bind(function(){
+                        var scrollTop = this.$win.scrollTop();
+                        //var scrollPosition = scrollTop - 500;
+                        if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                            scrollTop = scrollTop - 775;
+                        }else{
+                            scrollTop = scrollTop - 315;
+                        }
+                        if(scrollTop >= this.navTop){
+                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
+                        }
+//                        if(scrollPosition < 0 ){
+//                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
+//                        }
+                        else{
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
+                        }
+                    },this));
+                },
             initControls:function(){
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});                
                 this.initMergeFields();
@@ -243,11 +263,18 @@ function (template,editorView) {
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                        this.$el.parents('body').click(function(e){
+                               if ($(e.target).parents('#mee_editor').length > 0) {
+                                console.log('hit inside');
+                            } else {
+                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
+                            }
+                        })
                     },this));  
             },
             setTextVersion:function(text){

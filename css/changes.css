@@ -3306,6 +3306,12 @@ text-align:center;
     max-width: 200px;
   white-space: nowrap;
 }
+.trim-text-search{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    max-width: 300px;
+  white-space: nowrap;
+}
 
 .thumbnail .caption p i.ellipsis {
     background: none repeat scroll 0 0 #EFF7FB;
