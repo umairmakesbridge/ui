@@ -401,6 +401,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 $.fn.getMEEHTML = function () {
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
+                                    var parentTd = '';
+                                    if(this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style')!==""){
+                                        parentTd = this.find("#mee-iframe").contents().find(".mainContentHtml").parent().attr('style');
+                                        
+                                    }
                                     mainHTMLELE.find(".bgimage").each(function(){
                                         $(this).attr("mee-style",$(this).attr("style"));
                                         $(this).removeAttr("style");
@@ -413,7 +418,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         $(this).attr("style",$(this).attr("mee-style"));
                                         $(this).removeAttr("mee-style");
                                     });
-                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
+                                    
+                                    var outputHTML = "<table style='width:" + emailWidth + "' align='center' class='table600' width='"+parseFloat(emailWidth)+"' ><tr><td  data-bgcolor='"+pageBackgroundColor+"' style='width: 100%;"+parentTd+"outline:none;' width='"+parseFloat(emailWidth)+"' id='__OUTERTD'><!-- MEE_DOCUMENT --><div>"+cleanedupHTML+"</div></td></tr></table>"
                                     
                                     var header_section = this.find("#mee-iframe").contents().find("head").clone()
                                     header_section.find(".system").remove();
@@ -429,9 +435,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var htmlOBJ = $(html);
                                     var outerTD = htmlOBJ.find("#__OUTERTD");
                                     var innerHTML = outerTD.length? $.trim(outerTD.html()) : html;
+                                    var outerCss = outerTD.attr('style');
                                     //get background color of body
                                     pageBackgroundColor = outerTD.length ?outerTD.attr("data-bgColor"):"#fff"; 
                                     emailWidth = options.landingPage? "100%":outerTD.attr("width");
+                                    this.find('#mee-iframe').contents().find('.mainContentHtmlGrand').attr('style',outerCss);
                                     if(!emailWidth){
                                         var mainTable = this.find("#mee-iframe").contents().find(".mainTable");
                                         emailWidth = parseFloat(mainTable.css("width"));
@@ -3864,7 +3872,39 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
                                                             var currentNode = tiny_editor_selection.getNode();
+                                                           
                                                             isElementClicked = false;
+                                                             $(editor.bodyElement).parents('body').find('.mce-floatpanel').removeClass('fixed-panel');
+                                                            var toolbar = $(editor.bodyElement).parents('body').find('.mce-floatpanel');
+                                                            $.each(toolbar,function(key,val){
+                                                                if($(val).css('display')!=='none'){
+                                                                    
+                                                                    $(val).css({'width':parseInt(myElement.find('.editortoolbar').width())-9+'px','left':'0px'});
+                                                                    var scrollTop = options.parentWindowobj.scrollTop();
+                                                                    var currentWindowObj = options.parentWindowobj; 
+                                                                    if(currentWindowObj.hasClass('modal-body')){
+                                                                       if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                                                                           var scrollPosition = scrollTop - 775;
+                                                                       }else if(currentWindowObj.find('.logpanel_box').length > 0){
+                                                                           scrollPosition = scrollTop - 410;
+                                                                       }
+                                                                       else{
+                                                                                scrollPosition = scrollTop - 315;
+                                                                            } 
+                                                                    }else{
+                                                                        var scrollPosition = scrollTop - 395;
+                                                                    }
+                                                                    
+                                                                    //console.log(scrollPosition);
+                                                                    
+                                                                    if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
+                                                                              $(val).css({top:scrollPosition+"px","left":"0"});
+                                                                            }else{
+                                                                               $(val).css({top:"0px","left":"0"}); 
+                                                                            }
+                                                                    $(val).addClass('fixed-panel');
+                                                                }
+                                                            })
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
                                                                 editor.selection.select(selectedLinkFromTinyMCE);
                                                                 var selected_element_range = meeIframeWindow.tinyMCE.activeEditor.selection.getRng();
@@ -4072,8 +4112,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                         icon: false,
                                                         menu: [{text:"Personal Fields", menu:basicTagsGlobal,_editor:editor},{text:"Custom Fields", menu:customTagsGlobal,_editor:editor},{text:"Link Fields", menu:linksTagsGlobal,_editor:editor}],
                                                         onPostRender: function () {
-
-                                                        }
+                                                                    
+                                                        },
                                                     });
                                                 },
                                                 //theme_modern_buttons2: "exapmle Mybutton",
@@ -5501,7 +5541,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         "left": left + "px",
                                         "top": top + "px"
                                     }).show();
-                                    console.log("left:" + left + "px, top:" + top + "px");
+                                    //console.log("left:" + left + "px, top:" + top + "px");
                                 }
                                 myElement.on("click", "i.newwin", function () {
                                     var url = $(this).parent().attr("href");
@@ -5863,6 +5903,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,
                         _app: this.app,
+                        parentWindowobj:this.options.parentWindow,
                         pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,
                         OnDropElementOnBuildingBlock: function (args, callBack) {

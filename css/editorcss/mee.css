@@ -3073,7 +3073,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     background: none repeat scroll 0 0 #FFFFFF;
     border: 2px solid #FFFFFF;
     border-radius: 0 0 2px 2px; 
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     width: 100%;
     -webkit-border-radius: 2px 2px;
     -moz-border-radius: 2px 2px;

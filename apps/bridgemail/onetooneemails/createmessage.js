@@ -276,11 +276,18 @@ function (template,contactsView) {
                      this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());       
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:373,left:0}, _el:this.$("#mee_editor"), html:''
-                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,isOTOFlag:true,isSaveHide:true});                                    
+                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,parentWindow:this.$el.parents(".modal-body"),isOTOFlag:true,isSaveHide:true});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.dialog.getBody()); 
+                        this.$el.parents('body').click(function(e){
+                                if ($(e.target).parents('#mee_editor').length > 0) {
+                                console.log('hit inside');
+                            } else {
+                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
+                            }
+                        })
                     },this));  
                 },
                 setMEE:function(html){
@@ -312,6 +319,7 @@ function (template,contactsView) {
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');                                                
                             this.$nav.css("top","60px");this.$tools.css("top","60px");
+                            this.scrollfixPanel();
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
                             this.$nav.removeClass('editor-toptoolbar-fixed');
@@ -325,6 +333,20 @@ function (template,contactsView) {
                     },this);
                     this.processScroll();
                     this.$win.on('scroll', this.processScroll);                                
+                },
+             scrollfixPanel: function(){
+                    this.$win.scroll(_.bind(function(){
+                        var scrollTop = this.$win.scrollTop();
+                        //var scrollPosition = scrollTop - 500;
+                        var scrollTop = this.$win.scrollTop();
+                        var scrollPosition = scrollTop - 410;
+                        if(scrollPosition < 0 ){
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
+                        }else{
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollPosition+'px');
+                        }
+                        
+                    },this));
                 },
              sendEmail : function(){
                     var isValid = true;
