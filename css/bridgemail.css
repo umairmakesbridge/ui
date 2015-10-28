@@ -14948,6 +14948,9 @@ a.bayshore-toggle i {
     line-height: 20px;
     margin: 8px 0 0;
 }
+.summary-chart .tag-chart ul li strong{
+    float: none;    
+}   
 
 .summary-chart ul li em{
     float: right;

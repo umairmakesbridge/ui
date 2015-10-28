@@ -51,6 +51,10 @@ function (template,app) {
                     checkboxClass: 'checkpanelinput',
                     insert: '<div class="icheck_line-icon"></div>'
               });
+              
+              if (this.app.get("isFromCRM") && this.app.get("isFromCRM").toLowerCase() == "y") {
+                 this.$(".filter_pop").css("top","34%");
+              }
                 
             },
             applyFilters:function(){

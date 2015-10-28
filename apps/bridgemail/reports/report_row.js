@@ -969,15 +969,15 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }
                     }
                 },
-                getCampaignsFromNurtureTrack: function (messages) {
+                getCampaignsFromNurtureTrack: function (messages, loadCampaigns) {
                     var _grid = this.$("#_grid tbody");
                     _grid.children().remove();
                     var _maxWidth = this.$(".col1 .template-container").width() * .5;
-                    var checkSumArray = [];                    
-                    var campNums = $.map(messages, function (el) {
-                        checkSumArray.push(el[0]["campNum.checksum"]);
+                    this.checkSumArray = [];                    
+                    var campNums = $.map(messages, _.bind(function (el) {
+                        this.checkSumArray.push(el[0]["campNum.checksum"]);
                         return el[0]["campNum.encode"];
-                    }).join(",");
+                    },this)).join(",");
                     this.app.showLoading("Loading Messages...", this.$(".parent-container"));
                     var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=list_csv";
                     var post_data = {campNum_csv: campNums};
@@ -993,9 +993,9 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.campArray.push(new Backbone.Model(val[0]));
                         }, this);
                         var order_no = 1;
-                        for(var i=0;i<checkSumArray.length;i++){
+                        for(var i=0;i<this.checkSumArray.length;i++){
                             _.each(this.campArray, function (val, index) {
-                                if(checkSumArray[i]==val.get("campNum.checksum")){
+                                if(this.checkSumArray[i]==val.get("campNum.checksum")){
                                     val.set("trackId.encode", this.modelArray[0].get("trackId.encode"));
                                     val.set("order", order_no);
                                     order_no = order_no + 1;
@@ -1004,13 +1004,18 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 }                                
                             }, this);
                         }
-                        this.app.showLoading("Creating Chart...", this.$(".cstats"));
-                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                            this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
-                            this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
-                            this.chartPage.$el.css({"width": "100%", "height": "280px"});
-                            this.createNurtureTrackChart();
-                        }, this));
+                        if(loadCampaigns){
+                            this.loadNTSummary();
+                        }
+                        else{
+                            this.app.showLoading("Creating Chart...", this.$(".cstats"));
+                            require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'},colors: ['#f6e408', '#27316a', '#559cd6', '#03d9a4']});
+                                this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
+                                this.chartPage.$el.css({"width": "100%", "height": "280px"});
+                                this.createNurtureTrackChart();
+                            }, this));
+                        }
 
                     }, this));
                 },
@@ -1066,8 +1071,18 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         this.$(".total-count").html('<strong class="badge">' + 0 + '</strong> message selected');
                     }
                     this.saveSettings();
+                },                
+                loadNurtureTrackSummary:function(){
+                    if (this.campArray){
+                        this.loadNTSummary();
+                    }
+                    else{
+                        if (this.modelArray[0].get("messages")) {
+                            this.getCampaignsFromNurtureTrack(this.modelArray[0].get("messages")[0],true);
+                        }
+                    }
                 },
-                loadNurtureTrackSummary: function () {
+                loadNTSummary: function () {
                     if (this.campArray.length) {
                         this.$(".add-msg-report").hide();
                         this.$(".bmsgrid").show();
@@ -1082,64 +1097,66 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         var _grid = this.$("#_grid tbody");
                         _grid.children().remove();
                         var order_no = 1;
+                        for(var i=0;i<this.checkSumArray.length;i++){
                         _.each(this.campArray, function (val, index) {
-                            var msgRow = new this.trackRow({model: val, sub: this, showSummaryChart: true});
-                            _grid.append(msgRow.$el);
-                            this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
-                            var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
-                            var campNum = val.get("campNum.encode");
-                            var post_data = {campNum: campNum, toDate: this.toDate, fromDate: this.fromDate}
-                            $.post(URL, post_data).done(_.bind(function (sJson) {
-                                var summary_json = jQuery.parseJSON(sJson);
-                                if (summary_json[0] == "err") {
-                                    this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
-                                    return false;
-                                }
-                                if (summary_json.count !== "0") {
-                                    require(["reports/campaign_bar_chart"], _.bind(function (chart) {
-                                        var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
-                                        var categories = [];
+                            if(this.checkSumArray[i]==val.get("campNum.checksum")){
+                                var msgRow = new this.trackRow({model: val, sub: this, showSummaryChart: true});
+                                _grid.append(msgRow.$el);
+                                this.app.showLoading("Loading Summary Chart...", this.$("#chart-" + val.get("campNum.checksum")));
+                                var URL = "/pms/io/campaign/getCampaignSummaryStats/?BMS_REQ_TK=" + this.app.get("bms_token") + "&type=summaryDailyBreakUp";
+                                var campNum = val.get("campNum.encode");
+                                var post_data = {campNum: campNum, toDate: this.toDate, fromDate: this.fromDate}
+                                $.post(URL, post_data).done(_.bind(function (sJson) {
+                                    var summary_json = jQuery.parseJSON(sJson);
+                                    if (summary_json[0] == "err") {
+                                        this.app.showAlert(summary_json[1], this.$el.parents(".ws-content.active"));
+                                        return false;
+                                    }
+                                    if (summary_json.count !== "0") {
+                                        require(["reports/campaign_bar_chart"], _.bind(function (chart) {
+                                            var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
+                                            var categories = [];
 
-                                        this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                            , openCount: 0, sentCount: 0, socialCount: 0};
+                                            this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
+                                                , openCount: 0, sentCount: 0, socialCount: 0};
 
-                                        _.each(summary_json.summaries[0], function (sVal) {
-                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
-                                            sentData.push(parseInt(sVal[0].sentCount));
-                                            openData.push(parseInt(sVal[0].openCount));
-                                            viewData.push(parseInt(sVal[0].pageViewsCount));
-                                            clickCount.push(parseInt(sVal[0].clickCount));
-                                            socialData.push(parseInt(sVal[0].socialCount));
-                                            bounceData.push(parseInt(sVal[0].bounceCount));
-                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
-                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
-                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
-                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
-                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        }, this);
-                                        var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
-                                        this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                                sentData.push(parseInt(sVal[0].sentCount));
+                                                openData.push(parseInt(sVal[0].openCount));
+                                                viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                clickCount.push(parseInt(sVal[0].clickCount));
+                                                socialData.push(parseInt(sVal[0].socialCount));
+                                                bounceData.push(parseInt(sVal[0].bounceCount));
+                                                //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
+                                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                            }, this);
+                                            var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
+                                            this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
 
-                                        //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
-                                        this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
-                                        this.chartPage.$el.css({"width": "100%", "height": "250px"});
-                                        this.chartPage.createChart(_data);
-                                        _.each(this.chart_data, function (v, key) {
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                            this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
-                                        }, this);
-                                    }, this));
-                                }
-                                else {
-                                    this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for <i>Message ' + order_no + '</i></p></div>');
-                                }
-                                order_no = order_no + 1;
-                            }, this));
-
+                                            //this.chartPage = new chart({page: this, legend: {position: "none"}, isStacked: true, vAxisLogScale: vAxisLogScale,colors:['#dfdfdf','#f6e408','#559cd6','#27316a','#03d9a4','#f71a1a']});
+                                            this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
+                                            this.chartPage.$el.css({"width": "100%", "height": "250px"});
+                                            this.chartPage.createChart(_data);
+                                            _.each(this.chart_data, function (v, key) {
+                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
+                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                            }, this);
+                                        }, this));
+                                    }
+                                    else {
+                                        this.$("#chart-" + val.get("campNum.checksum")).html('<div class="loading nodata"><p style="background:none">No data found for <i>Message ' + val.get("order") + '</i></p></div>');
+                                    }
+                                    order_no = order_no + 1;
+                                }, this));
+                             }
                         }, this);
-
+                       }   
                     }
 
                 },
