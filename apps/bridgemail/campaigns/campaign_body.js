@@ -104,7 +104,8 @@ function (template,editorView) {
                         }else{
                             scrollTop = scrollTop - 315;
                         }
-                        if(scrollTop >= this.navTop){
+                        
+                        if(scrollTop >= (this.navTop -220)){
                              this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
                         }
 //                        if(scrollPosition < 0 ){
@@ -113,6 +114,7 @@ function (template,editorView) {
                         else{
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
                         }
+                        //console.log('ScrollTop : '+ scrollTop + ' navTop ' + (this.navTop -220));
                     },this));
                 },
             initControls:function(){
@@ -269,11 +271,9 @@ function (template,editorView) {
                         this.initScroll();
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                         this.$el.parents('body').click(function(e){
-                               if ($(e.target).parents('#mee_editor').length > 0) {
-                                console.log('hit inside');
-                            } else {
+                               if ($(e.target).parents('#mee_editor').length === 0) {
                                 MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
-                            }
+                            } 
                         })
                     },this));  
             },

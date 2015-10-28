@@ -2345,10 +2345,8 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.initScroll();
                         this.app.showLoading(false, this.$("#area_html_editor_mee"));
                         this.$el.parents('#workspace').click(function (e) {
-                            if ($(e.target).parents('#mee_editor').length > 0) {
-                                console.log('hit inside');
-                            } else {
-                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
+                            if ($(e.target).parents('#mee_editor').length === 0) {
+                                 MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
                             }
 
                         })
