@@ -4757,7 +4757,9 @@ body > .draggableControl{
 .droppedFormBlock i.icon,.signupform{background:url("../images/drop-form1.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0) !important;}
 .draggableControl.disabled {opacity: 0.4;}
 /* ================================================End editorstyle.css================================================ */
-
+.editor-panel-zero-padding{
+    padding: 10px 0 !important;
+}
 
 
 

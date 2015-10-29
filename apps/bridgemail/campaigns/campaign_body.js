@@ -99,22 +99,25 @@ function (template,editorView) {
                     this.$win.scroll(_.bind(function(){
                         var scrollTop = this.$win.scrollTop();
                         //var scrollPosition = scrollTop - 500;
+                        
                         if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
                             scrollTop = scrollTop - 775;
                         }else{
                             scrollTop = scrollTop - 315;
                         }
                         
-                        if(scrollTop >= (this.navTop -220)){
+                        if(scrollTop >= (this.navTop - 240) && scrollTop > 0){
+                            this.$editorarea.removeClass('editor-panel-zero-padding');
                              this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
+                        }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
+                            this.$editorarea.addClass('editor-panel-zero-padding');
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','40'); 
                         }
-//                        if(scrollPosition < 0 ){
-//                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
-//                        }
                         else{
+                            this.$editorarea.addClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
                         }
-                        //console.log('ScrollTop : '+ scrollTop + ' navTop ' + (this.navTop -220));
+                        console.log('ScrollTop : '+ scrollTop + ' navTop ' + (this.navTop -220));
                     },this));
                 },
             initControls:function(){
