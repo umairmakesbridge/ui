@@ -156,6 +156,7 @@ define(['text!reports/html/reportflow.html','reports/report_row'],
                         if(val.fromDate){
                             report_obj['fromDate'] = val.fromDate;
                         }
+                        report_obj['dateRange'] = val.dateRange;    
                         report_json.push(report_obj);
                     },this);
                                         

@@ -42,6 +42,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     this.dataArray = [];
                     this.fromDate = null;
                     this.toDate = null;
+                    this.dateRange = 0;
                     this.loadReport = this.options.loadReport;
                     this.fromClick=false;
                     this.row_obj = this.options.row_obj;
@@ -105,9 +106,34 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if(this.row_obj && this.row_obj.toDate && this.row_obj.fromDate){
                         this.fromDate = this.row_obj.fromDate;
                         this.toDate = this.row_obj.toDate;
-                        var fromDate = moment($.trim(this.fromDate), 'MM-DD-YYYY');
-                        var toDate = moment($.trim(this.toDate), 'MM-DD-YYYY');
-                        this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        this.dateRange = this.row_obj.dateRange;
+                        if(!this.dateRange){
+                            var fromDate = moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                            var toDate = moment($.trim(this.toDate), 'MM-DD-YYYY');
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        }
+                        else {
+                            var currentDate =  moment(new Date());
+                            var fromDate =  null;
+                            var toDate = moment(new Date());
+                            if(this.dateRange==1){
+                                fromDate = currentDate;                                                                
+                                this.$(".ui-daterangepicker-Today").addClass("ui-state-active");
+                            }
+                            else if(this.dateRange==2){                               
+                                fromDate = currentDate.subtract(1, 'days');                                
+                                this.$(".ui-daterangepicker-Yesterday").addClass("ui-state-active");
+                            }
+                            else if(this.dateRange==7){                                
+                                fromDate = currentDate.subtract(7, 'days');                                
+                                this.$(".ui-daterangepicker-Last7days").addClass("ui-state-active");
+                            }
+                            else if(this.dateRange==30){                                
+                                fromDate = currentDate.subtract(30, 'days');                         
+                                this.$(".ui-daterangepicker-Last30Days").addClass("ui-state-active");
+                            }                            
+                            this.$("#daterange").val(fromDate.format("M/D/YYYY")+" - "+toDate.format("M/D/YYYY"));
+                        }
                     }
                     this.loadRows();
 
@@ -154,6 +180,21 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                 setDateRangeLi: function (obj) {
                     var target = $.getObj(obj, "li");
                     if (!target.hasClass("ui-daterangepicker-dateRange")) {
+                        var anchorTag = target.find("a");
+                        if(anchorTag.attr("datestart")=="yesterday"){
+                            this.dateRange = 2;
+                        } else if(anchorTag.attr("datestart")=="today"){
+                            this.dateRange = 1;
+                        }
+                        else if(anchorTag.attr("datestart")=="today-7days"){
+                            this.dateRange = 7;
+                        }
+                        else if(anchorTag.attr("datestart")=="Today-30"){
+                            this.dateRange = 30;
+                        }
+                        else{
+                            this.dateRange = 0;
+                        }
                         this.setDateRange();
                     }
                 }, /*---------- End Calender functions---------------*/
@@ -1298,13 +1339,15 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage = new chart({page: this, xAxis: {label: 'category'}, yAxis: {label: 'Count'}});
                             this.$(".col-2 .campaign-chart").html(this.chartPage.$el);
                             this.chartPage.$el.css({"width": "100%", "height": "280px"});
+                            var loadFirstTime = this.loadReport;
                             this.createTagsChart();
                             if (this.toDate && this.fromDate) {
+                                this.loadReport = loadFirstTime;
                                 this.setDateRange();                                
                             }
                             else{
                                 this.$(".chart-types,.tagsexpand").hide();
-                                this.$(".tagsexpand").attr("data-expand","0").html("Expand Tags");
+                                this.$(".tagsexpand").attr("data-expand","0").html("View Growth Stats");
                             }
                         }, this));
                         
@@ -1388,12 +1431,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                     if(linkObj.attr("data-expand")=="0"){
                         this.loadTagsSummary();
                         linkObj.attr("data-expand","1");
-                        linkObj.html("Collapse Tags").attr("data-original-title","Click to collapse tags details");
+                        linkObj.html("Hide Growth Stats").attr("data-original-title","Click to hide growth details");
                     }
                     else{
                         this.drawTagsInOne();
                         linkObj.attr("data-expand","0");
-                        linkObj.html("Expand Tags").attr("data-original-title","Click to expand tags details");
+                        linkObj.html("View Growth Stats").attr("data-original-title","Click to view growth details");
                     }
                 },
                 loadTagsSummary: function () {
