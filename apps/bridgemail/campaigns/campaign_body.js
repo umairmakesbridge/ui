@@ -117,7 +117,7 @@ function (template,editorView) {
                             this.$editorarea.addClass('editor-panel-zero-padding');
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
                         }
-                        console.log('ScrollTop : '+ scrollTop + ' navTop ' + (this.navTop -220));
+                      
                     },this));
                 },
             initControls:function(){
@@ -273,11 +273,6 @@ function (template,editorView) {
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.$("#area_html_editor_mee")); 
-                        this.$el.parents('body').click(function(e){
-                               if ($(e.target).parents('#mee_editor').length === 0) {
-                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
-                            } 
-                        })
                     },this));  
             },
             setTextVersion:function(text){
