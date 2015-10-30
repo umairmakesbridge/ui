@@ -5521,7 +5521,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var left_minus = 15;      //static space to minus to show dialog on exact location
                                     var ele_offset = _ele.offset();
                                     var ele_height = _ele.height();
-                                    var top = ele_offset.top + 74 + topPlus;
+                                    var currentWindowObj = options.parentWindowobj; 
+                                    if(currentWindowObj.find('.logpanel_box').length > 0){
+                                             var top = ele_offset.top + 94 + topPlus;
+                                    }else{
+                                        var top = ele_offset.top + 74 + topPlus;
+                                    }
+                                    
                                     var left = ele_offset.left + 297 + leftPlus;
                                     var url_string = "", showClass = "disabled";
                                     url = _ele.attr("href");

@@ -282,11 +282,9 @@ function (template,contactsView) {
                         this.initScroll();
                         this.app.showLoading(false,this.dialog.getBody()); 
                         this.$el.parents('body').click(function(e){
-                                if ($(e.target).parents('#mee_editor').length > 0) {
-                                console.log('hit inside');
-                            } else {
+                                if ($(e.target).parents('#mee_editor').length === 0) {
                                 MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
-                            }
+                            } 
                         })
                     },this));  
                 },
