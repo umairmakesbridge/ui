@@ -10253,3 +10253,10 @@ sup.beta {
 .webstats-row .radiopanelinput.checked{
     background-color:#94cf1e;
 }
+.tagsexpand{
+    padding-left: 26px;
+    background:url("../img/b_show.png") no-repeat center left;
+}
+.tagsexpand.stats-hide{
+    background:url("../img/b_hide.png") no-repeat center left;
+}
