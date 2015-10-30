@@ -794,7 +794,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     $(window).scroll(_.bind(function () {
                         var scrollTop = this.$win.scrollTop();
                         var scrollPosition = scrollTop - 395;
-                        console.log(scrollPosition);
+                        
                         if (scrollPosition < 0) {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
                         } else {
@@ -2344,12 +2344,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false, this.$("#area_html_editor_mee"));
-                        this.$el.parents('#workspace').click(function (e) {
-                            if ($(e.target).parents('#mee_editor').length === 0) {
-                                 MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
-                            }
-
-                        })
+                        
                     }, this));
                 },
                 setTextVersion: function (text) {

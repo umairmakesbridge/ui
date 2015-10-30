@@ -281,11 +281,7 @@ function (template,contactsView) {
                         this.setMEE(_html);
                         this.initScroll();
                         this.app.showLoading(false,this.dialog.getBody()); 
-                        this.$el.parents('body').click(function(e){
-                                if ($(e.target).parents('#mee_editor').length === 0) {
-                                MEEPage._$el.find('#mee-iframe').contents().find('.fixed-panel').hide();
-                            } 
-                        })
+                        
                     },this));  
                 },
                 setMEE:function(html){
