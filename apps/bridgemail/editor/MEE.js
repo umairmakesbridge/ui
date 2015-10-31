@@ -3884,7 +3884,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     var currentWindowObj = options.parentWindowobj; 
                                                                     if(currentWindowObj.hasClass('modal-body')){
                                                                        if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           var scrollPosition = scrollTop - 775;
+                                                                            var topaccordian = (parseInt(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(currentWindowObj.find('.selection-boxes').outerHeight()) + 115 + 55); // h3 + padding
+                                                                            var scrollPosition = scrollTop - topaccordian;
                                                                        }else if(currentWindowObj.find('.logpanel_box').length > 0){
                                                                            scrollPosition = scrollTop - 410;
                                                                        }

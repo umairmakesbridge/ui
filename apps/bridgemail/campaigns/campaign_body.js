@@ -101,7 +101,8 @@ function (template,editorView) {
                         //var scrollPosition = scrollTop - 500;
                         
                         if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                            scrollTop = scrollTop - 775;
+                            var topaccordian = (parseInt(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(this.$el.parents(".modal-body").find('.selection-boxes').outerHeight()) + 115 + 55); // h3 + padding
+                            var scrollTop = scrollTop - topaccordian;
                         }else{
                             scrollTop = scrollTop - 315;
                         }
@@ -111,7 +112,7 @@ function (template,editorView) {
                              this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
                         }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
                             this.$editorarea.addClass('editor-panel-zero-padding');
-                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','40'); 
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','20px'); 
                         }
                         else{
                             this.$editorarea.addClass('editor-panel-zero-padding');
