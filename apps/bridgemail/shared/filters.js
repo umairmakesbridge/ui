@@ -43,6 +43,7 @@
       this.offsetLengthSubList = '';
       this.offsetLengthLists = '';
       this.isfilterfound = false;
+      this.ajaxrequest = null;
       // Objects
       this.listsObj = {};
       this.webformsObj = {};
@@ -615,6 +616,7 @@
           filter_html += ' <div class="btn-group "><select class="member-box"><option value="Y">Member</option><option value="N">Non Member</option></select></div> <em class="text">of the selected list(s).</em>'
           filter_html += '</div>'
           filter_html += '</div>'          
+          filter_html += '<div class="nolist" style="display:none;"><p class="notfound" style="text-align: left;margin: 0 5px 0 10px;">Selected list has been deleted.</p></div>'          
           filter_html += '<div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_subscriber_lists"><strong class="badge">0</strong><span>lists found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search"></div></h2></div><div class="target-listing"  style="margin-top:9px">'
           filter_html += '<div class="bmsgrid" style="overflow:inherit!important;"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div><div class="bDiv" style="height: 320px;"><table cellpadding="0" cellspacing="0" width="100%" id="__list_grid" class="listsgrid '+filterClass+'" ><tbody>'
           filter_html += '</tbody></table></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></div>'
@@ -694,7 +696,7 @@
             var URL = "/pms/io/list/getListData/?BMS_REQ_TK="+this.options.app.get('bms_token')+"&type=batches&offset="+self.offsetLengthLists;
         }
         
-       $.ajax({
+      self.ajaxrequest  = $.ajax({
             url: URL,
             dataType: 'json',
 //            async: true,
@@ -717,6 +719,7 @@
        this.listsObj['searchText'] = txt;
         this.offsetLengthLists =0;
         this.loadLists(this.offsetLengthLists,filter,this.listsObj.params,this.listsObj['searchText']);
+        filter.find('.nolist').hide();
     }
     ,clearSearchList: function(filter){
         this.offsetLengthLists =0;
@@ -773,7 +776,7 @@
          }
       filter.find(".match-box").chosen({disable_search: "true",width:"100px"}).change(function(){
           $(this).val($(this).val())
-          $(this).trigger("chosen:updated")
+          $(this).trigger("chosen:updated");
       })
       
       
@@ -788,6 +791,7 @@
           /* ICHECK BY ABDULLAH */
            if(filter.find('#__list_grid .check-list').iCheck){
             $(event.target).parents("tr").find(".check-list").iCheck('check');
+            filter.find('.nolist').hide();
         }
         
         
@@ -839,7 +843,12 @@
            if(list_arr[0] && filter.find('#__list_grid input[list_checksum='+list_arr[0]+']').length == 0){
                this.options.app.showLoading("Loading Lists...", filter.find('#__list_grid'));
                     filter.find('#__list_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
-               self.loadLists(self.offsetLengthLists,filter,params)
+               if(self.offsetLengthLists !== "-1"){
+                     self.loadLists(self.offsetLengthLists,filter,params)
+                }else{
+                    self.options.app.showLoading(false, filter.find('#__list_grid'));
+                    filter.find('.nolist').show();
+                }
            }else{
                
                $.each(list_arr,function(k,v){
