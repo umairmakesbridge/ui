@@ -21,6 +21,7 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                // this.optionObj = {};
                                 this.app = this.options.app;
                                 this.option = this.options;
+                                this.CloseCall = null;
                                 //this.optionObj[this.options.wrapDiv] = this.option;
                                 
 				this.render();
@@ -166,7 +167,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                            if(this.option.closeCallBack){
                                this.option.closeCallBack();
                            }
-                           
+                           if(this.CloseCall){
+                               this.CloseCall();
+                           }
                            if(this.app.dialogArray.length>1){
                             this.showPrevious();
                            
@@ -179,6 +182,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                                }
                            },100);                           
                           }  
+                        },
+                        closeDialogCallBack : function(closeCall){
+                            this.CloseCall = closeCall;
                         },
                         getBody:function(){
                             return this.$(".modal-body");

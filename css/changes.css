@@ -10260,3 +10260,8 @@ sup.beta {
 .tagsexpand.stats-hide{
     background:url("../img/b_hide.png") no-repeat center left;
 }
+.nolist{
+    background: #eff7fb none repeat scroll 0 0;
+    clear: both;
+    overflow: hidden;
+}

@@ -315,10 +315,19 @@ define(['text!target/html/target.html', 'bms-filters', 'bms-tags', 'jquery.bmsgr
                             if (filters) {
                                 filters.loadFilters(selected_target);
                             }
+                            camp_obj.dialog.$el.find('.btn-close').click(function(){
+                                //camp_obj.closeCallBack();
+                            })
 
                         }
 
                     });
                 },
+                closeCallBack:function(){
+                    var filters = this.dialog.$el.find("#c_c_target").data("filters")
+                    if(filters.ajaxrequest){
+                        filters.ajaxrequest.abort();
+                    }
+            }
             });
         });

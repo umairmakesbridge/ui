@@ -135,11 +135,12 @@ function (template) {
                               bodyCss:{"min-height":dialog_height+"px"},
                               headerIcon : 'targetw',
                               wrapDiv : 'edit-target-view',
-                              buttons: {saveBtn:{text:'Save Target'} }                                                                           
+                              buttons: {saveBtn:{text:'Save Target'} },
+                              
                         });         
                     this.app.showLoading("Loading...",dialog.getBody());                                  
                       require(["target/target"],function(targetPage){                                     
-                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable,camp_parent_obj:camp_parent_obj});
+                           var mPage = new targetPage({camp:self,target_id:t_id,dialog:dialog,editable:isEditable,camp_parent_obj:camp_parent_obj,});
                            var dialogArrayLength = self.app.dialogArray.length; // New Dialog
                            dialog.getBody().append(mPage.$el);
                            mPage.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
@@ -148,6 +149,7 @@ function (template) {
                            self.app.dialogArray[dialogArrayLength-1].currentView = mPage; // New dialog
                             dialog.$el.find('#target_name').focus();    
                            dialog.saveCallBack(_.bind(mPage.saveTargetFilter,mPage));
+                           dialog.closeDialogCallBack(_.bind(mPage.closeCallBack,mPage));
                           //Autobots
                           if(self.options.type == "autobots_listing"){
                               dialog.$el.find('.modal-footer').find('.btn-save').removeClass('btn-green').addClass('btn-blue');
@@ -157,6 +159,7 @@ function (template) {
                       });
                        
                 },
+                
                 copyTarget: function(ev) {
                     var target_id = $(ev.target).data('id');
                     var curview = this;
