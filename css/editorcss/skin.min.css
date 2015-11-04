@@ -1661,6 +1661,7 @@ div.mce-tinymce-inline {
 .mce-i-alignleft {background-position: -210px -30px;}
 .mce-i-aligncenter {background-position: -240px -30px;}
 .mce-i-alignright {background-position: -270px -30px;}
+.mce-i-alignjustify {background-position: -300px -30px;}
 
 .mce-i-bullist {background-position: -330px -30px;}
 .mce-i-numlist {background-position: -360px -30px;}

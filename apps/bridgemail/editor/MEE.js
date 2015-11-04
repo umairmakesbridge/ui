@@ -3855,7 +3855,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 skin_url: options._app.get("path") + "css/editorcss",
                                                 plugins: 'textcolor table anchor autolink advlist paste',
                                                 //script_url: '/scripts/libs/tinymce/tinymce.min.js',
-                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright | bullist numlist",
+                                                toolbar1: " LinksButton | personalizeMenu | fontselect fontsizeselect | foreTextColor | backTextColor | bold italic underline | subscript superscript | alignleft aligncenter alignright alignjustify | bullist numlist",
                                                 fontsize_formats: "8pt 10pt 12pt 13pt 14pt 15pt 16pt 18pt 20pt 22pt 24pt 26pt 28pt 30pt 32pt 36pt",
                                                 setup: function (editor) {
                                                     if (meeIframe.find("#" + editor.id).data('tinymce') == undefined) {
@@ -3892,7 +3892,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                        else{
                                                                                 scrollPosition = scrollTop - 315;
                                                                             } 
-                                                                    }else{
+                                                                    }else if(myElement.parents('body').find('.landing_top').length > 0){
+                                                                           scrollPosition = scrollTop - parseInt(myElement.parents('body').find('.landing_top').outerHeight()+175)
+                                                                       }
+                                                                    else{
                                                                         var scrollPosition = scrollTop - 395;
                                                                     }
                                                                     
