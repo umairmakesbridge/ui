@@ -454,7 +454,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         _html = this.landinpageHTML;
                     }
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), html:''
+                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),html:''
                             ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
                             changeTemplateClick: _.bind(this.templatesDialog,this)});                                    
                         this.$("#mee_editor").setChange(this);                
@@ -511,7 +511,8 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                             this.$nav.addClass('editor-toptoolbar-fixed');
                             this.$nav.css("width",this.$(".editorpanel").width());
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
-                            this.$editorarea.addClass('editor-panel-fixed');                        
+                            this.$editorarea.addClass('editor-panel-fixed');  
+                            this.scrollfixPanel();
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
                             this.$nav.removeClass('editor-toptoolbar-fixed');
@@ -536,6 +537,18 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     },this);
                     this.processScroll();
                     this.$win.on('scroll', this.processScroll);                                
+                },
+                scrollfixPanel: function () {
+                    $(window).scroll(_.bind(function () {
+                        var scrollTop = this.$win.scrollTop();
+                        var scrollPosition = scrollTop - parseInt(this.$('.landing_top').outerHeight()+175);
+                        
+                        if (scrollPosition < 0) {
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
+                        } else {
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', scrollPosition + 'px');
+                        }
+                    }, this));
                 },
                 statusToggle: function(e){
                     var target = this.$(".status_tgl");

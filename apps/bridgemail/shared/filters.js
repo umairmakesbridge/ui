@@ -616,7 +616,7 @@
           filter_html += ' <div class="btn-group "><select class="member-box"><option value="Y">Member</option><option value="N">Non Member</option></select></div> <em class="text">of the selected list(s).</em>'
           filter_html += '</div>'
           filter_html += '</div>'          
-          filter_html += '<div class="nolist" style="display:none;"><p class="notfound" style="text-align: left;margin: 0 5px 0 10px;">Selected list has been deleted.</p></div>'          
+          filter_html += '<div class="nolist" style="display:none;"><i class="erroricon"></i><p class="" style="text-align: left;margin: 0 5px 0 10px;">Selected list has been deleted.</p><a title="" class="icon close closelisterror showtooltip" style="position: absolute; background-position: 0px -720px; opacity: 1; right: 3px; top: 3px;"></a></div>'          
           filter_html += '<div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_subscriber_lists"><strong class="badge">0</strong><span>lists found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div class="input-append search"></div></h2></div><div class="target-listing"  style="margin-top:9px">'
           filter_html += '<div class="bmsgrid" style="overflow:inherit!important;"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div><div class="bDiv" style="height: 320px;"><table cellpadding="0" cellspacing="0" width="100%" id="__list_grid" class="listsgrid '+filterClass+'" ><tbody>'
           filter_html += '</tbody></table></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></div>'
@@ -718,8 +718,9 @@
         
        this.listsObj['searchText'] = txt;
         this.offsetLengthLists =0;
+        filter.find('.nolist').remove();
         this.loadLists(this.offsetLengthLists,filter,this.listsObj.params,this.listsObj['searchText']);
-        filter.find('.nolist').hide();
+        
     }
     ,clearSearchList: function(filter){
         this.offsetLengthLists =0;
@@ -749,6 +750,7 @@
        filter.find('#__list_grid').append(filter_html);  
       
       if(this.listsObj.searchText){
+                        
                         filter.find("#__list_grid tr").each(function(k,val){
                             $(this).find(".lists-name").highlight($.trim(self.listsObj.searchText))
                             $(this).find(".taglink").highlight($.trim(self.listsObj.searchText));
@@ -783,6 +785,7 @@
         /*ICHECK IMPLEMENTATION BY ABDULLAH*/
             if(filter.find('#__list_grid .check-list').iCheck){
              self.icheckCreate(filter.find('#__list_grid .check-list'));
+            // filter.find('.nolist').remove();
          }
       /*Ends*/
         filter.find("#__list_grid .action").click(function(event){
@@ -791,9 +794,9 @@
           /* ICHECK BY ABDULLAH */
            if(filter.find('#__list_grid .check-list').iCheck){
             $(event.target).parents("tr").find(".check-list").iCheck('check');
-            filter.find('.nolist').hide();
+           
         }
-        
+         filter.find('.nolist').remove();
         
       });
       
@@ -848,6 +851,7 @@
                 }else{
                     self.options.app.showLoading(false, filter.find('#__list_grid'));
                     filter.find('.nolist').show();
+                    self.closeDelError(filter);
                 }
            }else{
                
@@ -895,7 +899,7 @@
        filter.find(".filter-cont").append(filter_html);
     
       
-      filter_html_tb = '<div class="webforms-container"><div class="inputcont"><div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_form_subscriber"><strong class="badge">0</strong><span>forms found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div id="formlistsearch" style="margin:0;" class="input-append search"></div></h2></div><div class="target-listing" id="filter-forms" style="margin-top:9px"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div>'
+      filter_html_tb = '<div class="webforms-container"><div class="inputcont"><div class="nolist" style="display:none;"><i class="erroricon"></i><p class="" style="text-align: left;margin: 0 5px 0 10px;display:block;">Selected form has been deleted.</p><a title="" class="icon close closelisterror showtooltip" style="position: absolute; background-position: 0px -720px; opacity: 1; right: 3px; top: 3px;"></a></div><div class="template-container"><div class="row temp-filters"><h2 style="margin-left: 15px;margin-top: 4px;" id="total_form_subscriber"><strong class="badge">0</strong><span>forms found</span></h2><h2 class="header-list" style=" float: right;margin-right: 5px;margin-top: 2px;background-color:transparent"><a style="margin: -4px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip list-refresh"><i>Refresh</i></a>&nbsp; <div id="formlistsearch" style="margin:0;" class="input-append search"></div></h2></div><div class="target-listing" id="filter-forms" style="margin-top:9px"><div class="bmsgrid"><div class="hDiv"><div class="hDivBox"><table cellspacing="0" cellpadding="0"></table></div></div>'
       filter_html_tb += '<div class="bDiv" style="height: 320px;"> <table cellpadding="0" cellspacing="0" width="100%" id="__form_grid"><tbody>'
        
       filter_html_tb += '</tbody></table></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button></div>'
@@ -953,6 +957,7 @@
         
        this.webformsObj['searchText'] = txt;
         this.offsetLengthformList =0;
+        filter.find('.nolist').remove();
         this.LoadFormList(this.offsetLengthformList,filter,this.webformsObj.params,this.webformsObj['searchText']);
     }
     ,clearWebforms: function(filter){
@@ -981,7 +986,7 @@
             }else{
                 var URL = "/pms/io/form/getSignUpFormData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=search&offset="+self.offsetLengthformList                   
             }
-            jQuery.getJSON(URL,  function(tsv, state, xhr){
+           self.ajaxrequest = jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){
                   _json = jQuery.parseJSON(xhr.responseText);
                   if(self.options.app.checkError(_json)){
@@ -1034,7 +1039,7 @@
    }
   , generateFormTab:function(filter,filter_html_tb,params){
          var self = this;
-                  
+          var negOff = null;       
        
         filter.find("#__form_grid tbody").append(filter_html_tb);
         if(this.webformsObj.searchText){
@@ -1051,6 +1056,7 @@
         if(self.offsetLengthformList !== "-1"){
           filter.find("#__form_grid tbody tr").last().attr("data-load", "true");
         }else{
+            negOff = self.offsetLengthformList;
             this.offsetLengthformList=0;
         }
         
@@ -1062,6 +1068,7 @@
              filter.find("#__form_grid tr").removeClass("selected");
              $(this).parents("tr").addClass("selected");
              filter.attr('selected_checksum',$(this).parents("tr").attr('webform_checksum'));
+             filter.find('.nolist').remove();
             // dialog.hide();
          })
          if(filter.attr('selected_checksum')){
@@ -1073,7 +1080,15 @@
                                //console.log('calling for ajax');
                                self.options.app.showLoading("Loading forms...", filter.find('#__form_grid'));
                                filter.find('#__form_grid .loading p').css({'margin-left':'-150px','margin-right':'0'});
-                               self.LoadFormList(self.offsetLengthformList,filter,params) 
+                               if(negOff !== "-1"){
+                                    self.LoadFormList(self.offsetLengthformList,filter,params)
+                               }else{
+                                   self.options.app.showLoading(false, filter.find('#__form_grid'));
+                                   filter.find('.nolist').show();
+                                   //console.log('Selectd form is deleted');
+                                   self.closeDelError(filter);
+                               }
+                                
                              }else if(params && filter.find("#__form_grid tr.selected").length > 0 && !filter.hasClass('scrolltoview')){
                                
                                              filter.find("#__form_grid tr.selected").scrollintoview();
@@ -1397,7 +1412,7 @@
               list_html += '</tbody></table></div></div><button class="stats-scroll ScrollToTop" type="button" style="display: none; position:absolute;bottom:5px;right:20px;"></button>'
               
         d +='<div>'
-        d += '<div class="template-container" style="margin-right:5px;min-height:290px"><div style="display: inline-block; padding: 4px 0px; height:auto;width:100%;" id="temp-search-total-badge" class="temp-filters clearfix"><h2 id="total_subscriber" style="margin-left: 15px;margin-top: 4px;"><strong class="badge"></strong><span>lists found</span></h2><h2 class="header-list filter-target-head" style="float:right;">&nbsp;<a style="margin: -2px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip subscribe-refresh"><i>Refresh</i></a><div id="'+searchDiv+'" style="margin:0;" class="input-append search"></div><a class="closebtn" id="filter-dropdown-close"></a></h2></div><div class="target-listing" id="filter-lists">'+list_html+'</div></div>'
+        d += '<div class="nolist" style="display:none;"><i class="erroricon"></i><p class="" style="text-align: left;margin: 0 5px 0 10px;display:block;">Selected list has been deleted.</p><a title="" class="icon close closelisterror showtooltip" style="position: absolute; background-position: 0px -720px; opacity: 1; right: 3px; top: 3px;"></a></div><div class="template-container" style="margin-right:5px;min-height:290px"><div style="display: inline-block; padding: 4px 0px; height:auto;width:100%;" id="temp-search-total-badge" class="temp-filters clearfix"><h2 id="total_subscriber" style="margin-left: 15px;margin-top: 4px;"><strong class="badge"></strong><span>lists found</span></h2><h2 class="header-list filter-target-head" style="float:right;">&nbsp;<a style="margin: -2px 2px;display:none;" data-original-title="Refresh listing" class="refresh_btn showtooltip subscribe-refresh"><i>Refresh</i></a><div id="'+searchDiv+'" style="margin:0;" class="input-append search"></div><a class="closebtn" id="filter-dropdown-close"></a></h2></div><div class="target-listing" id="filter-lists">'+list_html+'</div></div>'
         d += '</div>'
         
         d = $(d)
@@ -1435,6 +1450,7 @@
      // console.log(d);
        this.subListObj['searchText'] = txt;
         this.offsetLengthSubList =0;
+        d.find('.nolist').remove();
         this.loadSubsList(this.offsetLengthSubList,false,d,false,this.subListObj['searchText']);
 
   },
@@ -1466,7 +1482,7 @@
         }
       
       var checksumlist;
-       jQuery.getJSON(URL,  function(tsv, state, xhr){
+       self.ajaxrequest = jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){
                       var lists = jQuery.parseJSON(xhr.responseText); 
                       var filter = $(self.options.filterRow)
@@ -1506,6 +1522,7 @@
        dialog.find("#filter_list_grid").append(list_html);
        
        if(this.subListObj.searchText){
+                                
                                 dialog.find("#filter_list_grid tr").each(function(k,val){
                                     $(this).find(".listsub-name").highlight($.trim(self.subListObj.searchText));
                                     $(this).find(".taglink").highlight($.trim(self.subListObj.searchText));
@@ -1525,6 +1542,7 @@
              dialog.parent().find('.sub-date-container').find("a").removeClass("add-list").addClass("list");
              dialog.find("#filter_list_grid tr").removeClass("selected");
              $(this).parents("tr").addClass("selected");
+             dialog.find('.nolist').remove();
             // dialog.hide();
          })
          
@@ -1551,7 +1569,15 @@
                                 var showloading = $('#show-loading');
                                 self.options.app.showLoading("Loading Lists...",dialog.find('#filter_list_grid'));
                                 //console.log('calling for next offset');
-                                self.loadSubsList(self.offsetLengthSubList,false,dialog); 
+                                if(self.offsetLengthSubList !== "-1"){
+                                     self.loadSubsList(self.offsetLengthSubList,false,dialog); 
+                                }else{
+                                    dialog.find('.nolist').show();
+                                    
+                                    self.options.app.showLoading(false,dialog.find('#filter_list_grid'));
+                                    self.closeDelError(dialog);
+                                }
+                               
                                 
                              }else{
                                  var tr = dialog.find("#filter-lists tr[list_checksum='"+selected_list+"']")
@@ -1559,7 +1585,7 @@
                                  if(tr.length){
                                         tr.addClass("selected");
                                         if(!self.scrolltoSubLisView ){
-                                            console.log('scrolling');
+                                            //console.log('scrolling');
                                             dialog.find("#filter-lists tr.selected").scrollintoview();
                                             if(self.$element.find('.filter_list_grid').length ===  dialog.find('#filter_list_grid.selected-row').length){
                                                 self.scrolltoSubLisView = true; 
@@ -2033,6 +2059,7 @@
                         });
              obj.on('ifChecked', function(event){
                        $(event.target).parents("tr").addClass("selected");
+                       $(event.target).parents('.filter-cont').find('.nolist').remove();
                    });
               obj.on('ifUnchecked', function(event){
                        $(event.target).parents("tr").removeClass("selected");
@@ -2068,7 +2095,13 @@
             dialog.find('#filter_list_grid').parent().animate({scrollTop:0},600);
         }
         
-    }
+    },
+    closeDelError : function(filter){
+        filter.find('.closelisterror').click(function(){
+            filter.find('.nolist').remove();
+        });
+        
+    } 
   }
 
  /* FILTER PLUGIN DEFINITION
