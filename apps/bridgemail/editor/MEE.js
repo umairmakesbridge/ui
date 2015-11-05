@@ -3883,7 +3883,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     var scrollTop = options.parentWindowobj.scrollTop();
                                                                     var currentWindowObj = options.parentWindowobj; 
                                                                     if(currentWindowObj.hasClass('modal-body')){
-                                                                       if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
+                                                                        if(options.scrollTopMinus){
+                                                                            var scrollPosition = scrollTop - options.scrollTopMinus;
+                                                                        }
+                                                                       else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
                                                                             var topaccordian = (parseInt(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(currentWindowObj.find('.selection-boxes').outerHeight()) + 115 + 55); // h3 + padding
                                                                             var scrollPosition = scrollTop - topaccordian;
                                                                        }else if(currentWindowObj.find('.logpanel_box').length > 0){
@@ -5914,6 +5917,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         formid : this.options.formid,
                         _app: this.app,
                         parentWindowobj:this.options.parentWindow,
+                        scrollTopMinus:this.options.scrollTopMinus,
                         pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,
                         OnDropElementOnBuildingBlock: function (args, callBack) {

@@ -630,8 +630,9 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                 },
                 setMEEView:function(){
                         var _html = this.editorContent!==""?$('<div/>').html(this.editorContentMEE).text().replace(/&line;/g,""):""; 
+                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 35); // Scroll Top Minus from Body
                          require(["editor/MEE"],_.bind(function(MEE){                                              
-                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),saveBtnText:'Save Template Body'});                                    
+                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:topaccordian,html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),saveBtnText:'Save Template Body'});                                    
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
                             this.initScroll();
@@ -667,6 +668,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');                                                
                             this.$nav.css("top","90px");this.$tools.css("top","90px");
+                            this.scrollfixPanel();
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
                             this.$nav.removeClass('editor-toptoolbar-fixed');
@@ -680,6 +682,28 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     },this);
                     this.processScroll();
                     this.$win.on('scroll', this.processScroll);                                
-                }
+                },
+                scrollfixPanel: function(){
+                    this.$win.scroll(_.bind(function(){
+                        var scrollTop = this.$win.scrollTop();
+                        //var scrollPosition = scrollTop - 500;
+                      
+                            var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 35); // h3 + padding
+                            var scrollTop = scrollTop - topaccordian;
+                       
+                        if(scrollTop >= (this.navTop - 270) && scrollTop > 0){
+                            this.$editorarea.removeClass('editor-panel-zero-padding');
+                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
+                        }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
+                            this.$editorarea.addClass('editor-panel-zero-padding');
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','20px'); 
+                        }
+                        else{
+                            this.$editorarea.addClass('editor-panel-zero-padding');
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','0');
+                        }
+                      
+                    },this));
+                },
             });
         });

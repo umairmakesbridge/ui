@@ -325,9 +325,9 @@ define(['text!target/html/target.html', 'bms-filters', 'bms-tags', 'jquery.bmsgr
                 },
                 closeCallBack:function(){
                     var filters = this.dialog.$el.find("#c_c_target").data("filters")
-                    if(filters.ajaxrequest){
-                        filters.ajaxrequest.abort();
+                    if(filters && filters.ajaxrequest){
+                                filters.ajaxrequest.abort();
+                            }          
                     }
-            }
             });
         });
