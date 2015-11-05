@@ -466,7 +466,7 @@ define([
         showLoginExpireAlert: function (message, container) {
             if (message) {
                 var dialogHTML = '<div class="overlay"><div class="messagebox caution"><h3>' + message.heading + '</h3>';
-                var btn = '<div class="btns"><a href="/pms/" class="btn-green btn-ok"><span>Login</span><i class="icon next"></i></a></div><div class="clearfix"></div>';
+                var btn = '<div class="btns"><a href="/pms/login.jsp" class="btn-green btn-ok"><span>Login</span><i class="icon next"></i></a></div><div class="clearfix"></div>';
                 dialogHTML += '<p>' + message.detail + '</p>' + btn + '</div></div>';
                 $(container).append(dialogHTML);
                 $(".overlay .btn-ok").click(function () {
