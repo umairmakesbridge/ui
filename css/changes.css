@@ -10279,3 +10279,32 @@ sup.beta {
     padding: 2px;
     width: 19px;
 }
+.loadingPurl-mask{
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+}
+.loadingPageUrl{
+     -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: #fcfeff none repeat scroll 0 0;
+    border-color: #eaf4f9 navy #eaf4f9 #eaf4f9;
+    border-image: none;
+    border-style: solid none solid solid;
+    border-width: 2px medium 2px 2px;
+    height: 35px;
+    opacity: 1;
+    width: 90%;
+}
+.loadingPurl-mask p{
+     color: #a5a0a0 !important;
+    font-size: 13px !important;
+    font-weight: 400;
+    left: 16px;
+    line-height: 27px !important;
+    opacity: 1;
+    position: absolute;
+    top: 0;
+}
