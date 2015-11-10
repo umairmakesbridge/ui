@@ -636,12 +636,13 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                             this.$("#mee_editor").setChange(this.states);                
                             this.setMEE(_html);
                             this.initScroll();
-                            this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                             
                         },this));  
                 },
                 setMEE:function(html){
                    if(this.$("#mee_editor").setMEEHTML){
-                        this.$("#mee_editor").setMEEHTML(html);                        
+                        this.$("#mee_editor").setMEEHTML(html);   
+                        this.app.showLoading(false,this.$("#area_html_editor_mee"));
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);

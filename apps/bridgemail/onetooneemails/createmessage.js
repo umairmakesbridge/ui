@@ -273,20 +273,21 @@ function (template,contactsView) {
              setMEEView:function(){
                     var _html = "";
                     _html = this.emailHTML?$('<div/>').html(this.emailHTML).text().replace(/&line;/g,""):""; 
-                     this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());       
+                     this.app.showLoading("Loading Makesbridge Easy Editor...",this.dialog.getBody());
+                     
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:373,left:0}, _el:this.$("#mee_editor"), html:''
-                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,parentWindow:this.$el.parents(".modal-body"),isOTOFlag:true,isSaveHide:true});                                    
+                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:410,isOTOFlag:true,isSaveHide:true});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
-                        this.app.showLoading(false,this.dialog.getBody()); 
-                        
+                       
                     },this));  
                 },
                 setMEE:function(html){
                    if(this.$("#mee_editor").setMEEHTML && this.$("#mee_editor").getIframeStatus()){
-                        this.$("#mee_editor").setMEEHTML(html);                        
+                        this.$("#mee_editor").setMEEHTML(html);
+                         this.app.showLoading(false,this.dialog.getBody()); 
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);

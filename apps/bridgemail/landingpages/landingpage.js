@@ -453,19 +453,20 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         this.landinpageHTML = layout;
                         _html = this.landinpageHTML;
                     }
+                     var topaccordian=parseInt(this.$('.landing_top').outerHeight()+175);
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),html:''
+                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:topaccordian,html:''
                             ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
                             changeTemplateClick: _.bind(this.templatesDialog,this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
-                        this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                     },this));  
                 },
                 setMEE:function(html){
                    if(this.$("#mee_editor").setMEEHTML && this.$("#mee_editor").getIframeStatus()){
-                        this.$("#mee_editor").setMEEHTML(html);                        
+                        this.$("#mee_editor").setMEEHTML(html);   
+                        this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                    } 
                    else{
                        setTimeout(_.bind(this.setMEE,this,html),200);

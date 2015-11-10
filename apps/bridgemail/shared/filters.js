@@ -1220,7 +1220,7 @@
                                   self.pageUrls.push({"id":url,"title":title})
                               })
                                                                                                                       
-                             filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")                            
+                                                        
                            
                              if( filter.find(".pagelink-box").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".pagelink-box").find("option:last-child").attr("data-load","true");
@@ -1228,6 +1228,9 @@
                              if(params && params['pageURL'] &&  filter.find(".pagelink-box").val()!== self.options.app.decodeHTML(params['pageURL'])){
                                  filter.find(".pagelink-box").attr("data-selected",self.options.app.decodeHTML(params['pageURL']));
                                  filter.find(".pagelink-box").trigger("chosen:select")
+                                 filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated") 
+                             }else{
+                                 filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated") 
                              }
                         }
                   }).fail(function() { console.log( "error in loading page urls" ); });
