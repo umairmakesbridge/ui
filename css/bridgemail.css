@@ -14952,13 +14952,17 @@ a.bayshore-toggle i {
     float: none;    
 }   
 
-.summary-chart ul li em{
+.stats-panel ul li em{
     float: right;
     font-size: 14px;
     font-style: normal;
     font-weight: bold;
-    margin: 10px 0 0;
+    margin: 20px 0 0;
     opacity: 0.8;
+}
+
+.summary-chart .stats-panel ul li em{
+    margin: 10px 0 0;
 }
 
 .icons-bar-chart .icons{

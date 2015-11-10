@@ -574,6 +574,11 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
                                 this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                if(parseInt(val)!==0){
+                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                }else{
+                                    this.$(".col-2 ." + key+"Per").html("0%");
+                                }
                             }, this);
 
                         }, this));
@@ -788,7 +793,13 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.chartPage.createChart(_data);
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
-                                this.$(".col-2 ." + key).html(this.app.addCommas(val));                                
+                                this.$(".col-2 ." + key).html(this.app.addCommas(val));        
+                                if(parseInt(val)!==0){
+                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                }
+                                else{
+                                    this.$(".col-2 ." + key+"Per").html("0%");
+                                }
                             }, this);
 
                         }, this));
@@ -1120,6 +1131,12 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                             this.app.showLoading(false, this.$(".cstats"));
                             _.each(this.chart_data, function (val, key) {
                                 this.$(".col-2 ." + key).html(this.app.addCommas(val));
+                                if(parseInt(val)!==0){
+                                    this.$(".col-2 ." + key+"Per").html((parseInt(val)/parseInt(this.chart_data['sentCount']) * 100).toFixed(2) + "%");
+                                }
+                                else{
+                                    this.$(".col-2 ." + key+"Per").html("0%");
+                                }
                             }, this);
 
                         }, this));
