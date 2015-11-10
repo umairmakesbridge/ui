@@ -98,6 +98,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 this.registerAction = MakeBridgeUndoRedoManager_RegisterAction;
                                 this._undo = MakeBridgeUndoRedoManager_Undo;
                                 this._redo = MakeBridgeUndoRedoManager_Redo;
+                                
 
                                 function MakeBridgeUndoRedoManager_RegisterAction(obj) { // Save HTML before performing any action
 
@@ -245,6 +246,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var borderLeftWidth, borderRightWidth, borderTopWidth, borderBottomWidth, TotalBorderTopBottom, TotalBorderLeftRight;
                                 var defaultLiContentForDC = $("<li class='right defaultLi active'><span>Default</span></li>");
                                 var iframeEle = myElement.find(".mee-iframe");
+                                var isRemoveDialogAttach = false;
 
 
 
@@ -375,7 +377,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function setIFrameElements() {
                                     meeIframeWindow = myElement.find("#mee-iframe")[0].contentWindow;
                                     mainContentHtmlGrand = meeIframe.find(".mainContentHtmlGrand");
-                                    removeDialogs();    
+                                   if(!isRemoveDialogAttach){
+                                        removeDialogs();    
+                                   }
+                                   
                                     mainContentHtmlGrand.mouseup(function () {
                                         if(changFlag){
                                             changFlag.editor_change = true;
@@ -537,6 +542,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         isElementClicked = false;
 
                                     });
+                                    isRemoveDialogAttach = true;
                                 }
                                 //--------------------- Code Preview ---------------------------//
 
@@ -3883,23 +3889,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     var scrollTop = options.parentWindowobj.scrollTop();
                                                                     var currentWindowObj = options.parentWindowobj; 
                                                                     if(currentWindowObj.hasClass('modal-body')){
-                                                                        if(options.scrollTopMinus){
+                                                                        if(options.scrollTopMinus){ // Without Accordian
                                                                             var scrollPosition = scrollTop - options.scrollTopMinus;
                                                                         }
                                                                        else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                            var topaccordian = (parseInt(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(currentWindowObj.find('.selection-boxes').outerHeight()) + 115 + 55); // h3 + padding
-                                                                            var scrollPosition = scrollTop - topaccordian;
-                                                                       }else if(currentWindowObj.find('.logpanel_box').length > 0){
-                                                                           scrollPosition = scrollTop - 410;
+                                                                           scrollPosition =  scrollTop - options.scrollTopMinusObj.topopenaccordian; // open accordian
                                                                        }
                                                                        else{
-                                                                                scrollPosition = scrollTop - 315;
+                                                                                scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
                                                                             } 
-                                                                    }else if(myElement.parents('body').find('.landing_top').length > 0){
-                                                                           scrollPosition = scrollTop - parseInt(myElement.parents('body').find('.landing_top').outerHeight()+175)
-                                                                       }
+                                                                    }
                                                                     else{
-                                                                        var scrollPosition = scrollTop - 395;
+                                                                        var scrollPosition = scrollTop - options.scrollTopMinus; // Parent obj is workspace
                                                                     }
                                                                     
                                                                     //console.log(scrollPosition);
@@ -3912,7 +3913,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     $(val).addClass('fixed-panel');
                                                                 }
                                                             })
-                                                            if (currentNode.nodeName == "a" || currentNode.nodeName == "A") {
+                                                            if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
                                                                 editor.selection.select(selectedLinkFromTinyMCE);
                                                                 var selected_element_range = meeIframeWindow.tinyMCE.activeEditor.selection.getRng();
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
@@ -5532,7 +5533,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     if(currentWindowObj.find('.logpanel_box').length > 0){
                                              var top = ele_offset.top + 94 + topPlus;
                                     }else{
-                                        var top = ele_offset.top + 74 + topPlus;
+                                        var top = ele_offset.top + 80 + topPlus;
                                     }
                                     
                                     var left = ele_offset.left + 297 + leftPlus;
@@ -5554,7 +5555,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         "left": left + "px",
                                         "top": top + "px"
                                     }).show();
-                                    //console.log("left:" + left + "px, top:" + top + "px");
+                                //    console.log("left:" + left + "px, top:" + top + "px");
                                 }
                                 myElement.on("click", "i.newwin", function () {
                                     var url = $(this).parent().attr("href");
@@ -5918,6 +5919,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         _app: this.app,
                         parentWindowobj:this.options.parentWindow,
                         scrollTopMinus:this.options.scrollTopMinus,
+                        scrollTopMinusObj:this.options.scrollTopMinusObj,
                         pageId: this.options.pageid?this.options.pageid:false,
                         _BMSTOKEN: BMSTOKEN,
                         OnDropElementOnBuildingBlock: function (args, callBack) {

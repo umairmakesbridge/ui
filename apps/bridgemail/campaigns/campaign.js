@@ -2339,11 +2339,10 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window), html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
+                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:395, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
                         this.$("#mee_editor").setChange(this.states);
                         this.setMEE(_html);
                         this.initScroll();
-                        this.app.showLoading(false, this.$("#area_html_editor_mee"));
                         
                     }, this));
                 },
@@ -2422,6 +2421,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 setMEE: function (html) {
                     if (this.$("#mee_editor").setMEEHTML && this.$("#mee_editor").getIframeStatus()) {
                         this.$("#mee_editor").setMEEHTML(html);
+                        this.app.showLoading(false, this.$("#area_html_editor_mee"));
                     }
                     else {
                         setTimeout(_.bind(this.setMEE, this, html), 200);

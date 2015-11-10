@@ -75,6 +75,7 @@ function (template,editorView) {
                       if(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
                           scrollTop = scrollTop - 500;
                       }
+                     // console.log('scrollTop :' + scrollTop + ' & NavTop : '+ parseInt(this.navTop) + parseInt(10))
                       if (scrollTop >= this.navTop && !this.isFixed) {
                         this.isFixed = 1
                         this.$nav.addClass('editor-toptoolbar-fixed');
@@ -112,7 +113,8 @@ function (template,editorView) {
                              this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
                         }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
                             this.$editorarea.addClass('editor-panel-zero-padding');
-                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','20px'); 
+                            var settop = (this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")) ? '90px' : '70px'; 
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',settop); 
                         }
                         else{
                             this.$editorarea.addClass('editor-panel-zero-padding');
@@ -268,12 +270,15 @@ function (template,editorView) {
             },
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
-                     require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
+                     require(["editor/MEE"],_.bind(function(MEE){
+                         
+                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(this.$el.parents(".modal-body").find('.selection-boxes').outerHeight()) + 115 + 35); // h3 + padding
+                        var topaccordianObj = {topopenaccordian:topaccordian,topcloseaccordian:315}
+                        var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
                         this.initScroll();
-                        this.app.showLoading(false,this.$("#area_html_editor_mee")); 
+                        
                     },this));  
             },
             setTextVersion:function(text){
@@ -281,7 +286,8 @@ function (template,editorView) {
             },
             setMEE:function(html){
                if(this.$("#mee_editor").setMEEHTML){
-                    this.$("#mee_editor").setMEEHTML(html);                        
+                    this.$("#mee_editor").setMEEHTML(html);   
+                    this.app.showLoading(false,this.$("#area_html_editor_mee")); 
                } 
                else{
                    setTimeout(_.bind(this.setMEE,this,html),200);
