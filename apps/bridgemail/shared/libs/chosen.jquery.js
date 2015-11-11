@@ -779,7 +779,8 @@
       }
       
       if(this.options.remote_url){
-        var URL = this.options.remote_url + "&offset="+offset;  
+        var URL = this.options.remote_url + "&offset="+offset; 
+        var callback = this.options.callbackfn;
         var remote_type = this.is_remote_type;
         jQuery.getJSON(URL,  function(tsv, state, xhr){
               if(xhr && xhr.responseText){                        
@@ -816,6 +817,7 @@
                        selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
                        if(selected_link){
                            $(_this.form_field).removeAttr("data-selected");
+                           callback();
                        }
                        var url = val[0]["url"] ? SelectParser.decodeHTML(val[0]["url"]) : ""
                        var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""

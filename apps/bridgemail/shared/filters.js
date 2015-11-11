@@ -1171,7 +1171,7 @@
           filter_html += '</select></div>'
           filter_html += '<div class="pagelink-box-container" style="display:none">'
             filter_html += '<label style="display:none">Filter URL</label>'
-            filter_html += '<div class="btn-group "><select id="web-filterplug" data-placeholder="Select Page Link" class="pagelink-box" disabled="disabled"><option value="">Loading Page URL... </option></select></div>'                        
+            filter_html += '<div class="btn-group "><div class="loadingPurl-mask" style="display:none;"><div class="loadingPageUrl"></div><p>Loading Page URL...</p></div><select id="web-filterplug" data-placeholder="Select Page Link" class="pagelink-box" disabled="disabled"><option value="">Loading Page URL... </option></select></div>'                        
           filter_html += '</div>'
           filter_html += '<div class="pagetype-box-container" style="display:none">'
             filter_html += '<label style="display:none">Page Type</label>'
@@ -1220,17 +1220,16 @@
                                   self.pageUrls.push({"id":url,"title":title})
                               })
                                                                                                                       
-                                                        
+                              filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated")           
                            
                              if( filter.find(".pagelink-box").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".pagelink-box").find("option:last-child").attr("data-load","true");
                              }
+                             
                              if(params && params['pageURL'] &&  filter.find(".pagelink-box").val()!== self.options.app.decodeHTML(params['pageURL'])){
                                  filter.find(".pagelink-box").attr("data-selected",self.options.app.decodeHTML(params['pageURL']));
                                  filter.find(".pagelink-box").trigger("chosen:select")
-                                 filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated") 
-                             }else{
-                                 filter.find(".pagelink-box").html(select_html).prop("disabled",false).trigger("chosen:updated") 
+                                 filter.find(".loadingPurl-mask").show();
                              }
                         }
                   }).fail(function() { console.log( "error in loading page urls" ); });
@@ -1322,7 +1321,8 @@
       })
       filter.find(".pagelink-box").chosen({width:"400px",is_remote:true
                                            ,remote_url:"/pms/io/filters/getLinkIDFilter/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=listLinkLibrary",
-                                           page_urls : self.pageUrls
+                                           page_urls : self.pageUrls,
+                                           callbackfn: $.proxy(self.removeUrlLoading,self,filter)
                                           }).change(function(){
           $(this).val($(this).val())
           $(this).trigger("chosen:updated")
@@ -1356,7 +1356,12 @@
       
       
       
+    },
+    removeUrlLoading: function(filter){
+            
+           filter.find(".loadingPurl-mask").hide();
     }
+    
   , addActionBar:function(filterRow,filterType){
 					
       var action =  $('<div class="btm-bar "><div class="filter_type"><span class="">'+filterType+'</span></div></div>')            
