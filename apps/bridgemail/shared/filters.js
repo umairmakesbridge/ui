@@ -440,15 +440,15 @@
           var map ={N:"listNormalCampaigns",A:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",T:"listNurtureTracksCampaigns",B:"listAutobotCampaigns"}
           mapValue = $(this).val();
           if($(this).val()=="N"){
-              filter.find('.loadingPurl-mask p').html('Laoding Campaigns...');
+              filter.find('.loadingPurl-mask p').html('Loading Campaigns...');
           }else if($(this).val() == "B"){
-              filter.find('.loadingPurl-mask p').html('Laoding Autobots...');
+              filter.find('.loadingPurl-mask p').html('Loading Autobots...');
           }else if($(this).val() == "A"){
-              filter.find('.loadingPurl-mask p').html('Laoding Auto Triggers...');  
+              filter.find('.loadingPurl-mask p').html('Loading Auto Triggers...');  
           }else if($(this).val() == "W"){
-              filter.find('.loadingPurl-mask p').html('Laoding Workflows...');
+              filter.find('.loadingPurl-mask p').html('Loading Workflows...');
           }else if($(this).val() == "T"){
-              filter.find('.loadingPurl-mask p').html('Laoding Nurture Tracks...');
+              filter.find('.loadingPurl-mask p').html('Loading Nurture Tracks...');
           }
           var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type="+map[$(this).val()]+"&status=A&bucket=20&offset=0";                                                                                
             jQuery.getJSON(URL,  function(tsv, state, xhr){
@@ -464,20 +464,12 @@
                         
                      }else if(campainVal == "B"){
                          var select_html = '<option value="-1">Any Autobot</option>'
-                         filter.find('.loadingPurl-mask p').html('Loading Autobots...');
-                       
                      }else if(campainVal == "A"){
                          var select_html = '<option value="-1">Any Auto Trigger</option>'
-                         filter.find('.loadingPurl-mask p').html('Loading Auto Triggers...');
-                        
                      }else if(campainVal == "W"){
                          var select_html = '<option value="-1">Any Workflows</option>'
-                         filter.find('.loadingPurl-mask p').html('Loading Workflows...');
-                        
                      }else if(campainVal == "T"){
                          var select_html = '<option value="-1">Any Nurture Track</option>'
-                         filter.find('.loadingPurl-mask p').html('Loading Nurture Tracks...');
-                        
                      }
                      if(_json.count!=="0"){
                         var camp_list = _json.lists || _json.campaigns
