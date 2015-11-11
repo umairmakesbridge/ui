@@ -817,7 +817,9 @@
                        selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
                        if(selected_link){
                            $(_this.form_field).removeAttr("data-selected");
-                           callback();
+                           if(callback){
+                                callback();
+                           }
                        }
                        var url = val[0]["url"] ? SelectParser.decodeHTML(val[0]["url"]) : ""
                        var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""
