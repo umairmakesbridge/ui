@@ -164,6 +164,7 @@
       this.mouse_on_container = false;
       this.results_showing = false;
       this.result_highlighted = null;
+      this.iscampaginSelected = false;
       this.result_single_selected = null;
       this.is_remote =   this.options.is_remote || false;
       this.is_remote_type = (this.options.is_remote_type) ? this.options.is_remote_type : "";
@@ -320,9 +321,15 @@
         return this.winnow_results();
       }
     };
+    AbstractChosen.prototype.results_update_fieldrecord = function() {
+      if(this.iscampaginSelected){
+          this.remote_page = 20;
+      }
+    };
     
     AbstractChosen.prototype.result_update_selected = function (){
         this.fetch_records(20);
+        
     }
 
     AbstractChosen.prototype.results_toggle = function() {
@@ -636,6 +643,9 @@
       this.form_field_jq.bind("chosen:updated.chosen", function(evt) {
         _this.results_update_field(evt);
       });
+      this.form_field_jq.bind("chosen:updatedfetch.chosen", function(evt) {
+        _this.results_update_fieldrecord(evt);
+      });
       this.form_field_jq.bind("chosen:select.chosen", function(evt) {
         _this.result_update_selected(evt);
       });
@@ -802,7 +812,10 @@
                             if(selected_camp){
                                     $(_this.form_field).removeAttr("data-selected");
                                     _this.search_results_div.parents('body').find('#campaign-lists-filterplug').prop("disabled",false).trigger("chosen:updated");
-
+                                    _this.iscampaginSelected = true;
+                                    if(callback){
+                                        callback();
+                                    }
                                 }
                             var _value = val[0]["campNum.encode"] || val[0]["campNum"]
                             if(val[0]["isTextOnly"]){
@@ -817,7 +830,9 @@
                        selected_link = ($(_this.form_field).attr("data-selected") && $(_this.form_field).attr("data-selected")==SelectParser.decodeHTML(val[0]["url"])) ? "selected" : ""
                        if(selected_link){
                            $(_this.form_field).removeAttr("data-selected");
-                           callback();
+                           if(callback){
+                               callback();
+                           }
                        }
                        var url = val[0]["url"] ? SelectParser.decodeHTML(val[0]["url"]) : ""
                        var title = val[0].title ? SelectParser.decodeHTML(val[0].title) : ""

@@ -397,7 +397,7 @@
        filter_html += '<div class="row">'
             filter_html += '<label style="width: 120px;">Campaign</label>'            
             filter_html += ' <div class="btn-group "><select data-placeholder="Any Campaign" class="chosen-select campaign-source"><option value=""></option><option value="N" selected>Campaigns</option><option value="A">Auto Trigger</option><option value="T">Nurture Track</option><option value="W">Workflow</option><option value="B">Autobot</option></select></div>'  
-            filter_html += '<div class="btn-group "><select data-placeholder="Select Campaign" id="campaign-lists-filterplug" class="campaign-list" disabled="disabled">'  
+            filter_html += '<div class="btn-group "><div style="display: none;" class="loadingPurl-mask"><div class="loadingPageUrl"></div><p>Loading...</p></div><select data-placeholder="Select Campaign" id="campaign-lists-filterplug" class="campaign-list" disabled="disabled">'  
                   filter_html +='<option value="-1">Any Campaign</option>'  
                   var campaigns_array =this.options.app.getAppData("campaigns")   
                   filter_html +='<option value=""></option>'
@@ -436,8 +436,20 @@
           $(this).parent().find(".chosen-container").append('<div class="loading-wheel combo"></div>')
           var campainVal =$(this).val();
           filter.find(".campaign-list").html("<option value='-1'>Loading...</option>").prop("disabled",true).trigger("chosen:updated")
+          filter.find('.loadingPurl-mask').show();
           var map ={N:"listNormalCampaigns",A:"listAutoTriggerCampaigns",W:"listWorkflowsCampaigns",T:"listNurtureTracksCampaigns",B:"listAutobotCampaigns"}
           mapValue = $(this).val();
+          if($(this).val()=="N"){
+              filter.find('.loadingPurl-mask p').html('Laoding Campaigns...');
+          }else if($(this).val() == "B"){
+              filter.find('.loadingPurl-mask p').html('Laoding Autobots...');
+          }else if($(this).val() == "A"){
+              filter.find('.loadingPurl-mask p').html('Laoding Auto Triggers...');  
+          }else if($(this).val() == "W"){
+              filter.find('.loadingPurl-mask p').html('Laoding Workflows...');
+          }else if($(this).val() == "T"){
+              filter.find('.loadingPurl-mask p').html('Laoding Nurture Tracks...');
+          }
           var URL = "/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type="+map[$(this).val()]+"&status=A&bucket=20&offset=0";                                                                                
             jQuery.getJSON(URL,  function(tsv, state, xhr){
                 if(xhr && xhr.responseText){
@@ -448,15 +460,24 @@
                      filter.find(".campaign-source").parent().find(".chosen-container .loading-wheel").remove()
                      filter.find(".campaign-source").prop("disabled",false).trigger("chosen:updated")
                      if(campainVal == "N"){
-                        var select_html = '<option value="-1">Any Campaign</option>' 
+                        var select_html = '<option value="-1">Any Campaign</option>';
+                        
                      }else if(campainVal == "B"){
                          var select_html = '<option value="-1">Any Autobot</option>'
+                         filter.find('.loadingPurl-mask p').html('Laoding Autobots...');
+                       
                      }else if(campainVal == "A"){
                          var select_html = '<option value="-1">Any Auto Trigger</option>'
+                         filter.find('.loadingPurl-mask p').html('Laoding Auto Triggers...');
+                        
                      }else if(campainVal == "W"){
                          var select_html = '<option value="-1">Any Workflows</option>'
+                         filter.find('.loadingPurl-mask p').html('Laoding Workflows...');
+                        
                      }else if(campainVal == "T"){
                          var select_html = '<option value="-1">Any Nurture Track</option>'
+                         filter.find('.loadingPurl-mask p').html('Laoding Nurture Tracks...');
+                        
                      }
                      if(_json.count!=="0"){
                         var camp_list = _json.lists || _json.campaigns
@@ -473,6 +494,7 @@
                             else{
                                 select_html += '<option value="'+_value+'" '+selected_camp+'>'+val[0].name+'</option>'
                             }
+                            filter.find('.loadingPurl-mask').hide();
                         })
                      }
                     
@@ -483,6 +505,7 @@
                      if(isSelected_camp){
                          
                          filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
+                         filter.find('.loadingPurl-mask').hide();
                      }
                      if( filter.find(".campaign-list").find("option").length < parseInt(_json.totalCount)){
                                     filter.find(".campaign-list").find("option:last-child").attr("data-load","true");
@@ -492,10 +515,16 @@
                      if(params && params["campaignNumber.checksum"]){
                          if(filter.find(".campaign-source").val()==="N" && !isSelected_camp){
                            filter.find(".campaign-list").attr("data-selected",self.options.app.decodeHTML(params['campaignNumber.checksum']));
+                           filter.find(".campaign-list").trigger("chosen:updatedfetch");
                            filter.find(".campaign-list").trigger("chosen:select");
+                           filter.find('.loadingPurl-mask').show();
+                        }else{
+                             filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
+                             filter.find('.loadingPurl-mask').hide();
                         }
                        filter.find(".campaign-list").change()
                      }else{
+                        
                          filter.find(".campaign-list").prop("disabled",false).trigger("chosen:updated")
                          }
                      
@@ -505,10 +534,12 @@
            
       })
       if(filter.find(".campaign-source").val()==="N"){
+            
             filter.find(".campaign-list").chosen({width:"400px",is_remote:true
                                            ,remote_url:"/pms/io/campaign/getCampaignData/?BMS_REQ_TK="+self.options.app.get('bms_token')+"&type=listNormalCampaigns&status=A&bucket=20",
                                            page_urls : '',
-                                           is_remote_type:'campaings'
+                                           is_remote_type:'campaings',
+                                           callbackfn: $.proxy(self.removeUrlLoading,self,filter)
                                                             }).change(function(){
                             $(this).val($(this).val())
                             $(this).trigger("chosen:updated")
