@@ -604,7 +604,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                         }
                         else {
                             this.$(".total-count").html('<strong class="badge">' + total_pages_selected + '</strong> campaign selected');
-                        }
+                        }                                              
                         _.each(this.modelArray, function (val, index) {
                             var campRow = new this.campRow({model: val, sub: this, showSummaryChart: true});
                             _grid.append(campRow.$el);
@@ -621,26 +621,65 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                 if (summary_json.count !== "0") {
                                     require(["reports/campaign_bar_chart"], _.bind(function (chart) {
                                         var sentData = [], openData = [], viewData = [], clickCount = [], socialData = [], bounceData = [];
-
                                         var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
-                                            , openCount: 0, sentCount: 0, socialCount: 0};
-                                        _.each(summary_json.summaries[0], function (sVal) {
-                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
-                                            sentData.push(parseInt(sVal[0].sentCount));
-                                            openData.push(parseInt(sVal[0].openCount));
-                                            viewData.push(parseInt(sVal[0].pageViewsCount));
-                                            clickCount.push(parseInt(sVal[0].clickCount));
-                                            socialData.push(parseInt(sVal[0].socialCount));
-                                            bounceData.push(parseInt(sVal[0].bounceCount));
+                                            , openCount: 0, sentCount: 0, socialCount: 0};                                        
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                    sentData.push(parseInt(sVal[0].sentCount));
+                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    socialData.push(parseInt(sVal[0].socialCount));
+                                                    bounceData.push(parseInt(sVal[0].bounceCount));
 
-                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
-                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
-                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
-                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        }, this);
+                                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                                    _d = _d + 1;
+                                                }
+                                                else{
+                                                    sentData.push(0);
+                                                    openData.push(0);
+                                                    viewData.push(0);
+                                                    clickCount.push(0);
+                                                    socialData.push(0);
+                                                    bounceData.push(0);                                                   
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                                sentData.push(parseInt(sVal[0].sentCount));
+                                                openData.push(parseInt(sVal[0].openCount));
+                                                viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                clickCount.push(parseInt(sVal[0].clickCount));
+                                                socialData.push(parseInt(sVal[0].socialCount));
+                                                bounceData.push(parseInt(sVal[0].bounceCount));
+
+                                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                            }, this);
+                                        }
+                                        
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
                                         this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
                                         this.$("#chart-" + val.get("campNum.checksum")).html(this.chartPage.$el);
@@ -845,24 +884,60 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                         var categories = [];
                                         this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                             , openCount: 0, sentCount: 0, socialCount: 0};
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                    sentData.push(parseInt(sVal[0].sentCount));
+                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    socialData.push(parseInt(sVal[0].socialCount));
+                                                    bounceData.push(parseInt(sVal[0].bounceCount));
 
-                                        _.each(summary_json.summaries[0], function (sVal) {
-                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
-                                            sentData.push(parseInt(sVal[0].sentCount));
-                                            openData.push(parseInt(sVal[0].openCount));
-                                            viewData.push(parseInt(sVal[0].pageViewsCount));
-                                            clickCount.push(parseInt(sVal[0].clickCount));
-                                            socialData.push(parseInt(sVal[0].socialCount));
-                                            bounceData.push(parseInt(sVal[0].bounceCount));
-                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
-                                            this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                            this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
-                                            this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                            this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
-                                            this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
-                                            this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                        }, this);
-
+                                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                                    _d = _d + 1;
+                                                }
+                                                else{
+                                                    sentData.push(0);
+                                                    openData.push(0);
+                                                    viewData.push(0);
+                                                    clickCount.push(0);
+                                                    socialData.push(0);
+                                                    bounceData.push(0);                                                   
+                                                }
+                                            }
+                                        }
+                                        else{        
+                                            _.each(summary_json.summaries[0], function (sVal) {
+                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                                sentData.push(parseInt(sVal[0].sentCount));
+                                                openData.push(parseInt(sVal[0].openCount));
+                                                viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                clickCount.push(parseInt(sVal[0].clickCount));
+                                                socialData.push(parseInt(sVal[0].socialCount));
+                                                bounceData.push(parseInt(sVal[0].bounceCount));
+                                                //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), ''])
+                                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                            }, this);
+                                        }
                                         var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
                                         this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
 
@@ -1196,22 +1271,60 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                                 , openCount: 0, sentCount: 0, socialCount: 0};
 
-                                            _.each(summary_json.summaries[0], function (sVal) {
-                                                categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
-                                                sentData.push(parseInt(sVal[0].sentCount));
-                                                openData.push(parseInt(sVal[0].openCount));
-                                                viewData.push(parseInt(sVal[0].pageViewsCount));
-                                                clickCount.push(parseInt(sVal[0].clickCount));
-                                                socialData.push(parseInt(sVal[0].socialCount));
-                                                bounceData.push(parseInt(sVal[0].bounceCount));
-                                                //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
-                                                this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
-                                                this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
-                                                this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
-                                                this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
-                                                this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
-                                                this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
-                                            }, this);
+                                            var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.summaries[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                            for(var d=0;d<days_report;d++){
+                                                var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                categories.push(c_date);
+                                                var sVal = summaries["summary"+_d];
+                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                    sentData.push(parseInt(sVal[0].sentCount));
+                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    socialData.push(parseInt(sVal[0].socialCount));
+                                                    bounceData.push(parseInt(sVal[0].bounceCount));
+
+                                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                                    _d = _d + 1;
+                                                }
+                                                else{
+                                                    sentData.push(0);
+                                                    openData.push(0);
+                                                    viewData.push(0);
+                                                    clickCount.push(0);
+                                                    socialData.push(0);
+                                                    bounceData.push(0);                                                   
+                                                }
+                                            }
+                                            }
+                                            else{            
+                                                _.each(summary_json.summaries[0], function (sVal) {
+                                                    categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                                    sentData.push(parseInt(sVal[0].sentCount));
+                                                    openData.push(parseInt(sVal[0].openCount));
+                                                    viewData.push(parseInt(sVal[0].pageViewsCount));
+                                                    clickCount.push(parseInt(sVal[0].clickCount));
+                                                    socialData.push(parseInt(sVal[0].socialCount));
+                                                    bounceData.push(parseInt(sVal[0].bounceCount));
+                                                    //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].sentCount), parseInt(sVal[0].openCount), parseInt(sVal[0].pageViewsCount), parseInt(sVal[0].clickCount), parseInt(sVal[0].socialCount), parseInt(sVal[0].bounceCount), '']);
+                                                    this.chart_data["bounceCount"] = this.chart_data["bounceCount"] + parseInt(sVal[0].bounceCount);
+                                                    this.chart_data["clickCount"] = this.chart_data["clickCount"] + parseInt(sVal[0].clickCount);
+                                                    this.chart_data["sentCount"] = this.chart_data["sentCount"] + parseInt(sVal[0].sentCount);
+                                                    this.chart_data["openCount"] = this.chart_data["openCount"] + parseInt(sVal[0].openCount);
+                                                    this.chart_data["socialCount"] = this.chart_data["socialCount"] + parseInt(sVal[0].socialCount);
+                                                    this.chart_data["pageViewsCount"] = this.chart_data["pageViewsCount"] + parseInt(sVal[0].pageViewsCount);
+                                                }, this);
+                                            }
                                             var _data = [{"name": "Bounce", "data": bounceData}, {"name": "Social", "data": socialData}, {"name": "Click", "data": clickCount}, {"name": "View", "data": viewData}, {"name": "Open", "data": openData}, {"name": "Sent", "data": sentData}];
                                             this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#03d9a4', '#27316a', '#559cd6', '#f6e408', '#dfdfdf']});
 

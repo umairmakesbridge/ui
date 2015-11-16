@@ -33,15 +33,7 @@ function ($,Backbone, _, template) {
                 },
                 create: function(e){
                     if($(".create-button").hasClass("saving")) return false;
-                    var field_text = $.trim(this.$(".field-text").val());
-                     /*this.app.checkIllegalCharacters(field_text,_.bind(
-                                function(lettersArray){
-                                    var re = new RegExp("["+lettersArray.join("")+"]+","g");                              
-                                    field_text = field_text.replace(re, _.bind(this.app.replaceCharacaters,this.app));                                                                                          
-                                    
-                               },this)
-                               
-                            )*/
+                    var field_text = $.trim(this.$(".field-text").val());                   
                     if(field_text){
                         this.app.hideError({control:this.$('.lp_name')});                        
                         if(this.options.createURL){   

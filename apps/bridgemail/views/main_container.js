@@ -886,21 +886,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                       postData : {type:'create',BMS_REQ_TK:this.app.get('bms_token')},
                       saveCallBack :  _.bind(this.createNurtureTrack,this) // Calling same view for refresh headBadge
                     });
-                    
-                    
-                  /*  var dialog = this.app.showDialog({title: 'New Nurture Track',
-                        css: {"width": "650px", "margin-left": "-325px"},
-                        bodyCss: {"min-height": "100px"},
-                        headerIcon: 'new_headicon',
-                        buttons: {saveBtn: {text: 'Create'}}
-                    });
-                    this.app.showLoading("Loading...", dialog.getBody());
-                    require(["nurturetrack/newnurturetrack"], _.bind(function (trackPage) {
-                        var mPage = new trackPage({page: this, newdialog: dialog});
-                        dialog.getBody().html(mPage.$el);
-                        mPage.$("input").focus();
-                        dialog.saveCallBack(_.bind(mPage.createNurtureTrack, mPage));
-                    }, this));*/
+                                                        
                 },
                 createNurtureTrack : function(fieldText, _json){
                                 if(this.addCountHeader){

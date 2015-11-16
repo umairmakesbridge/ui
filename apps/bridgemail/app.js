@@ -77,14 +77,7 @@ define([
                 app_data: {}
             }, window.sz_config || {}));
             this.testUsers = ['admin', 'jayadams', 'demo', 'MKS-Training2', 'mansoor@makesbridge.com'];
-            this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];
-            
-            this.specialLetters = {"Á":"&#193;","á":"&#225;","Č":"&#268;","č":"&#269;","Ď":"&#270;","ď":"&#271;","É":"&#201;","é":"&#233;","Ě":"&#282;","ě":"&#283;","Í":"&#205;","í":"&#237;","Ň":"&#327;","ň":"&#328;","Ó":"&#211;","ó":"&#243;","Ř":"&#344;","ř":"&#345;","Š":"&#352;","š":"&#353;","Ť":"&#356;","ť":"&#357;","Ů":"&#366;","ů":"&#367;","Ý":"&#221;","ý":"&#253;","Ž":"&#381;","ž":"&#382;",
-                               "Ą":"&#260;","ą":"&#261;","Ć":"&#262;","ć":"&#263;","Ę":"&#280;","ę":"&#281;","Ł":"&#321;","ł":"&#322;","Ń":"&#323;","ń":"&#324;","Ś":"&#346;","ś":"&#347;","Ź":"&#377;","ź":"&#378;","Ż":"&#379;","ż":"&#380;",
-                               "ç":"&ccedil;","Ú":"&#218;","ú":"&#251;","—":"&#8212;","–":"&#8211;","‘":"&#8216;","’":"&#8217;","“":"&#8220;","”":"&#8221;","„":"&#8222;","€":"&#8364;","™":"&#8482;",                                   
-                               "Ç":"&#199;","Ğ":"&#286;","Ö":"&#214;","Ş":"&#350;","Ü":"&#220;","ğ":"&#287;","ö":"&#246;","ş":"&#351;","ü":"&#252;","İ":"&#304;","ı":"&#305;"
-                              };
-                                                            
+            this.dcItemsUsers = ['admin', 'jayadams', 'demo', 'fisglobal'];                                                                                  
 
             //Convenience for accessing the app object in the console
             if (this.get('env') != 'production') {
@@ -543,79 +536,7 @@ define([
             }
             return val;
         },
-        decodeJSON: function (str) {            
-            /*str = str.replace(/&#193;/g, "Á");
-            str = str.replace(/&#225;/g, "á");
-            str = str.replace(/&#268;/g, "Č");
-            str = str.replace(/&#269;/g, "č");
-            str = str.replace(/&#270;/g, "Ď");
-            str = str.replace(/&#271;/g, "ď");
-            str = str.replace(/&#201;/g, "É");
-            str = str.replace(/&#233;/g, "é");
-            str = str.replace(/&#282;/g, "Ě");
-            str = str.replace(/&#283;/g, "ě");
-            str = str.replace(/&#205;/g, "Í");
-            str = str.replace(/&#8212;/g, "—");
-            str = str.replace(/&#8211;/g, "–");
-            str = str.replace(/&#8216;/g, "‘");
-            str = str.replace(/&#8217;/g, "’");
-            str = str.replace(/&#8220;/g, "“");
-            str = str.replace(/&#8221;/g, "”");
-            str = str.replace(/&#8222;/g, "„");
-            str = str.replace(/&#8364;/g, "€");
-            str = str.replace(/&#8482;/g, "™");
-            
-            str = str.replace(/&#237;/g, "í");
-            str = str.replace(/&#327;/g, "Ň");
-            str = str.replace(/&#328;/g, "ň");
-            str = str.replace(/&#211;/g, "Ó");
-            str = str.replace(/&#243;/g, "ó");
-            str = str.replace(/&#344;/g, "Ř");
-            str = str.replace(/&#345;/g, "ř");
-            str = str.replace(/&#352;/g, "Š");
-            str = str.replace(/&#353;/g, "š");
-            str = str.replace(/&#356;/g, "Ť");
-            str = str.replace(/&#357;/g, "ť");
-            str = str.replace(/&#366;/g, "Ů");
-            str = str.replace(/&#367;/g, "ů");
-            str = str.replace(/&#221;/g, "Ý");
-            str = str.replace(/&#253;/g, "ý");
-            
-             str = str.replace(/&#381;/g, "Ž");
-             str = str.replace(/&#382;/g, "ž");
-             
-             str = str.replace(/&#260;/g, "Ą");
-             str = str.replace(/&#261;/g, "ą");
-             str = str.replace(/&#262;/g, "Ć");
-             str = str.replace(/&#263;/g, "ć");
-             str = str.replace(/&#280;/g, "Ę");
-             str = str.replace(/&#281;/g, "ę");
-             str = str.replace(/&#321;/g, "Ł");
-             str = str.replace(/&#322;/g, "ł");
-             str = str.replace(/&#323;/g, "Ń");
-             str = str.replace(/&#324;/g, "ń");
-             str = str.replace(/&#346;/g, "Ś");
-             str = str.replace(/&#347;/g, "ś");
-             str = str.replace(/&#377;/g, "Ź");
-             str = str.replace(/&#378;/g, "ź");
-             str = str.replace(/&#379;/g, "Ż");
-             str = str.replace(/&#380;/g, "ż");
-             
-             str = str.replace(/&ccedil;/g, "ç");
-             str = str.replace(/&#218;/g, "Ú");
-             str = str.replace(/&#251;/g, "ú");
-             str = str.replace(/&#199;/g, "Ç");
-             str = str.replace(/&#286;/g, "Ğ");
-             str = str.replace(/&#214;/g, "Ö");
-             str = str.replace(/&#350;/g, "Ş");
-             str = str.replace(/&#220;/g, "Ü");
-             str = str.replace(/&#287;/g, "ğ");
-             str = str.replace(/&#246;/g, "ö");
-             str = str.replace(/&#351;/g, "ş");
-             str = str.replace(/&#252;/g, "ü");
-             str = str.replace(/&#304;/g, "İ");
-             str = str.replace(/&#305;/g, "ı");
-             */
+        decodeJSON: function (str) {                        
              return str;
         },
         getMMM: function (month) {
@@ -1007,44 +928,6 @@ define([
                 currentTab.wscroll = et;
                 tabarray.push(currentTab);
             }
-        },
-        checkIllegalCharacters: function(val,callBack,options){
-          var illegalLetters = /[Á-Žá-žĄ-Żą-żçáÇĞÖÜçğöşüÁ-Žá-ź—–‘“”„€™’]+/g;
-          var notValid = false;          
-          if(illegalLetters.test(val)){
-              var lettersArray = val.match(illegalLetters);                      
-              /*var message = options.fieldName+' contains the following characters which are not currently supported.<br/><font style="font-size:18px;line-height:28px;font-weight:bold;display:block;overflow:hidden;white-space:wrap;width:460px;">'+lettersArray.join(", ")+"</font>";
-                  message += "<br/>If you want to proceed, the above characters will be changed to <br/>";
-                  var changedCharacters = [];
-                  _.each( lettersArray ,function(ke){
-                      changedCharacters.push(this.specialLetters[ke]);                      
-                  },this);
-                  message += '<font style="font-size:18px;line-height:28px;font-style: italic;display:block;overflow:hidden;white-space:wrap;width:460px;">'+changedCharacters.join(", ")+'</font>';
-                  message += "<br/>Click <b>Continue</b> to proceed or press <b>Cancel</b> to change above characters manually.";
-              this.showAlertPopup({heading:'Characters not supported',
-                        detail:message,  
-                        text: "Continue",
-                        btnClass:"btn-yellow",
-                        dialogWidth: "475px",
-                        icon: "next",
-                        callback: _.bind(function(){                            
-                            callBack(lettersArray);
-                        },this)
-                    },
-                    $('body'));  */
-                callBack(lettersArray);    
-                notValid = true;
-          }
-          
-          return notValid;
-          
-        },
-        replaceCharacaters:function(letter){             
-           var asciiCodes = "";
-           for(var i=0;i<letter.length;i++){
-               asciiCodes +=this.specialLetters[letter.charAt(i)];
-           }      
-           return asciiCodes; 
         },
         /*-------------------------------
          * Common Preview method
