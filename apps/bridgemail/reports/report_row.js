@@ -635,7 +635,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
-                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
                                                     openData.push(parseInt(sVal[0].openCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
@@ -894,7 +894,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
-                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
                                                     openData.push(parseInt(sVal[0].openCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
@@ -1271,7 +1271,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chart_data = {bounceCount: 0, clickCount: 0, pageViewsCount: 0
                                                 , openCount: 0, sentCount: 0, socialCount: 0};
 
-                                            var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
                                         var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
                                         var days_report = date1.diff(date2, 'days');
                                         var summaries =  summary_json.summaries[0];
@@ -1281,7 +1281,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                                 var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
                                                 categories.push(c_date);
                                                 var sVal = summaries["summary"+_d];
-                                                if(c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
+                                                if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                
                                                     sentData.push(parseInt(sVal[0].sentCount));
                                                     openData.push(parseInt(sVal[0].openCount));
                                                     viewData.push(parseInt(sVal[0].pageViewsCount));
@@ -1334,7 +1334,7 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
                                             this.chartPage.createChart(_data);
                                             _.each(this.chart_data, function (v, key) {
                                                 this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key).html(this.app.addCommas(v));
-                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(val.get("sentCount")) * 100).toFixed(2) + "%");
+                                                this.$("#stats-" + val.get("campNum.checksum") + " .stats-panel ." + key+"Per").html((parseInt(v)/parseInt(this.chart_data["sentCount"]) * 100).toFixed(2) + "%");
                                             }, this);
                                         }, this));
                                     }
@@ -1626,16 +1626,42 @@ define(['text!reports/html/report_row.html', 'moment', 'jquery.searchcontrol', '
 
                                         var increaseCount = [], decreaseCount = [];
                                         var categories = [];
-
                                         this.chart_data = {addCount: 0, removeCount: 0};
-                                        _.each(summary_json.stats[0], function (sVal) {
-                                            categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
-                                            increaseCount.push(parseInt(sVal[0].addCount));
-                                            decreaseCount.push(parseInt(sVal[0].removeCount));
-                                            //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
-                                            this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
-                                            this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
-                                        }, this);
+                                        
+                                        var date1 =  moment($.trim(this.toDate), 'MM-DD-YYYY');
+                                        var date2 =  moment($.trim(this.fromDate), 'MM-DD-YYYY');
+                                        var days_report = date1.diff(date2, 'days');
+                                        var summaries =  summary_json.stats[0];
+                                        var _d = 1;    
+                                        if(days_report<=30){
+                                                for(var d=0;d<days_report;d++){
+                                                    var c_date = moment($.trim(this.fromDate), 'MM-DD-YYYY').add(d,"day").format("DD MMM");
+                                                    categories.push(c_date);
+                                                    var sVal = summaries["stat"+_d];
+                                                    if(sVal && c_date == moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM")){                                                                                                        
+                                                        increaseCount.push(parseInt(sVal[0].addCount));
+                                                        decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                        
+                                                        this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                        this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                        _d = _d + 1;
+                                                    }
+                                                    else{
+                                                        increaseCount.push(0);
+                                                        decreaseCount.push(0);
+                                                    }
+                                                }
+                                            }
+                                            else{  
+                                                _.each(summary_json.stats[0], function (sVal) {
+                                                    categories.push(moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"));
+                                                    increaseCount.push(parseInt(sVal[0].addCount));
+                                                    decreaseCount.push(parseInt(sVal[0].removeCount));
+                                                    //_data.push([moment(sVal[0].reportDate, 'YYYY-M-D').format("DD MMM"), parseInt(sVal[0].removeCount), parseInt(sVal[0].addCount), ''])
+                                                    this.chart_data['addCount'] = this.chart_data['addCount'] + parseInt(sVal[0].addCount);
+                                                    this.chart_data['removeCount'] = this.chart_data['removeCount'] + parseInt(sVal[0].removeCount);
+                                                }, this);
+                                            }
                                         var _data = [{"name": "Decrease", "data": decreaseCount}, {"name": "Increase", "data": increaseCount}];
                                         this.chartPage = new chart({page: this, isStacked: true, xAxis: {label: 'category', categories: categories}, yAxis: {label: 'Count'}, colors: ['#f71a1a', '#97d61d']});
                                         this.$("." + tagClass).html(this.chartPage.$el);
