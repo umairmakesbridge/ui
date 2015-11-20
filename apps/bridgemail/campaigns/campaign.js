@@ -760,17 +760,17 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                                 var i, scrollTop = this.$win.scrollTop();
                                 if (scrollTop >= this.navTop && !this.isFixed) {
                                     this.isFixed = 1
-                                    this.$nav.addClass('editor-toptoolbar-fixed');
+                                    this.$nav.addClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');
                                     this.$nav.css("width", this.$(".editorpanel").width());
                                     this.$tools.addClass('editor-lefttoolbar-fixed');
-                                    this.$editorarea.addClass('editor-panel-fixed');
+                                    this.$editorarea.addClass('editor-panel-fixed-camp');
                                     this.scrollfixPanel();
                                 } else if (scrollTop <= this.navTop && this.isFixed) {
                                     this.isFixed = 0
-                                    this.$nav.removeClass('editor-toptoolbar-fixed');
+                                    this.$nav.removeClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');
                                     this.$nav.css("width", "100%");
                                     this.$tools.removeClass('editor-lefttoolbar-fixed');
-                                    this.$editorarea.removeClass('editor-panel-fixed');
+                                    this.$editorarea.removeClass('editor-panel-fixed-camp');
                                 }
                                 var scrollBottom = $(document).height() - $(window).height() - $(window).scrollTop();
                                 if (scrollBottom < 74) {
@@ -793,7 +793,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 scrollfixPanel: function () {
                     $(window).scroll(_.bind(function () {
                         var scrollTop = this.$win.scrollTop();
-                        var scrollPosition = scrollTop - 395;
+                        var scrollPosition = scrollTop - 371;
                         
                         if (scrollPosition < 0) {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
@@ -2339,7 +2339,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:395, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
+                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:371, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
                         this.$("#mee_editor").setChange(this.states);
                         this.setMEE(_html);
                         this.initScroll();

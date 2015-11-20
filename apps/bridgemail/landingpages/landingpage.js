@@ -453,7 +453,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         this.landinpageHTML = layout;
                         _html = this.landinpageHTML;
                     }
-                     var topaccordian=parseInt(this.$('.landing_top').outerHeight()+175);
+                     var topaccordian=parseInt(this.$('.landing_top').outerHeight()+176);
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:topaccordian,html:''
                             ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
@@ -509,14 +509,14 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                           var i, scrollTop = this.$win.scrollTop();
                           if (scrollTop >= this.navTop && !this.isFixed) {
                             this.isFixed = 1
-                            this.$nav.addClass('editor-toptoolbar-fixed');
+                            this.$nav.addClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');
                             this.$nav.css("width",this.$(".editorpanel").width());
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');  
                             this.scrollfixPanel();
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
-                            this.$nav.removeClass('editor-toptoolbar-fixed');
+                            this.$nav.removeClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');
                             this.$nav.css("width","100%");
                             this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.removeClass('editor-panel-fixed');                        
@@ -542,7 +542,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                 scrollfixPanel: function () {
                     $(window).scroll(_.bind(function () {
                         var scrollTop = this.$win.scrollTop();
-                        var scrollPosition = scrollTop - parseInt(this.$('.landing_top').outerHeight()+175);
+                        var scrollPosition = scrollTop - parseInt(this.$('.landing_top').outerHeight()+176);
                         
                         if (scrollPosition < 0) {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');

@@ -2626,6 +2626,9 @@ a,
     margin: 0 10px 10px;
     width: 270px;
 }
+.mee-left-toolbar{
+    margin: 7px 10px 10px;
+}
 .tools ul.tabsnav { }
 .tools ul.tabsnav li { float:right; width:133px; }
 .tools ul.tabsnav li:first-child { float:left; }
@@ -3027,6 +3030,9 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 .MEE_EDITOR .editorpanel { 
     display: block; 
     margin: 10px 10px 10px 290px;
+    border: 2px solid #1d3c49;
+    padding: 0;
+    border-radius: 2px;
 }
 
 .MEE_EDITOR .editorbar {
@@ -3036,6 +3042,9 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     -webkit-border-radius:  2px 2px 0 0;
     -moz-border-radius: 2px 2px 0 0;
     border-radius:  2px 2px 0 0; 
+    top:7px;
+     margin-bottom: 0px;
+     background: #fff;
 } 
 
 .MEE_EDITOR .editorbar ul  {
@@ -3044,9 +3053,12 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 .MEE_EDITOR .editorbar ul li {
     display: inline-block;
     float: left;
-    line-height: 36px;
-    padding: 0 5px 0 0;
+    line-height: 30px;
+    padding: 0 5px 8px 0;
     text-align: center;
+}
+.MEE_EDITOR .editorbar ul li:first-child {
+    margin-left: 5px;
 }
 .MEE_EDITOR .editorbar ul li a { color:#fff; font-size:13px; line-height:30px;}
 /*.editorbar ul li a span { line-height:30px;}
@@ -3074,7 +3086,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
     border: 2px solid #FFFFFF;
     border-radius: 0 0 2px 2px; 
     /*padding: 10px 0;*/
-    width: 100%;
+    width: 99.6%;
     -webkit-border-radius: 2px 2px;
     -moz-border-radius: 2px 2px;
     border-radius: 2px 2px; 
@@ -4565,14 +4577,14 @@ ul.socialbtns li .radiopanelinput.checked {
 
 .editor-toptoolbar-fixed{
     position: fixed;
-    top:0px;     
+    top:0px !important;     
     z-index: 1000;
-    -webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-    box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
+    /*-webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);*/
+    /*-moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);*/
+    /*box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);*/
 }
 .modal-body .editor-toptoolbar-fixed,.modal-body .editor-lefttoolbar-fixed{
-    top:60px;    
+    top:60px !important;    
 }
 .shadow-div{
     -webkit-box-shadow:0 5px 5px rgba(0, 0, 0, 0.2);
@@ -4585,9 +4597,13 @@ ul.socialbtns li .radiopanelinput.checked {
     position: fixed;
     top:0px;     
     z-index: 10;
+     margin: 0 10px 10px;
 }
 .MEE_EDITOR .editorbox.editor-panel-fixed{
     padding-top: 60px;
+}
+.MEE_EDITOR .editorbox.editor-panel-fixed-camp{
+    padding-top: 42px;
 }
 div.textcontent ul,div.textcontent ol{
     margin:0px !important;
@@ -4762,4 +4778,19 @@ body > .draggableControl{
 }
 
 
-
+.editor-toptoolbar-fixed-border {
+    border-radius: 1px !important;
+    border-top: 2px solid #1d3c49;
+    
+}
+.editor-toptoolbar-fixed-border > ul{
+   margin-top : 10px !important;
+}
+.editor-toptoolbar-fixed-border > ul li{
+   padding : 0 5px 0 0 !important;
+}
+.MEE_EDITOR .editorbar ul{
+     background: #fff none repeat scroll 0 0;
+    float: left;
+    margin-left: 0 !important;
+}

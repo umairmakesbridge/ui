@@ -318,7 +318,7 @@ function (template,contactsView) {
                           } else if (scrollTop <= this.navTop && this.isFixed) {
                             this.isFixed = 0
                             this.$nav.removeClass('editor-toptoolbar-fixed');
-                            this.$nav.css("top","0px");this.$tools.css("top","0px");
+                            this.$nav.css("top","7px");this.$tools.css("top","0px");
                             this.$nav.css("width","100%");
                             this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.removeClass('editor-panel-fixed');                        

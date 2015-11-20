@@ -3893,10 +3893,21 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                             var scrollPosition = scrollTop - options.scrollTopMinus;
                                                                         }
                                                                        else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           scrollPosition =  scrollTop - options.scrollTopMinusObj.topopenaccordian; // open accordian
+                                                                           if(currentWindowObj.find('#campaign_useCustomFooter_div').css('display')!=='none'){
+                                                                                var addHeight = 27;
+                                                                           }else{
+                                                                               var addHeight = 8;
+                                                                           }
+                                                                           scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                           scrollPosition = scrollPosition + 50; 
+                                                                            }
                                                                        }
                                                                        else{
                                                                                 scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                                    scrollPosition = scrollPosition + 56; 
+                                                                                     }
                                                                             } 
                                                                     }
                                                                     else{
@@ -5575,6 +5586,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         var $selected_anchor = $(selected_anchor);
                                         var _html = $selected_anchor.html();
                                         $selected_anchor.replaceWith(_html);
+                                    }else if(selected_anchor.parentNode.tagName.toLowerCase()=="a"){
+                                        var $selectedtag = $(selected_anchor)
+                                        var $clonedtag = $selectedtag.clone()
+                                        $selectedtag.parents('span').html($clonedtag);
                                     }
 
                                     myElement.find(".alertButtons").hide();

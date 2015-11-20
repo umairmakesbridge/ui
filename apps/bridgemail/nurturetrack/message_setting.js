@@ -29,6 +29,7 @@ function (template) {
                 this.plainText = "";
                 this.htmlText = "";   
                 this.type = this.options.type;
+                if(this.options.type == "autobots") {this.ABtype = true;}
                 this.isCreateCamp = (this.options.isCreateNT) ? this.options.isCreateNT : '';
                 if(this.options.type !="undefined" && this.options.type == "autobots")
                      this.camp_id = this.options.campNum;     
@@ -147,7 +148,7 @@ function (template) {
                 if(this.editable){
                     require(["campaigns/campaign_body"],_.bind(function(page){    
                          this.app.showLoading(false,this.$bodyInner);                    
-                         this.messagebody_page = new page({page:this,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
+                         this.messagebody_page = new page({page:this,ABtype:this.ABtype ,scrollElement:this.dialog.$(".modal-body"),camp_obj:this.camp_obj,editable:this.editable})                       
                          this.$bodyInner.append(this.messagebody_page.$el); 
                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
                          this.messagebody_page.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog

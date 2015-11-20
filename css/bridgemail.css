@@ -3979,6 +3979,7 @@ a.tw-toggle.wsicon i {
 .settings.social h2 {
     float: left;
     line-height: 45px;
+    min-width : 86px
     margin: 0 20px 0 0;
 }
 .settings.social h2 .icon {
