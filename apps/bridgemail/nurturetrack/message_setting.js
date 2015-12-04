@@ -206,9 +206,14 @@ function (template) {
                         .done(_.bind(function(data) {                                 
                             var step1_json = jQuery.parseJSON(data);
                             this.app.showLoading(false,this.dialog.$el);
-                            this.$(".save-step2").removeClass("saving");
+                            this.$(".save-step2").removeClass("disabled-btn");
                             if(step1_json[0]!=="err"){
-                                this.app.showMessge("Message settings saved successfully!");
+                                if(!this.messagebody_page.meeView.autoSaveFlag){
+                                        this.app.showMessge("Message settings saved successfully!");
+                                        }
+                                        this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        this.messagebody_page.meeView.autoSaveFlag = false;
+                                
                                 if(selected_li=="plain_text"){
                                     this.plainText = plain;                                    
                                     this.htmlText = "";

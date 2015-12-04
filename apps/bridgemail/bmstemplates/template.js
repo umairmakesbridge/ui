@@ -34,6 +34,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     this.page = this.options.template;
                     this.editor_change = false;
                     this.editorContentMEE = "";
+                    this.meeView = null;
                     if (this.options.rowtemplate) {
                         this.modelTemplate = this.options.rowtemplate;
                     }
@@ -293,8 +294,18 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
                     }, this));
                 },
-                saveTemplateCall: function () {
+                saveTemplateCall: function (obj) {
                     var _this = this;
+                    if(!this.meeView.autoSaveFlag){
+                    var button = '';
+                    if(obj){
+                         button = $.getObj(obj,"a");
+                    }else{
+                        this.meeView.autoSaveFlag = true; 
+                    }
+                    
+                    if((button && !button.hasClass("disabled-btn")) ||  this.meeView.autoSaveFlag == true){  
+                    
                     var URL = "/pms/io/campaign/saveUserTemplate/?BMS_REQ_TK=" + this.app.get('bms_token');
                     var isReturnPath = this.$(".return-path").prop("checked") ? 'Y' : 'N';
                     var isFeatured = this.$(".featured").prop("checked") ? 'Y' : 'N';
@@ -313,21 +324,34 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                     else {
                         this.dataObj["templateHtml"] = _tinyMCE.get('bmseditor_template').getContent()//_this.$("textarea").val()
                     }
-                    _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
+                    if(button &&  !button.hasClass("disabled-btn")){
+                            button.addClass("disabled-btn");
+                            _this.app.showLoading("Updating Template...", this.$el.parents('.modal'));
+                        }
                     $.post(URL, this.dataObj)
                             .done(function (data) {
                                 _this.app.showLoading(false, _this.$el.parents('.modal'));
                                 var _json = jQuery.parseJSON(data);
                                 if (_json[0] !== 'err') {
-                                    _this.app.showMessge("Template Updated Successfully!");
+                                     if(!_this.meeView.autoSaveFlag){
+                                         _this.app.showMessge("Template Updated Successfully!");
+                                        }
+                                        if(button){
+                                            button.removeClass("disabled-btn"); 
+                                        }
+                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        _this.meeView.autoSaveFlag = false;   
+                                        _this.editor_change = false;
                                     if (_this.modelTemplate) {
                                         _this.modelSave();
                                     }
                                 }
                                 else {
                                     _this.app.showAlert(_json[1], $("body"), {fixed: true});
-                                }
-                            });
+                                    }
+                                });
+                            }
+                        }
                 },
                 initEditor: function () {
                     if(this.tinymceEditor==true){return false}
@@ -630,10 +654,11 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                 },
                 setMEEView:function(){
                         var _html = this.editorContent!==""?$('<div/>').html(this.editorContentMEE).text().replace(/&line;/g,""):""; 
-                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 35); // Scroll Top Minus from Body
+                        var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // Scroll Top Minus from Body
                          require(["editor/MEE"],_.bind(function(MEE){                                              
-                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:topaccordian,html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),saveBtnText:'Save Template Body'});                                    
-                            this.$("#mee_editor").setChange(this.states);                
+                            var MEEPage = new MEE({app:this.app,margin:{top:236,left:0},_el:this.$("#mee_editor"),parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:topaccordian,html:'',saveClick:_.bind(this.saveTemplateCall,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),saveBtnText:'Save Template Body', previewCallback: _.bind(this.previewCallback, this)});                                    
+                            this.$("#mee_editor").setChange(this); 
+                            this.meeView = MEEPage;
                             this.setMEE(_html);
                             this.initScroll();
                              
@@ -662,18 +687,20 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                           var i, scrollTop = this.$win.scrollTop();
                           this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top  ;
                           
-                          if (scrollTop >= this.navTop && !this.isFixed) {
+                          if (scrollTop >= (this.navTop + 12) && !this.isFixed) {
                             this.isFixed = 1
-                            this.$nav.addClass('editor-toptoolbar-fixed');                            
+                            this.$nav.addClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');                            
                             this.$nav.css("width",this.$(".editorpanel").width());
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');                                                
-                            this.$nav.css("top","90px");this.$tools.css("top","90px");
+                            this.$nav.attr("style","top:90px !important");
+                            this.$tools.attr("style","top:90px !important");
+                            this.$nav.css("width",this.$(".editorpanel").width());
                             this.scrollfixPanel();
-                          } else if (scrollTop <= this.navTop && this.isFixed) {
+                          } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
                             this.isFixed = 0
-                            this.$nav.removeClass('editor-toptoolbar-fixed');
-                            this.$nav.css("top","0px");this.$tools.css("top","0px");
+                            this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
+                            this.$nav.css("top","7px");this.$tools.css("top","0px");
                             this.$nav.css("width","100%");
                             this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.removeClass('editor-panel-fixed');                        
@@ -689,7 +716,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                         var scrollTop = this.$win.scrollTop();
                         //var scrollPosition = scrollTop - 500;
                       
-                            var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 35); // h3 + padding
+                            var topaccordian = (parseInt(this.$el.parents(".modal-body").find('.template-wrap').outerHeight()) + 31); // h3 + padding
                             var scrollTop = scrollTop - topaccordian;
                        
                         if(scrollTop >= (this.navTop - 270) && scrollTop > 0){
@@ -697,7 +724,7 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                              this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top',scrollTop+'px');
                         }else if(this.$tools.hasClass('editor-lefttoolbar-fixed')){
                             this.$editorarea.addClass('editor-panel-zero-padding');
-                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','20px'); 
+                            this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top','48px'); 
                         }
                         else{
                             this.$editorarea.addClass('editor-panel-zero-padding');
@@ -706,5 +733,8 @@ define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bm
                       
                     },this));
                 },
+                previewCallback: function(){
+                    this.head_action_bar.find('.preview').trigger('click');
+                }
             });
         });

@@ -592,19 +592,28 @@
             <% } %>
             <% if (!options.otopage) { %>
             <li class="save MenuCallBackSave" style="float:right;margin-right:5px;">
-                <a  class="btn-green save-step2">
+                <a  class="btn-green save-step2 showtooltip" data-original-title="Click to save">
                     <% if(options.saveBtnText){ %>
-                    <i class="icon save"></i><span><%= options.saveBtnText %></span>
+                    <i class="icon save"></i>
+                    <!--<span><%= options.saveBtnText %></span>-->
                     <% }else{ %>
-                    <i class="icon save"></i><span>Save Email Body</span>
+                    <i class="icon save"></i>
+                    <!--<span>Save Email Body</span>-->
                     <% } %>
                 </a>
             </li>
             <% } %>
             
              <li class="MenuCallPreview" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>">
-                <a  class="btn-blue">
-                    <i class="icon preview"></i><span>Preview</span>
+                <a  class="btn-blue showtooltip" data-original-title="Click to preview" >
+                    <i class="icon preview"></i>
+                    <!--<span>Preview</span>-->
+                </a>
+            </li>
+             <li class="MenuCallCode" style="float:right; <% if (options.otopage) { print('margin-right:5px') } %>" >
+                <a  class="btn-blue showtooltip" data-original-title="Click to set/get html" >
+                    <i class="icon code" ></i>
+                    <!--<span>Code</span>-->
                 </a>
             </li>
             <% if (!options.otopage && !options.landingPage) { %>
@@ -623,8 +632,9 @@
             <% } %>
             
             <% } %>
-            
+            <span class="lastSaveInfo"></span>
         </ul>
+            <div class="disabled-toolbar"></div> 
     </div>
     <!--  tools  -->
 

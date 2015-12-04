@@ -85,7 +85,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     };
                     this.bmseditor = new editorView({opener: this, wp_id: this.wp_id});
                     this.render();
-
+                    this.meeView = null;
                     var appMsgs = this.app.messages[0];
                     this.app.showInfo(this.$el.find('#lblSubject'), appMsgs.CAMP_subject_info);
                     this.app.showInfo(this.$el.find('#lblFromemail'), appMsgs.CAMP_femail_info);
@@ -793,7 +793,7 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 scrollfixPanel: function () {
                     $(window).scroll(_.bind(function () {
                         var scrollTop = this.$win.scrollTop();
-                        var scrollPosition = scrollTop - 371;
+                        var scrollPosition = scrollTop - 372;
                         
                         if (scrollPosition < 0) {
                             this.$el.find('#mee-iframe').contents().find('.fixed-panel').css('top', '0');
@@ -1304,11 +1304,21 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     return proceed;
                 },
                 saveForStep2: function (obj) {
-                    var button = $.getObj(obj, "a");
-                    if (!button.hasClass("saving")) {
-                        this.saveStep2(false);
-                        button.addClass("saving");
+                    
+                    if(!this.meeView.autoSaveFlag){
+                       if(obj){
+                            var button = $.getObj(obj, "a");
+                                if (!button.hasClass("disabled-btn")) {
+                                this.saveStep2(false);
+                                button.addClass("disabled-btn");
+                            }  
+                        }else{
+                           this.meeView.autoSaveFlag = true; 
+                           this.saveStep2(false); 
+                        } 
                     }
+                    
+                    
                 },
                 saveStep2: function (gotoNext, htmlText) {
                     var camp_obj = this;
@@ -1368,9 +1378,13 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                                 .done(function (data) {
                                     var step1_json = jQuery.parseJSON(data);
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
-                                    camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("saving");
+                                    camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("disabled-btn");
                                     if (step1_json[0] !== "err") {
+                                        if(!camp_obj.meeView.autoSaveFlag){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
+                                        }
+                                        camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        camp_obj.meeView.autoSaveFlag = false;
                                         if (selected_li == "plain_text") {
                                             camp_obj.states.step2.plainText = plain;
                                             camp_obj.states.step2.htmlText = "";
@@ -2339,8 +2353,9 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 setMEEView: function () {
                     var _html = this.campobjData.editorType == "MEE" ? $('<div/>').html(this.states.step2.htmlText).text().replace(/&line;/g, "") : "";
                     require(["editor/MEE"], _.bind(function (MEE) {
-                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:371, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this)});
+                        var MEEPage = new MEE({app: this.app, _el: this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:43, html: '', text: this.states.step2.plainText, saveClick: _.bind(this.saveForStep2, this), textVersionCallBack: _.bind(this.setTextVersion, this), previewCallback: _.bind(this.previewCallback, this)});
                         this.$("#mee_editor").setChange(this.states);
+                        this.meeView = MEEPage;
                         this.setMEE(_html);
                         this.initScroll();
                         
@@ -4314,6 +4329,11 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     var iframHTML = "<iframe src=\"" + URL + "\"  width=\"100%\" class=\"dcItemsIframe\" frameborder=\"0\" style=\"height:" + (dialog_height - 7) + "px\"></iframe>"
                     dialog.getBody().html(iframHTML);
 
+                },
+                previewCallback : function(){
+                    var active_ws = this.$el.parents(".ws-content");
+                    var header_title = active_ws.find(".camp_header .edited  h2");
+                    header_title.find('.preview').trigger('click');
                 }
 
             });

@@ -309,7 +309,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 
 
 /* -----------------------------------------------------------------------------------------------   */
-.mainTable { margin:0 auto;  
+.mainTable { margin:30px auto 0;  
             
             backgroud-colol:#fff;
 }

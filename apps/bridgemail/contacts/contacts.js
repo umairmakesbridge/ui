@@ -25,7 +25,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     },
                 "click .toggletags":function(event){
                         this.$('.status_tgl a').removeClass('active');
-                        $(event.target).addClass('active');
+                        $(event.currentTarget).addClass('active');
                         if(this.$('#contact-search').val().length > 0){
                             this.$('#contact-search').val('');
                             this.fetchContacts();
@@ -35,7 +35,7 @@ function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberR
                     },
             "click .togglecontact": function(event){
                         this.$('.status_tgl a').removeClass('active');
-                        $(event.target).addClass('active');
+                        $(event.currentTarget).addClass('active');
                         this.$('#contact-search').val('');
                         this.$('#contact-search').attr('placeholder','Search By Contacts')
                         if(this.$('#contact-search').val().length > 0){

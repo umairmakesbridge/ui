@@ -2607,6 +2607,11 @@ a,
 .editorbar i.icon.undo  { background-position:-150px 0;  }
 .editorbar i.icon.redo  { background-position:-180px 0;  }
 .MEE_EDITOR .icon.preview  {background: url("../images/meeicons.png") no-repeat  -60px 0; }
+.MEE_EDITOR .icon.code  {background: url("../images/myhtml-18.png") no-repeat  6px 6px; }
+.header-icon .code {
+    background: url("../images/myhtml-18.png") no-repeat  6px 6px;
+    height: 33px;
+}
 .MEE_EDITOR .icon.save  { background: url("../images/save.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.plaintext { background: url("../../img/plaing.png") no-repeat scroll center center; }
 .MEE_EDITOR .icon.sendtest  { background: url("../images/sendtest.png") no-repeat scroll center center; }
@@ -3030,7 +3035,7 @@ ul.b-blocks.hide-footer.image-footer-hide a{ display: none !important; }
 .MEE_EDITOR .editorpanel { 
     display: block; 
     margin: 10px 10px 10px 290px;
-    border: 2px solid #1d3c49;
+    border: 1px solid #1d3c49;
     padding: 0;
     border-radius: 2px;
 }
@@ -4780,7 +4785,7 @@ body > .draggableControl{
 
 .editor-toptoolbar-fixed-border {
     border-radius: 1px !important;
-    border-top: 2px solid #1d3c49;
+    border-top: 1px solid #1d3c49;
     
 }
 .editor-toptoolbar-fixed-border > ul{
@@ -4793,4 +4798,28 @@ body > .draggableControl{
      background: #fff none repeat scroll 0 0;
     float: left;
     margin-left: 0 !important;
+}
+.disabled-toolbar{
+    background:url("../images/disabletoolbar.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+     clear: both;
+    height: 43px;
+    position: absolute;
+    top: 45px;
+    width: 99.9%;
+    z-index: 1;
+    display: block;
+    border-radius: 0 6px 11px 0;
+}
+.editor-toptoolbar-fixed-border div.disabled-toolbar {
+    top: 48px;
+}
+.lastSaveInfo{
+      color: #1d91bc;
+    display: inline-block;
+    /*font-weight: bold;*/
+    left: 12px;
+    line-height: 30px;
+    position: relative;
+    text-align: center;
+    width: auto;
 }

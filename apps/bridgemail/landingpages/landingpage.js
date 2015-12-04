@@ -453,13 +453,14 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         this.landinpageHTML = layout;
                         _html = this.landinpageHTML;
                     }
-                     var topaccordian=parseInt(this.$('.landing_top').outerHeight()+176);
+                     var topaccordian=parseInt(this.$('.landing_top').outerHeight());
                      require(["editor/MEE"],_.bind(function(MEE){                                              
-                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:topaccordian,html:''
+                        var MEEPage = new MEE({app:this.app,margin:{top:84,left:0}, _el:this.$("#mee_editor"), parentWindow: $(window),scrollTopMinus:60,html:''
                             ,saveClick:_.bind(this.saveLandingPage,this),saveBtnText:'Save HTML',landingPage:true,formAttach:_.bind(this.formLandingPage,this),formid:this.formid,pageid:this.page_id,
-                            changeTemplateClick: _.bind(this.templatesDialog,this)});                                    
+                            changeTemplateClick: _.bind(this.templatesDialog,this), previewCallback: _.bind(this.previewCallback, this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
+                        this.meeView = MEEPage;
                         this.initScroll();
                     },this));  
                 },
@@ -473,26 +474,41 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                    }
                 },
                 saveLandingPage: function(obj){
-                    var button = $.getObj(obj,"a");
-                    if(!button.hasClass("saving")){                        
-                        button.addClass("saving");
+                    if(!this.meeView.autoSaveFlag){
+                   var button = '';
+                    if(obj){
+                         button = $.getObj(obj,"a");
+                    }else{
+                        this.meeView.autoSaveFlag = true; 
+                    }
+                   
+                    if((button && !button.hasClass("disabled-btn")) ||  this.meeView.autoSaveFlag == true){                        
+                        if(button &&  !button.hasClass("disabled-btn")){
+                            button.addClass("disabled-btn");
+                           this.app.showLoading("Saving ...",this.$el.parents(".ws-content"));
+                        }
                          var URL = "/pms/io/publish/saveLandingPages/?BMS_REQ_TK="+this.app.get('bms_token');
-                         this.app.showLoading("Saving ...",this.$el.parents(".ws-content"));
                          var post_data = {type:"update",pageId:this.page_id,html:this.$("#mee_editor").getMEEHTML()};
                         $.post(URL,post_data )
                              .done(_.bind(function(data) {                                 
                                  var _json = jQuery.parseJSON(data);
                                  this.app.showLoading(false,this.$el.parents(".ws-content"));                                 
-                                 this.$(".save-step2").removeClass("saving");
+                                 this.$(".save-step2").removeClass("disabled-btn");
                                  if(_json[0]!=="err"){
-                                     this.app.showMessge("Landing page saved successfully!");
-                                                                          
+                                     if(!this.meeView.autoSaveFlag){
+                                        this.app.showMessge("Landing page saved successfully!");
+                                        }
+                                         
+                                        this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        this.meeView.autoSaveFlag = false; 
+                                        this.editor_change = false;
                                  }
                                  else{                               
                                     this.app.showAlert(_json[1],$("body"));
                                  }
-                        },this));
-                    }  
+                            },this));
+                        } 
+                    } //  ./autoSaveFlag
                 },
                 initScroll:function(){            
                     this.$win=$(window)
@@ -576,7 +592,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                     });
                     this.app.showLoading("Loading...",dialog.getBody());
                     require(["landingpages/landingpage_templates"],_.bind(function(templates){
-                        var tmPr =  new templates({app:this.app,scrollElement:dialog.getBody(),dialog:dialog}); 
+                        var tmPr =  new templates({app:this.app,scrollElement:dialog.getBody(),dialog:dialog,parentView : this}); 
                          dialog.getBody().html(tmPr.$el);
                          tmPr.init();
                          var dialogArrayLength = this.app.dialogArray.length; // New Dialog
@@ -651,6 +667,9 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                 insertImage:function(obj){
                    this.showImage(obj.imgthumb);
                    this.saveImage(obj.imgencode);
+                },
+                previewCallback: function(){
+                    this.previewPage(true);
                 }
             });
         });
