@@ -74,7 +74,7 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                     }else{
                         this.fetchBots();
                     }
-                    if(typeof this.options.params !="undefined"){
+                    if(typeof this.options.params !="undefined" && !ev){
                        if(typeof this.options.params.botType !="undefined"){
                         this.typeOfBots = this.options.params.botType;
                         this.addNewAutobot();
@@ -386,11 +386,15 @@ define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'au
                         // this.ws_header.find("#workspace-header").after($('<a class="cstatus pclr18" style="margin:6px 4px 0px -7px">Playing </a>'));
                     });
                 },
-                addNewAutobot: function() {
+                addNewAutobot: function(ev) {
                     $("body #new_autobot").remove();
                     $("body .autobots-modal-in").remove();
-                    $('body').append('<div class="modal-backdrop  in autobots-modal-in"></div>');
-                    $("body").append("<div id='new_autobot' style='width: 795px;  top: 120px;left:50%' class='modal in'></div>");
+                    if(!ev){
+                        var visibilty = this.options.params.botCreateRequest == true?"hidden":"visible";
+                    }
+                   
+                    $('body').append('<div class="modal-backdrop  in autobots-modal-in" style="visibility : '+visibilty+'"></div>');
+                    $("body").append("<div id='new_autobot' style='width: 795px;  top: 120px;left:50%;visibility:"+visibilty+"' class='modal in'></div>");
                     $("body #new_autobot").html(new Choosebot({app: this.app, listing: this,type:this.typeOfBots}).el);
                     $("body #new_autobot").css("margin-left","-"+$("#new_autobot").width() / 2+"px");
                     this.typeOfBots = false;
