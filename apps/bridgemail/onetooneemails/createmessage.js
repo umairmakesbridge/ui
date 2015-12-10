@@ -277,7 +277,7 @@ function (template,contactsView) {
                      
                      require(["editor/MEE"],_.bind(function(MEE){                                              
                         var MEEPage = new MEE({app:this.app,margin:{top:373,left:0}, _el:this.$("#mee_editor"), html:''
-                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:410,isOTOFlag:true,isSaveHide:true});                                    
+                            ,saveClick:_.bind(this.sendEmail,this),fromDialog:true,parentWindow:this.$el.parents(".modal-body"),scrollTopMinus:410,isOTOFlag:true,isSaveHide:true, previewCallback: _.bind(this.previewCallback, this)});                                    
                         this.$("#mee_editor").setChange(this);                
                         this.setMEE(_html);
                         this.initScroll();
@@ -307,18 +307,18 @@ function (template,contactsView) {
                           var i, scrollTop = this.$win.scrollTop();
                           this.navTop = this.$('#area_html_editor_mee').length && this.$('#area_html_editor_mee').position().top  ;
                           
-                          if (scrollTop >= this.navTop && !this.isFixed) {
+                          if (scrollTop >= (this.navTop + 12) && !this.isFixed) {
                             this.isFixed = 1
-                            this.$nav.addClass('editor-toptoolbar-fixed');                            
+                            this.$nav.addClass('editor-toptoolbar-fixed editor-toptoolbar-fixed-border');                            
                             this.$nav.css("width",this.$(".editorpanel").width());
                             this.$tools.addClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.addClass('editor-panel-fixed');                                                
                             this.$nav.css("top","60px");this.$tools.css("top","60px");
                             this.scrollfixPanel();
-                          } else if (scrollTop <= this.navTop && this.isFixed) {
+                          } else if (scrollTop <= (this.navTop + 12) && this.isFixed) {
                             this.isFixed = 0
-                            this.$nav.removeClass('editor-toptoolbar-fixed');
-                            this.$nav.css("top","0px");this.$tools.css("top","0px");
+                            this.$nav.removeClass('editor-toptoolbar-fixed  editor-toptoolbar-fixed-border');
+                            this.$nav.css("top","7px");this.$tools.css("top","0px");
                             this.$nav.css("width","100%");
                             this.$tools.removeClass('editor-lefttoolbar-fixed');                        
                             this.$editorarea.removeClass('editor-panel-fixed');                        
@@ -654,6 +654,33 @@ function (template,contactsView) {
                     for(var i = 0; i < arraylength; i++) {
                         this.dialog.hide();
                     }
+                },
+                previewCallback: function(){
+                   
+                   
+                 			
+                var dialog_width = $(document.documentElement).width()-60;
+                var dialog_height = $(document.documentElement).height()-182;
+                var dialog = this.app.showDialog({title:'Message Preview' ,
+                                  css:{"width":dialog_width+"px","margin-left":"-"+(dialog_width/2)+"px","top":"10px"},
+                                  headerEditable:false,
+                                  headerIcon : 'dlgpreview',
+                                  bodyCss:{"min-height":dialog_height+"px"}
+                });	
+                this.app.showLoading("Loading Message HTML...",dialog.getBody());									
+                var preview_url = "https://"+this.app.get("preview_domain")+"/pms/events/viewcamp.jsp?msgId="+this.msgID+"&subNo="+this.subNum;
+
+                require(["common/templatePreview"],_.bind(function(MessagePreview){
+
+                var tmPr =  new MessagePreview({frameSrc:preview_url,app:this.app,frameHeight:dialog_height,prevFlag:'T',tempNum:this.msgID}); // isText to Dynamic
+                 dialog.getBody().append(tmPr.$el);
+                 this.app.showLoading(false, tmPr.$el.parent());
+                 tmPr.init();
+                 var dialogArrayLength = this.app.dialogArray.length; // New Dialog
+                 tmPr.$el.addClass('dialogWrap-'+dialogArrayLength); // New Dialog
+                 dialog.$el.find('#dialog-title .preview').remove();
+               },this));
+                   
                 }
     });   
 });

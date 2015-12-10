@@ -461,7 +461,6 @@
                      filter.find(".campaign-source").prop("disabled",false).trigger("chosen:updated")
                      if(campainVal == "N"){
                         var select_html = '<option value="-1">Any Campaign</option>';
-                        
                      }else if(campainVal == "B"){
                          var select_html = '<option value="-1">Any Autobot</option>'
                      }else if(campainVal == "A"){
@@ -1450,7 +1449,9 @@
         
         //dialog.getBody().html(d)
         dialog.html(d)
+        if(self.subListObj.params){
          dialog.attr('checksumlist',self.subListObj.params['listNumber.checksum']);
+        }
         d.find("#"+searchDiv).searchcontrol({
                 id:'list-search',
                 width:'250px',

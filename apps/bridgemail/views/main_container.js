@@ -741,7 +741,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                         var type = $(ev.target).data('type');
                     }
 
-                    this.addWorkSpace({type: '', title: 'Autobots', sub_title: 'Listing', url: 'autobots/autobots', workspace_id: 'autobots', 'addAction': true, tab_icon: 'autobotslisting', params: {botType: type}});
+                    this.addWorkSpace({type: '', title: 'Autobots', sub_title: 'Listing', url: 'autobots/autobots', workspace_id: 'autobots', 'addAction': true, tab_icon: 'autobotslisting', params: {botType: type,botCreateRequest:true}});
                 },
                 salesforceCrm: function () {
                     this.addWorkSpace({

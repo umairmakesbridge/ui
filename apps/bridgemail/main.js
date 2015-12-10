@@ -40,7 +40,7 @@
            'jquery.isotope':'shared/libs/jquery.isotope',
            'mee-helper': 'shared/editor_common',
            'mincolors':'shared/libs/jquery.minicolors',
-           'tinymce':'shared/libs/tinymce/tinymce.min',
+           'tinymce':'shared/libs/tinymce/tinymce',
            'scrollbox':'shared/jquery.scrollbox',
            'highcharts':'shared/libs/charts/highcharts',
            'export-chart':'shared/libs/charts/modules/exporting',

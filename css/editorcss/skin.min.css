@@ -1712,6 +1712,7 @@ div.mce-tinymce-inline {
 .mce-tinymce.mce-tinymce-inline.mce-container.mce-panel.mce-floatpanel.fixed-panel {
     left: 0 !important;
      visibility: visible !important;
+     overflow:hidden;
 }
 
 

@@ -20,6 +20,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.leftMinus = 80;
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
+                    this.autoSaveFlag = false;
                     var mee_view = this;
                     var predefinedControls = [
                         {
@@ -99,7 +100,6 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 this._undo = MakeBridgeUndoRedoManager_Undo;
                                 this._redo = MakeBridgeUndoRedoManager_Redo;
                                 
-
                                 function MakeBridgeUndoRedoManager_RegisterAction(obj) { // Save HTML before performing any action
 
                                     if (isUndoPerformed) { // While performing undo redo if any new action performed then clear the stack
@@ -176,6 +176,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                             }
                             var mee = this;
                             mee.iframeLoaded = false;
+                            
                             this.each(function () {
                                 var $this = $(this);
                                 var undoManager = new MakeBridgeUndoRedoManager({
@@ -193,7 +194,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         
                                         this.$el.html(this.my_template({allowedUser: ['admin', 'jayadams', 'demo'], options: options}));
                                         this.$("#mee-iframe").load(function () {
-                                            mee.iframeLoaded = true;    
+                                            mee.iframeLoaded = true;
                                             $this.find("#mee-iframe").contents().find("body").mouseover(_.bind(mee.setScrollHeight,mee));                                            
                                         })
                                         
@@ -377,11 +378,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                    if(!isRemoveDialogAttach){
                                         removeDialogs();    
                                    }
-                                   
+                                   recursiveSaveCall();
                                     mainContentHtmlGrand.mouseup(function () {
                                         if(changFlag){
                                             changFlag.editor_change = true;
-                                        }
+                                        }   
                                     })
                                     //*****************************************Landing page options***********************************************************************************///
                                     if (options.landingPage) {
@@ -390,7 +391,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     }
                                    //*****************************************End of landing pages***********************************************************************************///
                                 }
-
+                                /* ===============Auto Save======================== */
+                                function recursiveSaveCall(){
+                                     if(changFlag.editor_change){
+                                            options.saveCallBack();
+                                        }
+                                       else{
+                                         mee_view.autoSaveFlag = false;
+                                         // console.log('Flag is false now');      
+                                        }
+                                      setTimeout(function(){recursiveSaveCall()},20000)
+                                }
                                 $.fn.setChange = function (states) {
                                     changFlag = states;
                                 };
@@ -499,7 +510,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         myElement.find("[data-type='signupForm']").removeClass("disabled").attr("draggable",true);   
                                     }
                                 }
-
+                               
                                 $.fn.getIframeStatus = function () {
                                     return mee.iframeLoaded;
                                 }
@@ -548,10 +559,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                     var lnkTextVersion = myElement.find(".MenuCallTextVersion");
                                     var lnkDCItems = myElement.find(".MenuCallDCItems");    
                                     var divPreviewCode = myElement.find(".divPreviewCode");
-
+                                    var lnkHtmlCode = myElement.find(".MenuCallCode");
                                     //previeCodeTabs.tabs();
 
                                     lnkPreviewCode.click(function () {
+                                        options.previewdesignTemplateCallback();
+                                    });
+                                    lnkHtmlCode.click(function(){
                                         var mainHTMLELE = meeIframe.find(".mainContentHtml");
                                         mainHTMLELE.find(".bgimage").each(function(){
                                             $(this).attr("mee-style",$(this).attr("style"));
@@ -568,7 +582,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var dialog_width = $(document.documentElement).width() - 60;
                                         var dialog_height = $(document.documentElement).height() - 182;
                                         var dialog = options._app.showDialog({
-                                            title: 'Code Preview',
+                                            title: 'HTML Code',
                                             css: {
                                                 "width": dialog_width + "px",
                                                 "margin-left": "-" + (dialog_width / 2) + "px",
@@ -578,7 +592,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                 "min-height": dialog_height + "px"
                                             },
                                             headerEditable: false,
-                                            headerIcon: 'dlgpreview',
+                                            headerIcon: 'code',
                                             buttons: {
                                                 saveBtn: {
                                                     text: 'Set'
@@ -586,12 +600,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                             }
                                         });
                                         var preview_html = '<div class="divPreviewCode"><ul  class="mapTab tabs-btns clearfix">';
-                                        preview_html += '<li class="active"><a href="#preview" data-toggle="tab">Preview</a></li>';
-                                        preview_html += '<li><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';
-                                        preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane active">';
+                                        preview_html += '<li style="display:none;"><a href="#preview" data-toggle="tab">Preview</a></li>';
+                                        preview_html += '<li style="display:none;" class="active"><a href="#htmlCode" data-toggle="tab">Html Code</a></li></ul>';
+                                        preview_html += '<div class="tab-content" style="padding:0px"><div id="preview" class="tab-pane">';
                                         preview_html += '<div class="divHtmlPreview"><iframe id="preview_iframe" frameborder="0" src="about:blank" style="width:100%;height:' + (dialog_height - 48) + 'px;"></iframe></div></div>';
-                                        preview_html += '<div id="htmlCode" class="tab-pane">';
-                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 58) + 'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
+                                        preview_html += '<div id="htmlCode" class="tab-pane active">';
+                                        preview_html += '<textarea style="font-size:12px;width:' + (dialog_width - 46) + 'px;height:' + (dialog_height - 20) + 'px;margin-bottom:0px;border:0px;" class="divHtmlCode" cols="1000" rows="250"></textarea>';
                                         preview_html += '</div></div></div>';
                                         preview_html = $(preview_html);
                                         dialog.getBody().append(preview_html);
@@ -625,9 +639,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         iframe.write(content);
                                         iframe.close();
                                         dialog.getBody().find(".divHtmlCode").val(outputHTML);
-
                                     });
-                                    
                                     lnkTextVersion.click(function () {
                                         
                                         var dialog_width = $(document.documentElement).width() - 60;
@@ -2302,6 +2314,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         changFlag.editor_change = true;
                                     }
                                 }
+                               
 
                                 var OnClickedOnElement = function (event) {
                                     myElement.find("#imageDataSavingObject").data("myWorkingObject", event.target);
@@ -3850,6 +3863,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 makeCloneAndRegister();
                                                             }
                                                         });
+                                                         
                                                         editor.on("mouseUp", function (e) {
                                                             myElement.find(".alertButtons").hide();
                                                             var tiny_editor_selection = editor.selection;
@@ -3869,14 +3883,27 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                             var scrollPosition = scrollTop - options.scrollTopMinus;
                                                                         }
                                                                        else if(currentWindowObj.find('#ui-accordion-accordion_setting-panel-0').hasClass("ui-accordion-content-active")){
-                                                                           scrollPosition =  scrollTop - options.scrollTopMinusObj.topopenaccordian; // open accordian
+                                                                           if(currentWindowObj.find('#campaign_useCustomFooter_div').css('display')!=='none'){
+                                                                                var addHeight = 27;
+                                                                           }else{
+                                                                               var addHeight = 8;
+                                                                           }
+                                                                            scrollPosition = ((myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + 60)); // New Offset 
+                                                                           //scrollPosition =  scrollTop - (options.scrollTopMinusObj.topopenaccordian + parseInt(currentWindowObj.find('.editortoolbar').outerHeight()) + addHeight); // open accordian
+                                                                           if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                             scrollPosition = scrollPosition + 50; 
+                                                                            }
                                                                        }
                                                                        else{
                                                                                 scrollPosition = scrollTop - options.scrollTopMinusObj.topcloseaccordian; // closed accordian
+                                                                                 if(currentWindowObj.find('.editorbox').hasClass('editor-panel-zero-padding')){
+                                                                                    scrollPosition = scrollPosition + 56; 
+                                                                                     }
                                                                             } 
                                                                     }
                                                                     else{
-                                                                        var scrollPosition = scrollTop - options.scrollTopMinus; // Parent obj is workspace
+                                                                         //console.log('myElement : '+myElement.offset().top+ ' AND' + myElement.find('.disabled-toolbar').offset().top)
+                                                                        var scrollPosition = (myElement.find('.disabled-toolbar').offset().top ) - (myElement.offset().top + options.scrollTopMinus); // Parent obj is workspace
                                                                     }
                                                                                                                                         
                                                                     
@@ -3885,7 +3912,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                             }else{
                                                                                $(val).css({top:"0px","left":"0"}); 
                                                                             }
-                                                                    $(val).addClass('fixed-panel');
+                                                                    setTimeout(function(){ $(val).addClass('fixed-panel'); }, 50);
+                                                                    
+                                                                    setTimeout(function(){ myElement.find('.disabled-toolbar').css('visibility','hidden'); }, 100);
                                                                 }
                                                             })
                                                             if (currentNode.nodeName == "a" || currentNode.nodeName == "A" || currentNode.parentNode.nodeName == "A" || currentNode.parentNode.nodeName == "a") {
@@ -3894,6 +3923,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                                                 showAlertButtons(currentNode, selectedLinkFromTinyMCE.href);
                                                                 isElementClicked = true;
                                                             }
+                                                        });
+                                                        
+                                                        editor.on('blur', function () {
+                                                            //$(this.contentAreaContainer.parentElement).find("div.mce-toolbar-grp").hide();
+                                                            //console.log('Hitting');
+                                                            myElement.find('.disabled-toolbar').removeAttr('style');
                                                         });
                                                     }
                                                     editor.addButton('LinksButton', {
@@ -5539,6 +5574,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                         var $selected_anchor = $(selected_anchor);
                                         var _html = $selected_anchor.html();
                                         $selected_anchor.replaceWith(_html);
+                                    }else if(selected_anchor.parentNode.tagName.toLowerCase()=="a"){
+                                        var $selectedtag = $(selected_anchor)
+                                        var $clonedtag = $selectedtag.clone()
+                                        $selectedtag.parents('span').html($clonedtag);
                                     }
 
                                     myElement.find(".alertButtons").hide();
@@ -5700,6 +5739,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 
                                  myElement.find('.MenuCallTemplate').click(function (obj) {
                                     options.templatesCallBack(obj);
+                                    
                                 });
 
                                 
@@ -5877,6 +5917,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         saveCallBack: this.options.saveClick,
                         templatesCallBack: this.options.changeTemplateClick,
                         saveTextVersionCallBack: this.options.textVersionCallBack,
+                        previewdesignTemplateCallback :  this.options.previewCallback,
                         textVersion:this.options.text,
                         formCallBack: this.options.formAttach, 
                         formid : this.options.formid,
@@ -6333,9 +6374,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                         OnExistingDynamicControlDropped: function () {
 
                         }
-
+                        
 
                     });
+                    $(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 }
 
 
