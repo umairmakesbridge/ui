@@ -1,4 +1,4 @@
-define(['text!campaigns/html/campaign_row_copy.html', 'jquery.highlight'],
+define(['text!campaigns/html/campaign_row_copy.html'],
         function (template, highlighter) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

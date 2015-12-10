@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'underscore', 'app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','bms-tags','scrollbox'],
-	function ($, Backbone, _, app, template,fileuploader,dragfile,bmstags,scrollbox) {
+define(['app', 'text!common/html/quickadd.html','fileuploader','bms-dragfile','scrollbox'],
+	function (app, template,fileuploader,dragfile,scrollbox) {
 		'use strict';
 		return Backbone.View.extend({
                         id: 'csvupload',

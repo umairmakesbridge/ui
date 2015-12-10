@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobots_tile.html', 'moment', 'jquery.chosen','common/tags_row'],
-        function(template, moment, chosen,tagView) {
+define(['text!autobots/html/autobots_tile.html','common/tags_row'],
+        function(template,tagView) {
             'use strict';
             return Backbone.View.extend({
                 tagName: "li",

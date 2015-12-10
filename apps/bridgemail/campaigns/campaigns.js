@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!campaigns/html/campaigns.html', 'bms-filters', 'daterangepicker', 'moment', 'campaigns/collections/campaigns', 'campaigns/campaign_row'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, _daterangepicker, moment, campaignCollection, campaignRowView) {
+define(['text!campaigns/html/campaigns.html', 'campaigns/collections/campaigns', 'campaigns/campaign_row'],
+        function (template, campaignCollection, campaignRowView) {
             'use strict';
             return Backbone.View.extend({
                 id: 'campaigns_list',

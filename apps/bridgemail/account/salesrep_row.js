@@ -1,4 +1,4 @@
-define(['text!account/html/salesrep_row.html','moment','jquery.chosen'],
+define(['text!account/html/salesrep_row.html'],
 function (template,moment) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

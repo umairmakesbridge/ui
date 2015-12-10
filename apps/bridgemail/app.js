@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action', 'moment'
+    'jquery', 'underscore', 'backbone', 'bootstrap', 'views/common/dialog', 'views/common/dialog2', 'views/common/add_action','moment','jquery.bmsgrid', 'bms-tags', 'bms-addbox','jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight','daterangepicker'
 ], function ($, _, Backbone, bootstrap, bmsStaticDialog, bmsDialog, addDialog, moment) {
     'use strict';
     var App = Backbone.Model.extend({
@@ -57,7 +57,7 @@ define([
         initialize: function () {
             //Load config or use defaults
             this.set(_.extend({
-                env: 'production',
+                env: 'test',
                 complied: 1,
                 bms_token: bms_token,
                 isMEETemplate: $.getUrlVar(false, 'meeTemplate'),
@@ -239,6 +239,8 @@ define([
             //Cache Clear time set
             this.clearCache();
             this.mainContainer.$el.css("min-height", $(document.documentElement).height() - 35);
+            // Load large files in start. 
+            require(["editor/MEE",'jquery-ui'], _.bind(function (MEE) { },this));
 
         },
         getUser: function () {
@@ -702,8 +704,7 @@ define([
         },
         validateEmail: function (emailVal)
         {
-            var email_patt = new RegExp("[A-Za-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?");
-            //var email_patt = new RegExp("[A-Za-z0-9'_`-]+(?:\\.[A-Za-z0-9'_`-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])");
+            var email_patt = new RegExp("[A-Za-z0-9A-Z!#$%&'*+/=?^_`{|}~-]+(?:\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?");            
             return email_patt.test(emailVal);
         },
         showError: function (params) {

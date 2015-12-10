@@ -1,5 +1,5 @@
-define(['text!autobots/html/targets.html', 'moment'],
-        function(template, moment) {
+define(['text!autobots/html/targets.html'],
+        function(template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Target li view for nurture track 

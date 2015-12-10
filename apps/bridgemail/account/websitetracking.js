@@ -1,4 +1,4 @@
-define(['text!account/html/websitetracking.html','jquery.icheck'],
+define(['text!account/html/websitetracking.html'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

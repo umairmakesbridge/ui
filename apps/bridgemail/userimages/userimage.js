@@ -7,8 +7,8 @@
  * Image view in grid. require bms_tags and userimage html. events remove/preview/select/show url/mark fav/ etc.
  */
 
-define(['text!userimages/html/userimage.html', 'bms-tags'],
-        function(template, bmstags) {
+define(['text!userimages/html/userimage.html'],
+        function(template) {
             'use strict';
             return Backbone.View.extend({
                 tagName: 'li',

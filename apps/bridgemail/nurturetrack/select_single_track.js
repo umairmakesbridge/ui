@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/select_single_track.html', 'nurturetrack/collections/tracks', 'nurturetrack/track_row','moment','jquery.bmsgrid','daterangepicker'],
-function (template, TracksCollection, trackRowView,moment) {
+define(['text!nurturetrack/html/select_single_track.html', 'nurturetrack/collections/tracks', 'nurturetrack/track_row'],
+function (template, TracksCollection, trackRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

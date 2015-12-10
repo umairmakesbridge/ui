@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/track_row_makesbridge_tile.html','jquery.highlight','common/tags_row','jquery.customScroll'],
-function (template,highlighter,tagView) {
+define(['text!nurturetrack/html/track_row_makesbridge_tile.html','common/tags_row'],
+function (template,tagView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nurture track Makesbridge View to show on listing page

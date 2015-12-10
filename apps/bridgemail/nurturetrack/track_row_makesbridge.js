@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/track_row_makesbridge.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!nurturetrack/html/track_row_makesbridge.html'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nurture track Makesbridge View to show on listing page

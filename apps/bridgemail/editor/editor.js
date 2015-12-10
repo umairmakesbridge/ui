@@ -1,5 +1,5 @@
-define(['jquery','backbone', 'underscore', 'text!editor/html/editor.html'],
-	function ($,Backbone,_, template) {
+define(['text!editor/html/editor.html'],
+	function (template) {
 		'use strict';
 		return Backbone.View.extend({			                                                                       
                         className:'editor_box',

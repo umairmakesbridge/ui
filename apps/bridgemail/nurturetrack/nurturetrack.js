@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','target/collections/recipients_targets','bms-tags','bms-dragfile'],
+define(['text!nurturetrack/html/nurturetrack.html','nurturetrack/targetli','nurturetrack/message_row','nurturetrack/wait_row','nurturetrack/buttons_row','target/collections/recipients_targets','bms-dragfile'],
         function(template,TargetLiView,MessageView,WaitView,ButtonsView,TargetsCollection) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

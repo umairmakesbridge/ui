@@ -43,7 +43,8 @@
            'tinymce':'shared/libs/tinymce/tinymce.min',
            'scrollbox':'shared/jquery.scrollbox',
            'highcharts':'shared/libs/charts/highcharts',
-           'export-chart':'shared/libs/charts/modules/exporting'
+           'export-chart':'shared/libs/charts/modules/exporting',
+           'jspdf' : 'reports/summary/vendors/jspdf'
        },
         shim: {
                 backbone: {

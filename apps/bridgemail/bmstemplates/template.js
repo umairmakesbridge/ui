@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template.html', 'jquery.icheck', 'bms-tags', 'bms-addbox', 'bms-dragfile', 'bms-mergefields'],
-        function (template, icheck, bmstags) {
+define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields'],
+        function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Template save and update view

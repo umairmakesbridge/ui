@@ -270,15 +270,13 @@ function (template,editorView) {
             },
             setMEEView:function(){
                     var _html = this.campobjData.editorType=="MEE"?$('<div/>').html(this.parent.htmlText).text().replace(/&line;/g,""):""; 
-                     require(["editor/MEE"],_.bind(function(MEE){
-                         
+                     require(["editor/MEE"],_.bind(function(MEE){                         
                         var topaccordian = (parseInt(this.$el.parents(".modal-body").find('#ui-accordion-accordion_setting-panel-0').outerHeight()) + parseInt(this.$el.parents(".modal-body").find('.selection-boxes').outerHeight()) + 115 + 35); // h3 + padding
                         var topaccordianObj = {topopenaccordian:topaccordian,topcloseaccordian:315}
                         var MEEPage = new MEE({app:this.app,_el:this.$("#mee_editor"),html:'',parentWindow:this.$el.parents(".modal-body"),scrollTopMinusObj:topaccordianObj,text:this.parent.plainText,saveBtnText:'Save Message Body',saveClick:_.bind(this.saveForStep2,this) ,fromDialog:true,reattachEvents:_.bind(this.ReattachEvents,this),textVersionCallBack:_.bind(this.setTextVersion,this)});                                    
                         this.$("#mee_editor").setChange(this.states);                
                         this.setMEE(_html);
-                        this.initScroll();
-                        
+                        this.initScroll();                        
                     },this));  
             },
             setTextVersion:function(text){

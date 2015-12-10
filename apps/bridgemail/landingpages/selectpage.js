@@ -1,5 +1,5 @@
-define(['text!landingpages/html/selectpage.html', 'landingpages/collections/landingpages', 'landingpages/landingpage_row','moment','jquery.bmsgrid','bms-shuffle'],
-function (template, PagesCollection, pageRowView,moment) {
+define(['text!landingpages/html/selectpage.html', 'landingpages/collections/landingpages', 'landingpages/landingpage_row','bms-shuffle'],
+function (template, PagesCollection, pageRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

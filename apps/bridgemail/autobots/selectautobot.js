@@ -1,5 +1,5 @@
-define(['text!autobots/html/selectautobot.html', 'autobots/collections/autobots', 'autobots/autobot','moment','jquery.bmsgrid','bms-shuffle','daterangepicker'],
-function (template, AutobotCollection, botRowView,moment) {
+define(['text!autobots/html/selectautobot.html', 'autobots/collections/autobots', 'autobots/autobot','bms-shuffle'],
+function (template, AutobotCollection, botRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

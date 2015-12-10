@@ -20,13 +20,7 @@ define(['text!common/html/localTile.html'],
                  */
                 initialize: function () {
                     this.app = this.options.app;
-                    this.template = _.template(template);
-                    //this.url = '';
-                    //this.bms_token = null;
-                    //this.tempNum = null;
-                    //this.original = 'N';
-                    //this.html = 'Y';
-                   // this.subNum = null;                    
+                    this.template = _.template(template);                    
                     this.userid = this.options.userId;
                     if(this.userid==='bayshoresolutions'){
                         this.$el.removeClass('local-adds');
@@ -38,14 +32,11 @@ define(['text!common/html/localTile.html'],
                  * Initialize view .
                  */
                 render: function () {
-
-                    this.$el.html(this.template());
-                    
-                    //this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
+                    this.$el.html(this.template());                                       
                 },
                 init: function () {
 
-                    //this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
+                    
                 },
                
             });

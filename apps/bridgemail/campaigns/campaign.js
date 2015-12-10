@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck', 'jquery.searchcontrol', 'jquery.highlight', 'jquery-ui', 'text!campaigns/html/campaign.html', 'editor/editor', 'bms-tags', 'bms-filters', 'bms-mapping', 'moment', 'bms-mergefields', 'scrollbox'],
-        function (bmsgrid, calendraio, chosen, icheck, bmsSearch, jqhighlight, jqueryui, template, editorView, bmstags, bmsfilters, Mapping, moment, bms, scrollbox) {
+define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/templates', "listupload/campaign_recipients_lists",'target/selecttarget', 'listupload/csvupload', 'bms-filters', 'bms-mapping', 'bms-mergefields', 'scrollbox'],
+        function ( template, editorView,templatesPage, selectListPage, selectTarget, csvuploadPage, bmsfilters, Mapping, bms, scrollbox) {
             'use strict';
             return Backbone.View.extend({
                 id: 'step_container',
@@ -854,14 +854,13 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 },
                 fetchServerTime: function () {
                     this.app.showLoading("Loading Calendar...", this.$(".schedule-box2"));
-                    require(["campaigns/schedule_campaign"], _.bind(function (templatePreview) {
-                        var tmPr = new templatePreview({app: this.app, parent: this, currentStates: this.states.step4, campNum: this.camp_id, rescheduled: this.rescheduled, hidecalender: this.hidecalender, scheduleFlag: 'draft'});
+                    require(["campaigns/schedule_campaign"], _.bind(function (scheduleCalnder) {
+                        var tmPr = new scheduleCalnder({app: this.app, parent: this, currentStates: this.states.step4, campNum: this.camp_id, rescheduled: this.rescheduled, hidecalender: this.hidecalender, scheduleFlag: 'draft'});
                         //tmPr.init(); // Call view functions
                         this.$el.find('.schedule-box2').append(tmPr.$el);
                         this.$el.find('.schedule-box2').removeAttr('style');
                         this.app.showLoading(false, this.$(".schedule-box2"));
                     }, this));
-
                 },
                 initStep4: function () {
                     if (this.states.step4.init === false) {
@@ -2348,11 +2347,11 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                     if (!this.states.step2.templates) {
                         this.app.showLoading("Loading Templates...", this.$('#area_use_template'));
                         var _this = this;
-                        require(["bmstemplates/templates"], function (templatesPage) {
+                        //require(["bmstemplates/templates"], function (templatesPage) {
                             var page = new templatesPage({page: _this, app: _this.app, selectCallback: _.bind(_this.selectTemplate, _this)});
                             _this.$('#area_use_template').html(page.$el);
                             page.init();
-                        })
+                        //})
 
                         this.states.step2.templates = true;
                     }
@@ -2449,11 +2448,11 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                             break;
                         case 'upload_csv':
                             camp_obj.app.showLoading("Loading CSV upload...", camp_obj.$el.find('#area_upload_csv'));
-                            require(["listupload/csvupload"], function (csvuploadPage) {
+                            //require(["listupload/csvupload"], function (csvuploadPage) {
                                 var lPage = new csvuploadPage({camp: camp_obj, app: camp_obj.app});
                                 camp_obj.$el.find('.step3 #area_upload_csv').html(lPage.$el);
                                 camp_obj.states.step3.csvupload = lPage;
-                            })
+                            //})
                             break;
                         case 'salesforce_import':
                             this.checkSalesForceStatus();
@@ -3960,39 +3959,24 @@ define(['jquery.bmsgrid', 'jquery.calendario', 'jquery.chosen', 'jquery.icheck',
                 choseLists: function () {
                     //var params = {type : 'lists'};
                     this.app.showLoading("Loading Lists...", this.$('#area_choose_lists'));
-                    require(["listupload/campaign_recipients_lists"], _.bind(function (page) {
-                        this.RecListsPage = new page({params: {type: "batches", recipientType: this.states.step3.recipientType.toLowerCase()}, parent: this, app: this.app, campNum: this.camp_id});
-                        this.$('#area_choose_lists').html(this.RecListsPage.$el);
-                        //console.log();
-                        //this.RecListsPage.init();                         
-                        // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
+                    //require(["listupload/campaign_recipients_lists"], _.bind(function (selectListPage) {
+                        this.RecListsPage = new selectListPage({params: {type: "batches", recipientType: this.states.step3.recipientType.toLowerCase()}, parent: this, app: this.app, campNum: this.camp_id});
+                        this.$('#area_choose_lists').html(this.RecListsPage.$el);                      
                         this.setRecipients();
-
-                        //this.RecListsPage.createRecipients(listArray);
-                    }, this));
-                    /*var that = this;
-                     require(['listupload/recipients_list'],function(viewLists){
-                     var objViewLists = new viewLists();
-                     $(that.el).find("#target-lists").html(objViewLists.el);
-                     });*/
+                      
+                    //}, this));
+                    
 
                 },
                 choseTargets: function () {
                     //var params = {type : 'lists'};
                     this.app.showLoading("Loading Targets...", this.$('#area_choose_targets'));
-                    require(["target/selecttarget"], _.bind(function (page) {
-                        this.RecTargetPage = new page({page: this, editable: true});
+                    //require(["target/selecttarget"], _.bind(function (selectTarget) {
+                        this.RecTargetPage = new selectTarget({page: this, editable: true});
                         this.$('#area_choose_targets').html(this.RecTargetPage.$el);
-                        this.RecTargetPage.init();
-                        // dialog.saveCallBack(_.bind(targetsPage.saveCall,targetsPage));
-                        this.setRecipients();
-                        //this.RecListsPage.createRecipients(listArray);
-                    }, this));
-                    /*var that = this;
-                     require(['listupload/recipients_list'],function(viewLists){
-                     var objViewLists = new viewLists();
-                     $(that.el).find("#target-lists").html(objViewLists.el);
-                     });*/
+                        this.RecTargetPage.init();                        
+                        this.setRecipients();                        
+                    //}, this));                    
 
                 },
                 showGoogle: function () {

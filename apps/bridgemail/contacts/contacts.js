@@ -1,5 +1,5 @@
-define(['jquery.searchcontrol','contacts/collections/subscribers','text!contacts/html/contacts.html','jquery.chosen','jquery.icheck','contacts/subscriber_row','contacts/multipleadd'],
-function (jsearchcontrol,subscriberCollection,template,chosen,icheck,SubscriberRowView,addContactView) {
+define(['contacts/collections/subscribers','text!contacts/html/contacts.html','contacts/subscriber_row','contacts/multipleadd'],
+function (subscriberCollection,template,SubscriberRowView,addContactView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Contacts dashboard view, depends on search control, chosen control, icheck control

@@ -1,4 +1,4 @@
-define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','moment','jquery.bmsgrid','bms-shuffle','daterangepicker'],
+define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','moment','jquery.bmsgrid','bms-shuffle'],
 function (template, FormsCollection, formRowView,moment) {
         'use strict';
         return Backbone.View.extend({  

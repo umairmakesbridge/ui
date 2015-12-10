@@ -1,5 +1,5 @@
-define(['text!common/html/templatePreview.html', 'common/ccontacts', 'jquery.icheck', 'jquery.chosen'],
-        function (template, contactsView, icheck, chosen) {
+define(['text!common/html/templatePreview.html', 'common/ccontacts'],
+        function (template, contactsView) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Template Preview

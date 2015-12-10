@@ -1,4 +1,4 @@
-define(['text!common/html/bouncereport.html', 'jquery.searchcontrol','jquery.highlight'],
+define(['text!common/html/bouncereport.html'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

@@ -1,4 +1,4 @@
-define(['text!account/html/salesforcesettings.html','jquery.icheck'],
+define(['text!account/html/salesforcesettings.html'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

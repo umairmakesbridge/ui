@@ -1,4 +1,4 @@
-define(['text!campaigns/html/campaign_step1.html','bms-mergefields','jquery.chosen','jquery.icheck'],
+define(['text!campaigns/html/campaign_step1.html','bms-mergefields'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

@@ -8,8 +8,8 @@
  * Changing this file may cause changes in Image Module First Step / Graphics Upload
  */
 
-define(['userimages/collections/userimages','userimages/userimage','text!userimages/html/userimages.html','jquery.bmsgrid','bms-dragfile','jquery-ui'],
-function (collectionUserImages,viewUserImage,template,bms_grid,dragfiles,jqueryui) {
+define(['userimages/collections/userimages','userimages/userimage','text!userimages/html/userimages.html','bms-dragfile','jquery-ui'],
+function (collectionUserImages,viewUserImage,template,dragfiles,jqueryui) {
         'use strict';
         return Backbone.View.extend({
             className: 'images_grid',

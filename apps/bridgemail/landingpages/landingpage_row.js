@@ -1,5 +1,5 @@
-define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
-        function (template, highlighter) {
+define(['text!landingpages/html/landingpage_row.html', 'landingpages/copylandingpage'],
+        function (template, copyLandingPage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Landing page row View to show on listing page
@@ -195,12 +195,12 @@ define(['text!landingpages/html/landingpage_row.html', 'jquery.highlight'],
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     this.sub.total_fetch = 0;
-                    require(["landingpages/copylandingpage"], _.bind(function (page) {
-                        var mPage = new page({page: this, copydialog: dialog});
+                    //require(["landingpages/copylandingpage"], _.bind(function (copyLandingPage) {
+                        var mPage = new copyLandingPage({page: this, copydialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         mPage.init();
                         dialog.saveCallBack(_.bind(mPage.copyPage, mPage));
-                    }, this));
+                    //}, this));
                 },
                 previewPage: function () {                    
                     var camp_obj = this.sub;                                        

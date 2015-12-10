@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/wait_row.html','moment','jquery.chosen','datetimepicker'],
-function (template,moment) {
+define(['text!nurturetrack/html/wait_row.html','datetimepicker'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Target li view for nurture track 

@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/track_row.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!nurturetrack/html/track_row.html','nurturetrack/copynurturetrack', 'nurturetrack/track_view'],
+function (template, copyTrackPage, pageTrackView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Nurture track View to show on listing page
@@ -116,12 +116,12 @@ function (template,highlighter) {
                     buttons: {saveBtn:{text:'Create Nurture Track'} }                                                                           
                 });
                 this.app.showLoading("Loading...",dialog.getBody());
-                require(["nurturetrack/copynurturetrack"],_.bind(function(copyTrackPage){                                     
+                //require(["nurturetrack/copynurturetrack"],_.bind(function(copyTrackPage){                                     
                     var mPage = new copyTrackPage({page:this,copydialog:dialog});
                     dialog.getBody().html(mPage.$el);
                     mPage.init();
                     dialog.saveCallBack(_.bind(mPage.copyTrack,mPage));
-                },this));
+                //},this));
             },
             playNurtureTrack:function(){
                 this.app.showLoading("Playing Nurture Track...",this.parent.$el);
@@ -164,12 +164,12 @@ function (template,highlighter) {
             ,
             viewNurtureTrack:function(){
                 this.app.showLoading("Loading...",this.parent.$el);
-                require(["nurturetrack/track_view"],_.bind(function(page){    
+                //require(["nurturetrack/track_view"],_.bind(function(pageTrackView){    
                      this.app.showLoading(false,this.parent.$el);                    
-                     var view_page = new page({page:this});                       
+                     var view_page = new pageTrackView({page:this});                       
                      $("body").append(view_page.$el);        
                      view_page.init();
-                 },this));
+                 //},this));
             },
             addRowToCol2: function () {
                 if (this.showUseButton && !this.singleSelection) {

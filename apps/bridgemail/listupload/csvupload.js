@@ -1,4 +1,4 @@
-define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragfile', 'jquery.chosen', 'bms-addbox'],
+define(['app', 'text!listupload/html/csvupload.html', 'fileuploader', 'bms-dragfile'],
         function (app, template, fileuploader, dragfile, chosen, addbox) {
             'use strict';
             return Backbone.View.extend({

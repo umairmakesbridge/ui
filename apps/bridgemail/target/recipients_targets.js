@@ -9,7 +9,7 @@
  * 
  **/
 
-define(['text!target/html/recipients_targets.html', 'target/collections/recipients_targets', 'target/views/recipients_target', 'app', 'bms-addbox','jquery.chosen'],
+define(['text!target/html/recipients_targets.html', 'target/collections/recipients_targets', 'target/views/recipients_target', 'app'],
         function(template, TargetsCollection, TargetView, app, addBox,chosen) {
             'use strict';
             return Backbone.View.extend({

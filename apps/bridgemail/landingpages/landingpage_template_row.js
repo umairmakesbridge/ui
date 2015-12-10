@@ -1,5 +1,5 @@
-define(['text!landingpages/html/landingpage_template_row.html', 'jquery.highlight'],
-        function (template, highlighter) {
+define(['text!landingpages/html/landingpage_template_row.html'],
+        function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Landing page template row View to show on listing page

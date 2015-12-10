@@ -1,4 +1,4 @@
-define(['text!account/html/addeditsalerep.html','jquery.icheck'],
+define(['text!account/html/addeditsalerep.html'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

@@ -1,5 +1,5 @@
-define(['text!target/html/select_target.html', 'target/collections/recipients_targets', 'target/views/recipients_target','moment','jquery.bmsgrid','bms-shuffle','daterangepicker'],
-function (template, TargetsCollection, targetRowView,moment) {
+define(['text!target/html/select_target.html', 'target/collections/recipients_targets', 'target/views/recipients_target','bms-shuffle'],
+function (template, TargetsCollection, targetRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

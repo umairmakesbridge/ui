@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/message_row.html','jquery-ui','bms-addbox','bms-dragfile'],
+define(['text!nurturetrack/html/message_row.html','jquery-ui','bms-dragfile'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

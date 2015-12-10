@@ -1,5 +1,5 @@
-define(['text!onetooneemails/html/singleemaillisting.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!onetooneemails/html/singleemaillisting.html'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Record View to show on listing page

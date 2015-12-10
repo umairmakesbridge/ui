@@ -6,8 +6,8 @@
  * Dependency: CCONTACT HTML
  */
 
-define(['text!common/html/ccontact.html','jquery.highlight'],
-function (template,highlighter) {
+define(['text!common/html/ccontact.html'],
+function (template) {
         'use strict';
         return Backbone.View.extend({
             className: 'erow',

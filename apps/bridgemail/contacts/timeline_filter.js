@@ -1,4 +1,4 @@
-define(['text!contacts/html/timeline_filter.html','app', 'jquery.chosen','jquery.icheck'],
+define(['text!contacts/html/timeline_filter.html','app'],
 function (template,app) {
         'use strict';
         return Backbone.View.extend({

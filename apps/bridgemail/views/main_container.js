@@ -1,5 +1,5 @@
-define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/common/news', 'views/workspace', 'jquery.isotope'],
-        function ($, Backbone, app, HeaderView, LandingPage, FooterView, NewsView, WorkSpace) {
+define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main_container.html', 'views/common/footer', 'views/workspace', 'jquery.isotope'],
+        function ($, Backbone, app, HeaderView, LandingPage, FooterView, WorkSpace) {
             "use strict";
 
             return Backbone.View.extend({
@@ -138,7 +138,7 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                 initialize: function () {
                     this.header = new HeaderView();
                     this.footer = new FooterView();
-                    this.news = new NewsView();
+                    //this.news = new NewsView();
                     this.isRender = false;
                     this.subscribe_name = '';
                     this.subscribe_id = '';
@@ -502,24 +502,19 @@ define(['jquery', 'backbone', 'app', 'views/common/header', 'text!templates/main
                     this.$('.icon-menu').click(_.bind(function (event) {
                         var li = $.getObj(event, "li");
                         if (li.hasClass("active")) {
-                            li.removeClass("active");
-                            //this.$(".slideoverlay").fadeOut("slow");
+                            li.removeClass("active");                            
                             this.$(".slidenav-dd").hide();
 
                         }
                         else {
-                            li.addClass("active");
-                            //this.$(".slideoverlay").fadeIn("slow");
+                            li.addClass("active");                            
                             this.$(".slidenav-dd").show();
 
                         }
                         event.stopPropagation();
                     }, this));
                     // show Main Menu 
-                    this.$('.icon-menu').mouseenter(_.bind(function (event) {
-                        //$('.dropdown-nav').hide();
-                        ///this.$('a.lo-no').click();
-                        //$('.dropdown-nav').removeClass('open');
+                    this.$('.icon-menu').mouseenter(_.bind(function (event) {                        
                         $('.dropdown-nav-addcampaign i').removeClass('activeB')
                         var li = $.getObj(event, "li");
                         li.addClass("active");

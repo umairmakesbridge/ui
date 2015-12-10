@@ -21,7 +21,7 @@ define(['text!reports/html/select_stats.html', 'jquery.icheck'],
                 render: function ()
                 {
                     this.$el.html(this.template({}));
-                    this.$el.css("margin", "-10px")                    
+                    this.$el.css({"margin": "-10px", "width":"480px"});                    
                 },
                 init: function () {
                     this.$('input.general-stats-panel').iCheck({
@@ -41,6 +41,8 @@ define(['text!reports/html/select_stats.html', 'jquery.icheck'],
                         this.websiteCall = false;
                         this.getWebSiteClick();
                     }, this));
+                    
+                    this.$el.parent().css("overflow","hidden");
 
                 },
                 saveCall: function () {

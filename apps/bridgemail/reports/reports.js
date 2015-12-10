@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!reports/html/reports.html', 'bms-filters', 'moment', 'reports/collections/reports', 'reports/report','highcharts'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, moment, reportsCollection, reportRowView) {
+define([ 'text!reports/html/reports.html', 'bms-filters', 'reports/collections/reports', 'reports/report','highcharts'],
+        function (template, bmsfilters, reportsCollection, reportRowView) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',

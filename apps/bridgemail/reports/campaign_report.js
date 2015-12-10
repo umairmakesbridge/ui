@@ -1,5 +1,5 @@
-define(['text!reports/html/campaign_report.html','moment','jquery.bmsgrid','jquery.highlight','jquery.searchcontrol','jquery.chosen','daterangepicker','jquery.icheck'],
-function (template,moment,bmsgrid,highlight,searchcontrol) {
+define(['text!reports/html/campaign_report.html'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Campaign Reports page 

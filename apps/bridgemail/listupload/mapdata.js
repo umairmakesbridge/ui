@@ -1,5 +1,5 @@
-define(['text!listupload/html/mapdata.html','jquery.chosen','bms-addbox'],
-function (template,chosen,addbox) {
+define(['text!listupload/html/mapdata.html'],
+function (template) {
 	'use strict';
 	return Backbone.View.extend({
 		id: 'mapdata',

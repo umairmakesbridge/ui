@@ -9,8 +9,8 @@
  * * Section8 - Landing page Forms
  ****/
 
-define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery-ui', 'mee-helper', 'mincolors','bms-remote'],
-        function ($, Backbone, _, template) {
+define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor/links', 'editor/buildingblock', 'editor/DC/filters', 'mee-helper', 'mincolors','bms-remote'],
+        function ($, Backbone, _, template, linksPage, blocksPage, filterPage) {
             'use strict';
             return Backbone.View.extend({
                 events: {
@@ -110,8 +110,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             undoRedoStack.pop();
                                         }
                                         isUndoPerformed = false;
-                                    }
-                                    console.log("Register action=" + undoRedoStack.length + "--Index=" + undoRedoIndex);
+                                    }                                    
                                     if (undoRedoStack.length == 0) {
                                         _view.find(".undo_li a.btn-gray").addClass("disabled");
                                         _view.find(".redo_li a.btn-gray").addClass("disabled");
@@ -140,8 +139,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                     if (undoRedoIndex >= 0) {
                                         isUndoPerformed = true;
-                                        undoRedoIndex--;
-                                        console.log("undo action=" + undoRedoStack.length + "--Index=" + undoRedoIndex);
+                                        undoRedoIndex--;                                        
                                         if (undoRedoStack.length > 1 && undoRedoIndex == 0) {
                                             _view.find(".undo_li a.btn-gray").addClass("disabled");
                                             _view.find(".redo_li a.btn-gray").removeClass("disabled");
@@ -160,8 +158,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 function MakeBridgeUndoRedoManager_Redo() { // on Press Redu increase index and send the stack Element
 
                                     if (isUndoPerformed && undoRedoStack.length > (undoRedoIndex + 1)) {
-                                        undoRedoIndex++;
-                                        console.log("Redo action=" + undoRedoStack.length + "--Index=" + undoRedoIndex);
+                                        undoRedoIndex++;                                        
                                         if (undoRedoIndex < undoRedoStack.length - 1) {
                                             _view.find(".undo_li a.btn-gray").removeClass("disabled");
                                             _view.find(".redo_li a.btn-gray").removeClass("disabled");
@@ -1917,8 +1914,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     options._app.showLoading("Loading...", dialog.getBody());
                                     dialog.$el.css("z-index", "99999");
                                     $(".modal-backdrop").css("z-index", "99998");
-                                    require(["editor/links"], function (page) {
-                                        var linkDialogPage = new page({
+                                    //require(["editor/links"], function (page) {
+                                        var linkDialogPage = new linksPage({
                                             config: options,
                                             selectedText : selectedText,
                                             meeIframeWindow: meeIframeWindow,
@@ -1930,7 +1927,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         dialog.getBody().append(linkDialogPage.$el);
                                         dialog.saveCallBack(_.bind(linkDialogPage.insertLink, linkDialogPage, dialog));
                                         options._app.showLoading(false, dialog.getBody());                                        
-                                    });
+                                    //});
                                 }
 
 
@@ -2097,13 +2094,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         dataType: requestProperties.DataType,
                                         cache: false,
                                         async: false,
-                                        success: function (e) {
-                                            //console.log("Response Came:"+e);
+                                        success: function (e) {                                            
                                             returnJson = e;
                                         },
                                         error: errorCallBack
-                                    });
-                                    //console.log(returnJson);
+                                    });                                    
                                     return returnJson;
                                 }
                                 // .................... Send Server Request ................................
@@ -2471,8 +2466,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 };
 
                                 myElement.find("input#searchImg").keyup(function (e) {
-                                    if (e.which == 13) {
-                                        //console.log("enter pressed");
+                                    if (e.which == 13) {                                        
                                         var searchText = myElement.find(".searchimg-text").val();
                                         if (searchText == "") {
                                             LoadImagesInLibrary();
@@ -2631,10 +2625,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 });
 
 
-                                myElement.on("keyup", "#addTagsToImage", function (e) {
-                                    //console.log("Tags input key up");
-                                    if (e.which == 13) {
-                                        //console.log("enter pressed");
+                                myElement.on("keyup", "#addTagsToImage", function (e) {                                   
+                                    if (e.which == 13) {                                        
                                         myElement.find("a.addtag").click();
                                     }
 
@@ -2746,10 +2738,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         myElement.find('.DCEditDialog').hide();
 
 
-                                        var imageObj = imageListGlobal[index];
-
-                                        // var fileName = imageObj.fileName;
-                                        // console.log("FileName extracted for image is:"+fileName);
+                                        var imageObj = imageListGlobal[index];                                        
                                         showBox(element, imageObj, "info");
                                     }
                                     else if (type === "imageLink") {
@@ -2879,9 +2868,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                 myElement.find("#HTML5FileUploader").on("dragenter", function (e) {
                                     e.stopPropagation();
-                                    e.preventDefault();
-                                    console.log("drag enter called..");
-                                    //myElement.find(".divBuildingBlockLoadingImages").show();                                            
+                                    e.preventDefault();                                    
                                 });
 
                                 myElement.find("#HTML5FileUploader").on("dragover", function (e) {
@@ -2899,17 +2886,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
 
-                                myElement.find("#HTML5FileUploader").on("drop", function (e) {
-                                    console.log("drop called..");
+                                myElement.find("#HTML5FileUploader").on("drop", function (e) {                                    
                                     e.stopPropagation();
                                     e.preventDefault();
-                                    var files = e.originalEvent.dataTransfer.files;
-                                    // console.log("Dropped Files Are:"+ files);
-
-                                    // console.log(files);
-                                    handleFileUpload(files);
-                                    //myElement.find(".divBuildingBlockLoadingImages").hide();
-                                    // this.$element.addClass('file-border');
+                                    var files = e.originalEvent.dataTransfer.files;                                    
+                                    handleFileUpload(files);                                    
                                 });
 
                                 var handleFileUpload = function (files) {
@@ -2934,8 +2915,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
                                 var sendFileToServer = function (formData) {
-                                    var uploadURL = myElement.find("#form1").attr("action");
-                                    console.log("URL To post is:" + uploadURL);
+                                    var uploadURL = myElement.find("#form1").attr("action");                                    
                                     var _this = this;
                                     var data_id = 0;
                                     var jqXHR = $.ajax({
@@ -3086,13 +3066,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     var OpenRulesWindow = function (args, top, left) {
                                         var filterDialog = myElement.find(".dcRulesDialog");
                                         options._app.showLoading("Loading Filters...", filterDialog.find("div"), {"top": "51px", "left": "50%", "margin-left": "-150px"});
-                                        require(["editor/DC/filters"], function (templatePage) {
-                                            var mPage = new templatePage({
+                                        //require(["editor/DC/filters"], function (filterPage) {
+                                            var mPage = new filterPage({
                                                 opt: options,
                                                 args: args
                                             });
                                             filterDialog.html(mPage.$el);
-                                        });
+                                        //});
                                         meeIframe.find(".editNameBox").hide();
                                         filterDialog.css({"left": left, "top": top, "display": "block"});
                                         return false;
@@ -3156,9 +3136,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             var updateContent = function () {
                                                 txtfieldContent.prop("disabled", true);
                                                 btnUpdateContent.addClass("saving");
-                                                args.DynamicContent = getDynamicContent(element);
-
-                                                //console.log(element.data("content"));
+                                                args.DynamicContent = getDynamicContent(element);                                                
                                                 args.DynamicContent.Label = dcContentNameUpdateWindow.find(".txtContentName").val();
                                                 if (element.attr("id")) {
                                                     meeIframe.find("li[id='" + element.attr("id") + "'] span:first").html(args.DynamicContent.Label);
@@ -3563,8 +3541,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         error: function (e) {
                                             console.log("get Dynamic Variation Content failed:" + e);
                                         }
-                                    });
-                                    console.log(dynamicVariation);
+                                    });                                    
                                     return dynamicVariation;
 
                                 }
@@ -3630,8 +3607,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         ]
                                     });
                                 }
-                                var _OnEditDynamicVariation = function (args) {
-                                    console.log("Going to edit Dynamic Variation...");
+                                var _OnEditDynamicVariation = function (args) {                                    
                                     if (options.OnEditDynamicVariation != null) {
                                         //Call overridden Method here: will use when exposing properties to developer
                                         options.OnEditDynamicVariation(args);
@@ -3902,8 +3878,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                                     else{
                                                                         var scrollPosition = scrollTop - options.scrollTopMinus; // Parent obj is workspace
                                                                     }
-                                                                    
-                                                                    //console.log(scrollPosition);
+                                                                                                                                        
                                                                     
                                                                     if(scrollPosition > 0 && myElement.find('.editortoolbar').hasClass('editor-toptoolbar-fixed') === true){
                                                                               $(val).css({top:scrollPosition+"px","left":"0"});
@@ -4181,15 +4156,13 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         //Droppable:
                                         oHtml.find(".myDroppable").andSelf().filter(".myDroppable").each(function (i, o) {
                                             CreateDroppableWithAllFunctions(o);
-                                            DropableMouseEnterLeave($(o));
-                                            console.log("myDroppable Event handling");
+                                            DropableMouseEnterLeave($(o));                                            
                                         });
 
                                         //Moving Handlers - Mouse Hover
                                         oHtml.find(".csHaveData").andSelf().filter(".csHaveData").each(function (i, o) {
                                             InitializeElementWithDraggable($(o));
-                                            InitializeMouseHover($(o));
-                                            console.log("Mouse over Event handling");
+                                            InitializeMouseHover($(o));                                            
                                         });
 
                                         //////////////////////////////////////////////////////////////////////////////////////////
@@ -4331,8 +4304,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                             var oControl = new Object();
                                                             var controlID = ui.draggable.data("id");
                                                             
-                                                            var isNew = ui.draggable.data("isnew");
-                                                            console.log(controlID);
+                                                            var isNew = ui.draggable.data("isnew");                                                            
                                                             //need to apply each for this and then search on each [0]
                                                             
                                                             if(!isNew){                                                                
@@ -4523,8 +4495,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                             //handling DC into DC MOVE
                                             if (ui.draggable.hasClass("csDynamicData")) {
-                                                if ($(this).parent().hasClass("dcInternalContents")) {
-                                                    console.log("Dropping DC in DC");
+                                                if ($(this).parent().hasClass("dcInternalContents")) {                                                    
                                                     return;
                                                 }
                                                 else {
@@ -4573,10 +4544,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 ///////
 
                                                 var controlID = ui.draggable.data("id");
-                                                console.log(controlID);
+                                                
                                                 //need to apply each for this and then search on each [0]
 
-                                                console.log(buildingBlocksGlobal);
                                                 var bb = undefined;
                                                 if (typeOfDraggingControl == "buildingBlock") {
                                                     $.each(buildingBlocksGlobal, function (i, obj) {
@@ -4598,9 +4568,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                     var decodeHTML = $('<div/>').html(bb.html).text();
                                                     oControl.Html = $(decodeHTML);
                                                     oControl.Type = "buildingBlock";
-                                                    oControl.ID = bb.ID;
-
-                                                    console.log(oControl);
+                                                    oControl.ID = bb.ID;                                                    
 
                                                     args.predefinedControl = oControl;
 
@@ -4627,8 +4595,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                   var oControl = new Object();
                                                     var controlID = ui.draggable.data("id");
 
-                                                    var isNew = ui.draggable.data("isnew");
-                                                    console.log(controlID);
+                                                    var isNew = ui.draggable.data("isnew");                                                    
                                                     //need to apply each for this and then search on each [0]
 
                                                     if(!isNew){                                                                
@@ -4677,8 +4644,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                             }
                                             else if (typeOfDraggingControl == "dynamicContentContainer") { //^^
 
-                                                if ($(this).parent().hasClass("dcInternalContents")) {
-                                                    console.log("Dropping DC in DC");
+                                                if ($(this).parent().hasClass("dcInternalContents")) {                                                    
                                                     return;
                                                 }
                                                 else {
@@ -4833,8 +4799,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                                                     args.predefinedControl = oControl;
 
-                                                    //Place predefined html into dropped area.
-                                                    //console.log("HTML:"+ oControl.HTML);
+                                                    //Place predefined html into dropped area.                                                    
                                                     args.droppedElement.html(oControl.Html);
 
 
@@ -5283,8 +5248,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
                                     });
                                     options._app.showLoading("Loading...", dialog.getBody());
-                                    require(["editor/buildingblock"], function (templatePage) {
-                                        var mPage = new templatePage({
+                                    //require(["editor/buildingblock"], function (blocksPage) {
+                                        var mPage = new blocksPage({
                                             editor: mee,
                                             dialog: dialog,
                                             config: options,
@@ -5304,7 +5269,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
 
 
-                                    });
+                                    //});
                                 }
                                 mee.deleteBlock = function (element, block_id) {
                                     var URL = "/pms/io/publish/saveEditorData/?" + options._BMSTOKEN;
@@ -5554,8 +5519,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     myElement.find(".alertButtons").css({
                                         "left": left + "px",
                                         "top": top + "px"
-                                    }).show();
-                                //    console.log("left:" + left + "px, top:" + top + "px");
+                                    }).show();                                
                                 }
                                 myElement.on("click", "i.newwin", function () {
                                     var url = $(this).parent().attr("href");
@@ -5945,11 +5909,9 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.myColors = e.colors;
-                                    //console.log("MyColors success:" + e.colors);
+                                    args.myColors = e.colors;                                    
                                 },
-                                error: function (e) {
-                                    //console.log("MyColors Failed:" + e);
+                                error: function (e) {                                    
                                 }
                             });
                         },
@@ -5960,15 +5922,12 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                             }
                             else {
                                 saveColors = args.myColorsFromServiceGlobal + "," + args.AddedColor;
-                            }
-                            //console.log("Color list to be added:" + saveColors);
+                            }                            
 
-                            saveColors = encodeURIComponent(saveColors);
-                            //console.log("Color list to be added after encoded:" + saveColors);
+                            saveColors = encodeURIComponent(saveColors);                            
                             var URL = "/pms/io/publish/saveEditorData/?" + BMSTOKEN + "&type=saveColors&colors=" + saveColors;
                             $.post(URL)
-                                    .done(function (data) {
-                                        //console.log("Insert My Color success:" + data);
+                                    .done(function (data) {                                        
                                         // your code go here. 
                                     });
 
@@ -5991,7 +5950,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     args.DynamicContent.DynamicContentID = ec[1];
                                 },
                                 error: function (e) {
-                                    //console.log("Insert Dynamic Variation Content failed:"+ e);
+                                    
                                 }
                             });
 
@@ -6013,19 +5972,17 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 //contentRuleURL += "&"+ j +".listNumber=";
                             }
                             $.ajax({
-                                url: contentRuleURL,
-                                //data: "{ name: 'test', html: args.buildingBlock.Name }",
+                                url: contentRuleURL,                                
                                 type: "POST",
                                 contentType: "application/json; charset=latin1",
                                 dataType: "json",
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    //console.log("Insert Dynamic Variation Content Rule success:"+ e);  
 
                                 },
                                 error: function (e) {
-                                    //console.log("Insert Dynamic Variation Rule failed:"+ e);
+                                    
                                 }
                             });
 
@@ -6046,14 +6003,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 dataType: "json",
                                 cache: false,
                                 async: false,
-                                success: function (ec) {
-                                    //console.log("Update Dynamic Variation Content success:"+ ec);  
-                                    //console.log("Dynamic number Content is:" + ec[1]);
-
+                                success: function (ec) {                                   
 
                                 },
-                                error: function (e) {
-                                    //console.log("Insert Dynamic Variation Content failed:"+ e);
+                                error: function (e) {                                    
                                 }
                             });
                         },
@@ -6093,11 +6046,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     });
                         },
                         OnDynamicControlSave: function (variation)
-                        {
-                            console.log("isUPdate on saving:" + variation.IsUpdate);
-                            console.log("Variation ID on saving:" + variation.DynamicVariationID);
-                            console.log("Variation Name on saving:" + variation.Label);
-                            console.log(variation);
+                        {                            
 
                             if (variation.IsUpdate) {
 
@@ -6109,12 +6058,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     dataType: "json",
                                     cache: false,
                                     async: false,
-                                    success: function (e) {
-                                        console.log("Rename Dynamic Variation success:" + e);
+                                    success: function (e) {                                        
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                        console.log("Rename Dynamic Variation failed:" + e);
+                                        
                                     }
 
                                 });
@@ -6122,9 +6070,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 var contents = variation.ListOfDynamicContents;
                                 for (var i = 0; i < contents.length; i++) {
                                     var content = contents[i];
-                                    var contentNumber = content.DynamicContentID;
-                                    console.log(content);
-                                    console.log("ContentNumebr:" + contentNumber);
+                                    var contentNumber = content.DynamicContentID;                                   
                                     var contentURL = "";
                                     if (contentNumber != 0) {
                                         contentURL = "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=updateContent&dynamicNumber=" + dynamicNumber + "&campaignSubject=" + content.Label + "&contents=" + encodeURIComponent(content.InternalContents) + "&contentLabel=" + content.Label + "&contentNumber=" + contentNumber;
@@ -6142,8 +6088,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         cache: false,
                                         async: false,
                                         success: function (ec) {
-                                            console.log("Update Dynamic Variation Content success:" + ec);
-                                            //console.log("Dynamic number Content is:" + ec[1]);
+                                           
                                             if (contentNumber == 0) {
                                                 contentNumber = ec[1];
                                             }
@@ -6167,18 +6112,18 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                                 cache: false,
                                                 async: false,
                                                 success: function (e) {
-                                                    console.log("Update Dynamic Variation Content Rule success:" + e);
+                                                    
 
                                                 },
                                                 error: function (e) {
-                                                    console.log("Update Dynamic Variation Rule failed:" + e);
+                                                    
                                                 }
                                             });
 
 
                                         },
                                         error: function (e) {
-                                            console.log("Insert Dynamic Variation Content failed:" + e);
+                                            
                                         }
                                     });
                                 }
@@ -6195,10 +6140,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     dataType: "json",
                                     cache: false,
                                     async: false,
-                                    success: function (e) {
-                                        console.log("Insert Dynamic Variation success:" + e);
-                                        //var results = e.split(",");
-                                        console.log("Dynamic number is:" + e[1]);
+                                    success: function (e) {                                       
 
                                         var dynamicNumber = e[1];
                                         if (dynamicNumber != "err") {
@@ -6206,7 +6148,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                         }
                                     },
                                     error: function (e) {
-                                        console.log("Insert Dynamic Variation failed:" + e);
+                                       
                                     }
 
                                 });
@@ -6215,9 +6157,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         },
                         OnEditDynamicVariation: function (args) {
                             //Save to Server
-                            if (args.DCID != null) {
-                                console.log("Block Id:" + args.DCID);
-                                console.log("Block Name:" + args.DCName);
+                            if (args.DCID != null) {                               
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=relabel&label=" + args.DCName + "&dynamicNumber=" + args.DCID,
@@ -6228,11 +6168,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                        console.log("Rename Dynamic Variation success:" + e);
+                                      
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                        console.log("Rename Dynamic Variation failed:" + e);
+                                      
                                     }
 
                                 });
@@ -6243,9 +6183,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                         },
                         OnDynamicVariationName: function (variation) {
                             //Save to Server
-                            if (variation != null) {
-                                console.log("Block Id:" + variation.DynamicVariationID);
-                                console.log("Block Name:" + variation.Label);
+                            if (variation != null) {                              
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=relabel&label=" + variation.Label + "&dynamicNumber=" + variation.DynamicVariationID,
@@ -6256,11 +6194,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                        console.log("Rename Dynamic Variation success:" + e);
+                                       
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
-                                        console.log("Rename Dynamic Variation failed:" + e);
+                                       
                                     }
 
                                 });
@@ -6270,8 +6208,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
 
                         },
                         OnDeleteDynamicVariation: function (args) {
-                            if (args != null) {
-                                console.log(args.DCID);
+                            if (args != null) {                              
 
                                 $.ajax({
                                     url: "/pms/io/publish/saveDynamicVariation/?" + BMSTOKEN + "&type=delete&dynamicNumber=" + args.DCID,
@@ -6282,7 +6219,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     cache: false,
                                     async: false,
                                     success: function (e) {
-                                        console.log("delete dynamicVariation success:" + e);
+                                        
                                         //LoadBuildingBlocks();
                                     },
                                     error: function (e) {
@@ -6305,8 +6242,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 async: false,
                                 success: function (e) {
                                     if (e.variations != undefined) {
-                                        args.dynamicBlocks = e.variations[0];
-                                        //console.log("GetDynamicBlocks success:" + e.data);
+                                        args.dynamicBlocks = e.variations[0];                                        
                                     }
                                 },
                                 error: function (e) {
@@ -6326,18 +6262,14 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.personalizeTags = e;
-                                    //console.log("LoadPersonalizeTags success:" + e);
+                                    args.personalizeTags = e;                                    
 
                                 },
-                                error: function (e) {
-                                    //console.log("LoadPersonalizeTags Failed:" + e);
+                                error: function (e) {                                    
                                 }
                             });
                         },
-                        CallBackSaveMethod: function (templateHTML, outputHTML) {
-                            console.log("TemplateHTML:" + templateHTML);
-                            console.log("OutputHTML:" + outputHTML);
+                        CallBackSaveMethod: function (templateHTML, outputHTML) {                          
 
                             $.post('/pms/io/campaign/saveUserTemplate/?"+BMSTOKEN+"',
                                     {
@@ -6353,7 +6285,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                     }
                             )
                                     .done(function (data) {
-                                        console.log("Saving done with response:" + data);
+                                        
                                     });
 
                         },
@@ -6371,11 +6303,11 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 success: function (e) {
                                     if (e.count != "0") {
                                         args.formBlocks = e.forms[0];
-                                        console.log("LoadFormBlocks success:" + e);
+                                        
                                     }
                                 },
                                 error: function (e) {
-                                    console.log("LoadFormBlocks Failed:" + e);
+                                    
                                 }
                             });
                         },
@@ -6391,12 +6323,10 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'jquery
                                 cache: false,
                                 async: false,
                                 success: function (e) {
-                                    args.formContents = e.formPreviewURL;
-                                    console.log("LoadFormContents success:" + e);
+                                    args.formContents = e.formPreviewURL;                                   
 
                                 },
-                                error: function (e) {
-                                    console.log("LoadFormContents  Failed:" + e);
+                                error: function (e) {                                    
                                 }
                             });
                         },

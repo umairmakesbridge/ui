@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/report.html','nurturetrack/collections/states','nurturetrack/state_row','jquery.bmsgrid'],
+define(['text!nurturetrack/html/report.html','nurturetrack/collections/states','nurturetrack/state_row'],
 function (template,NTStates,stateView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
@@ -70,8 +70,7 @@ function (template,NTStates,stateView) {
                         }                                                                        
                         var message_text = response.msgCount=="1"?"Message":"Messages"
                         this.statDiv.find(".message-count").html('<strong class="badge ">'+this.app.addCommas(response.msgCount)+'</strong><span> '+message_text+'</span>'); 
-                       // this.statDiv.find(".sent-count").html(this.app.addCommas(sentCount.toString()));
-                       // this.statDiv.find(".pending-count").html(this.app.addCommas(pendingCount.toString()));                        
+                       
                     }, this),
                     error: function (collection, resp) {
                             

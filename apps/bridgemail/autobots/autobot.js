@@ -5,8 +5,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbox'],
-        function(template, moment, chosen, bms) {
+define(['text!autobots/html/autobot.html', "autobots/clone_autobot", 'bms-addbox'],
+        function(template,autobotClone) {
             'use strict';
             return Backbone.View.extend({
                 tagName: "tr",
@@ -312,12 +312,12 @@ define(['text!autobots/html/autobot.html', 'moment', 'jquery.chosen', 'bms-addbo
                         buttons: {saveBtn: {text: 'Create Autobot'}}
                     });
                     this.options.app.showLoading("Loading...", dialog.getBody());
-                    require(["autobots/clone_autobot"], _.bind(function(autobot) {
-                        var mPage = new autobot({page: this, copydialog: dialog});
+                    //require(["autobots/clone_autobot"], _.bind(function(autobotClone) {
+                        var mPage = new autobotClone({page: this, copydialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         mPage.init();
                         dialog.saveCallBack(_.bind(mPage.copyAutobot, mPage));
-                    }, this));
+                    //}, this));
                 },
                 getAutobotById: function(where, id) {
                     if (where == "dialog") {

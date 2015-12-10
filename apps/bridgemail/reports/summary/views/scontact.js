@@ -6,8 +6,8 @@
  * Dependency: SCONTACT HTML
  */
 
-define(['text!reports/summary/html/scontact.html','moment','app'],
-function (template,moment,app) {
+define(['text!reports/summary/html/scontact.html','app'],
+function (template,app) {
         'use strict';
         return Backbone.View.extend({
             className: 'erow',

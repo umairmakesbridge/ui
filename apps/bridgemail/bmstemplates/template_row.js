@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/template_row.html', 'jquery.highlight', 'common/tags_row', 'jquery.customScroll'],
-        function (template, highlighter, tagView) {
+define(['text!bmstemplates/html/template_row.html', 'common/tags_row', 'bmstemplates/copytemplate'],
+        function (template, tagView, copyTemplatePage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -184,7 +184,7 @@ define(['text!bmstemplates/html/template_row.html', 'jquery.highlight', 'common/
                         buttons: {saveBtn: {text: 'Create Template'}}
                     });
                     this.app.showLoading("Loading...", __dialog.getBody());
-                    require(["bmstemplates/copytemplate"], _.bind(function (copyTemplatePage) {
+                    //require(["bmstemplates/copytemplate"], _.bind(function (copyTemplatePage) {
                         var mPage = new copyTemplatePage({templ: self, template_id: this.model.get('templateNumber.encode'), _current: this, app: this.app, templatesDialog: __dialog});
                         __dialog.getBody().append(mPage.$el);
                         this.app.showLoading(false, mPage.$el.parent());
@@ -193,7 +193,7 @@ define(['text!bmstemplates/html/template_row.html', 'jquery.highlight', 'common/
                         this.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.copyTemplate, mPage); // New Dialog
                         __dialog.$el.find('#dialog-title .preview').remove();
                         __dialog.saveCallBack(_.bind(mPage.copyTemplate, mPage));
-                    }, this));
+                    //}, this));
                 },
                 updateTemplate: function (tempNum, isTotal) {
                     var _this = this.parent;

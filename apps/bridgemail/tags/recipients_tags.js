@@ -6,8 +6,8 @@
  * 
  **/
 
-define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags', 'tags/recipients_tag', 'tags/models/recipients_tag', 'app', 'bms-addbox', 'bms-tags','jquery.searchcontrol'],
-        function(template, tagsCollection, tagView, tagModel, app, addBox, tags,search) {
+define(['text!tags/html/recipients_tags.html', 'tags/collections/recipients_tags', 'tags/recipients_tag', 'tags/models/recipients_tag', 'app'],
+        function(template, tagsCollection, tagView, tagModel, app) {
             'use strict';
             return Backbone.View.extend({
                 className: 'div',

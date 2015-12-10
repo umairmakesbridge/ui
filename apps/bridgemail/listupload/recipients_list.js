@@ -5,8 +5,8 @@
  * Description:this view is called from contacts/recipients, so changing this may cause problem in recipients list.
  **/
 
-define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app','bms-addbox'],
-function (template,recipientsCollection,recipientView,listModel,app,addBox) {
+define(['text!listupload/html/recipients_list.html','listupload/collections/recipients_lists','listupload/views/recipient_list','listupload/models/recipient_list','app'],
+function (template,recipientsCollection,recipientView,listModel,app) {
         'use strict';
         return Backbone.View.extend({
             className: 'recipients_lists',
@@ -32,8 +32,7 @@ function (template,recipientsCollection,recipientView,listModel,app,addBox) {
             },
             render:function (search) {
                 this.$el.html(this.template({}));
-                this.loadLists();
-                //this.$(".add-list").addbox({app:this.app,placeholder_text:'Enter new list name',addCallBack:_.bind(this.addlist,this)});                     
+                this.loadLists();                
                 //this.$(".add-list").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});
                 this.$(".showtooltip").tooltip({'placement':'bottom',delay: { show: 0, hide:0 },animation:false});  
                 this.active_ws = this.$el.parents(".ws-content");

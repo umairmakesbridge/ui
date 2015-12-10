@@ -1,4 +1,4 @@
-define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','nurturetrack/track_row_makesbridge_tile','jquery.bmsgrid','jquery.searchcontrol','jquery.highlight'],
+define(['text!nurturetrack/html/nurturetracks.html','nurturetrack/collections/tracks','nurturetrack/track_row','nurturetrack/track_row_tile','nurturetrack/track_row_makesbridge','nurturetrack/track_row_makesbridge_tile'],
 function (template,tracksCollection,trackRow,trackRowTile,trackRowMakesbrdige,trackRowMakesbrdigeTile) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

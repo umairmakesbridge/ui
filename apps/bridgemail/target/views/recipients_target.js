@@ -5,8 +5,8 @@
  * Description: Single Link view to display on main page.
  * Dependency: LINK HTML, SContacts
  */
-define(['text!target/html/recipients_target.html','jquery.highlight'],
-function (template) {
+define(['text!target/html/recipients_target.html', "target/copytarget"],
+function (template,copytargetPage) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',
@@ -172,7 +172,7 @@ function (template) {
                         buttons: {saveBtn: {text: 'Copy Target'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
-                    require(["target/copytarget"], function(copytargetPage) {
+                    //require(["target/copytarget"], function(copytargetPage) {
                         var mPage = new copytargetPage({camp: camp_obj, app: curview.app, target_id: target_id, copydialog: dialog, editview: curview, source: 'edit'});
                         var dialogArrayLength = curview.app.dialogArray.length; // New Dialog
                         dialog.getBody().append(mPage.$el);
@@ -187,7 +187,7 @@ function (template) {
                             dialog.$el.find(".btn-save").click();
                             }
                         });
-                    });
+                    //});
                 },
                previewTarget:function(ev){
                       if(this.options.type == "autobots_listing"){

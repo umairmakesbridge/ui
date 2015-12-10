@@ -1,4 +1,4 @@
-define(['text!account/html/addeditsubaccount.html','account/collections/salesrep','account/salesrep_selection_row','jquery.icheck'],
+define(['text!account/html/addeditsubaccount.html','account/collections/salesrep','account/salesrep_selection_row'],
         function (template,salesrepCollection,salesrepRow) {
             'use strict';
             return Backbone.View.extend({

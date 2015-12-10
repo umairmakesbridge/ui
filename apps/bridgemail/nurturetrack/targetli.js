@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/targetli.html','moment'],
-function (template,moment) {
+define(['text!nurturetrack/html/targetli.html'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Target li view for nurture track 

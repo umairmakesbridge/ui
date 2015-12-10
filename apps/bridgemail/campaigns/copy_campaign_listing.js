@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid','jquery.highlight','text!campaigns/html/copy_campaign_listing.html','jquery.searchcontrol','bms-filters','campaigns/collections/campaigns','campaigns/campaign_row_copy','moment'],
-function (bmsgrid,jqhighlight,template,jsearchcontrol,bmsfilters,campaignCollection,campaignRowView,moment) {
+define(['text!campaigns/html/copy_campaign_listing.html','bms-filters','campaigns/collections/campaigns','campaigns/campaign_row_copy'],
+function (template,bmsfilters,campaignCollection,campaignRowView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Copy Campaign dashboard view, depends on search control,

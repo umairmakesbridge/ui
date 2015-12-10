@@ -1,5 +1,5 @@
-define(['text!reports/html/report.html', 'jquery.highlight'],
-        function (template, highlighter) {
+define(['text!reports/html/report.html'],
+        function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Reports page row View to show on listing page

@@ -1,5 +1,5 @@
-define(['text!bmstemplates/html/templates.html','jquery.highlight','bmstemplates/collections/templates','bmstemplates/template_row'],
-function (template,highlight,templateCollection,templateRowView) {
+define(['text!bmstemplates/html/templates.html','bmstemplates/collections/templates','bmstemplates/template_row'],
+function (template,templateCollection,templateRowView) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Templates Gallery Page

@@ -7,8 +7,8 @@
  * Dependency: HTML, Summary Model, Graphs View, Stats Model, Contacts VIew.
  */
 
-define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts'],
-function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
+define(['text!reports/summary/html/summary.html','reports/summary/models/summary','reports/summary/views/links','reports/summary/views/graphs','reports/summary/models/stats','reports/summary/views/scontacts',"reports/summary/views/settings"],
+function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView, settingsPage) {
         'use strict';
         return Backbone.View.extend({
             className: 'campaign-summary',
@@ -241,11 +241,11 @@ function (template,Summary,ViewLinks,ViewGraphs,Stats,contactsView) {
                                     bodyCss:{"min-height":dialog_height+"px"}                                                                          
                          });
                   that.options.app.showLoading(loading,dialog.getBody());
-                  require(["reports/summary/views/settings"],function(Settings){
-                         var mPage = new Settings({model:that.objSummary,app:that.options.app, botId:that.autobotId,trackId:that.trackId});
+                  //require(["reports/summary/views/settings"],function(settingsPage){
+                         var mPage = new settingsPage({model:that.objSummary,app:that.options.app, botId:that.autobotId,trackId:that.trackId});
                          dialog.getBody().html(mPage.$el);
                          that.options.app.showLoading(false,dialog.getBody());
-                   });
+                   //});
                   
             },
             pageViews:function(ev){

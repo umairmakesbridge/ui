@@ -1,5 +1,5 @@
-define(['contacts/collections/subscriber_timeline','contacts/collections/subscriber_timeline_future','text!contacts/html/subscriber_timeline.html','contacts/timeline_row','moment','contacts/timeline_filter'],
-function (Timeline,TimelineFuture,template,TimeLineRowView,moment,filterDialog) {
+define(['contacts/collections/subscriber_timeline','contacts/collections/subscriber_timeline_future','text!contacts/html/subscriber_timeline.html','contacts/timeline_row','contacts/timeline_filter'],
+function (Timeline,TimelineFuture,template,TimeLineRowView,filterDialog) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber Timeline view 

@@ -1,5 +1,5 @@
-define(['text!contacts/html/timeline_row.html', 'moment'],
-        function (template, moment) {
+define(['text!contacts/html/timeline_row.html'],
+        function (template) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Time line row view

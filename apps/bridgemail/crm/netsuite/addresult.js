@@ -1,5 +1,5 @@
-define(['text!crm/netsuite/html/addresult.html','jquery.chosen'],
-function (template) {
+define(['text!crm/netsuite/html/addresult.html', 'campaigns/collections/netsuite_campaigns'],
+function (template, nsCampaignCollections) {
         'use strict';
         return Backbone.View.extend({                                                              
                 events: {
@@ -21,7 +21,7 @@ function (template) {
                 },
                 showNetsuiteCampaigns:function(){
                     this.$(".ns_campaigns_combo").html("<option>Loading...</option>").prop("disabled",true).trigger("chosen:updated");  
-                    require(["campaigns/collections/netsuite_campaigns"],_.bind(function(nsCampaignCollections){                                     
+                    //require(["campaigns/collections/netsuite_campaigns"],_.bind(function(nsCampaignCollections){                                     
                         var nsCampaigns =  new nsCampaignCollections();  
                         var model = null;
                         var _offset = 0;                                              
@@ -48,7 +48,7 @@ function (template) {
                         });
                         
                         
-                   },this));
+                   //},this));
                 },
                 saveResultsTo:function(dialog){   
                     if(this.validateRNS()){        

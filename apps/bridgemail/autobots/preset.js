@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/preset.html', 'jquery.icheck', 'bms-tags'],
+define(['text!autobots/html/preset.html', 'bms-tags'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

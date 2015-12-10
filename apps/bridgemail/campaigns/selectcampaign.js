@@ -1,5 +1,5 @@
-define(['text!campaigns/html/selectcampaign.html', 'campaigns/collections/campaigns', 'campaigns/campaign_row','moment','jquery.bmsgrid','bms-shuffle','daterangepicker'],
-function (template, CampaignsCollection, campRowView,moment) {
+define(['text!campaigns/html/selectcampaign.html', 'campaigns/collections/campaigns', 'campaigns/campaign_row','bms-shuffle'],
+function (template, CampaignsCollection, campRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

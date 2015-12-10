@@ -1,5 +1,5 @@
-define(['text!nurturetrack/html/selecttrack.html', 'nurturetrack/collections/tracks', 'nurturetrack/track_row','moment','jquery.bmsgrid','bms-shuffle','daterangepicker'],
-function (template, TracksCollection, trackRowView,moment) {
+define(['text!nurturetrack/html/selecttrack.html', 'nurturetrack/collections/tracks', 'nurturetrack/track_row','bms-shuffle'],
+function (template, TracksCollection, trackRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

@@ -1,4 +1,4 @@
-define(['text!common/html/linkFilter.html', 'jquery.searchcontrol','jquery.highlight'],
+define(['text!common/html/linkFilter.html'],
         function (template) {
             'use strict';
             return Backbone.View.extend({

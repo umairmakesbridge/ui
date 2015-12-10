@@ -1,4 +1,4 @@
-define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout.html','jquery.chosen','bms-tags','bms-addbox','bms-dragfile'],
+define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout.html','bms-dragfile'],
         function(template,layout) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //

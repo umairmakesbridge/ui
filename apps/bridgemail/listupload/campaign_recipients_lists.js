@@ -5,7 +5,7 @@
  * Description:this view is called from campaign wizard, so changing this may cause problem in recipients list.
  */
 
-define(['text!listupload/html/campaign_recipients_lists.html','listupload/collections/recipients_lists', 'listupload/views/campaign_recipients_list','moment','jquery.bmsgrid','bms-shuffle'],
+define(['text!listupload/html/campaign_recipients_lists.html','listupload/collections/recipients_lists', 'listupload/views/campaign_recipients_list','bms-shuffle'],
 function (template, ListsCollection, ListsView,moment) {
         'use strict';
         return Backbone.View.extend({  

@@ -6,8 +6,8 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/autobot_name.html', 'jquery.searchcontrol', 'jquery.icheck', 'jquery.chosen'],
-        function(template, searchcontrol, iCheck, choosen) {
+define(['text!autobots/html/autobot_name.html'],
+        function(template) {
             'use strict';
             return Backbone.View.extend({
                 events: {

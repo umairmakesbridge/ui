@@ -5,7 +5,7 @@
  * Description: Notification View
  * Dependency: Notifications
  */
-define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target','jquery.icheck'],
+define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-tags', 'target/models/recipients_target'],
         function(template, recipientView, tags, ModelRecipient) {
             'use strict';
             return Backbone.View.extend({

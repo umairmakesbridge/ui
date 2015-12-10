@@ -6,7 +6,7 @@
  * Dependency: Graph HTML, Chart, SContacts 
  */
 
-define(['text!reports/summary/html/graphs.html','reports/summary/views/chart','reports/summary/views/scontacts',  "reports/summary/vendors/jspdf"],
+define(['text!reports/summary/html/graphs.html','reports/summary/views/chart','reports/summary/views/scontacts',  "jspdf"],
 function (template,chart,contactsView,jsPDF) {
         'use strict';
         return Backbone.View.extend({

@@ -1,4 +1,4 @@
-define(['text!account/html/subaccount_row.html','jquery.highlight'],
+define(['text!account/html/subaccount_row.html'],
 function (template,highlighter) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!account/html/account.html', 'bms-dragfile'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template) {
+define(['text!account/html/account.html', 'bms-dragfile'],
+        function (template) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',

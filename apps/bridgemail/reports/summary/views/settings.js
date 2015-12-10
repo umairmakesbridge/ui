@@ -5,8 +5,8 @@
  * Description: Display Setting Dialog
  * Dependency: Setting HTML
  */
-define(['text!reports/summary/html/settings.html','jquery.icheck'],
-function (template,icheck) {
+define(['text!reports/summary/html/settings.html'],
+function (template) {
         'use strict';
         return Backbone.View.extend({
             className: 'camp_set',

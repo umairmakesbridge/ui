@@ -1,6 +1,6 @@
 
-define(['text!campaigns/html/schedule_campaign.html','jquery.calendario','moment'],
-function (template,calendario,moment) {
+define(['text!campaigns/html/schedule_campaign.html','jquery.calendario'],
+function (template,calendario) {
       /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         //  Schedule Calender view 

@@ -6,8 +6,8 @@
  * Dependency: Contact Card HTML
  */
 
-define(['text!common/html/vcontact.html','jquery.highlight', 'bms-tags'],
-function (template,highlighter,tags) {
+define(['text!common/html/vcontact.html'],
+function (template) {
         'use strict';
         return Backbone.View.extend({
             tagName:'div',

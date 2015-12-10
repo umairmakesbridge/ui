@@ -1,5 +1,5 @@
-define(['text!campaigns/html/campaign_row.html', 'jquery.highlight'],
-        function (template, highlighter) {
+define(['text!campaigns/html/campaign_row.html', 'campaigns/copycampaign'],
+        function (template, copycampaignPage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -157,11 +157,11 @@ define(['text!campaigns/html/campaign_row.html', 'jquery.highlight'],
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
                     this.sub.total_fetch = 0;
-                    require(["campaigns/copycampaign"], _.bind(function (copycampaignPage) {
+                    //require(["campaigns/copycampaign"], _.bind(function (copycampaignPage) {
                         var mPage = new copycampaignPage({camp: this.sub, camp_id: camp_id, app: this.app, copycampsdialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         dialog.saveCallBack(_.bind(mPage.copyCampaign, mPage));
-                    }, this));
+                    //}, this));
                 },
                 previewCampaign: function () {
                     var camp_id = this.model.get('campNum.encode');

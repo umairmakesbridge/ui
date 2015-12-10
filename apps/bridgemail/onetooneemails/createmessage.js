@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-define(['text!onetooneemails/html/createmessage.html','common/ccontacts','jquery.chosen','bms-mergefields'],
+define(['text!onetooneemails/html/createmessage.html','common/ccontacts','bms-mergefields'],
 function (template,contactsView) {
    /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

@@ -4,8 +4,8 @@
  * Description: List Grid.
  * Dependency: List Grid Single Grid View
  */
-define(['text!listupload/html/recipient_list.html','bms-tags','jquery.highlight'],
-function (template,tags) {
+define(['text!listupload/html/recipient_list.html'],
+function (template) {
         'use strict';
         return Backbone.View.extend({
             tagName:'tr',

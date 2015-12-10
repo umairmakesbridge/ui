@@ -1,5 +1,5 @@
-define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.chosen', 'moment', 'bms-tags'],
-        function(template, jsearchcontrol, chosen, moment, tags) {
+define(['text!contacts/html/subscriber.html', "contacts/subscriber_timeline"],
+        function(template, timelinePage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber detail page view depends on search control, chosen , date library moment and tags control
@@ -413,10 +413,10 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                 loadActivityTimeLine: function() {
                     var _this = this;
                     this.app.showLoading("Loading Timeline...", this.$(".colright"));
-                    require(["contacts/subscriber_timeline"], function(timeline) {
-                        var page = new timeline({sub: _this});
+                    //require(["contacts/subscriber_timeline"], function(timelinePage) {
+                        var page = new timelinePage({sub: _this});
                         _this.$(".colright").html(page.$el);
-                    });
+                    //});
                 },
                 sendEmail : function(){
                          // Loading templates 
@@ -444,14 +444,9 @@ define(['text!contacts/html/subscriber.html', 'jquery.searchcontrol', 'jquery.ch
                             _this.app.dialogArray[dialogArrayLength-1].currentView = _this.templateView; // New Dialog
                         })
                  },
-                 selectTemplate:function(obj){
-                   // this.setEditor();
+                 selectTemplate:function(obj){                   
                     var target = $.getObj(obj,"a");
-                    var bms_token =this.app.get('bms_token');
-                   // this.app.showLoading('Loading HTML...',this.$el);
-                    //this.states.editor_change = true;
-                   // var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+                             
-                   // jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));                    
+                    var bms_token =this.app.get('bms_token');                   
                      this.template_id = target.attr("id").split("_")[1]; 
                      this.templateView.createOTODialog();
                     

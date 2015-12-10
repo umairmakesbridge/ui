@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!landingpages/html/landingpages.html', 'bms-filters', 'moment', 'landingpages/collections/landingpages', 'landingpages/landingpage_row', 'landingpages/landingpage_template_row'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, moment, pagesCollection, pageRowView, tplPageRowView) {
+define(['text!landingpages/html/landingpages.html', 'landingpages/collections/landingpages', 'landingpages/landingpage_row', 'landingpages/landingpage_template_row'],
+        function (template, pagesCollection, pageRowView, tplPageRowView) {
             'use strict';
             return Backbone.View.extend({
                 tags: 'div',

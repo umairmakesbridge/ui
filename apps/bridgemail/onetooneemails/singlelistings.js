@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!onetooneemails/html/singlelistings.html', 'bms-filters', 'daterangepicker', 'moment', 'onetooneemails/collections/singlelistings', 'onetooneemails/singlelisting_row'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, bmsfilters, _daterangepicker, moment, singlelistingCollection, singlelistingRowView) {
+define([ 'text!onetooneemails/html/singlelistings.html', 'onetooneemails/collections/singlelistings', 'onetooneemails/singlelisting_row'],
+        function (template, singlelistingCollection, singlelistingRowView) {
             'use strict';
             return Backbone.View.extend({
                 id: 'campaigns_list',

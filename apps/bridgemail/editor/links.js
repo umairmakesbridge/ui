@@ -1,4 +1,4 @@
-define(['text!editor/html/links.html','jquery.icheck','jquery.chosen'],
+define(['text!editor/html/links.html'],
 function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //

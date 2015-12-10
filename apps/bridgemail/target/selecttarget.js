@@ -1,5 +1,5 @@
-define(['text!target/html/selecttarget.html','target/collections/recipients_targets', 'target/views/recipients_target','moment','jquery.bmsgrid','bms-shuffle'],
-function (template, TargetsCollection, TargetView,moment) {
+define(['text!target/html/selecttarget.html','target/collections/recipients_targets', 'target/views/recipients_target','bms-shuffle'],
+function (template, TargetsCollection, TargetView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',
@@ -381,9 +381,7 @@ function (template, TargetsCollection, TargetView,moment) {
                           
                             for(var s=offset;s<collection.length;s++){                                
                                 this.addToCol2(collection.at(s));
-                            }   
-                            //console.log(recipientArray);
-                            //this.createTargets();
+                            }                              
                         }, this),
                         error: function (collection, resp) {
 
@@ -409,9 +407,7 @@ function (template, TargetsCollection, TargetView,moment) {
                          count++;
                         return $(this);
                     }
-               }).show();
-               //this.$(".total-count").html(count);
-               //this.$(".total-text").html('My Nurture Tracks <b>found for tag &lsquo;' + tag + '&rsquo;</b>');
+               }).show();               
             },
         });
 });

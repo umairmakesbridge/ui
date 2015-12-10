@@ -1,9 +1,9 @@
-define(['text!contacts/html/subscriber_fields.html','jquery-ui','bms-addbox'],
-function (template,jqueryui,addbox) {
+define(['text!contacts/html/subscriber_fields.html','jquery-ui'],
+function (template,jqueryui) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber fields View
-        //
+        // 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         'use strict';
         return Backbone.View.extend({
@@ -218,10 +218,7 @@ function (template,jqueryui,addbox) {
                        var _json = jQuery.parseJSON(data);                         
                 
                         if(_json[0] !== "err"){
-                            _this.app.showLoading(false,dialog.$el);
-                            //  _this.updateValues();
-                             // _this.subscriber.showFields();
-                             //  _this.updateSubscriberLetter();
+                            _this.app.showLoading(false,dialog.$el);                            
                              if(parseInt(_json.addedCount) > 0){
                                   _this.app.showMessge("New Subscribers Created Successfully!");
                              }else{
@@ -229,14 +226,7 @@ function (template,jqueryui,addbox) {
                              }
                             _this.subscriber.ws_header.find('.tcount').html("0")
                               _this.refreshContactList();
-                              dialog.hide();
-                              //dialog.$el.find('.btn-save').unbind('click');
-                              //dialog.$el.find('.btn-save').html('<span>Update</span><i class="icon update"></i>');
-                              //_this.subscriber.sub_id = _json[1];
-                              //dialog.$el.find('.btn-save').removeClass('btn-save').addClass('btn-update').click(function(){
-                               //   _this.updateSubscriberDetail(dialog);
-                              //})
-                             // dialog.hide();
+                              dialog.hide();                              
                         }else{
                              _this.app.showLoading(false,dialog.$el);
                             _this.app.showAlert(_json[1],_this.$el);

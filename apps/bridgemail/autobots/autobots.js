@@ -5,8 +5,8 @@
  * Description: 
  */
 
-define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot', 'jquery.highlight', 'bms-mergefields', 'jquery.chosen','autobots/autobot_name'],
-        function(template, Autobots, Autobot, AutobotTile, app, Choosebot, highlight, mrgfield, choosen,AutobotName) {
+define(['text!autobots/html/autobots.html', 'autobots/collections/autobots', 'autobots/autobot', 'autobots/autobots_tile', 'app', 'autobots/choose_bot','autobots/autobot_name'],
+        function(template, Autobots, Autobot, AutobotTile, app, Choosebot, AutobotName) {
             'use strict';
             return Backbone.View.extend({
                 events: {

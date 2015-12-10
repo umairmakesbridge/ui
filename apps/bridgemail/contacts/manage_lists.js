@@ -1,5 +1,5 @@
-define(['text!contacts/html/manage_lists.html','jquery.bmsgrid'],
-function (template,jqueryui,bms_grid) {
+define(['text!contacts/html/manage_lists.html'],
+function (template) {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         //
         // Subscriber subscribed lists View
