@@ -1,5 +1,5 @@
-define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','moment','jquery.bmsgrid','bms-shuffle'],
-function (template, FormsCollection, formRowView,moment) {
+define(['text!forms/html/selectform.html', 'forms/collections/formlistings', 'forms/formlistings_row','bms-shuffle'],
+function (template, FormsCollection, formRowView) {
         'use strict';
         return Backbone.View.extend({  
                 className:'select-target-view',

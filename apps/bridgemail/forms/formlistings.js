@@ -1,5 +1,5 @@
-define(['jquery.bmsgrid', 'jquery.highlight', 'jquery.searchcontrol', 'text!forms/html/formlistings.html', 'moment', 'forms/collections/formlistings', 'forms/formlistings_row','bms-remote'],
-        function (bmsgrid, jqhighlight, jsearchcontrol, template, moment, formsCollection, formsRowView) {
+define(['text!forms/html/formlistings.html', 'forms/collections/formlistings', 'forms/formlistings_row','bms-remote'],
+        function (template, formsCollection, formsRowView) {
             'use strict';
             return Backbone.View.extend({
                 id: 'forms_list',

@@ -1,5 +1,5 @@
-define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
-        function (template, highlighter) {
+define(['text!forms/html/formlistings_row.html','forms/copyform'],
+        function (template, copyFormPage) {
             /////////////////////////////////////////////////////////////////////////////////////////////////////////
             //
             // Subscriber Record View to show on listing page
@@ -152,12 +152,12 @@ define(['text!forms/html/formlistings_row.html', 'jquery.highlight'],
                         buttons: {saveBtn: {text: 'Create Form'}}
                     });
                     this.app.showLoading("Loading...", dialog.getBody());
-                    require(["forms/copyform"], _.bind(function (page) {
-                        var mPage = new page({page: this, copydialog: dialog});
+                    //require(["forms/copyform"], _.bind(function (copyFormPage) {
+                        var mPage = new copyFormPage({page: this, copydialog: dialog});
                         dialog.getBody().html(mPage.$el);
                         mPage.init();
                         dialog.saveCallBack(_.bind(mPage.copyForm, mPage));
-                    }, this));
+                    //}, this));
                 },
                 deleteFormDialog: function () {
                     var form_id = this.model.get('formId.encode')
