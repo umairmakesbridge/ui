@@ -394,7 +394,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 /* ===============Auto Save======================== */
                                 function recursiveSaveCall(){
-                                     if(changFlag.editor_change){
+                                     if(changFlag.editor_change && options.otopage !== true){
                                             options.saveCallBack();
                                         }
                                        else{
