@@ -155,7 +155,9 @@ define(['jquery', 'underscore', 'backbone','text!templates/common/dialog2.html']
                             var length = this.app.dialogArray.length;
                             var showElement = length-1; 
                             var currView = this.app.dialogArray[showElement].currentView;
-                            currView.$el.find('#mee_editor').resetAutoSaveTimer();
+                            if(currView && currView.$el.find('#mee_editor').length > 0){
+                                currView.$el.find('#mee_editor').resetAutoSaveTimer();
+                            }
                             if(this.app.get("newWin") && this.app.get("workId")=="camppreview"){
                                 window.close();
                                 return;
