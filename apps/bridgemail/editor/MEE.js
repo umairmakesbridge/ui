@@ -21,6 +21,7 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                     this.topMinus = 381;
                     this.BMSTOKEN = "BMS_REQ_TK=" + this.app.get('bms_token');
                     this.autoSaveFlag = false;
+                    this.timer = false;
                     var mee_view = this;
                     var predefinedControls = [
                         {
@@ -400,12 +401,15 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                          mee_view.autoSaveFlag = false;
                                          // console.log('Flag is false now');      
                                         }
-                                      setTimeout(function(){recursiveSaveCall()},20000)
+                                      mee_view.timer = setTimeout(function(){recursiveSaveCall()},20000)
                                 }
                                 $.fn.setChange = function (states) {
                                     changFlag = states;
                                 };
-                                
+                                $.fn.resetAutoSaveTimer = function(){
+                                    changFlag = false;
+                                    clearTimeout(mee_view.timer);
+                                };
                                 $.fn.getMEEBody = function(){
                                     var mainHTMLELE = this.find("#mee-iframe").contents().find(".mainContentHtml");
                                     var constructedHTML = $(mainHTMLELE.outerHTML());                                    
