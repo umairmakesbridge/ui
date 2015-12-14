@@ -1389,6 +1389,7 @@ div.tooltip:before {
 ul.toolbar {
 	position: absolute;	
 	z-index: 98;
+        top: 16px;
 }
 ul.toolbar li {
 	float: left;
@@ -2971,6 +2972,12 @@ p {
 	float: right;
 	margin: 0;
 	width: 70%;
+}
+.cont-box .btnrow a {
+	margin:0 3px;
+}
+#tagslist ul li > a{
+    padding:0px !important;
 }
 
 #choose_soruce {

@@ -1,9 +1,8 @@
 define([
-	'backbone', 'app', 'onetooneemails/models/singlelistings'
-], function (Backbone, app, Campaign) {
+	'backbone', 'app'
+], function (Backbone, app) {
         'use strict';
-	return Backbone.Collection.extend({
-		model: Campaign,
+	return Backbone.Collection.extend({		
 		url: function () {
                     if(app.get('complied')==0){ 
                         return app.get('path')+'apps/bridgemail/tipandtest/tipandtest.json';
