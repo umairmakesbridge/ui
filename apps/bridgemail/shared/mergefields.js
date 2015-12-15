@@ -200,7 +200,7 @@
             var $thisCustomFields = this.configs.customFields;
             var $thisLinks = this.configs.links;
             var $thisEmailType = this.configs.emailType;
-            var $isClass = this.options.class;
+            var $isClass = this.options.cssClass;
             var btn = $.getObj(obj, "button");
             $this.find("#merge_list_search").val("");
             

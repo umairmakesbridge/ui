@@ -131,7 +131,7 @@ define(['text!autobots/html/alert.html', 'target/views/recipients_target', 'bms-
                     this.$("#ddlendless").chosen({no_results_text: 'Oops, nothing found!', width: "140px", disable_search: "true"});
                     this.dialog.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
                     this.$(".showtooltip").tooltip({'placement': 'bottom', delay: {show: 0, hide: 0}, animation: false});
-                    this.$('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', class: "show-top"});
+                    this.$('#wrap_email').mergefields({autobot: true, app: this.app, config: {emailType: true, state: 'dialog'}, elementID: 'merge_field_plugin', placeholder_text: '{{LASTNAME}}', cssClass: "show-top"});
                     this.$('#merge_field_plugin').css('width', '72%!important');
                     this.$("#txtRecurTimes").ForceNumericOnly();
                     this.$(".alert-salesrep").iCheck({

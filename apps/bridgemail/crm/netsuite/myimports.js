@@ -48,7 +48,7 @@ function (template,MyImports,moment) {
                                 myimports_html += '<td><div class="name-type"><h3><a id="editname_'+val.get("tId")+'" class="get-import">'+import_name+'</a>'+this.setStatus(val.get("status"))+'</h3></div></td>';
                                 myimports_html += '<td>';
                                 if(val.get("frequency")!==''){
-                                    myimports_html += '<img src="img/recurring2.gif"  class="recurring2img" alt=""/>';                                
+                                    myimports_html += '<img src="'+this.app.get("path")+'img/recurring2.gif"  class="recurring2img" alt=""/>';                                
                                 }
                                 myimports_html += '</td>';
                                 myimports_html += '<td>';

@@ -308,8 +308,8 @@
                     this.errMessage = 0;
                 }
          }
-         if(file.size > 1000000*50){
-             this.app.showAlert("CSV file size should not be greater than <b>50MB</b>",$("body"),{fixed:true})
+         if(file.size > 1000000*350){
+             this.app.showAlert("CSV file size should not be greater than <b>350MB</b>",$("body"),{fixed:true})
              isCSV = false;
              this.errMessage = 0;
          }

@@ -2252,6 +2252,9 @@ define(['text!reports/html/report_row.html', 'reports/campaign_bar_chart'],
                     this.$(".add-msg-report").hide();      
                     this.$(".online-campaign-area").remove();
                     this.$(".template-container").css({"overflow-y": 'hidden', height: 'auto'});
+                    if(campArray.length>1){
+                        this.$(".target-listing").addClass("summary-chart");
+                    }
                     _.each(campArray, function (val, index) {
                             var campId = val;        
                             var chartTitle = this.modelArray[0].campMapping?this.modelArray[0].campMapping[campId]:"" 
