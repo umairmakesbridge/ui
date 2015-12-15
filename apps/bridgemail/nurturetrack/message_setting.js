@@ -208,11 +208,16 @@ function (template) {
                             this.app.showLoading(false,this.dialog.$el);
                             this.$(".save-step2").removeClass("disabled-btn");
                             if(step1_json[0]!=="err"){
-                                if(!this.messagebody_page.meeView.autoSaveFlag){
+                                if(this.messagebody_page.meeView && !this.messagebody_page.meeView.autoSaveFlag){
                                         this.app.showMessge("Message settings saved successfully!");
+                                        }else if(!this.messagebody_page.meeView){
+                                             this.app.showMessge("Step 2 saved successfully!");
                                         }
-                                        this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
-                                        this.messagebody_page.meeView.autoSaveFlag = false;
+                                        if(this.messagebody_page.meeView){
+                                            this.messagebody_page.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
+                                            this.messagebody_page.meeView.autoSaveFlag = false;
+                                        }
+                                        
                                 
                                 if(selected_li=="plain_text"){
                                     this.plainText = plain;                                    

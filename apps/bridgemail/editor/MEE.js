@@ -394,7 +394,8 @@ define(['jquery', 'backbone', 'underscore', 'text!editor/html/MEE.html', 'editor
                                 }
                                 /* ===============Auto Save======================== */
                                 function recursiveSaveCall(){
-                                     if(changFlag.editor_change && options.otopage !== true){
+                                     if(changFlag.editor_change && options.otopage !== true && myElement.find("#mee-iframe").contents().find('.mainContentHtml').html().trim() !== ""){
+                                            //console.log(mee.iframeLoaded);
                                             options.saveCallBack();
                                         }
                                        else{

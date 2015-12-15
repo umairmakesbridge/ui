@@ -44,6 +44,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                         if(this.options.params.parent){
                             this.parentWS = this.options.params.parent;
                         }
+                        this.editor_change = true;
                     }                                        
                 }
                 ,
@@ -499,7 +500,7 @@ define(['text!landingpages/html/landingpage.html','text!landingpages/html/layout
                                         this.app.showMessge("Landing page saved successfully!");
                                         }
                                          
-                                        this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                         this.meeView.autoSaveFlag = false; 
                                         this.editor_change = false;
                                  }
