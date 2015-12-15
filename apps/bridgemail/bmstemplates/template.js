@@ -339,7 +339,7 @@ define(['text!bmstemplates/html/template.html', 'bms-dragfile', 'bms-mergefields
                                         if(button){
                                             button.removeClass("disabled-btn"); 
                                         }
-                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
+                                        _this.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
                                         _this.meeView.autoSaveFlag = false;   
                                         _this.editor_change = false;
                                     if (_this.modelTemplate) {

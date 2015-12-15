@@ -55,7 +55,7 @@ function (template,editorView) {
                
             },
             saveForStep2:function(obj){ 
-                if(!this.meeView.autoSaveFlag){
+                if(this.meeView && !this.meeView.autoSaveFlag){
                        if(obj){
                             var button = $.getObj(obj, "a");
                                 if (!button.hasClass("disabled-btn")) {
@@ -66,6 +66,8 @@ function (template,editorView) {
                            this.meeView.autoSaveFlag = true; 
                            this.parent.saveStep2(false); 
                         } 
+                    }else{
+                        this.parent.saveStep2(false); 
                     }
             },
             initScroll:function(){            
@@ -342,6 +344,8 @@ function (template,editorView) {
                 var bms_token =this.app.get('bms_token');
                 this.app.showLoading('Loading HTML...',this.$el.parents(".modal"));
                 this.states.editor_change = true;
+                this.$("#mee-iframe").contents().find('.mainContentHtml').html('');
+                this.$el.find('.lastSaveInfo').html('Saving...');
                 var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK="+bms_token+"&type=html&templateNumber="+target.attr("id").split("_")[1];                              
                 jQuery.getJSON(URL,_.bind(this.setEditorHTML,this));
                 //this.$("#html_editor").click();

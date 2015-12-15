@@ -62,6 +62,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     this.mergeTags = {};
                     this.allMergeTags = [];
                     this.camp_istext = null;
+                    this.isNextPress = false;
                     this.wp_id = this.options.params.wp_id;
                     this.rescheduled = false;
                     this.hidecalender = false;
@@ -155,6 +156,7 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     proceed = this.saveStep1();
                                     break;
                                 case 'step_2':
+                                    this.isNextPress = true;
                                     proceed = this.saveStep2();
                                     break;
                                 case 'step_3':
@@ -1304,8 +1306,9 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                 },
                 saveForStep2: function (obj) {
                     
-                    if(!this.meeView.autoSaveFlag){
+                    if(this.meeView && !this.meeView.autoSaveFlag){
                        if(obj){
+                           this.isNextPress = false;
                             var button = $.getObj(obj, "a");
                                 if (!button.hasClass("disabled-btn")) {
                                 this.saveStep2(false);
@@ -1315,6 +1318,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                            this.meeView.autoSaveFlag = true; 
                            this.saveStep2(false); 
                         } 
+                    }else{
+                        this.saveStep2(false); 
                     }
                     
                     
@@ -1363,11 +1368,15 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                                     camp_obj.app.showLoading(false, camp_obj.$el.parents(".ws-content"));
                                     camp_obj.$(".save-step2,.MenuCallBackSave a").removeClass("disabled-btn");
                                     if (step1_json[0] !== "err") {
-                                        if(!camp_obj.meeView.autoSaveFlag){
+                                        if(camp_obj.meeView && !camp_obj.meeView.autoSaveFlag){
                                         camp_obj.app.showMessge("Step 2 saved successfully!");
+                                        }else if(!camp_obj.meeView){
+                                             camp_obj.app.showMessge("Step 2 saved successfully!");
                                         }
-                                        camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved : '+moment().format('h:mm:ss a'));
-                                        camp_obj.meeView.autoSaveFlag = false;
+                                        if(camp_obj.meeView){
+                                            camp_obj.meeView._$el.find('.lastSaveInfo').html('<i class="icon time"></i>Last Saved: '+moment().format('h:mm:ss a'));
+                                            camp_obj.meeView.autoSaveFlag = false;
+                                        }
                                         if (selected_li == "plain_text") {
                                             camp_obj.states.step2.plainText = plain;
                                             camp_obj.states.step2.htmlText = "";
@@ -2376,6 +2385,8 @@ define([  'text!campaigns/html/campaign.html', 'editor/editor','bmstemplates/tem
                     var target = $.getObj(obj, "a");
                     var bms_token = this.app.get('bms_token');
                     this.app.showLoading('Loading HTML...', this.$el);
+                    this.$("#mee-iframe").contents().find('.mainContentHtml').html('');
+                    this.$el.find('.lastSaveInfo').html('Saving...');
                     this.states.editor_change = true;
                     var URL = "/pms/io/campaign/getUserTemplate/?BMS_REQ_TK=" + bms_token + "&type=html&templateNumber=" + target.attr("id").split("_")[1];
                     jQuery.getJSON(URL, _.bind(this.setEditorHTML, this));
