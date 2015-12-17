@@ -222,7 +222,7 @@ define(['text!bmstemplates/html/template_row.html', 'common/tags_row', 'bmstempl
                         self.app.showLoading(false, mPage.$el.parent());
                         mPage.init();
                         mPage.$el.addClass('dialogWrap-' + dialogArrayLength); // New Dialog
-                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage));
+                        dialog.saveCallBack(_.bind(mPage.saveTemplateCall, mPage ,true));
                         self.app.dialogArray[dialogArrayLength - 1].reattach = true;// New Dialog
                         self.app.dialogArray[dialogArrayLength - 1].currentView = mPage; // New Dialog
                         self.app.dialogArray[dialogArrayLength - 1].saveCall = _.bind(mPage.saveTemplateCall, mPage); // New Dialog
